@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SIMA.Framework.Common" Version="1.6.5" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.NetTopologySuite" Version="8.0.1" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
+	  <PackageReference Include="NetTopologySuite" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj" />
+    <ProjectReference Include="..\SIMA.Domain\SIMA.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

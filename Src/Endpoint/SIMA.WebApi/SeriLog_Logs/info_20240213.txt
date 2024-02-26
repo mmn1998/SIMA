@@ -1,0 +1,1826 @@
+2024-02-13T12:46:04.6575975+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\nomani.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T12:46:04.9649275+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T12:46:04.9667317+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T12:46:04.9671928+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T12:46:04.9675398+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "C:\Users\nomani.YAAS\source\repos\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T12:46:07.5435507+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T12:46:08.1473027+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 615.8562ms
+2024-02-13T12:46:08.2143583+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T12:46:08.2164649+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13758 "application/javascript; charset=utf-8" 2.259ms
+2024-02-13T12:46:08.7095495+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T12:46:08.7720899+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 62.5681ms
+2024-02-13T12:46:09.3561621+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T12:46:09.9279895+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 571.8487ms
+2024-02-13T13:17:41.8059121+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\khazaei.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T13:17:42.0491552+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T13:17:42.0503151+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T13:17:42.0505890+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T13:17:42.0506446+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "D:\Project\SIMAProject\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T13:17:45.7204314+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T13:17:46.1282063+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 432.3403ms
+2024-02-13T13:17:46.1773831+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T13:17:46.1826500+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13757 "application/javascript; charset=utf-8" 5.4749ms
+2024-02-13T13:17:46.2610497+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T13:17:46.3080024+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 47.2098ms
+2024-02-13T13:17:46.4211709+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T13:17:46.6541026+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 232.9387ms
+2024-02-13T13:17:58.5799368+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - null null
+2024-02-13T13:17:58.7475665+03:30 [INF] (Microsoft.AspNetCore.Authorization.DefaultAuthorizationService) Authorization failed. "These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+SIMA.Framework.Common.Security.PermissionRequirement"
+2024-02-13T13:17:58.7508281+03:30 [INF] (Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler) AuthenticationScheme: "Bearer" was challenged.
+2024-02-13T13:17:58.7510675+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - 401 0 null 171.1544ms
+2024-02-13T13:18:28.0988613+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - "application/json" 54
+2024-02-13T13:18:28.1127340+03:30 [INF] (Microsoft.AspNetCore.Cors.Infrastructure.CorsService) CORS policy execution successful.
+2024-02-13T13:18:28.1213578+03:30 [INF] (RequestResponseLoggingMiddleware) Request POST: /Users/Login, Body: { "username": "0123456789", "password": "123456" },UserId: 
+2024-02-13T13:18:28.1225139+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T13:18:28.1385897+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Post\", controller = \"Users\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Post(SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQuery)" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController" ("SIMA.WebApi").
+2024-02-13T13:18:28.2143794+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:18:30.8029593+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("40"ms) [Parameters=["@__username_0='?' (Size = 50) (DbType = AnsiString)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [u].[Id], [u].[ActiveFrom], [u].[ActiveStatusId], [u].[ActiveTo], [u].[CompanyId], [u].[CreatedAt], [u].[CreatedBy], [u].[IsLoggedIn], [u].[ModifiedAt], [u].[ModifiedBy], [u].[ProfileID], [u].[User_SecretKey], [u].[Username], [u].[Password], [u].[SecretKey]
+FROM [Authentication].[Users] AS [u]
+WHERE [u].[Username] = @__username_0"
+2024-02-13T13:18:30.9883525+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("10"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[GroupId]
+FROM [Authentication].[UserGroup] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T13:18:30.9942955+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[RoleId]
+FROM [Authentication].[UserRole] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T13:18:30.9991507+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[PermissionId]
+FROM [Authentication].[UserPermission] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T13:18:31.0684112+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=["@__roleIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [r1].[PermissionId]
+FROM [Authentication].[Role] AS [r]
+INNER JOIN [Authentication].[RolePermission] AS [r1] ON [r].[Id] = [r1].[RoleId]
+WHERE [r].[Id] IN (
+    SELECT [r0].[value]
+    FROM OPENJSON(@__roleIds_0) WITH ([value] bigint '$') AS [r0]
+)"
+2024-02-13T13:18:31.0766260+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=["@__groupIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [g1].[PermissionId]
+FROM [Authentication].[Groups] AS [g]
+INNER JOIN [Authentication].[GroupPermission] AS [g1] ON [g].[Id] = [g1].[GroupId]
+WHERE [g].[Id] IN (
+    SELECT [g0].[value]
+    FROM OPENJSON(@__groupIds_0) WITH ([value] bigint '$') AS [g0]
+)"
+2024-02-13T13:18:31.1127415+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("32"ms) [Parameters=["@__permissionIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [p].[EnglishKey]
+FROM [Authentication].[Permission] AS [p]
+WHERE [p].[Id] IN (
+    SELECT [p0].[value]
+    FROM OPENJSON(@__permissionIds_0) WITH ([value] bigint '$') AS [p0]
+)"
+2024-02-13T13:18:31.1443075+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 2927.7004ms.
+2024-02-13T13:18:31.1488884+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2024-02-13T13:18:31.1622046+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" in 3021.4734ms
+2024-02-13T13:18:31.1626345+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T13:18:31.1630325+03:30 [INF] (RequestResponseLoggingMiddleware) Response POST: /Users/Login, Status Code: 200, Body: 
+2024-02-13T13:18:31.1692532+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - 200 null "application/json; charset=utf-8" 3070.4347ms
+2024-02-13T13:18:48.4092907+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - null null
+2024-02-13T13:18:48.4667525+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:18:48.4708097+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"BranchesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController" ("SIMA.WebApi").
+2024-02-13T13:18:48.4931763+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:20:00.5327327+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\khazaei.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T13:20:00.6887178+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T13:20:00.6897783+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T13:20:00.6899809+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T13:20:00.6900244+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "D:\Project\SIMAProject\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T13:20:01.4450701+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T13:20:01.6598543+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 220.1456ms
+2024-02-13T13:20:01.6834930+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T13:20:01.6867020+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13757 "application/javascript; charset=utf-8" 3.0165ms
+2024-02-13T13:20:01.6905504+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T13:20:01.7241959+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 33.6251ms
+2024-02-13T13:20:01.7904286+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T13:20:02.0002887+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 210.0039ms
+2024-02-13T13:20:13.2828797+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - null null
+2024-02-13T13:20:13.4007391+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:20:13.4173908+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"BranchesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController" ("SIMA.WebApi").
+2024-02-13T13:20:13.4893256+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:20:17.1189108+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 3626.6109ms.
+2024-02-13T13:20:17.1240912+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.BranchManagement.Branches.GetBranchQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T13:20:17.1437322+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)" in 3724.0427ms
+2024-02-13T13:20:17.1442705+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:20:17.1452085+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - 200 null "application/json; charset=utf-8" 3862.4402ms
+2024-02-13T13:22:34.4483851+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\khazaei.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T13:22:34.6142456+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T13:22:34.6158934+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T13:22:34.6162727+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T13:22:34.6163218+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "D:\Project\SIMAProject\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T13:22:36.6153786+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T13:22:36.8619660+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 257.735ms
+2024-02-13T13:22:36.8902651+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T13:22:36.8970908+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T13:22:36.8985339+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13757 "application/javascript; charset=utf-8" 9.02ms
+2024-02-13T13:22:37.0549243+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 157.8299ms
+2024-02-13T13:22:37.1570235+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T13:22:37.5265444+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 369.7558ms
+2024-02-13T13:22:54.1311256+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - null null
+2024-02-13T13:22:54.2522525+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:22:54.2693116+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"BranchesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController" ("SIMA.WebApi").
+2024-02-13T13:22:54.3388582+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:22:56.2550335+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 1908.4867ms.
+2024-02-13T13:22:56.2596244+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.BranchManagement.Branches.GetBranchQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T13:22:56.2810062+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)" in 2008.8538ms
+2024-02-13T13:22:56.2815878+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1.BranchesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:22:56.2826005+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Branches""" - 200 null "application/json; charset=utf-8" 2151.5451ms
+2024-02-13T13:23:08.1476171+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/IssueTypes""" - null null
+2024-02-13T13:23:08.1497076+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.IssueManagement.IssueTypes.V1.IssueTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:23:08.1522031+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"IssueTypesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.IssueManagement.IssueTypes.V1.IssueTypesQueryController" ("SIMA.WebApi").
+2024-02-13T13:23:08.1687421+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.IssueManagement.IssueTypes.V1.IssueTypesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:23:08.2184392+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.IssueManagement.IssueTypes.V1.IssueTypesQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 49.549ms.
+2024-02-13T13:23:08.2189299+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.IssueManagement.IssueTypes.GetIssueTypesQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T13:23:08.2224777+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.IssueManagement.IssueTypes.V1.IssueTypesQueryController.Get (SIMA.WebApi)" in 70.1906ms
+2024-02-13T13:23:08.2226930+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.IssueManagement.IssueTypes.V1.IssueTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:23:08.2228804+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/IssueTypes""" - 200 null "application/json; charset=utf-8" 75.3039ms
+2024-02-13T13:23:18.8412998+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Project""" - null null
+2024-02-13T13:23:18.8453206+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects.ProjectQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:23:18.8483029+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"ProjectQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get()" on controller "SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects.ProjectQueryController" ("SIMA.WebApi").
+2024-02-13T13:23:18.8735188+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects.ProjectQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:23:19.2736543+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects.ProjectQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 399.5083ms.
+2024-02-13T13:23:19.2750687+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.WorkFlowEngine.Project.GetProjectQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T13:23:19.2825412+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects.ProjectQueryController.Get (SIMA.WebApi)" in 434.0685ms
+2024-02-13T13:23:19.2826793+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects.ProjectQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:23:19.2842129+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Project""" - 200 null "application/json; charset=utf-8" 443.0477ms
+2024-02-13T13:23:29.1388212+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/WorkFlows""" - null null
+2024-02-13T13:23:29.1394781+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1.WorkFlowsQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:23:29.1417243+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"WorkFlowsQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get()" on controller "SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1.WorkFlowsQueryController" ("SIMA.WebApi").
+2024-02-13T13:23:29.1559465+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1.WorkFlowsQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T13:23:29.2043002+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1.WorkFlowsQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 48.2631ms.
+2024-02-13T13:23:29.2044704+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.GetWorkFlowQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T13:23:29.2155069+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1.WorkFlowsQueryController.Get (SIMA.WebApi)" in 73.7047ms
+2024-02-13T13:23:29.2155941+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1.WorkFlowsQueryController.Get (SIMA.WebApi)"'
+2024-02-13T13:23:29.2157766+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/WorkFlows""" - 200 null "application/json; charset=utf-8" 77.0939ms
+2024-02-13T15:20:55.5846448+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\nomani.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T15:20:55.8437613+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T15:20:55.8461640+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T15:20:55.8465400+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T15:20:55.8466135+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "C:\Users\nomani.YAAS\source\repos\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T15:20:58.6310511+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T15:20:59.0203000+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 396.0027ms
+2024-02-13T15:20:59.0677190+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T15:20:59.0738636+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13758 "application/javascript; charset=utf-8" 6.2147ms
+2024-02-13T15:20:59.1211870+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T15:20:59.1674638+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 46.2908ms
+2024-02-13T15:20:59.3800932+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T15:20:59.7592693+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 379.128ms
+2024-02-13T15:36:13.7752893+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\nomani.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T15:36:13.9935173+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T15:36:13.9952312+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T15:36:13.9956351+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T15:36:13.9957076+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "C:\Users\nomani.YAAS\source\repos\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T15:36:15.9658814+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T15:36:16.3934095+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 434.1014ms
+2024-02-13T15:36:16.4360975+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T15:36:16.4416866+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13758 "application/javascript; charset=utf-8" 5.6384ms
+2024-02-13T15:36:16.4837777+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T15:36:16.5348050+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 51.0653ms
+2024-02-13T15:36:16.7231136+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T15:36:17.0614844+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 338.4733ms
+2024-02-13T15:36:32.2965636+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Users/is-authenticated""" - null null
+2024-02-13T15:36:32.4236579+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)"'
+2024-02-13T15:36:32.4459678+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"IsAuthorize\", controller = \"UsersQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] IsAuthorize()" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController" ("SIMA.WebApi").
+2024-02-13T15:36:32.5509324+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T15:36:32.5566676+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 2.5524ms.
+2024-02-13T15:36:32.5614471+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T15:36:32.5741077+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)" in 125.2504ms
+2024-02-13T15:36:32.5745041+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)"'
+2024-02-13T15:36:32.5747582+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Users/is-authenticated""" - 200 null "application/json; charset=utf-8" 278.2294ms
+2024-02-13T15:36:59.0231715+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Users/is-authenticated""" - null null
+2024-02-13T15:36:59.0556748+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)"'
+2024-02-13T15:36:59.0559478+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"IsAuthorize\", controller = \"UsersQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] IsAuthorize()" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController" ("SIMA.WebApi").
+2024-02-13T15:36:59.0922434+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T15:37:13.5895443+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 14497.1141ms.
+2024-02-13T15:37:13.5899009+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T15:37:13.5907919+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)" in 14534.6783ms
+2024-02-13T15:37:13.5909251+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)"'
+2024-02-13T15:37:13.5910559+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Users/is-authenticated""" - 200 null "application/json; charset=utf-8" 14577.1347ms
+2024-02-13T15:37:29.5658383+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - "application/json" 54
+2024-02-13T15:37:29.5685579+03:30 [INF] (Microsoft.AspNetCore.Cors.Infrastructure.CorsService) CORS policy execution successful.
+2024-02-13T15:37:29.5876834+03:30 [INF] (RequestResponseLoggingMiddleware) Request POST: /Users/Login, Body: { "username": "0123456789", "password": "123456" },UserId: 
+2024-02-13T15:37:29.5878886+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T15:37:29.6005257+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Post\", controller = \"Users\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Post(SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQuery)" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController" ("SIMA.WebApi").
+2024-02-13T15:37:29.6420829+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T15:37:32.0801185+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" in 2479.4185ms
+2024-02-13T15:37:32.0814504+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T15:37:32.1886581+03:30 [INF] (SIMA.Framework.WebApi.ExceptionMiddleware) Handled exception occurred
+2024-02-13T15:37:32.2135835+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - 201 null "application/json" 2647.7603ms
+2024-02-13T15:37:51.8449864+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - "application/json" 54
+2024-02-13T15:37:51.8454449+03:30 [INF] (Microsoft.AspNetCore.Cors.Infrastructure.CorsService) CORS policy execution successful.
+2024-02-13T15:37:51.8459107+03:30 [INF] (RequestResponseLoggingMiddleware) Request POST: /Users/Login, Body: { "username": "0123456789", "password": "123456" },UserId: 
+2024-02-13T15:37:51.8459909+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T15:37:51.8460744+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Post\", controller = \"Users\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Post(SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQuery)" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController" ("SIMA.WebApi").
+2024-02-13T15:37:51.8748992+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T15:40:52.2118087+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\nomani.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T15:40:52.4640000+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T15:40:52.4657026+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T15:40:52.4660797+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T15:40:52.4661458+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "C:\Users\nomani.YAAS\source\repos\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T15:40:53.0602512+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T15:40:53.5375331+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 483.1232ms
+2024-02-13T15:40:53.5760374+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T15:40:53.5816134+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13758 "application/javascript; charset=utf-8" 5.6008ms
+2024-02-13T15:40:53.6333951+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T15:40:53.6949380+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 61.5509ms
+2024-02-13T15:40:53.8859057+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T15:40:54.2901219+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 404.2441ms
+2024-02-13T15:41:15.8098204+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - "application/json" 54
+2024-02-13T15:41:15.8292618+03:30 [INF] (Microsoft.AspNetCore.Cors.Infrastructure.CorsService) CORS policy execution successful.
+2024-02-13T15:41:15.9255296+03:30 [INF] (RequestResponseLoggingMiddleware) Request POST: /Users/Login, Body: { "username": "0123456789", "password": "123456" },UserId: 
+2024-02-13T15:41:15.9270483+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T15:41:15.9491509+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Post\", controller = \"Users\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Post(SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQuery)" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController" ("SIMA.WebApi").
+2024-02-13T15:41:16.0632618+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T15:41:19.4389124+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("61"ms) [Parameters=["@__username_0='?' (Size = 50) (DbType = AnsiString)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [u].[Id], [u].[ActiveFrom], [u].[ActiveStatusId], [u].[ActiveTo], [u].[CompanyId], [u].[CreatedAt], [u].[CreatedBy], [u].[IsLoggedIn], [u].[ModifiedAt], [u].[ModifiedBy], [u].[ProfileID], [u].[User_SecretKey], [u].[Username], [u].[Password], [u].[SecretKey]
+FROM [Authentication].[Users] AS [u]
+WHERE [u].[Username] = @__username_0"
+2024-02-13T15:41:19.7237003+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("17"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[GroupId]
+FROM [Authentication].[UserGroup] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T15:41:19.7310169+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[RoleId]
+FROM [Authentication].[UserRole] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T15:41:19.7389880+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[PermissionId]
+FROM [Authentication].[UserPermission] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T15:41:19.8509263+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=["@__roleIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [r1].[PermissionId]
+FROM [Authentication].[Role] AS [r]
+INNER JOIN [Authentication].[RolePermission] AS [r1] ON [r].[Id] = [r1].[RoleId]
+WHERE [r].[Id] IN (
+    SELECT [r0].[value]
+    FROM OPENJSON(@__roleIds_0) WITH ([value] bigint '$') AS [r0]
+)"
+2024-02-13T15:41:19.8604800+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=["@__groupIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [g1].[PermissionId]
+FROM [Authentication].[Groups] AS [g]
+INNER JOIN [Authentication].[GroupPermission] AS [g1] ON [g].[Id] = [g1].[GroupId]
+WHERE [g].[Id] IN (
+    SELECT [g0].[value]
+    FROM OPENJSON(@__groupIds_0) WITH ([value] bigint '$') AS [g0]
+)"
+2024-02-13T15:41:19.9005151+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("33"ms) [Parameters=["@__permissionIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [p].[EnglishKey]
+FROM [Authentication].[Permission] AS [p]
+WHERE [p].[Id] IN (
+    SELECT [p0].[value]
+    FROM OPENJSON(@__permissionIds_0) WITH ([value] bigint '$') AS [p0]
+)"
+2024-02-13T15:41:19.9503781+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 3882.8025ms.
+2024-02-13T15:41:19.9586427+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2024-02-13T15:41:19.9796698+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" in 4027.6616ms
+2024-02-13T15:41:19.9806719+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T15:41:19.9820415+03:30 [INF] (RequestResponseLoggingMiddleware) Response POST: /Users/Login, Status Code: 200, Body: 
+2024-02-13T15:41:19.9910720+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - 200 null "application/json; charset=utf-8" 4181.5308ms
+2024-02-13T15:41:50.0370981+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/Users/is-authenticated""" - null null
+2024-02-13T15:41:50.1024382+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)"'
+2024-02-13T15:41:50.1076618+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"IsAuthorize\", controller = \"UsersQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] IsAuthorize()" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController" ("SIMA.WebApi").
+2024-02-13T15:41:50.1365271+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T15:41:57.9309720+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 7794.202ms.
+2024-02-13T15:41:57.9314796+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Boolean, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T15:41:57.9338439+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)" in 7825.968ms
+2024-02-13T15:41:57.9339972+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersQueryController.IsAuthorize (SIMA.WebApi)"'
+2024-02-13T15:41:57.9341503+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/Users/is-authenticated""" - 200 null "application/json; charset=utf-8" 7897.0923ms
+2024-02-13T16:18:12.7157641+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\nomani.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T16:18:12.9506316+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T16:18:12.9541851+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T16:18:12.9546697+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T16:18:12.9547366+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "C:\Users\nomani.YAAS\source\repos\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T16:18:14.8574908+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T16:18:15.2618650+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 412.4703ms
+2024-02-13T16:18:15.3206913+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T16:18:15.3230601+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13758 "application/javascript; charset=utf-8" 2.5474ms
+2024-02-13T16:18:15.3559145+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T16:18:15.4200798+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 64.0822ms
+2024-02-13T16:18:15.5906432+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T16:18:15.9406673+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 350.0195ms
+2024-02-13T16:18:40.0108369+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentExtensions""" - null null
+2024-02-13T16:18:40.1623793+03:30 [INF] (Microsoft.AspNetCore.Authorization.DefaultAuthorizationService) Authorization failed. "These requirements were not met:
+SIMA.Framework.Common.Security.PermissionRequirement"
+2024-02-13T16:18:40.1655810+03:30 [INF] (Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler) AuthenticationScheme: "Bearer" was challenged.
+2024-02-13T16:18:40.1659149+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentExtensions""" - 401 0 null 155.0982ms
+2024-02-13T16:18:46.6046151+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentExtensions""" - null null
+2024-02-13T16:18:46.6102240+03:30 [INF] (Microsoft.AspNetCore.Authorization.DefaultAuthorizationService) Authorization failed. "These requirements were not met:
+SIMA.Framework.Common.Security.PermissionRequirement"
+2024-02-13T16:18:46.6107729+03:30 [INF] (Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler) AuthenticationScheme: "Bearer" was challenged.
+2024-02-13T16:18:46.6110755+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentExtensions""" - 401 0 null 6.5211ms
+2024-02-13T16:19:06.0324125+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentExtensions""" - null null
+2024-02-13T16:19:06.1659905+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.DMS.DocumentExtensions.V1.DocumentExtensionsQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:19:06.1938949+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"DocumentExtensionsQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.DMS.DocumentExtensions.V1.DocumentExtensionsQueryController" ("SIMA.WebApi").
+2024-02-13T16:19:06.2999680+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.DMS.DocumentExtensions.V1.DocumentExtensionsQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T16:19:06.9279802+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.DMS.DocumentExtensions.V1.DocumentExtensionsQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 624.8862ms.
+2024-02-13T16:19:06.9358742+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.DMS.DocumentExtensions.GetDocumentExtensionQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T16:19:06.9584001+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.DMS.DocumentExtensions.V1.DocumentExtensionsQueryController.Get (SIMA.WebApi)" in 761.5523ms
+2024-02-13T16:19:06.9590351+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.DMS.DocumentExtensions.V1.DocumentExtensionsQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:19:06.9607508+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentExtensions""" - 200 null "application/json; charset=utf-8" 928.3767ms
+2024-02-13T16:19:25.1310767+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentTypes""" - null null
+2024-02-13T16:19:25.1324368+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.DMS.DocumentTypes.V1.DocumentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:19:25.1367034+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"DocumentTypesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.DMS.DocumentTypes.V1.DocumentTypesQueryController" ("SIMA.WebApi").
+2024-02-13T16:19:25.1938578+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.DMS.DocumentTypes.V1.DocumentTypesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T16:19:25.2151158+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.DMS.DocumentTypes.V1.DocumentTypesQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 21.0906ms.
+2024-02-13T16:19:25.2156425+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.DMS.DocumentTypes.GetDocumentTypeQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T16:19:25.2185969+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.DMS.DocumentTypes.V1.DocumentTypesQueryController.Get (SIMA.WebApi)" in 81.7164ms
+2024-02-13T16:19:25.2188636+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.DMS.DocumentTypes.V1.DocumentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:19:25.2191211+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/DocumentTypes""" - 200 null "application/json; charset=utf-8" 88.1355ms
+2024-02-13T16:20:00.4069322+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/WorkFlowDocumentTypes""" - null null
+2024-02-13T16:20:00.4075252+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentTypes.V1.WorkFlowDocumentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:20:00.4114984+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"WorkFlowDocumentTypesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentTypes.V1.WorkFlowDocumentTypesQueryController" ("SIMA.WebApi").
+2024-02-13T16:20:00.4650846+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentTypes.V1.WorkFlowDocumentTypesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T16:20:00.4903425+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentTypes.V1.WorkFlowDocumentTypesQueryController.Get (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 25.1483ms.
+2024-02-13T16:20:00.4910229+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[System.Collections.Generic.List`1[[SIMA.Application.Query.Contract.Features.DMS.WorkFlowDocumentTypes.GetWorkFlowDocumentTypeQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]"'.
+2024-02-13T16:20:00.4931215+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentTypes.V1.WorkFlowDocumentTypesQueryController.Get (SIMA.WebApi)" in 81.4959ms
+2024-02-13T16:20:00.4932449+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentTypes.V1.WorkFlowDocumentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:20:00.4934322+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/WorkFlowDocumentTypes""" - 200 null "application/json; charset=utf-8" 86.5943ms
+2024-02-13T16:20:22.9825881+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/PaymentTypes""" - null null
+2024-02-13T16:20:23.0426162+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:20:23.0460240+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"PaymentTypesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController" ("SIMA.WebApi").
+2024-02-13T16:20:23.0679923+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T16:20:23.4769727+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController.Get (SIMA.WebApi)" in 430.8573ms
+2024-02-13T16:20:23.4773931+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:20:23.5850034+03:30 [INF] (SIMA.Framework.WebApi.ExceptionMiddleware) Handled exception occurred
+2024-02-13T16:20:23.5954289+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/PaymentTypes""" - 201 null "application/json" 612.8236ms
+2024-02-13T16:20:56.1319995+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/PaymentTypes""" - null null
+2024-02-13T16:20:56.1328720+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController.Get (SIMA.WebApi)"'
+2024-02-13T16:20:56.1330584+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Get\", controller = \"PaymentTypesQuery\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Get(SIMA.Framework.Common.Request.BaseRequest)" on controller "SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController" ("SIMA.WebApi").
+2024-02-13T16:20:56.1559568+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1.PaymentTypesQueryController.Get (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T16:41:48.0846425+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("34"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2024-02-13T16:41:48.1668293+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("24"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2024-02-13T16:41:48.1701370+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2024-02-13T16:41:48.1752803+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2024-02-13T16:41:48.1906246+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2024-02-13T16:41:48.2057194+03:30 [INF] (Microsoft.EntityFrameworkCore.Migrations) Applying migration '"20240213131121_initSima20240213"'.
+2024-02-13T16:41:48.6098836+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Project') IS NULL EXEC(N'CREATE SCHEMA [Project];');"
+2024-02-13T16:41:48.6115549+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Basic') IS NULL EXEC(N'CREATE SCHEMA [Basic];');"
+2024-02-13T16:41:48.6127964+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Authentication') IS NULL EXEC(N'CREATE SCHEMA [Authentication];');"
+2024-02-13T16:41:48.6139732+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Bank') IS NULL EXEC(N'CREATE SCHEMA [Bank];');"
+2024-02-13T16:41:48.6151356+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Organization') IS NULL EXEC(N'CREATE SCHEMA [Organization];');"
+2024-02-13T16:41:48.6164196+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'DMS') IS NULL EXEC(N'CREATE SCHEMA [DMS];');"
+2024-02-13T16:41:48.6176114+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'IssueManagement') IS NULL EXEC(N'CREATE SCHEMA [IssueManagement];');"
+2024-02-13T16:41:48.6235600+03:30 [ERR] (Microsoft.EntityFrameworkCore.Database.Command) Failed executing DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[ActionType] (
+    [Id] bigint NOT NULL,
+    [MainType] nvarchar(max) NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(20) NULL,
+    [EventTag] nvarchar(max) NULL,
+    [EventInternalTag] nvarchar(max) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_ActionType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:00.6445407+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("573"ms) [Parameters=[""], CommandType='Text', CommandTimeout='60']"
+""CREATE DATABASE [SIMADB];"
+2024-02-13T16:43:00.8031469+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("122"ms) [Parameters=[""], CommandType='Text', CommandTimeout='60']"
+""IF SERVERPROPERTY('EngineEdition') <> 5
+BEGIN
+    ALTER DATABASE [SIMADB] SET READ_COMMITTED_SNAPSHOT ON;
+END;"
+2024-02-13T16:43:00.8250427+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2024-02-13T16:43:00.8925382+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [__EFMigrationsHistory] (
+    [MigrationId] nvarchar(150) NOT NULL,
+    [ProductVersion] nvarchar(32) NOT NULL,
+    CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
+);"
+2024-02-13T16:43:00.8947512+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT 1"
+2024-02-13T16:43:00.9087457+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT OBJECT_ID(N'[__EFMigrationsHistory]');"
+2024-02-13T16:43:00.9247538+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("14"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];"
+2024-02-13T16:43:00.9385335+03:30 [INF] (Microsoft.EntityFrameworkCore.Migrations) Applying migration '"20240213131121_initSima20240213"'.
+2024-02-13T16:43:01.2799346+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Project') IS NULL EXEC(N'CREATE SCHEMA [Project];');"
+2024-02-13T16:43:01.2821144+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Basic') IS NULL EXEC(N'CREATE SCHEMA [Basic];');"
+2024-02-13T16:43:01.2839118+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Authentication') IS NULL EXEC(N'CREATE SCHEMA [Authentication];');"
+2024-02-13T16:43:01.2856737+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Bank') IS NULL EXEC(N'CREATE SCHEMA [Bank];');"
+2024-02-13T16:43:01.2874445+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'Organization') IS NULL EXEC(N'CREATE SCHEMA [Organization];');"
+2024-02-13T16:43:01.2892277+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'DMS') IS NULL EXEC(N'CREATE SCHEMA [DMS];');"
+2024-02-13T16:43:01.2916554+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""IF SCHEMA_ID(N'IssueManagement') IS NULL EXEC(N'CREATE SCHEMA [IssueManagement];');"
+2024-02-13T16:43:01.3006987+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("9"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[ActionType] (
+    [Id] bigint NOT NULL,
+    [MainType] nvarchar(max) NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(20) NULL,
+    [EventTag] nvarchar(max) NULL,
+    [EventInternalTag] nvarchar(max) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_ActionType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3077575+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[ActiveStatus] (
+    [ID] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [IsActive] char(1) NULL,
+    [IsDeleted] char(1) NULL,
+    [HasTimeToActiveAgain] char(1) NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifyAt] rowversion NULL,
+    [ModifyBy] int NULL,
+    CONSTRAINT [PK_ActiveStatus] PRIMARY KEY ([ID])
+);"
+2024-02-13T16:43:01.3131389+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[AddressType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_AddressType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3184319+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Bank].[BranchType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifyAt] rowversion NULL,
+    [ModifyBy] bigint NULL,
+    CONSTRAINT [PK_BranchType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3239475+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Bank].[BrokerType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_BrokerType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3307085+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Organization].[Company] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ParentId] bigint NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Organization] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Company_Company_ParentId] FOREIGN KEY ([ParentId]) REFERENCES [Organization].[Company] ([Id])
+);"
+2024-02-13T16:43:01.3366805+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[ConfigurationAttribute] (
+    [Id] bigint NOT NULL,
+    [EnglishKey] varchar(200) NULL,
+    [Name] nvarchar(200) NULL,
+    [DataType] nvarchar(50) NULL,
+    [IsUserConfige] char(1) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_onfigurationAttribute] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3419088+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Bank].[CurrencyType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [IsBaseCurrency] char(1) NULL,
+    [ActiveStatusId] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_CurrencyType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3468261+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [DMS].[DocumentExtension] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(20) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_DocumentExtension] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3516719+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [DMS].[DocumentType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(20) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_DocumentType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3567753+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Domain] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Domain] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3618837+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[Gender] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Gender] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3674233+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Groups] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Groups] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3728452+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueApproval] (
+    [Id] bigint NOT NULL,
+    [ProductId] bigint NOT NULL,
+    [IsApproval] nvarchar(max) NOT NULL,
+    [WorkflowStepId] bigint NOT NULL,
+    [WorkflowActorId] bigint NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueApproval] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3780334+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueCustomFeild] (
+    [Id] bigint NOT NULL,
+    [IssueId] bigint NOT NULL,
+    [CustomeFeildId] bigint NOT NULL,
+    [KeyValues] nvarchar(max) NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueCustomFeild] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3846929+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueLinkReason] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Code] nvarchar(20) NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueLinkReason] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3899252+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssuePriority] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Code] nvarchar(20) NOT NULL,
+    [Ordering] real NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssuePriority] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.3952431+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Code] nvarchar(20) NOT NULL,
+    [IconPath] nvarchar(max) NOT NULL,
+    [ColorHex] nvarchar(max) NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.4006397+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueWeightCategory] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [Code] nvarchar(20) NOT NULL,
+    [MinRange] int NOT NULL,
+    [MaxRange] int NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueWeightCategory] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.4115674+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Bank].[PaymentType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_PaymentType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.4168411+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[PhonType] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [Code] nvarchar(50) NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_PhonType] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.4220668+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[Project] (
+    [Id] bigint NOT NULL,
+    [DomainID] bigint NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(20) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Project] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.4274720+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Role] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [EnglishKey] varchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Role] PRIMARY KEY ([Id])
+);"
+2024-02-13T16:43:01.4354364+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[LocationType] (
+    [ID] bigint NOT NULL,
+    [ParentId] bigint NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_LocationType] PRIMARY KEY ([ID]),
+    CONSTRAINT [FK_LocationType_ActiveStatus_ActiveStatusId] FOREIGN KEY ([ActiveStatusId]) REFERENCES [Basic].[ActiveStatus] ([ID]) ON DELETE CASCADE,
+    CONSTRAINT [FK_LocationType_LocationType_ParentId] FOREIGN KEY ([ParentId]) REFERENCES [Basic].[LocationType] ([ID])
+);"
+2024-02-13T16:43:01.4451477+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("9"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Bank].[Branch] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [BranchTypeId] bigint NULL,
+    [BranchChiefOfficerId] bigint NULL,
+    [BranchDeputyId] bigint NULL,
+    [Latitude] float NULL,
+    [Longitude] float NULL,
+    [LocationId] bigint NULL,
+    [PhoneNumber] nvarchar(20) NULL,
+    [PostalCode] nvarchar(10) NULL,
+    [Address] nvarchar(500) NULL,
+    [IsMultiCurrencyBranch] char(1) NULL,
+    [ActiveStatusId] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Branch] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Branch_BranchType] FOREIGN KEY ([BranchTypeId]) REFERENCES [Bank].[BranchType] ([Id])
+);"
+2024-02-13T16:43:01.4519350+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Bank].[Broker] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(20) NULL,
+    [BrokerTypeId] bigint NULL,
+    [PhoneNumber] nvarchar(20) NULL,
+    [Address] nvarchar(500) NULL,
+    [ExpireDate] datetime NULL,
+    [ActiveStatusId] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Broker] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Broker_BrokerType] FOREIGN KEY ([BrokerTypeId]) REFERENCES [Bank].[BrokerType] ([Id])
+);"
+2024-02-13T16:43:01.4600837+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[ConfigurationAttributeValue] (
+    [Id] bigint NOT NULL,
+    [ConfigurationAttributeId] bigint NOT NULL,
+    [Value] nvarchar(4000) NULL,
+    [IsUserConfige] char(1) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_ConfigurationAttributeValue] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ConfigurationAttributeValue_A] FOREIGN KEY ([ConfigurationAttributeId]) REFERENCES [Basic].[ConfigurationAttribute] ([Id])
+);"
+2024-02-13T16:43:01.4666166+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[SysConfig] (
+    [Id] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    [ConfigurationId] bigint NULL,
+    [KeyValue] varchar(4000) NULL,
+    CONSTRAINT [PK_SysConfig] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_SysConfig_ConfigurationAttribute] FOREIGN KEY ([ConfigurationId]) REFERENCES [Basic].[ConfigurationAttribute] ([Id])
+);"
+2024-02-13T16:43:01.4744090+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [DMS].[WorkflowDocumentExtension] (
+    [Id] bigint NOT NULL,
+    [WorkflowId] bigint NOT NULL,
+    [DocumentExtensionId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkflowDocumentExtension] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkflowDocumentExtension_DocumentExtension_DocumentExtensionId] FOREIGN KEY ([DocumentExtensionId]) REFERENCES [DMS].[DocumentExtension] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.4828833+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [DMS].[Documents] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(20) NULL,
+    [MainAggregateId] bigint NOT NULL,
+    [SourceId] bigint NOT NULL,
+    [AttachStepId] bigint NOT NULL,
+    [DocumentTypeId] bigint NOT NULL,
+    [FileExtensionId] bigint NOT NULL,
+    [FileAddress] nvarchar(1000) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Documents] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Documents_DocumentExtension_FileExtensionId] FOREIGN KEY ([FileExtensionId]) REFERENCES [DMS].[DocumentExtension] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Documents_DocumentType_DocumentTypeId] FOREIGN KEY ([DocumentTypeId]) REFERENCES [DMS].[DocumentType] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.4900389+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [DMS].[WorkflowDocumentType] (
+    [Id] bigint NOT NULL,
+    [WorkflowId] bigint NOT NULL,
+    [DocumentTypeId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkflowDocumentType] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkflowDocumentType_DocumentType_DocumentTypeId] FOREIGN KEY ([DocumentTypeId]) REFERENCES [DMS].[DocumentType] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.4966206+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Form] (
+    [Id] bigint NOT NULL,
+    [DomainId] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Title] nvarchar(max) NULL,
+    [Code] nvarchar(50) NULL,
+    [IsSystemForm] nvarchar(max) NULL,
+    [JsonContent] nvarchar(max) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Form] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Form_Domain_DomainId] FOREIGN KEY ([DomainId]) REFERENCES [Authentication].[Domain] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.5035803+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[MainAggregate] (
+    [Id] bigint NOT NULL,
+    [DomainId] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_MainAggregate] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_MainAggregate_Domain_DomainId] FOREIGN KEY ([DomainId]) REFERENCES [Authentication].[Domain] ([Id])
+);"
+2024-02-13T16:43:01.5120997+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Permission] (
+    [Id] bigint NOT NULL,
+    [DomainId] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [EnglishKey] varchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Permission_1] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Permission_Domain] FOREIGN KEY ([DomainId]) REFERENCES [Authentication].[Domain] ([Id])
+);"
+2024-02-13T16:43:01.5194182+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Profile] (
+    [Id] bigint NOT NULL,
+    [FirstName] nvarchar(50) NULL,
+    [LastName] nvarchar(50) NULL,
+    [FatherName] nvarchar(50) NULL,
+    [GenderId] bigint NULL,
+    [NationalID] varchar(12) NULL,
+    [Brithday] date NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Profile] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Profile_Gender] FOREIGN KEY ([GenderId]) REFERENCES [Basic].[Gender] ([Id])
+);"
+2024-02-13T16:43:01.5307821+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[Issue] (
+    [Id] bigint NOT NULL,
+    [CompanyId] bigint NOT NULL,
+    [CurrentWorkflowId] bigint NOT NULL,
+    [Code] nvarchar(20) NOT NULL,
+    [Summery] nvarchar(max) NOT NULL,
+    [CurrentStateId] bigint NOT NULL,
+    [CurrenStepId] bigint NOT NULL,
+    [MainAggregateId] bigint NOT NULL,
+    [SourceId] bigint NOT NULL,
+    [IssueTypeId] bigint NOT NULL,
+    [IssuePriorityId] bigint NOT NULL,
+    [IssueWeightCategoryId] bigint NOT NULL,
+    [Weight] int NOT NULL,
+    [IssueDate] datetime2 NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [DueDate] datetime2 NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Issue] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Issue_IssuePriority_IssuePriorityId] FOREIGN KEY ([IssuePriorityId]) REFERENCES [IssueManagement].[IssuePriority] ([Id]),
+    CONSTRAINT [FK_Issue_IssueType_IssueTypeId] FOREIGN KEY ([IssueTypeId]) REFERENCES [IssueManagement].[IssueType] ([Id]),
+    CONSTRAINT [FK_Issue_IssueWeightCategory_IssueWeightCategoryId] FOREIGN KEY ([IssueWeightCategoryId]) REFERENCES [IssueManagement].[IssueWeightCategory] ([Id])
+);"
+2024-02-13T16:43:01.5374930+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[ProjectGroup] (
+    [Id] bigint NOT NULL,
+    [ProjectID] bigint NOT NULL,
+    [GroupID] bigint NOT NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_ProjectGroup] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ProjectGroup_Project_ProjectID] FOREIGN KEY ([ProjectID]) REFERENCES [Project].[Project] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.5507477+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[ProjectMember] (
+    [Id] bigint NOT NULL,
+    [ProjectID] bigint NOT NULL,
+    [UserID] bigint NOT NULL,
+    [IsManager] char(1) NOT NULL,
+    [IsAdminProject] char(1) NOT NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_ProjectMember] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_ProjectMember_Project] FOREIGN KEY ([ProjectID]) REFERENCES [Project].[Project] ([Id])
+);"
+2024-02-13T16:43:01.5635649+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlow] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(100) NULL,
+    [Code] nvarchar(20) NULL,
+    [ProjectID] bigint NOT NULL,
+    [FileContent] nvarchar(max) NULL,
+    [MainAggregateId] bigint NULL,
+    [ManagerRoleID] bigint NULL,
+    [BpmnId] nvarchar(max) NULL,
+    [Ordering] real NULL,
+    [Description] nvarchar(4000) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlow] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlow_Project] FOREIGN KEY ([ProjectID]) REFERENCES [Project].[Project] ([Id])
+);
+DECLARE @description AS sql_variant;
+SET @description = N'';
+EXEC sp_addextendedproperty 'MS_Description', @description, 'SCHEMA', N'Project', 'TABLE', N'WorkFlow', 'COLUMN', N'CreatedAt';"
+2024-02-13T16:43:01.5712835+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Basic].[Location] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [ParentId] bigint NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    [LocationTypeId] bigint NULL,
+    CONSTRAINT [PK_Location] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Location_LocationType] FOREIGN KEY ([LocationTypeId]) REFERENCES [Basic].[LocationType] ([ID]),
+    CONSTRAINT [FK_Location_Location_ParentId] FOREIGN KEY ([ParentId]) REFERENCES [Basic].[Location] ([Id])
+);"
+2024-02-13T16:43:01.5794317+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[FormGroup] (
+    [Id] bigint NOT NULL,
+    [FormId] bigint NOT NULL,
+    [GroupId] bigint NOT NULL,
+    [ActiveFrom] datetime2 NOT NULL,
+    [ActiveTo] datetime2 NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_FormGroup] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FormGroup_Form_FormId] FOREIGN KEY ([FormId]) REFERENCES [Authentication].[Form] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_FormGroup_Groups_GroupId] FOREIGN KEY ([GroupId]) REFERENCES [Authentication].[Groups] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.5865505+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[FormRole] (
+    [Id] bigint NOT NULL,
+    [FormId] bigint NOT NULL,
+    [RoleId] bigint NOT NULL,
+    [ActiveFrom] datetime2 NOT NULL,
+    [ActiveTo] datetime2 NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_FormRole] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FormRole_Form_FormId] FOREIGN KEY ([FormId]) REFERENCES [Authentication].[Form] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_FormRole_Role_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [Authentication].[Role] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.5936340+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[GroupPermission] (
+    [Id] bigint NOT NULL,
+    [GroupId] bigint NULL,
+    [PermissionId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_GroupPermission] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_GroupPermission_Groups] FOREIGN KEY ([GroupId]) REFERENCES [Authentication].[Groups] ([Id]),
+    CONSTRAINT [FK_GroupPermission_Permission] FOREIGN KEY ([PermissionId]) REFERENCES [Authentication].[Permission] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.6006689+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[RolePermission] (
+    [Id] bigint NOT NULL,
+    [RoleId] bigint NOT NULL,
+    [PermissionId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_RolePermission] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_RolePermission_Permission] FOREIGN KEY ([PermissionId]) REFERENCES [Authentication].[Permission] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_RolePermission_Role] FOREIGN KEY ([RoleId]) REFERENCES [Authentication].[Role] ([Id])
+);"
+2024-02-13T16:43:01.6079850+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[PhoneBook] (
+    [Id] bigint NOT NULL,
+    [ProfileId] bigint NULL,
+    [PhoneTypeId] bigint NULL,
+    [PhoneNumber] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_PhoneBook] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_PhoneBook_PhonType] FOREIGN KEY ([PhoneTypeId]) REFERENCES [Basic].[PhonType] ([Id]),
+    CONSTRAINT [FK_PhoneBook_Profile] FOREIGN KEY ([ProfileId]) REFERENCES [Authentication].[Profile] ([Id])
+);"
+2024-02-13T16:43:01.6156378+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[Users] (
+    [Id] bigint NOT NULL,
+    [User_SecretKey] text NULL,
+    [ProfileID] bigint NULL,
+    [CompanyId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [Username] varchar(50) NOT NULL,
+    [Password] varchar(128) NOT NULL,
+    [SecretKey] text NOT NULL,
+    [IsLoggedIn] char(1) NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_User] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_User_Company] FOREIGN KEY ([CompanyId]) REFERENCES [Organization].[Company] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_User_Profile] FOREIGN KEY ([ProfileID]) REFERENCES [Authentication].[Profile] ([Id])
+);"
+2024-02-13T16:43:01.6219964+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueComment] (
+    [Id] bigint NOT NULL,
+    [IssueId] bigint NOT NULL,
+    [Comment] nvarchar(max) NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueComment] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IssueComment_Issue_IssueId] FOREIGN KEY ([IssueId]) REFERENCES [IssueManagement].[Issue] ([Id])
+);"
+2024-02-13T16:43:01.6282377+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueDocument] (
+    [Id] bigint NOT NULL,
+    [IssueId] bigint NOT NULL,
+    [DocumentId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueDocument] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IssueDocument_Issue_IssueId] FOREIGN KEY ([IssueId]) REFERENCES [IssueManagement].[Issue] ([Id])
+);"
+2024-02-13T16:43:01.6344574+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueHistory] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(max) NOT NULL,
+    [IssueId] bigint NOT NULL,
+    [SourceStateId] bigint NOT NULL,
+    [TargetStateId] bigint NOT NULL,
+    [SourceStepId] bigint NOT NULL,
+    [TargetStepId] bigint NOT NULL,
+    [PerformerUserId] bigint NOT NULL,
+    [Description] nvarchar(max) NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    CONSTRAINT [PK_IssueHistory] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IssueHistory_Issue_IssueId] FOREIGN KEY ([IssueId]) REFERENCES [IssueManagement].[Issue] ([Id])
+);"
+2024-02-13T16:43:01.6421983+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [IssueManagement].[IssueLink] (
+    [Id] bigint NOT NULL,
+    [IssueId] bigint NOT NULL,
+    [IssueIdLinkedTo] bigint NOT NULL,
+    [IssueIdLinkReasonTo] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_IssueLink] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_IssueLink_IssueLinkReason_IssueIdLinkReasonTo] FOREIGN KEY ([IssueIdLinkReasonTo]) REFERENCES [IssueManagement].[IssueLinkReason] ([Id]),
+    CONSTRAINT [FK_IssueLink_Issue_IssueId] FOREIGN KEY ([IssueId]) REFERENCES [IssueManagement].[Issue] ([Id]),
+    CONSTRAINT [FK_IssueLink_Issue_IssueIdLinkedTo] FOREIGN KEY ([IssueIdLinkedTo]) REFERENCES [IssueManagement].[Issue] ([Id])
+);"
+2024-02-13T16:43:01.6605827+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("18"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[State] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [Code] nvarchar(50) NULL,
+    [WorkFlowID] bigint NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_State] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_State_WorkFlow] FOREIGN KEY ([WorkFlowID]) REFERENCES [Project].[WorkFlow] ([Id])
+);"
+2024-02-13T16:43:01.6759765+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("15"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlowActor] (
+    [Id] bigint NOT NULL,
+    [WorkFlowId] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(20) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlowActor] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlowActor_WorkFlow_WorkFlowId] FOREIGN KEY ([WorkFlowId]) REFERENCES [Project].[WorkFlow] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.6825315+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlowCompany] (
+    [Id] bigint NOT NULL,
+    [CompanyId] bigint NOT NULL,
+    [WorkFlowId] bigint NOT NULL,
+    [ActiveFrom] datetime2 NULL,
+    [ActiveTo] datetime2 NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlowCompany] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlowCompany_WorkFlow_WorkFlowId] FOREIGN KEY ([WorkFlowId]) REFERENCES [Project].[WorkFlow] ([Id])
+);"
+2024-02-13T16:43:01.6929039+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("10"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[AddressBook] (
+    [Id] bigint NOT NULL,
+    [ProfileID] bigint NULL,
+    [AddressTypeId] bigint NULL,
+    [LocationId] bigint NULL,
+    [Address] nvarchar(2000) NULL,
+    [PostalCode] varchar(10) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_AddressBook] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AddressBook_AddressType] FOREIGN KEY ([AddressTypeId]) REFERENCES [Basic].[AddressType] ([Id]),
+    CONSTRAINT [FK_AddressBook_Location] FOREIGN KEY ([LocationId]) REFERENCES [Basic].[Location] ([Id]),
+    CONSTRAINT [FK_AddressBook_Profile] FOREIGN KEY ([ProfileID]) REFERENCES [Authentication].[Profile] ([Id])
+);"
+2024-02-13T16:43:01.7074934+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("14"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Organization].[Department] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [LocationId] bigint NULL,
+    [ParentId] bigint NULL,
+    [CompanyId] bigint NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Department] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Department_Company] FOREIGN KEY ([CompanyId]) REFERENCES [Organization].[Company] ([Id]),
+    CONSTRAINT [FK_Department_Department_parent] FOREIGN KEY ([ParentId]) REFERENCES [Organization].[Department] ([Id]),
+    CONSTRAINT [FK_Department_Location_LocationId] FOREIGN KEY ([LocationId]) REFERENCES [Basic].[Location] ([Id])
+);"
+2024-02-13T16:43:01.7152462+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[AdminLocationAccess] (
+    [Id] bigint NOT NULL,
+    [UserID] bigint NULL,
+    [LocationId] bigint NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_AdminLocationAccess] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AdminLocationAccess_Location] FOREIGN KEY ([LocationId]) REFERENCES [Basic].[Location] ([Id]),
+    CONSTRAINT [FK_AdminLocationAccess_User] FOREIGN KEY ([UserID]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.7246658+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("9"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[FormUser] (
+    [Id] bigint NOT NULL,
+    [FormId] bigint NOT NULL,
+    [UserId] bigint NOT NULL,
+    [ActiveFrom] datetime2 NOT NULL,
+    [ActiveTo] datetime2 NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_FormUser] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_FormUser_Form_FormId] FOREIGN KEY ([FormId]) REFERENCES [Authentication].[Form] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_FormUser_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.7379233+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[UserConfig] (
+    [Id] bigint NOT NULL,
+    [UserId] bigint NULL,
+    [ConfigurationId] bigint NULL,
+    [KeyValue] varchar(4000) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_UserConfig] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserConfig_ConfigurationAttribute] FOREIGN KEY ([ConfigurationId]) REFERENCES [Basic].[ConfigurationAttribute] ([Id]),
+    CONSTRAINT [FK_UserConfig_User] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.7498750+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("12"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[UserDomainAccess] (
+    [Id] bigint NOT NULL,
+    [DomainId] bigint NULL,
+    [UserId] bigint NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_UserDomainAccess] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserDomainAccess_Domain] FOREIGN KEY ([DomainId]) REFERENCES [Authentication].[Domain] ([Id]),
+    CONSTRAINT [FK_UserDomainAccess_User] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.7633223+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[UserGroup] (
+    [Id] bigint NOT NULL,
+    [UserId] bigint NULL,
+    [GroupId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_UserGroup] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserGroup_Groups] FOREIGN KEY ([GroupId]) REFERENCES [Authentication].[Groups] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserGroup_User] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.7698104+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[UserLocationAccess] (
+    [Id] bigint NOT NULL,
+    [UserId] bigint NULL,
+    [LocationId] bigint NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_UserLocationAccess] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserLocationAccess_Location] FOREIGN KEY ([LocationId]) REFERENCES [Basic].[Location] ([Id]),
+    CONSTRAINT [FK_UserLocationAccess_User] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.7839692+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("14"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[UserPermission] (
+    [Id] bigint NOT NULL,
+    [UserId] bigint NULL,
+    [PermissionId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_UserPermission] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserPermission_Permission] FOREIGN KEY ([PermissionId]) REFERENCES [Authentication].[Permission] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserPermission_User] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.7923653+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Authentication].[UserRole] (
+    [Id] bigint NOT NULL,
+    [UserId] bigint NULL,
+    [RoleId] bigint NOT NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_UserRole] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_UserRole_Role] FOREIGN KEY ([RoleId]) REFERENCES [Authentication].[Role] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_UserRole_User] FOREIGN KEY ([UserId]) REFERENCES [Authentication].[Users] ([Id])
+);"
+2024-02-13T16:43:01.8045088+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("12"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[Step] (
+    [Id] bigint NOT NULL,
+    [Name] nvarchar(200) NULL,
+    [WorkFlowID] bigint NULL,
+    [ActionTypeId] bigint NULL,
+    [StateID] bigint NULL,
+    [BpmnId] nvarchar(max) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Step] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Step_ActionType_ActionTypeId] FOREIGN KEY ([ActionTypeId]) REFERENCES [Project].[ActionType] ([Id]),
+    CONSTRAINT [FK_Step_State] FOREIGN KEY ([StateID]) REFERENCES [Project].[State] ([Id]),
+    CONSTRAINT [FK_Step_WorkFlow] FOREIGN KEY ([WorkFlowID]) REFERENCES [Project].[WorkFlow] ([Id])
+);"
+2024-02-13T16:43:01.8157271+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlowActorGroup] (
+    [Id] bigint NOT NULL,
+    [WorkFlowActorID] bigint NOT NULL,
+    [GroupID] bigint NOT NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlowActorGroup] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlowActorGroup_WorkFlowActor_WorkFlowActorID] FOREIGN KEY ([WorkFlowActorID]) REFERENCES [Project].[WorkFlowActor] ([Id]) ON DELETE CASCADE
+);"
+2024-02-13T16:43:01.8223779+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlowActorRole] (
+    [Id] bigint NOT NULL,
+    [WorkFlowActorID] bigint NOT NULL,
+    [RoleID] bigint NOT NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlowActorRole] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlowActorRole_WorkFlowActor] FOREIGN KEY ([WorkFlowActorID]) REFERENCES [Project].[WorkFlowActor] ([Id])
+);"
+2024-02-13T16:43:01.8293544+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlowActorUser] (
+    [Id] bigint NOT NULL,
+    [WorkFlowActorID] bigint NOT NULL,
+    [UserID] bigint NOT NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlowActorUser] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlowActorUser_WorkFlowActor] FOREIGN KEY ([WorkFlowActorID]) REFERENCES [Project].[WorkFlowActor] ([Id])
+);"
+2024-02-13T16:43:01.8353861+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Organization].[Position] (
+    [Id] bigint NOT NULL,
+    [DepartmentId] bigint NULL,
+    [Name] nvarchar(50) NULL,
+    [Code] nvarchar(50) NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Position] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Position_Department] FOREIGN KEY ([DepartmentId]) REFERENCES [Organization].[Department] ([Id])
+);"
+2024-02-13T16:43:01.8470703+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[Progress] (
+    [Id] bigint NOT NULL,
+    [SourceId] bigint NOT NULL,
+    [TargetId] bigint NULL,
+    [WorkFlowId] bigint NOT NULL,
+    [Name] nvarchar(50) NULL,
+    [BpmnId] nvarchar(max) NULL,
+    [Description] nvarchar(max) NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Progress] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Progress_Step_SourceId] FOREIGN KEY ([SourceId]) REFERENCES [Project].[Step] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_Progress_Step_TargetId] FOREIGN KEY ([TargetId]) REFERENCES [Project].[Step] ([Id]) ON DELETE SET NULL,
+    CONSTRAINT [FK_Progress_WorkFlow_WorkFlowId] FOREIGN KEY ([WorkFlowId]) REFERENCES [Project].[WorkFlow] ([Id])
+);"
+2024-02-13T16:43:01.8605618+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("13"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Project].[WorkFlowActorStep] (
+    [Id] bigint NOT NULL,
+    [WorkFlowActorID] bigint NOT NULL,
+    [StepID] bigint NOT NULL,
+    [ActiveStatusID] bigint NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_WorkFlowActorStep] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_WorkFlowActorStep_Step] FOREIGN KEY ([StepID]) REFERENCES [Project].[Step] ([Id]),
+    CONSTRAINT [FK_WorkFlowActorStep_WorkFlowActor] FOREIGN KEY ([WorkFlowActorID]) REFERENCES [Project].[WorkFlowActor] ([Id])
+);"
+2024-02-13T16:43:01.8690160+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE TABLE [Organization].[Staff] (
+    [Id] bigint NOT NULL,
+    [ProfileId] bigint NULL,
+    [ManagerId] bigint NULL,
+    [PositionId] bigint NULL,
+    [StaffNumber] varchar(20) NULL,
+    [ActiveFrom] date NULL,
+    [ActiveTo] date NULL,
+    [ActiveStatusId] bigint NOT NULL,
+    [CreatedAt] datetime NULL DEFAULT ((getdate())),
+    [CreatedBy] bigint NULL,
+    [ModifiedAt] rowversion NULL,
+    [ModifiedBy] bigint NULL,
+    CONSTRAINT [PK_Staff] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Staff_Position] FOREIGN KEY ([PositionId]) REFERENCES [Organization].[Position] ([Id]),
+    CONSTRAINT [FK_Staff_Profile] FOREIGN KEY ([ProfileId]) REFERENCES [Authentication].[Profile] ([Id]),
+    CONSTRAINT [FK_Staff_Profile_manager] FOREIGN KEY ([ManagerId]) REFERENCES [Authentication].[Profile] ([Id])
+);"
+2024-02-13T16:43:01.8724638+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_ActionType_Code] ON [Project].[ActionType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.8762268+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AddressBook_AddressTypeId] ON [Authentication].[AddressBook] ([AddressTypeId]);"
+2024-02-13T16:43:01.8802123+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AddressBook_LocationId] ON [Authentication].[AddressBook] ([LocationId]);"
+2024-02-13T16:43:01.8844419+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AddressBook_ProfileID] ON [Authentication].[AddressBook] ([ProfileID]);"
+2024-02-13T16:43:01.8882273+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_AddressType_Code] ON [Basic].[AddressType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.8905469+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AdminLocationAccess_LocationId] ON [Authentication].[AdminLocationAccess] ([LocationId]);"
+2024-02-13T16:43:01.8929510+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_AdminLocationAccess_UserID] ON [Authentication].[AdminLocationAccess] ([UserID]);"
+2024-02-13T16:43:01.8958939+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Branch_BranchTypeId] ON [Bank].[Branch] ([BranchTypeId]);"
+2024-02-13T16:43:01.8986254+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Branch_Code] ON [Bank].[Branch] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9012028+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_BranchType_Code] ON [Bank].[BranchType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9059372+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Broker_BrokerTypeId] ON [Bank].[Broker] ([BrokerTypeId]);"
+2024-02-13T16:43:01.9084116+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Broker_Code] ON [Bank].[Broker] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9131857+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_BrokerType_Code] ON [Bank].[BrokerType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9164555+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Company_Code] ON [Organization].[Company] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9240990+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Company_ParentId] ON [Organization].[Company] ([ParentId]) WHERE [ParentId] IS NOT NULL;"
+2024-02-13T16:43:01.9319213+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [index_Key] ON [Basic].[ConfigurationAttribute] ([EnglishKey]) WHERE [EnglishKey] IS NOT NULL;"
+2024-02-13T16:43:01.9344572+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_ConfigurationAttributeValue_ConfigurationAttributeId] ON [Basic].[ConfigurationAttributeValue] ([ConfigurationAttributeId]);"
+2024-02-13T16:43:01.9377358+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_CurrencyType_Code] ON [Bank].[CurrencyType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9413621+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Department] ON [Organization].[Department] ([Id]);"
+2024-02-13T16:43:01.9439581+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Department_Code] ON [Organization].[Department] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9525686+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("8"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Department_CompanyId] ON [Organization].[Department] ([CompanyId]);"
+2024-02-13T16:43:01.9563175+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Department_LocationId] ON [Organization].[Department] ([LocationId]);"
+2024-02-13T16:43:01.9589071+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Department_ParentId] ON [Organization].[Department] ([ParentId]);"
+2024-02-13T16:43:01.9634415+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_DocumentExtension_Code] ON [DMS].[DocumentExtension] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9660235+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Documents_Code] ON [DMS].[Documents] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9712774+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Documents_DocumentTypeId] ON [DMS].[Documents] ([DocumentTypeId]);"
+2024-02-13T16:43:01.9771663+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Documents_FileExtensionId] ON [DMS].[Documents] ([FileExtensionId]);"
+2024-02-13T16:43:01.9813339+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_DocumentType_Code] ON [DMS].[DocumentType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9856897+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Domain_Code] ON [Authentication].[Domain] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9881905+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Form_Code] ON [Authentication].[Form] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:01.9904967+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Form_DomainId] ON [Authentication].[Form] ([DomainId]);"
+2024-02-13T16:43:01.9929109+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_FormGroup_FormId] ON [Authentication].[FormGroup] ([FormId]);"
+2024-02-13T16:43:01.9985860+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_FormGroup_GroupId] ON [Authentication].[FormGroup] ([GroupId]);"
+2024-02-13T16:43:02.0031763+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_FormRole_FormId] ON [Authentication].[FormRole] ([FormId]);"
+2024-02-13T16:43:02.0059385+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_FormRole_RoleId] ON [Authentication].[FormRole] ([RoleId]);"
+2024-02-13T16:43:02.0089005+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_FormUser_FormId] ON [Authentication].[FormUser] ([FormId]);"
+2024-02-13T16:43:02.0134545+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_FormUser_UserId] ON [Authentication].[FormUser] ([UserId]);"
+2024-02-13T16:43:02.0180724+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Gender_Code] ON [Basic].[Gender] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.0217113+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_GroupPermission_GroupId] ON [Authentication].[GroupPermission] ([GroupId]);"
+2024-02-13T16:43:02.0242314+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_GroupPermission_PermissionId] ON [Authentication].[GroupPermission] ([PermissionId]);"
+2024-02-13T16:43:02.0280362+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Groups_Code] ON [Authentication].[Groups] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.0326965+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Issue_Code] ON [IssueManagement].[Issue] ([Code]);"
+2024-02-13T16:43:02.0357011+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Issue_IssuePriorityId] ON [IssueManagement].[Issue] ([IssuePriorityId]);"
+2024-02-13T16:43:02.0421928+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Issue_IssueTypeId] ON [IssueManagement].[Issue] ([IssueTypeId]);"
+2024-02-13T16:43:02.0461971+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Issue_IssueWeightCategoryId] ON [IssueManagement].[Issue] ([IssueWeightCategoryId]);"
+2024-02-13T16:43:02.0501095+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_IssueComment_IssueId] ON [IssueManagement].[IssueComment] ([IssueId]);"
+2024-02-13T16:43:02.0523253+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_IssueDocument_IssueId] ON [IssueManagement].[IssueDocument] ([IssueId]);"
+2024-02-13T16:43:02.0545698+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_IssueHistory_IssueId] ON [IssueManagement].[IssueHistory] ([IssueId]);"
+2024-02-13T16:43:02.0586458+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_IssueLink_IssueId] ON [IssueManagement].[IssueLink] ([IssueId]);"
+2024-02-13T16:43:02.0610555+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_IssueLink_IssueIdLinkedTo] ON [IssueManagement].[IssueLink] ([IssueIdLinkedTo]);"
+2024-02-13T16:43:02.0635254+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_IssueLink_IssueIdLinkReasonTo] ON [IssueManagement].[IssueLink] ([IssueIdLinkReasonTo]);"
+2024-02-13T16:43:02.0671633+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_IssueLinkReason_Code] ON [IssueManagement].[IssueLinkReason] ([Code]);"
+2024-02-13T16:43:02.0710196+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_IssuePriority_Code] ON [IssueManagement].[IssuePriority] ([Code]);"
+2024-02-13T16:43:02.0808654+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("10"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_IssueType_Code] ON [IssueManagement].[IssueType] ([Code]);"
+2024-02-13T16:43:02.0835683+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_IssueWeightCategory_Code] ON [IssueManagement].[IssueWeightCategory] ([Code]);"
+2024-02-13T16:43:02.0864938+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Location_Code] ON [Basic].[Location] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.0888586+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Location_LocationTypeId] ON [Basic].[Location] ([LocationTypeId]);"
+2024-02-13T16:43:02.0910299+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Location_ParentId] ON [Basic].[Location] ([ParentId]);"
+2024-02-13T16:43:02.0933657+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_LocationType_ActiveStatusId] ON [Basic].[LocationType] ([ActiveStatusId]);"
+2024-02-13T16:43:02.0991076+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_LocationType_Code] ON [Basic].[LocationType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1013130+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_LocationType_ParentId] ON [Basic].[LocationType] ([ParentId]);"
+2024-02-13T16:43:02.1038129+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [index_Code] ON [Authentication].[MainAggregate] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1080964+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_MainAggregate_DomainId] ON [Authentication].[MainAggregate] ([DomainId]);"
+2024-02-13T16:43:02.1135167+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_PaymentType_Code] ON [Bank].[PaymentType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1161554+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Permission_Code] ON [Authentication].[Permission] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1184645+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Permission_DomainId] ON [Authentication].[Permission] ([DomainId]);"
+2024-02-13T16:43:02.1209145+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_PhoneBook_PhoneTypeId] ON [Authentication].[PhoneBook] ([PhoneTypeId]);"
+2024-02-13T16:43:02.1232647+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_PhoneBook_ProfileId] ON [Authentication].[PhoneBook] ([ProfileId]);"
+2024-02-13T16:43:02.1301390+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_PhonType_Code] ON [Basic].[PhonType] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1328892+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Position_Code] ON [Organization].[Position] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1356340+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Position_DepartmentId] ON [Organization].[Position] ([DepartmentId]);"
+2024-02-13T16:43:02.1397529+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [index_national] ON [Authentication].[Profile] ([NationalID]) WHERE [NationalID] IS NOT NULL;"
+2024-02-13T16:43:02.1421893+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Profile_GenderId] ON [Authentication].[Profile] ([GenderId]);"
+2024-02-13T16:43:02.1461296+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Progress_SourceId] ON [Project].[Progress] ([SourceId]);"
+2024-02-13T16:43:02.1485383+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Progress_TargetId] ON [Project].[Progress] ([TargetId]);"
+2024-02-13T16:43:02.1514925+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Progress_WorkFlowId] ON [Project].[Progress] ([WorkFlowId]);"
+2024-02-13T16:43:02.1557457+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Project_Code] ON [Project].[Project] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1583610+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_ProjectGroup_ProjectID] ON [Project].[ProjectGroup] ([ProjectID]);"
+2024-02-13T16:43:02.1650421+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_ProjectMember_ProjectID] ON [Project].[ProjectMember] ([ProjectID]);"
+2024-02-13T16:43:02.1682700+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Role_Code] ON [Authentication].[Role] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1727390+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("4"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_Role_Code_EnglishKey] ON [Authentication].[Role] ([Code], [EnglishKey]) WHERE [Code] IS NOT NULL AND [EnglishKey] IS NOT NULL;"
+2024-02-13T16:43:02.1753863+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_RolePermission_PermissionId] ON [Authentication].[RolePermission] ([PermissionId]);"
+2024-02-13T16:43:02.1776568+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_RolePermission_RoleId] ON [Authentication].[RolePermission] ([RoleId]);"
+2024-02-13T16:43:02.1798322+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Staff_ManagerId] ON [Organization].[Staff] ([ManagerId]);"
+2024-02-13T16:43:02.1820478+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Staff_PositionId] ON [Organization].[Staff] ([PositionId]);"
+2024-02-13T16:43:02.1844622+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Staff_ProfileId] ON [Organization].[Staff] ([ProfileId]);"
+2024-02-13T16:43:02.1872774+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [index_code] ON [Project].[State] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.1895097+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_State_WorkFlowID] ON [Project].[State] ([WorkFlowID]);"
+2024-02-13T16:43:02.2036285+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("14"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Step_ActionTypeId] ON [Project].[Step] ([ActionTypeId]);"
+2024-02-13T16:43:02.2186468+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("15"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Step_StateID] ON [Project].[Step] ([StateID]);"
+2024-02-13T16:43:02.2212994+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Step_WorkFlowID] ON [Project].[Step] ([WorkFlowID]);"
+2024-02-13T16:43:02.2277231+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_SysConfig_ConfigurationId] ON [Authentication].[SysConfig] ([ConfigurationId]);"
+2024-02-13T16:43:02.2299192+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserConfig_ConfigurationId] ON [Authentication].[UserConfig] ([ConfigurationId]);"
+2024-02-13T16:43:02.2321838+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserConfig_UserId] ON [Authentication].[UserConfig] ([UserId]);"
+2024-02-13T16:43:02.2345468+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserDomainAccess_DomainId] ON [Authentication].[UserDomainAccess] ([DomainId]);"
+2024-02-13T16:43:02.2452045+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("10"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserDomainAccess_UserId] ON [Authentication].[UserDomainAccess] ([UserId]);"
+2024-02-13T16:43:02.2475554+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserGroup_GroupId] ON [Authentication].[UserGroup] ([GroupId]);"
+2024-02-13T16:43:02.2496803+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserGroup_UserId] ON [Authentication].[UserGroup] ([UserId]);"
+2024-02-13T16:43:02.2522100+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserLocationAccess_LocationId] ON [Authentication].[UserLocationAccess] ([LocationId]);"
+2024-02-13T16:43:02.2546382+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserLocationAccess_UserId] ON [Authentication].[UserLocationAccess] ([UserId]);"
+2024-02-13T16:43:02.2569525+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserPermission_PermissionId] ON [Authentication].[UserPermission] ([PermissionId]);"
+2024-02-13T16:43:02.2593353+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserPermission_UserId] ON [Authentication].[UserPermission] ([UserId]);"
+2024-02-13T16:43:02.2617043+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserRole_RoleId] ON [Authentication].[UserRole] ([RoleId]);"
+2024-02-13T16:43:02.2639554+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_UserRole_UserId] ON [Authentication].[UserRole] ([UserId]);"
+2024-02-13T16:43:02.2665622+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [index_Username] ON [Authentication].[Users] ([Username]);"
+2024-02-13T16:43:02.2731372+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [index_Username_ID] ON [Authentication].[Users] ([Username], [ProfileID], [CompanyId]) WHERE [ProfileID] IS NOT NULL;"
+2024-02-13T16:43:02.2754912+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Users_CompanyId] ON [Authentication].[Users] ([CompanyId]);"
+2024-02-13T16:43:02.2777580+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_Users_ProfileID] ON [Authentication].[Users] ([ProfileID]);"
+2024-02-13T16:43:02.2803917+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_WorkFlow_Code] ON [Project].[WorkFlow] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.2833481+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlow_ProjectID] ON [Project].[WorkFlow] ([ProjectID]);"
+2024-02-13T16:43:02.2860477+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE UNIQUE INDEX [IX_WorkFlowActor_Code] ON [Project].[WorkFlowActor] ([Code]) WHERE [Code] IS NOT NULL;"
+2024-02-13T16:43:02.2884214+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowActor_WorkFlowId] ON [Project].[WorkFlowActor] ([WorkFlowId]);"
+2024-02-13T16:43:02.2907571+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowActorGroup_WorkFlowActorID] ON [Project].[WorkFlowActorGroup] ([WorkFlowActorID]);"
+2024-02-13T16:43:02.2931267+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowActorRole_WorkFlowActorID] ON [Project].[WorkFlowActorRole] ([WorkFlowActorID]);"
+2024-02-13T16:43:02.2955302+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowActorStep_StepID] ON [Project].[WorkFlowActorStep] ([StepID]);"
+2024-02-13T16:43:02.2979009+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowActorStep_WorkFlowActorID] ON [Project].[WorkFlowActorStep] ([WorkFlowActorID]);"
+2024-02-13T16:43:02.3037697+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("6"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowActorUser_WorkFlowActorID] ON [Project].[WorkFlowActorUser] ([WorkFlowActorID]);"
+2024-02-13T16:43:02.3088249+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkFlowCompany_WorkFlowId] ON [Project].[WorkFlowCompany] ([WorkFlowId]);"
+2024-02-13T16:43:02.3122654+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkflowDocumentExtension_DocumentExtensionId] ON [DMS].[WorkflowDocumentExtension] ([DocumentExtensionId]);"
+2024-02-13T16:43:02.3148403+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("2"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""CREATE INDEX [IX_WorkflowDocumentType_DocumentTypeId] ON [DMS].[WorkflowDocumentType] ([DocumentTypeId]);"
+2024-02-13T16:43:02.3221802+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=[""], CommandType='Text', CommandTimeout='30']"
+""INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20240213131121_initSima20240213', N'8.0.1');"
+2024-02-13T19:18:42.6829284+03:30 [INF] (Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager) User profile is available. Using '"C:\Users\erfani.YAAS\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
+2024-02-13T19:18:43.0431614+03:30 [INF] (Microsoft.Hosting.Lifetime) Now listening on: "http://localhost:5118"
+2024-02-13T19:18:43.0448357+03:30 [INF] (Microsoft.Hosting.Lifetime) Application started. Press Ctrl+C to shut down.
+2024-02-13T19:18:43.0451894+03:30 [INF] (Microsoft.Hosting.Lifetime) Hosting environment: "Development"
+2024-02-13T19:18:43.0452871+03:30 [INF] (Microsoft.Hosting.Lifetime) Content root path: "D:\Git\sima-master\Src\Endpoint\SIMA.WebApi"
+2024-02-13T19:18:45.9561384+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - null null
+2024-02-13T19:18:46.4296425+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/index.html""" - 200 null "text/html;charset=utf-8" 881.0257ms
+2024-02-13T19:18:46.4934331+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - null null
+2024-02-13T19:18:46.4958785+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_framework/aspnetcore-browser-refresh.js""" - 200 13758 "application/javascript; charset=utf-8" 2.1137ms
+2024-02-13T19:18:46.5073666+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - null null
+2024-02-13T19:18:46.5649946+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/_vs/browserLink""" - 200 null "text/javascript; charset=UTF-8" 57.6753ms
+2024-02-13T19:18:46.8110944+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - null null
+2024-02-13T19:18:47.2616315+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "GET" "http"://"localhost:5118""""/swagger/v1/swagger.json""" - 200 null "application/json;charset=utf-8" 450.1601ms
+2024-02-13T19:19:13.3198813+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request starting "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - "application/json" 54
+2024-02-13T19:19:13.3240383+03:30 [INF] (Microsoft.AspNetCore.Cors.Infrastructure.CorsService) CORS policy execution successful.
+2024-02-13T19:19:13.4334497+03:30 [INF] (RequestResponseLoggingMiddleware) Request POST: /Users/Login, Body: { "username": "0123456789", "password": "123456" },UserId: 
+2024-02-13T19:19:13.4356281+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executing endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T19:19:13.4610894+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Route matched with "{action = \"Post\", controller = \"Users\"}". Executing controller action with signature "System.Threading.Tasks.Task`1[SIMA.Framework.Common.Response.Result] Post(SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQuery)" on controller "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController" ("SIMA.WebApi").
+2024-02-13T19:19:13.5779049+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executing action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" - Validation state: Valid
+2024-02-13T19:19:17.1222357+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("57"ms) [Parameters=["@__username_0='?' (Size = 50) (DbType = AnsiString)"], CommandType='Text', CommandTimeout='30']"
+""SELECT TOP(1) [u].[Id], [u].[ActiveFrom], [u].[ActiveStatusId], [u].[ActiveTo], [u].[CompanyId], [u].[CreatedAt], [u].[CreatedBy], [u].[IsLoggedIn], [u].[ModifiedAt], [u].[ModifiedBy], [u].[ProfileID], [u].[User_SecretKey], [u].[Username], [u].[Password], [u].[SecretKey]
+FROM [Authentication].[Users] AS [u]
+WHERE [u].[Username] = @__username_0"
+2024-02-13T19:19:17.3883933+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("17"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[GroupId]
+FROM [Authentication].[UserGroup] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T19:19:17.3963726+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("1"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[RoleId]
+FROM [Authentication].[UserRole] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T19:19:17.4192987+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[Id], [u].[ActiveFrom], [u].[ActiveStatusId], [u].[ActiveTo], [u].[CreatedAt], [u].[CreatedBy], [u].[DomainId], [u].[ModifiedAt], [u].[ModifiedBy], [u].[UserId]
+FROM [Authentication].[UserDomainAccess] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T19:19:17.4585645+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("5"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [f].[Id], [f].[ActiveFrom], [f].[ActiveStatusId], [f].[ActiveTo], [f].[CreatedAt], [f].[CreatedBy], [f].[FormId], [f].[ModifiedAt], [f].[ModifiedBy], [f].[UserId]
+FROM [Authentication].[FormUser] AS [f]
+WHERE [f].[UserId] = @__user_Id_0"
+2024-02-13T19:19:17.5381993+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("11"ms) [Parameters=["@__groupIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [f].[Id], [f].[ActiveFrom], [f].[ActiveStatusId], [f].[ActiveTo], [f].[CreatedAt], [f].[CreatedBy], [f].[FormId], [f].[GroupId], [f].[ModifiedAt], [f].[ModifiedBy]
+FROM [Authentication].[FormGroup] AS [f]
+WHERE [f].[GroupId] IN (
+    SELECT [g].[value]
+    FROM OPENJSON(@__groupIds_0) WITH ([value] bigint '$') AS [g]
+)"
+2024-02-13T19:19:17.5457019+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("3"ms) [Parameters=["@__user_Id_0='?' (DbType = Int64)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [u].[PermissionId]
+FROM [Authentication].[UserPermission] AS [u]
+WHERE [u].[UserId] = @__user_Id_0"
+2024-02-13T19:19:17.5963442+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=["@__roleIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [r1].[PermissionId]
+FROM [Authentication].[Role] AS [r]
+INNER JOIN [Authentication].[RolePermission] AS [r1] ON [r].[Id] = [r1].[RoleId]
+WHERE [r].[Id] IN (
+    SELECT [r0].[value]
+    FROM OPENJSON(@__roleIds_0) WITH ([value] bigint '$') AS [r0]
+)"
+2024-02-13T19:19:17.6111711+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("7"ms) [Parameters=["@__groupIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [g1].[PermissionId]
+FROM [Authentication].[Groups] AS [g]
+INNER JOIN [Authentication].[GroupPermission] AS [g1] ON [g].[Id] = [g1].[GroupId]
+WHERE [g].[Id] IN (
+    SELECT [g0].[value]
+    FROM OPENJSON(@__groupIds_0) WITH ([value] bigint '$') AS [g0]
+)"
+2024-02-13T19:19:17.6400871+03:30 [INF] (Microsoft.EntityFrameworkCore.Database.Command) Executed DbCommand ("23"ms) [Parameters=["@__permissionIds_0='?' (Size = 4000)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [p].[EnglishKey]
+FROM [Authentication].[Permission] AS [p]
+WHERE [p].[Id] IN (
+    SELECT [p0].[value]
+    FROM OPENJSON(@__permissionIds_0) WITH ([value] bigint '$') AS [p0]
+)"
+2024-02-13T19:19:17.6862838+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action method "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)", returned result "Microsoft.AspNetCore.Mvc.ObjectResult" in 4105.0691ms.
+2024-02-13T19:19:17.6925526+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor) Executing "ObjectResult", writing value of type '"SIMA.Framework.Common.Response.Result`1[[SIMA.Application.Query.Contract.Features.Auths.Users.LoginUserQueryResult, SIMA.Application.Query.Contract, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'.
+2024-02-13T19:19:17.7209940+03:30 [INF] (Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker) Executed action "SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)" in 4253.3413ms
+2024-02-13T19:19:17.7218262+03:30 [INF] (Microsoft.AspNetCore.Routing.EndpointMiddleware) Executed endpoint '"SIMA.WebApi.Controllers.Features.Auths.Users.V1.UsersController.Post (SIMA.WebApi)"'
+2024-02-13T19:19:17.7226024+03:30 [INF] (RequestResponseLoggingMiddleware) Response POST: /Users/Login, Status Code: 200, Body: 
+2024-02-13T19:19:17.7302176+03:30 [INF] (Microsoft.AspNetCore.Hosting.Diagnostics) Request finished "HTTP/1.1" "POST" "http"://"localhost:5118""""/Users/Login""" - 200 null "application/json; charset=utf-8" 4410.4183ms

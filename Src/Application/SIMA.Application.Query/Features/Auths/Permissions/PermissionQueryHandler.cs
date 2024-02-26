@@ -1,0 +1,35 @@
+﻿using AutoMapper;
+using Sima.Framework.Core.Repository;
+using SIMA.Application.Query.Contract.Features.Auths.Permission;
+using SIMA.Framework.Common.Response;
+using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.Auths.Permissions;
+
+namespace SIMA.Application.Query.Features.Auths.Permissions;
+
+public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<GetPermissionQueryResult>>, IQueryHandler<GetAllPermissionsByDomainIdQuery, Result<List<GetPermissionQueryResult>>>
+{
+    private readonly IMapper _mapper;
+    private readonly IPermissionQueryRepository _repository;
+
+    public PermissionQueryHandler(IMapper mapper, IPermissionQueryRepository repository)
+    {
+        _mapper = mapper;
+        _repository = repository;
+    }
+
+    public async Task<Result<GetPermissionQueryResult>> Handle(GetPermissionQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.FindById(request.Id);
+        return Result.Ok(result);
+    }
+
+    public async Task<Result<List<GetPermissionQueryResult>>> Handle(GetAllPermissionsByDomainIdQuery request, CancellationToken cancellationToken)
+    {
+        var result = new List<GetPermissionQueryResult>();
+
+        if (request.DomainId is not null && request.DomainId != 0) result = await _repository.GetAll(request.DomainId.Value);
+        else result = await _repository.GetAll();
+        return Result.Ok(result);
+    }
+}
