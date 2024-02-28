@@ -1,31 +1,28 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlowActor;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
-using SIMA.Persistance.Read;
+using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlowActor
+namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlowActor;
+
+public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
 {
-    public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
+    private readonly string _connectionString;
+
+
+    public WorkFlowActorQueryRepository(IConfiguration configuration)
     {
-        private readonly string _connectionString;
+        _connectionString = configuration.GetConnectionString();
+    }
+    public async Task<GetWorkFlowActorQueryResult> FindById(long id)
+    {
+        var response = new GetWorkFlowActorQueryResult();
 
-
-        public WorkFlowActorQueryRepository(IConfiguration configuration)
+        using (var connection = new SqlConnection(_connectionString))
         {
-            _connectionString = configuration.GetConnectionString();
-        }
-        public async Task<GetWorkFlowActorQueryResult> FindById(long id)
-        {
-            var response = new GetWorkFlowActorQueryResult();
-
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
+            await connection.OpenAsync();
+            string query = $@"
                   SELECT DISTINCT C.[ID] as Id
           ,C.[Name]
           ,C.[Code]
@@ -84,62 +81,80 @@ Order By c.[CreatedAt] desc
                         
                         WHERE C.[ActiveStatusID] = 1 and U.ActiveStatusId = 1 and C.Id = @Id
 Order By c.[CreatedAt] desc  ";
-                        
 
 
-                using (var multi = await connection.QueryMultipleAsync(query, new { Id = id }))
-                {
-                    response = multi.ReadAsync<GetWorkFlowActorQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ;
-                    response.WorkFlowActorGroups = multi.ReadAsync<WorkFlowActorGroup>().GetAwaiter().GetResult().ToList();
-                    response.WorkFlowActorRoles = multi.ReadAsync<WorkFlowActorRole>().GetAwaiter().GetResult().ToList();
-                    response.WorkFlowActorUsers = multi.ReadAsync<WorkFlowActorUser>().GetAwaiter().GetResult().ToList();
-                }
+
+            using (var multi = await connection.QueryMultipleAsync(query, new { Id = id }))
+            {
+                response = multi.ReadAsync<GetWorkFlowActorQueryResult>().GetAwaiter().GetResult().FirstOrDefault();
+                response.WorkFlowActorGroups = multi.ReadAsync<WorkFlowActorGroup>().GetAwaiter().GetResult().ToList();
+                response.WorkFlowActorRoles = multi.ReadAsync<WorkFlowActorRole>().GetAwaiter().GetResult().ToList();
+                response.WorkFlowActorUsers = multi.ReadAsync<WorkFlowActorUser>().GetAwaiter().GetResult().ToList();
             }
-            return response;
         }
+        return response;
+    }
+    public async Task<Result<IEnumerable<GetWorkFlowActorQueryResult>>> GetAll(GetAllWorkFlowActorsQuery request)
+    {
+        var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
 
-        public async Task<List<GetWorkFlowActorQueryResult>> GetAll()
+
+        using (var connection = new SqlConnection(_connectionString))
         {
-            try
+
+            var queryCount = @"
+                           SELECT COUNT(*) Result
+                                  FROM [PROJECT].[WORKFLOWACTOR] C
+                                  join [Project].[WorkFlow] W on C.WorkFlowId = W.Id
+                            	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
+                            	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                           WHERE  C.ActiveStatusId != 3
+                            		and (@SearchValue is null OR C.[Name] like @SearchValue)
+                            		AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId);";
+
+            await connection.OpenAsync();
+
+            string query = $@"
+                            SELECT DISTINCT C.[ID] as Id
+                                      ,C.[Name]
+                                      ,C.[Code]
+                                      ,C.[WorkFlowId]
+                                      ,W.[Name] as WorkFlowName
+                                      ,C.[activeStatusId]
+                            		  ,A.[Name] ActiveStatus
+                            		  ,P.[Name] ProjectName
+                            		  ,P.Id ProjectId
+                            		  ,D.[Name] DomainName
+                            		  ,D.[Id] DomainId
+                                      ,c.[CreatedAt]
+                                  FROM [PROJECT].[WORKFLOWACTOR] C
+                                  join [Project].[WorkFlow] W on C.WorkFlowId = W.Id
+                            	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
+                            	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                               WHERE  C.ActiveStatusId != 3
+                            		and (@SearchValue is null OR C.[Name] like @SearchValue)
+                            		AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
+                            		order by C.CreatedAt desc
+                            		OFFSET @Skip rows FETCH NEXT @Take rows only";
+
+
+            using (var multi = await connection.QueryMultipleAsync(query + " " + queryCount, new
             {
 
-                var response = new List<GetWorkFlowActorQueryResult>();
-
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    await connection.OpenAsync();
-                    string query = $@"
-SELECT DISTINCT C.[ID] as Id
-          ,C.[Name]
-          ,C.[Code]
-         	,C.[WorkFlowId]
-         	,W.[Name] as WorkFlowName
-          ,C.[activeStatusId]
-		  ,A.[Name] ActiveStatus
-		  ,P.[Name] ProjectName
-		  ,P.Id ProjectId
-		  ,D.[Name] DomainName
-		  ,D.[Id] DomainId
-,c.[CreatedAt]
-      FROM [PROJECT].[WORKFLOWACTOR] C
-      join [Project].[WorkFlow] W on C.WorkFlowId = W.Id
-	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
-	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-      WHERE C.[ActiveStatusID] <> 3   
-Order By c.[CreatedAt] desc  
-";
-                    var result = await connection.QueryAsync<GetWorkFlowActorQueryResult>(query);
-                    response = result.ToList();
-                }
-                return response;
-            }
-            catch (Exception ex)
+                SearchValue = "%" + request.SearchValue + "%",
+                request.WorkFlowId,
+                request.DomainId,
+                request.ProjectId,
+                Skip = skip,
+                request.Take
+            }))
             {
-                throw;
+                var response = await multi.ReadAsync<GetWorkFlowActorQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count);
             }
-
-
         }
     }
 }

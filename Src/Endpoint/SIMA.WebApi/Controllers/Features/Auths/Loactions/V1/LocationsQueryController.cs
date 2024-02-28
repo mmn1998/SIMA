@@ -34,17 +34,9 @@ public class LocationsQueryController : ControllerBase
     [SimaAuthorize(Permissions.LocationGetAll)]
     public async Task<Result> Get([FromQuery] BaseRequest request)
     {
-        try
-        {
-            var query = new GetAllLocationQuery { Request = request };
-            var result = await _mediator.Send(query);
-            return result;
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var query = new GetAllLocationQuery { Request = request };
+        var result = await _mediator.Send(query);
+        return result;
     }
     [HttpGet("GetParentLocationsByLocationTypeId")]
     [SimaAuthorize(Permissions.GetParentLocationsByLocationTypeId)]

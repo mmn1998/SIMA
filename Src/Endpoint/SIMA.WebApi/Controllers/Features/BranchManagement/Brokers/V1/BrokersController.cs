@@ -21,15 +21,7 @@ public class BrokersController : ControllerBase
     [HttpPost]
     public async Task<Result> Post([FromBody] CreateBrokerCommand command)
     {
-        try
-        {
-            return await _mediator.Send(command);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        return await _mediator.Send(command);
     }
     [HttpPut]
     public async Task<Result> Put([FromBody] ModifyBrokerCommand command)

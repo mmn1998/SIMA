@@ -24,16 +24,8 @@ public class BranchesQueryController : ControllerBase
     [SimaAuthorize(Permissions.BranchGetAll)]
     public async Task<Result> Get([FromQuery] BaseRequest request)
     {
-        try
-        {
-            var query = new GetAllBranchQuery { Request = request };
-            return await _mediator.Send(query);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var query = new GetAllBranchQuery { Request = request };
+        return await _mediator.Send(query);
     }
     [HttpGet("{id}")]
     [SimaAuthorize(Permissions.BranchGet)]

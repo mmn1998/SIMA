@@ -25,10 +25,9 @@ namespace SIMA.WebApi.Controllers.Features.IssueManagement.Issues.V1
         /// <returns></returns>
         [HttpGet("myIssueList")]
         [SimaAuthorize(Permissions.MyIssueList)]
-        public async Task<Result> MyIssueList([FromQuery] BaseRequest request, [FromQuery] long? workFlowId)
+        public async Task<Result> MyIssueList([FromQuery] GetMyIssueListQuery request)
         {
-            var query = new GetMyIssueListQuery { Request = request, WorkFlowId = workFlowId };
-            return await _mediator.Send(query);
+            return await _mediator.Send(request);
         }
         /// <summary>
         /// فهرست حوزه من
@@ -37,10 +36,9 @@ namespace SIMA.WebApi.Controllers.Features.IssueManagement.Issues.V1
         /// <returns></returns>
         [HttpGet]
         [SimaAuthorize(Permissions.IssueGetAll)]
-        public async Task<Result> Get([FromQuery] BaseRequest request, [FromQuery] long? workFlowId)
+        public async Task<Result> Get([FromQuery] GetAllIssuesQuery request)
         {
-            var query = new GetAllIssuesQuery { Request = request, WorkFlowId = workFlowId };
-            return await _mediator.Send(query);
+            return await _mediator.Send(request);
         }
         [HttpGet("{id}")]
         [SimaAuthorize(Permissions.IssueGet)]

@@ -19,17 +19,15 @@ public class BranchQueryRepository : IBranchQueryRepository
     }
     public async Task<Result<List<GetBranchQueryResult>>> GetAll(BaseRequest baseRequest)
     {
-        try
+        var response = new List<GetBranchQueryResult>();
+        string query = string.Empty;
+        int totalCount = 0;
+        using (var connection = new SqlConnection(_connectionString))
         {
-            var response = new List<GetBranchQueryResult>();
-            string query = string.Empty;
-            int totalCount = 0;
-            using (var connection = new SqlConnection(_connectionString))
+            await connection.OpenAsync();
+            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
             {
-                await connection.OpenAsync();
-                if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-                {
-                    query = @"
+                query = @"
                         SELECT DISTINCT B.[Id]
                               ,B.[Name]
                               ,B.[Code]
@@ -51,13 +49,13 @@ public class BranchQueryRepository : IBranchQueryRepository
                         WHERE (B.[Name] like @SearchValue OR B.[Code] like @SearchValue OR B.[PhoneNumber] like @SearchValue OR
                         B.[PostalCode] like @SearchValue OR B.[Longitude] like @SearchValue OR B.[Latitude] like @SearchValue OR B.[Address] like @SearchValue OR S.[Name] like @SearchValue)
 Order By b.[CreatedAt] desc  ";
-                    var result = await connection.QueryAsync<GetBranchQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                    totalCount = result.Count();
-                    response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-                }
-                else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-                {
-                    query = @"
+                var result = await connection.QueryAsync<GetBranchQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
+                totalCount = result.Count();
+                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
+            }
+            else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
+            {
+                query = @"
                         SELECT DISTINCT B.[Id]
                               ,B.[Name]
                               ,B.[Code]
@@ -78,13 +76,13 @@ Order By b.[CreatedAt] desc  ";
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
 Order By b.[CreatedAt] desc  
                         ";
-                    var result = await connection.QueryAsync<GetBranchQueryResult>(query);
-                    totalCount = result.Count();
-                    response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-                }
-                else
-                {
-                    query = @"
+                var result = await connection.QueryAsync<GetBranchQueryResult>(query);
+                totalCount = result.Count();
+                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
+            }
+            else
+            {
+                query = @"
                         SELECT DISTINCT B.[Id]
                               ,B.[Name]
                               ,B.[Code]
@@ -104,17 +102,11 @@ Order By b.[CreatedAt] desc
                           FROM [Bank].[Branch] B
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
 Order By b.[CreatedAt] desc  ";
-                    response = (await connection.QueryAsync<GetBranchQueryResult>(query)).ToList();
+                response = (await connection.QueryAsync<GetBranchQueryResult>(query)).ToList();
 
-                }
             }
-            return Result.Ok(response, totalCount);
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
-
+        return Result.Ok(response, totalCount);
     }
 
     public async Task<GetBranchQueryResult> GetById(long id)

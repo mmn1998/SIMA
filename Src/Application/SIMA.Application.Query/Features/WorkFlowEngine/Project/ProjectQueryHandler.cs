@@ -8,7 +8,7 @@ using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.Project;
 namespace SIMA.Application.Query.Features.WorkFlowEngine.Project
 {
     public class ProjectQueryHandler : IQueryHandler<GetAllProjectsQuery, Result<List<GetProjectQueryResult>>>, IQueryHandler<GetProjectQuery, Result<GetProjectQueryResult>>
-                                     ,IQueryHandler<GetProjectsByDomainQuery , Result<List<GetProjectQueryResult>>>
+                                     , IQueryHandler<GetProjectsByDomainQuery, Result<List<GetProjectQueryResult>>>
     {
         private readonly IMapper _mapper;
         private readonly IProjectQueryRepository _repository;
@@ -30,16 +30,8 @@ namespace SIMA.Application.Query.Features.WorkFlowEngine.Project
 
         public async Task<Result<List<GetProjectQueryResult>>> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var entites = await _repository.GetAll();
-                return Result.Ok(entites);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            var entites = await _repository.GetAll();
+            return Result.Ok(entites);
         }
 
         public async Task<Result<List<GetProjectQueryResult>>> Handle(GetProjectsByDomainQuery request, CancellationToken cancellationToken)

@@ -16,9 +16,10 @@ public partial class WorkFlowActorRole : Entity
     {
         Id = new WorkFlowActorRoleId(IdHelper.GenerateUniqueId());
         WorkFlowActorId = arg.WorkFlowActorId;
-        CreatedAt = DateTime.UtcNow;
+        CreatedBy = arg.CreatedBy;
+        CreatedAt = arg.CreatedAt;
         RoleId = arg.RoleId;
-        ActiveStatusId = (long)ActiveStatusEnum.Active;
+        ActiveStatusId = arg.ActiveStatusId;
     }
     public static WorkFlowActorRole New(CreateWorkFlowActorRoleArg arg)
     {

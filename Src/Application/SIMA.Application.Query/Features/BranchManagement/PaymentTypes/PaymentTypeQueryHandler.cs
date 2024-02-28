@@ -17,17 +17,8 @@ public class PaymentTypeQueryHandler : IQueryHandler<GetAllPaymentTypesQuery, Re
 
     public async Task<Result<List<GetPaymentTypeQueryResult>>> Handle(GetAllPaymentTypesQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var result = await _repository.GetAll(request.Request);
-            return Result.Ok(result);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
-
+        var result = await _repository.GetAll(request.Request);
+        return Result.Ok(result);
     }
 
     public async Task<Result<GetPaymentTypeQueryResult>> Handle(GetPaymentTypeQuery request, CancellationToken cancellationToken)

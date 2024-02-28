@@ -32,23 +32,15 @@ public class UsersController : ControllerBase
     [AllowAnonymous]
     public async Task<Result> Post([FromBody] LoginUserQuery command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-            //#region SetPermissionsInRedis
-            //string key = MemoryCacheKeys.Permissions + result.Data.UserId.ToString();
-            //string value = JsonSerializer.Serialize(result.Data.Permissions);
+        var result = await _mediator.Send(command);
+        //#region SetPermissionsInRedis
+        //string key = MemoryCacheKeys.Permissions + result.Data.UserId.ToString();
+        //string value = JsonSerializer.Serialize(result.Data.Permissions);
 
-            //TimeSpan expirtionTime = TimeSpan.FromHours(3);
-            //await _redisService.InsertAsync(key, value, expirtionTime);
-            //#endregion
-            return result;
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        //TimeSpan expirtionTime = TimeSpan.FromHours(3);
+        //await _redisService.InsertAsync(key, value, expirtionTime);
+        //#endregion
+        return result;
     }
     [HttpGet("Logout")]
     public async Task Logout()
@@ -91,16 +83,8 @@ public class UsersController : ControllerBase
     [SimaAuthorize(Permissions.UserDomainPost)]
     public async Task<Result> Post([FromBody] CreateUserDomainCommand command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-            return result;
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var result = await _mediator.Send(command);
+        return result;
     }
     [HttpPost("AddUserAggregate")]
     [SimaAuthorize(Permissions.AddUserAggregate)]
@@ -182,16 +166,8 @@ public class UsersController : ControllerBase
     [AllowAnonymous]
     public async Task<Result>? Get([FromQuery] string Ticket)
     {
-        try
-        {
-            var query = new GetUserNameWithSSO { Tiket = Ticket };
-            return await _mediator.Send(query);
-        }
-        catch
-        {
-            throw;
-        }
-
+        var query = new GetUserNameWithSSO { Tiket = Ticket };
+        return await _mediator.Send(query);
     }
 
 }

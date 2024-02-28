@@ -25,6 +25,8 @@ public class GetAllIssueQueryResult
     public long ActiveStatusId { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string CreatedBy { get; set; }
+    public string CreateFullName => $"{FirstName} {LastName}";
     public DateTime CreatedAt { get; set; }
     public string PersianCreatedAt => DateHelper.ToPersianDate(CreatedAt);
 }

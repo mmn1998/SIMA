@@ -23,16 +23,8 @@ public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLo
 
     public async Task<Result<GetLocationQueryResult>> Handle(GetLocationQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var result = await _repository.FindById(request.Id);
-            return Result.Ok(result);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-
+        var result = await _repository.FindById(request.Id);
+        return Result.Ok(result);
     }
 
     public async Task<Result<List<GetLocationQueryResult>>> Handle(GetAllLocationQuery request, CancellationToken cancellationToken)

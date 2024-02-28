@@ -96,8 +96,8 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
 
         public async Task<Result<long>> Handle(IssueRunActionCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _repository.GetById(request.IssueId);
-            var nextStep = await _workFlowRepository.GetNextStepById(entity.CurrentWorkflowId, request.NextStepId);
+            var issue = await _repository.GetById(request.IssueId);
+            var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId, request.NextStepId);
 
             var arg = _mapper.Map<IssueRunActionArg>(request);
             arg.CurrentStepId = nextStep.SourceStepId;
@@ -106,21 +106,21 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
             if (!string.IsNullOrEmpty(request.Comment))
             {
                 var commentArg = _mapper.Map<CreateIssueCommentArg>(request);
-                await entity.AddComment(commentArg);
+                await issue.AddComment(commentArg);
             }
 
             #region IssueHistory
 
-            var history = _mapper.Map<CreateIssueHistoryArg>(entity);
-            history.SourceStateId = entity.CurrentStateId;
+            var history = _mapper.Map<CreateIssueHistoryArg>(issue);
+            history.SourceStateId = issue.CurrentStateId;
             history.TargetStateId = nextStep.SourceStateId;
-            history.SourceStepId = entity.CurrenStepId;
+            history.SourceStepId = issue.CurrenStepId;
             history.TargetStepId = nextStep.SourceStepId;
-            entity.AddHistory(history);
+            issue.AddHistory(history);
 
             #endregion
 
-            entity.RunAction(arg);
+            issue.RunAction(arg);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.IssueId);
         }

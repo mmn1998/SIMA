@@ -229,46 +229,38 @@ public class UserQueryRepository : IUserQueryRepository
         //    RoleIds = roleIds.Select(x => x.Value).ToList()
         //};
         #endregion
-        try
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var multi = await connection.QueryMultipleAsync(query, new { UserId = user.Id.Value }))
             {
-                using (var multi = await connection.QueryMultipleAsync(query, new { UserId = user.Id.Value }))
-                {
-                    response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
-                    response.RoleIds = await multi.ReadAsync<long>();
-                    response.GroupIds = await multi.ReadAsync<long>();
-                    response.Permissions = await multi.ReadAsync<int>();
-                    response.TempMenues = await multi.ReadAsync<Menue>();
-                }
+                response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
+                response.RoleIds = await multi.ReadAsync<long>();
+                response.GroupIds = await multi.ReadAsync<long>();
+                response.Permissions = await multi.ReadAsync<int>();
+                response.TempMenues = await multi.ReadAsync<Menue>();
             }
-            response.Menue = new List<Menue>();
-            foreach (var item in response.TempMenues)
-            {
-                if (string.IsNullOrEmpty(item.Code) && response.TempMenues.Where(it => it.DomainId == item.DomainId).Count() > 1)
-                {
-                    var subMenu = response.TempMenues.Where(it => it.DomainId == item.DomainId && it.Code != "").Select(it => new SubMenue
-                    {
-                        Code = it.Code,
-                        Name = it.Name,
-                    }).ToList();
-                    response.Menue.Add(new Menue
-                    {
-                        Code = "",
-                        DomainId = 0,
-                        Name = item.Name,
-                        SubMenues = subMenu,
-
-                    });
-                }
-            }
-            response.TempMenues = null;
         }
-        catch (Exception ex)
+        response.Menue = new List<Menue>();
+        foreach (var item in response.TempMenues)
         {
+            if (string.IsNullOrEmpty(item.Code) && response.TempMenues.Where(it => it.DomainId == item.DomainId).Count() > 1)
+            {
+                var subMenu = response.TempMenues.Where(it => it.DomainId == item.DomainId && it.Code != "").Select(it => new SubMenue
+                {
+                    Code = it.Code,
+                    Name = it.Name,
+                }).ToList();
+                response.Menue.Add(new Menue
+                {
+                    Code = "",
+                    DomainId = 0,
+                    Name = item.Name,
+                    SubMenues = subMenu,
 
-            throw;
+                });
+            }
         }
+        response.TempMenues = null;
         return response;
     }
 
@@ -335,23 +327,14 @@ public class UserQueryRepository : IUserQueryRepository
                           inner join [Basic].[Location] LL  on address.[LocationID]=LL.[ID]
                           
                           WHERE        (u.ID = @UserID)";
-            try
+            using (var multi = await connection.QueryMultipleAsync(query, new { UserID = userId }))
             {
-                using (var multi = await connection.QueryMultipleAsync(query, new { UserID = userId }))
-                {
-                    response.UserInfo = multi.ReadAsync<UserInfo>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.UserNotFoundError;
-                    response.Phones = multi.ReadAsync<PhoneResult>().GetAwaiter().GetResult().ToList();
-                    response.Positions = multi.ReadAsync<PositionResult>().GetAwaiter().GetResult().ToList();
-                    response.Addresses = multi.ReadAsync<AddressResult>().GetAwaiter().GetResult().ToList();
+                response.UserInfo = multi.ReadAsync<UserInfo>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.UserNotFoundError;
+                response.Phones = multi.ReadAsync<PhoneResult>().GetAwaiter().GetResult().ToList();
+                response.Positions = multi.ReadAsync<PositionResult>().GetAwaiter().GetResult().ToList();
+                response.Addresses = multi.ReadAsync<AddressResult>().GetAwaiter().GetResult().ToList();
 
-                }
             }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-
         }
         return response;
     }

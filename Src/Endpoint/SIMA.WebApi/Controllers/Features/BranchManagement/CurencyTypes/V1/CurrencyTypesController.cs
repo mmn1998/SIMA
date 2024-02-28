@@ -23,15 +23,7 @@ namespace SIMA.WebApi.Controllers.Features.BranchManagement.CurencyTypes.V1
         [SimaAuthorize(Permissions.CurrencyTypePost)]
         public async Task<Result> Post([FromBody] CreateCurrencyTypeCommand command)
         {
-            try
-            {
-                return await _mediator.Send(command);
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
+            return await _mediator.Send(command);
         }
         [HttpPut]
         [SimaAuthorize(Permissions.CurrencyTypePut)]

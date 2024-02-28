@@ -25,16 +25,8 @@ public class LocationTypesController : ControllerBase
     [SimaAuthorize(Permissions.LocationTypePost)]
     public async Task<Result> Post(CreateLocationTypeCommand command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-
+        var result = await _mediator.Send(command);
+        return result;
     }
 
     [HttpPut]

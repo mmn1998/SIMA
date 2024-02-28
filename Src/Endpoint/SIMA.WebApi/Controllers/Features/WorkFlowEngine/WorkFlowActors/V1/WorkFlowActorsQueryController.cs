@@ -5,45 +5,34 @@ using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlowActor;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlowActors.V1
+namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlowActors.V1;
+
+[Route("[controller]")]
+[ApiController]
+[ApiExplorerSettings(GroupName = "WorkFlowActors")]
+[Authorize]
+
+public class WorkFlowActorsQueryController : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    [ApiExplorerSettings(GroupName = "WorkFlowActors")]
-    [Authorize]
+    private readonly IMediator _mediator;
 
-    public class WorkFlowActorsQueryController : ControllerBase
+    public WorkFlowActorsQueryController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
+    [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.WorkFlowActorGet)]
+    public async Task<Result> Get(long id)
+    {
+        var query = new GetWorkFlowActorQuery { Id = id };
+        var result = await _mediator.Send(query);
+        return result;
+    }
 
-        public WorkFlowActorsQueryController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-        [HttpGet("{id}")]
-        [SimaAuthorize(Permissions.WorkFlowActorGet)]
-        public async Task<Result> Get(long id)
-        {
-            var query = new GetWorkFlowActorQuery { Id = id };
-            var result = await _mediator.Send(query);
-            return result;
-        }
-
-        [HttpGet]
-        [SimaAuthorize(Permissions.WorkFlowActorGetAll)]
-        public async Task<Result> Get()
-        {
-            try
-            {
-                var query = new GetAllWorkFlowActorsQuery();
-                var result = await _mediator.Send(query);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
-        }
+    [HttpGet]
+    [SimaAuthorize(Permissions.WorkFlowActorGetAll)]
+    public async Task<Result> Get([FromQuery] GetAllWorkFlowActorsQuery request)
+    {
+        return await _mediator.Send(request);
     }
 }

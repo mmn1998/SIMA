@@ -23,15 +23,7 @@ public class BranchesController : ControllerBase
     [SimaAuthorize(Permissions.BranchPost)]
     public async Task<Result> Post([FromBody] CreateBranchCommand command)
     {
-        try
-        {
-            return await _mediator.Send(command);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        return await _mediator.Send(command);
     }
     [HttpPut]
     [SimaAuthorize(Permissions.BranchPut)]

@@ -45,19 +45,12 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
 
     public async Task<Result<long>> Handle(CreateAddressTypeCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var arg = _mapper.Map<CreateAddressTypeArg>(request);
-            var addressType = await AddressType.Create(arg, _service);
-            await _repository.Add(addressType);
-            await _unitOfWork.SaveChangesAsync();
-            DeleteCachedData();
-            return Result.Ok(addressType.Id.Value);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+        var arg = _mapper.Map<CreateAddressTypeArg>(request);
+        var addressType = await AddressType.Create(arg, _service);
+        await _repository.Add(addressType);
+        await _unitOfWork.SaveChangesAsync();
+        DeleteCachedData();
+        return Result.Ok(addressType.Id.Value);
 
     }
     public async Task<Result<long>> Handle(ModifyAddressTypeCommand request, CancellationToken cancellationToken)

@@ -20,16 +20,14 @@ namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.CurrencyT
 
         public async Task<List<GetCurrencyTypeQueryResult>> GetAll(BaseRequest request)
         {
-            try
+            var result = new List<GetCurrencyTypeQueryResult>();
+            string query = string.Empty;
+            using (var connection = new SqlConnection(_connectionString))
             {
-                var result = new List<GetCurrencyTypeQueryResult>();
-                string query = string.Empty;
-                using (var connection = new SqlConnection(_connectionString))
+                await connection.OpenAsync();
+                if (!string.IsNullOrEmpty(request.SearchValue))
                 {
-                    await connection.OpenAsync();
-                    if (!string.IsNullOrEmpty(request.SearchValue))
-                    {
-                        query = @"
+                    query = @"
                             SELECT DISTINCT CT.[ID]
                           ,CT.[Name]
                           ,CT.[Code]
@@ -42,10 +40,10 @@ namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.CurrencyT
                               WHERE (CT.Name like %@SearchValue OR CT.[Code] like @SerachValue)
 Order By ct.[CreatedAt] desc  
                             ";
-                    }
-                    else
-                    {
-                        query = @"
+                }
+                else
+                {
+                    query = @"
                             SELECT DISTINCT CT.[ID]
                           ,CT.[Name]
                           ,CT.[Code]
@@ -57,19 +55,13 @@ Order By ct.[CreatedAt] desc
                       INNER JOIN [Basic].[ActiveStatus] A on A.ID = CT.ActiveStatusID
 Order By ct.[CreatedAt] desc  
                             ";
-                    }
-                    result = (await connection.QueryAsync<GetCurrencyTypeQueryResult>(query))
-                        .Skip((request.Skip - 1) * request.Take)
-                        .Take(request.Take)
-                        .ToList();
                 }
-                return result;
+                result = (await connection.QueryAsync<GetCurrencyTypeQueryResult>(query))
+                    .Skip((request.Skip - 1) * request.Take)
+                    .Take(request.Take)
+                    .ToList();
             }
-            catch (Exception e)
-            {
-
-                throw;
-            }
+            return result;
         }
 
         public async Task<GetCurrencyTypeQueryResult> GetById(long id)

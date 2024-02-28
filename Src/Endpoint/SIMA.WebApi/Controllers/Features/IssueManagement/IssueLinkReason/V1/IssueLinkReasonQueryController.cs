@@ -23,17 +23,9 @@ namespace SIMA.WebApi.Controllers.Features.IssueManagement.IssueLinkReason.V1
         [SimaAuthorize(Permissions.IssueLinkReasonsGet)]
         public async Task<Result> Get(long id)
         {
-            try
-            {
-                var query = new GetIssueLinkReasonQuery { Id = id };
-                var result = await _mediator.Send(query);
-                return result;
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
+            var query = new GetIssueLinkReasonQuery { Id = id };
+            var result = await _mediator.Send(query);
+            return result;
         }
 
         [HttpGet]

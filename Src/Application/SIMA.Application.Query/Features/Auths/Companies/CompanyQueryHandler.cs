@@ -22,17 +22,9 @@ namespace SIMA.Application.Query.Features.Auths.Companies
 
         public async Task<Result<GetCompanyQueryResult>> Handle(GetCompanyByIdQuery request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var entity = await _repository.FindById(request.Id);
-                var result = _mapper.Map<GetCompanyQueryResult>(entity);
-                return Result.Ok(result);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            var entity = await _repository.FindById(request.Id);
+            var result = _mapper.Map<GetCompanyQueryResult>(entity);
+            return Result.Ok(result);
         }
 
         public async Task<Result<List<GetCompanyQueryResult>>> Handle(GetAllCompanyQuery request, CancellationToken cancellationToken)

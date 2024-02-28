@@ -2,10 +2,8 @@
 using AutoBPM.Bpmn.Models;
 using AutoMapper;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Exeptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
-using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 
@@ -86,7 +84,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers
             {
                 var progress = ToProgres(flow, definition, ref steps);
                 result.AddRange(progress);
-                definition.Processes.FirstOrDefault(x => x.Id == processId).Remove(flow);
+                definition.Processes.FirstOrDefault(x => x.Id == processId)?.Remove(flow);
                 var nextResult = NextFlows(flow.GetNextNodes(definition), processId, definition, ref steps);
                 result.AddRange(nextResult);
             }
@@ -118,6 +116,10 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers
                     ActionTypeId = actionTypeValue,
                     // IsLastStep = flow.GetNextNodes(definition) is null ? "1" : "0",
                 };
+                if (string.IsNullOrEmpty(flow.Name) && actionTypeValue == 9)
+                {
+                    flowArg.Name = "شروع فرایند";
+                }
                 steps.Add(flow.Id, flowArg);
             }
 
@@ -147,6 +149,10 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers
                         ActionTypeId = actionTypeValue,
                         //  IsLastStep = nextFlow.GetNextNodes(definition) is null ? "1" : "0",
                     };
+                    if (string.IsNullOrEmpty(step.Name) && actionTypeValue == 10)
+                    {
+                        step.Name = "پایان فرایند";
+                    }
                     steps.Add(nextFlow.Id, step);
                 }
                 if (step != null)

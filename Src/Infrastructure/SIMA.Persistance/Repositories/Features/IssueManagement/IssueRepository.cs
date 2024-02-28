@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
@@ -25,7 +27,7 @@ namespace SIMA.Persistance.Repositories.Features.IssueManagement
 
         public async Task<Issue> GetLastIssue()
         {
-            var result = await _context.Issues.OrderByDescending(x=>x.CreatedAt).FirstOrDefaultAsync();
+            var result = await _context.Issues.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
             return result;
         }
     }

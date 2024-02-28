@@ -39,17 +39,9 @@ public class GenderQueryController : ControllerBase
     [SimaAuthorize(Permissions.GenderGetAll)]
     public async Task<Result> Get([FromQuery] BaseRequest request)
     {
-        try
-        {
-            var query = new GetAllGenderQuery { Request = request };
-            //var result = await _genderQuery.GetAll();
-            return await _mediator.Send(query);
-            //return Result.Ok(result);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var query = new GetAllGenderQuery { Request = request };
+        //var result = await _genderQuery.GetAll();
+        return await _mediator.Send(query);
+        //return Result.Ok(result);
     }
 }

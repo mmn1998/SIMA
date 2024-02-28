@@ -37,20 +37,12 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         #region Workflow
         public async Task<Result<long>> Handle(CreateWorkFlowCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var arg = _mapper.Map<CreateWorkFlowArg>(request);
-                var entity = Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg);
-                await _repository.Add(entity);
-                var id = entity.Id.Value;
-                await _unitOfWork.SaveChangesAsync();
-                return Result.Ok(id);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            var arg = _mapper.Map<CreateWorkFlowArg>(request);
+            var entity = Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg);
+            await _repository.Add(entity);
+            var id = entity.Id.Value;
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(id);
         }
         public async Task<Result<long>> Handle(ModifyWorkFlowCommand request, CancellationToken cancellationToken)
         {
@@ -73,34 +65,26 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         #region Step
         public async Task<Result<long>> Handle(CreateStepCommand request, CancellationToken cancellationToken)
         {
-            try
+            var workflow = await _repository.GetById((long)request.WorkFlowId);
+            var arg = _mapper.Map<CreateStepArg>(request);
+            var step = workflow.AddStep(arg);
+
+
+            List<CreateWorkFlowActorStepArg> listActorStepArg = new List<CreateWorkFlowActorStepArg>();
+            foreach (var item in request.ActorId)
             {
-                var workflow = await _repository.GetById((long)request.WorkFlowId);
-                var arg = _mapper.Map<CreateStepArg>(request);
-                var step = workflow.AddStep(arg);
-
-
-                List<CreateWorkFlowActorStepArg> listActorStepArg = new List<CreateWorkFlowActorStepArg>();
-                foreach (var item in request.ActorId)
-                {
-                    CreateWorkFlowActorStepArg actorStepArg = new CreateWorkFlowActorStepArg();
-                    actorStepArg.WorkFlowActorId = item;
-                    actorStepArg.StepId = step.Id.Value;
-                    actorStepArg.ActiveStatusId = (long)ActiveStatusEnum.Active;
-                    actorStepArg.Id = IdHelper.GenerateUniqueId();
-                    listActorStepArg.Add(actorStepArg);
-                }
-
-                step.AddActorStep(listActorStepArg);
-                await _unitOfWork.SaveChangesAsync();
-
-                return Result.Ok(step.Id.Value);
-            }
-            catch (Exception ex)
-            {
-                throw;
+                CreateWorkFlowActorStepArg actorStepArg = new CreateWorkFlowActorStepArg();
+                actorStepArg.WorkFlowActorId = item;
+                actorStepArg.StepId = step.Id.Value;
+                actorStepArg.ActiveStatusId = (long)ActiveStatusEnum.Active;
+                actorStepArg.Id = IdHelper.GenerateUniqueId();
+                listActorStepArg.Add(actorStepArg);
             }
 
+            step.AddActorStep(listActorStepArg);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Result.Ok(step.Id.Value);
         }
         public async Task<Result<long>> Handle(ModifyStepCommand request, CancellationToken cancellationToken)
         {
@@ -123,20 +107,12 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         #region State
         public async Task<Result<long>> Handle(CreateStateCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
-                var workflow = await _repository.GetById2(new WorkFlowId(Value: (long)request.WorkFlowId));
-                var arg = _mapper.Map<CreateStateArg>(request);
-                var state = await workflow.AddState(arg, _service);
-                await _unitOfWork.SaveChangesAsync();
-                return Result.Ok(state.Id.Value);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
+            var workflow = await _repository.GetById2(new WorkFlowId(Value: (long)request.WorkFlowId));
+            var arg = _mapper.Map<CreateStateArg>(request);
+            var state = await workflow.AddState(arg, _service);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(state.Id.Value);
         }
         public async Task<Result<long>> Handle(ModifyStateCommand request, CancellationToken cancellationToken)
         {

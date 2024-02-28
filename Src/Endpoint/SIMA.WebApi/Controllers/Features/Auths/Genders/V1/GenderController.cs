@@ -32,16 +32,8 @@ public class GenderController : ControllerBase
     [SimaAuthorize(Permissions.GenderPut)]
     public async Task<Result> Put(ModifyGenderCommand command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-            return result;
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var result = await _mediator.Send(command);
+        return result;
     }
 
     [HttpDelete("{id}")]

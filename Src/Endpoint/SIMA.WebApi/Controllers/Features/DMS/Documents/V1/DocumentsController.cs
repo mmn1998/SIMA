@@ -20,15 +20,7 @@ public class DocumentsController : ControllerBase
     [HttpPost]
     public async Task<Result> Post([FromBody] CreateDocumentCommand command)
     {
-        try
-        {
-            return await _mediator.Send(command);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        return await _mediator.Send(command);
     }
     //[HttpPut]
     //public async Task<Result> Put([FromBody] ModifyDocumentCommand command)

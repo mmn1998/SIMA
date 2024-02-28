@@ -1,13 +1,11 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
-using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
+using System.Buffers;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
@@ -23,20 +21,38 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
             _simaIdentity = simaIdentity;
         }
 
-        public async Task<Result<List<GetAllIssueQueryResult>>> GetAll(BaseRequest baseRequest, long? workFlowId = null)
+        public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAll(GetAllIssuesQuery request)
         {
             var userId = _simaIdentity.UserId;
-            var response = new List<GetAllIssueQueryResult>();
-            int totalCount = 0;
+            var roleIds = _simaIdentity.RoleIds;
+            var groupIds = _simaIdentity.GroupId;
+            var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
             using (var connection = new SqlConnection(_connectionString))
             {
+                var queryCount = @"
+                              SELECT  COUNT(*) Result
+                                    from IssueManagement.Issue I  
+                                    join Project.Step S on I.CurrenStepId = S.Id
+                                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
+                                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
+                                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
+                                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
+                                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
+                                    left join Project.State ST on I.CurrentStateId = ST.Id
+                                    join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
+									join Project.Project project on project.Id = W.ProjectID
+                                    left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
+                                    left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
+                                    join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
+                                    join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
+                                    WHERE  (WR.RoleID IN @RoleIds or WG.GroupID IN @GroupIds or  WU.UserID=@userId
+                                    and I.ActiveStatusId != 3
+                                    and (@SearchValue is null OR I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
+                                    AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId));";
                 await connection.OpenAsync();
-                string query = string.Empty;
-                if (!string.IsNullOrEmpty(baseRequest.SearchValue) && workFlowId is not null)
-                {
-                    query = @"
+                string query = @"
                               SELECT  
-                                      I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
+                                     I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
                                     ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
                                     ,I.issuePriorityId,IPP.Name issuePriorityName
                                     ,I.weight,I.currentStateId
@@ -47,6 +63,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                                     ,P.[FirstName] as FirstName
                                     ,P.[LastName] as LastName
                                     ,I.[CreatedAt] 
+                                    ,I.[CreatedBy] 
                                     from IssueManagement.Issue I  
                                     join Project.Step S on I.CurrenStepId = S.Id
                                     join Project.WorkFlowActorStep WS on S.Id = WS.StepID
@@ -56,372 +73,121 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                                     left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
                                     left join Project.State ST on I.CurrentStateId = ST.Id
                                     join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
+									join Project.Project project on project.Id = W.ProjectID
                                     left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
                                     left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
                                     join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
                                     join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-
-                        WHERE  WR.RoleID in @RoleIds or WG.GroupID in @GroupIds or  WU.UserID=@userId
-                                and I.ActiveStatusId != 3
-                            and (I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
-AND W.Id = @WorkFlowId
- order by I.CreatedAt desc
-                    ";
-                    var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%", userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId, WorkFlowId = workFlowId });
-                    totalCount = result.Count();
-                    response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                   .Take(baseRequest.Take)
-                    .ToList();
-                }
-                else if (!string.IsNullOrEmpty(baseRequest.SearchValue) && workFlowId is null)
+                                    WHERE  (WR.RoleID IN @RoleIds or WG.GroupID IN @GroupIds or  WU.UserID=@userId
+                                    and I.ActiveStatusId != 3
+                                    and (@SearchValue is null OR I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
+                                    AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
+                                    order by I.CreatedAt desc OFFSET @Skip rows FETCH NEXT @Take rows only;";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
                 {
-                    query = @"
-                              SELECT  
-                                      I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
-                                    ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
-                                    ,I.issuePriorityId,IPP.Name issuePriorityName
-                                    ,I.weight,I.currentStateId
-                                    ,ST.Name currentStateName
-                                    ,S.id currentStepId
-                                    ,S.Name currentStepName
-                                    ,I.summery,I.description
-                                    ,P.[FirstName] as FirstName
-                                    ,P.[LastName] as LastName
-                                    ,I.[CreatedAt] 
-                                    from IssueManagement.Issue I  
-                                    join Project.Step S on I.CurrenStepId = S.Id
-                                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                                    left join Project.State ST on I.CurrentStateId = ST.Id
-                                    join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-                                    left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                                    left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-
-                        WHERE  WR.RoleID in @RoleIds or WG.GroupID in @GroupIds or  WU.UserID=@userId
-                                and I.ActiveStatusId != 3
-                            and (I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
- order by I.CreatedAt desc
-                    ";
-                    var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%", userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId });
-                    totalCount = result.Count();
-                    response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                   .Take(baseRequest.Take)
-                    .ToList();
-                }
-                else
+                    userId = userId,
+                    RoleIds = roleIds,
+                    SearchValue = "%" + request.SearchValue + "%",
+                    GroupIds = groupIds,
+                    request.WorkFlowId,
+                    request.DomainId,
+                    request.ProjectId,
+                    Skip = skip,
+                    request.Take
+                }))
                 {
-                    if (workFlowId is null)
-                    {
-                        query = @"
-                                SELECT  
-                                      I.Id,I.Code,I.[CurrentWorkflowId]  WorkflowId
-                                    ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
-                                    ,I.issuePriorityId,IPP.Name issuePriorityName
-                                    ,I.weight,I.currentStateId
-                                    ,ST.Name currentStateName
-                                    ,S.id currentStepId
-                                    ,S.Name currentStepName
-                                    ,I.summery,I.description
-                                    ,P.[FirstName] as PerformerFirstName
-                                    ,P.[LastName] as PerformerLastName
-                                    ,I.[CreatedAt] 
-                                    from IssueManagement.Issue I  
-                                    join Project.Step S on I.CurrenStepId = S.Id
-                                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                                    left join Project.State ST on I.CurrentStateId = ST.Id
-                                    join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-                                    left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                                    left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                                            WHERE  WR.RoleID in @RoleIds or WG.GroupID in @GroupIds or  WU.UserID=@userId
-                                                    and I.ActiveStatusId != 3
-                                          order by I.CreatedAt desc";
-                        var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId });
-                        totalCount = result.Count();
-                        response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                       .Take(baseRequest.Take)
-                       .ToList();
-                    }
-                    else
-                    {
-                        query = @"
-                                SELECT  
-                                      I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
-                                    ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
-                                    ,I.issuePriorityId,IPP.Name issuePriorityName
-                                    ,I.weight,I.currentStateId
-                                    ,ST.Name currentStateName
-                                    ,S.id currentStepId
-                                    ,S.Name currentStepName
-                                    ,I.summery,I.description
-                                    ,P.[FirstName] as PerformerFirstName
-                                    ,P.[LastName] as PerformerLastName
-                                    ,I.[CreatedAt] 
-                                    from IssueManagement.Issue I  
-                                    join Project.Step S on I.CurrenStepId = S.Id
-                                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                                    left join Project.State ST on I.CurrentStateId = ST.Id
-                                    join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-                                    left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                                    left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                                            WHERE  WR.RoleID in @RoleIds or WG.GroupID in @GroupIds or  WU.UserID=@userId
-                                                    and I.ActiveStatusId != 3
-AND W.Id = @WorkFlowId
-                                          order by I.CreatedAt desc";
-                        var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId, WorkFlowId = workFlowId });
-                        totalCount = result.Count();
-                        response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                       .Take(baseRequest.Take)
-                       .ToList();
-                    }
-
-                    
+                    var response = await multi.ReadAsync<GetAllIssueQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count);
                 }
-
             }
-            return Result.Ok(response, totalCount); ;
         }
 
-        public async Task<Result<List<GetAllIssueQueryResult>>> GetAllMyIssue(BaseRequest baseRequest, long? workFlowId = null)
+        public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAllMyIssue(GetMyIssueListQuery request)
         {
-            try
+            var userId = _simaIdentity.UserId;
+            var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
+            using (var connection = new SqlConnection(_connectionString))
             {
-                var userId = _simaIdentity.UserId;
-                var response = new List<GetAllIssueQueryResult>();
-                int totalCount = 0;
-                using (var connection = new SqlConnection(_connectionString))
+                var queryCount = @"
+                                   SELECT COUNT(*) Result
+                                         FROM IssueManagement.Issue i
+                                         INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
+                                         inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
+                                 		join Project.Project project on project.Id = W.ProjectID
+                                         inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
+                                         right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
+                                         LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
+                                         LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
+                                         join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
+                                         join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
+                                         WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
+                                             and (@SearchValue is null OR i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
+                                         AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)";
+                await connection.OpenAsync();
+                string query = @"
+                                SELECT DISTINCT 
+                                      i.Id
+                                      ,i.Code
+                                      ,i.CurrentWorkflowId WorkflowId
+                                      ,w.Name WorkflowName
+                                      ,i.MainAggregateId
+                                      ,i.SourceId
+                                      ,i.IssueTypeId
+                                      ,ist.Name IssueTypeName
+                                      ,i.IssuePriorityId
+                                      ,ipp.Name IssuePriorityName
+                                      ,i.Weight
+                                      ,i.CurrentStateId
+                                      ,ST.Name currentStateName
+                                      ,i.CurrenStepId
+                                      ,SP.Name CurrentStepName
+                                      ,i.Summery
+                                      ,i.Description
+                                      -- ,i.IssueDate
+                                      -- ,i.DueDate
+                                      ,i.ActiveStatusId
+                                      , S.Name as ActiveStatus
+                                      ,P.[FirstName] as FirstName
+                                      ,P.[LastName] as LastName
+                                      ,I.[CreatedAt] 
+                                      FROM IssueManagement.Issue i
+                                      INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
+                                      inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
+                              	      join Project.Project project on project.Id = W.ProjectID
+                                      inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
+                                      right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
+                                      LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
+                                      LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
+                                      join [Authentication].[Users] U on I.CreatedBy = U.Id
+                                      join [Authentication].[Profile] P on P.Id = U.ProfileID
+                                      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
+                                      and (@SearchValue is null OR i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
+                                      AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
+                                      order by I.CreatedAt desc
+                                      OFFSET @Skip rows FETCH NEXT @Take rows only;";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
                 {
-                    await connection.OpenAsync();
-                    string query = string.Empty;
-                    if (!string.IsNullOrEmpty(baseRequest.SearchValue) && workFlowId is null)
-                    {
-                        query = @"
-                  SELECT DISTINCT 
-                        i.Id
-                        ,i.Code
-                        ,i.CurrentWorkflowId WorkflowId
-                        ,w.Name WorkflowName
-                        ,i.MainAggregateId
-                        ,i.SourceId
-                        ,i.IssueTypeId
-                        ,ist.Name IssueTypeName
-                        ,i.IssuePriorityId
-                        ,ipp.Name IssuePriorityName
-                        ,i.Weight
-                        ,i.CurrentStateId
-                        ,ST.Name currentStateName
-                        ,i.CurrenStepId
-                        ,SP.Name CurrentStepName
-                        ,i.Summery
-                        ,i.Description
-                        -- ,i.IssueDate
-                        -- ,i.DueDate
-                        ,i.ActiveStatusId
-                        -- ,i.CreatedAt
-                        -- ,i.CreatedBy
-                        , S.Name as ActiveStatus
-                        ,P.[FirstName] as FirstName
-                        ,P.[LastName] as LastName
-                        ,I.[CreatedAt] 
-                        FROM IssueManagement.Issue i
-                        INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                        inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                        inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                        right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                        LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                        LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                        join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                        join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                WHERE  i.CreatedAt =@userId  and i.ActiveStatusId != 3
-                    and (i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
-                   order by i.CreatedAt desc";
-                        var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%", userId });
-                        totalCount = result.Count();
-                        response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                       .Take(baseRequest.Take)
-                        .ToList();
-                    }
-                    else if (!string.IsNullOrEmpty(baseRequest.SearchValue) && workFlowId is not null)
-                    {
-                        query = @"
-                  SELECT DISTINCT 
-                        i.Id
-                        ,i.Code
-                        ,i.CurrentWorkflowId WorkflowId
-                        ,w.Name WorkflowName
-                        ,i.MainAggregateId
-                        ,i.SourceId
-                        ,i.IssueTypeId
-                        ,ist.Name IssueTypeName
-                        ,i.IssuePriorityId
-                        ,ipp.Name IssuePriorityName
-                        ,i.Weight
-                        ,i.CurrentStateId
-                        ,ST.Name currentStateName
-                        ,i.CurrenStepId
-                        ,SP.Name CurrentStepName
-                        ,i.Summery
-                        ,i.Description
-                        -- ,i.IssueDate
-                        -- ,i.DueDate
-                        ,i.ActiveStatusId
-                        -- ,i.CreatedAt
-                        -- ,i.CreatedBy
-                        , S.Name as ActiveStatus
-                        ,P.[FirstName] as FirstName
-                        ,P.[LastName] as LastName
-                        ,I.[CreatedAt] 
-                        FROM IssueManagement.Issue i
-                        INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                        inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                        inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                        right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                        LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                        LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                        join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                        join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                WHERE  i.CreatedAt =@userId  and i.ActiveStatusId != 3
-                    and (i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
-and w.Id = @WorkFlowId
-                   order by i.CreatedAt desc";
-                        var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%", userId, WorkFlowId = workFlowId });
-                        totalCount = result.Count();
-                        response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                       .Take(baseRequest.Take)
-                        .ToList();
-                    }
-                    else
-                    {
-                        if (workFlowId is null)
-                        {
-                            query = @"
-     SELECT DISTINCT 
-                        i.Id
-                        ,i.Code
-                        ,i.CurrentWorkflowId WorkflowId
-                        ,w.Name WorkflowName
-                        ,i.MainAggregateId
-                        ,i.SourceId
-                        ,i.IssueTypeId
-                        ,ist.Name IssueTypeName
-                        ,i.IssuePriorityId
-                        ,ipp.Name IssuePriorityName
-                        ,i.Weight
-                        ,i.CurrentStateId
-                        ,ST.Name currentStateName
-                        ,i.CurrenStepId
-                        ,SP.Name CurrentStepName
-                        ,i.Summery
-                        ,i.Description
-                        -- ,i.IssueDate
-                        -- ,i.DueDate
-                        ,i.ActiveStatusId
-                        -- ,i.CreatedAt
-                        -- ,i.CreatedBy
-                        , S.Name as ActiveStatus
-                        ,P.[FirstName] as FirstName
-                        ,P.[LastName] as LastName
-                        ,I.[CreatedAt] 
-                        FROM IssueManagement.Issue i
-                        INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                        inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                        inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                        right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                        LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                        LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                        join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                        join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
-                order by i.CreatedAt desc";
-
-                            var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { userId });
-                            totalCount = result.Count();
-                            response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                           .Take(baseRequest.Take)
-                           .ToList();
-                        }
-                        else
-                        {
-                            query = @"
-     SELECT DISTINCT 
-                        i.Id
-                        ,i.Code
-                        ,i.CurrentWorkflowId WorkflowId
-                        ,w.Name WorkflowName
-                        ,i.MainAggregateId
-                        ,i.SourceId
-                        ,i.IssueTypeId
-                        ,ist.Name IssueTypeName
-                        ,i.IssuePriorityId
-                        ,ipp.Name IssuePriorityName
-                        ,i.Weight
-                        ,i.CurrentStateId
-                        ,ST.Name currentStateName
-                        ,i.CurrenStepId
-                        ,SP.Name CurrentStepName
-                        ,i.Summery
-                        ,i.Description
-                        -- ,i.IssueDate
-                        -- ,i.DueDate
-                        ,i.ActiveStatusId
-                        -- ,i.CreatedAt
-                        -- ,i.CreatedBy
-                        , S.Name as ActiveStatus
-                        ,P.[FirstName] as FirstName
-                        ,P.[LastName] as LastName
-                        ,I.[CreatedAt] 
-                        FROM IssueManagement.Issue i
-                        INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                        inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                        inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                        right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                        LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                        LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                        join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                        join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3 AND w.Id = @WorkFlowId
-                order by i.CreatedAt desc";
-
-                            var result = await connection.QueryAsync<GetAllIssueQueryResult>(query, new { userId, WorkFlowId = workFlowId });
-                            totalCount = result.Count();
-                            response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                           .Take(baseRequest.Take)
-                           .ToList();
-                        }
-                    }
-
+                    userId,
+                    SearchValue = "%" + request.SearchValue + "%",
+                    request.WorkFlowId,
+                    request.DomainId,
+                    request.ProjectId,
+                    Skip = skip,
+                    request.Take
+                }))
+                {
+                    var response = await multi.ReadAsync<GetAllIssueQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count);
                 }
-                return Result.Ok(response, totalCount); ;
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
-            
         }
 
         public async Task<GetIssueQueryResult> GetById(long id)
         {
-
             var userId = _simaIdentity.UserId;
             var response = new GetIssueQueryResult();
-
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -448,7 +214,12 @@ and w.Id = @WorkFlowId
                             ,I.[Summery]
                             ,I.[Description]
                         	,I.[DueDate]
+                            ,S.BpmnId BpmnId
+                            ,W.FileContent WorkFlowFileContent 
+                            ,A.Name ActiveStatus    
+                            ,I.ActiveStatusId
                         FROM [SIMADB].[IssueManagement].[Issue] I
+                        join [Basic].[ActiveStatus] A on A.Id = I.ActiveStatusId
                         join [SIMADB].[Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
                         join [SIMADB].[Project].[Project] P On P.Id = W.ProjectID
                         join [SIMADB].[Authentication].[Domain] D on P.DomainID = D.Id
@@ -511,30 +282,20 @@ and w.Id = @WorkFlowId
 	                           left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
 	                           left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
                                inner  join [SIMADB].[Project].[Progress] P on S.Id = P.SourceId
-                                 inner   join [SIMADB].[Project].[Step] ST on P.TargetId = ST.Id
-                                       CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
-
-                              Where    I.Id = @Id and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
+                               inner   join [SIMADB].[Project].[Step] ST on P.TargetId = ST.Id
+                               CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
+                               Where    I.Id = @Id and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
                                I.ActiveStatusId <> 3";
-                try
+                using (var multi = await connection.QueryMultipleAsync(query, new { Id = id, userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
                 {
-                    using (var multi = await connection.QueryMultipleAsync(query, new { Id = id, userId = userId ,RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
-                    {
-                        response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw IssueExceptions.IssueErrorException;
-                        response.IssueLinks = multi.ReadAsync<GetIssueLinkQueryResult>().GetAwaiter().GetResult().ToList();
-                        response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
-                        response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();
-                        response.RelatedProgresses = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
-                    }
-
-                    response.NullCheck();
-                    return response;
+                    response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw IssueExceptions.IssueErrorException;
+                    response.IssueLinks = multi.ReadAsync<GetIssueLinkQueryResult>().GetAwaiter().GetResult().ToList();
+                    response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
+                    response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();
+                    response.RelatedProgresses = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
                 }
-                catch
-                {
-                    throw;
-                }
-               
+                response.NullCheck();
+                return response;
             }
         }
 
@@ -604,5 +365,26 @@ and w.Id = @WorkFlowId
                 return result;
             }
         }
+
+//        public async Task<GetXMLArg> GetFileContentByIssueId(long issueId)
+//        {
+//            var result = new GetXMLArg();
+//            string query = @"
+//SELECT 
+//S.BpmnId BpmnId
+//,W.FileContent XML
+//  FROM [IssueManagement].[Issue] I
+//  INNER JOIN [Project].[Step] S ON S.Id = I.CurrenStepId
+//  INNER JOIN [Project].[WorkFlow] W ON W.Id = S.WorkFlowID
+//  WHERE I.Id = @IssueId
+//";
+//            using (var connection = new SqlConnection(_connectionString))
+//            {
+//                await connection.OpenAsync();
+//                result = await connection.QueryFirstOrDefaultAsync<GetXMLArg>(query, new { IssueId = issueId });
+//                result.NullCheck();
+//            }
+//            return result;
+//        }
     }
 }

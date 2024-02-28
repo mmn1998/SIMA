@@ -1,4 +1,5 @@
 ﻿using SIMA.Framework.Common.Helper;
+using System.Text.Json.Serialization;
 
 namespace SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 
@@ -27,7 +28,11 @@ public class GetIssueQueryResult
     public string Description { get; set; }
     public string? ActiveStatus { get; set; }
     public long ActiveStatusId { get; set; }
+    [JsonIgnore]
     public DateTime DueDate { get; set; }
+    public string? WorkFlowFileContent { get; set; }
+    [JsonIgnore]
+    public string? BpmnId { get; set; }
     public string PersianDueDate => DateHelper.ToPersianDate(DueDate);
     public List<GetIssueLinkQueryResult> IssueLinks { get; set; }
     public List<GetIssueDocumentQueryResult> IssueDocuments { get; set; }

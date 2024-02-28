@@ -24,17 +24,9 @@ public class DomainsQueryController : ControllerBase
     [HttpGet("{id}")]
     public async Task<Result> Get([FromRoute] long id)
     {
-        try
-        {
-            var query = new GetDomainQuery { Id = id };
-            var result = await _mediator.Send(query);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-
+        var query = new GetDomainQuery { Id = id };
+        var result = await _mediator.Send(query);
+        return result;
     }
 
     [HttpGet]
@@ -44,6 +36,5 @@ public class DomainsQueryController : ControllerBase
         var query = new GetAllDomainQuery { Request = request };
         var result = await _mediator.Send(query);
         return result;
-
     }
 }

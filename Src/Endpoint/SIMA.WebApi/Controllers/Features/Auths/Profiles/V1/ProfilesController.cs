@@ -22,16 +22,8 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Profiles.V1
         [HttpPost]
         public async Task<Result> Post([FromBody] CreateProfileCommand command)
         {
-            try
-            {
-                var result = await _mediator.Send(command);
-                return result;
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
+            var result = await _mediator.Send(command);
+            return result;
         }
 
         [HttpDelete("{id}")]

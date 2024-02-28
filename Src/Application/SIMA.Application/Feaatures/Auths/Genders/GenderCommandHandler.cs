@@ -44,16 +44,16 @@ public class GenderCommandHandler : ICommandHandler<CreateGenderCommand, Result<
     }
     public async Task<Result<long>> Handle(ModifyGenderCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById((int)request.Id);
+        var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyGenderArg>(request);
         entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(entity.Id.Value);
     }
     public async Task<Result<long>> Handle(DeleteGenderCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById((int)request.Id);
+        var entity = await _repository.GetById(request.Id);
         entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();

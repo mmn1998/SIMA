@@ -32,18 +32,9 @@ public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQu
     }
     public async Task<Result<LoginUserQueryResult>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-
-            var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
-            var result = UserQueryMapper.MapToToken(user, _securitySettings);
-            return Result.Ok(result);
-        }
-        catch (Exception ex)
-        {
-
-            throw;
-        }
+        var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
+        var result = UserQueryMapper.MapToToken(user, _securitySettings);
+        return Result.Ok(result);
     }
     public async Task<Result<GetInfoByUserIdQueryResult>> Handle(GetInfoByUserIdQuery request, CancellationToken cancellationToken)
     {

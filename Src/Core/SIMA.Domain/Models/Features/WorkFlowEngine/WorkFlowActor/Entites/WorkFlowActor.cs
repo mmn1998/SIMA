@@ -44,35 +44,38 @@ public class WorkFlowActor : Entity
         ActiveStatusId = (long)ActiveStatusEnum.Deactive;
     }
 
-    public void AddActorRole(List<long> roleId)
+    public void AddActorRoles(List<CreateWorkFlowActorRoleArg> args)
     {
-        var actorRoles = roleId.Select(x => WorkFlowActorRole.New(new CreateWorkFlowActorRoleArg { RoleId = x, WorkFlowActorId = Id }));
-        foreach (var actorRole in actorRoles)
+        foreach (var arg in args)
         {
-            if (!_workFlowActorRoles.Any(war => war.WorkFlowActorId == Id && war.RoleId == actorRole.RoleId))
+            if (!_workFlowActorRoles.Any(war => war.WorkFlowActorId == Id && war.RoleId == arg.RoleId))
             {
+                arg.WorkFlowActorId = Id;
+                var actorRole = WorkFlowActorRole.New(arg);
                 _workFlowActorRoles.Add(actorRole);
             }
         }
     }
-    public void AddActorUser(List<long> userId)
+    public void AddActorUsers(List<CreateWorkFlowActorUserArg> args)
     {
-        var actorUsers = userId.Select(x => WorkFlowActorUser.New(new CreateWorkFlowActorUserArg { UserId = x, WorkFlowActorId = Id }));
-        foreach (var actorUser in actorUsers)
+        foreach (var arg in args)
         {
-            if (!_workFlowActorUsers.Any(wau => wau.WorkFlowActorId == Id && wau.UserId == actorUser.UserId))
+            if (!_workFlowActorUsers.Any(wau => wau.WorkFlowActorId == Id && wau.UserId == arg.UserId))
             {
+                arg.WorkFlowActorId = Id;
+                var actorUser = WorkFlowActorUser.New(arg);
                 _workFlowActorUsers.Add(actorUser);
             }
         }
     }
-    public void AddActorGroup(List<long> groupId)
+    public void AddActorGroups(List<CreateWorkFlowActorGroupArg> args)
     {
-        var actorGroups = groupId.Select(x => WorkFlowActorGroup.New(new CreateWorkFlowActorGroupArg { GroupId = x, WorkFlowActorId = Id }));
-        foreach (var actorGroup in actorGroups)
+        foreach (var arg in args)
         {
-            if (!_workFlowActorGroups.Any(wag => wag.WorkFlowActorId == Id && wag.GroupId == actorGroup.GroupId))
+            if (!_workFlowActorGroups.Any(wag => wag.WorkFlowActorId == Id && wag.GroupId == arg.GroupId))
             {
+                arg.WorkFlowActorId = Id;
+                var actorGroup = WorkFlowActorGroup.New(arg);
                 _workFlowActorGroups.Add(actorGroup);
             }
         }

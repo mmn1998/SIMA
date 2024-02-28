@@ -5,34 +5,25 @@ using SIMA.Application.Contract.Features.WorkFlowEngine.BPMSes;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.BPMSes
+namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.BPMSes;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+[ApiExplorerSettings(GroupName = "BPMS")]
+public class BPMSController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    [ApiExplorerSettings(GroupName = "BPMS")]
-    public class BPMSController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public BPMSController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public BPMSController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpPost]
-        [SimaAuthorize(Permissions.BMPSPost)]
-        public async Task<Result> Post(BpmsCommand command)
-        {
-            try
-            {
-                return await _mediator.Send(command);
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
+    [HttpPost]
+    [SimaAuthorize(Permissions.BMPSPost)]
+    public async Task<Result> Post(BpmsCommand command)
+    {
+            return await _mediator.Send(command);
     }
 }

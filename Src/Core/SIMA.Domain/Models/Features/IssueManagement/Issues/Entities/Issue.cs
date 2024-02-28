@@ -73,7 +73,7 @@ public class Issue : Entity
         ModifiedBy = arg.ModifiedBy;
     }
 
-    public async void RunAction(IssueRunActionArg arg)
+    public void RunAction(IssueRunActionArg arg)
     {
         CurrentStateId = arg.CurrentStateId;
         CurrenStepId = arg.CurrentStepId;

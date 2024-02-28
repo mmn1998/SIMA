@@ -32,14 +32,6 @@ public class PaymentTypesQueryController : ControllerBase
     public async Task<Result> Get([FromQuery] BaseRequest request)
     {
         var query = new GetAllPaymentTypesQuery { Request = request };
-        try
-        {
-            return await _mediator.Send(query);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        return await _mediator.Send(query);
     }
 }

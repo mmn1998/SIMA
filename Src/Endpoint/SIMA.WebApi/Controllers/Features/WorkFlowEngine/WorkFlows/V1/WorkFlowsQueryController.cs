@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlowActor;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -54,11 +55,9 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1
         #region -- Step --
         [HttpGet("GetSteps")]
         [SimaAuthorize(Permissions.WorkFlowStepGetAll)]
-        public async Task<Result> GetSteps()
+        public async Task<Result> GetSteps([FromQuery] GetAllStepsQuery request)
         {
-            var query = new GetAllStepsQuery();
-            var result = await _mediator.Send(query);
-            return result;
+            return await _mediator.Send(request);
         }
 
         [HttpGet("GetStepById/{id}")]
@@ -82,11 +81,9 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1
         #region -- State --
         [HttpGet("GetStates")]
         [SimaAuthorize(Permissions.WorkFlowStateGetAll)]
-        public async Task<Result> GetStates()
+        public async Task<Result> GetStates([FromQuery] GetAllStatesQuery request)
         {
-            var query = new GetAllStatesQuery();
-            var result = await _mediator.Send(query);
-            return result;
+            return await _mediator.Send(request);
         }
 
         [HttpGet("GetStateById/{id}")]

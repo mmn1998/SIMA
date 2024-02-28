@@ -26,14 +26,16 @@ public class Gender : Entity
         return new Gender(arg);
     }
 
-    public async void Modify(ModifyGenderArg arg, IGenderService service)
+    public async Task Modify(ModifyGenderArg arg, IGenderService service)
     {
         await ModifyGuards(arg, service);
+
         Name = arg.Name;
         Code = arg.Code;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
+
     }
     #region Guards
     private static async Task CreateGuards(CreateGenderArg arg, IGenderService service)

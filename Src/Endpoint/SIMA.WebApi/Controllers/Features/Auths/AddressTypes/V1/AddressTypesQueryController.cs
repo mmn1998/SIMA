@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.AddressTypes;
 using SIMA.Framework.Common.Request;
@@ -25,17 +24,9 @@ public class AddressTypesQueryController : ControllerBase
     [SimaAuthorize(Permissions.AddressTypesGet)]
     public async Task<Result> Get(long id)
     {
-        try
-        {
-            var query = new GetAddressTypeQuery { Id = id };
-            var result = await _mediator.Send(query);
-            return result;
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var query = new GetAddressTypeQuery { Id = id };
+        var result = await _mediator.Send(query);
+        return result;
     }
 
     [HttpGet]

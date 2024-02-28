@@ -16,16 +16,14 @@ namespace SIMA.Persistance.Read.Repositories.Features.DMS.WorkFlowDocumentExtens
         }
         public async Task<List<GetWorkFlowDocumentExtensionQueryResult>> GetAll(BaseRequest baseRequest)
         {
-            try
+            var response = new List<GetWorkFlowDocumentExtensionQueryResult>();
+            int totalCount = 0;
+            using (var connection = new SqlConnection(_connectionString))
             {
-                var response = new List<GetWorkFlowDocumentExtensionQueryResult>();
-                int totalCount = 0;
-                using (var connection = new SqlConnection(_connectionString))
+                await connection.OpenAsync();
+                if (!string.IsNullOrEmpty(baseRequest.SearchValue))
                 {
-                    await connection.OpenAsync();
-                    if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-                    {
-                        string query = @"
+                    string query = @"
 SELECT DISTINCT WDT.[Id]
       ,WDT.[WorkflowId]
       ,WDT.[DocumentExtensionId]
@@ -39,13 +37,13 @@ SELECT DISTINCT WDT.[Id]
  WHERE (WDT.[WorkflowId] like @SearchValue OR WDT.[DocumentExtensionId] like @SearchValue OR S.Name like @SearchValue)  and S.ActiveStatusId<>3
 Order By wdt.[CreatedAt] desc  
 ";
-                        var result = await connection.QueryAsync<GetWorkFlowDocumentExtensionQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                        totalCount = result.Count();
-                        response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-                    }
-                    else
-                    {
-                        string query = @"
+                    var result = await connection.QueryAsync<GetWorkFlowDocumentExtensionQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
+                    totalCount = result.Count();
+                    response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                }
+                else
+                {
+                    string query = @"
 SELECT DISTINCT WDT.[Id]
       ,WDT.[WorkflowId]
       ,WDT.[DocumentExtensionId]
@@ -59,17 +57,11 @@ SELECT DISTINCT WDT.[Id]
 where  wdt.ActiveStatusId<>3
 Order By wdt.[CreatedAt] desc  
 ";
-                        var result = await connection.QueryAsync<GetWorkFlowDocumentExtensionQueryResult>(query);
-                        totalCount = result.Count();
-                        response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-                    }
-                    return response;
+                    var result = await connection.QueryAsync<GetWorkFlowDocumentExtensionQueryResult>(query);
+                    totalCount = result.Count();
+                    response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
                 }
-            }
-            catch (Exception e)
-            {
-
-                throw;
+                return response;
             }
         }
 

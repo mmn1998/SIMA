@@ -23,19 +23,11 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany
 
         public async Task<Result<long>> Handle(CreateWorkFlowCompanyCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var arg = _mapper.Map<CreateWorkFlowCompanyArg>(request);
-                var entity = await Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities.WorkFlowCompany.New(arg);
-                await _repository.Add(entity);
-                await _unitOfWork.SaveChangesAsync();
-                return Result.Ok(entity.Id.Value);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            var arg = _mapper.Map<CreateWorkFlowCompanyArg>(request);
+            var entity = await Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities.WorkFlowCompany.New(arg);
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
         }
         public async Task<Result<long>> Handle(ModifyWorkFlowCompanyCommand request, CancellationToken cancellationToken)
         {

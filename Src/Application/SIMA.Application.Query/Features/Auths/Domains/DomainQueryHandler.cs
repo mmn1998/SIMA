@@ -18,17 +18,9 @@ public class DomainQueryHandler : IQueryHandler<GetDomainQuery, Result<GetDomain
     }
     public async Task<Result<GetDomainQueryResult>> Handle(GetDomainQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var entity = await _repository.FindById(request.Id);
-            var result = _mapper.Map<GetDomainQueryResult>(entity);
-            return Result.Ok(result);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
-
+        var entity = await _repository.FindById(request.Id);
+        var result = _mapper.Map<GetDomainQueryResult>(entity);
+        return Result.Ok(result);
     }
 
     public async Task<Result<List<GetDomainQueryResult>>> Handle(GetAllDomainQuery request, CancellationToken cancellationToken)

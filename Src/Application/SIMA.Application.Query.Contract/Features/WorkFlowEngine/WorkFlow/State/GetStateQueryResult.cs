@@ -8,7 +8,9 @@
         public long WorkFlowId { get; set; }
         public string? WorkFlowName { get; set; }
         public string? DomainName { get; set; }
+        public long? DomainId { get; set; }
         public string? ProjectName { get; set; }
+        public string? ProjectId { get; set; }
         public long ActiveStatusId { get; set; }
         public string ActiveStatus { get; set; }
         //public DateTime? CreatedAt { get; set; }

@@ -35,19 +35,11 @@ public class PaymentTypeCommandHandler : ICommandHandler<AddPaymentTypeCommand, 
 
     public async Task<Result<long>> Handle(EditPaymentTypeCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var entity = await _repository.GetById(request.Id);
-            var arg = _mapper.Map<ModifyPaymentTypeArg>(request);
-            await entity.Modify(arg, _domainService);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
-        }
-        catch (Exception e)
-        {
-
-            throw;
-        }
+        var entity = await _repository.GetById(request.Id);
+        var arg = _mapper.Map<ModifyPaymentTypeArg>(request);
+        await entity.Modify(arg, _domainService);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(entity.Id.Value);
     }
 
     public async Task<Result<long>> Handle(DeletePaymentTypeCommand request, CancellationToken cancellationToken)

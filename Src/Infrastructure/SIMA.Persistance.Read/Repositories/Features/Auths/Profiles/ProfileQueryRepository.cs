@@ -19,12 +19,10 @@ public class ProfileQueryRepository : IProfileQueryRepository
 
     public async Task<GetProfileQueryResult> FindById(long id)
     {
-        try
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
+            await connection.OpenAsync();
+            string query = $@"
                 SELECT DISTINCT P.[ID] as Id
                   ,P.FirstName
 	              ,P.LastName
@@ -35,16 +33,10 @@ public class ProfileQueryRepository : IProfileQueryRepository
               FROM [Authentication].[Profile] P
               join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID    
               WHERE P.[ActiveStatusID] <> 3 AND P.Id = @Id";
-                var result = await connection.QueryFirstOrDefaultAsync<GetProfileQueryResult>(query, new { Id = id });
-                if (result is null) throw SimaResultException.ProfileNotFoundError;
-                return result;
-            }
+            var result = await connection.QueryFirstOrDefaultAsync<GetProfileQueryResult>(query, new { Id = id });
+            if (result is null) throw SimaResultException.ProfileNotFoundError;
+            return result;
         }
-        catch (Exception ex)
-        {
-            throw;
-        }
-
     }
 
     public async Task<List<GetPhoneBookQueryResult>> FindWithPhoneBook(long id)
