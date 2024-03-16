@@ -4,7 +4,7 @@ using SIMA.Application.Query.Contract.Features.BranchManagement.CurrencyTypes;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Request;
-using SIMA.Persistance.Read;
+using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.CurrencyTypes
@@ -18,50 +18,49 @@ namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.CurrencyT
             _connectionString = configuration.GetConnectionString();
         }
 
-        public async Task<List<GetCurrencyTypeQueryResult>> GetAll(BaseRequest request)
-        {
-            var result = new List<GetCurrencyTypeQueryResult>();
-            string query = string.Empty;
+        public async Task<Result<IEnumerable<GetCurrencyTypeQueryResult>>> GetAll(GetAllCurrencyTypesQuery request)
+        {            
             using (var connection = new SqlConnection(_connectionString))
             {
+                string queryCount = @"
+                       SELECT Count(*) Result
+                       FROM [Bank].[CurrencyType] CT
+                       INNER JOIN [Basic].[ActiveStatus] A on A.ID = CT.ActiveStatusID
+                       WHERE  CT.ActiveStatusId != 3
+                       and (@SearchValue is null OR CT.[Name] like @SearchValue or CT.[Code] like @SearchValue)
+                                      ";
                 await connection.OpenAsync();
-                if (!string.IsNullOrEmpty(request.SearchValue))
-                {
-                    query = @"
-                            SELECT DISTINCT CT.[ID]
-                          ,CT.[Name]
-                          ,CT.[Code]
-                          ,[ISBASECURRENCY]
-                    	  ,A.Name ActiveStatus
-                    	  ,CT.ActiveStatusId
-,ct.[CreatedAt]
-                      FROM [Bank].[CurrencyType] CT
-                      INNER JOIN [Basic].[ActiveStatus] A on A.ID = CT.ActiveStatusID
-                              WHERE (CT.Name like %@SearchValue OR CT.[Code] like @SerachValue)
-Order By ct.[CreatedAt] desc  
+
+                string query = $@"
+                      SELECT DISTINCT CT.[ID]
+                        ,CT.[Name]
+                        ,CT.[Code]
+                        ,CT.[ISBASECURRENCY]
+                     	,A.Name ActiveStatus
+                     	,CT.ActiveStatusId
+                        ,ct.[CreatedAt]
+                    FROM [Bank].[CurrencyType] CT
+                    INNER JOIN [Basic].[ActiveStatus] A on A.ID = CT.ActiveStatusID
+                    WHERE  CT.ActiveStatusId != 3
+                      and (@SearchValue is null OR CT.[Name] like @SearchValue or CT.[Code] like @SearchValue)
+                    order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                      OFFSET @Skip rows FETCH NEXT @PageSize rows only;
                             ";
-                }
-                else
+
+
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
                 {
-                    query = @"
-                            SELECT DISTINCT CT.[ID]
-                          ,CT.[Name]
-                          ,CT.[Code]
-                          ,[ISBASECURRENCY]
-                    	  ,A.Name ActiveStatus
-                    	  ,CT.ActiveStatusId
-,ct.[CreatedAt]
-                      FROM [Bank].[CurrencyType] CT
-                      INNER JOIN [Basic].[ActiveStatus] A on A.ID = CT.ActiveStatusID
-Order By ct.[CreatedAt] desc  
-                            ";
+                    SearchValue = "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetCurrencyTypeQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
                 }
-                result = (await connection.QueryAsync<GetCurrencyTypeQueryResult>(query))
-                    .Skip((request.Skip - 1) * request.Take)
-                    .Take(request.Take)
-                    .ToList();
+
             }
-            return result;
         }
 
         public async Task<GetCurrencyTypeQueryResult> GetById(long id)

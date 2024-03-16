@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIMA.Persistance.Persistence;
 
@@ -11,9 +12,11 @@ using SIMA.Persistance.Persistence;
 namespace SIMA.Persistance.Migrations
 {
     [DbContext(typeof(SIMADBContext))]
-    partial class SIMADBContextModelSnapshot : ModelSnapshot
+    [Migration("20240220093357_add-remaining-fks20240220")]
+    partial class addremainingfks20240220
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2577,6 +2580,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
@@ -3273,10 +3277,6 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("ActiveStatusID");
 
-                    b.Property<string>("BpmnId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -3317,10 +3317,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long?>("ActiveStatusId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("BpmnId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Code")
                         .HasMaxLength(20)

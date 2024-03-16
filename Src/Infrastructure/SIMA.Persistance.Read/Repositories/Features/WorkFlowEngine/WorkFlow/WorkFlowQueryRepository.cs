@@ -16,13 +16,25 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<List<GetWorkFlowQueryResult>> GetAll()
+    public async Task<Result<List<GetWorkFlowQueryResult>>> GetAll(GetAllWorkFlowsQuery request)
     {
         var response = new List<GetWorkFlowQueryResult>();
-
+        int totalCount = 0;
+        
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
+
+            string queryCount = @"
+                Select Count(*) Result
+                FROM [PROJECT].[WorkFlow] C
+                    join [PROJECT].Project P on C.ProjectID = P.Id
+					INNER JOIN [Basic].[ActiveStatus] A on C.ActiveStatusID = A.ID
+					INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                WHERE C.[ActiveStatusID] <> 3
+                and (@SearchValue is null OR (C.Name like @SearchValue or C.Code like @SearchValue or C.[Description] like @SearchValue or P.Name like @SearchValue or D.[Name] like @SearchValue or A.[Name] like @SearchValue))
+";
+
             string query = $@"
                   SELECT  C.[ID] as Id
                   ,C.[Name]
@@ -37,19 +49,28 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 				  ,A.[Name] ActiveStatus
 				  ,D.Id DomainId
 				  ,D.[Name] DomainName
-,c.[CreatedAt]
+                  ,c.[CreatedAt]
                     FROM [PROJECT].[WorkFlow] C
                     join [PROJECT].Project P on C.ProjectID = P.Id
 					INNER JOIN [Basic].[ActiveStatus] A on C.ActiveStatusID = A.ID
 					INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-              WHERE C.[ActiveStatusID] <> 3
-                  order by C.CreatedAt desc
-";
-            var result = await connection.QueryAsync<GetWorkFlowQueryResult>(query);
-            if (result is null) throw SimaResultException.WorkflowNotFoundError;
-            response = result.ToList();
+                WHERE C.[ActiveStatusID] <> 3
+                and (@SearchValue is null OR (C.Name like @SearchValue or C.Code like @SearchValue or C.[Description] like @SearchValue or P.Name like @SearchValue or D.[Name] like @SearchValue or A.[Name] like @SearchValue))
+                  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                  OFFSET @Skip rows FETCH NEXT @Take rows only;";
+
+            using (var result = await connection.QueryMultipleAsync(query + queryCount, new
+            {
+                SearchValue = "%" + request.Filter + "%",
+                Take = request.PageSize,
+                request.Skip,
+            }))
+            {
+                response = (await result.ReadAsync<GetWorkFlowQueryResult>()).ToList();
+                totalCount = await result.ReadSingleAsync<int>();
+            }
         }
-        return response;
+        return Result.Ok(response, totalCount, request.PageSize, request.Page);
     }
     public async Task<GetWorkFlowQueryResult> FindById(long id)
     {
@@ -85,20 +106,20 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
     }
     public async Task<Result<IEnumerable<GetStepQueryResult>>> GetAllStep(GetAllStepsQuery request)
     {
-        var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
+        
 
         using (var connection = new SqlConnection(_connectionString))
         {
 
             var queryCount = @"
                          SELECT COUNT(*) Result
-                              FROM [SIMADB].[PROJECT].[STEP] C
-                              left join [SIMADB].[PROJECT].[State] S on C.StateID = S.Id
+                              FROM [PROJECT].[STEP] C
+                              left join [PROJECT].[State] S on C.StateID = S.Id
                               join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
                         	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
                         	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
                         	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-                          WHERE  C.ActiveStatusId != 3
+                          WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
                               and (@SearchValue is null OR C.[Name] like @SearchValue)
                               AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId);";
 
@@ -118,33 +139,33 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
                         		   ,D.[Name] DomainName
                         		   ,D.[Id] DomainId
                         		   ,c.[CreatedAt]
-                               FROM [SIMADB].[PROJECT].[STEP] C
-                               left join [SIMADB].[PROJECT].[State] S on C.StateID = S.Id
+                               FROM [PROJECT].[STEP] C
+                               left join [PROJECT].[State] S on C.StateID = S.Id
                               join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
                         	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
                         	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
                         	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-                         WHERE  C.ActiveStatusId != 3
+                         WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
                                 and (@SearchValue is null OR C.[Name] like @SearchValue)
                                AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                              order by C.CreatedAt desc
+                               order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
                         OFFSET @Skip rows FETCH NEXT @Take rows only";
 
 
             using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
 
-                SearchValue = "%" + request.SearchValue + "%",
-                request.WorkFlowId,
-                request.DomainId,
-                request.ProjectId,
-                Skip = skip,
-                request.Take
+                SearchValue = "%" + request.Filter + "%",
+                WorkFlowId = request.WorkFlowId,
+                ProjectId = request.ProjectId,
+                DomainId = request.DomainId,
+                Take = request.PageSize,
+                request.Skip,
             }))
             {
                 var response = await multi.ReadAsync<GetStepQueryResult>();
                 var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count);
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
 
@@ -172,8 +193,8 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 ,D.[Name] DomainName
 ,D.[Id] DomainId
 ,c.[CreatedAt]
-       FROM [SIMADB].[PROJECT].[STEP] C
-       left join [SIMADB].[PROJECT].[State] S on C.StateID = S.Id
+       FROM  [PROJECT].[STEP] C
+       left join  [PROJECT].[State] S on C.StateID = S.Id
       join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
 	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
 	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
@@ -209,8 +230,8 @@ Order By c.[CreatedAt] desc
 ,P.Id ProjectId
 ,D.[Name] DomainName
 ,D.[Id] DomainId
-       FROM [SIMADB].[PROJECT].[STEP] C
-       left join [SIMADB].[PROJECT].[State] S on C.StateID = S.Id
+       FROM [PROJECT].[STEP] C
+       left join [PROJECT].[State] S on C.StateID = S.Id
       join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
 	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
 	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
@@ -224,7 +245,7 @@ WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
     }
     public async Task<Result<IEnumerable<GetStateQueryResult>>> GetAllStates(GetAllStatesQuery request)
     {
-        var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
+        
 
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -261,24 +282,24 @@ WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
                                WHERE  C.ActiveStatusId != 3
                                    and (@SearchValue is null OR C.[Name] like @SearchValue)
                                   AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                                 order by C.CreatedAt desc
+                                  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
                                OFFSET @Skip rows FETCH NEXT @Take rows only";
 
 
             using (var multi = await connection.QueryMultipleAsync(query + " " + queryCount, new
             {
 
-                SearchValue = "%" + request.SearchValue + "%",
-                request.WorkFlowId,
-                request.DomainId,
-                request.ProjectId,
-                Skip = skip,
-                request.Take
+                SearchValue = "%" + request.Filter + "%",
+                WorkFlowId = request.WorkFlowId,
+                ProjectId = request.ProjectId,
+                DomainId = request.DomainId,
+                Take = request.PageSize,
+                request.Skip,
             }))
             {
                 var response = await multi.ReadAsync<GetStateQueryResult>();
                 var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count);
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
     }

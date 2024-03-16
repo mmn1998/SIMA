@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.ValueObjects;
 namespace SIMA.Persistance.EntityConfigurations.Features.BranchManagement;
@@ -28,6 +30,18 @@ public class BranchConfiguration : IEntityTypeConfiguration<Domain.Models.Featur
             .HasConversion(
             v => v.Value,
             v => new DepartmentId(v));
+        entity.Property(x => x.LocationId)
+            .HasConversion(
+            v => v.Value,
+            v => new LocationId(v));
+        entity.Property(x => x.BranchChiefOfficerId)
+            .HasConversion(
+            v => v.Value,
+            v => new StaffId(v));
+        entity.Property(x => x.BranchDeputyId)
+            .HasConversion(
+            v => v.Value,
+            v => new StaffId(v));
 
         entity.Property(e => e.IsMultiCurrencyBranch)
             .HasMaxLength(1)
@@ -44,5 +58,11 @@ public class BranchConfiguration : IEntityTypeConfiguration<Domain.Models.Featur
             .HasConstraintName("FK_Branch_BranchType");
         entity.HasOne(d => d.Department).WithMany(p => p.Branches)
             .HasForeignKey(d => d.DepartmentId);
+        entity.HasOne(d => d.Location).WithMany(p => p.Branches)
+            .HasForeignKey(d => d.LocationId);
+        entity.HasOne(d => d.BranchDeputy).WithMany(p => p.DeputyBranches)
+            .HasForeignKey(d => d.BranchDeputyId);
+        entity.HasOne(d => d.BranchChiefOfficer).WithMany(p => p.ChiefBranches)
+            .HasForeignKey(d => d.BranchChiefOfficerId);
     }
 }

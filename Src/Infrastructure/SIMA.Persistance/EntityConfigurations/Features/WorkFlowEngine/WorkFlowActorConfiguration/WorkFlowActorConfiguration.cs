@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 
@@ -13,13 +16,12 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
             entity.ToTable("WorkFlowActor", "Project");
             entity.HasIndex(e => e.Code).IsUnique();
             entity.Property(x => x.Id)
-         .HasColumnName("Id")
          .HasConversion(
              v => v.Value,
              v => new WorkFlowActorId(v))
          .ValueGeneratedNever();
 
-            entity.Property(e => e.ActiveStatusId).HasColumnName("ActiveStatusID");
+            entity.Property(e => e.ActiveStatusId);
             entity.Property(e => e.Code)
                 .HasMaxLength(20)
                 .IsUnicode();
@@ -47,16 +49,18 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
             entity.ToTable("WorkFlowActorGroup", "Project");
 
             entity.Property(x => x.Id)
-                .HasColumnName("Id")
                 .HasConversion(
                     v => v.Value,
                     v => new WorkFlowActorGroupId(v))
                 .ValueGeneratedNever();
-            entity.Property(e => e.ActiveStatusId).HasColumnName("ActiveStatusID");
+            entity.Property(e => e.ActiveStatusId);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.GroupId).HasColumnName("GroupID");
+            entity.Property(e => e.GroupId)
+                .HasConversion(
+                x=>x.Value,
+                x=> new GroupId(x));
             entity.Property(e => e.ModifiedAt)
                 .IsRowVersion()
                 .IsConcurrencyToken();
@@ -66,7 +70,12 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
            v => v.Value,
            v => new WorkFlowActorId(v));
 
-            entity.Property(e => e.WorkFlowActorId).HasColumnName("WorkFlowActorID");
+            entity.HasOne(x => x.Group)
+                .WithMany(x => x.WorkFlowActorGroups)
+                .HasForeignKey(x => x.GroupId);
+            entity.HasOne(x => x.WorkFlowActor)
+                .WithMany(x => x.WorkFlowActorGroups)
+                .HasForeignKey(x => x.WorkFlowActorId);
 
         }
     }
@@ -89,13 +98,19 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
             entity.Property(e => e.ModifiedAt)
                 .IsRowVersion()
                 .IsConcurrencyToken();
-            entity.Property(e => e.RoleId).HasColumnName("RoleID");
+            entity.Property(e => e.RoleId)
+                .HasConversion(
+                x=>x.Value,
+                x=> new RoleId(x)
+                );
             entity.Property(x => x.WorkFlowActorId)
            .HasConversion(
             v => v.Value,
             v => new WorkFlowActorId(v));
-            entity.Property(e => e.WorkFlowActorId).HasColumnName("WorkFlowActorID");
-
+            entity.Property(e => e.WorkFlowActorId);
+            entity.HasOne(e => e.Role)
+                .WithMany(x => x.WorkFlowActorRoles)
+                .HasForeignKey(e => e.RoleId);
             entity.HasOne(d => d.WorkFlowActor).WithMany(p => p.WorkFlowActorRoles)
                 .HasForeignKey(d => d.WorkFlowActorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -122,16 +137,19 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
             entity.Property(e => e.ModifiedAt)
                 .IsRowVersion()
                 .IsConcurrencyToken();
-            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.Property(x => x.WorkFlowActorId)
             .HasConversion(
              v => v.Value,
              v => new WorkFlowActorId(v));
+            entity.Property(x => x.UserId)
+            .HasConversion(
+             v => v.Value,
+             v => new UserId(v));
 
-            entity.Property(e => e.WorkFlowActorId).HasColumnName("WorkFlowActorID");
-
-            entity.HasOne(d => d.WorkFlowActor).WithMany(p => p.WorkFlowActorUsers)
+            entity.HasOne(d => d.User).WithMany(p => p.WorkFlowActorUsers)
+                .HasForeignKey(d => d.UserId);
+                entity.HasOne(d => d.WorkFlowActor).WithMany(p => p.WorkFlowActorUsers)
                 .HasForeignKey(d => d.WorkFlowActorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_WorkFlowActorUser_WorkFlowActor");

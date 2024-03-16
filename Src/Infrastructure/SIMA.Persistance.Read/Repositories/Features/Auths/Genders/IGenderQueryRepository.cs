@@ -8,5 +8,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Genders;
 public interface IGenderQueryRepository : IQueryRepository
 {
     Task<GetGenderQueryResult> FindById(long id);
-    Task<Result<List<GetGenderQueryResult>>> GetAll(BaseRequest? baseRequests = null);
+    Task<Result<IEnumerable<GetGenderQueryResult>>> GetAll(GetAllGenderQuery? baseRequests = null);
 }

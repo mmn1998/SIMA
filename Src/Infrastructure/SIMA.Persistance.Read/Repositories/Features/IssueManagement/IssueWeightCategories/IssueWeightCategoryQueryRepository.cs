@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssueWeightCategories;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -16,66 +17,52 @@ public class IssueWeightCategoryQueryRepository : IIssueWeightCategoryQueryRepos
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetIssueWeightCategoryQueryResult>>> GetAll(BaseRequest baseRequest)
+    public async Task<Result<IEnumerable<GetIssueWeightCategoryQueryResult>>> GetAll(GetAllIssueWeightCategoriesQuery request)
     {
-        var response = new List<GetIssueWeightCategoryQueryResult>();
-        int totalCount = 0;
+        
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string query = string.Empty;
-            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
+            var queryCount = @"
+                              SELECT  COUNT(*) Result  
+                                  FROM [IssueManagement].[IssueWeightCategory] WG
+                                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
+                                    WHERE (@SearchValue is null OR (WG.[MinRange] like @SearchValue or WG.[MaxRange] like @SearchValue or WG.[Name] like @SearchValue or WG.[Code] like @SearchValue )) and WG.ActiveStatusId != 3";
+            var query = $@"
+                              SELECT WG.[Id]
+                                    ,WG.[Name]
+                                    ,WG.[Code]
+                                    ,WG.[MinRange]
+                                    ,WG.[MaxRange]
+                                    ,WG.[ActiveStatusId]
+                                    ,S.[Name] ActiveStatus
+                                    ,wg.[CreatedAt]
+                                FROM [IssueManagement].[IssueWeightCategory] WG
+                                INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
+                                  WHERE (@SearchValue is null OR (WG.[MinRange] like @SearchValue or WG.[MaxRange] like @SearchValue or WG.[Name] like @SearchValue or WG.[Code] like @SearchValue )) and WG.ActiveStatusId != 3
+                               order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                query = @"
-SELECT TOP (1000) WG.[Id]
-      ,WG.[Name]
-      ,WG.[Code]
-      ,WG.[MinRange]
-      ,WG.[MaxRange]
-      ,WG.[ActiveStatusId]
-      ,S.[Name] ActiveStatus
-,wg.[CreatedAt]
-  FROM [IssueManagement].[IssueWeightCategory] WG
-  INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
-    WHERE (WG.[MinRange] like @SearchValue or WG.[MaxRange] like @SearchValue or WG.[Name] like @SearchValue or WG.[Code] like @SearchValue ) and WG.ActiveStatusId != 3
-Order By wg.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetIssueWeightCategoryQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                    .Take(baseRequest.Take)
-                    .ToList();
-            }
-            else
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
             {
-                query = @"
-SELECT TOP (1000) WG.[Id]
-      ,WG.[Name]
-      ,WG.[Code]
-      ,WG.[MinRange]
-      ,WG.[MaxRange]
-      ,WG.[ActiveStatusId]
-      ,S.[Name] ActiveStatus
-,wg.[CreatedAt]
-  FROM [IssueManagement].[IssueWeightCategory] WG
-  INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId    
-where WG.ActiveStatusId != 3
-Order By wg.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetIssueWeightCategoryQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                    .Take(baseRequest.Take)
-                    .ToList();
+                var response = await multi.ReadAsync<GetIssueWeightCategoryQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
-        return Result.Ok(response, totalCount); ;
     }
 
     public async Task<GetIssueWeightCategoryQueryResult> GetById(long id)
     {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = @"
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            string query = @"
 SELECT TOP (1000) WG.[Id]
       ,WG.[Name]
       ,WG.[Code]
@@ -87,10 +74,10 @@ SELECT TOP (1000) WG.[Id]
   INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
   WHERE WG.[Id] = @Id and WG.ActiveStatusId != 3
 ";
-                var result = await connection.QueryFirstOrDefaultAsync<GetIssueWeightCategoryQueryResult>(query, new { Id = id });
-                result.NullCheck();
-                return result;
-            }
+            var result = await connection.QueryFirstOrDefaultAsync<GetIssueWeightCategoryQueryResult>(query, new { Id = id });
+            result.NullCheck();
+            return result;
+        }
     }
 
     public async Task<long> GetIdByWeight(int weight)

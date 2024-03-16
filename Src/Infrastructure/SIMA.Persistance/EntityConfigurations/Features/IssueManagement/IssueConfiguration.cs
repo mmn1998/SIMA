@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.IssueManagement;
 
@@ -37,6 +39,22 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
        .HasConversion(
         v => v.Value,
         v => new IssuePriorityId(v));
+        entity.Property(x => x.CurrenStepId)
+       .HasConversion(
+        v => v.Value,
+        v => new StepId(v));
+        entity.Property(x => x.CurrentStateId)
+       .HasConversion(
+        v => v.Value,
+        v => new StateId(v));
+        entity.Property(x => x.CurrentWorkflowId)
+       .HasConversion(
+        v => v.Value,
+        v => new WorkFlowId(v));
+        entity.Property(x => x.MainAggregateId)
+       .HasConversion(
+        v => v.Value,
+        v => new MainAggregateId(v));
         entity.HasOne(d => d.IssuePriority).WithMany(p => p.Issues)
                 .HasForeignKey(d => d.IssuePriorityId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
@@ -47,5 +65,17 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
         entity.HasOne(d => d.IssueWeightCategory).WithMany(p => p.Issues)
                 .HasForeignKey(d => d.IssueWeightCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+        entity.HasOne(x => x.CurrenStep)
+            .WithMany(p => p.Issues)
+            .HasForeignKey(x => x.CurrenStepId);
+        entity.HasOne(x => x.CurrentState)
+            .WithMany(p => p.Issues)
+            .HasForeignKey(x => x.CurrentStateId);
+        entity.HasOne(x => x.CurrentWorkflow)
+            .WithMany(p => p.Issues)
+            .HasForeignKey(x => x.CurrentWorkflowId);
+        entity.HasOne(x => x.MainAggregate)
+            .WithMany(p => p.Issues)
+            .HasForeignKey(x => x.MainAggregateId);
     }
 }

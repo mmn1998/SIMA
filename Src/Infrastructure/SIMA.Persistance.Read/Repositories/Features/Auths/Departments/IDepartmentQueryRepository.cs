@@ -8,5 +8,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Departments;
 public interface IDepartmentQueryRepository : IQueryRepository
 {
     Task<GetDepartmentQueryResult> FindById(long id);
-    Task<Result<List<GetDepartmentQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetDepartmentQueryResult>>> GetAll(GetAllDepartmentsQuery? request = null);
 }

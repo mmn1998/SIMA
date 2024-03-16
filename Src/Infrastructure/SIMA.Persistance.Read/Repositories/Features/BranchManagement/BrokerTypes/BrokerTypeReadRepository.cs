@@ -3,66 +3,69 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.BranchManagement.BrokerTypes;
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Request;
-using SIMA.Persistance.Read;
+using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.BrokerTypes
+namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.BrokerTypes;
+
+public class BrokerTypeReadRepository : IBrokerTypeReadRepository
 {
-    public class BrokerTypeReadRepository : IBrokerTypeReadRepository
+    private readonly string _connectionString;
+    public BrokerTypeReadRepository(IConfiguration configuration)
     {
-        private readonly string _connectionString;
-        public BrokerTypeReadRepository(IConfiguration configuration)
+        _connectionString = configuration.GetConnectionString();
+    }
+    public async Task<Result<IEnumerable<GetBrokerTypeQueryResult>>> GetAll(GetAllBrokerTypesQuery request)
+    {
+        
+
+        using (var connection = new SqlConnection(_connectionString))
         {
-            _connectionString = configuration.GetConnectionString();
-        }
-        public async Task<List<GetBrokerTypeQueryResult>> GetAll(BaseRequest request)
-        {
-            var result = new List<GetBrokerTypeQueryResult>();
-            string query = string.Empty;
-            using (var connection = new SqlConnection(_connectionString))
+
+            string queryCount = @"
+                            SELECT Count(*) Result
+                            FROM [Bank].[BrokerType] BT
+                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
+                            WHERE  BT.ActiveStatusId != 3
+                            and (@SearchValue is null OR BT.[Name] like @SearchValue or BT.[Code] like @SearchValue)
+                            ";
+
+            await connection.OpenAsync();
+             
+            
+               string query = $@"
+                            SELECT DISTINCT BT.[ID]
+                                 ,BT.[Name]
+                                 ,BT.[Code]
+                              	 ,A.Name ActiveStatus
+                              	 ,BT.ActiveStatusId 
+                                 ,bt.[CreatedAt]
+                             FROM [Bank].[BrokerType] BT
+                             INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
+                             WHERE  BT.ActiveStatusId != 3
+                             and (@SearchValue is null OR BT.[Name] like @SearchValue or BT.[Code] like @SearchValue)
+                             order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                             OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+                            ";
+
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                if (!string.IsNullOrEmpty(request.SearchValue))
-                {
-                    query = @"
-                            SELECT DISTINCT BT.[ID]
-                                  ,BT.[Name]
-                                  ,BT.[Code]
-                            	  ,A.Name ActiveStatus
-                            	  ,BT.ActiveStatusId 
-,bt.[CreatedAt]
-                              FROM [Bank].[BrokerType] BT
-                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
-                              WHERE (PT.Name like @SearchValue OR BT.[Code] like @SerachValue)
-Order By bt.[CreatedAt] desc  
-                            ";
-                }
-                else
-                {
-                    query = @"
-                            SELECT DISTINCT BT.[ID]
-                                  ,BT.[Name]
-                                  ,BT.[Code]
-                            	  ,A.Name ActiveStatus
-                            	  ,BT.ActiveStatusId 
-,bt.[CreatedAt]
-                              FROM [Bank].[BrokerType] BT
-                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
-Order By bt.[CreatedAt] desc  
-                            ";
-                }
-                result = (await connection.QueryAsync<GetBrokerTypeQueryResult>(query, new { SearchValue = "%" + request.SearchValue + "%" }))
-                    .Skip((request.Skip - 1) * request.Take)
-                    .Take(request.Take)
-                    .ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetBrokerTypeQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
-            return result;
         }
-        public async Task<GetBrokerTypeQueryResult> GetById(long id)
-        {
-            var result = new GetBrokerTypeQueryResult();
-            string query = @"
+    }
+    public async Task<GetBrokerTypeQueryResult> GetById(long id)
+    {
+        var result = new GetBrokerTypeQueryResult();
+        string query = @"
                     SELECT DISTINCT BT.[ID]
                                   ,BT.[Name]
                                   ,BT.[Code]
@@ -71,13 +74,12 @@ Order By bt.[CreatedAt] desc
                               FROM [Bank].[BrokerType] BT
                               INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID WHERE BT.Id = @Id
                     ";
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                result = await connection.QueryFirstAsync<GetBrokerTypeQueryResult>(query, new { Id = id });
-                if (result is null) throw SimaResultException.NullException;
-            }
-            return result;
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            result = await connection.QueryFirstAsync<GetBrokerTypeQueryResult>(query, new { Id = id });
+            if (result is null) throw SimaResultException.NullException;
         }
+        return result;
     }
 }

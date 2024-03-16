@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 
@@ -20,6 +23,10 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
             v => new ProjectId(v))
         .ValueGeneratedNever();
             entity.HasKey(e => e.Id);
+            entity.Property(x => x.DomainId)
+            .HasConversion(
+                v => v.Value,
+                v => new DomainId(v));
             entity.Property(e => e.ActiveStatusId).HasColumnName("ActiveStatusID");
             entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
             entity.Property(e => e.Code)
@@ -33,6 +40,9 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
                         .IsConcurrencyToken();
             entity.Property(e => e.Name)
                         .HasMaxLength(50);
+            entity.HasOne(x => x.Domain)
+                .WithMany(x => x.Projects)
+                .HasForeignKey(x => x.DomainId);
         }
     }
     public class ProjectGroupConfiguration : IEntityTypeConfiguration<ProjectGroup>
@@ -46,11 +56,15 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
                  v => v.Value,
                  v => new ProjectGroupId(v))
                 .ValueGeneratedNever();
-            entity.Property(e => e.ActiveStatusId).HasColumnName("ActiveStatusID");
+            entity.Property(x => x.GroupId)
+                .HasConversion(
+                 v => v.Value,
+                 v => new GroupId(v));
+            entity.Property(e => e.ActiveStatusId);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.GroupId).HasColumnName("GroupID");
+            entity.Property(e => e.GroupId);
             entity.Property(e => e.ModifiedAt)
                 .IsRowVersion()
                 .IsConcurrencyToken();
@@ -58,7 +72,13 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
             .HasConversion(
             v => v.Value,
             v => new ProjectId(v));
-            entity.Property(e => e.ProjectId).HasColumnName("ProjectID");
+            entity.Property(e => e.ProjectId);
+            entity.HasOne(x => x.Project)
+                .WithMany(x => x.ProjectGroups)
+                .HasForeignKey(x => x.ProjectId);
+            entity.HasOne(x => x.Group)
+                .WithMany(x => x.ProjectGroups)
+                .HasForeignKey(x => x.GroupId);
         }
     }
     public class ProjectMemberConfiguration : IEntityTypeConfiguration<ProjectMember>
@@ -92,6 +112,10 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
                     .HasConversion(
                     v => v.Value,
                     v => new ProjectId(v));
+            entity.Property(x => x.UserId)
+                    .HasConversion(
+                    v => v.Value,
+                    v => new UserId(v));
             entity.Property(e => e.ProjectId).HasColumnName("ProjectID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -99,6 +123,8 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
                 .HasForeignKey(d => d.ProjectId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ProjectMember_Project");
+            entity.HasOne(d => d.User).WithMany(p => p.ProjectMembers)
+                .HasForeignKey(d => d.UserId);                
         }
     }
 }

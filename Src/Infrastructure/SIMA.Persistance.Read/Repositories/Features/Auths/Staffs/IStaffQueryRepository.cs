@@ -7,11 +7,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Staffs;
 
 public interface IStaffQueryRepository : IQueryRepository
 {
-    //Task<Department> GetDepartment(long staffId);
-    //Task<Profile> GetManager(long managerId);
-    //Task<Profile> GetProfile(long profileId);
-    //Task<Position> GetPosition(long positionId);
     Task<bool> IsStaffSatisfied(long profileId, long positionId);
     Task<GetStaffQueryResult> FindById(long id);
-    Task<Result<List<GetStaffQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetStaffQueryResult>>> GetAll(GetAllStaffQuery? request = null);
 }

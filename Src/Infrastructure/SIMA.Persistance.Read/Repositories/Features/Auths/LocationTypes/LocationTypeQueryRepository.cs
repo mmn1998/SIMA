@@ -39,79 +39,47 @@ public class LocationTypeQueryRepository : ILocationTypeQueryRepository
         }
     }
 
-    public async Task<Result<List<GetLocationTypeQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<IEnumerable<GetLocationTypeQueryResult>>> GetAll(GetAllLocationTypeQuery? request = null)
     {
-        var response = new List<GetLocationTypeQueryResult>();
-        int totalCount = 0;
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+                        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
+
+            string queryCount = @"
+              SELECT COUNT(*) Result
+              FROM [Basic].[LocationType] LT
+              left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
+              join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
+              WHERE  LT.ActiveStatusId != 3
+              and (@SearchValue is null OR LT.[Name] like @SearchValue or LT.[Code] like @SearchValue)";
+            await connection.OpenAsync();
+            string query = $@"
+              SELECT DISTINCT LT.[ID] as Id
+              		,LT.[Name]
+              		,LT.[Code]
+              		,LT.[ActiveStatusID]
+              		,A.[Name] as ActiveStatus
+              		,PLT.[Name] ParentName
+              		,lt.[CreatedAt]
+              FROM [Basic].[LocationType] LT
+              left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
+              join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
+              WHERE  LT.ActiveStatusId != 3
+              and (@SearchValue is null OR LT.[Name] like @SearchValue or LT.[Code] like @SearchValue)
+              order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+              OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                string query = $@"
-                SELECT DISTINCT LT.[ID] as Id
-                                ,LT.[Name]
-                                ,LT.[Code]
-                                ,LT.[ActiveStatusID]
-                                ,A.[Name] as ActiveStatus
-	                            ,PLT.[Name] ParentName
-,lt.[CreatedAt]
-                  FROM [Basic].[LocationType] LT
-                  left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
-                  join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
-                  WHERE (LT.Name like @SearchValue OR Lt.Code like @SearchValue) AND LT.[ActiveStatusID] <> 3
-Order By lt.[CreatedAt] desc
-";
-                var result = await connection.QueryAsync<GetLocationTypeQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetLocationTypeQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
-                SELECT DISTINCT LT.[ID] as Id
-                                ,LT.[Name]
-                                ,LT.[Code]
-                                ,LT.[ActiveStatusID]
-                                ,A.[Name] as ActiveStatus
-	                            ,PLT.[Name] ParentName
-,lt.[CreatedAt]
-                  FROM [Basic].[LocationType] LT
-                  join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
-                  left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
-                  WHERE LT.[ActiveStatusID] <> 3
-Order By lt.[CreatedAt] desc";
-                var result = await connection.QueryAsync<GetLocationTypeQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        else
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
-                SELECT DISTINCT LT.[ID] as Id
-                                ,LT.[Name]
-                                ,LT.[Code]
-                                ,LT.[ActiveStatusID]
-                                ,A.[Name] as ActiveStatus
-	                            ,PLT.[Name] ParentName
-,lt.[CreatedAt]
-                  FROM [Basic].[LocationType] LT
-                  join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
-                  left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
-                  WHERE LT.[ActiveStatusID] <> 3
-Order By lt.[CreatedAt] desc
-";
-                response = (await connection.QueryAsync<GetLocationTypeQueryResult>(query)).ToList();
-            }
-        }
-        return Result.Ok(response, totalCount);
+
     }
 }

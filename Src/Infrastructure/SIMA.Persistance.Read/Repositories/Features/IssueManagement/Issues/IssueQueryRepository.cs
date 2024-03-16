@@ -5,7 +5,6 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
-using System.Buffers;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
@@ -26,11 +25,10 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
             var userId = _simaIdentity.UserId;
             var roleIds = _simaIdentity.RoleIds;
             var groupIds = _simaIdentity.GroupId;
-            var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
+            
             using (var connection = new SqlConnection(_connectionString))
             {
-                var queryCount = @"
-                              SELECT  COUNT(*) Result
+                var queryCount = @" SELECT  COUNT(*) Result
                                     from IssueManagement.Issue I  
                                     join Project.Step S on I.CurrenStepId = S.Id
                                     join Project.WorkFlowActorStep WS on S.Id = WS.StepID
@@ -43,14 +41,14 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 									join Project.Project project on project.Id = W.ProjectID
                                     left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
                                     left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                                    WHERE  (WR.RoleID IN @RoleIds or WG.GroupID IN @GroupIds or  WU.UserID=@userId
+                                    join  [Authentication].[Users] U on I.CreatedBy = U.Id
+                                    join  [Authentication].[Profile] P on P.Id = U.ProfileID
+                                    WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
                                     and I.ActiveStatusId != 3
                                     and (@SearchValue is null OR I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
                                     AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId));";
                 await connection.OpenAsync();
-                string query = @"
+                string query = $@"
                               SELECT  
                                      I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
                                     ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
@@ -76,29 +74,30 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 									join Project.Project project on project.Id = W.ProjectID
                                     left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
                                     left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
-                                    WHERE  (WR.RoleID IN @RoleIds or WG.GroupID IN @GroupIds or  WU.UserID=@userId
+                                    join  [Authentication].[Users] U on I.CreatedBy = U.Id
+                                    join  [Authentication].[Profile] P on P.Id = U.ProfileID
+                                    WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
                                     and I.ActiveStatusId != 3
                                     and (@SearchValue is null OR I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
                                     AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
-                                    order by I.CreatedAt desc OFFSET @Skip rows FETCH NEXT @Take rows only;";
+                                    order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
                 using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
                 {
-                    userId = userId,
-                    RoleIds = roleIds,
-                    SearchValue = "%" + request.SearchValue + "%",
-                    GroupIds = groupIds,
+                    userId,
+                    roleIds,
+                    SearchValue = "%" + request.Filter + "%",
+                    groupIds,
                     request.WorkFlowId,
                     request.DomainId,
                     request.ProjectId,
-                    Skip = skip,
-                    request.Take
+                    request.Skip,
+                    request.PageSize
                 }))
                 {
                     var response = await multi.ReadAsync<GetAllIssueQueryResult>();
                     var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count);
+                    return Result.Ok(response, count, request.PageSize, request.Page);
                 }
             }
         }
@@ -106,7 +105,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
         public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAllMyIssue(GetMyIssueListQuery request)
         {
             var userId = _simaIdentity.UserId;
-            var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
+            
             using (var connection = new SqlConnection(_connectionString))
             {
                 var queryCount = @"
@@ -119,13 +118,13 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                                          right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
                                          LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
                                          LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                                         join [SIMADB].[Authentication].[Users] U on I.CreatedBy = U.Id
-                                         join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID
+                                         join  [Authentication].[Users] U on I.CreatedBy = U.Id
+                                         join  [Authentication].[Profile] P on P.Id = U.ProfileID
                                          WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
                                              and (@SearchValue is null OR i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
                                          AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)";
                 await connection.OpenAsync();
-                string query = @"
+                string query = $@"
                                 SELECT DISTINCT 
                                       i.Id
                                       ,i.Code
@@ -164,22 +163,23 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                                       WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
                                       and (@SearchValue is null OR i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
                                       AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                                      order by I.CreatedAt desc
-                                      OFFSET @Skip rows FETCH NEXT @Take rows only;";
+                                      order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                      OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
                 using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
                 {
                     userId,
-                    SearchValue = "%" + request.SearchValue + "%",
+                    SearchValue = "%" + request.Filter + "%",
                     request.WorkFlowId,
                     request.DomainId,
                     request.ProjectId,
-                    Skip = skip,
-                    request.Take
+                    request.Skip,
+                    request.PageSize,
                 }))
                 {
                     var response = await multi.ReadAsync<GetAllIssueQueryResult>();
                     var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count);
+                    return Result.Ok(response, count, request.PageSize, request.Page);
                 }
             }
         }
@@ -218,16 +218,16 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                             ,W.FileContent WorkFlowFileContent 
                             ,A.Name ActiveStatus    
                             ,I.ActiveStatusId
-                        FROM [SIMADB].[IssueManagement].[Issue] I
+                        FROM  [IssueManagement].[Issue] I
                         join [Basic].[ActiveStatus] A on A.Id = I.ActiveStatusId
-                        join [SIMADB].[Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
-                        join [SIMADB].[Project].[Project] P On P.Id = W.ProjectID
-                        join [SIMADB].[Authentication].[Domain] D on P.DomainID = D.Id
-                        Join [SIMADB].[IssueManagement].[IssueType] IT on IT.Id = I.IssueTypeId
-                        Join [SIMADB].[IssueManagement].[IssuePriority] IP on IP.Id = I.IssuePriorityId
-                        Join [SIMADB].[IssueManagement].[IssueWeightCategory] IWC on IWC.Id = I.IssueWeightCategoryId
-                        join [SIMADB].[Project].[Step] S on I.CurrenStepId = S.Id
-                        left join [SIMADB].[Project].[State] ST on I.CurrentStateId = ST.Id
+                        join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
+                        join  [Project].[Project] P On P.Id = W.ProjectID
+                        join  [Authentication].[Domain] D on P.DomainID = D.Id
+                        Join  [IssueManagement].[IssueType] IT on IT.Id = I.IssueTypeId
+                        Join  [IssueManagement].[IssuePriority] IP on IP.Id = I.IssuePriorityId
+                        Join  [IssueManagement].[IssueWeightCategory] IWC on IWC.Id = I.IssueWeightCategoryId
+                        join  [Project].[Step] S on I.CurrenStepId = S.Id
+                        left join  [Project].[State] ST on I.CurrentStateId = ST.Id
                       Where I.ActiveStatusId != 3 and I.Id = @Id 
                     
                       --IssueLink
@@ -238,10 +238,10 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                         ,IL.[IssueIdLinkReasonTo] as IssueLinkReasonId
                         ,ILR.[Name] as issueLinkReasonName
                         ,ILR.[Code] as issueLinkReasonCode
-                         FROM [SIMADB].[IssueManagement].[Issue] I
-                         Join [SIMADB].[IssueManagement].[IssueLink] IL on I.Id = IL.IssueId
-                         join [SIMADB].[IssueManagement].[IssueLinkReason] ILR on ILR.Id = IL.IssueIdLinkReasonTo
-                         Join [SIMADB].[IssueManagement].[Issue] ILT on IL.IssueIdLinkedTo = ILT.Id
+                         FROM  [IssueManagement].[Issue] I
+                         Join  [IssueManagement].[IssueLink] IL on I.Id = IL.IssueId
+                         join  [IssueManagement].[IssueLinkReason] ILR on ILR.Id = IL.IssueIdLinkReasonTo
+                         Join  [IssueManagement].[Issue] ILT on IL.IssueIdLinkedTo = ILT.Id
                             Where I.ActiveStatusId != 3 and I.Id = @Id 
                     
                     	   --Document
@@ -249,21 +249,23 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                     	   ID.[DocumentId]
                     	  ,D.[FileAddress] as  documentPath
                     	  ,DE.[Name] as documentExtentionName
-                    	  FROM [SIMADB].[IssueManagement].[Issue] I
-                    	    left join [SIMADB].[IssueManagement].[IssueDocument] ID on I.Id = ID.IssueId
-                            left join [SIMADB].[DMS].[Documents] D on D.Id= ID.DocumentId
-                            join [SIMADB].[DMS].[DocumentExtension] DE on DE.Id = D.FileExtensionId
+                    	  FROM  [IssueManagement].[Issue] I
+                    	    left join  [IssueManagement].[IssueDocument] ID on I.Id = ID.IssueId
+                            left join  [DMS].[Documents] D on D.Id= ID.DocumentId
+                            join  [DMS].[DocumentExtension] DE on DE.Id = D.FileExtensionId
                            Where I.ActiveStatusId != 3 and I.Id = @Id 
                     		 --Comment
                     		select 
                     	  IC.[Id]
                     	  ,IC.[Comment]
-                    	  ,IC.[CreatedAt]
+                    	  ,IC.[CreatedAt] CommentDate
                     	  ,IC.[CreatedBy]
                     	  ,U.[Username]
-                    	  FROM [SIMADB].[IssueManagement].[Issue] I
-                    	    join [SIMADB].[IssueManagement].[IssueComment] IC on I.Id = IC.IssueId
-                            join [SIMADB].[Authentication].[Users] U on Ic.CreatedBy = U.Id
+                          ,(P.FirstName + ' ' + P.LastName) CreatorFullname
+                    	  FROM [IssueManagement].[Issue] I
+                    	    join [IssueManagement].[IssueComment] IC on I.Id = IC.IssueId
+                            join [Authentication].[Users] U on Ic.CreatedBy = U.Id
+                            join [Authentication].[Profile] P on P.Id = U.ProfileID
                          Where I.ActiveStatusId != 3 and I.Id = @Id
                          order by IC.CreatedAt desc
 
@@ -273,19 +275,19 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                                ,s.Name 
                                ,FStep.Name TargetName
                                ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId
-                               From [SIMADB].[IssueManagement].[Issue] I
-                               inner join [SIMADB].[Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
-                               inner   join [SIMADB].[Project].[Step] S on I.CurrenStepId = S.Id
+                               From  [IssueManagement].[Issue] I
+                               inner join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
+                               inner   join  [Project].[Step] S on I.CurrenStepId = S.Id
                                join Project.WorkFlowActorStep WS on S.Id = WS.StepID
 	                           join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
 	                           left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
 	                           left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
 	                           left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                               inner  join [SIMADB].[Project].[Progress] P on S.Id = P.SourceId
-                               inner   join [SIMADB].[Project].[Step] ST on P.TargetId = ST.Id
+                               inner  join  [Project].[Progress] P on S.Id = P.SourceId
+                               inner   join  [Project].[Step] ST on P.TargetId = ST.Id
                                CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
                                Where    I.Id = @Id and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
-                               I.ActiveStatusId <> 3";
+                               I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3 ";
                 using (var multi = await connection.QueryMultipleAsync(query, new { Id = id, userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
                 {
                     response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw IssueExceptions.IssueErrorException;
@@ -321,13 +323,13 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 							  ,STTA.[Name] as TargetStateName 
 							  ,P.[FirstName] as PerformerFirstName
 							  ,P.[LastName] as PerformerLastName
-                           FROM [SIMADB].[IssueManagement].[IssueHistory] I
-						  join [SIMADB].[Project].[Step] S on S.Id = I.SourceStepId
-						  left join [SIMADB].[Project].[State] ST on ST.Id = I.SourceStateId
-						  join [SIMADB].[Project].[Step] STA on STA.Id = I.TargetStepId
-						  left join [SIMADB].[Project].[State] STTA on STTA.Id = I.TargetStateId
-						  join [SIMADB].[Authentication].[Users] U on I.PerformerUserId = U.Id
-						  join [SIMADB].[Authentication].[Profile] P on P.Id = U.ProfileID WHERE IssueId = @IssueId
+                           FROM  [IssueManagement].[IssueHistory] I
+						  join  [Project].[Step] S on S.Id = I.SourceStepId
+						  left join  [Project].[State] ST on ST.Id = I.SourceStateId
+						  join  [Project].[Step] STA on STA.Id = I.TargetStepId
+						  left join  [Project].[State] STTA on STTA.Id = I.TargetStateId
+						  join  [Authentication].[Users] U on I.PerformerUserId = U.Id
+						  join  [Authentication].[Profile] P on P.Id = U.ProfileID WHERE IssueId = @IssueId
                             order by I.CreatedAt desc";
                 var result = await connection.QueryAsync<GetIssueHistoriesByIssueIdQueryResult>(query, new { IssueId = issueId });
                 return result;
@@ -349,7 +351,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                               ,[Description]
                               ,[CreatedAt]
                               ,[CreatedBy]
-                          FROM [SIMADB].[IssueManagement].[IssueHistory]
+                          FROM  [IssueManagement].[IssueHistory]
                           WHERE Id = @Id";
                 var result = await connection.QueryFirstOrDefaultAsync<GetIssueHistoriesByIdQueryResult>(query, new { Id = id });
                 return result;
@@ -366,25 +368,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
             }
         }
 
-//        public async Task<GetXMLArg> GetFileContentByIssueId(long issueId)
-//        {
-//            var result = new GetXMLArg();
-//            string query = @"
-//SELECT 
-//S.BpmnId BpmnId
-//,W.FileContent XML
-//  FROM [IssueManagement].[Issue] I
-//  INNER JOIN [Project].[Step] S ON S.Id = I.CurrenStepId
-//  INNER JOIN [Project].[WorkFlow] W ON W.Id = S.WorkFlowID
-//  WHERE I.Id = @IssueId
-//";
-//            using (var connection = new SqlConnection(_connectionString))
-//            {
-//                await connection.OpenAsync();
-//                result = await connection.QueryFirstOrDefaultAsync<GetXMLArg>(query, new { IssueId = issueId });
-//                result.NullCheck();
-//            }
-//            return result;
-//        }
+
     }
 }

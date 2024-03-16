@@ -8,5 +8,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Positions;
 public interface IPositionQueryRepository : IQueryRepository
 {
     Task<GetPositionQueryResult> FindById(long id);
-    Task<Result<List<GetPositionQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetPositionQueryResult>>> GetAll(GetAllPositionsQuery? request = null);
 }

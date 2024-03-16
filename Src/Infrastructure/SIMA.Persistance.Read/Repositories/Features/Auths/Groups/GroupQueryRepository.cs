@@ -2,6 +2,7 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Groups;
+using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
@@ -39,59 +40,43 @@ public class GroupQueryRepository : IGroupQueryRepository
         return result;
     }
 
-    public async Task<Result<List<GetGroupQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<IEnumerable<GetGroupQueryResult>>> GetAll(GetAllGroupQuery request)
     {
-        var response = new List<GetGroupQueryResult>();
-        int totalCount = 0;
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+        
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@" select
-                            g.[ID] Id
-                          ,g.[Name]
-                          ,g.[Code]
-                          ,a.ID ActiveStatusId
-                          ,a.Name ActiveStatus
-,g.[CreatedAt]
-                      FROM [Authentication].[Groups] g
-                            join Basic.ActiveStatus a
-                            on g.ActiveStatusId = a.ID
-              WHERE (g.Name like @SearchValue OR g.Code like @SearchValue) AND g.[ActiveStatusID] <> 3
-Order By g.[CreatedAt] desc
-";
-                var result = connection.Query<GetGroupQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
+            await connection.OpenAsync();
+            var queryCount = @" SELECT  COUNT(*) Result
+                               FROM [Authentication].[Groups] g
+                              join Basic.ActiveStatus a on g.ActiveStatusId = a.ID
+                              WHERE (@SearchValue is null OR (g.Name like @SearchValue OR g.Code like @SearchValue)) AND g.[ActiveStatusID] <> 3";
 
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
-               SELECT
-                           g.[ID] Id
-                          ,g.[Name]
-                          ,g.[Code]
-                          ,a.ID ActiveStatusId
-                          ,a.Name ActiveStatus
-,g.[CreatedAt]
-                      FROM [Authentication].[Groups] g
+            string query = $@" select
+                                   g.[ID] Id
+                                  ,g.[Name]
+                                  ,g.[Code]
+                                  ,a.ID ActiveStatusId
+                                  ,a.Name ActiveStatus
+                                  ,g.[CreatedAt]
+                            FROM [Authentication].[Groups] g
                             join Basic.ActiveStatus a
                             on g.ActiveStatusId = a.ID
-              WHERE g.[ActiveStatusID] <> 3
-Order By g.[CreatedAt] desc
-";
-                var result = await connection.QueryAsync<GetGroupQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                           WHERE (@SearchValue is null OR (g.Name like @SearchValue OR g.Code like @SearchValue)) AND g.[ActiveStatusID] <> 3
+                          order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                          OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+            {
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetGroupQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
-        return Result.Ok(response, totalCount);
     }
 
     public async Task<GetGroupAggregateResult> GetGroupAggregate(long groupId)

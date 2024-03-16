@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.DMS;
 
@@ -18,6 +20,10 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
             .HasConversion(x => x.Value, v => new DocumentTypeId(v));
         entity.Property(x => x.FileExtensionId)
             .HasConversion(x => x.Value, v => new DocumentExtensionId(v));
+        entity.Property(x => x.MainAggregateId)
+            .HasConversion(x => x.Value, v => new MainAggregateId(v));
+        entity.Property(x => x.AttachStepId)
+            .HasConversion(x => x.Value, v => new StepId(v));
         entity.HasKey(x => x.Id);
         entity.HasIndex(x => x.Code).IsUnique();
         entity.Property(x => x.CreatedAt)
@@ -35,6 +41,13 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
                 .HasForeignKey(x => x.DocumentTypeId);
         entity.HasOne(x => x.FileExtension)
             .WithMany(x => x.Documents)
-                .HasForeignKey(x => x.FileExtensionId);
+                .HasForeignKey(x => x.FileExtensionId)
+                ;
+        entity.HasOne(x => x.MainAggregate)
+            .WithMany(x => x.Documents)
+                .HasForeignKey(x => x.MainAggregateId);
+        entity.HasOne(x => x.AttachStep)
+            .WithMany(x => x.Documents)
+                .HasForeignKey(x => x.AttachStepId);
     }
 }

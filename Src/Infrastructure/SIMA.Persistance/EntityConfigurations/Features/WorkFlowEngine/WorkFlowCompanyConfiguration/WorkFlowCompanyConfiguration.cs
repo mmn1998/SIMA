@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.ValueObject;
@@ -30,7 +31,13 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
               .HasConversion(
               v => v.Value,
               v => new WorkFlowId(v));
-            entity.HasOne(d => d.WorkFlow).WithMany(p => p.WorkFlowCompanies)
+            entity.Property(x => x.CompanyId)
+              .HasConversion(
+              v => v.Value,
+              v => new CompanyId(v));
+            entity.HasOne(d => d.Company).WithMany(p => p.WorkFlowCompanies)
+                .HasForeignKey(d => d.CompanyId);
+                entity.HasOne(d => d.WorkFlow).WithMany(p => p.WorkFlowCompanies)
                 .HasForeignKey(d => d.WorkFlowId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 ;

@@ -8,7 +8,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Users;
 public interface IUserQueryRepository : IQueryRepository
 {
     Task<GetUserQueryResult> FindByIdQuery(long id);
-    Task<Result<List<GetUserQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetUserQueryResult>>> GetAll(GetAllUserQuery? request = null);
     Task<bool> IsUsernameUnique(string username);
     Task<bool> IsUsrConfigSatisfied(long configurationId, long userId);
     Task<LoginUserQueryResult> GetByUsernameAndPassword(string username, string password);

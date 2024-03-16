@@ -8,6 +8,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Locations;
 public interface ILocationQueryRepository : IQueryRepository
 {
     Task<GetLocationQueryResult> FindById(long id);
-    Task<Result<List<GetLocationQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetLocationQueryResult>>> GetAll(GetAllLocationQuery? request = null);
     Task<List<GetParentLocationsByLocationTypeIdQueryResult>> GetParentsByChildId(long locationTypeId);
 }

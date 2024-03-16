@@ -8,6 +8,7 @@ public static class ConnectionStringExtension
 {
     public static string GetConnectionString(this IConfiguration configuration)
     {
+
         string CipherConnectionString = configuration.GetConnectionString("UserManagementCipher") ?? "";
         string SignConnectionString = configuration.GetConnectionString("UserManagementSign") ?? "";
         string privateKeyPath = configuration.GetValue<string>("PrivateKeyPath") ?? "";
@@ -24,6 +25,7 @@ public static class ConnectionStringExtension
         {
             connectionString = signResult.DecriptedValue;
         }
+
         return connectionString;
     }
 }

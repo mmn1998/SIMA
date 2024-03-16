@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.DMS.WorkFlowDocumentTypes;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.Persistance.Read.Repositories.Features.DMS.WorkFlowDocumentTypes;
@@ -15,16 +14,19 @@ public class WorkFlowDocumentTypeQueryRepository : IWorkFlowDocumentTypeQueryRep
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetWorkFlowDocumentTypeQueryResult>>> GetAll(BaseRequest baseRequest)
+    public async Task<Result<List<GetWorkFlowDocumentTypeQueryResult>>> GetAll(GetAllWorkFlowDocumentTypesQuery request)
     {
         var response = new List<GetWorkFlowDocumentTypeQueryResult>();
         int totalCount = 0;
+        
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                string query = @"
+            string countQuery = @"SELECT DISTINCT Count(*) Result
+  FROM [DMS].[WorkflowDocumentType] WDT
+  INNER JOIN [Basic].[ActiveStatus] S on WDT.ActiveStatusId = S.ID
+ WHERE (@SearchValue is null OR (WDT.[WorkflowId] like @SearchValue OR WDT.[DocumentTypeId] like @SearchValue OR S.Name like @SearchValue))";
+            string query = $@"
 SELECT DISTINCT WDT.[Id]
       ,WDT.[WorkflowId]
       ,WDT.[DocumentTypeId]
@@ -33,32 +35,21 @@ SELECT DISTINCT WDT.[Id]
 ,wdt.[CreatedAt]
   FROM [DMS].[WorkflowDocumentType] WDT
   INNER JOIN [Basic].[ActiveStatus] S on WDT.ActiveStatusId = S.ID
- WHERE (WDT.[WorkflowId] like @SearchValue OR WDT.[DocumentTypeId] like @SearchValue OR S.Name like @SearchValue)
-Order By wdt.[CreatedAt] desc  
-
+ WHERE (@SearchValue is null OR ( WDT.[WorkflowId] like @SearchValue OR WDT.[DocumentTypeId] like @SearchValue OR S.Name like @SearchValue))
+ order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+OFFSET @Skip rows FETCH NEXT @Take rows only;
 ";
-                var result = await connection.QueryAsync<GetWorkFlowDocumentTypeQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-            }
-            else
+            using (var result = await connection.QueryMultipleAsync(query + countQuery, new
             {
-                string query = @"
-SELECT DISTINCT WDT.[Id]
-      ,WDT.[WorkflowId]
-      ,WDT.[DocumentTypeId]
-      ,WDT.[ActiveStatusId]
-	  ,S.Name ActiveStatus
-,wdt.[CreatedAt]
-  FROM [DMS].[WorkflowDocumentType] WDT
-  INNER JOIN [Basic].[ActiveStatus] S on WDT.ActiveStatusId = S.ID
-Order By wdt.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetWorkFlowDocumentTypeQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                Take = request.PageSize,
+                request.Skip
+            }))
+            {
+                response = (await result.ReadAsync<GetWorkFlowDocumentTypeQueryResult>()).ToList();
+                totalCount = await result.ReadSingleAsync<int>();
             }
-            return Result.Ok(response, totalCount);
+            return Result.Ok(response, totalCount, request.PageSize, request.Page);
         }
     }
 

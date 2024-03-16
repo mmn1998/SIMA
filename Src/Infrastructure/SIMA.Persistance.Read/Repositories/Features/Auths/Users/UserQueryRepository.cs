@@ -1,18 +1,13 @@
-﻿using Azure;
-using Dapper;
+﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Users;
-using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
-using SIMA.Framework.Common.Security;
 using SIMA.Persistance.Persistence;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Users;
 
@@ -80,14 +75,16 @@ public class UserQueryRepository : IUserQueryRepository
     }
     public async Task<LoginUserQueryResult> GetByUsernameAndPassword(string username, string password)
     {
-        var response = new LoginUserQueryResult();
+        try
+        {
+            var response = new LoginUserQueryResult();
 
-        var user = await _readContext.Users
-                    .FirstOrDefaultAsync(u => u.Username == username);
-        if (user is null) throw SimaResultException.InvalidUsernameOrPasswordError;
-        user.Password.Verify(password);
+            var user = await _readContext.Users
+                        .FirstOrDefaultAsync(u => u.Username == username);
+            if (user is null) throw SimaResultException.InvalidUsernameOrPasswordError;
+            user.Password.Verify(password);
 
-        var query = @"
+            var query = @"
                         --user
 
                         select distinct
@@ -148,7 +145,7 @@ public class UserQueryRepository : IUserQueryRepository
                         SELECT distinct
                         UDA.DomainId,d.Name Name,'' Code
 
-                         FROM [SIMADB].[Authentication].[UserDomainAccess] UDA
+                         FROM  [Authentication].[UserDomainAccess] UDA
                          inner join [Authentication].[Users] U on U.Id=UDA.UserId
                          inner join Authentication.Domain D on D.Id=UDA.DomainId
                          where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1
@@ -158,7 +155,7 @@ public class UserQueryRepository : IUserQueryRepository
 
                         SELECT distinct
                         UDA.DomainId,f.Title Name,F.Code Code
-                        FROM [SIMADB].[Authentication].[UserDomainAccess] UDA
+                        FROM  [Authentication].[UserDomainAccess] UDA
                         inner join [Authentication].[Users] U on U.Id=UDA.UserId
                         inner join Authentication.Domain D on D.Id=UDA.DomainId
                         inner join  Authentication.FormUser fu on fu.UserId = u.Id
@@ -170,7 +167,7 @@ public class UserQueryRepository : IUserQueryRepository
 
                         SELECT distinct
                         UDA.DomainId,f.Title Name,F.Code Code
-                        FROM [SIMADB].[Authentication].[UserDomainAccess] UDA
+                        FROM  [Authentication].[UserDomainAccess] UDA
                         inner join [Authentication].[Users] U on U.Id=UDA.UserId
                         inner join Authentication.Domain D on D.Id=UDA.DomainId
                         inner join Authentication.UserRole ur on u.Id = ur.UserId
@@ -184,7 +181,7 @@ public class UserQueryRepository : IUserQueryRepository
 
                         SELECT distinct
                         UDA.DomainId,f.Title Name,F.Code Code
-                        FROM [SIMADB].[Authentication].[UserDomainAccess] UDA
+                        FROM  [Authentication].[UserDomainAccess] UDA
                         inner join [Authentication].[Users] U on U.Id=UDA.UserId
                         inner join Authentication.Domain D on D.Id=UDA.DomainId
                             inner  join Authentication.UserGroup ug on u.Id = ug.UserId
@@ -195,73 +192,46 @@ public class UserQueryRepository : IUserQueryRepository
                          and cast(getdate() as char(12))  between  UDA.[ActiveFrom] and  UDA.[ActiveTo]
                     ";
 
-        #region -- old --
-        //var groupIds = await _readContext.UserGroups.Where(x => x.UserId == user.Id).Select(y => y.GroupId).ToListAsync();
-        //var roleIds = await _readContext.UserRoles.Where(x => x.UserId == user.Id).Select(y => y.RoleId).ToListAsync();
 
-        //var permissionIds = await _readContext.UserPermissions.Where(x => x.UserId == user.Id).Select(y => y.PermissionId).ToListAsync();
-
-        //var roles = await _readContext.Roles
-        //.Where(x => roleIds.Contains(x.Id))
-        //.SelectMany(x => x.RolePermissions.Select(y => y.PermissionId))
-        //.ToListAsync();
-
-        //permissionIds.AddRange(roles);
-
-        //var groups = await _readContext.Groups
-        //    .Where(x => groupIds.Contains(x.Id))
-        //    .SelectMany(x => x.GroupPermissions.Select(y => y.PermissionId))
-        //    .ToListAsync();
-
-        //permissionIds.AddRange(groups);
-
-        //var permissionsData = await _readContext.Permissions
-        //.Where(x => permissionIds.Contains(x.Id))
-        //.Select(permission => permission.EnglishKey)
-        //.ToListAsync();
-        //var res = new LoginUserQueryResult
-        //{
-        //    Permissions = permissionsData.Select(x => (Framework.Common.Security.Permissions)Enum.Parse(typeof(Framework.Common.Security.Permissions), x, true)).ToList(),
-        //    UserId = user.Id.Value,
-        //    CompanyId = user.CompanyId.Value,
-        //    Username = user.Username,
-        //    GroupIds = groupIds.Select(x => x.Value).ToList(),
-        //    RoleIds = roleIds.Select(x => x.Value).ToList()
-        //};
-        #endregion
-        using (var connection = new SqlConnection(_connectionString))
-        {
-            using (var multi = await connection.QueryMultipleAsync(query, new { UserId = user.Id.Value }))
+            using (var connection = new SqlConnection(_connectionString))
             {
-                response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
-                response.RoleIds = await multi.ReadAsync<long>();
-                response.GroupIds = await multi.ReadAsync<long>();
-                response.Permissions = await multi.ReadAsync<int>();
-                response.TempMenues = await multi.ReadAsync<Menue>();
+                using (var multi = await connection.QueryMultipleAsync(query, new { UserId = user.Id.Value }))
+                {
+                    response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
+                    response.RoleIds = await multi.ReadAsync<long>();
+                    response.GroupIds = await multi.ReadAsync<long>();
+                    response.Permissions = await multi.ReadAsync<int>();
+                    response.TempMenues = await multi.ReadAsync<Menue>();
+                }
             }
-        }
-        response.Menue = new List<Menue>();
-        foreach (var item in response.TempMenues)
-        {
-            if (string.IsNullOrEmpty(item.Code) && response.TempMenues.Where(it => it.DomainId == item.DomainId).Count() > 1)
+            response.Menue = new List<Menue>();
+            foreach (var item in response.TempMenues)
             {
-                var subMenu = response.TempMenues.Where(it => it.DomainId == item.DomainId && it.Code != "").Select(it => new SubMenue
+                if (string.IsNullOrEmpty(item.Code) && response.TempMenues.Where(it => it.DomainId == item.DomainId).Count() > 1)
                 {
-                    Code = it.Code,
-                    Name = it.Name,
-                }).ToList();
-                response.Menue.Add(new Menue
-                {
-                    Code = "",
-                    DomainId = 0,
-                    Name = item.Name,
-                    SubMenues = subMenu,
+                    var subMenu = response.TempMenues.Where(it => it.DomainId == item.DomainId && it.Code != "").Select(it => new SubMenue
+                    {
+                        Code = it.Code,
+                        Name = it.Name,
+                    }).ToList();
+                    response.Menue.Add(new Menue
+                    {
+                        Code = "",
+                        DomainId = 0,
+                        Name = item.Name,
+                        SubMenues = subMenu,
 
-                });
+                    });
+                }
             }
+            response.TempMenues = null;
+            return response;
         }
-        response.TempMenues = null;
-        return response;
+        catch (Exception ex)
+        {
+            throw;
+        }
+
     }
 
 
@@ -453,60 +423,53 @@ public class UserQueryRepository : IUserQueryRepository
 
     }
 
-    public async Task<Result<List<GetUserQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<IEnumerable<GetUserQueryResult>>> GetAll(GetAllUserQuery? request = null)
     {
-        var response = new List<GetUserQueryResult>();
-        int totalCount = 0;
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+
+        
+
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
+
+            string queryCount = @"
+                        SELECT Count(*) Result
+                        FROM [Authentication].[Users] U
+                        INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
+                        INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+                        join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
+                        WHERE (@SearchValue is null OR C.Name like @SearchValue OR P.FirstName like @SearchValue OR
+                        P.LastName like @SearchValue OR U.Username like @SearchValue) and U.ActiveStatusId != 3";
+            await connection.OpenAsync();
+            string query = $@"
+                        SELECT DISTINCT U.ID as Id,
+                        		C.Name as CompanyName,
+                        		(P.FirstName + ' ' + P.LastName) as FullName,
+                        		U.Username,
+                        		U.ActiveStatusId,
+                        		A.Name as ActiveStatus
+                        		,u.[CreatedAt]
+                        FROM [Authentication].[Users] U
+                        INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
+                        INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+                        join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
+                        WHERE (@SearchValue is null OR C.Name like @SearchValue OR P.FirstName like @SearchValue OR
+                        P.LastName like @SearchValue OR U.Username like @SearchValue) and U.ActiveStatusId != 3
+                        order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                        OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                string query = $@"
-                SELECT DISTINCT U.ID as Id,
-                    C.Name as CompanyName,
-                    (P.FirstName + ' ' + P.LastName) as FullName,
-                    U.Username,
-                    U.ActiveStatusId,
-                    A.Name as ActiveStatus
-,u.[CreatedAt]
-                      FROM [Authentication].[Users] U
-                      INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
-                      INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
-                      join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
-                WHERE (C.Name like @SearchValue OR P.FirstName like @SearchValue OR
-                P.LastName like @SearchValue OR U.Username like @SearchValue) and U.ActiveStatusId != 3
-Order By u.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetUserQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetUserQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
-               SELECT DISTINCT U.ID as Id,
-                    C.Name as CompanyName,
-                    (P.FirstName + ' ' + P.LastName) as FullName,
-                    U.Username,
-                    U.ActiveStatusId,
-                    A.Name as ActiveStatus
-,u.[CreatedAt]
-                      FROM [Authentication].[Users] U
-                      INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
-                      INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
-                      join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID 
-                   Where U.ActiveStatusId != 3 
-Order By u.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetUserQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        return Result.Ok(response, totalCount);
+
     }
 
     public async Task<GetUserRoleQueryResult> GetUserRole(long userRoleId)

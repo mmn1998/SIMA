@@ -15,16 +15,21 @@ public class DocumentExtensionQueryRepository : IDocumentExtensionQueryRepositor
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetDocumentExtensionQueryResult>>> GetAll(BaseRequest baseRequest)
+    public async Task<Result<List<GetDocumentExtensionQueryResult>>> GetAll(GetAllDocumentExtensionsQuery request)
     {
         var response = new List<GetDocumentExtensionQueryResult>();
         int totalCount = 0;
+        
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                string query = @"
+            string countQuery = @"
+SELECT Count(*) Result
+  FROM [DMS].[DocumentExtension] DE
+  INNER JOIN [Basic].[ActiveStatus] S on DE.ActiveStatusId = S.ID
+  WHERE (@SearchValue is null OR DE.Name like @SearchValue OR DE.Code like @SearchValue OR S.Name like @SearchValue)
+";
+            string query = $@"
 SELECT DISTINCT DE.[Id]
       ,DE.[Name]
       ,DE.[Code]
@@ -33,32 +38,22 @@ SELECT DISTINCT DE.[Id]
 ,de.[CreatedAt]
   FROM [DMS].[DocumentExtension] DE
   INNER JOIN [Basic].[ActiveStatus] S on DE.ActiveStatusId = S.ID
-  WHERE (DE.Name like @SearchValue OR DE.Code like @SearchValue OR S.Name like @SearchValue)
-Order By de.[CreatedAt] desc  
+  WHERE (@SearchValue is null OR DE.Name like @SearchValue OR DE.Code like @SearchValue OR S.Name like @SearchValue)
+ order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+OFFSET @Skip rows FETCH NEXT @Take rows only;
 ";
-                var result = await connection.QueryAsync<GetDocumentExtensionQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-            }
-            else
+            using (var result = await connection.QueryMultipleAsync(query + countQuery, new
             {
-                string query = @"
-SELECT DISTINCT DE.[Id]
-      ,DE.[Name]
-      ,DE.[Code]
-      ,DE.[ActiveStatusId]
-	  ,S.Name ActiveStatus
-,de.[CreatedAt]
-  FROM [DMS].[DocumentExtension] DE
-  INNER JOIN [Basic].[ActiveStatus] S on DE.ActiveStatusId = S.ID
-Order By de.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetDocumentExtensionQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
+                request.Skip,
+                Take = request.PageSize,
+                SearchValue = "%" + request.Filter + "%"
+            }))
+            {
+                response = (await result.ReadAsync<GetDocumentExtensionQueryResult>()).ToList();
+                totalCount = await result.ReadSingleAsync<int>();
             }
         }
-        return Result.Ok(response, totalCount); ;
+        return Result.Ok(response, totalCount, request.PageSize, request.Page);
     }
 
     public async Task<GetDocumentExtensionQueryResult> GetById(long id)

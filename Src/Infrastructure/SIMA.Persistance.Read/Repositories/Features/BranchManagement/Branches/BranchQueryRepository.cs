@@ -3,9 +3,7 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
-using SIMA.Persistance.Read;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.Branches;
@@ -17,96 +15,55 @@ public class BranchQueryRepository : IBranchQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetBranchQueryResult>>> GetAll(BaseRequest baseRequest)
+    public async Task<Result<IEnumerable<GetBranchQueryResult>>> GetAll(GetAllBranchQuery request)
     {
-        var response = new List<GetBranchQueryResult>();
-        string query = string.Empty;
-        int totalCount = 0;
         using (var connection = new SqlConnection(_connectionString))
         {
-            await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                query = @"
-                        SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.[BranchChiefOfficerId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                            , S.[Name] as ActiveStatus
-,b.[CreatedAt]
-                          FROM [Bank].[Branch] B
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-                        WHERE (B.[Name] like @SearchValue OR B.[Code] like @SearchValue OR B.[PhoneNumber] like @SearchValue OR
-                        B.[PostalCode] like @SearchValue OR B.[Longitude] like @SearchValue OR B.[Latitude] like @SearchValue OR B.[Address] like @SearchValue OR S.[Name] like @SearchValue)
-Order By b.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetBranchQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-            }
-            else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                query = @"
-                        SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.[BranchChiefOfficerId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                            , S.[Name] as ActiveStatus
-,b.[CreatedAt]
-                          FROM [Bank].[Branch] B
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-Order By b.[CreatedAt] desc  
-                        ";
-                var result = await connection.QueryAsync<GetBranchQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-            }
-            else
-            {
-                query = @"
-                        SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchChiefOfficerId]
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                            , S.[Name] as ActiveStatus
-,b.[CreatedAt]
-                          FROM [Bank].[Branch] B
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-Order By b.[CreatedAt] desc  ";
-                response = (await connection.QueryAsync<GetBranchQueryResult>(query)).ToList();
+            string queryCount = @" 
+                SELECT Count(*) Result
+                      FROM [Bank].[Branch] B
+                      INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+                      WHERE  B.ActiveStatusId != 3
+                      and (@SearchValue is null OR B.[Name] like @SearchValue or B.[Code] like @SearchValue) ";
 
+            await connection.OpenAsync();
+
+            string query = $@"
+                        SELECT DISTINCT B.[Id]
+                              ,B.[Name]
+                              ,B.[Code]
+                              ,B.[BranchTypeId]
+                              ,B.[BranchChiefOfficerId]
+                              ,B.ActiveStatusId
+                              ,B.[BranchDeputyId]
+                              ,B.[Latitude]
+                              ,B.[Longitude]
+                              ,B.[LocationId]
+                              ,B.[PhoneNumber]
+                              ,B.[PostalCode]
+                              ,B.[Address]
+                              ,B.[IsMultiCurrencyBranch]
+                              ,S.[Name] as ActiveStatus
+							  ,b.[CreatedAt]
+      FROM [Bank].[Branch] B
+      INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+      WHERE  B.ActiveStatusId != 3
+      and (@SearchValue is null OR B.[Name] like @SearchValue or B.[Code] like @SearchValue)
+      order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+      OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+            {
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetBranchQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
-        return Result.Ok(response, totalCount);
     }
 
     public async Task<GetBranchQueryResult> GetById(long id)
@@ -116,28 +73,32 @@ Order By b.[CreatedAt] desc  ";
         {
             await connection.OpenAsync();
             query = @"
-                SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.[BranchChiefOfficerId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                            , S.[Name] as ActiveStatus
-                          FROM [Bank].[Branch] B
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-                  WHERE B.Id = @Id";
+                       SELECT DISTINCT B.[Id]
+                                     ,B.[Name]
+                                     ,B.[Code]
+                                     ,B.[BranchTypeId]
+                                     ,B.[BranchChiefOfficerId]
+                                     ,B.ActiveStatusId
+                                     ,B.[BranchDeputyId]
+                                     ,B.[Latitude]
+                                     ,B.[Longitude]
+                                     ,B.[LocationId]
+                                     ,B.[PhoneNumber]
+                                     ,B.[PostalCode]
+                                     ,B.[Address]
+                                     ,B.[IsMultiCurrencyBranch]
+                                   , S.[Name] as ActiveStatus
+                                 FROM [Bank].[Branch] B
+                         INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+                         WHERE B.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetBranchQueryResult>(query, new { Id = id });
             if (result is null) throw SimaResultException.NullException;
+
             return result;
         }
 
     }
 }
+
+       
+       

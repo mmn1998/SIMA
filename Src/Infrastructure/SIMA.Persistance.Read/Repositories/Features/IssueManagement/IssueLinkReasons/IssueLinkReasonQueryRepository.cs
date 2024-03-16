@@ -4,24 +4,22 @@ using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
-using SIMA.Persistance.Read;
 using System.Data.SqlClient;
 
+namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueLinkReasons;
 
-namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueLinkReasons
+public class IssueLinkReasonQueryRepository : IIssueLinkReasonQueryRepository
 {
-    public class IssueLinkReasonQueryRepository : IIssueLinkReasonQueryRepository
+    private readonly string _connectionString;
+
+    public IssueLinkReasonQueryRepository(IConfiguration configuration)
     {
-        private readonly string _connectionString;
+        _connectionString = configuration.GetConnectionString();
+    }
 
-        public IssueLinkReasonQueryRepository(IConfiguration configuration)
-        {
-            _connectionString = configuration.GetConnectionString();
-        }
-
-        public async Task<GetIssueLinkReasonQueryResult> FindById(long id)
-        {
-            var query = $@"SELECT ILR.[ID]
+    public async Task<GetIssueLinkReasonQueryResult> FindById(long id)
+    {
+        var query = $@"SELECT ILR.[ID]
                           ,ILR.[Name]
                           ,ILR.[Code]
                           ,ILR.[ActiveStatusID]
@@ -29,62 +27,49 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueLinkR
                       FROM [ISSUEMANAGEMENT].[IssueLinkReason] ILR
                       INNER JOIN [Basic].[ActiveStatus] A on A.ID = ILR.ActiveStatusId
                       WHERE ILR.Id = @Id and ILR.ActiveStatusId != 3";
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var result = await connection.QueryFirstOrDefaultAsync<GetIssueLinkReasonQueryResult>(query, new { Id = id });
-                return result ?? throw SimaResultException.NotFound;
-            }
-        }
-
-        public async Task<Result<List<GetIssueLinkReasonQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+        using (var connection = new SqlConnection(_connectionString))
         {
-            var response = new List<GetIssueLinkReasonQueryResult>();
-            int totalCount = 0;
-            if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+            await connection.OpenAsync();
+            var result = await connection.QueryFirstOrDefaultAsync<GetIssueLinkReasonQueryResult>(query, new { Id = id });
+            return result ?? throw SimaResultException.NotFound;
+        }
+    }
+
+    public async Task<Result<IEnumerable<GetIssueLinkReasonQueryResult>>> GetAll(GetAllIssueLinkReasonsQuery request )
+    {        
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var queryCount = @" SELECT  COUNT(*) Result
+                                    FROM [ISSUEMANAGEMENT].[IssueLinkReason] ILR
+                                    INNER JOIN [Basic].[ActiveStatus] A on A.ID = ILR.ActiveStatusId
+                                    WHERE (@SearchValue is null OR  (ILR.Name like @SearchValue OR ILR.Code like @SearchValue)) AND ILR.[ActiveStatusID] <> 3";
+
+            var query = $@"
+                              SELECT DISTINCT
+                                     ILR.[ID]
+                                    ,ILR.[Name]
+                                    ,ILR.[Code]
+                                    ,ILR.[ActiveStatusID]
+                                    ,A.[Name] as ActiveStatus
+                                    ,ilr.[CreatedAt]
+                                    FROM [ISSUEMANAGEMENT].[IssueLinkReason] ILR
+                                    INNER JOIN [Basic].[ActiveStatus] A on A.ID = ILR.ActiveStatusId
+                                    WHERE (@SearchValue is null OR  (ILR.Name like @SearchValue OR ILR.Code like @SearchValue)) AND ILR.[ActiveStatusID] <> 3
+                                    order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    await connection.OpenAsync();
-                    string query = $@"
-                      SELECT DISTINCT ILR.[ID]
-                          ,ILR.[Name]
-                          ,ILR.[Code]
-                          ,ILR.[ActiveStatusID]
-                          ,A.[Name] as ActiveStatus
-,ilr.[CreatedAt]
-                      FROM [ISSUEMANAGEMENT].[IssueLinkReason] ILR
-                       INNER JOIN [Basic].[ActiveStatus] A on A.ID = ILR.ActiveStatusId
-              WHERE (Name like N'%@SearchValue%' OR Code like '%@SearchValue%') AND [ActiveStatusID] = 1
-Order By ilr.[CreatedAt] desc  
-";
-                    var result = await connection.QueryAsync<GetIssueLinkReasonQueryResult>(query, new { baseRequest.SearchValue });
-                    totalCount = result.Count();
-                    response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-                }
-            }
-            else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    await connection.OpenAsync();
-                    string query = @"
-                SELECT DISTINCT ILR.[ID]
-                          ,ILR.[Name]
-                          ,ILR.[Code]
-                          ,ILR.[ActiveStatusID]
-                          ,A.[Name] as ActiveStatus
-,ilr.[CreatedAt]
-                      FROM [ISSUEMANAGEMENT].[IssueLinkReason] ILR
-                      INNER JOIN [Basic].[ActiveStatus] A on A.ID = ILR.ActiveStatusId
-                      WHERE ILR.[ActiveStatusID] != 3
-Order By ilr.[CreatedAt] desc  ";
-                    var result = await connection.QueryAsync<GetIssueLinkReasonQueryResult>(query);
-                    totalCount = result.Count();
-                    response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-                }
+                var response = await multi.ReadAsync<GetIssueLinkReasonQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
-            return Result.Ok(response, totalCount); ;
         }
     }
 }

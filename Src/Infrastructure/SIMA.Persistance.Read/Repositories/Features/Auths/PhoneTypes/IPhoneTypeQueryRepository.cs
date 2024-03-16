@@ -8,5 +8,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.PhoneTypes;
 public interface IPhoneTypeQueryRepository : IQueryRepository
 {
     Task<GetPhoneTypeQueryResult> FindById(long id);
-    Task<Result<List<GetPhoneTypeQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetPhoneTypeQueryResult>>> GetAll(GetAllPhoneTypesQuery? request = null);
 }

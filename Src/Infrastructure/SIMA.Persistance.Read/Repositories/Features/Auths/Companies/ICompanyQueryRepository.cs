@@ -7,6 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Companies;
 
 public interface ICompanyQueryRepository : IQueryRepository
 {
-    Task<Result<List<GetCompanyQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetCompanyQueryResult>>> GetAll(GetAllCompanyQuery? request = null);
     Task<GetCompanyQueryResult> FindById(long id);
 }

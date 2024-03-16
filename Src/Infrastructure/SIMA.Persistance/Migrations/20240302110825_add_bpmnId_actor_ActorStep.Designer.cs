@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIMA.Persistance.Persistence;
 
@@ -11,9 +12,11 @@ using SIMA.Persistance.Persistence;
 namespace SIMA.Persistance.Migrations
 {
     [DbContext(typeof(SIMADBContext))]
-    partial class SIMADBContextModelSnapshot : ModelSnapshot
+    [Migration("20240302110825_add_bpmnId_actor_ActorStep")]
+    partial class add_bpmnId_actor_ActorStep
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1816,10 +1819,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchChiefOfficerId");
-
-                    b.HasIndex("BranchDeputyId");
-
                     b.HasIndex("BranchTypeId");
 
                     b.HasIndex("Code")
@@ -1827,8 +1826,6 @@ namespace SIMA.Persistance.Migrations
                         .HasFilter("[Code] IS NOT NULL");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("LocationId");
 
                     b.ToTable("Branch", "Bank");
                 });
@@ -2117,7 +2114,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("AttachStepId")
+                    b.Property<long>("AttachStepId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -2160,12 +2157,10 @@ namespace SIMA.Persistance.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long?>("SourceId")
+                    b.Property<long>("SourceId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AttachStepId");
 
                     b.HasIndex("Code")
                         .IsUnique()
@@ -2174,8 +2169,6 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("DocumentTypeId");
 
                     b.HasIndex("FileExtensionId");
-
-                    b.HasIndex("MainAggregateId");
 
                     b.ToTable("Documents", "DMS");
                 });
@@ -2299,10 +2292,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkflowActorId");
-
-                    b.HasIndex("WorkflowStepId");
-
                     b.ToTable("IssueApproval", "IssueManagement");
                 });
 
@@ -2342,8 +2331,6 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IssueId");
 
                     b.ToTable("IssueCustomFeild", "IssueManagement");
                 });
@@ -2595,7 +2582,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("IssueWeightCategoryId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("MainAggregateId")
+                    b.Property<long>("MainAggregateId")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -2621,19 +2608,11 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("CurrenStepId");
-
-                    b.HasIndex("CurrentStateId");
-
-                    b.HasIndex("CurrentWorkflowId");
-
                     b.HasIndex("IssuePriorityId");
 
                     b.HasIndex("IssueTypeId");
 
                     b.HasIndex("IssueWeightCategoryId");
-
-                    b.HasIndex("MainAggregateId");
 
                     b.ToTable("Issue", "IssueManagement");
                 });
@@ -2711,8 +2690,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DocumentId");
-
                     b.HasIndex("IssueId");
 
                     b.ToTable("IssueDocument", "IssueManagement");
@@ -2752,25 +2729,15 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("SourceStepId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("TargetStateId")
+                    b.Property<long>("TargetStateId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("TargetStepId")
+                    b.Property<long>("TargetStepId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IssueId");
-
-                    b.HasIndex("PerformerUserId");
-
-                    b.HasIndex("SourceStateId");
-
-                    b.HasIndex("SourceStepId");
-
-                    b.HasIndex("TargetStateId");
-
-                    b.HasIndex("TargetStepId");
 
                     b.ToTable("IssueHistory", "IssueManagement");
                 });
@@ -2978,8 +2945,6 @@ namespace SIMA.Persistance.Migrations
                         .IsUnique()
                         .HasFilter("[Code] IS NOT NULL");
 
-                    b.HasIndex("DomainId");
-
                     b.ToTable("Project", "Project");
                 });
 
@@ -2990,7 +2955,8 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnName("Id");
 
                     b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("ActiveStatusID");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3001,7 +2967,8 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("GroupID");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -3012,11 +2979,10 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("ProjectId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("ProjectID");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
 
                     b.HasIndex("ProjectId");
 
@@ -3074,8 +3040,6 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ProjectMember", "Project");
                 });
@@ -3224,7 +3188,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("MainAggregateId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ManagerRoleId")
+                    b.Property<long?>("ManagerRoleId")
                         .HasColumnType("bigint")
                         .HasColumnName("ManagerRoleID");
 
@@ -3253,10 +3217,6 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("Code")
                         .IsUnique()
                         .HasFilter("[Code] IS NOT NULL");
-
-                    b.HasIndex("MainAggregateId");
-
-                    b.HasIndex("ManagerRoleId");
 
                     b.HasIndex("ProjectId");
 
@@ -3313,10 +3273,12 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", b =>
                 {
                     b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
 
                     b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("ActiveStatusID");
 
                     b.Property<string>("BpmnId")
                         .IsRequired()
@@ -3365,10 +3327,12 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActorGroup", b =>
                 {
                     b.Property<long>("Id")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
 
                     b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("ActiveStatusID");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3379,7 +3343,8 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("GroupId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("GroupID");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -3390,11 +3355,10 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("WorkFlowActorId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("WorkFlowActorID");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GroupId");
 
                     b.HasIndex("WorkFlowActorId");
 
@@ -3428,14 +3392,14 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("RoleID");
 
                     b.Property<long>("WorkFlowActorId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("WorkFlowActorID");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.HasIndex("WorkFlowActorId");
 
@@ -3469,14 +3433,14 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("UserID");
 
                     b.Property<long>("WorkFlowActorId")
-                        .HasColumnType("bigint");
+                        .HasColumnType("bigint")
+                        .HasColumnName("WorkFlowActorID");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.HasIndex("WorkFlowActorId");
 
@@ -3522,8 +3486,6 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("WorkFlowId");
 
@@ -4003,14 +3965,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "BranchChiefOfficer")
-                        .WithMany("ChiefBranches")
-                        .HasForeignKey("BranchChiefOfficerId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "BranchDeputy")
-                        .WithMany("DeputyBranches")
-                        .HasForeignKey("BranchDeputyId");
-
                     b.HasOne("SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities.BranchType", "BranchType")
                         .WithMany("Branches")
                         .HasForeignKey("BranchTypeId")
@@ -4022,19 +3976,9 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Locations.Entities.Location", "Location")
-                        .WithMany("Branches")
-                        .HasForeignKey("LocationId");
-
-                    b.Navigation("BranchChiefOfficer");
-
-                    b.Navigation("BranchDeputy");
-
                     b.Navigation("BranchType");
 
                     b.Navigation("Department");
-
-                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities.Broker", b =>
@@ -4049,10 +3993,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "AttachStep")
-                        .WithMany("Documents")
-                        .HasForeignKey("AttachStepId");
-
                     b.HasOne("SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities.DocumentType", "DocumentType")
                         .WithMany("Documents")
                         .HasForeignKey("DocumentTypeId")
@@ -4065,17 +4005,9 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.MainAggregates.Entities.MainAggregate", "MainAggregate")
-                        .WithMany("Documents")
-                        .HasForeignKey("MainAggregateId");
-
-                    b.Navigation("AttachStep");
-
                     b.Navigation("DocumentType");
 
                     b.Navigation("FileExtension");
-
-                    b.Navigation("MainAggregate");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.DMS.WorkFlowDocumentTypes.Entities.WorkflowDocumentType", b =>
@@ -4100,56 +4032,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("DocumentExtension");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities.IssueApproval", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", "WorkflowActor")
-                        .WithMany("IssueApprovals")
-                        .HasForeignKey("WorkflowActorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "WorkflowStep")
-                        .WithMany("IssueApprovals")
-                        .HasForeignKey("WorkflowStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("WorkflowActor");
-
-                    b.Navigation("WorkflowStep");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities.IssueCustomFeild", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", "Issue")
-                        .WithMany("IssueCustomFeilds")
-                        .HasForeignKey("IssueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Issue");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "CurrenStep")
-                        .WithMany("Issues")
-                        .HasForeignKey("CurrenStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", "CurrentState")
-                        .WithMany("Issues")
-                        .HasForeignKey("CurrentStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", "CurrentWorkflow")
-                        .WithMany("Issues")
-                        .HasForeignKey("CurrentWorkflowId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities.IssuePriority", "IssuePriority")
                         .WithMany("Issues")
                         .HasForeignKey("IssuePriorityId")
@@ -4165,23 +4049,11 @@ namespace SIMA.Persistance.Migrations
                         .HasForeignKey("IssueWeightCategoryId")
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.MainAggregates.Entities.MainAggregate", "MainAggregate")
-                        .WithMany("Issues")
-                        .HasForeignKey("MainAggregateId");
-
-                    b.Navigation("CurrenStep");
-
-                    b.Navigation("CurrentState");
-
-                    b.Navigation("CurrentWorkflow");
-
                     b.Navigation("IssuePriority");
 
                     b.Navigation("IssueType");
 
                     b.Navigation("IssueWeightCategory");
-
-                    b.Navigation("MainAggregate");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.IssueComment", b =>
@@ -4196,18 +4068,10 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.IssueDocument", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", "Document")
-                        .WithMany("IssueDocuments")
-                        .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", "Issue")
                         .WithMany("IssueDocuments")
                         .HasForeignKey("IssueId")
                         .IsRequired();
-
-                    b.Navigation("Document");
 
                     b.Navigation("Issue");
                 });
@@ -4219,43 +4083,7 @@ namespace SIMA.Persistance.Migrations
                         .HasForeignKey("IssueId")
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Users.Entities.User", "PerformerUser")
-                        .WithMany("IssueHistories")
-                        .HasForeignKey("PerformerUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", "SourceState")
-                        .WithMany("SourceIssueHistories")
-                        .HasForeignKey("SourceStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "SourceStep")
-                        .WithMany("SourceIssueHistories")
-                        .HasForeignKey("SourceStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", "TargetState")
-                        .WithMany("TargetIssueHistories")
-                        .HasForeignKey("TargetStateId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "TargetStep")
-                        .WithMany("TargetIssueHistories")
-                        .HasForeignKey("TargetStepId");
-
                     b.Navigation("Issue");
-
-                    b.Navigation("PerformerUser");
-
-                    b.Navigation("SourceState");
-
-                    b.Navigation("SourceStep");
-
-                    b.Navigation("TargetState");
-
-                    b.Navigation("TargetStep");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.IssueLink", b =>
@@ -4307,32 +4135,13 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkFlow");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites.Project", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Domains.Entities.Domain", "Domain")
-                        .WithMany("Projects")
-                        .HasForeignKey("DomainId");
-
-                    b.Navigation("Domain");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites.ProjectGroup", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Groups.Entities.Group", "Group")
-                        .WithMany("ProjectGroups")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites.Project", "Project")
+                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites.Project", null)
                         .WithMany("ProjectGroups")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites.ProjectMember", b =>
@@ -4343,15 +4152,7 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_ProjectMember_Project");
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Users.Entities.User", "User")
-                        .WithMany("ProjectMembers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Project");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", b =>
@@ -4389,25 +4190,11 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.MainAggregates.Entities.MainAggregate", "MainAggregate")
-                        .WithMany("WorkFlows")
-                        .HasForeignKey("MainAggregateId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Roles.Entities.Role", "ManagerRole")
-                        .WithMany("WorkFlows")
-                        .HasForeignKey("ManagerRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites.Project", "Project")
                         .WithMany("WorkFlows")
                         .HasForeignKey("ProjectId")
                         .IsRequired()
                         .HasConstraintName("FK_WorkFlow_Project");
-
-                    b.Navigation("MainAggregate");
-
-                    b.Navigation("ManagerRole");
 
                     b.Navigation("Project");
                 });
@@ -4444,75 +4231,41 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActorGroup", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Groups.Entities.Group", "Group")
-                        .WithMany("WorkFlowActorGroups")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", "WorkFlowActor")
+                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", null)
                         .WithMany("WorkFlowActorGroups")
                         .HasForeignKey("WorkFlowActorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Group");
-
-                    b.Navigation("WorkFlowActor");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActorRole", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Roles.Entities.Role", "Role")
-                        .WithMany("WorkFlowActorRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", "WorkFlowActor")
                         .WithMany("WorkFlowActorRoles")
                         .HasForeignKey("WorkFlowActorId")
                         .IsRequired()
                         .HasConstraintName("FK_WorkFlowActorRole_WorkFlowActor");
 
-                    b.Navigation("Role");
-
                     b.Navigation("WorkFlowActor");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActorUser", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Users.Entities.User", "User")
-                        .WithMany("WorkFlowActorUsers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", "WorkFlowActor")
                         .WithMany("WorkFlowActorUsers")
                         .HasForeignKey("WorkFlowActorId")
                         .IsRequired()
                         .HasConstraintName("FK_WorkFlowActorUser_WorkFlowActor");
 
-                    b.Navigation("User");
-
                     b.Navigation("WorkFlowActor");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities.WorkFlowCompany", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Companies.Entities.Company", "Company")
-                        .WithMany("WorkFlowCompanies")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", "WorkFlow")
                         .WithMany("WorkFlowCompanies")
                         .HasForeignKey("WorkFlowId")
                         .IsRequired();
-
-                    b.Navigation("Company");
 
                     b.Navigation("WorkFlow");
                 });
@@ -4530,8 +4283,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Departments");
 
                     b.Navigation("Users");
-
-                    b.Navigation("WorkFlowCompanies");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttribute", b =>
@@ -4560,8 +4311,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("Permissions");
 
-                    b.Navigation("Projects");
-
                     b.Navigation("UserDomainAccesses");
                 });
 
@@ -4585,11 +4334,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("GroupPermissions");
 
-                    b.Navigation("ProjectGroups");
-
                     b.Navigation("UserGroups");
-
-                    b.Navigation("WorkFlowActorGroups");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.LocationTypes.Entities.LocationType", b =>
@@ -4603,20 +4348,9 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("AdminLocationAccesses");
 
-                    b.Navigation("Branches");
-
                     b.Navigation("Departments");
 
                     b.Navigation("UserLocationAccesses");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.MainAggregates.Entities.MainAggregate", b =>
-                {
-                    b.Navigation("Documents");
-
-                    b.Navigation("Issues");
-
-                    b.Navigation("WorkFlows");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Permissions.Entities.Permission", b =>
@@ -4658,17 +4392,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("RolePermissions");
 
                     b.Navigation("UserRoles");
-
-                    b.Navigation("WorkFlowActorRoles");
-
-                    b.Navigation("WorkFlows");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", b =>
-                {
-                    b.Navigation("ChiefBranches");
-
-                    b.Navigation("DeputyBranches");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Users.Entities.User", b =>
@@ -4676,10 +4399,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("AdminLocationAccesses");
 
                     b.Navigation("FormUsers");
-
-                    b.Navigation("IssueHistories");
-
-                    b.Navigation("ProjectMembers");
 
                     b.Navigation("UserConfigs");
 
@@ -4692,8 +4411,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("UserPermissions");
 
                     b.Navigation("UserRoles");
-
-                    b.Navigation("WorkFlowActorUsers");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities.BranchType", b =>
@@ -4720,11 +4437,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkflowDocumentTypes");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", b =>
-                {
-                    b.Navigation("IssueDocuments");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities.IssueLinkReason", b =>
                 {
                     b.Navigation("IssueLinks");
@@ -4748,8 +4460,6 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", b =>
                 {
                     b.Navigation("IssueComments");
-
-                    b.Navigation("IssueCustomFeilds");
 
                     b.Navigation("IssueDocuments");
 
@@ -4776,28 +4486,12 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", b =>
                 {
-                    b.Navigation("Issues");
-
-                    b.Navigation("SourceIssueHistories");
-
                     b.Navigation("Steps");
-
-                    b.Navigation("TargetIssueHistories");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", b =>
                 {
-                    b.Navigation("Documents");
-
-                    b.Navigation("IssueApprovals");
-
-                    b.Navigation("Issues");
-
-                    b.Navigation("SourceIssueHistories");
-
                     b.Navigation("SourceProgresses");
-
-                    b.Navigation("TargetIssueHistories");
 
                     b.Navigation("TargetProgresses");
 
@@ -4806,8 +4500,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", b =>
                 {
-                    b.Navigation("Issues");
-
                     b.Navigation("Progresses");
 
                     b.Navigation("States");
@@ -4821,8 +4513,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor", b =>
                 {
-                    b.Navigation("IssueApprovals");
-
                     b.Navigation("WorkFlowActorGroups");
 
                     b.Navigation("WorkFlowActorRoles");

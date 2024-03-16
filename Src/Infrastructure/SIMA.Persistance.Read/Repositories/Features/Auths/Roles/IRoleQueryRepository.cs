@@ -9,7 +9,7 @@ public interface IRoleQueryRepository : IQueryRepository
 {
     Task<bool> IsRoleSatisfied(string code, string englishKey);
     Task<GetRoleQueryResult> FindById(long id);
-    Task<Result<List<GetRoleQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetRoleQueryResult>>> GetAll(GetAllRoleQuery? request = null);
     Task<GetRolePermissionQueryResult> GetRolePermission(long rolePermissionId);
     Task<GetRoleAggregateResult> GetRoleAggegate(long roleId);
 }

@@ -7,7 +7,6 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Domains;
-
 public class DomainQueryRepository : IDomainQueryRepository
 {
     private readonly SIMADBContext _readContext;
@@ -30,7 +29,6 @@ public class DomainQueryRepository : IDomainQueryRepository
             await connection.OpenAsync();
             var result = await connection.QueryFirstOrDefaultAsync<GetDomainQueryResult>(query, new { Id = id });
             return result ?? throw SimaResultException.NotFound;
-
         }
     }
 

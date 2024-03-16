@@ -48,9 +48,9 @@ public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
                             ,G.[Name] as GroupName
                             ,G.[Code] as GroupCode
 ,c.[CreatedAt]
-                        FROM [SIMADB].[PROJECT].[WORKFLOWACTOR] C
-                        left join [SIMADB].[Project].[WorkFlowActorGroup] AG on AG.WorkFlowActorID  = C.Id
-                        join [SIMADB].[Authentication].[Groups] G on AG.GroupID = G.Id
+                        FROM  [PROJECT].[WORKFLOWACTOR] C
+                        left join  [Project].[WorkFlowActorGroup] AG on AG.WorkFlowActorID  = C.Id
+                        join  [Authentication].[Groups] G on AG.GroupID = G.Id
                         WHERE C.[ActiveStatusID] = 1 and G.ActiveStatusId = 1 and C.Id = @Id
 Order By c.[CreatedAt] desc  
                         
@@ -61,9 +61,9 @@ Order By c.[CreatedAt] desc
                             ,R.[Name] as RoleName
                             ,R.[Code] as RoleCode
 ,c.[CreatedAt]
-                        FROM [SIMADB].[PROJECT].[WORKFLOWACTOR] C
-                        left join [SIMADB].[Project].[WorkFlowActorRole] AR on AR.WorkFlowActorID  = C.Id
-                        join [SIMADB].[Authentication].Role R on AR.RoleID = R.Id
+                        FROM  [PROJECT].[WORKFLOWACTOR] C
+                        left join  [Project].[WorkFlowActorRole] AR on AR.WorkFlowActorID  = C.Id
+                        join  [Authentication].Role R on AR.RoleID = R.Id
                         WHERE C.[ActiveStatusID] = 1 and R.ActiveStatusId = 1 and C.Id = @Id
                         Order By c.[CreatedAt] desc  
                         
@@ -74,10 +74,10 @@ Order By c.[CreatedAt] desc
                             ,P.[LastName] as LastName
                         	,U.[Username] as UserName
 ,c.[CreatedAt]
-                        FROM [SIMADB].[PROJECT].[WORKFLOWACTOR] C
-                        left join [SIMADB].[Project].[WorkFlowActorUser] AU on AU.WorkFlowActorID  = C.Id
-                        join [SIMADB].[Authentication].[Users] U on AU.UserID = U.Id
-                        join [SIMADB].[Authentication].[Profile] P on U.ProfileID = P.Id
+                        FROM  [PROJECT].[WORKFLOWACTOR] C
+                        left join  [Project].[WorkFlowActorUser] AU on AU.WorkFlowActorID  = C.Id
+                        join  [Authentication].[Users] U on AU.UserID = U.Id
+                        join  [Authentication].[Profile] P on U.ProfileID = P.Id
                         
                         WHERE C.[ActiveStatusID] = 1 and U.ActiveStatusId = 1 and C.Id = @Id
 Order By c.[CreatedAt] desc  ";
@@ -96,7 +96,7 @@ Order By c.[CreatedAt] desc  ";
     }
     public async Task<Result<IEnumerable<GetWorkFlowActorQueryResult>>> GetAll(GetAllWorkFlowActorsQuery request)
     {
-        var skip = request.Skip != 0 ? ((request.Skip - 1) * request.Take) : 0;
+        
 
 
         using (var connection = new SqlConnection(_connectionString))
@@ -136,24 +136,24 @@ Order By c.[CreatedAt] desc  ";
                                WHERE  C.ActiveStatusId != 3
                             		and (@SearchValue is null OR C.[Name] like @SearchValue)
                             		AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                            		order by C.CreatedAt desc
+                            		 order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
                             		OFFSET @Skip rows FETCH NEXT @Take rows only";
 
 
             using (var multi = await connection.QueryMultipleAsync(query + " " + queryCount, new
             {
 
-                SearchValue = "%" + request.SearchValue + "%",
-                request.WorkFlowId,
-                request.DomainId,
-                request.ProjectId,
-                Skip = skip,
-                request.Take
+                SearchValue = "%" + request.Filter + "%",
+                WorkFlowId = request.WorkFlowId,
+                ProjectId = request.ProjectId,
+                DomainId = request.DomainId,
+                Take = request.PageSize,
+                request.Skip,
             }))
             {
                 var response = await multi.ReadAsync<GetWorkFlowActorQueryResult>();
                 var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count);
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
     }

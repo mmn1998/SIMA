@@ -1,7 +1,9 @@
 ﻿using Dapper;
+using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.AddressTypes;
+using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
@@ -44,79 +46,66 @@ public class AddressTypeQueryRepository : IAddressTypeQueryRepository
 
     }
 
-    public async Task<Result<List<GetAddressTypeQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<List<GetAddressTypeQueryResult>>> GetAll(GetAllAddressTypesQuery request)
     {
-        int totalCount = 0;
-        var response = new List<GetAddressTypeQueryResult>();
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+        
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
+            await connection.OpenAsync();
+            var queryCount = @" SELECT  COUNT(*) Result
+                                FROM [Basic].[AddressType]  at
+                                join Basic.ActiveStatus a
+                                on at.ActiveStatusId = a.ID
+                               WHERE (@SearchValue is null OR (at.Name like @SearchValue OR at.Code like @SearchValue)) AND at.[ActiveStatusID] <> 3";
 
-                string query = $@"
-                SELECT DISTINCT 
-                   at.[ID] as Id
-                  ,at.[Name]
-                  ,at.[Code]
-                  ,a.ID ActiveStatusId
-                  ,a.Name ActiveStatus
-                  ,at.[CreatedAt]
-              FROM [Basic].[AddressType]  at
-                   join Basic.ActiveStatus a
-                   on at.ActiveStatusId = a.ID
-              WHERE (at.Name like @SearchValue OR at.Code like @SearchValue) AND at.[ActiveStatusID] <> 3
-Order By at.[CreatedAt] desc";
+            string query = $@"
+                                 SELECT DISTINCT 
+                                    at.[ID] as Id
+                                   ,at.[Name]
+                                   ,at.[Code]
+                                   ,a.ID ActiveStatusId
+                                   ,a.Name ActiveStatus
+                                   ,at.[CreatedAt]
+                               FROM [Basic].[AddressType]  at
+                                    join Basic.ActiveStatus a
+                                    on at.ActiveStatusId = a.ID
+                                WHERE (@SearchValue is null OR (at.Name like @SearchValue OR at.Code like @SearchValue)) AND at.[ActiveStatusID] <> 3
+                                order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+            {
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = (await multi.ReadAsync<GetAddressTypeQueryResult>()).ToList();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
+            }
+        }
+    }
+    public async Task<List<GetAddressTypeQueryResult>> GetAllForRedis()
+    {
 
-                var result = connection.Query<GetAddressTypeQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = @"
-                SELECT DISTINCT at.[ID] as Id
-                  ,at.[Name]
-                  ,at.[Code]
-                  ,a.ID ActiveStatusId
-                  ,a.Name ActiveStatus
-                  ,at.[CreatedAt]
-              FROM [Basic].[AddressType] at
-                  join Basic.ActiveStatus a
-                   on at.ActiveStatusId = a.ID
-              WHERE at.[ActiveStatusID] <> 3
-                Order By at.[CreatedAt] desc
-";
-                var result = await connection.QueryAsync<GetAddressTypeQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
+            await connection.OpenAsync();
+
+            string query = $@"
+                                 SELECT DISTINCT 
+                                    at.[ID] as Id
+                                   ,at.[Name]
+                                   ,at.[Code]
+                                   ,a.ID ActiveStatusId
+                                   ,a.Name ActiveStatus
+                                   ,at.[CreatedAt]
+                               FROM [Basic].[AddressType]  at
+                                    join Basic.ActiveStatus a
+                                    on at.ActiveStatusId = a.ID
+                                WHERE  at.[ActiveStatusID] <> 3 ;";
+            var result = (await connection.QueryAsync<GetAddressTypeQueryResult>(query)).ToList();
+            return result;
         }
-        else
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = @"
-                SELECT DISTINCT at.[ID] as Id
-                  ,at.[Name]
-                  ,at.[Code]
-                  ,a.ID ActiveStatusId
-                  ,a.Name ActiveStatus
-                  ,at.[CreatedAt]
-              FROM [Basic].[AddressType] at
-                   join Basic.ActiveStatus a
-                   on at.ActiveStatusId = a.ID
-              WHERE at.[ActiveStatusID] <> 3
-Order By at.[CreatedAt] desc
-";
-                response = (await connection.QueryAsync<GetAddressTypeQueryResult>(query)).ToList();
-            }
-        }
-        return Result.Ok(response, totalCount);
     }
 }

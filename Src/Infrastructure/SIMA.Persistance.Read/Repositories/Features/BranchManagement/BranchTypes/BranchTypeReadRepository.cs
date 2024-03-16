@@ -3,8 +3,7 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.BranchManagement.BranchTypes;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Request;
-using SIMA.Persistance.Read;
+using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.BranchManagement.BranchTypes;
@@ -16,48 +15,49 @@ public class BranchTypeReadRepository : IBranchTypeReadRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<List<GetBranchTypeQueryResult>> GetAll(BaseRequest request)
+    public async Task<Result<IEnumerable<GetBranchTypeQueryResult>>> GetAll(GetAllBranchTypesQuery request)
     {
-        var result = new List<GetBranchTypeQueryResult>();
-        string query = string.Empty;
+        
+
         using (var connection = new SqlConnection(_connectionString))
         {
+            string queryCount = @"
+                                SELECT Count(*) Result
+                             FROM [Bank].[BranchType] BT
+                             INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
+                             WHERE  BT.ActiveStatusId != 3
+                                 and (@SearchValue is null OR BT.[Name] like @SearchValue or BT.[Code] like @SearchValue)";
+
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.SearchValue))
-            {
-                query = @"
-                            SELECT DISTINCT BT.[ID]
-                                  ,BT.[Name]
-                                  ,BT.[Code]
-                                  ,BT.[ActiveStatusID]
-                            	  ,A.Name ActiveStatus
-,bt.[CreatedAt]
-                              FROM [Bank].[BranchType] BT
-                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
-                              WHERE (PT.Name like @SearchValue OR BT.[Code] like @SerachValue OR A.[Name] like @SerachValue)
-Order By bt.[CreatedAt] desc  
+
+            string query = $@"
+                         SELECT DISTINCT BT.[ID]
+                              ,BT.[Name]
+                              ,BT.[Code]
+                              ,BT.[ActiveStatusID]
+                           	  ,A.Name ActiveStatus
+                              ,bt.[CreatedAt]
+                          FROM [Bank].[BranchType] BT
+                          INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
+                          WHERE  BT.ActiveStatusId != 3
+                              and (@SearchValue is null OR BT.[Name] like @SearchValue or BT.[Code] like @SearchValue)
+                              order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                              OFFSET @Skip rows FETCH NEXT @PageSize rows only;
                             ";
-            }
-            else
+
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                query = @"
-                            SELECT DISTINCT BT.[ID]
-                                  ,BT.[Name]
-                                  ,BT.[Code]
-                                  ,BT.[ActiveStatusID]
-                            	  ,A.Name ActiveStatus
-,bt.[CreatedAt]
-                              FROM [Bank].[BranchType] BT
-                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID 
-Order By bt.[CreatedAt] desc  
-                            ";
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetBranchTypeQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
-            result = (await connection.QueryAsync<GetBranchTypeQueryResult>(query, new { SearchValue = "%" + request.SearchValue + "%" }))
-                .Skip((request.Skip - 1) * request.Take)
-                .Take(request.Take)
-                .ToList();
         }
-        return result;
     }
     public async Task<GetBranchTypeQueryResult> GetById(long id)
     {

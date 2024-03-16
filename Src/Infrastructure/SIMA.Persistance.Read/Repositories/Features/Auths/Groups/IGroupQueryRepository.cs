@@ -8,7 +8,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Groups;
 public interface IGroupQueryRepository : IQueryRepository
 {
     Task<GetGroupQueryResult> FindById(long id);
-    Task<Result<List<GetGroupQueryResult>>> GetAll(BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetGroupQueryResult>>> GetAll(GetAllGroupQuery? baseRequest = null);
     Task<GetGroupPermissionQueryResult> GetGroupPermission(long groupPermissionId);
     Task<GetUserGroupQueryResult> GetGroupUser(long userGroupId);
     Task<GetGroupAggregateResult> GetGroupAggregate(long groupId);

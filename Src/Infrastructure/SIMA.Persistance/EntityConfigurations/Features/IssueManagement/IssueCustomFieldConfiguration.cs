@@ -16,11 +16,18 @@ internal class IssueCustomFieldConfiguration : IEntityTypeConfiguration<IssueCus
         v => new IssueCustomFeildId(v))
     .ValueGeneratedNever();
         entity.HasKey(e => e.Id);
+        entity.Property(x => x.IssueId)
+    .HasConversion(
+        v => v.Value,
+        v => new IssueId(v));
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
+        entity.HasOne(x => x.Issue)
+            .WithMany(x => x.IssueCustomFeilds)
+            .HasForeignKey(x => x.IssueId);
     }
 }

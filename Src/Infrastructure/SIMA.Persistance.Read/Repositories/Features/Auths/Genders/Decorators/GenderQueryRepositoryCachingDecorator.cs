@@ -25,7 +25,7 @@ public class GenderQueryRepositoryCachingDecorator : IGenderQueryRepository
         return await _repository.FindById(id);
     }
 
-    public async Task<Result<List<GetGenderQueryResult>>> GetAll(BaseRequest? baseRequests = null)
+    public async Task<Result<IEnumerable<GetGenderQueryResult>>> GetAll(GetAllGenderQuery? baseRequests = null)
     {
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Genders);

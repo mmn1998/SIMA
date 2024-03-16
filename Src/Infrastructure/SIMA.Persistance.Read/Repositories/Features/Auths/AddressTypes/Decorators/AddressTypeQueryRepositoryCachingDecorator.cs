@@ -28,19 +28,24 @@ public class AddressTypeQueryRepositoryCachingDecorator : IAddressTypeQueryRepos
         return await _repository.FindById(id);
     }
 
-    public async Task<Result<List<GetAddressTypeQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<List<GetAddressTypeQueryResult>>> GetAll(GetAllAddressTypesQuery baseRequest)
     {
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.AddressTypes);
         try
         {
-            var setResult = await _repository.GetAll();
-            _redisService.InsertAsync(redisKey, setResult.Data);
+            var setResult = await _repository.GetAllForRedis();
+            _redisService.InsertAsync(redisKey, setResult);
         }
         catch (Exception e)
         {
             _logger.LogError(e, $"redis insert failed :\n\n{e.Message}");
         }
         return await _repository.GetAll(baseRequest);
+    }
+
+    public async Task<List<GetAddressTypeQueryResult>> GetAllForRedis()
+    {
+        return await _repository.GetAllForRedis();
     }
 }

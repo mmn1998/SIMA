@@ -65,162 +65,126 @@ Order By p.[CreatedAt] desc";
         //return await _context.Profiles.SelectMany(x => x.PhoneBooks).Select(x => new GetPhoneBookQueryResult
         //{ }).ToListAsync();
     }
-    public async Task<Result<List<GetAddressBookQueryResult>>> FindWithAddressBook(long id, BaseRequest? baseRequest = null)
+    public async Task<Result<List<GetAddressBookQueryResult>>> FindWithAddressBook(long id, BaseRequest? request = null)
     {
-        var response = new List<GetAddressBookQueryResult>();
-        int totalCount = 0;
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                var query = @$"
+            var queryCount = @" SELECT  COUNT(*) Result 
+                                from Authentication.Profile p 
+                                join Authentication.AddressBook a on p.ID = a.ProfileID
+                                join Basic.AddressType at on a.AddressTypeID = at.ID
+                                join [Basic].[ActiveStatus] S on S.Id = P.ActiveStatusID
+                                WHERE p.ActiveStatusId != 3 and p.ID = @Id AND ((@SearchValue is null OR a.Address like @SearchValue OR at.Name like @SearchValue))";
+
+            string query = @$"
                               select P.ID ProfileId
                               ,a.ID Id,a.Address
                               ,at.Name AddressType
                               ,s.Name ActiveStatus
                               ,p.ActiveStatusId
-,p.[CreatedAt]
+                              ,p.[CreatedAt]
                               from Authentication.Profile p 
                               join Authentication.AddressBook a on p.ID = a.ProfileID
                               join Basic.AddressType at on a.AddressTypeID = at.ID
                               join [Basic].[ActiveStatus] S on S.Id = P.ActiveStatusID
-                              WHERE p.ActiveStatusId != 3 and p.ID = @Id AND (a.Address like @SearchValue OR at.Name like @SearchValue
-Order By p.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetAddressBookQueryResult>(query, new { Id = id, SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-            else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
+                              WHERE p.ActiveStatusId != 3 and p.ID = @Id AND (@SearchValue is null OR (a.Address like @SearchValue OR at.Name like @SearchValue))
+                              order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                              OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                var query = @$"
-                              select P.ID ProfileId
-                              ,a.ID Id,a.Address
-                              ,at.Name AddressType
-                              ,s.Name ActiveStatus
-                              ,p.ActiveStatusId
-,p.[CreatedAt]
-                              from Authentication.Profile p 
-                              join Authentication.AddressBook a on p.ID = a.ProfileID
-                              join Basic.AddressType at on a.AddressTypeID = at.ID
-                              join [Basic].[ActiveStatus] S on S.Id = P.ActiveStatusID
-                              WHERE  (p.ID = @Id)  AND a.[ActiveStatusID] <> 3 AND p.[ActiveStatusID] <> 3
-Order By p.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetAddressBookQueryResult>(query, new { Id = id });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                Id = id, 
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetAddressBookQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response.ToList(), count, request.PageSize, request.Page);
             }
-            return Result.Ok(response, totalCount);
         }
     }
 
-    public async Task<Result<List<GetProfileQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<List<GetProfileQueryResult>>> GetAll(BaseRequest? request = null)
     {
-        var response = new List<GetProfileQueryResult>();
-        int totalCount = 0;
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+        
+
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
+            await connection.OpenAsync();
+            var queryCount = @" SELECT  COUNT(*) Result
+                                FROM [Authentication].[Profile] P
+                                   join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
+                                  WHERE (@SearchValue is null OR (FirstName like @SearchValue  OR LastName like @SearchValue OR NationalID like @SearchValue)) AND P.[ActiveStatusID] <> 3";
+            string query = $@" SELECT DISTINCT 
+                                     P.[ID] as Id
+                                    ,P.FirstName
+	                                ,P.LastName
+	                                ,P.FatherName
+	                                ,P.NationalID as NationalCode
+	                                ,P.ActiveStatusId 
+	                                ,A.Name as ActiveStatus
+                                    ,p.[CreatedAt]
+                                FROM [Authentication].[Profile] P
+                                 join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
+                                WHERE (@SearchValue is null OR (FirstName like @SearchValue  OR LastName like @SearchValue OR NationalID like @SearchValue)) AND P.[ActiveStatusID] <> 3
+                                order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                string query = $@"
-                SELECT DISTINCT P.[ID] as Id
-                  ,P.FirstName
-	              ,P.LastName
-	              ,P.FatherName
-	              ,P.NationalID as NationalCode
-	              ,P.ActiveStatusId 
-	              ,A.Name as ActiveStatus
-,p.[CreatedAt]
-              FROM [Authentication].[Profile] P
-               join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
-              WHERE (FirstName like @SearchValue  OR LastName like @SearchValue OR NationalID like @SearchValue) AND P.[ActiveStatusID] <> 3
-Order By p.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetProfileQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetProfileQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response.ToList(), count, request.PageSize, request.Page);
             }
         }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
-                SELECT DISTINCT P.[ID] as Id
-                  ,P.FirstName
-	              ,P.LastName
-	              ,P.FatherName
-	              ,P.NationalID as NationalCode
-	              ,P.ActiveStatusId 
-	              ,A.Name as ActiveStatus
-,p.[CreatedAt]
-              FROM [Authentication].[Profile] P
-               join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
-              WHERE P.[ActiveStatusID] <> 3
-Order By p.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetProfileQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        return Result.Ok(response, totalCount);
     }
 
-    public async Task<Result<List<GetPhoneBookQueryResult>>> GetAllPhoneBooks(int profileId, BaseRequest? baseRequest = null)
+    public async Task<Result<List<GetPhoneBookQueryResult>>> GetAllPhoneBooks(int profileId, BaseRequest? request = null)
     {
-        var response = new List<GetPhoneBookQueryResult>();
-        int totalCount = 0;
-        if (!string.IsNullOrEmpty(baseRequest.SearchValue))
+        
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
+            await connection.OpenAsync();
+            var queryCount = @" SELECT  COUNT(*) Result
+                                 FROM [Authentication].[Profile] P
+                                 INNER JOIN [Authentication].[PhoneBook] PB on PB.ProfileID = P.ID AND PB.[ActiveStatusID] <> 3
+                                 left JOIN [Basic].[PhonType] PT on PT.ID = PB.PhoneTypeID
+                                 join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
+                                 WHERE (@SearchValue is null OR(PB.PhoneNumber like @SearchValue  OR PT.Name like @SearchValue)) AND P.[ActiveStatusID] <> 3";
+            string query = $@"
+                                  SELECT DISTINCT PB.ID as Id,
+			                      PB.PhoneNumber,
+			                      PT.Name as PhoneTypeName
+                                  ,P.ActiveStatusId 
+	                              ,A.Name as ActiveStatus
+                                  ,p.[CreatedAt]
+                                  FROM [Authentication].[Profile] P
+                                  INNER JOIN [Authentication].[PhoneBook] PB on PB.ProfileID = P.ID AND PB.[ActiveStatusID] <> 3
+                                  left JOIN [Basic].[PhonType] PT on PT.ID = PB.PhoneTypeID
+                                  join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
+                                  WHERE (@SearchValue is null OR(PB.PhoneNumber like @SearchValue  OR PT.Name like @SearchValue)) AND P.[ActiveStatusID] <> 3
+                                  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                                   OFFSET @Skip rows FETCH NEXT @PageSize rows only;  ";
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                string query = $@"
-                            SELECT DISTINCT PB.ID as Id,
-			                PB.PhoneNumber,
-			                PT.Name as PhoneTypeName
-                            ,P.ActiveStatusId 
-	                        ,A.Name as ActiveStatus
-,p.[CreatedAt]
-                            FROM [Authentication].[Profile] P
-                            INNER JOIN [Authentication].[PhoneBook] PB on PB.ProfileID = P.ID AND PB.[ActiveStatusID] <> 3
-                            left JOIN [Basic].[PhonType] PT on PT.ID = PB.PhoneTypeID
-                            join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
-                            WHERE (PB.PhoneNumber like @SearchValue  OR PT.Name like @SearchValue) AND P.[ActiveStatusID] <> 3
-Order By p.[CreatedAt] desc  ";
-                var result = connection.Query<GetPhoneBookQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetPhoneBookQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response.ToList(), count, request.PageSize, request.Page);
             }
         }
-        else if (string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
-               SELECT DISTINCT PB.ID as Id,
-			                PB.PhoneNumber,
-			                PT.Name as PhoneTypeName
-                            ,P.ActiveStatusId 
-	                        ,A.Name as ActiveStatus
-,p.[CreatedAt]
-                            FROM [Authentication].[Profile] P
-                            INNER JOIN [Authentication].[PhoneBook] PB on PB.ProfileID = P.ID AND PB.[ActiveStatusID] <> 3
-                            left JOIN [Basic].[PhonType] PT on PT.ID = PB.PhoneTypeID
-                            join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
-              WHERE PB.[ActiveStatusID] <> 3 AND P.[ActiveStatusID] <> 3
-Order By p.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetPhoneBookQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        return Result.Ok(response, totalCount);
     }
 
     public async Task<List<SelectModel>> GetMangersByCompanyId(long id)
@@ -229,13 +193,13 @@ Order By p.[CreatedAt] desc
         {
             await connection.OpenAsync();
             var query = @$"SELECT CONCAT(p.FirstName, ' ', p.LastName) Name, p.ID Id
-                                                    FROM     
-                                                        Organization.Staff s INNER JOIN
-                                                        Authentication.Profile p ON s.ManagerID = p.ID INNER JOIN
-                                                        Organization.Position po ON s.PositionID = po.ID INNER JOIN
-                                                        Organization.Department d ON po.DepartmentID = d.ID AND po.DepartmentID = d.ID INNER JOIN
-                                                        Organization.Company c ON d.CompanyID = c.ID AND d.CompanyID = c.ID WHERE  c.ID = @Id
-Order By p.[CreatedAt] desc  ";
+                                  FROM     
+                                      Organization.Staff s INNER JOIN
+                                      Authentication.Profile p ON s.ManagerID = p.ID INNER JOIN
+                                      Organization.Position po ON s.PositionID = po.ID INNER JOIN
+                                      Organization.Department d ON po.DepartmentID = d.ID AND po.DepartmentID = d.ID INNER JOIN
+                                      Organization.Company c ON d.CompanyID = c.ID AND d.CompanyID = c.ID WHERE  c.ID = @Id
+                                      Order By p.[CreatedAt] desc  ";
             var result = await connection.QueryAsync<SelectModel>(query, new { Id = id });
             return result.ToList();
         }
@@ -243,7 +207,6 @@ Order By p.[CreatedAt] desc  ";
 
     public async Task<List<GetShortProfileQueryResult>> GetShort()
     {
-
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
@@ -254,11 +217,11 @@ Order By p.[CreatedAt] desc  ";
 	              ,P.NationalID as NationalId
                   ,P.[ActiveStatusID]
                   ,A.[Name] as ActiveStatus 
-,p.[CreatedAt]
+                  ,p.[CreatedAt]
               FROM [Authentication].[Profile] P
               join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID    
               WHERE P.[ActiveStatusID] <> 3
-Order By p.[CreatedAt] desc  ";
+              Order By p.[CreatedAt] desc  ";
             var result = await connection.QueryAsync<GetShortProfileQueryResult>(query);
             if (result is null) throw SimaResultException.ProfileNotFoundError;
             return result.ToList();

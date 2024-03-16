@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
+using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 
@@ -14,22 +16,29 @@ namespace SIMA.Persistance.Repositories.Features.WorkFlowEngine.WorkFlowReposito
 public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 {
     private readonly SIMADBContext _context;
-    public WorkFlowRepository(SIMADBContext context) : base(context)
+    private readonly ISimaIdentity _simaIdentity;
+    public WorkFlowRepository(SIMADBContext context, ISimaIdentity simaIdentity) : base(context)
     {
         _context = context;
+        _simaIdentity = simaIdentity;
     }
 
     public async Task<WorkFlow> GetById(long id)
     {
-        var workFlowId = new WorkFlowId(Value: id);
-        WorkFlow workFlow = null;
+        try
+        {
+            var workFlowId = new WorkFlowId(Value: id);
+            var workFlow = await _context.WorkFlows.Include(x => x.Steps).ThenInclude(x => x.State).Include(x => x.WorkFlowActors).ThenInclude(x => x.WorkFlowActorSteps).Distinct().FirstOrDefaultAsync(x => x.Id == workFlowId);
+            if (workFlow is null)
+                workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == workFlowId);
 
-        workFlow = await _context.WorkFlows.Include(x => x.States).Include(x => x.Steps).FirstOrDefaultAsync(x => x.Id == workFlowId);
+            return workFlow;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
 
-        if (workFlow is null)
-            workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == workFlowId);
-
-        return workFlow;
     }
 
     public async Task<WorkFlow> GetById2(WorkFlowId id)
@@ -47,7 +56,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 
     public async Task<WorkFlow> GetWorkFlowByDomainId(long domainId)
     {
-        var workFlow = await _context.WorkFlows.Include(x => x.States).Include(x => x.Project).Where(x => x.Project.DomainId == domainId).FirstOrDefaultAsync();
+        var workFlow = await _context.WorkFlows.Include(x => x.States).Include(x => x.Project).Where(x => x.Project.DomainId == new DomainId(domainId)).FirstOrDefaultAsync();
         return workFlow;
     }
 
@@ -76,6 +85,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             result.SourceStepId = step.Id.Value;
             result.Id = workFlowId;
             result.ProjectId = workFlow.ProjectId.Value;
+            result.MainAggregateId = workFlow.MainAggregateId.Value;
             return result;
         }
         else
@@ -109,4 +119,5 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             throw IssueExceptions.IssueErrorException;
         }
     }
+
 }

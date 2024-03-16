@@ -7,6 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.DMS.DocumentExtensions;
 
 public interface IDocumentExtensionQueryRepository : IQueryRepository
 {
-    Task<Result<List<GetDocumentExtensionQueryResult>>> GetAll(BaseRequest baseRequest);
+    Task<Result<List<GetDocumentExtensionQueryResult>>> GetAll(GetAllDocumentExtensionsQuery request);
     Task<GetDocumentExtensionQueryResult> GetById(long id);
 }

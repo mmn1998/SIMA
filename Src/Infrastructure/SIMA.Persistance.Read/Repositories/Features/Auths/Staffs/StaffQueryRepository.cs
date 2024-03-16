@@ -52,66 +52,55 @@ Order By s.[CreatedAt] desc  ";
 
     }
 
-    public async Task<Result<List<GetStaffQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<IEnumerable<GetStaffQueryResult>>> GetAll(GetAllStaffQuery? request = null)
     {
-        var response = new List<GetStaffQueryResult>();
-        int totalCount = 0;
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
+        
+        using (var connection = new SqlConnection(_connectionString))
             {
+            string queryCount = @"
+                SELECT COUNT(*) Result
+                FROM [Organization].[Staff] S
+                INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
+                INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
+                INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+                INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
+                join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
+                WHERE  S.[ActiveStatusID] <> 3
+                AND(@SearchValue is null OR P.FirstName like @SearchValue OR P.LastName like @SearchValue OR S.StaffNumber like @SearchValue OR C.Name like @SearchValue OR D.Name like @SearchValue)";
                 await connection.OpenAsync();
                 string query = $@"
                 SELECT DISTINCT S.ID as Id
-                ,S.StaffNumber
-                ,(P.FirstName + ' ' + P.LastName) as FulllName
-                ,D.Name as DepartmentName
-                ,C.Name as CompanyName
-                ,S.[ActiveStatusID]
-                ,A.[Name] as ActiveStatus
-,s.[CreatedAt]
+                		,S.StaffNumber
+                		,(P.FirstName + ' ' + P.LastName) as FulllName
+                		,D.Name as DepartmentName
+                		,C.Name as CompanyName
+                		,S.[ActiveStatusID]
+                		,A.[Name] as ActiveStatus
+                		,s.[CreatedAt]
                 FROM [Organization].[Staff] S
                 INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
                 INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
                 INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
                 INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
                 join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
-              WHERE (P.FirstName like @SearchValue OR P.LastName like @SearchValue OR S.StaffNumber like @SearchValue OR C.Name like @SearchValue OR D.Name like @SearchValue) AND S.[ActiveStatusID] <> 3
-Order By s.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetStaffQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
+                WHERE  S.[ActiveStatusID] <> 3
+                AND(@SearchValue is null OR P.FirstName like @SearchValue OR P.LastName like @SearchValue OR S.StaffNumber like @SearchValue OR C.Name like @SearchValue OR D.Name like @SearchValue)
+                order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                string query = $@"
-                 SELECT DISTINCT S.ID as Id
-                ,S.StaffNumber
-                ,(P.FirstName + ' ' + P.LastName) as FulllName
-                ,D.Name as DepartmentName
-                ,C.Name as CompanyName
-                ,S.[ActiveStatusID]
-                ,A.[Name] as ActiveStatus
-,s.[CreatedAt]
-                FROM [Organization].[Staff] S
-                INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
-                INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
-                INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
-                INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
-                join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
-                WHERE S.[ActiveStatusID] <> 3
-Order By s.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetStaffQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetStaffQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
         }
-        return Result.Ok(response, totalCount);
+        
     }
 
     public async Task<bool> IsStaffSatisfied(long profileId, long positionId)

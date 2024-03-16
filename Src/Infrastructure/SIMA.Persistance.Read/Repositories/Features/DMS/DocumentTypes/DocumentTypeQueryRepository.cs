@@ -15,16 +15,19 @@ public class DocumentTypeQueryRepository : IDocumentTypeQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetDocumentTypeQueryResult>>> GetAll(BaseRequest baseRequest)
+    public async Task<Result<List<GetDocumentTypeQueryResult>>> GetAll(GetAllDocumentTypesQuery request)
     {
         var response = new List<GetDocumentTypeQueryResult>();
         int totalCount = 0;
+        
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                string query = @"
+            string countQuery = @"SELECT COUNT(*) Result
+  FROM [DMS].[DocumentType] DT
+  INNER JOIN [Basic].[ActiveStatus] S on DT.ActiveStatusId = S.ID
+  WHERE (DT.Name like @SearchValue OR DT.Code like @SearchValue OR S.Name like @SearchValue)";
+            string query = $@"
 SELECT DISTINCT DT.[Id]
       ,DT.[Name]
       ,DT.[Code]
@@ -33,32 +36,22 @@ SELECT DISTINCT DT.[Id]
 ,dt.[CreatedAt]
   FROM [DMS].[DocumentType] DT
   INNER JOIN [Basic].[ActiveStatus] S on DT.ActiveStatusId = S.ID
-  WHERE (DT.Name like @SearchValue OR DT.Code like @SearchValue OR S.Name like @SearchValue)
-Order By dt.[CreatedAt] desc  
+  WHERE (@SearchValue is null OR DT.Name like @SearchValue OR DT.Code like @SearchValue OR S.Name like @SearchValue)
+ order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+OFFSET @Skip rows FETCH NEXT @PageSize rows only;
 ";
-                var result = await connection.QueryAsync<GetDocumentTypeQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
-            }
-            else
+            using (var result = await connection.QueryMultipleAsync(query + countQuery, new
             {
-                string query = @"
-SELECT DISTINCT DT.[Id]
-      ,DT.[Name]
-      ,DT.[Code]
-      ,DT.[ActiveStatusId]
-	  ,S.Name ActiveStatus
-,dt.[CreatedAt]
-  FROM [DMS].[DocumentType] DT
-  INNER JOIN [Basic].[ActiveStatus] S on DT.ActiveStatusId = S.ID
-Order By dt.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetDocumentTypeQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize,
+            }))
+            {
+                response = (await result.ReadAsync<GetDocumentTypeQueryResult>()).ToList();
+                totalCount = await result.ReadSingleAsync<int>();
             }
         }
-        return Result.Ok(response, totalCount);
+        return Result.Ok(response, totalCount, request.PageSize, request.Page);
     }
 
     public async Task<GetDocumentTypeQueryResult> GetById(long id)

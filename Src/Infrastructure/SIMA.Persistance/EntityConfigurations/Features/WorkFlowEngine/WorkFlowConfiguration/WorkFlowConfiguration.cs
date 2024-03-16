@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
@@ -46,6 +48,14 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                .HasConversion(
                 v => v.Value,
                 v => new ProjectId(v));
+            entity.Property(x => x.MainAggregateId)
+               .HasConversion(
+                v => v.Value,
+                v => new MainAggregateId(v));
+            entity.Property(x => x.ManagerRoleId)
+               .HasConversion(
+                v => v.Value,
+                v => new RoleId(v));
             entity.Property(e => e.ProjectId).HasColumnName("ProjectID");
 
             entity.HasOne(d => d.Project).WithMany(p => p.WorkFlows)
@@ -54,6 +64,8 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                 .HasConstraintName("FK_WorkFlow_Project");
 
             entity.HasMany(x => x.Steps).WithOne(x => x.WorkFlow).HasForeignKey(x => x.WorkFlowId);
+            entity.HasOne(x => x.MainAggregate).WithMany(x => x.WorkFlows).HasForeignKey(x => x.MainAggregateId);
+            entity.HasOne(x => x.ManagerRole).WithMany(x => x.WorkFlows).HasForeignKey(x => x.ManagerRoleId);
         }
     }
 

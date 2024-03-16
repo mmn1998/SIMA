@@ -8,7 +8,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.AddressTypes;
 public interface IAddressTypeQueryRepository : IQueryRepository
 {
     Task<GetAddressTypeQueryResult> FindById(long id);
-    Task<Result<List<GetAddressTypeQueryResult>>> GetAll(BaseRequest? baseRequest = null);
-
+    Task<Result<List<GetAddressTypeQueryResult>>> GetAll(GetAllAddressTypesQuery baseRequest);
+    Task<List<GetAddressTypeQueryResult>> GetAllForRedis();
 }
 

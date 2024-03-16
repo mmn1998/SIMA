@@ -4,7 +4,6 @@ using SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
-using SIMA.Persistance.Read;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssuePriorities;
@@ -16,58 +15,47 @@ public class IssuePriorityQueryRepository : IIssuePriorityQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetIssuePriorotyQueryResult>>> GetAll(BaseRequest baseRequest)
+
+    public async Task<Result<IEnumerable<GetIssuePriorotyQueryResult>>> GetAll(GetAllIssuePriorotiesQuery request)
     {
-        var response = new List<GetIssuePriorotyQueryResult>();
-        int totalCount = 0;
+        
+
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string query = string.Empty;
-            if (!string.IsNullOrEmpty(baseRequest.SearchValue))
-            {
-                query = @"
-                SELECT DISTINCT P.[Id]
-                      ,P.[Name]
-                      ,P.[Code]
-                      ,P.[Ordering]
-                      ,P.[ActiveStatusId]
-	                  , S.[Name] as ActiveStatus
-,p.[CreatedAt]
-                  FROM [IssueManagement].[IssuePriority] P
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-                    WHERE (P.[Ordering] like '@SearchValue' or P.[Name] like N'@SearchValue' or P.[Code] like N'@SearchValue' or S.[Name] like N'@SearchValue')
-Order By p.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetIssuePriorotyQueryResult>(query, new { baseRequest.SearchValue });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                .Take(baseRequest.Take)
-                .ToList();
-            }
-            else
-            {
-                query = @"
-                SELECT DISTINCT P.[Id]
-                      ,P.[Name]
-                      ,P.[Code]
-                      ,P.[Ordering]
-                      ,P.[ActiveStatusId]
-	                  , S.[Name] as ActiveStatus
-,p.[CreatedAt]
-                  FROM [IssueManagement].[IssuePriority] P
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId 
-                  where P.ActiveStatusId != 3
-Order By p.[CreatedAt] desc  ";
-                var result = await connection.QueryAsync<GetIssuePriorotyQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Skip - 1) * baseRequest.Take)
-                .Take(baseRequest.Take)
-                .ToList();
-            }
+            string queryCount = @"
+                              SELECT COUNT(*) Result
+                                      FROM [IssueManagement].[IssuePriority] P
+                                      INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                                       WHERE (@SearchValue is null OR  (P.[Ordering] like @SearchValue or P.[Name] like @SearchValue or P.[Code] like @SearchValue or S.[Name] like @SearchValue)) and 
+                                       P.ActiveStatusId <> 3 ";
 
+            string query = $@"
+                              SELECT DISTINCT P.[Id]
+                                    ,P.[Name]
+                                    ,P.[Code]
+                                    ,P.[Ordering]
+                                    ,P.[ActiveStatusId]
+	                                , S.[Name] as ActiveStatus
+                                    ,p.[CreatedAt]
+                                FROM [IssueManagement].[IssuePriority] P
+                                INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                                WHERE (@SearchValue is null OR  (P.[Ordering] like @SearchValue or P.[Name] like @SearchValue or P.[Code] like @SearchValue or S.[Name] like @SearchValue)) and 
+                                           P.ActiveStatusId <> 3  
+                                 order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}            
+                                  OFFSET @Skip rows FETCH NEXT @PageSize rows only ;";
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+            {
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetIssuePriorotyQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
+            }
         }
-        return Result.Ok(response, totalCount); ;
     }
 
     public async Task<GetIssuePriorotyQueryResult> GetById(long id)

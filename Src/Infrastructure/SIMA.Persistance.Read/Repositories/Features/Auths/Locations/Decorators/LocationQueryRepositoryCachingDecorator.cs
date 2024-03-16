@@ -28,7 +28,7 @@ public class LocationQueryRepositoryCachingDecorator : ILocationQueryRepository
         return await _queryRepository.FindById(id);
     }
 
-    public async Task<Result<List<GetLocationQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<IEnumerable<GetLocationQueryResult>>> GetAll(GetAllLocationQuery? request = null)
     {
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Location);
@@ -43,7 +43,7 @@ public class LocationQueryRepositoryCachingDecorator : ILocationQueryRepository
             _logger.LogError(e, $"redis insert failed :\n\n{e.Message}");
         }
 
-        return await _queryRepository.GetAll(baseRequest);
+        return await _queryRepository.GetAll(request);
     }
 
     public async Task<List<GetParentLocationsByLocationTypeIdQueryResult>> GetParentsByChildId(long locationTypeId)

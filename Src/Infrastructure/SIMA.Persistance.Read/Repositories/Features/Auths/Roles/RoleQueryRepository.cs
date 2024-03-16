@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Roles;
+using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
@@ -41,55 +42,44 @@ public class RoleQueryRepository : IRoleQueryRepository
         }
     }
 
-    public async Task<Result<List<GetRoleQueryResult>>> GetAll(BaseRequest? baseRequest = null)
+    public async Task<Result<IEnumerable<GetRoleQueryResult>>> GetAll(GetAllRoleQuery? request = null)
     {
-        var response = new List<GetRoleQueryResult>();
-        int totalCount = 0;
-        if (baseRequest != null && !string.IsNullOrEmpty(baseRequest.SearchValue))
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = $@"
+            string queryCount = @"
+                SELECT Count(*) Result
+                FROM [Authentication].[Role] R
+                join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
+                WHERE [ActiveStatusID] <> 3
+                AND (@SearchValue is null OR R.Name like @SearchValue OR R.Code like @SearchValue)  ";
+            await connection.OpenAsync();
+            string query = $@"
                SELECT DISTINCT R.[ID] as Id
-                  ,R.[Name]
-                  ,R.[Code]
-                  ,R.[ActiveStatusId]
-                  ,A.[Name] as ActiveStatus
-,r.[CreatedAt]
-              FROM [Authentication].[Role] R
-              join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
-              WHERE (Name like @SearchValue OR Code like @SearchValue) AND [ActiveStatusID] <> 3
-Order By r.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetRoleQueryResult>(query, new { SearchValue = "%" + baseRequest.SearchValue + "%" });
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
-            }
-        }
-        else if (baseRequest != null && string.IsNullOrEmpty(baseRequest.SearchValue))
-        {
-            using (var connection = new SqlConnection(_connectionString))
+                    ,R.[Name]
+                    ,R.[Code]
+                    ,R.[ActiveStatusId]
+                    ,A.[Name] as ActiveStatus
+                    ,r.[CreatedAt]
+               FROM [Authentication].[Role] R
+               join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
+               WHERE [ActiveStatusID] <> 3
+               AND (@SearchValue is null OR R.Name like @SearchValue OR R.Code like @SearchValue)  
+               order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+               OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+
+            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                await connection.OpenAsync();
-                string query = $@"
-               SELECT DISTINCT R.[ID] as Id
-                  ,R.[Name]
-                  ,R.[Code]
-                  ,R.[ActiveStatusId]
-                  ,A.[Name] as ActiveStatus
-,r.[CreatedAt]
-              FROM [Authentication].[Role] R
-              join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
-              WHERE [ActiveStatusID] <> 3
-Order By r.[CreatedAt] desc  
-";
-                var result = await connection.QueryAsync<GetRoleQueryResult>(query);
-                totalCount = result.Count();
-                response = result.Skip((baseRequest.Take - 1) * baseRequest.Skip).Take(baseRequest.Take).ToList();
+                SearchValue = "%" + request.Filter + "%",
+                request.Skip,
+                request.PageSize
+            }))
+            {
+                var response = await multi.ReadAsync<GetRoleQueryResult>();
+                var count = await multi.ReadSingleAsync<int>();
+                return Result.Ok(response, count, request.PageSize, request.Page);
             }
+
         }
-        return Result.Ok(response, totalCount);
     }
 
     public async Task<GetRolePermissionQueryResult> GetRolePermission(long rolePermissionId)
