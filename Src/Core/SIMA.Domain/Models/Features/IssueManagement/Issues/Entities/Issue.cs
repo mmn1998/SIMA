@@ -1,10 +1,15 @@
-﻿using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
+using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Interfaces;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -19,10 +24,10 @@ public class Issue : Entity
         Id = new IssueId(arg.Id);
         Code = arg.Code;
         Summery = arg.Summery;
-        CurrentWorkflowId = arg.CurrentWorkflowId;
-        CurrentStateId = arg.CurrentStateId;
-        CurrenStepId = arg.CurrenStepId;
-        MainAggregateId = arg.MainAggregateId;
+        CurrentWorkflowId = new(arg.CurrentWorkflowId);
+        CurrentStateId = new(arg.CurrentStateId);
+        CurrenStepId = new(arg.CurrenStepId);
+        MainAggregateId = new(arg.MainAggregateId);
         SourceId = arg.SourceId;
         IssueTypeId = new(arg.IssueTypeId);
         IssuePriorityId = new(arg.IssuePriorityId);
@@ -75,8 +80,8 @@ public class Issue : Entity
 
     public void RunAction(IssueRunActionArg arg)
     {
-        CurrentStateId = arg.CurrentStateId;
-        CurrenStepId = arg.CurrentStepId;
+        CurrentStateId = new(arg.CurrentStateId);
+        CurrenStepId = new(arg.CurrentStepId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
@@ -85,30 +90,30 @@ public class Issue : Entity
         var comment = await IssueComment.Create(issueCommentArg);
         _issueComments.Add(comment);
     }
-    public void DeactiveComment(IssueCommentId issueCommentId)
+    public void DeleteComment(IssueCommentId issueCommentId)
     {
         var comment = _issueComments.FirstOrDefault(c => c.Id == issueCommentId);
         comment.NullCheck();
-        comment?.Deactive();
+        comment?.Delete();
     }
-    public bool DeactiveIssueLink(long issueLinkId)
+    public bool DeleteIssueLink(long issueLinkId)
     {
         var result = _issueLink.Where(x => x.Id == new IssueLinkId(issueLinkId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
             return false;
 
     }
-    public bool DeactiveIssueDocument(long issueDocumentId)
+    public bool DeleteIssueDocument(long issueDocumentId)
     {
         var result = _issueDocuments.Where(x => x.Id == new IssueDocumentId(issueDocumentId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
@@ -119,6 +124,8 @@ public class Issue : Entity
 
     public async void AddIssueLink(List<CreateIssueLinkArg> issueLinkArgs)
     {
+        if (!issueLinkArgs.Any())
+            return;
         foreach (var item in issueLinkArgs)
         {
             if(item.IssueIdLinkedTo > 0)
@@ -132,6 +139,8 @@ public class Issue : Entity
     }
     public async void AddIssueDocument(List<CreateIssueDocumentArg> issueDocumentArgs)
     {
+        if (!issueDocumentArgs.Any())
+            return;
         foreach (var item in issueDocumentArgs)
         {
             if(item.DocumentId > 0)
@@ -146,12 +155,16 @@ public class Issue : Entity
 
     public IssueId Id { get; private set; }
     public long CompanyId { get; private set; }
-    public long CurrentWorkflowId { get; private set; }
+    public WorkFlowId CurrentWorkflowId { get; private set; }
+    public virtual WorkFlow CurrentWorkflow { get; private set; }
     public string Code { get; private set; }
     public string Summery { get; private set; }
-    public long CurrentStateId { get; private set; }
-    public long CurrenStepId { get; private set; }
-    public long MainAggregateId { get; private set; }
+    public StateId CurrentStateId { get; private set; }
+    public virtual State CurrentState { get; private set; }
+    public StepId CurrenStepId { get; private set; }
+    public virtual Step CurrenStep { get; private set; }
+    public MainAggregateId? MainAggregateId { get; private set; }
+    public virtual MainAggregate? MainAggregate { get; private set; }
     public long SourceId { get; private set; }
     public IssueTypeId IssueTypeId { get; private set; }
     public virtual IssueType IssueType { get; private set; }
@@ -168,9 +181,9 @@ public class Issue : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     private List<IssueComment> _issueComments = new();
     public ICollection<IssueComment> IssueComments => _issueComments;
@@ -183,6 +196,8 @@ public class Issue : Entity
     private List<IssueHistory> _issueHistories = new();
     public ICollection<IssueHistory> IssueHistories => _issueHistories;
     public ICollection<IssueLink> IssuesLinkedTo { get; private set; }
+    private List<IssueCustomFeild> _issueCustomFeilds => new();
+    public ICollection<IssueCustomFeild> IssueCustomFeilds => _issueCustomFeilds;
 
     #region Gaurds
 
@@ -191,6 +206,7 @@ public class Issue : Entity
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
         if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
+        
     }
     private async Task ModifyGuards(ModifyIssueArg arg, IIssueDomainService service)
     {

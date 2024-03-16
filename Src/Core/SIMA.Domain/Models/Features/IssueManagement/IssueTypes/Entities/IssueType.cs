@@ -30,7 +30,7 @@ public class IssueType : Entity
         await CreateGuard(arg, service);
         return new IssueType(arg);
     }
-    public async void Modify(ModifyIssueTypeArg arg, IIssueTypeDomainService service)
+    public async Task Modify(ModifyIssueTypeArg arg, IIssueTypeDomainService service)
     {
         await ModifyGuard(arg, service);
 
@@ -53,9 +53,9 @@ public class IssueType : Entity
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public ICollection<Issue> Issues { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
 

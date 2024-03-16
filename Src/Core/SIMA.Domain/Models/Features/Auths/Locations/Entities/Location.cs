@@ -7,6 +7,7 @@ using SIMA.Domain.Models.Features.Auths.LocationTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.LocationTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -30,7 +31,7 @@ public class Location : Entity
         await CreateGuards(arg, service);
         return new Location(arg);
     }
-    public async void Modify(ModifyLocationArg arg, ILocationService service)
+    public async Task Modify(ModifyLocationArg arg, ILocationService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -98,6 +99,9 @@ public class Location : Entity
     private List<UserLocationAccess> _userLocationAccesses = new();
 
     public ICollection<UserLocationAccess> UserLocationAccesses => _userLocationAccesses;
+    private List<Branch> _branches = new();
+
+    public ICollection<Branch> Branches => _branches;
 
     public virtual LocationType? LocationType { get; private set; }
 }

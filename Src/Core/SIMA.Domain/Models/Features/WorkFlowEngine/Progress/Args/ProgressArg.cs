@@ -2,7 +2,7 @@
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args
 {
-    public class CreateProgressArg
+    public class ProgressArg
     {
         public long Id { get; set; }
         public long SourceId { get; set; }
@@ -14,7 +14,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args
         public long? ActiveStatusId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public long? CreatedBy { get; set; }
-        public CreateStepArg Source { get; set; }
-        public CreateStepArg Target { get; set; }
+        public StepArg Source { get; set; }
+        public StepArg Target { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
+﻿using SIMA.Domain.Models.Features.Auths.Roles.Entities;
+using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -18,23 +20,24 @@ public partial class WorkFlowActorRole : Entity
         WorkFlowActorId = arg.WorkFlowActorId;
         CreatedBy = arg.CreatedBy;
         CreatedAt = arg.CreatedAt;
-        RoleId = arg.RoleId;
+        RoleId = new(arg.RoleId);
         ActiveStatusId = arg.ActiveStatusId;
     }
     public static WorkFlowActorRole New(CreateWorkFlowActorRoleArg arg)
     {
         return new WorkFlowActorRole(arg);
     }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
 
     }
     public WorkFlowActorRoleId Id { get; set; }
 
     public WorkFlowActorId WorkFlowActorId { get; set; }
 
-    public long RoleId { get; set; }
+    public RoleId RoleId { get; set; }
+    public virtual Role Role { get; set; }
 
     public long? ActiveStatusId { get; set; }
 

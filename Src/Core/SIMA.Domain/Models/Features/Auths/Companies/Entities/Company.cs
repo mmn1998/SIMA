@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.Companies.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -33,7 +34,7 @@ public class Company : Entity
         return new Company(arg);
     }
 
-    public async void Modify(ModifyCompanyArg arg, ICompanyService service)
+    public async Task Modify(ModifyCompanyArg arg, ICompanyService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -101,6 +102,9 @@ public class Company : Entity
     //private List<Company> _companies = new();
 
     //public virtual ICollection<Company> InverseParent=> _companies;
+    private List<WorkFlowCompany> _workFlowCompanies = new();
+
+    public virtual ICollection<WorkFlowCompany> WorkFlowCompanies => _workFlowCompanies;
 
     public virtual Company? Parent { get; set; }
 }

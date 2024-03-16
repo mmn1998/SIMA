@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Persistance.Persistence;
@@ -38,6 +40,41 @@ public class BranchDomainService : IBranchDomainService
             if (!result) break;
             result = newPoint.Distance(geometryFactory.CreatePoint(new Coordinate(item.Longitude ?? 0, item.Latitude ?? 0))) <= bufferDistanceInDegrees;
         }
+        return result;
+    }
+
+    public async Task<bool> IsStaffFromSelectedLocation(StaffId staffId, LocationId locationId)
+    {
+        bool result = false;
+        var staff = await _context.Staff.FirstOrDefaultAsync(s => s.Id == staffId);
+        if (staff is not null)
+        {
+            if (staff.ProfileId is not null)
+            {
+                var location = await _context.Locations
+                    .Include(x => x.AddressBooks)
+                    .FirstOrDefaultAsync(l => l.Id == locationId);
+                if (location is not null && location.AddressBooks is not null)
+                {
+                    foreach (var item in location.AddressBooks)
+                    {
+                        if (item.ProfileId == staff.ProfileId)
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public async Task<bool> IsStaffHasAnyRoleInOtherBrfanches(StaffId staffId, BranchId? branchId = null)
+    {
+        bool result = true;
+        if (branchId != null) result = await _context.Branches.AnyAsync(b => b.BranchChiefOfficerId == staffId || b.BranchDeputyId == staffId);
+        else result = await _context.Branches.AnyAsync(b => b.Id == branchId && (b.BranchChiefOfficerId == staffId || b.BranchDeputyId == staffId));
         return result;
     }
 }

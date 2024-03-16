@@ -1,6 +1,10 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
+﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -17,7 +21,7 @@ public partial class Project : Entity
         Id = new ProjectId(IdHelper.GenerateUniqueId());
         Name = arg.Name;
         Code = arg.Code;
-        DomainId = arg.DomainId;
+        if (arg.DomainId.HasValue) DomainId = new(arg.DomainId.Value);
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -26,36 +30,36 @@ public partial class Project : Entity
     {
         return new Project(arg);
     }
-    public void Modify(ModifyProjectArg arg)
+    public async Task Modify(ModifyProjectArg arg)
     {
         Code = arg.Code;
         Name = arg.Name;
-        DomainId = arg.DomainId;
+        if (arg.DomainId.HasValue) DomainId = new(arg.DomainId.Value);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    public bool DeactiveProjectGroup(long groupId)
+    public bool DeleteProjectGroup(long groupId)
     {
         var result = _projectGroups.Where(x => x.Id == new ProjectGroupId(groupId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
             return false;
 
     }
-    public bool DeactiveProjectMmeber(long userId)
+    public bool DeleteProjectMmeber(long userId)
     {
-        var result = _projectMember.Where(x => x.UserId == userId).FirstOrDefault();
+        var result = _projectMember.Where(x => x.UserId == new UserId(userId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
@@ -69,11 +73,20 @@ public partial class Project : Entity
     }
     public void AddProjectMember(List<CreateProjectMemberArg> request)
     {
-        var projectMember = request.Select(x => ProjectMember.New(new CreateProjectMemberArg { UserId = x.UserId, ProjectId = Id, IsAdminProject = x.IsAdminProject, IsManager = x.IsManager }));
+        var x = request.Count(x => x.IsManager == "1");
+        if(x > 1) throw ProjectExceptions.ProjectMemberIsManagerError;
+var projectMember = request.Select(x => ProjectMember.New(new CreateProjectMemberArg
+        { 
+            UserId = x.UserId,
+            ProjectId = Id,
+            IsAdminProject = x.IsAdminProject,
+            IsManager = x.IsManager }
+        ));
         _projectMember.AddRange(projectMember);
     }
     public ProjectId Id { get; set; }
-    public long? DomainId { get; set; }
+    public DomainId? DomainId { get; set; }
+    public virtual Auths.Domains.Entities.Domain? Domain { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
     public long? ActiveStatusId { get; set; }

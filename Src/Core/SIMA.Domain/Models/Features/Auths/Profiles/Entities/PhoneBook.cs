@@ -26,7 +26,7 @@ public class PhoneBook
     {
         return new PhoneBook(arg);
     }
-    public void Modify(ModifyPhoneBookArg arg)
+    public async Task Modify(ModifyPhoneBookArg arg)
     {
         if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
         if (arg.PhoneTypeId.HasValue) PhoneTypeId = new PhoneTypeId(arg.PhoneTypeId.Value);

@@ -1,4 +1,8 @@
-﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
+﻿using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -15,11 +19,11 @@ public class IssueHistory : Entity
         Id = new IssueHistoryId(IdHelper.GenerateUniqueId());
         Name = arg.Name;
         IssueId = new IssueId(arg.IssueId);
-        SourceStateId = arg.SourceStateId;
-        SourceStepId = arg.SourceStepId;
-        TargetStateId = arg.TargetStateId;
-        TargetStepId = arg.TargetStepId;
-        PerformerUserId = arg.PerformerUserId;
+        SourceStateId = new(arg.SourceStateId);
+        SourceStepId = new(arg.SourceStepId);
+        if(arg.TargetStateId.HasValue) TargetStateId = new(arg.TargetStateId.Value);
+        if(arg.TargetStepId.HasValue) TargetStateId = new(arg.TargetStepId.Value);
+        PerformerUserId = new(arg.PerformerUserId);
         Description = arg.Description;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -34,11 +38,16 @@ public class IssueHistory : Entity
     public string Name { get; private set; }
     public IssueId IssueId { get; private set; }
     public virtual Issue Issue { get; private set; }
-    public long SourceStateId { get; private set; }
-    public long TargetStateId { get; private set; }
-    public long SourceStepId { get; private set; }
-    public long TargetStepId { get; private set; }
-    public long PerformerUserId { get; private set; }
+    public StateId SourceStateId { get; private set; }
+    public virtual State SourceState { get; private set; }
+    public StateId? TargetStateId { get; private set; }
+    public State? TargetState { get; private set; }
+    public StepId SourceStepId { get; private set; }
+    public virtual Step SourceStep { get; private set; }
+    public StepId? TargetStepId { get; private set; }
+    public virtual Step? TargetStep { get; private set; }
+    public UserId PerformerUserId { get; private set; }
+    public virtual User PerformerUser { get; private set; }
     public string Description { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

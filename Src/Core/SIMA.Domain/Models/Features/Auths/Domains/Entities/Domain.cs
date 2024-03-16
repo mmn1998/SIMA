@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.Auths.Domains.Entities;
@@ -47,6 +48,8 @@ public class Domain
 
     private List<UserDomainAccess> _userDomainAccesses = new();
     public ICollection<UserDomainAccess> UserDomainAccesses => _userDomainAccesses;
+    private List<Project> _projects = new();
+    public ICollection<Project> Projects => _projects;
 
     private List<Form> _forms = new();
     public ICollection<Form> Forms => _forms;

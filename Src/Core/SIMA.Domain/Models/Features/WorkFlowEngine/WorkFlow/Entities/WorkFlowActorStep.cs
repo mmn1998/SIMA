@@ -16,6 +16,7 @@ public class WorkFlowActorStep : Entity
     private WorkFlowActorStep(CreateWorkFlowActorStepArg arg)
     {
         Id = new WorkFlowActorStepId(arg.Id);
+        BpmnId = arg.BpmnId;
         StepId = new StepId(arg.StepId);
         WorkFlowActorId = new WorkFlowActorId(arg.WorkFlowActorId);
         CreatedAt = DateTime.UtcNow;
@@ -26,10 +27,15 @@ public class WorkFlowActorStep : Entity
         var result = new WorkFlowActorStep(arg);
         return result;
     }
-
-    public void Deactive()
+    public void Modify(CreateWorkFlowActorStepArg arg)
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        StepId = new StepId(arg.StepId);
+        CreatedAt = DateTime.UtcNow;
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
+    public void Delete()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
     public WorkFlowActorStepId Id { get; set; }
@@ -40,6 +46,7 @@ public class WorkFlowActorStep : Entity
     public long? CreatedBy { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
+    public string BpmnId { get; private set; }
     public virtual Step Step { get; set; } = null!;
-    public virtual SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites. WorkFlowActor WorkFlowActor { get; set; } = null!;
+    public virtual WorkFlowActor.Entites.WorkFlowActor WorkFlowActor { get; set; } = null!;
 }

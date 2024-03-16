@@ -26,7 +26,7 @@ public class IssueLink : Entity
     {
         return new IssueLink(arg);
     }
-    public async void Modify(ModifyIssueLinkArg arg)
+    public async Task Modify(ModifyIssueLinkArg arg)
     {
         IssueId = new IssueId(arg.IssueId);
         IssueIdLinkedTo = new(arg.IssueIdLinkedTo);
@@ -47,9 +47,9 @@ public class IssueLink : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
 }

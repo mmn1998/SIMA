@@ -6,7 +6,7 @@ public class ModifyDocumentArg
     public string? Name { get; set; }
 
     public string? Code { get; set; }
-    public long MainAggregateId { get; set; }
+    public long? MainAggregateId { get; set; }
     public long SourceId { get; set; }
     public long AttachStepId { get; set; }
     public long DocumentTypeId { get; set; }

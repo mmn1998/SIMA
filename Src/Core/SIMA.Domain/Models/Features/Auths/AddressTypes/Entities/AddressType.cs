@@ -32,7 +32,7 @@ public class AddressType : Entity
     }
 
 
-    public async void Modify(ModifyAddressTypeArg arg, IAddressTypeDomainService service)
+    public async Task Modify(ModifyAddressTypeArg arg, IAddressTypeDomainService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;

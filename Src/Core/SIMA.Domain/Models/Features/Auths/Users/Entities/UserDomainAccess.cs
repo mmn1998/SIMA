@@ -23,7 +23,7 @@ public class UserDomainAccess
     {
         return new UserDomainAccess(arg);
     }
-    public void Modify(ModifyUserDomainArg arg)
+    public async Task Modify(ModifyUserDomainArg arg)
     {
         UserId = new UserId(arg.UserId.Value);
         DomainId = new DomainId(arg.DomainId.Value);

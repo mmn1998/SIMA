@@ -37,7 +37,7 @@ public class BrokerType : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public async Task Deactive()
+    public async Task Delete()
     {
         ActiveStatusId = 2;
     }

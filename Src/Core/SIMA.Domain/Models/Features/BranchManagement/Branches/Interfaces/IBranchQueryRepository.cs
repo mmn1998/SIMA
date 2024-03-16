@@ -7,6 +7,6 @@ namespace SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 
 public interface IBranchQueryRepository : IQueryRepository
 {
-    Task<Result<List<GetBranchQueryResult>>> GetAll(BaseRequest baseRequest);
+    Task<Result<IEnumerable<GetBranchQueryResult>>> GetAll(GetAllBranchQuery request);
     Task<GetBranchQueryResult> GetById(long id);
 }

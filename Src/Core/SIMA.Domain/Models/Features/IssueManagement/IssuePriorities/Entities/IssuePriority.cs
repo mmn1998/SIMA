@@ -30,7 +30,7 @@ public class IssuePriority : Entity
         await CreateGuard(arg, service);
         return new IssuePriority(arg);
     }
-    public async void Modify(ModifyIssuePriorityArg arg, IIssuePriorityDomainService service)
+    public async Task Modify(ModifyIssuePriorityArg arg, IIssuePriorityDomainService service)
     {
         await ModifyGuard(arg, service);
         Name = arg.Name;
@@ -71,12 +71,12 @@ public class IssuePriority : Entity
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public ICollection<Issue> Issues { get; private set; }
-    public void Deactive()
-    {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
-    }
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Deactive()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
     }
 }

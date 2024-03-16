@@ -4,6 +4,8 @@ using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -31,7 +33,7 @@ public class Group : Entity
         await CreateGuards(arg, service);
         return new Group(arg);
     }
-    public async void Modify(ModifyGroupArg arg, IGroupService service)
+    public async Task Modify(ModifyGroupArg arg, IGroupService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -80,7 +82,7 @@ public class Group : Entity
     #region ModifyMethods
 
 
-    public void ModifyGroupUser(ModifyUserGroupArg arg)
+    public async Task ModifyGroupUser(ModifyUserGroupArg arg)
     {
         arg.UserId.NullCheck();
         if (_userGroups.Any(ur => ur.GroupId == new GroupId(arg.GroupId) && ur.UserId == new UserId(arg.UserId.Value)))
@@ -91,7 +93,7 @@ public class Group : Entity
         entity.NullCheck();
         entity.Modify(arg);
     }
-    public void ModifyGroupPermission(ModifyGroupPermissionArg arg)
+    public async Task ModifyGroupPermission(ModifyGroupPermissionArg arg)
     {
         var entity = _groupPermissions.FirstOrDefault(gp => gp.Id == new GroupPermissionId(arg.Id));
         entity.NullCheck();
@@ -160,6 +162,10 @@ public class Group : Entity
 
     private List<FormGroup> _formGroups = new();
     public ICollection<FormGroup> FormGroups => _formGroups;
+    private List<ProjectGroup> _projectGroups = new();
+    public ICollection<ProjectGroup> ProjectGroups => _projectGroups;
+    private List<WorkFlowActorGroup> _workFlowActorGroups = new();
+    public ICollection<WorkFlowActorGroup> WorkFlowActorGroups => _workFlowActorGroups;
 
 
     public void Delete()

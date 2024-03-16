@@ -28,7 +28,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites
             return new ActionType(arg);
         }
 
-        public void Modify(ModifyActionTypeArg arg)
+        public async Task Modify(ModifyActionTypeArg arg)
         {
             Code = arg.Code;
             Name = arg.Name;
@@ -39,9 +39,9 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites
             ModifiedBy = arg.ModifiedBy;
         }
 
-        public void Deactive()
+        public void Delete()
         {
-            ActiveStatusId =  (long)ActiveStatusEnum.Deactive;
+            ActiveStatusId =  (long)ActiveStatusEnum.Delete;
         }
 
        

@@ -72,8 +72,8 @@ public class DocumentType : Entity
     public long? ModifiedBy { get; private set; }
     public virtual ICollection<Document> Documents { get; set; }
     public virtual ICollection<WorkflowDocumentType> WorkflowDocumentTypes { get; set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

@@ -23,7 +23,7 @@ public class UserRole
         CreatedAt = DateTime.Now;
         CreatedBy = arg.CreatedBy;
     }
-    public void Modify(ModifyUserRoleArg arg)
+    public async Task Modify(ModifyUserRoleArg arg)
     {
         UserId = new UserId(arg.UserId);
         RoleId = new RoleId(arg.RoleId);

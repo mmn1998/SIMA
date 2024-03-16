@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
+﻿using SIMA.Domain.Models.Features.Auths.Groups.Entities;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -17,7 +19,7 @@ public partial class WorkFlowActorGroup : Entity
         Id = new WorkFlowActorGroupId(IdHelper.GenerateUniqueId()); 
         WorkFlowActorId = arg.WorkFlowActorId;
         CreatedAt = DateTime.UtcNow;
-        GroupId = arg.GroupId;
+        GroupId = new(arg.GroupId);
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
     public static WorkFlowActorGroup New(CreateWorkFlowActorGroupArg arg)
@@ -25,14 +27,16 @@ public partial class WorkFlowActorGroup : Entity
         return new WorkFlowActorGroup(arg);
     }
 
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
 
     }
     public WorkFlowActorGroupId Id { get; set; }
     public WorkFlowActorId WorkFlowActorId { get; set; }
-    public long GroupId { get; set; }
+    public virtual WorkFlowActor WorkFlowActor { get; set; }
+    public GroupId GroupId { get; set; }
+    public virtual Group Group { get; set; }
     public long? ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }

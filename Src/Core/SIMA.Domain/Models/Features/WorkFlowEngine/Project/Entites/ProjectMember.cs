@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
+﻿using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -17,7 +19,7 @@ public partial class ProjectMember : Entity
     {
         Id = new ProjectMemberId(IdHelper.GenerateUniqueId());
         ProjectId = arg.ProjectId;
-        UserId = arg.UserId;
+        UserId = new(arg.UserId);
         IsAdminProject = arg.IsAdminProject;
         IsManager = arg.IsManager;
         CreatedAt = arg.CreatedAt;
@@ -28,23 +30,24 @@ public partial class ProjectMember : Entity
         return new ProjectMember(arg);
     }
 
-    public void Modify(ModifyProjectMemberArg arg)
+    public async Task Modify(ModifyProjectMemberArg arg)
     {
         ProjectId = new ProjectId(arg.ProjectId);
-        UserId = arg.UserId;
+        UserId = new(arg.UserId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
 
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
 
     }
    
     public ProjectMemberId Id { get; set; }
     public ProjectId ProjectId { get; set; }
-    public long UserId { get; set; }
+    public UserId UserId { get; set; }
+    public virtual User User { get; set; }
     public string IsManager { get; set; } = null!;
     public string IsAdminProject { get; set; } = null!;
     public long? ActiveStatusId { get; set; }

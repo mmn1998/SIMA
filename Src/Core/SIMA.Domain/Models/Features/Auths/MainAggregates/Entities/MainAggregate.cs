@@ -1,6 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Args;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.DMS.Documents.Entities;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
@@ -43,4 +46,7 @@ public class MainAggregate
     public long? ModifiedBy { get; private set; }
 
     public virtual Domains.Entities.Domain Domain { get; private set; } = null!;
+    public ICollection<Document> Documents { get; private set; }
+    public ICollection<Issue> Issues { get; private set; }
+    public ICollection<WorkFlow> WorkFlows { get; private set; }
 }

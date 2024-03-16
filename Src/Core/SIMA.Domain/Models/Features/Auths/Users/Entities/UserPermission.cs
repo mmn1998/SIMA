@@ -45,7 +45,7 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
         public byte[]? ModifiedAt { get; set; }
 
         public long? ModifiedBy { get; set; }
-        public void Modify(ModifyUserPermissionArg arg)
+        public async Task Modify(ModifyUserPermissionArg arg)
         {
             UserId = new UserId(arg.UserId.Value);
             PermissionId = new PermissionId(arg.PermissionId);

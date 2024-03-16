@@ -1,4 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Args;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -13,7 +14,7 @@ public class IssueCustomFeild : Entity
     public IssueCustomFeild(CreateIssueCustomFeildArg arg)
     {
         Id = new IssueCustomFeildId(IdHelper.GenerateUniqueId());
-        IssueId = arg.IssueId;
+        IssueId = new(arg.IssueId);
         CustomeFeildId = arg.CustomeFeildId;
         KeyValues = arg.KeyValues;
         ActiveStatusId = arg.ActiveStatusId;
@@ -25,9 +26,9 @@ public class IssueCustomFeild : Entity
     {
         return new IssueCustomFeild(arg);
     }
-    public async void Modify(ModifyIssueCustomFeildArg arg)
+    public async Task Modify(ModifyIssueCustomFeildArg arg)
     {
-        IssueId = arg.IssueId;
+        IssueId = new(arg.IssueId);
         CustomeFeildId = arg.CustomeFeildId;
         KeyValues = arg.KeyValues;
         ActiveStatusId = arg.ActiveStatusId;
@@ -35,7 +36,8 @@ public class IssueCustomFeild : Entity
         ModifiedBy = arg.ModifiedBy;
     }
     public IssueCustomFeildId Id { get; private set; }
-    public long IssueId { get; private set; }
+    public IssueId IssueId { get; private set; }
+    public virtual Issue Issue { get; private set; }
     public long CustomeFeildId { get; private set; }
     public string KeyValues { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -43,8 +45,8 @@ public class IssueCustomFeild : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

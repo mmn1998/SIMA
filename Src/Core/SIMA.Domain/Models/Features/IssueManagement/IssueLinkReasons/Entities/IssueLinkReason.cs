@@ -27,7 +27,7 @@ namespace SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities
             await CreateGuards(arg, service);
             return new IssueLinkReason(arg);
         }
-        public async void Modify(ModifyIssueLinkReasonArg arg, IIssueLinkReasonDomainService service)
+        public async Task Modify(ModifyIssueLinkReasonArg arg, IIssueLinkReasonDomainService service)
         {
             await ModifyGuards(arg, service);
             Name = arg.Name;
@@ -46,14 +46,14 @@ namespace SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities
         public long? ModifiedBy { get; private set; }
         public ICollection<IssueLink> IssueLinks { get; private set; }
 
-        public void Deactive()
-        {
-            ActiveStatusId = (long)ActiveStatusEnum.Deactive;
-        }
-
         public void Delete()
         {
             ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        }
+
+        public void Deactive()
+        {
+            ActiveStatusId = (long)ActiveStatusEnum.Deactive;
         }
 
 

@@ -25,7 +25,7 @@ public class Broker : Entity
         ExpireDate = arg.ExpireDate;
         if (arg.BrokerTypeId.HasValue) BrokerTypeId = new BrokerTypeId(arg.BrokerTypeId.Value);
     }
-    public async void Modify(ModifyBrokerArg arg, IBrokerService service)
+    public async Task Modify(ModifyBrokerArg arg, IBrokerService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -102,8 +102,8 @@ public class Broker : Entity
     public long? ModifiedBy { get; private set; }
 
     public virtual BrokerType? BrokerType { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

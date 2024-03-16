@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
+﻿using SIMA.Domain.Models.Features.Auths.Companies.Entities;
+using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.ValueObject;
 using SIMA.Framework.Common.Helper;
@@ -16,7 +18,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities
         {
             Id = new WorkFlowCompanyId(IdHelper.GenerateUniqueId());
             WorkFlowId = new WorkFlowId(arg.WorkFlowId);
-            CompanyId = arg.CompanyId;
+            CompanyId = new(arg.CompanyId);
             ActiveFrom = arg.ActiveFrom;
             ActiveTo = arg.ActiveTo;    
             CreatedAt = arg.CreatedAt;
@@ -27,21 +29,22 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities
         {
             return new WorkFlowCompany(arg);
         }
-        public void Modify(ModifyWorkFlowCompanyArg arg)
+        public async Task Modify(ModifyWorkFlowCompanyArg arg)
         {
             WorkFlowId = new WorkFlowId(arg.WorkFlowId);
-            CompanyId = arg.CompanyId;
+            CompanyId = new(arg.CompanyId);
             ActiveFrom = arg.ActiveFrom;
             ActiveTo = arg.ActiveTo;
             ModifiedAt = arg.ModifiedAt;
             ModifiedBy = arg.ModifiedBy;
         }
-        public void Deactive()
+        public void Delete()
         {
-            ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+            ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
         public WorkFlowCompanyId Id { get; private set; }
-        public long CompanyId { get; set; }
+        public CompanyId CompanyId { get; set; }
+        public virtual Company Company { get; set; }
         public WorkFlowId WorkFlowId { get; set; }
         public DateTime? ActiveFrom { get; private set; }
         public DateTime? ActiveTo { get; private set; }

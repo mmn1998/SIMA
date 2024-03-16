@@ -13,6 +13,9 @@ using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -123,7 +126,7 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
             await CreateGuards(service, arg);
             return new User(arg);
         }
-        public async void Modify(ModifyUserArg arg, IUserService userService)
+        public async Task Modify(ModifyUserArg arg, IUserService userService)
         {
             await ModifyGuards(userService, arg);
             if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
@@ -165,7 +168,7 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
 
         public virtual Profile? Profile { get; private set; }
         #region ModifyMethods
-        public void ModifyUserRole(ModifyUserRoleArg arg)
+        public async Task ModifyUserRole(ModifyUserRoleArg arg)
         {
             if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
             {
@@ -175,7 +178,7 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
             entity.NullCheck();
             entity.Modify(arg);
         }
-        public void ModifyUserPermission(ModifyUserPermissionArg arg)
+        public async Task ModifyUserPermission(ModifyUserPermissionArg arg)
         {
             if (_userPermission.Any(ur => ur.PermissionId == new PermissionId(arg.PermissionId) && ur.UserId == new UserId(arg.UserId.Value)))
             {
@@ -185,19 +188,19 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
             entity.NullCheck();
             entity.Modify(arg);
         }
-        public void ModifyUserLocation(ModifyUserLocationArg arg)
+        public async Task ModifyUserLocation(ModifyUserLocationArg arg)
         {
             var entity = _userLocationAccesses.FirstOrDefault(ul => ul.Id == new UserLocationAccessId(arg.Id));
             entity.NullCheck();
             entity.Modify(arg);
         }
-        public void ModifyUserGroup(ModifyUserGroupArg arg)
+        public async Task ModifyUserGroup(ModifyUserGroupArg arg)
         {
             var entity = _userGroup.FirstOrDefault(ug => ug.Id == new UserGroupId(arg.Id));
             entity.NullCheck();
             entity.Modify(arg);
         }
-        public void ModifyUserDomain(ModifyUserDomainArg arg)
+        public async Task ModifyUserDomain(ModifyUserDomainArg arg)
         {
 
             var entity = _userDomainAccesses.FirstOrDefault(ud => ud.Id == new UserDomainAccessId(arg.Id));
@@ -257,6 +260,12 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
         private List<AdminLocationAccess> _adminLocationAccesses = new();
         private List<FormUser> _formUsers = new();
         public ICollection<FormUser> FormUsers => _formUsers;
+        private List<IssueHistory> _issueHistories = new();
+        public ICollection<IssueHistory> IssueHistories => _issueHistories;
+        private List<WorkFlowActorUser> _workFlowActorUsers = new();
+        public ICollection<WorkFlowActorUser> WorkFlowActorUsers => _workFlowActorUsers;
+        private List<ProjectMember> _projectMembers = new();
+        public ICollection<ProjectMember> ProjectMembers => _projectMembers;
 
         public ICollection<AdminLocationAccess> AdminLocationAccesses => _adminLocationAccesses;
         private static async Task CreateGuards(IUserService userService, CreateUserArg arg)

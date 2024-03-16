@@ -1,10 +1,15 @@
-﻿using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Args;
 using SIMA.Domain.Models.Features.DMS.Documents.Interfaces;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -19,9 +24,9 @@ public class Document : Entity
         Id = new(IdHelper.GenerateUniqueId());
         Name = arg.Name;
         Code = arg.Code;
-        if (arg.MainAggregateId.HasValue) MainAggregateId = arg.MainAggregateId.Value;
+        if (arg.MainAggregateId.HasValue) MainAggregateId = new(arg.MainAggregateId.Value);
         SourceId = arg.SourceId;
-        AttachStepId = arg.AttachStepId;
+        AttachStepId = new(arg.AttachStepId);
         FileAddress = arg.FileAddress;
         FileExtensionId = new(arg.FileExtensionId);
         DocumentTypeId = new(arg.DocumentTypeId);
@@ -39,10 +44,10 @@ public class Document : Entity
         await ModifyGuards(arg, service);
         Name = arg.Name;
         Code = arg.Code;
-        MainAggregateId = arg.MainAggregateId;
+        if (arg.MainAggregateId.HasValue) MainAggregateId = new(arg.MainAggregateId.Value);
         ActiveStatusId = arg.ActiveStatusId;
         SourceId = arg.SourceId;
-        AttachStepId = arg.AttachStepId;
+        AttachStepId = new(arg.AttachStepId);
         FileExtensionId = new(arg.FileExtensionId);
         DocumentTypeId = new(arg.DocumentTypeId);
         FileAddress = arg.FileAddress;
@@ -76,9 +81,11 @@ public class Document : Entity
 
     public string? Code { get; private set; }
 
-    public long? MainAggregateId { get; private set; }
-    public long SourceId { get; private set; }
-    public long AttachStepId { get; private set; }
+    public MainAggregateId? MainAggregateId { get; private set; }
+    public virtual MainAggregate? MainAggregate { get; private set; }
+    public long? SourceId { get; private set; }
+    public StepId? AttachStepId { get; private set; }
+    public virtual Step? AttachStep { get; private set; }
     public DocumentTypeId DocumentTypeId { get; private set; }
     public virtual DocumentType DocumentType { get; private set; }
     public DocumentExtensionId FileExtensionId { get; private set; }
@@ -93,8 +100,9 @@ public class Document : Entity
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
-    public void Deactive()
+    public ICollection<IssueDocument> IssueDocuments { get; set; }
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

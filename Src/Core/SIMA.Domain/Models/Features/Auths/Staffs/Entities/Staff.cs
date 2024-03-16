@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Args;
 using SIMA.Domain.Models.Features.Auths.Staffs.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Staffs.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -28,7 +29,7 @@ public class Staff : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public async void Modify(ModifyStaffArg arg, IStaffService service)
+    public async Task Modify(ModifyStaffArg arg, IStaffService service)
     {
         await ModifyGuards(arg, service);
         if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
@@ -109,6 +110,8 @@ public class Staff : Entity
     public virtual Position? Position { get; private set; }
 
     public virtual Profile? Profile { get; private set; }
+    public virtual ICollection<Branch> ChiefBranches { get; private set; }
+    public virtual ICollection<Branch> DeputyBranches { get; private set; }
 
 
     public void Delete()

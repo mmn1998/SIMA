@@ -1,4 +1,8 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Modify;
@@ -14,22 +18,30 @@ public class WorkFlowActor : Entity
     {
 
     }
-    private WorkFlowActor(CreateWorkFlowActorArg arg)
+    private WorkFlowActor(WorkFlowActorArg arg)
     {
         Id = new WorkFlowActorId(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
-        CreatedBy = arg.CreatedBy;
+        BpmnId = arg.BpmnId;
+        CreatedBy = arg.UserId;
         CreatedAt = arg.CreatedAt;
         WorkFlowId = new WorkFlowId(arg.WorkFlowId);
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public static WorkFlowActor New(CreateWorkFlowActorArg arg)
+    public static WorkFlowActor New(WorkFlowActorArg arg)
     {
         var result = new WorkFlowActor(arg);
         return result;
     }
 
+    public void Modify(WorkFlowActorArg arg)
+    {
+        Code = arg.Code;
+        Name = arg.Name;
+        ActiveStatusId = arg.ActiveStatusId;
+        ModifiedBy = arg.UserId;
+    }
     public void Modify(ModifyWorkFlowActorArg arg)
     {
         Code = arg.Code;
@@ -39,16 +51,16 @@ public class WorkFlowActor : Entity
         ModifiedBy = arg.ModifiedBy;
     }
 
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
     public void AddActorRoles(List<CreateWorkFlowActorRoleArg> args)
     {
         foreach (var arg in args)
         {
-            if (!_workFlowActorRoles.Any(war => war.WorkFlowActorId == Id && war.RoleId == arg.RoleId))
+            if (!_workFlowActorRoles.Any(war => war.WorkFlowActorId == Id && war.RoleId == new RoleId(arg.RoleId)))
             {
                 arg.WorkFlowActorId = Id;
                 var actorRole = WorkFlowActorRole.New(arg);
@@ -60,7 +72,7 @@ public class WorkFlowActor : Entity
     {
         foreach (var arg in args)
         {
-            if (!_workFlowActorUsers.Any(wau => wau.WorkFlowActorId == Id && wau.UserId == arg.UserId))
+            if (!_workFlowActorUsers.Any(wau => wau.WorkFlowActorId == Id && wau.UserId == new UserId(arg.UserId)))
             {
                 arg.WorkFlowActorId = Id;
                 var actorUser = WorkFlowActorUser.New(arg);
@@ -72,7 +84,7 @@ public class WorkFlowActor : Entity
     {
         foreach (var arg in args)
         {
-            if (!_workFlowActorGroups.Any(wag => wag.WorkFlowActorId == Id && wag.GroupId == arg.GroupId))
+            if (!_workFlowActorGroups.Any(wag => wag.WorkFlowActorId == Id && wag.GroupId == new GroupId(arg.GroupId)))
             {
                 arg.WorkFlowActorId = Id;
                 var actorGroup = WorkFlowActorGroup.New(arg);
@@ -81,12 +93,12 @@ public class WorkFlowActor : Entity
         }
     }
 
-    public bool DeactiveRole(long roleId)
+    public bool DeleteRole(long roleId)
     {
         var result = _workFlowActorRoles.Where(x => x.Id == new WorkFlowActorRoleId(roleId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
@@ -94,12 +106,12 @@ public class WorkFlowActor : Entity
 
     }
 
-    public bool DeactiveGroup(long groupId)
+    public bool DeleteGroup(long groupId)
     {
         var result = _workFlowActorGroups.Where(x => x.Id == new WorkFlowActorGroupId(groupId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
@@ -107,12 +119,12 @@ public class WorkFlowActor : Entity
 
     }
 
-    public bool DeactiveUser(long userId)
+    public bool DeleteUser(long userId)
     {
         var result = _workFlowActorUsers.Where(x => x.Id == new WorkFlowActorUserId(userId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Deactive();
+            result.Delete();
             return true;
         }
         else
@@ -120,23 +132,27 @@ public class WorkFlowActor : Entity
 
     }
 
-    public WorkFlowActorId Id { get; set; }
-    public WorkFlowId WorkFlowId { get; set; }
-    public string? Name { get; set; }
-    public string? Code { get; set; }
-    public long? ActiveStatusId { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public long? CreatedBy { get; set; }
-    public byte[]? ModifiedAt { get; set; }
+    public WorkFlowActorId Id { get; private set; }
+    public WorkFlowId WorkFlowId { get; private set; }
+    public string? Name { get; private set; }
+    public string? Code { get; private set; }
+    public long? ActiveStatusId { get; private set; }
+    public DateTime? CreatedAt { get; private set; }
+    public long? CreatedBy { get; private set; }
+    public byte[]? ModifiedAt { get; private set; }
+    public string BpmnId { get; private set; }
     public long? ModifiedBy { get; set; }
-    public WorkFlow.Entities.WorkFlow WorkFlow { get; set; }
+    public WorkFlow.Entities.WorkFlow WorkFlow { get; private set; }
 
     private List<WorkFlowActorRole> _workFlowActorRoles = new();
     public IList<WorkFlowActorRole> WorkFlowActorRoles => _workFlowActorRoles;
-    public virtual ICollection<WorkFlowActorStep> WorkFlowActorSteps { get; set; } = new List<WorkFlowActorStep>();
+    private List<WorkFlowActorStep> _workFlowActorSteps = new();
+    public virtual ICollection<WorkFlowActorStep> WorkFlowActorSteps => _workFlowActorSteps;
     private List<WorkFlowActorUser> _workFlowActorUsers = new();
     public ICollection<WorkFlowActorUser> WorkFlowActorUsers => _workFlowActorUsers;
     private List<WorkFlowActorGroup> _workFlowActorGroups = new();
     public ICollection<WorkFlowActorGroup> WorkFlowActorGroups => _workFlowActorGroups;
+    private List<IssueApproval> _issueApprovals = new();
+    public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
 
 }

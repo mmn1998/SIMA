@@ -22,7 +22,7 @@ public class LocationType : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public async void Modify(ModifyLocationTypeArg arg, ILocationTypeService service)
+    public async Task Modify(ModifyLocationTypeArg arg, ILocationTypeService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;

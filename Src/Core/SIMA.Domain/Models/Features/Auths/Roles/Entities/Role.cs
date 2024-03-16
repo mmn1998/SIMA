@@ -5,6 +5,8 @@ using SIMA.Domain.Models.Features.Auths.Roles.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Roles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -70,7 +72,7 @@ public class Role : Entity
             await AddRolePermission(arg);
         }
     }
-    public void ModifyRolePermission(ModifyRolePermissionArg arg)
+    public async Task ModifyRolePermission(ModifyRolePermissionArg arg)
     {
         if (_rolePermissions.Any(rp => rp.PermissionId == new PermissionId(arg.PermissionId) && rp.RoleId == new RoleId(arg.RoleId)))
         {
@@ -80,7 +82,7 @@ public class Role : Entity
         rolePermission.NullCheck();
         rolePermission.Modify(arg);
     }
-    public async void Modify(ModifyRoleArg arg, IRoleService service)
+    public async Task Modify(ModifyRoleArg arg, IRoleService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -122,6 +124,10 @@ public class Role : Entity
 
     private List<FormRole> _formRoles = new();
     public ICollection<FormRole> FormRoles => _formRoles;
+    private List<WorkFlow> _workFlows = new();
+    public ICollection<WorkFlow> WorkFlows => _workFlows;
+    private List<WorkFlowActorRole> _workFlowActorRoles = new();
+    public ICollection<WorkFlowActorRole> WorkFlowActorRoles => _workFlowActorRoles;
 
     public void Delete()
     {

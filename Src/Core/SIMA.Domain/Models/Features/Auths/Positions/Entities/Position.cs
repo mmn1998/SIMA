@@ -28,7 +28,7 @@ public class Position : Entity
         await CreateGuards(arg, service);
         return new Position(arg);
     }
-    public async void Modify(ModifyPositionArg arg, IPositionService service)
+    public async Task Modify(ModifyPositionArg arg, IPositionService service)
     {
         await ModifyGuards(arg, service);
         Code = arg.Code;

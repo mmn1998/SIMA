@@ -89,7 +89,7 @@ public class Profile : Entity
         _addressBook.Remove(address);
     }
 
-    public void ModifyAddressBook(ModifyAddressBookArg arg)
+    public async Task ModifyAddressBook(ModifyAddressBookArg arg)
     {
         var address = _addressBook.FirstOrDefault(x => x.Id == new AddressBookId(arg.Id));
         address.NullCheck();
@@ -113,7 +113,7 @@ public class Profile : Entity
         phonebook.Delete();
     }
 
-    public void ModifyPhoneBook(ModifyPhoneBookArg arg)
+    public async Task ModifyPhoneBook(ModifyPhoneBookArg arg)
     {
         var phone = _phoneBooks.FirstOrDefault(x => x.Id == new PhoneBookId(arg.Id));
         phone.NullCheck();

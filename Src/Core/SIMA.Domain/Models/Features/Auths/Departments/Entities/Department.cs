@@ -30,12 +30,14 @@ public class Department : Entity
         if (arg.LocationId.HasValue) LocationId = new LocationId(arg.LocationId.Value);
     }
     public static async Task<Department> Create(CreateDepartmentArg arg, IDepartmentService service)
-    {
+    { 
+        await CreateGuards(arg, service);
         return new Department(arg);
     }
 
-    public void Modify(ModifyDepartmentArg arg, IDepartmentService service)
+    public async Task Modify(ModifyDepartmentArg arg, IDepartmentService service)
     {
+        await ModifyGuards(arg, service);
         Code = arg.Code;
         Name = arg.Name;
         if (arg.ParentId.HasValue) ParentId = new DepartmentId(arg.ParentId.Value);

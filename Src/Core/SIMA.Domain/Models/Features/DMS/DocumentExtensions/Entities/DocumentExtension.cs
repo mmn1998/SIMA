@@ -73,8 +73,8 @@ public class DocumentExtension : Entity
     public long? ModifiedBy { get; private set; }
     public virtual ICollection<Document> Documents { get; set; }
     public virtual ICollection<WorkflowDocumentExtension> WorkflowDocumentExtensions { get; set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

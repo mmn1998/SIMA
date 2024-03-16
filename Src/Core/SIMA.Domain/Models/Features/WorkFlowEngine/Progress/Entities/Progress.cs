@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
@@ -12,7 +13,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         {
 
         }
-        private Progress(CreateProgressArg arg)
+        private Progress(ProgressArg arg)
         {
             Id = new ProgressId(arg.Id);
             Name = arg.Name;
@@ -25,26 +26,34 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
             CreatedBy = arg.CreatedBy;
             ActiveStatusId = arg.ActiveStatusId;
         }
-        public static Progress New(CreateProgressArg arg)
+        public static Progress New(ProgressArg arg)
         {
             return new Progress(arg);
         }
-
-        public void Modify(ModifyProgressArg arg)
+        public void Modify(ProgressArg arg)
         {
             Name = arg.Name;
             Description = arg.Description;
             SourceId = new StepId(arg.SourceId);
             TargetId = arg.TargetId.HasValue ? new StepId(arg.TargetId.Value) : null;
-            WorkFlowId = new WorkFlowId(arg.WorkFlowId);
             BpmnId = arg.BpmnId;
-            ModifiedAt = arg.ModifiedAt;
+            ModifiedBy = arg.CreatedBy;
+            ActiveStatusId = arg.ActiveStatusId;
+        }
+        public async Task Modify(ModifyProgressArg arg)
+        {
+            Name = arg.Name;
+            Description = arg.Description;
+            SourceId = new StepId(arg.SourceId);
+            TargetId = arg.TargetId.HasValue ? new StepId(arg.TargetId.Value) : null;
+            BpmnId = arg.BpmnId;
             ModifiedBy = arg.ModifiedBy;
+            ActiveStatusId = arg.ActiveStatusId;
         }
 
-        public void Deactive()
+        public void Delete()
         {
-            ActiveStatusId = 2;
+            ActiveStatusId = (int)ActiveStatusEnum.Delete;
         }
 
 

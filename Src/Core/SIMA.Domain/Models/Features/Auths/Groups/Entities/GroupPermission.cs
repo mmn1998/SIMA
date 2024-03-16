@@ -25,7 +25,7 @@ public class GroupPermission
     {
         return new GroupPermission(arg);
     }
-    public void Modify(ModifyGroupPermissionArg arg)
+    public async Task Modify(ModifyGroupPermissionArg arg)
     {
         PermissionId = new PermissionId(arg.PermissionId);
         GroupId = new GroupId(arg.GroupId);

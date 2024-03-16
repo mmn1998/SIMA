@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Args;
+﻿using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Args;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -36,7 +37,7 @@ public class BranchType : Entity
         ModifyAt = arg.ModifyAt;
         ModifyBy = arg.ModifyBy;
     }
-    public async Task Deactive()
+    public async Task Delete()
     {
         ActiveStatusId = 2;
     }
@@ -48,8 +49,8 @@ public class BranchType : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifyAt { get; private set; }
     public long? ModifyBy { get; private set; }
-    private List<Branches.Entities.Branch> _branches = new();
-    public virtual ICollection<Branches.Entities.Branch> Branches => _branches.AsReadOnly();
+    private List<Branch> _branches = new();
+    public virtual ICollection<Branch> Branches => _branches.AsReadOnly();
     public BranchTypeId Id { get; private set; }
 
     #region Guards

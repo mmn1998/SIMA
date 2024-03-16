@@ -30,7 +30,7 @@ public class IssueWeightCategory : Entity
         await CreateGuards(arg, service);
         return new IssueWeightCategory(arg);
     }
-    public async void Modify(ModifyIssueWeightCategoryArg arg, IIssueWeightCategoryDomainService service)
+    public async Task Modify(ModifyIssueWeightCategoryArg arg, IIssueWeightCategoryDomainService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -83,12 +83,12 @@ public class IssueWeightCategory : Entity
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public ICollection<Issue> Issues { get; private set; }
-    public void Deactive()
-    {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
-    }
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Deactive()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
     }
 }

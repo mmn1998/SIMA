@@ -27,7 +27,7 @@ public class PhoneType : Entity
     }
 
 
-    public async void Modify(ModifyPhoneTypeArg arg, IPhoneTypeService service)
+    public async Task Modify(ModifyPhoneTypeArg arg, IPhoneTypeService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;

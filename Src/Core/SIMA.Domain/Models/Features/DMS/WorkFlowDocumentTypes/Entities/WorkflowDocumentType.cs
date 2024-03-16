@@ -64,8 +64,8 @@ public class WorkflowDocumentType : Entity
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

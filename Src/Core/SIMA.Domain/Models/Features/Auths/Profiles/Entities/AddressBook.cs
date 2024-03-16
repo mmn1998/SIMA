@@ -33,7 +33,7 @@ public class AddressBook
         //await validator.ValidateAndThrowAsync(arg);
         return new AddressBook(arg);
     }
-    public void Modify(ModifyAddressBookArg arg)
+    public async Task Modify(ModifyAddressBookArg arg)
     {
         if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
         if (arg.LocationId.HasValue) LocationId = new LocationId(arg.LocationId.Value);

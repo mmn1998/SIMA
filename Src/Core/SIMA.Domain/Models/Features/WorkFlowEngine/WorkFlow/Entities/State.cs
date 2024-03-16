@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
+﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -25,7 +26,7 @@ public class State : Entity
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
     }
-    public  void Modify(ModifyStateArgs arg, IWorkFlowDomainService service)
+    public  async Task Modify(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
          ModifyGuards(arg, service);
         Name = arg.Name;
@@ -39,15 +40,15 @@ public class State : Entity
         await CreateGuards(arg, service);
         return new State(arg);
     }
-    public void Deactive()
-    {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
-
-    }
-
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+
+    }
+
+    public void Deactive()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
 
     }
 
@@ -61,7 +62,10 @@ public class State : Entity
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
     public virtual ICollection<Step> Steps { get; set; } = new List<Step>();
+    public virtual ICollection<Issue> Issues { get; set; } = new List<Issue>();
     public virtual WorkFlow? WorkFlow { get; set; }
+    public virtual List<IssueHistory> SourceIssueHistories { get; set; }
+    public virtual List<IssueHistory>? TargetIssueHistories { get; set; }
 
     #region Gaurds
 

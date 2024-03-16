@@ -22,7 +22,7 @@ public class UserLocationAccess
     {
         return new UserLocationAccess(arg);
     }
-    public void Modify(ModifyUserLocationArg arg)
+    public async Task Modify(ModifyUserLocationArg arg)
     {
         UserId = new UserId(arg.Id);
         if (arg.LocationId.HasValue) LocationId = new LocationId(arg.LocationId.Value);

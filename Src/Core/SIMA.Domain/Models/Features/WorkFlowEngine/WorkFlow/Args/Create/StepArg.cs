@@ -2,7 +2,7 @@
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create
 {
-    public class CreateStepArg
+    public class StepArg
     {
         public long Id { get; set; }
         public string? Name { get; set; }
@@ -15,9 +15,9 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create
 
         public long? ActiveStatusId { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public long? CreatedBy { get; set; }
+        public long? UserId { get; set; }
 
-        public List<CreateProgressArg> CreateProgresses { get; set; } = new();
+        public List<ProgressArg> CreateProgresses { get; set; } = new();
         public List<CreateWorkFlowActorStepArg> ActorStepArgs { get; set; } = new();
     }
 }

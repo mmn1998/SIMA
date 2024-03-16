@@ -30,7 +30,7 @@ public class IssueComment : Entity
         arg.NullCheck();
         arg.Comment.NullCheck();
     }
-    public async void Modify(ModifyIssueCommentArg arg)
+    public async Task Modify(ModifyIssueCommentArg arg)
     {
         IssueId = new IssueId(arg.IssueId);
         Comment = arg.Comment;
@@ -47,8 +47,8 @@ public class IssueComment : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Deactive()
+    public void Delete()
     {
-        ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

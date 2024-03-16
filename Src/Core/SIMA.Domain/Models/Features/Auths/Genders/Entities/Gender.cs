@@ -19,7 +19,9 @@ public class Gender : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    private Gender() { }
+    private Gender() 
+    {
+    }
     public static async Task<Gender> Create(CreateGenderArg arg, IGenderService service)
     {
         await CreateGuards(arg, service);
@@ -28,13 +30,14 @@ public class Gender : Entity
 
     public async Task Modify(ModifyGenderArg arg, IGenderService service)
     {
+        
         await ModifyGuards(arg, service);
-
         Name = arg.Name;
         Code = arg.Code;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
+
 
     }
     #region Guards

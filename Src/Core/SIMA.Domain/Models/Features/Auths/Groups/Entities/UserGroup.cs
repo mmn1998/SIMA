@@ -27,7 +27,7 @@ public class UserGroup
     {
         return new UserGroup(arg);
     }
-    public void Modify(ModifyUserGroupArg arg)
+    public async Task Modify(ModifyUserGroupArg arg)
     {
         if (arg.UserId.HasValue) UserId = new UserId(arg.UserId.Value);
         GroupId = new GroupId(arg.GroupId);

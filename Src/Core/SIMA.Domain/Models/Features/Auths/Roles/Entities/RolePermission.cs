@@ -28,7 +28,7 @@ namespace SIMA.Domain.Models.Features.Auths.Roles.Entities
 
             return new RolePermission(arg);
         }
-        public void Modify(ModifyRolePermissionArg arg)
+        public async Task Modify(ModifyRolePermissionArg arg)
         {
             RoleId = new RoleId(arg.RoleId);
             PermissionId = new PermissionId(arg.PermissionId);
