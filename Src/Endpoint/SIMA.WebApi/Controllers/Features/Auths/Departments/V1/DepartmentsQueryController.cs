@@ -32,11 +32,9 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Departments.V1
 
         [HttpGet]
         [SimaAuthorize(Permissions.DepartmentsPut)]
-        public async Task<Result> Get([FromQuery] BaseRequest request)
+        public async Task<Result> Get([FromQuery] GetAllDepartmentsQuery request)
         {
-            var result = await _mediator.Send(new GetAllDepartmentsQuery { Request = request });
-            return result;
-
+            return await _mediator.Send(request);
         }
     }
 }

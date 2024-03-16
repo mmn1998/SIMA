@@ -20,16 +20,15 @@ public class DocumentExtensionsQueryController : ControllerBase
     }
     [HttpGet]
     [SimaAuthorize(Permissions.DocumentExtensionsGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllDocumentExtensionsQuery query)
     {
-        var command = new GetAllDocumentExtensionsQuery { Request = request };
-        return await _mediator.Send(command);
+        return await _mediator.Send(query);
     }
     [HttpGet("{id}")]
     [SimaAuthorize(Permissions.DocumentExtensionsGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
-        var command = new GetDocumentExtensionQuery { Id = id };
-        return await _mediator.Send(command);
+        var query = new GetDocumentExtensionQuery { Id = id };
+        return await _mediator.Send(query);
     }
 }

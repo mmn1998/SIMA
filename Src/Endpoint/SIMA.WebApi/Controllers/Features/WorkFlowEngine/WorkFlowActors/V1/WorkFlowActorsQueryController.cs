@@ -31,8 +31,8 @@ public class WorkFlowActorsQueryController : ControllerBase
 
     [HttpGet]
     [SimaAuthorize(Permissions.WorkFlowActorGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllWorkFlowActorsQuery request)
+    public async Task<Result> Get([FromQuery] GetAllWorkFlowActorsQuery query)
     {
-        return await _mediator.Send(request);
+        return await _mediator.Send(query);
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -22,9 +21,8 @@ public class BranchesQueryController : ControllerBase
     }
     [HttpGet]
     [SimaAuthorize(Permissions.BranchGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllBranchQuery query)
     {
-        var query = new GetAllBranchQuery { Request = request };
         return await _mediator.Send(query);
     }
     [HttpGet("{id}")]

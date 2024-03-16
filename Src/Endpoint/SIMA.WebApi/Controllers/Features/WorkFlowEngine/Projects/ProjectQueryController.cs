@@ -31,9 +31,8 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.Projects
 
         [HttpGet]
         [SimaAuthorize(Permissions.ProjectGetAll)]
-        public async Task<Result> Get()
+        public async Task<Result> Get([FromQuery] GetAllProjectsQuery query)
         {
-            var query = new GetAllProjectsQuery();
             var result = await _mediator.Send(query);
             return result;
         }

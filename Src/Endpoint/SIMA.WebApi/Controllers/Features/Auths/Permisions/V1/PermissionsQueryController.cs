@@ -34,11 +34,9 @@ public class PermissionsQueryController : ControllerBase
     [HttpGet]
     [SimaAuthorize(Permissions.PermisionsGetAll)] /// TODO Mehdi
                                                   /// MEHDI : it doesnt have any wireframes !!!
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllPermissionsQuery request)
     {
-        var query = new GetAllPermissionsQuery { Request = request };
-        var result = await _mediator.Send(query);
-        return result;
+        return await _mediator.Send(request);
     }
     [HttpGet("GetPermissionsByDomainId")]
     [AllowAnonymous]

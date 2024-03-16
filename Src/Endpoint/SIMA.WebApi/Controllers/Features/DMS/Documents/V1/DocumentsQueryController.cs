@@ -36,9 +36,8 @@ public class DocumentsQueryController : ControllerBase
         return Result.Ok(response);
     }
     [HttpGet]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllDocumentsQuery query)
     {
-        var query = new GetAllDocumentsQuery { Request = request };
         return await _mediator.Send(query);
     }
 }

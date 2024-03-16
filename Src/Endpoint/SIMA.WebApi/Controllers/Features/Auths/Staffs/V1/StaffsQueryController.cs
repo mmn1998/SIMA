@@ -23,11 +23,9 @@ public class StaffsQueryController : ControllerBase
     }
     [HttpGet]
     [SimaAuthorize(Permissions.StaffsGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllStaffQuery request)
     {
-        var query = new GetAllStaffQuery { Request = request };
-        var result = await _mediator.Send(query);
-        return result;
+        return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]

@@ -19,17 +19,16 @@ namespace SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentExtentions.V1
         }
 
         [HttpGet]
-        public async Task<Result> Get([FromQuery] BaseRequest request)
+        public async Task<Result> Get([FromQuery] GetAllWorkFlowDocumentExtensionQuery query)
         {
-            var command = new GetAllWorkFlowDocumentExtensionQuery { Request = request };
-            return await _mediator.Send(command);
+            return await _mediator.Send(query);
         }
 
         [HttpGet("{id}")]
         public async Task<Result> Get([FromRoute] long id)
         {
-            var command = new GetWorkFlowDocumentExtensionQuery { Id = id };
-            return await _mediator.Send(command);
+            var query = new GetWorkFlowDocumentExtensionQuery { Id = id };
+            return await _mediator.Send(query);
         }
     }
 }

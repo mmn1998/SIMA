@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssueWeightCategories;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -18,13 +17,14 @@ public class IssueWeightCategoriesQueryController : ControllerBase
     {
         _mediator = mediator;
     }
+
     [HttpGet]
     [SimaAuthorize(Permissions.IssueWeightCategoriesGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllIssueWeightCategoriesQuery request)
     {
-        var query = new GetAllIssueWeightCategoriesQuery { Request = request };
-        return await _mediator.Send(query);
+        return await _mediator.Send(request);
     }
+
     [HttpGet("{id}")]
     [SimaAuthorize(Permissions.IssueWeightCategoriesGet)]
     public async Task<Result> Get([FromRoute] long id)
@@ -32,11 +32,11 @@ public class IssueWeightCategoriesQueryController : ControllerBase
         var query = new GetIssueWeightCategoryQuery { Id = id };
         return await _mediator.Send(query);
     }
+
     [HttpGet("GetByWeight")]
-   // [SimaAuthorize(Permissions.IssueWeightCategoriesGet)]
-    public async Task<Result> GetByWeight( int weight)
+    public async Task<Result> GetByWeight(int weight)
     {
-        var query = new GetIssueWeightCategoryByWeightQuery { Weight=weight };
+        var query = new GetIssueWeightCategoryByWeightQuery { Weight = weight };
         return await _mediator.Send(query);
     }
 }

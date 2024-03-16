@@ -75,9 +75,11 @@ try
 
     #endregion
     #region Registrations
+
     string CipherConnectionString = builder.Configuration.GetConnectionString("UserManagementCipher") ?? "";
     string SignedConnectionString = builder.Configuration.GetConnectionString("UserManagementSign") ?? "";
     string connectionString = builder.Configuration.GetDecriptedValue(CipherConnectionString, SignedConnectionString);
+
     builder.Services.AddMemoryCache();
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddSingleton<IFileService, FileService>();

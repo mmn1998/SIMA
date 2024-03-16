@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -20,11 +19,11 @@ public class IssuePrioritiesQueryController : ControllerBase
     }
     [HttpGet]
     [SimaAuthorize(Permissions.IssuePriorotiesGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllIssuePriorotiesQuery request)
     {
-        var query = new GetAllIssuePriorotiesQuery { Request = request };
-        return await _mediator.Send(query);
+        return await _mediator.Send(request);
     }
+
     [HttpGet("{id}")]
     [SimaAuthorize(Permissions.IssuePriorotiesGet)]
     public async Task<Result> Get([FromRoute] long id)

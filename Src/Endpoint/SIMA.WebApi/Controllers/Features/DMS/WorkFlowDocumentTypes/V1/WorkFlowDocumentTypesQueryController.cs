@@ -20,9 +20,8 @@ public class WorkFlowDocumentTypesQueryController : ControllerBase
     }
     [HttpGet]
     [SimaAuthorize(Permissions.WorkFlowDocumentTypesGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllWorkFlowDocumentTypesQuery query)
     {
-        var query = new GetAllWorkFlowDocumentTypesQuery { Request = request };
         return await _mediator.Send(query);
     }
     [HttpGet("{id}")]

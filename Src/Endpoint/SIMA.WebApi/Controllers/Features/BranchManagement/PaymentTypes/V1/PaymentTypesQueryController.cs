@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.BranchManagement.PaymentTypes;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -29,9 +28,8 @@ public class PaymentTypesQueryController : ControllerBase
     }
     [HttpGet]
     [SimaAuthorize(Permissions.PaymentTypeGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllPaymentTypesQuery query)
     {
-        var query = new GetAllPaymentTypesQuery { Request = request };
         return await _mediator.Send(query);
     }
 }

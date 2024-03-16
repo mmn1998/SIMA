@@ -60,7 +60,7 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Profiles.V1
         [HttpGet("GetAddressBooksByProfileId/{ProfileId}")]
         public async Task<Result> GetAddressBookByProfileId(int ProfileId, [FromQuery] BaseRequest baseRequest)
         {
-            var query = new GetAllAddressBookQuery { Id = ProfileId };
+            var query = new GetAllAddressBookQuery { Id = ProfileId , Request = baseRequest  };
             var result = await _mediator.Send(query);
             return result;
         }

@@ -22,8 +22,15 @@ public class BPMSController : ControllerBase
 
     [HttpPost]
     [SimaAuthorize(Permissions.BMPSPost)]
-    public async Task<Result> Post(BpmsCommand command)
+    public async Task<Result> Post(CreateBpmsCommand command)
     {
-            return await _mediator.Send(command);
+        return await _mediator.Send(command);
+    }
+    [HttpPut]
+    [SimaAuthorize(Permissions.BMPSPost)]
+    public async Task<Result> Put(ModifyBpmsCommand command)
+    {
+        return await _mediator.Send(command);
     }
 }
+

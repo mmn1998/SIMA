@@ -30,9 +30,8 @@ namespace SIMA.WebApi.Controllers.Features.BranchManagement.BranchTypes.V1
         }
         [HttpGet]
         [SimaAuthorize(Permissions.BranchTypeGet)]
-        public async Task<Result> Get([FromQuery] BaseRequest request)
+        public async Task<Result> Get([FromQuery] GetAllBranchTypesQuery query)
         {
-            var query = new GetAllBranchTypesQuery { Request = request };
             return await _mediator.Send(query);
         }
     }

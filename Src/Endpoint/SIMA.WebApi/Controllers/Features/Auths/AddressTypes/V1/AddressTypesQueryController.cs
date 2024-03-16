@@ -31,10 +31,9 @@ public class AddressTypesQueryController : ControllerBase
 
     [HttpGet]
     [SimaAuthorize(Permissions.AddressTypesGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get([FromQuery] GetAllAddressTypesQuery request)
     {
-        var query = new GetAllAddressTypesQuery { Request = request };
-        var result = await _mediator.Send(query);
-        return result;
+        request = new GetAllAddressTypesQuery();
+        return await _mediator.Send(request);
     }
 }
