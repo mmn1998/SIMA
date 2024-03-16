@@ -34,8 +34,7 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
     }
     public async Task<Result<List<GetWorkFlowQueryResult>>> Handle(GetAllWorkFlowsQuery request, CancellationToken cancellationToken)
     {
-        var entites = await _repository.GetAll();
-        return Result.Ok(entites);
+        return await _repository.GetAll(request);
     }
     public async Task<Result<GetStepQueryResult>> Handle(GetStepQuery request, CancellationToken cancellationToken)
     {

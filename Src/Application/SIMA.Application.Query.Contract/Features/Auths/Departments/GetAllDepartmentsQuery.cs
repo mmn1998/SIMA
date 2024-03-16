@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Departments;
 
-public class GetAllDepartmentsQuery : IQuery<Result<List<GetDepartmentQueryResult>>>
+public class GetAllDepartmentsQuery : BaseRequest, IQuery<Result<IEnumerable<GetDepartmentQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

@@ -8,7 +8,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.LocationTypes;
 
 namespace SIMA.Application.Query.Features.Auths.LocationTypes;
 
-public class LocationTypeQueryHandler : IQueryHandler<GetLocationTypeQuery, Result<GetLocationTypeQueryResult>>, IQueryHandler<GetAllLocationTypeQuery, Result<List<GetLocationTypeQueryResult>>>
+public class LocationTypeQueryHandler : IQueryHandler<GetLocationTypeQuery, Result<GetLocationTypeQueryResult>>, IQueryHandler<GetAllLocationTypeQuery, Result<IEnumerable<GetLocationTypeQueryResult>>>
 {
     private readonly IMapper _mapper;
     private readonly ILocationTypeQueryRepository _repository;
@@ -31,7 +31,7 @@ public class LocationTypeQueryHandler : IQueryHandler<GetLocationTypeQuery, Resu
         return Result.Ok(result);
     }
 
-    public async Task<Result<List<GetLocationTypeQueryResult>>> Handle(GetAllLocationTypeQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetLocationTypeQueryResult>>> Handle(GetAllLocationTypeQuery request, CancellationToken cancellationToken)
     {
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.LocationType);
@@ -39,17 +39,20 @@ public class LocationTypeQueryHandler : IQueryHandler<GetLocationTypeQuery, Resu
 
         try
         {
+
             redisResult = _redisService.TryGet(redisKey, out List<GetLocationTypeQueryResult> values);
             if (!redisResult) throw new Exception();
-
-            values = string.IsNullOrEmpty(request.Request.SearchValue) ? values : values.Where(it => it.Name.Contains(request.Request.SearchValue) || it.Code.Contains(request.Request.SearchValue)).ToList();
+            values = string.IsNullOrEmpty(request.Filter) ? values : values
+                .Where(it => it.Name.Contains(request.Filter) || it.Code.Contains(request.Filter)
+                || it.ActiveStatus.Contains(request.Filter) || it.ParentName.Contains(request.Filter))
+                .ToList();
             int totalCount = values.Count();
-            values = values.Skip((request.Request.Skip - 1) * request.Request.Take).Take(request.Request.Take).ToList();
-            return Result.Ok(values, totalCount);
+            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+            return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);
         }
-        catch (Exception e)
+        catch
         {
-            return await _repository.GetAll(request.Request);
+            return await _repository.GetAll(request);
         }
     }
 }

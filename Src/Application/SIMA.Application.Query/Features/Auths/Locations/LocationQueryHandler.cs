@@ -7,7 +7,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Locations;
 
 namespace SIMA.Application.Query.Features.Auths.Locations;
 
-public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLocationQueryResult>>, IQueryHandler<GetAllLocationQuery, Result<List<GetLocationQueryResult>>>
+public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLocationQueryResult>>, IQueryHandler<GetAllLocationQuery, Result<IEnumerable<GetLocationQueryResult>>>
     , IQueryHandler<GetParentLocationsByLocationTypeIdQuery, Result<List<GetParentLocationsByLocationTypeIdQueryResult>>>
 {
     private readonly ILocationQueryRepository _repository;
@@ -27,7 +27,7 @@ public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLo
         return Result.Ok(result);
     }
 
-    public async Task<Result<List<GetLocationQueryResult>>> Handle(GetAllLocationQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetLocationQueryResult>>> Handle(GetAllLocationQuery request, CancellationToken cancellationToken)
     {
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Location);
@@ -37,18 +37,18 @@ public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLo
         {
             redisResult = _redisService.TryGet(redisKey, out List<GetLocationQueryResult> values);
             if (!redisResult) throw new Exception();
-
-            values = string.IsNullOrEmpty(request.Request.SearchValue) ? values : values.Where(it => it.LocationName.Contains(request.Request.SearchValue) || it.LocationCode.Contains(request.Request.SearchValue) || it.LocationTypeName.Contains(request.Request.SearchValue)).ToList();
+            values = string.IsNullOrEmpty(request.Filter) ? values : values
+                .Where(it => it.LocationName.Contains(request.Filter) || it.LocationTypeName.Contains(request.Filter)
+                || it.ParentLocationTypeName.Contains(request.Filter) || it.ActiveStatus.Contains(request.Filter) || it.LocationCode.Contains(request.Filter))
+                .ToList();
             int totalCount = values.Count();
-            values = values.Skip((request.Request.Skip - 1) * request.Request.Take).Take(request.Request.Take).ToList();
-            return Result.Ok(values, totalCount);
-
+            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+            return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);
         }
-        catch (Exception e)
+        catch
         {
-            return await _repository.GetAll(request.Request);
+            return await _repository.GetAll(request);
         }
-
     }
 
     public async Task<Result<List<GetParentLocationsByLocationTypeIdQueryResult>>> Handle(GetParentLocationsByLocationTypeIdQuery request, CancellationToken cancellationToken)

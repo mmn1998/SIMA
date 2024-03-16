@@ -57,7 +57,7 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
     {
         var addressType = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyAddressTypeArg>(request);
-        addressType.Modify(arg, _service);
+        await addressType.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();
         return Result.Ok(addressType.Id.Value);

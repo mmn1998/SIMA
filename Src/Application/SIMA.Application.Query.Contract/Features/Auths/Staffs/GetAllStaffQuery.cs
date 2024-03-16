@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Staffs;
 
-public class GetAllStaffQuery : IQuery<Result<List<GetStaffQueryResult>>>
+public class GetAllStaffQuery : BaseRequest, IQuery<Result<IEnumerable<GetStaffQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

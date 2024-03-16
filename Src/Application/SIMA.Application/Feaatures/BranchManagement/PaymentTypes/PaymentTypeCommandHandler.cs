@@ -45,7 +45,7 @@ public class PaymentTypeCommandHandler : ICommandHandler<AddPaymentTypeCommand, 
     public async Task<Result<long>> Handle(DeletePaymentTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Deactive();
+        entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

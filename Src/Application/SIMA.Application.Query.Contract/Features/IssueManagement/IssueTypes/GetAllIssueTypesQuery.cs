@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.IssueManagement.IssueTypes;
 
-public class GetAllIssueTypesQuery : IQuery<Result<List<GetIssueTypesQueryResult>>>
+public class GetAllIssueTypesQuery : BaseRequest, IQuery<Result<IEnumerable<GetIssueTypesQueryResult>>>
 {
-    public BaseRequest Request { get; set; } = new();
 }

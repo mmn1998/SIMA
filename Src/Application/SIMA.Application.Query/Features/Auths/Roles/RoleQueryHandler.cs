@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Roles;
 
 namespace SIMA.Application.Query.Features.Auths.Roles;
 
-public class RoleQueryHandler : IQueryHandler<GetRoleQuery, Result<GetRoleQueryResult>>, IQueryHandler<GetAllRoleQuery, Result<List<GetRoleQueryResult>>>,
+public class RoleQueryHandler : IQueryHandler<GetRoleQuery, Result<GetRoleQueryResult>>, IQueryHandler<GetAllRoleQuery, Result<IEnumerable<GetRoleQueryResult>>>,
     IQueryHandler<GetRolePermissionQuery, Result<GetRolePermissionQueryResult>>, IQueryHandler<GetRoleAggregate, Result<GetRoleAggregateResult>>
 {
     private readonly IRoleQueryRepository _repository;
@@ -22,9 +22,9 @@ public class RoleQueryHandler : IQueryHandler<GetRoleQuery, Result<GetRoleQueryR
         return Result.Ok(result);
     }
 
-    public async Task<Result<List<GetRoleQueryResult>>> Handle(GetAllRoleQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetRoleQueryResult>>> Handle(GetAllRoleQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetRolePermissionQueryResult>> Handle(GetRolePermissionQuery request, CancellationToken cancellationToken)

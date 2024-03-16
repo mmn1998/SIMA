@@ -4,7 +4,7 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Features.BranchManagement.BranchTypes;
-public class BranchTypeQueryHandler : IQueryHandler<GetAllBranchTypesQuery, Result<List<GetBranchTypeQueryResult>>>,
+public class BranchTypeQueryHandler : IQueryHandler<GetAllBranchTypesQuery, Result<IEnumerable<GetBranchTypeQueryResult>>>,
     IQueryHandler<GetBranchTypeQuery, Result<GetBranchTypeQueryResult>>
 {
     private readonly IBranchTypeReadRepository _repository;
@@ -14,10 +14,9 @@ public class BranchTypeQueryHandler : IQueryHandler<GetAllBranchTypesQuery, Resu
         _repository = repository;
     }
 
-    public async Task<Result<List<GetBranchTypeQueryResult>>> Handle(GetAllBranchTypesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetBranchTypeQueryResult>>> Handle(GetAllBranchTypesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request.Request);
-        return Result.Ok(result);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetBranchTypeQueryResult>> Handle(GetBranchTypeQuery request, CancellationToken cancellationToken)

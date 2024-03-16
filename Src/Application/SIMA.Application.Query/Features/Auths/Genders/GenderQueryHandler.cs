@@ -8,7 +8,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Genders;
 
 namespace SIMA.Application.Query.Features.Auths.Genders;
 
-public class GenderQueryHandler : IQueryHandler<GetGenderQuery, Result<GetGenderQueryResult>>, IQueryHandler<GetAllGenderQuery, Result<List<GetGenderQueryResult>>>
+public class GenderQueryHandler : IQueryHandler<GetGenderQuery, Result<GetGenderQueryResult>>, IQueryHandler<GetAllGenderQuery, Result<IEnumerable<GetGenderQueryResult>>>
 {
     private readonly IGenderQueryRepository _repository;
     private readonly IConfiguration _configuration;
@@ -24,11 +24,10 @@ public class GenderQueryHandler : IQueryHandler<GetGenderQuery, Result<GetGender
     public async Task<Result<GetGenderQueryResult>> Handle(GetGenderQuery request, CancellationToken cancellationToken)
     {
         var result = await _repository.FindById(request.Id);
-        //var result = _mapper.Map<GetGenderQueryResult>(entity);
         return Result.Ok(result);
     }
 
-    public async Task<Result<List<GetGenderQueryResult>>> Handle(GetAllGenderQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetGenderQueryResult>>> Handle(GetAllGenderQuery request, CancellationToken cancellationToken)
     {
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Genders);
@@ -36,18 +35,19 @@ public class GenderQueryHandler : IQueryHandler<GetGenderQuery, Result<GetGender
 
         try
         {
+
             redisResult = _redisService.TryGet(redisKey, out List<GetGenderQueryResult> values);
             if (!redisResult) throw new Exception();
-
-            values = string.IsNullOrEmpty(request.Request.SearchValue) ? values : values.Where(it => it.Name.Contains(request.Request.SearchValue) || it.Code.Contains(request.Request.SearchValue)).ToList();
-            int totalCount = values.Count();
-            values = values.Skip((request.Request.Skip - 1) * request.Request.Take).Take(request.Request.Take).ToList();
-            return Result.Ok(values, totalCount);
-
+            values = string.IsNullOrEmpty(request.Filter) ? values : values
+                .Where(it => it.Name.Contains(request.Filter) || it.Code.Contains(request.Filter) || it.ActiveStatus.Contains(request.Filter)).ToList();
+            int totalCount = values.Count;
+            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+            return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);
         }
-        catch (Exception e)
+        catch
         {
-            return await _repository.GetAll(request.Request);
+            return await _repository.GetAll(request);
         }
+
     }
 }

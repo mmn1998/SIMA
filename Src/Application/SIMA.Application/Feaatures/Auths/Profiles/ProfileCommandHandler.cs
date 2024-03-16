@@ -58,7 +58,7 @@ public class ProfileCommandHandler :
     {
         var entity = await _repository.GetById(request.ProfileId);
         var addressBookArg = _mapper.Map<ModifyAddressBookArg>(request);
-        entity.ModifyAddressBook(addressBookArg);
+        await entity.ModifyAddressBook(addressBookArg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -84,7 +84,7 @@ public class ProfileCommandHandler :
     {
         var entity = await _repository.GetById(request.ProfileId);
         var phoneBookArg = _mapper.Map<ModifyPhoneBookArg>(request);
-        entity.ModifyPhoneBook(phoneBookArg);
+        await entity.ModifyPhoneBook(phoneBookArg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.ProfileId);
     }

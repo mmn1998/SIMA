@@ -4,8 +4,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Groups;
 
-public class GetAllGroupQuery : IQuery<Result<List<GetGroupQueryResult>>>
+public class GetAllGroupQuery : BaseRequest, IQuery<Result<IEnumerable<GetGroupQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }
 

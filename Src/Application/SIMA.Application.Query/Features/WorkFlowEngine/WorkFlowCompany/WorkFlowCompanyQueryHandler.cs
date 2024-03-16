@@ -24,7 +24,6 @@ public class WorkFlowCompanyQueryHandler : IQueryHandler<GetAllWorkFlowCompanyQu
     }
     public async Task<Result<List<GetWorkFlowCompanyQueryResult>>> Handle(GetAllWorkFlowCompanyQuery request, CancellationToken cancellationToken)
     {
-        var entites = await _repository.GetAll();
-        return Result.Ok(entites);
+        return await _repository.GetAll(request);
     }
 }

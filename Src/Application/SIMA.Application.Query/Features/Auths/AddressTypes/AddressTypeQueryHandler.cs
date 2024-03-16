@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.AddressTypes;
 using SIMA.Framework.Common.Response;
@@ -40,15 +41,17 @@ public class AddressTypeQueryHandler : IQueryHandler<GetAddressTypeQuery, Result
             redisResult = _redisService.TryGet(redisKey, out List<GetAddressTypeQueryResult> values);
             if (!redisResult) throw new Exception();
 
-            values = string.IsNullOrEmpty(request.Request.SearchValue) ? values : values.Where(it => it.Name.Contains(request.Request.SearchValue) || it.Code.Contains(request.Request.SearchValue)).ToList();
+            values = string.IsNullOrEmpty(request.Filter) ? values : values
+                .Where(it => it.Name.Contains(request.Filter) || it.Code.Contains(request.Filter) || it.ActiveStatus.Contains(request.Filter))
+                .ToList();
             int totalCount = values.Count();
-            values = values.Skip((request.Request.Skip - 1) * request.Request.Take).Take(request.Request.Take).ToList();
-            return Result.Ok(values, totalCount);
-
+            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+            return Result.Ok(values, totalCount, request.PageSize, request.Page);
         }
-        catch (Exception e)
+        catch
         {
-            return await _repository.GetAll(request.Request);
+            return await _repository.GetAll(request);
         }
+
     }
 }

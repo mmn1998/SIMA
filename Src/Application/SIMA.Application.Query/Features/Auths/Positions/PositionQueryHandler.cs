@@ -7,7 +7,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Positions;
 namespace SIMA.Application.Query.Features.Auths.Positions;
 
 public class PositionQueryHandler : IQueryHandler<GetPositionQuery, Result<GetPositionQueryResult>>,
-    IQueryHandler<GetAllPositionsQuery, Result<List<GetPositionQueryResult>>>
+    IQueryHandler<GetAllPositionsQuery, Result<IEnumerable<GetPositionQueryResult>>>
 {
     private readonly IPositionQueryRepository _repository;
 
@@ -15,9 +15,9 @@ public class PositionQueryHandler : IQueryHandler<GetPositionQuery, Result<GetPo
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetPositionQueryResult>>> Handle(GetAllPositionsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetPositionQueryResult>>> Handle(GetAllPositionsQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetPositionQueryResult>> Handle(GetPositionQuery request, CancellationToken cancellationToken)

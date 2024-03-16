@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Gender;
 
-public class GetAllGenderQuery : IQuery<Result<List<GetGenderQueryResult>>>
+public class GetAllGenderQuery : BaseRequest, IQuery<Result<IEnumerable<GetGenderQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

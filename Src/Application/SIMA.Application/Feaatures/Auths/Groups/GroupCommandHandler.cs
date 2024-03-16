@@ -50,7 +50,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyGroupArg>(request);
-        entity.Modify(arg, _service);
+        await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -68,7 +68,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.GroupId);
         var arg = _mapper.Map<ModifyGroupPermissionArg>(request);
-        entity.ModifyGroupPermission(arg);
+        await entity.ModifyGroupPermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -86,7 +86,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.GroupId);
         var arg = _mapper.Map<ModifyUserGroupArg>(request);
-        entity.ModifyGroupUser(arg);
+        await entity.ModifyGroupUser(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

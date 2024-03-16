@@ -38,7 +38,7 @@ namespace SIMA.Application.Feaatures.IssueManagement.IssueLinkReasons
         {
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyIssueLinkReasonArg>(request);
-            entity.Modify(arg, _service);
+            await entity.Modify(arg, _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }
@@ -46,7 +46,7 @@ namespace SIMA.Application.Feaatures.IssueManagement.IssueLinkReasons
         public async Task<Result<long>> Handle(DeleteIssueLinkReasonCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetById(request.Id);
-            entity.Deactive();
+            entity.Delete();
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }

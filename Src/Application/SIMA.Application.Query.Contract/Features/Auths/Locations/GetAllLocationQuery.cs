@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Locations;
 
-public class GetAllLocationQuery : IQuery<Result<List<GetLocationQueryResult>>>
+public class GetAllLocationQuery : BaseRequest, IQuery<Result<IEnumerable<GetLocationQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

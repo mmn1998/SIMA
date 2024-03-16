@@ -4,7 +4,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Permission;
 
-public class GetAllPermissionsByDomainIdQuery : IQuery<Result<List<GetPermissionQueryResult>>>
+public class GetAllPermissionsByDomainIdQuery :BaseRequest, IQuery<Result<IEnumerable<GetPermissionQueryResult>>>
 {
     public long? DomainId { get; set; }
 }

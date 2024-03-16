@@ -37,14 +37,14 @@ public class IssueWeightCategoryHandler : ICommandHandler<CreateIssueWeightCateg
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyIssueWeightCategoryArg>(request.Id);
-        entity.Modify(arg, _service);
+        await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
     public async Task<Result<long>> Handle(DeleteIssueWeightCategoryCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Deactive();
+        entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

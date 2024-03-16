@@ -48,7 +48,7 @@ public class DocumentCommandHandler : ICommandHandler<CreateDocumentCommand, Res
     public async Task<Result<long>> Handle(DeleteDocumentCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Deactive();
+        entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

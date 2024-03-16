@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Departments;
 
 namespace SIMA.Application.Query.Features.Auths.Departments;
 
-public class DepartmentQueryHandler : IQueryHandler<GetDepartmentQuery, Result<GetDepartmentQueryResult>>, IQueryHandler<GetAllDepartmentsQuery, Result<List<GetDepartmentQueryResult>>>
+public class DepartmentQueryHandler : IQueryHandler<GetDepartmentQuery, Result<GetDepartmentQueryResult>>, IQueryHandler<GetAllDepartmentsQuery, Result<IEnumerable<GetDepartmentQueryResult>>>
 {
     private readonly IDepartmentQueryRepository _repository;
     private readonly IMapper _mapper;
@@ -16,9 +16,9 @@ public class DepartmentQueryHandler : IQueryHandler<GetDepartmentQuery, Result<G
         _repository = repository;
         _mapper = mapper;
     }
-    public async Task<Result<List<GetDepartmentQueryResult>>> Handle(GetAllDepartmentsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetDepartmentQueryResult>>> Handle(GetAllDepartmentsQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetDepartmentQueryResult>> Handle(GetDepartmentQuery request, CancellationToken cancellationToken)

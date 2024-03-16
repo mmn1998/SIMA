@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Permission;
 
-public class GetAllPermissionsQuery : IQuery<Result<List<GetPermissionQueryResult>>>
+public class GetAllPermissionsQuery : BaseRequest,  IQuery<Result<List<GetPermissionQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

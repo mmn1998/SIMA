@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.DMS.DocumentTypes;
 
-public class GetAllDocumentTypesQuery : IQuery<Result<List<GetDocumentTypeQueryResult>>>
+public class GetAllDocumentTypesQuery : BaseRequest, IQuery<Result<List<GetDocumentTypeQueryResult>>>
 {
-    public BaseRequest Request { get; set; } = new();
 }

@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCat
 namespace SIMA.Application.Query.Features.IssueManagement.IssueWeightCategories;
 
 public class IssueWeightCategoryQueryHandler : 
-    IQueryHandler<GetAllIssueWeightCategoriesQuery, Result<List<GetIssueWeightCategoryQueryResult>>>,
+    IQueryHandler<GetAllIssueWeightCategoriesQuery, Result<IEnumerable<GetIssueWeightCategoryQueryResult>>>,
     IQueryHandler<GetIssueWeightCategoryByWeightQuery, Result<string>>,
     IQueryHandler<GetIssueWeightCategoryQuery, Result<GetIssueWeightCategoryQueryResult>>
 {
@@ -16,9 +16,9 @@ public class IssueWeightCategoryQueryHandler :
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetIssueWeightCategoryQueryResult>>> Handle(GetAllIssueWeightCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetIssueWeightCategoryQueryResult>>> Handle(GetAllIssueWeightCategoriesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetIssueWeightCategoryQueryResult>> Handle(GetIssueWeightCategoryQuery request, CancellationToken cancellationToken)

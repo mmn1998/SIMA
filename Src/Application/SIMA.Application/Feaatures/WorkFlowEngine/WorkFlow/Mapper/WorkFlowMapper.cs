@@ -25,10 +25,10 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper
             ;
 
 
-            CreateMap<CreateStepCommand, CreateStepArg>()
+            CreateMap<CreateStepCommand, StepArg>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => simaIdentity.UserId))
                 .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
 
 

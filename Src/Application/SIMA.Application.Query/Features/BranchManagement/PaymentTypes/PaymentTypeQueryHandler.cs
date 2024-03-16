@@ -5,7 +5,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Features.BranchManagement.PaymentTypes;
 
-public class PaymentTypeQueryHandler : IQueryHandler<GetAllPaymentTypesQuery, Result<List<GetPaymentTypeQueryResult>>>,
+public class PaymentTypeQueryHandler : IQueryHandler<GetAllPaymentTypesQuery, Result<IEnumerable<GetPaymentTypeQueryResult>>>,
     IQueryHandler<GetPaymentTypeQuery, Result<GetPaymentTypeQueryResult>>
 {
     private readonly IPaymentTypeReadRepository _repository;
@@ -15,10 +15,9 @@ public class PaymentTypeQueryHandler : IQueryHandler<GetAllPaymentTypesQuery, Re
         _repository = repository;
     }
 
-    public async Task<Result<List<GetPaymentTypeQueryResult>>> Handle(GetAllPaymentTypesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetPaymentTypeQueryResult>>> Handle(GetAllPaymentTypesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request.Request);
-        return Result.Ok(result);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetPaymentTypeQueryResult>> Handle(GetPaymentTypeQuery request, CancellationToken cancellationToken)

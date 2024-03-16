@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.BranchManagement.BrokerTypes;
 
-public class GetAllBrokerTypesQuery : IQuery<Result<List<GetBrokerTypeQueryResult>>>
+public class GetAllBrokerTypesQuery : BaseRequest, IQuery<Result<IEnumerable<GetBrokerTypeQueryResult>>>
 {
-    public BaseRequest Request { get; set; } = new();
 }

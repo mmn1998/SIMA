@@ -5,7 +5,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Features.BranchManagement.CurrencyTypes
 {
-    public class CurrencyTypeQueryHandler : IQueryHandler<GetAllCurrencyTypesQuery, Result<List<GetCurrencyTypeQueryResult>>>,
+    public class CurrencyTypeQueryHandler : IQueryHandler<GetAllCurrencyTypesQuery, Result<IEnumerable<GetCurrencyTypeQueryResult>>>,
     IQueryHandler<GetCurrencyTypeQuery, Result<GetCurrencyTypeQueryResult>>
     {
         private readonly ICurrencyTypeReadRepository _repository;
@@ -15,10 +15,9 @@ namespace SIMA.Application.Query.Features.BranchManagement.CurrencyTypes
             _repository = repository;
         }
 
-        public async Task<Result<List<GetCurrencyTypeQueryResult>>> Handle(GetAllCurrencyTypesQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetCurrencyTypeQueryResult>>> Handle(GetAllCurrencyTypesQuery request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetAll(request.Request);
-            return Result.Ok(result);
+            return await _repository.GetAll(request);
         }
 
         public async Task<Result<GetCurrencyTypeQueryResult>> Handle(GetCurrencyTypeQuery request, CancellationToken cancellationToken)

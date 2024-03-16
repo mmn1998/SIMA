@@ -39,7 +39,7 @@ public class StaffCommandHandler : ICommandHandler<DeleteStaffCommand, Result<lo
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyStaffArg>(request);
-        entity.Modify(arg, _staffService);
+        await entity.Modify(arg, _staffService);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

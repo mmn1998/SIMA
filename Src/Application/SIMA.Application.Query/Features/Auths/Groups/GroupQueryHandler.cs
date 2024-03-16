@@ -7,7 +7,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Groups;
 
 namespace SIMA.Application.Query.Features.Auths.Groups;
 
-public class GroupQueryHandler : IQueryHandler<GetGroupQuery, Result<GetGroupQueryResult>>, IQueryHandler<GetAllGroupQuery, Result<List<GetGroupQueryResult>>>,
+public class GroupQueryHandler : IQueryHandler<GetGroupQuery, Result<GetGroupQueryResult>>, IQueryHandler<GetAllGroupQuery, Result<IEnumerable<GetGroupQueryResult>>>,
     IQueryHandler<GetGroupPermissionQuery, Result<GetGroupPermissionQueryResult>>, IQueryHandler<GetUserGroupQuery, Result<GetUserGroupQueryResult>>,
     IQueryHandler<GetGroupAggregate, Result<GetGroupAggregateResult>>
 {
@@ -25,10 +25,9 @@ public class GroupQueryHandler : IQueryHandler<GetGroupQuery, Result<GetGroupQue
         return Result.Ok(result);
     }
 
-    public async Task<Result<List<GetGroupQueryResult>>> Handle(GetAllGroupQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetGroupQueryResult>>> Handle(GetAllGroupQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request.Request);
-        return result;
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetUserGroupQueryResult>> Handle(GetUserGroupQuery request, CancellationToken cancellationToken)

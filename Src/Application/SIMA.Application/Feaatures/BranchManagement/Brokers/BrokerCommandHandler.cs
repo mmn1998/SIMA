@@ -40,7 +40,7 @@ public class BrokerCommandHandler : ICommandHandler<CreateBrokerCommand, Result<
         var brokerId = new BrokerId(request.Id);
         var entity = await _repository.GetById(brokerId);
         var arg = _mapper.Map<ModifyBrokerArg>(request);
-        entity.Modify(arg, _service);
+        await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -49,7 +49,7 @@ public class BrokerCommandHandler : ICommandHandler<CreateBrokerCommand, Result<
     {
         var brokerId = new BrokerId(request.Id);
         var entity = await _repository.GetById(brokerId);
-        entity.Deactive();
+        entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

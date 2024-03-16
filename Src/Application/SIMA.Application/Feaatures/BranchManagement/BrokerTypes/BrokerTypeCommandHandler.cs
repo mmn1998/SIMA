@@ -42,7 +42,7 @@ public class BrokerTypeCommandHandler : ICommandHandler<CreateBrokerTypeCommand,
     public async Task<Result<long>> Handle(DeleteBrokerTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        await entity.Deactive();
+        await entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

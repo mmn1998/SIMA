@@ -13,10 +13,11 @@ using SIMA.Framework.Core.Mediator;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SIMA.Application.Feaatures.WorkFlowEngine.BPMSes;
 
-public class BpmsCommandHandler : ICommandHandler<BpmsCommand, Result<long>>
+public class BpmsCommandHandler : ICommandHandler<CreateBpmsCommand, Result<long>>, ICommandHandler<ModifyBpmsCommand, Result<long>>
 {
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
@@ -36,60 +37,27 @@ public class BpmsCommandHandler : ICommandHandler<BpmsCommand, Result<long>>
         _progressRepository = progressRepository;
         _actorRepository = actorRepository;
     }
-    public async Task<Result<long>> Handle(BpmsCommand request, CancellationToken cancellationToken)
+    public async Task<Result<long>> Handle(CreateBpmsCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var workflow = await _workflowRepository.GetById(request.WorkFlowId);  
-            var content = JsonConvert.DeserializeObject<string>(request.Data);
-            long workFlowId = 0;
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(content);
-            XmlSerializer serializer = new XmlSerializer(typeof(TDefinitions));
-            using (XmlReader reader = XmlReader.Create(new StringReader(content)))
-            {
-                var data = (TDefinitions)serializer.Deserialize(reader);
-                #region --workflow --
-                var arg = BpmsMapper.Map(data);
-                arg.FileContent = content;
-                workflow.Modify(arg);
-                await _unitOfWork.SaveChangesAsync();
-                workFlowId = workflow.Id.Value;
-            }
-            return Result.Ok(workFlowId);
-
-        }
-        catch (Exception ex)
-        {
-            throw SimaResultException.FileUploadError;
-        }
-
-        #endregion
+        var workflow = await _workflowRepository.GetById(request.WorkFlowId);
+        var arg = BpmsMapper.Map(request);
+        workflow.Modify(arg);
+        await _unitOfWork.SaveChangesAsync();
+        var workFlowId = workflow.Id.Value;
+        return Result.Ok(workFlowId);
 
     }
 
-
-    public string ReadTextFile(string fileName)
+    public async Task<Result<long>> Handle(ModifyBpmsCommand request, CancellationToken cancellationToken)
     {
+        var workflow = await _workflowRepository.GetById(request.WorkFlowId);
 
-        string result = string.Empty;
-        var textFilesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "textfiles");
-
-        var filePath = Path.Combine(textFilesDirectory, fileName);
-
-        if (!File.Exists(filePath))
-        {
-            result = "فایل مورد نظر یافت نشد.";
-        }
-
-        if (result == string.Empty)
-        {
-            var fileContent = File.ReadAllText(filePath, Encoding.UTF8);
-            result = fileContent;
-        }
-
-        return result;
-
-
+        var arg = BpmsMapper.Map(request, workflow);
+        workflow.ModifyFlow(arg);
+        await _unitOfWork.SaveChangesAsync();
+        var workFlowId = workflow.Id.Value;
+        return Result.Ok(workFlowId);
     }
+
+
 }

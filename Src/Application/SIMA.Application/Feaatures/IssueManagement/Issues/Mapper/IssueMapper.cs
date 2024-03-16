@@ -21,7 +21,8 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues.Mapper
                 .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
                 .ForMember(dest => dest.IssueDate , act => act.MapFrom(source=>DateTime.Now))
                 .ForMember(dest => dest.DueDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.DueDate)))
-                .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
+                .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+                ;
 
             CreateMap<CreateIssueCommand, CreateIssueHistoryArg>()
                 .ForMember(x => x.Id, act => act.MapFrom(src => IdHelper.GenerateUniqueId()))

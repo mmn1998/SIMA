@@ -38,14 +38,11 @@ public class ProfileQueryHandler : IQueryHandler<GetProfileQuery, Result<GetProf
     public async Task<Result<List<GetProfileQueryResult>>> Handle(GetAllProfileQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request.Request);
-        //var entity = await _repository.GetAll(request.Request);
-        //return Result.Ok(entity);
     }
 
     public async Task<Result<List<GetPhoneBookQueryResult>>> Handle(GetAllPhoneBookQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAllPhoneBooks((int)request.Id, request.Request);
-
     }
 
     public async Task<Result<List<GetAddressBookQueryResult>>> Handle(GetAllAddressBookQuery request, CancellationToken cancellationToken)

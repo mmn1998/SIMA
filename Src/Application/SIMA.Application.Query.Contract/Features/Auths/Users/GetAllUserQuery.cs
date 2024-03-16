@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Users;
 
-public class GetAllUserQuery : IQuery<Result<List<GetUserQueryResult>>>
+public class GetAllUserQuery :BaseRequest, IQuery<Result<IEnumerable<GetUserQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

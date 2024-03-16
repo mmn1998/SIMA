@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.BranchManagement.PaymentTypes;
 
-public class GetAllPaymentTypesQuery : IQuery<Result<List<GetPaymentTypeQueryResult>>>
+public class GetAllPaymentTypesQuery : BaseRequest, IQuery<Result<IEnumerable<GetPaymentTypeQueryResult>>>
 {
-    public BaseRequest Request { get; set; } = new();
 }

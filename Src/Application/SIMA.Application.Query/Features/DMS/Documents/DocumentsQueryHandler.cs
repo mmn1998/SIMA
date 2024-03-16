@@ -27,13 +27,12 @@ public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, Get
             throw new SimaResultException("404", "file not found");
         }
         response.FileContent = fileContent;
-        response.Extension = documentResult.Extension;        
+        response.Extension = documentResult.Extension;
         return response;
     }
 
     public async Task<Result<List<GetAllDocumentQueryResult>>> Handle(GetAllDocumentsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request.Request);
-        return Result.Ok(result);
+        return await _repository.GetAll(request);
     }
 }

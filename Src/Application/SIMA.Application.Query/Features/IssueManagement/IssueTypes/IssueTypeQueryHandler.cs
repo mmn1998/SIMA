@@ -5,7 +5,8 @@ using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueTypes;
 
 namespace SIMA.Application.Query.Features.IssueManagement.IssueTypes;
 
-public class IssueTypeQueryHandler : IQueryHandler<GetAllIssueTypesQuery, Result<List<GetIssueTypesQueryResult>>>,
+public class IssueTypeQueryHandler :
+    IQueryHandler<GetAllIssueTypesQuery, Result<IEnumerable<GetIssueTypesQueryResult>>>,
     IQueryHandler<GetIssueTypesQuery, Result<GetIssueTypesQueryResult>>
 {
     private readonly IIssueTypeQueryRepositoty _repository;
@@ -14,9 +15,9 @@ public class IssueTypeQueryHandler : IQueryHandler<GetAllIssueTypesQuery, Result
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetIssueTypesQueryResult>>> Handle(GetAllIssueTypesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetIssueTypesQueryResult>>> Handle(GetAllIssueTypesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetIssueTypesQueryResult>> Handle(GetIssueTypesQuery request, CancellationToken cancellationToken)

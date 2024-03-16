@@ -58,7 +58,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     {
         var entity = await _repository.GetById(request.RoleId);
         var arg = _mapper.Map<ModifyRolePermissionArg>(request);
-        entity.ModifyRolePermission(arg);
+        await entity.ModifyRolePermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -67,7 +67,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyRoleArg>(request);
-        entity.Modify(arg, _roleService);
+        await entity.Modify(arg, _roleService);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

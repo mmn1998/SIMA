@@ -2,10 +2,8 @@
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 
-namespace SIMA.Application.Query.Contract.Features.BranchManagement.BranchTypes
+namespace SIMA.Application.Query.Contract.Features.BranchManagement.BranchTypes;
+
+public class GetAllBranchTypesQuery : BaseRequest, IQuery<Result<IEnumerable<GetBranchTypeQueryResult>>>
 {
-    public class GetAllBranchTypesQuery : IQuery<Result<List<GetBranchTypeQueryResult>>>
-    {
-        public BaseRequest Request { get; set; } = new();
-    }
 }

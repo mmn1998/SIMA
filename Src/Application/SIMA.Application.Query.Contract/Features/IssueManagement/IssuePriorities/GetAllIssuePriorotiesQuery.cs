@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
 
-public class GetAllIssuePriorotiesQuery : IQuery<Result<List<GetIssuePriorotyQueryResult>>>
+public class GetAllIssuePriorotiesQuery : BaseRequest,IQuery<Result<IEnumerable<GetIssuePriorotyQueryResult>>>
 {
-    public BaseRequest Request { get; set; } = new();
 }

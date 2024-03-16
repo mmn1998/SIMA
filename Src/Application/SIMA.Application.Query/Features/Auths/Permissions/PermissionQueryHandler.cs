@@ -7,7 +7,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Permissions;
 
 namespace SIMA.Application.Query.Features.Auths.Permissions;
 
-public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<GetPermissionQueryResult>>, IQueryHandler<GetAllPermissionsByDomainIdQuery, Result<List<GetPermissionQueryResult>>>
+public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<GetPermissionQueryResult>>, IQueryHandler<GetAllPermissionsByDomainIdQuery, Result<IEnumerable<GetPermissionQueryResult>>>
 {
     private readonly IMapper _mapper;
     private readonly IPermissionQueryRepository _repository;
@@ -24,12 +24,12 @@ public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<G
         return Result.Ok(result);
     }
 
-    public async Task<Result<List<GetPermissionQueryResult>>> Handle(GetAllPermissionsByDomainIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetPermissionQueryResult>>> Handle(GetAllPermissionsByDomainIdQuery request, CancellationToken cancellationToken)
     {
-        var result = new List<GetPermissionQueryResult>();
+        var result = new Result<IEnumerable<GetPermissionQueryResult>>();
 
-        if (request.DomainId is not null && request.DomainId != 0) result = await _repository.GetAll(request.DomainId.Value);
-        else result = await _repository.GetAll();
-        return Result.Ok(result);
+        if (request.DomainId is not null && request.DomainId != 0) result = await _repository.GetAll(request,  request.DomainId.Value);
+        else result = await _repository.GetAll(request);
+        return result;
     }
 }

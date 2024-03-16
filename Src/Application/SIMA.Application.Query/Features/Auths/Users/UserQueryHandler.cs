@@ -12,7 +12,7 @@ namespace SIMA.Application.Query.Features.Auths.Users;
 public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQueryResult>>,
         IQueryHandler<GetUserByProfileIdQuery, Result<GetUserByProfileIdQueryResult>>,
         IQueryHandler<GetInfoByUserIdQuery, Result<GetInfoByUserIdQueryResult>>,
-        IQueryHandler<GetAllUserQuery, Result<List<GetUserQueryResult>>>,
+        IQueryHandler<GetAllUserQuery, Result<IEnumerable<GetUserQueryResult>>>,
         IQueryHandler<GetUserQuery, Result<GetUserQueryResult>>
         , IQueryHandler<GetUserPermissionQuery, Result<GetUserPermissionQueryResult>>,
         IQueryHandler<GetUserLocationQuery, Result<GetUserLocationQueryResult>>,
@@ -52,9 +52,9 @@ public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQu
         throw new NotImplementedException();
     }
 
-    public async Task<Result<List<GetUserQueryResult>>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetUserQueryResult>>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetUserQueryResult>> Handle(GetUserQuery request, CancellationToken cancellationToken)

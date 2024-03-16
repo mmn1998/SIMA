@@ -8,5 +8,6 @@ public class GetWorkflowInfoByIdResponseQueryResult
     public long TargetStepId { get; set; }
     public long TargetStateId { get; set; }
     public long ProjectId { get; set; }
+    public long MainAggregateId { get; set; }
 }
 

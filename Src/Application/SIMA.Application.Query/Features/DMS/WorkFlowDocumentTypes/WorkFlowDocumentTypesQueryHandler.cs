@@ -16,7 +16,7 @@ public class WorkFlowDocumentTypesQueryHandler : IQueryHandler<GetAllWorkFlowDoc
     }
     public async Task<Result<List<GetWorkFlowDocumentTypeQueryResult>>> Handle(GetAllWorkFlowDocumentTypesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetWorkFlowDocumentTypeQueryResult>> Handle(GetWorkFlowDocumentTypeQuery request, CancellationToken cancellationToken)

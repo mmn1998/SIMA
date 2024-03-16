@@ -16,8 +16,7 @@ namespace SIMA.Application.Query.Features.DMS.WorkFlowDocumentExtensions
         }
         public async Task<Result<List<GetWorkFlowDocumentExtensionQueryResult>>> Handle(GetAllWorkFlowDocumentExtensionQuery request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetAll(request.Request);
-            return Result.Ok(result);
+            return await _repository.GetAll(request);
         }
 
         public async Task<Result<GetWorkFlowDocumentExtensionQueryResult>> Handle(GetWorkFlowDocumentExtensionQuery request, CancellationToken cancellationToken)

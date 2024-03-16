@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Positions;
 
-public class GetAllPositionsQuery : IQuery<Result<List<GetPositionQueryResult>>>
+public class GetAllPositionsQuery : BaseRequest,  IQuery<Result<IEnumerable<GetPositionQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

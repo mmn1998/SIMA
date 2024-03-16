@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.PhoneTypes;
 
 namespace SIMA.Application.Query.Features.Auths.PhoneTypes;
 
-public class PhoneTypeQueryHandler : IQueryHandler<GetPhoneTypeQuery, Result<GetPhoneTypeQueryResult>>, IQueryHandler<GetAllPhoneTypesQuery, Result<List<GetPhoneTypeQueryResult>>>
+public class PhoneTypeQueryHandler : IQueryHandler<GetPhoneTypeQuery, Result<GetPhoneTypeQueryResult>>, IQueryHandler<GetAllPhoneTypesQuery, Result<IEnumerable<GetPhoneTypeQueryResult>>>
 {
     private readonly IPhoneTypeQueryRepository _repository;
     private readonly IMapper _mapper;
@@ -16,10 +16,9 @@ public class PhoneTypeQueryHandler : IQueryHandler<GetPhoneTypeQuery, Result<Get
         _repository = repository;
         _mapper = mapper;
     }
-    public async Task<Result<List<GetPhoneTypeQueryResult>>> Handle(GetAllPhoneTypesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetPhoneTypeQueryResult>>> Handle(GetAllPhoneTypesQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request.Request);
-        return result;
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetPhoneTypeQueryResult>> Handle(GetPhoneTypeQuery request, CancellationToken cancellationToken)

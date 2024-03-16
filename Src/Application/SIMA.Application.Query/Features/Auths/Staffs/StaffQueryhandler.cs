@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Staffs;
 
 namespace SIMA.Application.Query.Features.Auths.Staffs;
 
-public class StaffQueryhandler : IQueryHandler<GetStaffQuery, Result<GetStaffQueryResult>>, IQueryHandler<GetAllStaffQuery, Result<List<GetStaffQueryResult>>>
+public class StaffQueryhandler : IQueryHandler<GetStaffQuery, Result<GetStaffQueryResult>>, IQueryHandler<GetAllStaffQuery, Result<IEnumerable<GetStaffQueryResult>>>
 {
     private readonly IStaffQueryRepository _repository;
 
@@ -20,8 +20,8 @@ public class StaffQueryhandler : IQueryHandler<GetStaffQuery, Result<GetStaffQue
         var result = await _repository.FindById(request.Id);
         return Result.Ok(result);
     }
-    public async Task<Result<List<GetStaffQueryResult>>> Handle(GetAllStaffQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetStaffQueryResult>>> Handle(GetAllStaffQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 }

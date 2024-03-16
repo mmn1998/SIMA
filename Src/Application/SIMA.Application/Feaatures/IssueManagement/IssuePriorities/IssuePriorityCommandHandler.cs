@@ -38,7 +38,7 @@ public class IssuePriorityCommandHandler : ICommandHandler<CreateIssuePriorityCo
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyIssuePriorityArg>(request);
-        entity.Modify(arg, _service);
+        await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -46,7 +46,7 @@ public class IssuePriorityCommandHandler : ICommandHandler<CreateIssuePriorityCo
     public async Task<Result<long>> Handle(DeleteIssuePriorityCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Deactive();
+        entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

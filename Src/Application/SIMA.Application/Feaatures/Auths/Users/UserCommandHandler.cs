@@ -108,41 +108,41 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         return Result.Ok(entity.Id.Value);
     }
 
-    public async Task<Result<long>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
-    {
-        var entity = await _repository.GetById(request.Id);
-        var arg = _mapper.Map<ModifyUserArg>(request);
-        entity.Modify(arg, _service);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
-    }
+        public async Task<Result<long>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _repository.GetById(request.Id);
+            var arg = _mapper.Map<ModifyUserArg>(request);
+            await entity.Modify(arg, _service);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
 
-    public async Task<Result<long>> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
-    {
-        var entity = await _repository.GetById(request.UserId);
-        var arg = _mapper.Map<ModifyUserRoleArg>(request);
-        entity.ModifyUserRole(arg);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
-    }
+        public async Task<Result<long>> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _repository.GetById(request.UserId);
+            var arg = _mapper.Map<ModifyUserRoleArg>(request);
+            await entity.ModifyUserRole(arg);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
 
-    public async Task<Result<long>> Handle(UpdateUserPermissionCommand request, CancellationToken cancellationToken)
-    {
-        var entity = await _repository.GetById(request.UserId);
-        var arg = _mapper.Map<ModifyUserPermissionArg>(request);
-        entity.ModifyUserPermission(arg);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
-    }
+        public async Task<Result<long>> Handle(UpdateUserPermissionCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _repository.GetById(request.UserId);
+            var arg = _mapper.Map<ModifyUserPermissionArg>(request);
+            await entity.ModifyUserPermission(arg);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
 
-    public async Task<Result<long>> Handle(UpdateUserDomainCommand request, CancellationToken cancellationToken)
-    {
-        var entity = await _repository.GetById(request.UserId);
-        var arg = _mapper.Map<ModifyUserDomainArg>(request);
-        entity.ModifyUserDomain(arg);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
-    }
+        public async Task<Result<long>> Handle(UpdateUserDomainCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _repository.GetById(request.UserId);
+            var arg = _mapper.Map<ModifyUserDomainArg>(request);
+            await entity.ModifyUserDomain(arg);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
 
     //public async Task<int> Handle(UpdateUserGroupCommand request, CancellationToken cancellationToken)
     //{
@@ -153,14 +153,14 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     //    return user.Id;
     //}
 
-    public async Task<Result<long>> Handle(UpdateUserLocationCommand request, CancellationToken cancellationToken)
-    {
-        var entity = await _repository.GetById(request.UserId);
-        var arg = _mapper.Map<ModifyUserLocationArg>(request);
-        entity.ModifyUserLocation(arg);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
-    }
+        public async Task<Result<long>> Handle(UpdateUserLocationCommand request, CancellationToken cancellationToken)
+        {
+            var entity = await _repository.GetById(request.UserId);
+            var arg = _mapper.Map<ModifyUserLocationArg>(request);
+            await entity.ModifyUserLocation(arg);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
 
     public async Task<Result<long>> Handle(DeleteUserDomainCommand request, CancellationToken cancellationToken)
     {

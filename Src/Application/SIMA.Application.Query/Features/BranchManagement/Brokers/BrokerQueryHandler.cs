@@ -5,7 +5,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Features.BranchManagement.Brokers;
 
-public class BrokerQueryHandler : IQueryHandler<GetBrokerQuery, Result<GetBrokerQueryResult>>, IQueryHandler<GetAllBrokerQuery, Result<List<GetBrokerQueryResult>>>
+public class BrokerQueryHandler : IQueryHandler<GetBrokerQuery, Result<GetBrokerQueryResult>>, IQueryHandler<GetAllBrokerQuery, Result<IEnumerable<GetBrokerQueryResult>>>
 {
     private readonly IBrokerReadRepository _repository;
 
@@ -13,10 +13,9 @@ public class BrokerQueryHandler : IQueryHandler<GetBrokerQuery, Result<GetBroker
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetBrokerQueryResult>>> Handle(GetAllBrokerQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetBrokerQueryResult>>> Handle(GetAllBrokerQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request.Request);
-        return Result.Ok(result);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetBrokerQueryResult>> Handle(GetBrokerQuery request, CancellationToken cancellationToken)

@@ -7,58 +7,61 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Interface;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 
-namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor
+namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor;
+
+public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorCommand, Result<long>>,
+    ICommandHandler<ModifyWorkFlowActorCommand, Result<long>>,
+    ICommandHandler<CreateWorkFlowActorRoleCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorRoleCommand, Result<long>>,
+    ICommandHandler<CreateWorkFlowActorUserCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorUserCommand, Result<long>>,
+    ICommandHandler<CreateWorkFlowActorGroupCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorGroupCommand, Result<long>>,
+    ICommandHandler<CreateRelatedWorkFlowActorEntitiesCommand, Result<long>>
+
 {
-    public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorCommand, Result<long>>,
-        ICommandHandler<ModifyWorkFlowActorCommand, Result<long>>,
-        ICommandHandler<CreateWorkFlowActorRoleCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorRoleCommand, Result<long>>,
-        ICommandHandler<CreateWorkFlowActorUserCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorUserCommand, Result<long>>,
-        ICommandHandler<CreateWorkFlowActorGroupCommand, Result<long>>, ICommandHandler<DeleteWorkFlowActorGroupCommand, Result<long>>,
-        ICommandHandler<CreateRelatedWorkFlowActorEntitiesCommand, Result<long>>
+    private readonly IWorkFlowActorRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
+    public WorkFlowActorCommandHandler(IWorkFlowActorRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
     {
-        private readonly IWorkFlowActorRepository _repository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        _repository = repository;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
+    public async Task<Result<long>> Handle(CreateWorkFlowActorCommand request, CancellationToken cancellationToken)
+    {
 
-        public WorkFlowActorCommandHandler(IWorkFlowActorRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+        var arg = _mapper.Map<WorkFlowActorArg>(request);
+        var actor = Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor.New(arg);
+        await _repository.Add(actor);
+        //request.Id = new WorkFlowActorId(actor.Id);
+
+        if (request.RoleId is not null)
         {
-            _repository = repository;
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+            actor.AddActorRoles(args);
         }
-        public async Task<Result<long>> Handle(CreateWorkFlowActorCommand request, CancellationToken cancellationToken)
+
+        if (request.GroupId is not null)
         {
-            var arg = _mapper.Map<CreateWorkFlowActorArg>(request);
-            var actor = Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor.New(arg);
-            await _repository.Add(actor);
-
-            if (request.RoleId is not null)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-                actor.AddActorRoles(args);
-            }
-
-            if (request.GroupId is not null)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-                actor.AddActorGroups(args);
-            }
-
-            if (request.UserId is not null)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-                actor.AddActorUsers(args);
-            }
-
-            await _unitOfWork.SaveChangesAsync();
-
-
-
-            return Result.Ok(actor.Id.Value);
-
+            var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+            actor.AddActorGroups(args);
         }
-        public async Task<Result<long>> Handle(ModifyWorkFlowActorCommand request, CancellationToken cancellationToken)
+
+        if (request.UserId is not null)
+        {
+            var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+            actor.AddActorUsers(args);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+
+
+        return Result.Ok(actor.Id.Value);
+    }
+    public async Task<Result<long>> Handle(ModifyWorkFlowActorCommand request, CancellationToken cancellationToken)
+    {
+        try
         {
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowActorArg>(request);
@@ -66,92 +69,100 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }
-        public async Task<Result<long>> Handle(DeleteWorkFlowActorCommand request, CancellationToken cancellationToken)
+        catch (Exception ex)
+        {
+            throw;
+        }
+
+    }
+    public async Task<Result<long>> Handle(DeleteWorkFlowActorCommand request, CancellationToken cancellationToken)
+    {
+        try
         {
             var entity = await _repository.GetById(request.Id);
-            entity.Deactive();
+            entity.Delete();
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
-
+        }
+        catch (Exception ex)
+        {
+            throw;
         }
 
-        public async Task<Result<long>> Handle(CreateWorkFlowActorRoleCommand request, CancellationToken cancellationToken)
+    }
+    public async Task<Result<long>> Handle(CreateWorkFlowActorRoleCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.WorkFlowActorId);
+        var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+        entity.AddActorRoles(args);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.WorkFlowActorId);
+    }
+    public async Task<Result<long>> Handle(DeleteWorkFlowActorRoleCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.WorkFlowActorId);
+        entity.DeleteRole(request.Id);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.Id);
+    }
+    public async Task<Result<long>> Handle(CreateWorkFlowActorUserCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.WorkFlowActorId);
+        var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+        entity.AddActorUsers(args);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.WorkFlowActorId);
+
+    }
+    public async Task<Result<long>> Handle(DeleteWorkFlowActorUserCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.WorkFlowActorId);
+        entity.DeleteUser(request.Id);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.Id);
+    }
+    public async Task<Result<long>> Handle(CreateWorkFlowActorGroupCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.WorkFlowActorId);
+        var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+        entity.AddActorGroups(args);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.WorkFlowActorId);
+
+    }
+    public async Task<Result<long>> Handle(DeleteWorkFlowActorGroupCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.WorkFlowActorId);
+        entity.DeleteGroup(request.Id);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.Id);
+    }
+    public async Task<Result<long>> Handle(CreateRelatedWorkFlowActorEntitiesCommand request, CancellationToken cancellationToken)
+    {
+        var actor = await _repository.GetById(request.Id);
+
+        if (request.RoleId is not null)
         {
-            var entity = await _repository.GetById(request.WorkFlowActorId);
             var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-            entity.AddActorRoles(args);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.WorkFlowActorId);
-        }
-        public async Task<Result<long>> Handle(DeleteWorkFlowActorRoleCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.WorkFlowActorId);
-            entity.DeactiveRole(request.Id);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.Id);
+            actor.AddActorRoles(args);
         }
 
-        public async Task<Result<long>> Handle(CreateWorkFlowActorUserCommand request, CancellationToken cancellationToken)
+        if (request.GroupId is not null)
         {
-            var entity = await _repository.GetById(request.WorkFlowActorId);
-            var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-            entity.AddActorUsers(args);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.WorkFlowActorId);
-
-        }
-        public async Task<Result<long>> Handle(DeleteWorkFlowActorUserCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.WorkFlowActorId);
-            entity.DeactiveUser(request.Id);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.Id);
-        }
-
-        public async Task<Result<long>> Handle(CreateWorkFlowActorGroupCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.WorkFlowActorId);
             var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-            entity.AddActorGroups(args);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.WorkFlowActorId);
-
+            actor.AddActorGroups(args);
         }
-        public async Task<Result<long>> Handle(DeleteWorkFlowActorGroupCommand request, CancellationToken cancellationToken)
+
+        if (request.UserId is not null)
         {
-            var entity = await _repository.GetById(request.WorkFlowActorId);
-            entity.DeactiveGroup(request.Id);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.Id);
+            var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+            actor.AddActorUsers(args);
         }
 
-        public async Task<Result<long>> Handle(CreateRelatedWorkFlowActorEntitiesCommand request, CancellationToken cancellationToken)
-        {
-            var actor = await _repository.GetById(request.Id);
-
-            if (request.RoleId is not null)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-                actor.AddActorRoles(args);
-            }
-
-            if (request.GroupId is not null)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-                actor.AddActorGroups(args);
-            }
-
-            if (request.UserId is not null)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-                actor.AddActorUsers(args);
-            }
-
-            await _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
 
 
-            return Result.Ok(actor.Id.Value);
-        }
+        return Result.Ok(actor.Id.Value);
     }
 }

@@ -5,7 +5,8 @@ using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssuePrioritie
 
 namespace SIMA.Application.Query.Features.IssueManagement.IssuePriorities;
 
-public class IssuePrioritiesQueryHandler : IQueryHandler<GetAllIssuePriorotiesQuery, Result<List<GetIssuePriorotyQueryResult>>>,
+public class IssuePrioritiesQueryHandler : 
+    IQueryHandler<GetAllIssuePriorotiesQuery, Result<IEnumerable<GetIssuePriorotyQueryResult>>>,
     IQueryHandler<GetIssuePriorotyQuery, Result<GetIssuePriorotyQueryResult>>
 {
     private readonly IIssuePriorityQueryRepository _repository;
@@ -14,9 +15,9 @@ public class IssuePrioritiesQueryHandler : IQueryHandler<GetAllIssuePriorotiesQu
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetIssuePriorotyQueryResult>>> Handle(GetAllIssuePriorotiesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetIssuePriorotyQueryResult>>> Handle(GetAllIssuePriorotiesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetIssuePriorotyQueryResult>> Handle(GetIssuePriorotyQuery request, CancellationToken cancellationToken)

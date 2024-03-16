@@ -17,7 +17,7 @@ public class DocumentExtensionQueryHandler : IQueryHandler<GetAllDocumentExtensi
     }
     public async Task<Result<List<GetDocumentExtensionQueryResult>>> Handle(GetAllDocumentExtensionsQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetDocumentExtensionQueryResult>> Handle(GetDocumentExtensionQuery request, CancellationToken cancellationToken)

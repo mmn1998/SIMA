@@ -38,7 +38,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         public async Task<Result<long>> Handle(CreateWorkFlowCommand request, CancellationToken cancellationToken)
         {
             var arg = _mapper.Map<CreateWorkFlowArg>(request);
-            var entity = Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg);
+            var entity = await Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg , _service);
             await _repository.Add(entity);
             var id = entity.Id.Value;
             await _unitOfWork.SaveChangesAsync();
@@ -48,14 +48,14 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowArg>(request);
-            entity.Modify(arg);
+            await entity.Modify(arg , _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
         public async Task<Result<long>> Handle(DeleteWorkFlowCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetById(request.Id);
-            entity.Deactive();
+            entity.Delete();
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
@@ -66,7 +66,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         public async Task<Result<long>> Handle(CreateStepCommand request, CancellationToken cancellationToken)
         {
             var workflow = await _repository.GetById((long)request.WorkFlowId);
-            var arg = _mapper.Map<CreateStepArg>(request);
+            var arg = _mapper.Map<StepArg>(request);
             var step = workflow.AddStep(arg);
 
 
@@ -90,14 +90,14 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             var entity = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStepArgs>(request);
-            entity.ModifyStep(arg);
+            await entity.ModifyStep(arg);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
         public async Task<Result<long>> Handle(DeleteStepCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetById(request.WorkFlowId);
-            entity.DeactiveStep(request.Id);
+            entity.DeleteStep(request.Id);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
@@ -119,7 +119,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
             var entity = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStateArgs>(request);
-            entity.ModifyState(arg, _service);
+            await entity.ModifyState(arg, _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
@@ -127,7 +127,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             if (!await _service.CheckWorkFlow(request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
             var entity = await _repository.GetById(request.WorkFlowId);
-            entity.DeactiveState(request.Id);
+            entity.DeleteState(request.Id);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }

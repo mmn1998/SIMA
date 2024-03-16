@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Companies;
 
-public class GetAllCompanyQuery : IQuery<Result<List<GetCompanyQueryResult>>>
+public class GetAllCompanyQuery : BaseRequest, IQuery<Result<IEnumerable<GetCompanyQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

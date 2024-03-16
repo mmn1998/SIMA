@@ -47,7 +47,7 @@ namespace SIMA.Application.Feaatures.DMS.WorkFlowDocumentExtentions
         public async Task<Result<long>> Handle(DeleteWorkFlowDocumentExtentionCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetById(request.Id);
-            entity.Deactive();
+            entity.Delete();
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }

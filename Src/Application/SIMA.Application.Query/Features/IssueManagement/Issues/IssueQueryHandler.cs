@@ -25,7 +25,7 @@ public class IssueQueryHandler :
     }
     public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> Handle(GetAllIssuesQuery request, CancellationToken cancellationToken)
     {
-     return await _repository.GetAll(request);
+        return await _repository.GetAll(request);
     }
 
     public async Task<Result<GetIssueQueryResult>> Handle(GetIssuesQuery request, CancellationToken cancellationToken)

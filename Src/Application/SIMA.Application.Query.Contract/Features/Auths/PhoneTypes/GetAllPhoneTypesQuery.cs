@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.PhoneTypes;
 
-public class GetAllPhoneTypesQuery : IQuery<Result<List<GetPhoneTypeQueryResult>>>
+public class GetAllPhoneTypesQuery : BaseRequest, IQuery<Result<IEnumerable<GetPhoneTypeQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

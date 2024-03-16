@@ -32,56 +32,73 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
         var arg = _mapper.Map<CreateProjectArg>(request);
         var entity = await Domain.Models.Features.WorkFlowEngine.Project.Entites.Project.New(arg);
         await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
 
         entity.AddProjectGroup(request.GroupId);
+
         var memberArg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
         entity.AddProjectMember(memberArg);
         await _unitOfWork.SaveChangesAsync();
 
         return Result.Ok(entity.Id.Value);
+
     }
     public async Task<Result<long>> Handle(ModifyProjectCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyProjectArg>(request);
-        entity.Modify(arg);
+        await entity.Modify(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
     public async Task<Result<long>> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Deactive();
+        entity.Delete();
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
     public async Task<Result<long>> Handle(CreateProjectGroupCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(request.ProjectId);
-        entity.AddProjectGroup(request.GroupId);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(request.ProjectId);
+        try
+        {
+            var entity = await _repository.GetById(request.ProjectId);
+            entity.AddProjectGroup(request.GroupId);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(request.ProjectId);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
     }
     public async Task<Result<long>> Handle(DeleteProjectGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.ProjectId);
-        entity.DeactiveProjectGroup(request.Id);
+        entity.DeleteProjectGroup(request.Id);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
     public async Task<Result<long>> Handle(CreateProjectMemberCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(request.ProjectId);
-        var arg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
-        entity.AddProjectMember(arg);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(request.ProjectId);
+        try
+        {
+            var entity = await _repository.GetById(request.ProjectId);
+            var arg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
+            entity.AddProjectMember(arg);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(request.ProjectId);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
     }
     public async Task<Result<long>> Handle(DeleteProjectMemberCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.ProjectId);
-        entity.DeactiveProjectMmeber(request.Id);
+        entity.DeleteProjectMmeber(request.Id);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

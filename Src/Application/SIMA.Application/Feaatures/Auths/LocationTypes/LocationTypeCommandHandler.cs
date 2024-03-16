@@ -45,7 +45,7 @@ public class LocationTypeCommandHandler : ICommandHandler<CreateLocationTypeComm
     {
         var entity = await _repository.GetById((int)request.Id);
         var arg = _mapper.Map<ModifyLocationTypeArg>(request);
-        entity.Modify(arg, _service);
+        await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();
         return Result.Ok(entity.Id.Value);
