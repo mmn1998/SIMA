@@ -42,14 +42,12 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
         }
         public async Task<Result<long>> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
         {
-            ///todo mr tasdighi
             if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId)) throw IssueExceptions.CreateIssueWithChechActorException;
 
             var workflow = await _workFlowRepository.GetWorkflowInfoById(request.CurrentWorkflowId);
             request.MainAggregateId = workflow.MainAggregateId;
             var arg = _mapper.Map<CreateIssueArg>(request);
             arg.IssueWeightCategoryd = await _issueWeightCategoryRepository.GetIdByWeight((int)request.Weight);
-
             arg.CurrenStepId = workflow.TargetStepId;
             arg.CurrentStateId = workflow.TargetStateId;
 
@@ -71,24 +69,20 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
 
             #endregion
 
-
+            var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
             var entity = await Issue.Create(arg, _service);
             entity.AddIssueLink(arg.IssueLinks);
             entity.AddIssueDocument(arg.IssueDocument);
 
             #region IssueHistory
-
             var history = _mapper.Map<CreateIssueHistoryArg>(request);
             history.SourceStateId = workflow.SourceStateId;
             history.TargetStateId = workflow.TargetStateId;
             history.SourceStepId = workflow.SourceStepId;
             history.TargetStepId = workflow.TargetStepId;
             entity.AddHistory(history);
-
             #endregion
-
-
-
+            entity.AddIssueChangeHistory(historyArg);
             await _repository.Add(entity);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
@@ -100,7 +94,15 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
         {
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyIssueArg>(request);
+            var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
             await entity.Modify(arg, _service);
+            historyArg.CompanyId = entity.CompanyId;
+            historyArg.MainAggregateId = entity.MainAggregateId.Value;
+            historyArg.SourceId = entity.SourceId;
+            historyArg.CurrenStepId = entity.CurrenStepId.Value;
+            historyArg.CurrentStateId = entity.CurrentStateId.Value;
+            historyArg.Code = entity.Code;
+            entity.AddIssueChangeHistory(historyArg);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }

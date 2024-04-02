@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
@@ -15,7 +16,8 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
     , IQueryHandler<GetStateQuery, Result<GetStateQueryResult>>
     , IQueryHandler<GetWorkFlowByProjectQuery, Result<List<GetWorkFlowQueryResult>>>
     , IQueryHandler<GetStatesByWorkFlowQuery, Result<List<GetStateQueryResult>>>
-     , IQueryHandler<GetStepsByWorkFlowQuery, Result<List<GetStepQueryResult>>>
+    , IQueryHandler<GetStepsByWorkFlowQuery, Result<List<GetStepQueryResult>>>
+    , IQueryHandler<GetAllWorkFlowForIssue, Result<IEnumerable<GetWorkFlowQueryResult>>>
 {
     private readonly IMapper _mapper;
     private readonly IWorkFlowQueryRepository _repository;
@@ -72,4 +74,12 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
         var entites = await _repository.GetAllStepByWorkFlowId(request.Id);
         return Result.Ok(entites);
     }
+
+    public async Task<Result<IEnumerable<GetWorkFlowQueryResult>>> Handle(GetAllWorkFlowForIssue request, CancellationToken cancellationToken)
+    {
+        var entites = await _repository.GetAllWorkFlowForIssue();
+        return Result.Ok(entites);
+    }
+
+    
 }
