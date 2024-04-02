@@ -17,4 +17,5 @@ public interface IWorkFlowQueryRepository : IQueryRepository
     Task<Result<IEnumerable<GetStateQueryResult>>> GetAllStates(GetAllStatesQuery request);
     Task<List<GetWorkFlowQueryResult>> GetByProjectId(long projectId);
     Task<List<GetStateQueryResult>> GetAllStatesByWorkFlowId(long id);
+    Task<IEnumerable<GetWorkFlowQueryResult>> GetAllWorkFlowForIssue();
 }

@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
@@ -12,9 +14,12 @@ namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
 public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 {
     private readonly string _connectionString;
-    public WorkFlowQueryRepository(IConfiguration configuration)
+    private readonly ISimaIdentity _simaIdentity;
+    public WorkFlowQueryRepository(IConfiguration configuration ,  ISimaIdentity simaIdentity)
     {
         _connectionString = configuration.GetConnectionString();
+        _simaIdentity = simaIdentity;
+
     }
     public async Task<Result<List<GetWorkFlowQueryResult>>> GetAll(GetAllWorkFlowsQuery request)
     {
@@ -382,7 +387,7 @@ Order By c.[CreatedAt] desc";
                   ,C.[FileContent]
                   ,C.[BpmnId]   
                   ,P.[Name] as ProjectName
-,c.[CreatedAt]
+                  ,c.[CreatedAt]
                     FROM [PROJECT].[WorkFlow] C
                     join [PROJECT].Project P on C.ProjectID = P.Id
               WHERE C.[ActiveStatusID] != 3 and C.[ProjectId] = @ProjectId
@@ -393,5 +398,32 @@ Order By c.[CreatedAt] desc
             response = result.ToList();
         }
         return response;
+    }
+
+    public async Task<IEnumerable<GetWorkFlowQueryResult>> GetAllWorkFlowForIssue()
+    {
+        var userid = _simaIdentity.UserId;
+        var groups = _simaIdentity.GroupId;
+        var roles = _simaIdentity.RoleIds;
+
+        var queryString = @"
+              select 
+                   W.[ID] as Id
+                  ,W.[Name]
+                  ,W.[Code]
+               from Project.WorkFlow w 
+               join Project.WorkFlowActor a on a.WorkFlowId=w.Id
+               join Project.Step s on s.WorkFlowID=w.Id
+               left join Project.WorkFlowActorUser u on u.WorkFlowActorId=a.Id
+               left join Project.WorkFlowActorRole r on r.WorkFlowActorID = a.Id
+               left join Project.WorkFlowActorGroup g on g.WorkFlowActorID = a.Id
+               where w.ActiveStatusId != 3 and s.ActionTypeId=9 and (u.UserID = @userid or r.RoleID in @roles or g.GroupID in @groups);"
+        ;
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var result = await connection.QueryAsync<GetWorkFlowQueryResult>(queryString, new {  userid, roles, groups });
+            return result ;
+        }
     }
 }
