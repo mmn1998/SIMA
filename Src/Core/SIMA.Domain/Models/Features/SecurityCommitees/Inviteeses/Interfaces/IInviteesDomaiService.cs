@@ -2,6 +2,6 @@
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Interfaces;
 
-internal interface IInviteesDomaiService : IDomainService
+public interface IInviteesDomaiService : IDomainService
 {
 }

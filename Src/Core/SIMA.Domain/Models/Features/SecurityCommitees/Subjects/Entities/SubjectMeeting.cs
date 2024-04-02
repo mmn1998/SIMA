@@ -8,7 +8,7 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 
-internal class SubjectMeeting
+public class SubjectMeeting
 {
     private SubjectMeeting() { }
     private SubjectMeeting(CreateSubjectMeetingArg arg)

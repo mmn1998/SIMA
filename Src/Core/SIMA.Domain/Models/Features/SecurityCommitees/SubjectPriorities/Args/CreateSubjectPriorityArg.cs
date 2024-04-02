@@ -1,6 +1,6 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Args;
 
-internal class CreateSubjectPriorityArg
+public class CreateSubjectPriorityArg
 {
     public string? Title { get; set; }
     public string? Description { get; set; }

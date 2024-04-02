@@ -1,6 +1,6 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Args;
 
-internal class CreateSubjectArg
+public class CreateSubjectArg
 {
     public string? Title { get; set; }
     public string? Description { get; set; }

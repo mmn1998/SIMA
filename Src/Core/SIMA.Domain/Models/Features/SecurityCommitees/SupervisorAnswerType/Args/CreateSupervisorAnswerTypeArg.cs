@@ -1,4 +1,4 @@
-﻿internal class CreateSupervisorAnswerTypeArg
+﻿public class CreateSupervisorAnswerTypeArg
 {
     public string? Code { get; set; }
     public string? Name { get; set; }

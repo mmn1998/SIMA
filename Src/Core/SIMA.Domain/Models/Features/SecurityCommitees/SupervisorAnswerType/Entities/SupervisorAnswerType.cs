@@ -3,7 +3,7 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerType.Entities;
 
-internal class SupervisorAnswerType
+public class SupervisorAnswerType
 {
     private SupervisorAnswerType()
     {

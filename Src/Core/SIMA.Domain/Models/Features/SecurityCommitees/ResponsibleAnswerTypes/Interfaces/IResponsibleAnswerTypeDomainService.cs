@@ -2,6 +2,6 @@
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Interfaces;
 
-internal interface IResponsibleAnswerTypeDomainService : IDomainService
+public interface IResponsibleAnswerTypeDomainService : IDomainService
 {
 }

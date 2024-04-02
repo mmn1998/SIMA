@@ -1,6 +1,6 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Args;
 
-internal class ModifyResponsibleAnswerTypeArg
+public class ModifyResponsibleAnswerTypeArg
 {
     public long Id { get; set; }
     public string? Code { get; set; }

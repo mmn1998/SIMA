@@ -2,6 +2,6 @@
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 
-internal interface IMeetingDomainService : IDomainService
+public interface IMeetingDomainService : IDomainService
 {
 }

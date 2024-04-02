@@ -5,7 +5,7 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
 
-internal class ResponsibleAnswerType
+public class ResponsibleAnswerType
 {
     private ResponsibleAnswerType()
     {

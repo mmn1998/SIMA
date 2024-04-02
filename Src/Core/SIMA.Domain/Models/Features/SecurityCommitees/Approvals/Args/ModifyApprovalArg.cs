@@ -1,6 +1,6 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Args;
 
-internal class ModifyApprovalArg
+public class ModifyApprovalArg
 {
     public long Id { get; set; }
     public long MeetingId { get; set; }

@@ -1,6 +1,6 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Args;
 
-internal class CreateResponsibleAnswerTypeArg
+public class CreateResponsibleAnswerTypeArg
 {
     public string? Code { get; set; }
     public string? Name { get; set; }

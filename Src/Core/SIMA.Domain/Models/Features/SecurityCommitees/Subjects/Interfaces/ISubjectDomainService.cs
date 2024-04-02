@@ -2,6 +2,6 @@
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Interfaces;
 
-internal interface ISubjectDomainService : IDomainService
+public interface ISubjectDomainService : IDomainService
 {
 }

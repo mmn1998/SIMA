@@ -2,7 +2,7 @@
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
 
-internal class CreateMeetingArg
+public class CreateMeetingArg
 {
     public string? Code { get; set; }
     public int? MeetingTurn { get; set; }

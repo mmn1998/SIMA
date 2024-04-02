@@ -6,7 +6,7 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 
-internal class Meeting
+public class Meeting
 {
     private Meeting() { }
     private Meeting(CreateMeetingArg arg) 

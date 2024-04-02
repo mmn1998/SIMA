@@ -1,4 +1,4 @@
-﻿internal class ModifySupervisorAnswerTypeArg
+﻿public class ModifySupervisorAnswerTypeArg
 {
     public long Id { get; set; }
     public string? Code { get; set; }

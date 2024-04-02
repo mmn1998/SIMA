@@ -10,7 +10,7 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 
-internal class Approval
+public class Approval
 {
     private Approval() { }
     private Approval(CreateApprovalArg arg)
@@ -19,8 +19,8 @@ internal class Approval
         MeetingId = new(arg.MeetingId);
         IssueId = new(arg.IssueId);
         DueDate = arg.DueDate;
-        ResponsibleComppanyId = new(arg.ResponsibleComppanyId);
-        SupervisorComppanyId = new CompanyId(arg.SupervisorComppanyId);
+        ResponsibleCompanyId = new(arg.ResponsibleComppanyId);
+        SupervisorCompanyId = new CompanyId(arg.SupervisorComppanyId);
         if (arg.ResponsibleDepartmentId.HasValue) ResponsibleDepartmentId = new(arg.ResponsibleDepartmentId.Value);
         if (arg.ResponsibleStaffId.HasValue) ResponsibleStaffId = new(arg.ResponsibleStaffId.Value);
         if (arg.SupervisorDepartmentId.HasValue) SupervisorDepartmentId = new(arg.SupervisorDepartmentId.Value);
@@ -44,8 +44,8 @@ internal class Approval
         MeetingId = new(arg.MeetingId);
         IssueId = new(arg.IssueId);
         DueDate = arg.DueDate;
-        ResponsibleComppanyId = new(arg.ResponsibleComppanyId);
-        SupervisorComppanyId = new CompanyId(arg.SupervisorComppanyId);
+        ResponsibleCompanyId = new(arg.ResponsibleComppanyId);
+        SupervisorCompanyId = new CompanyId(arg.SupervisorComppanyId);
         if (arg.ResponsibleDepartmentId.HasValue) ResponsibleDepartmentId = new(arg.ResponsibleDepartmentId.Value);
         if (arg.ResponsibleStaffId.HasValue) ResponsibleStaffId = new(arg.ResponsibleStaffId.Value);
         if (arg.SupervisorDepartmentId.HasValue) SupervisorDepartmentId = new(arg.SupervisorDepartmentId.Value);
@@ -72,10 +72,10 @@ internal class Approval
     public MeetingId MeetingId { get; private set; }
     public IssueId IssueId { get; private set; }
     public DateTime DueDate { get; private set; }
-    public CompanyId ResponsibleComppanyId { get; private set; }
+    public CompanyId ResponsibleCompanyId { get; private set; }
     public DepartmentId? ResponsibleDepartmentId { get; private set; }
     public StaffId? ResponsibleStaffId { get; private set; }
-    public CompanyId SupervisorComppanyId { get; private set; }
+    public CompanyId SupervisorCompanyId { get; private set; }
     public DepartmentId? SupervisorDepartmentId { get; private set; }
     public StaffId? SupervisorStaffId { get; private set; }
     public string? IsPresented { get; private set; }

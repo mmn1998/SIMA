@@ -1,6 +1,6 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Args;
 
-internal class ModifySubjectMeetingArg
+public class ModifySubjectMeetingArg
 {
     public long? SubjectId { get; set; }
     public long? MeetingId { get; set; }

@@ -6,7 +6,7 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 
-internal class SubjectPriority
+public class SubjectPriority
 {
     private SubjectPriority() { }
     private SubjectPriority(CreateSubjectPriorityArg arg)
