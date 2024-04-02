@@ -18,6 +18,7 @@ using Serilog.Exceptions.Core;
 using SIMA.WebApi.Middlwares;
 using System.Globalization;
 using SIMA.WebApi.Dtos;
+using SIMA.WebApi.Settings;
 
 #region AddConfigurationFiles
 var configuration = new ConfigurationBuilder()
@@ -63,6 +64,9 @@ try
     builder.Services.Configure<TokenModel>(
         builder.Configuration.GetSection(
             key: nameof(TokenModel)));
+    builder.Services.Configure<ApplicationSettings>(
+        builder.Configuration.GetSection(
+            key: nameof(ApplicationSettings)));
     #region Redis
 
     var redisSettingSection = configuration.GetSection("RedisSettings");
@@ -123,6 +127,7 @@ try
     app.MapControllers();
     app.UseSwagger();
     app.UseSwaggerUI();
+	//app.UseMiddleware<LicenseCheckerMiddleware>();
     app.UseDisAllowDirectDownloadMiddleware();
     //app.UseStaticFiles();
     app.UseCors(AllowEveryThingPolicy);

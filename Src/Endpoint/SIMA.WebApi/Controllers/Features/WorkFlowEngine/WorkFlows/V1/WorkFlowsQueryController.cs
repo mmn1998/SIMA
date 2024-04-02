@@ -42,6 +42,17 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1
             var result = await _mediator.Send(query);
             return result;
         }
+
+        [HttpGet("GetWorkFlowForIssue")]
+        [SimaAuthorize(Permissions.WorkFlowGetAll)]
+        public async Task<Result> Get()
+        {
+            var query = new GetAllWorkFlowForIssue();
+            var result = await _mediator.Send(query);
+            return result;
+        }
+
+
         [HttpGet("GetWorkFlowByProject/{projectId}")]
         [SimaAuthorize(Permissions.WorkFlowGet)]
         public async Task<Result> GetByProjectId(long projectId)
