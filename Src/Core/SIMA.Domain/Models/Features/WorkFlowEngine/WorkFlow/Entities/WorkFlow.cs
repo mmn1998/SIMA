@@ -272,4 +272,6 @@ public class WorkFlow : Entity
     public virtual ICollection<WorkFlowCompany.Entities.WorkFlowCompany> WorkFlowCompanies => _workFlowCompany;
     private List<Issue> _Issues = new();
     public virtual ICollection<Issue> Issues => _Issues;
+    private List<IssueChangeHistory> _issueChangeHistories = new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
 }

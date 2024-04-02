@@ -46,7 +46,12 @@ public class MainAggregate
     public long? ModifiedBy { get; private set; }
 
     public virtual Domains.Entities.Domain Domain { get; private set; } = null!;
-    public ICollection<Document> Documents { get; private set; }
-    public ICollection<Issue> Issues { get; private set; }
-    public ICollection<WorkFlow> WorkFlows { get; private set; }
+    private List<Document> _documents = new();
+    public ICollection<Document> Documents => _documents;
+    private List<IssueChangeHistory> _issueChangeHistories = new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+    private List<Issue> _issues = new();
+    public ICollection<Issue> Issues => _issues;
+    private List<WorkFlow> _workFlows = new();
+    public ICollection<WorkFlow> WorkFlows => _workFlows;
 }

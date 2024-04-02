@@ -116,6 +116,10 @@ public class Step : Entity
     public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
     private List<Issue> _issues = new();
     public ICollection<Issue> Issues => _issues;
+
+    private List<IssueChangeHistory> _issueChangeHistories = new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+  
     private List<IssueHistory> _sourceissueHistories = new();
     public ICollection<IssueHistory> SourceIssueHistories => _sourceissueHistories;
     private List<IssueHistory> _targetissueHistories = new();

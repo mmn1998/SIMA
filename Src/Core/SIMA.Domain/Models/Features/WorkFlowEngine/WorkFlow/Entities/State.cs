@@ -26,9 +26,9 @@ public class State : Entity
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
     }
-    public  async Task Modify(ModifyStateArgs arg, IWorkFlowDomainService service)
+    public async Task Modify(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
-         ModifyGuards(arg, service);
+        ModifyGuards(arg, service);
         Name = arg.Name;
         Code = arg.Code;
         WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
@@ -61,8 +61,12 @@ public class State : Entity
     public long? CreatedBy { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
-    public virtual ICollection<Step> Steps { get; set; } = new List<Step>();
-    public virtual ICollection<Issue> Issues { get; set; } = new List<Issue>();
+    private List<Step> _steps = new();
+    public virtual ICollection<Step> Steps => _steps;
+    private List<IssueChangeHistory> _issueChangeHistories = new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+    private List<Issue> _issues = new();
+    public ICollection<Issue> Issues => _issues;
     public virtual WorkFlow? WorkFlow { get; set; }
     public virtual List<IssueHistory> SourceIssueHistories { get; set; }
     public virtual List<IssueHistory>? TargetIssueHistories { get; set; }

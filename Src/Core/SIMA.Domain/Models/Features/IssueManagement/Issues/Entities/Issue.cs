@@ -1,4 +1,7 @@
-﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+﻿using Microsoft.VisualBasic;
+using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
+using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
@@ -50,7 +53,7 @@ public class Issue : Entity
         return new Issue(arg);
     }
 
-    private static async Task GuardAgainstCodeUniqueness(long id, string code,IIssueDomainService service)
+    private static async Task GuardAgainstCodeUniqueness(long id, string code, IIssueDomainService service)
     {
         var isCodeUnique = await service.IsCodeUnique(code, id);
         if (isCodeUnique)
@@ -76,6 +79,12 @@ public class Issue : Entity
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        DueDate = arg.DueDate;
+
+    }
+    public void AddIssueChangeHistory(CreateIssueChangeHistoryArg arg)
+    {
+        IssueChangeHistory.Create(arg);
     }
 
     public void RunAction(IssueRunActionArg arg)
@@ -128,13 +137,13 @@ public class Issue : Entity
             return;
         foreach (var item in issueLinkArgs)
         {
-            if(item.IssueIdLinkedTo > 0)
+            if (item.IssueIdLinkedTo > 0)
             {
                 item.IssueId = Id.Value;
                 var issuelink = await IssueLink.Create(item);
                 _issueLink.Add(issuelink);
             }
-           
+
         }
     }
     public async void AddIssueDocument(List<CreateIssueDocumentArg> issueDocumentArgs)
@@ -143,12 +152,12 @@ public class Issue : Entity
             return;
         foreach (var item in issueDocumentArgs)
         {
-            if(item.DocumentId > 0)
+            if (item.DocumentId > 0)
             {
                 var issueDocument = await IssueDocument.Create(item);
                 _issueDocuments.Add(issueDocument);
             }
-            
+
         }
     }
 
@@ -199,6 +208,9 @@ public class Issue : Entity
     private List<IssueCustomFeild> _issueCustomFeilds => new();
     public ICollection<IssueCustomFeild> IssueCustomFeilds => _issueCustomFeilds;
 
+    private List<IssueChangeHistory> _issueChangeHistories => new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+
     #region Gaurds
 
     private static async Task CreateGuards(CreateIssueArg arg, IIssueDomainService service)
@@ -206,7 +218,7 @@ public class Issue : Entity
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
         if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        
+
     }
     private async Task ModifyGuards(ModifyIssueArg arg, IIssueDomainService service)
     {

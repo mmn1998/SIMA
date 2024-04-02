@@ -52,7 +52,13 @@ public class IssueType : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public ICollection<Issue> Issues { get; private set; }
+
+    private List<Issue> _issues = new();
+    public ICollection<Issue> Issues => _issues;
+
+    private List<IssueChangeHistory> _issueChangeHistories = new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Runtime.CompilerServices;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 
@@ -70,7 +71,10 @@ public class IssuePriority : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public ICollection<Issue> Issues { get; private set; }
+    private List<IssueChangeHistory> _issueChangeHistories = new();
+    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+    private List<Issue> _issues = new();
+    public ICollection<Issue> Issues => _issues;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
