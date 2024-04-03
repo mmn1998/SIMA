@@ -1,5 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Interfaces;
@@ -54,8 +56,11 @@ public class SubjectMeeting
     #endregion
     public SubjectMeetingId Id { get; private set; }
     public SubjectId SubjectId { get; private set; }
+    public virtual Subject Subject { get; private set; }
     public MeetingId MeetingId { get; private set; }
+    public virtual Meeting Meeting { get; private set; }
     public SubjectPriorityId? SubjectPriorityId { get; private set; }
+    public virtual SubjectPriority? SubjectPriority { get; private set; }
     public string? IsOutOfOrder { get; private set; }
     public string? IsConfirmed { get; private set; }
     public UserId? ConfirmedBy { get; private set; }

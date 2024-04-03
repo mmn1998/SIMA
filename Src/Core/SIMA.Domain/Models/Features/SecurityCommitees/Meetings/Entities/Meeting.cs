@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
@@ -69,6 +70,8 @@ public class Meeting
     public ICollection<MeetingReason> MeetingReasons => _meetingReasons;
     private List<MeetingSchedule> _meetingSchedules => new();
     public ICollection<MeetingSchedule> MeetingSchedules => _meetingSchedules;
+    private List<SubjectMeeting> _subjectMeetings => new();
+    public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

@@ -8,8 +8,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.ValueObjects;
-using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
-using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.ValueObjects;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
 
@@ -101,26 +100,4 @@ public class ResponsibleAnswerTypeConfiguration : IEntityTypeConfiguration<Respo
         entity.Property(x => x.Code)
                     .HasMaxLength(20).IsUnicode();
     }
-}
-public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
-{
-    public void Configure(EntityTypeBuilder<Subject> entity)
-    {
-        entity.ToTable("Subject", "SecurityCommitee");
-        entity.Property(x => x.Id)
-            .HasConversion(x => x.Value, v => new SubjectId(v));
-        entity.HasKey(x => x.Id);
-        entity.Property(x => x.CreatedAt)
-                         .HasDefaultValueSql("(getdate())")
-                         .HasColumnType("datetime");
-        entity.Property(x => x.ModifiedAt)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
-    }
-}
-public class ApprovalConfiguration : IEntityTypeConfiguration<ApprovalConfiguration>
-{
-}
-public class ApprovalConfiguration : IEntityTypeConfiguration<ApprovalConfiguration>
-{
 }

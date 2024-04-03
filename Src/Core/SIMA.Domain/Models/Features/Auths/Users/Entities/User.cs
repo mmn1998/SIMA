@@ -14,6 +14,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
@@ -266,6 +267,8 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
         public ICollection<WorkFlowActorUser> WorkFlowActorUsers => _workFlowActorUsers;
         private List<ProjectMember> _projectMembers = new();
         public ICollection<ProjectMember> ProjectMembers => _projectMembers;
+        private List<Subject> _subjects = new();
+        public ICollection<Subject> Subjects => _subjects;
 
         public ICollection<AdminLocationAccess> AdminLocationAccesses => _adminLocationAccesses;
         private static async Task CreateGuards(IUserService userService, CreateUserArg arg)

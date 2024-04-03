@@ -61,6 +61,8 @@ public class Subject
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    private List<SubjectMeeting> _subjectMeetings => new();
+    public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
@@ -56,6 +57,8 @@ public class SubjectPriority
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    private List<SubjectMeeting> _subjectMeetings => new();
+    public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
