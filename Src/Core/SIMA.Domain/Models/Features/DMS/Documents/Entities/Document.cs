@@ -8,6 +8,9 @@ using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -101,6 +104,9 @@ public class Document : Entity
 
     public long? ModifiedBy { get; private set; }
     public ICollection<IssueDocument> IssueDocuments { get; set; }
+    public ICollection<ApprovalResponsibleAnswerDocument> ApprovalResponsibleAnswerDocuments { get; set; }
+    public ICollection<ApprovalSupervisorAnswerDocument> ApprovalSupervisorAnswerDocuments { get; set; }
+    public ICollection<MeetingDocument> MeetingDocuments { get; set; }
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
