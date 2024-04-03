@@ -3,6 +3,8 @@ using SIMA.Domain.Models.Features.Auths.Companies.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -105,6 +107,11 @@ public class Company : Entity
     private List<WorkFlowCompany> _workFlowCompanies = new();
 
     public virtual ICollection<WorkFlowCompany> WorkFlowCompanies => _workFlowCompanies;
-
+    private List<Approval> _responsibleApprovals => new();
+    public ICollection<Approval> ResponsibleApprovals => _responsibleApprovals;
+    private List<Approval> _supervisorApprovals => new();
+    public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
+    private List<Invitees> _invitees => new();
+    public ICollection<Invitees> Invitees => _invitees;
     public virtual Company? Parent { get; set; }
 }

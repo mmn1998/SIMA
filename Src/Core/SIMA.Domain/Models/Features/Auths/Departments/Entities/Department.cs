@@ -7,6 +7,8 @@ using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -97,6 +99,12 @@ public class Department : Entity
     public ICollection<Position> Positions => _positions;
     private List<Branch> _branches = new();
     public ICollection<Branch> Branches => _branches;
+    private List<Approval> _responsibleApprovals => new();
+    public ICollection<Approval> ResponsibleApprovals => _responsibleApprovals;
+    private List<Approval> _supervisorApprovals => new();
+    public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
+    private List<Invitees> _invitees => new();
+    public ICollection<Invitees> Invitees => _invitees;
     public void Delete()
     {
         ActiveStatusId = (int)ActiveStatusEnum.Delete;

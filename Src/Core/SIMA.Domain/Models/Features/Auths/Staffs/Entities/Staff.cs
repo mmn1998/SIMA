@@ -7,6 +7,8 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Staffs.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -113,7 +115,12 @@ public class Staff : Entity
     public virtual ICollection<Branch> ChiefBranches { get; private set; }
     public virtual ICollection<Branch> DeputyBranches { get; private set; }
 
-
+    private List<Approval> _responsibleApprovals => new();
+    public ICollection<Approval> ResponsibleApprovals => _responsibleApprovals;
+    private List<Approval> _supervisorApprovals => new();
+    public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
+    private List<Invitees> _invitees => new();
+    public ICollection<Invitees> Invitees => _invitees;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
