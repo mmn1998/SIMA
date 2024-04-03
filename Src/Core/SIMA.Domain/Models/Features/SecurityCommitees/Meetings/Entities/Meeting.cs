@@ -1,7 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
@@ -50,6 +52,7 @@ public class Meeting
     public int? MeetingTurn { get; private set; }
     public string? Description { get; private set; }
     public IssueId IssueId { get; private set; }
+    public virtual Issue Issue { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
 
@@ -58,6 +61,14 @@ public class Meeting
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    private List<Approval> _approvals => new();
+    public ICollection<Approval> Approvals => _approvals;
+    private List<MeetingDocument> _meetingDocuments => new();
+    public ICollection<MeetingDocument> MeetingDocuments => _meetingDocuments;
+    private List<MeetingReason> _meetingReasons => new();
+    public ICollection<MeetingReason> MeetingReasons => _meetingReasons;
+    private List<MeetingSchedule> _meetingSchedules => new();
+    public ICollection<MeetingSchedule> MeetingSchedules => _meetingSchedules;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

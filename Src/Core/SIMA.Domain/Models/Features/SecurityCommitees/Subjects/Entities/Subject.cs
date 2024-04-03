@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Interfaces;
@@ -52,6 +52,7 @@ public class Subject
     public string? Description { get; private set; }
     public string? IsArchived { get; private set; }
     public UserId? ArchivedBy { get; private set; }
+    public virtual User? Archiver { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
 

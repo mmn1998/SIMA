@@ -1,10 +1,14 @@
 ﻿using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
+using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
 using SIMA.Framework.Common.Helper;
 
@@ -58,9 +62,13 @@ public class Invitees
     #endregion
     public InviteesId Id { get; private set; }
     public MeetingScheduleId MeetingScheduleId { get; private set; }
+    public virtual MeetingSchedule MeetingSchedule { get; private set; }
     public CompanyId CompanyId { get; private set; }
+    public virtual Company Company { get; private set; }
     public DepartmentId? DepartmentId { get; private set; }
+    public virtual Department? Department { get; private set; }
     public StaffId? StaffId { get; private set; }
+    public virtual Staff? Staff { get; private set; }
     public string? IsCompanyRepresentative { get; private set; }
     public string? IsPresented { get; private set; }
     public string? IsSigned { get; private set; }

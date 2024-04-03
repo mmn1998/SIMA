@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
+﻿using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
@@ -46,6 +48,7 @@ public class MeetingSchedule
     #endregion
     public MeetingScheduleId Id { get; private set; }
     public MeetingId MeetingId { get; private set; }
+    public virtual Meeting Meeting { get; private set; }
     public DateTime MeetingDateTime { get; private set; }
     public string? Location { get; private set; }
     /// <summary>
@@ -59,6 +62,8 @@ public class MeetingSchedule
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    public virtual ICollection<Invitees> Inviteeses { get; private set; }
+
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

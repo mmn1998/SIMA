@@ -7,10 +7,10 @@ using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 
-public class ApprovalResponsibleAnswerDocument
+public class ApprovalSupervisorAnswerDocument
 {
-    private ApprovalResponsibleAnswerDocument() { }
-    private ApprovalResponsibleAnswerDocument(CreateApprovalResponsibleAnswerDocumentArg arg)
+    private ApprovalSupervisorAnswerDocument() { }
+    private ApprovalSupervisorAnswerDocument(CreateApprovalSupervisorAnswerDocumentArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
         DocumentId = new(arg.DocumentId);
@@ -18,13 +18,13 @@ public class ApprovalResponsibleAnswerDocument
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<ApprovalResponsibleAnswerDocument> Create(CreateApprovalResponsibleAnswerDocumentArg arg,
+    public static async Task<ApprovalSupervisorAnswerDocument> Create(CreateApprovalSupervisorAnswerDocumentArg arg,
         IApprovalResponsibleAnswerDocumentDomainService service)
     {
         await CreateGuards(arg, service);
-        return new ApprovalResponsibleAnswerDocument(arg);
+        return new ApprovalSupervisorAnswerDocument(arg);
     }
-    public async Task Modify(ModifyApprovalResponsibleAnswerDocumentArg arg, IApprovalResponsibleAnswerDocumentDomainService service)
+    public async Task Modify(ModifyApprovalSupervisorAnswerDocumentArg arg, IApprovalResponsibleAnswerDocumentDomainService service)
     {
         await ModifyGuards(arg, service);
         DocumentId = new(arg.DocumentId);
@@ -33,16 +33,16 @@ public class ApprovalResponsibleAnswerDocument
         ModifiedBy = arg.ModifiedBy;
     }
     #region Guards
-    private static async Task CreateGuards(CreateApprovalResponsibleAnswerDocumentArg arg, IApprovalResponsibleAnswerDocumentDomainService service)
+    private static async Task CreateGuards(CreateApprovalSupervisorAnswerDocumentArg arg, IApprovalResponsibleAnswerDocumentDomainService service)
     {
 
     }
-    private async Task ModifyGuards(ModifyApprovalResponsibleAnswerDocumentArg arg, IApprovalResponsibleAnswerDocumentDomainService service)
+    private async Task ModifyGuards(ModifyApprovalSupervisorAnswerDocumentArg arg, IApprovalResponsibleAnswerDocumentDomainService service)
     {
 
     }
     #endregion
-    public ApprovalResponsibleAnswerDocumentId Id { get; private set; }
+    public ApprovalSupervisorAnswerDocumentId Id { get; private set; }
     public DocumentId DocumentId { get; private set; }
     public virtual Document Document { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -57,5 +57,5 @@ public class ApprovalResponsibleAnswerDocument
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-
 }
+

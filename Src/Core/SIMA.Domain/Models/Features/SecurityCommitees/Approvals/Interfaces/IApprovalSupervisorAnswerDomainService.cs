@@ -2,6 +2,6 @@
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Interfaces;
 
-public interface IApprovalResponsibleAnswerDocumentDomainService : IDomainService
+public interface IApprovalSupervisorAnswerDomainService : IDomainService
 {
 }

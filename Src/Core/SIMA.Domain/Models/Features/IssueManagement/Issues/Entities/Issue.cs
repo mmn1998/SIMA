@@ -11,6 +11,8 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Interfaces;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -210,6 +212,10 @@ public class Issue : Entity
 
     private List<IssueChangeHistory> _issueChangeHistories => new();
     public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+    private List<Approval> _approvals => new();
+    public ICollection<Approval> Approvals => _approvals;
+    private List<Meeting> _meetings => new();
+    public ICollection<Meeting> Meetings => _meetings;
 
     #region Gaurds
 

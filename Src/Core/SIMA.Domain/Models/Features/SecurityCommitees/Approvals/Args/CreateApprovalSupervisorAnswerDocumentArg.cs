@@ -1,10 +1,10 @@
 ﻿namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Args;
 
-public class ModifyApprovalResponsibleAnswerDocumentArg
+public class CreateApprovalSupervisorAnswerDocumentArg
 {
     public long DocumentId { get; set; }
     public long ActiveStatusId { get; set; }
-    public byte[]? ModifiedAt { get; set; }
+    public DateTime? CreatedAt { get; set; }
 
-    public long? ModifiedBy { get; set; }
+    public long? CreatedBy { get; set; }
 }

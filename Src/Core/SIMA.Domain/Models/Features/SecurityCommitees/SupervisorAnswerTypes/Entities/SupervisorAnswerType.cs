@@ -1,7 +1,8 @@
-﻿using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerType.ValueObjects;
+﻿using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
 
-namespace SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerType.Entities;
+namespace SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
 
 public class SupervisorAnswerType
 {
@@ -53,6 +54,8 @@ public class SupervisorAnswerType
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    private List<ApprovalSupervisorAnswer> _approvalSupervisorAnswers => new();
+    public ICollection<ApprovalSupervisorAnswer> ApprovalSupervisorAnswers => _approvalSupervisorAnswers;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

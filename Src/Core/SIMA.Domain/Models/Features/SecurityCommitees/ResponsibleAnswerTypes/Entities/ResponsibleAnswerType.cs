@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Args;
+﻿using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -55,6 +56,8 @@ public class ResponsibleAnswerType
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    private List<ApprovalResponsibleAnswer> _approvalResponsibleAnswers => new();
+    public ICollection<ApprovalResponsibleAnswer> ApprovalResponsibleAnswers => _approvalResponsibleAnswers;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
