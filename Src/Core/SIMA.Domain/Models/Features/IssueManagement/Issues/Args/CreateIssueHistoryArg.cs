@@ -2,10 +2,11 @@
 
 public class CreateIssueHistoryArg
 {
+
     public long Id { get; set; }
     public string Name { get; set; }
     public long IssueId { get; set; }
-    public long SourceStateId { get; set; }
+    public long? SourceStateId { get; set; }
     public long? TargetStateId { get; set; }
     public long SourceStepId { get; set; }
     public long? TargetStepId { get; set; }

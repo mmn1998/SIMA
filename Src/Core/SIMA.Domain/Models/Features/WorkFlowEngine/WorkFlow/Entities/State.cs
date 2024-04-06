@@ -11,7 +11,6 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 
 public class State : Entity
 {
-
     private State()
     {
 
@@ -70,7 +69,8 @@ public class State : Entity
     public virtual WorkFlow? WorkFlow { get; set; }
     public virtual List<IssueHistory> SourceIssueHistories { get; set; }
     public virtual List<IssueHistory>? TargetIssueHistories { get; set; }
-
+    private List<Progress.Entities.Progress> _progresses = new();
+    public virtual ICollection<Progress.Entities.Progress> Progresses => _progresses;
     #region Gaurds
 
     private static async Task CreateGuards(CreateStateArg arg, IWorkFlowDomainService service)

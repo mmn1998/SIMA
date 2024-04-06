@@ -1,4 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Args;
@@ -51,16 +53,12 @@ public class MeetingSchedule
     public virtual Meeting Meeting { get; private set; }
     public DateTime MeetingDateTime { get; private set; }
     public string? Location { get; private set; }
-    /// <summary>
-    /// TODO MeetingHoldingStatusId
-    /// </summary>
+    public MeetingHoldingStatusId MeetingHoldingStatusId { get; private set; }
+    public virtual MeetingHoldingStatus MeetingHoldingStatus { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
     public virtual ICollection<Invitees> Inviteeses { get; private set; }
 

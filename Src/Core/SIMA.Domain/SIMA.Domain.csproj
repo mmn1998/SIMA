@@ -7,44 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\ActiveStatuses\**" />
-    <Compile Remove="Models\AddressTypes\**" />
-    <Compile Remove="Models\Companies\**" />
-    <Compile Remove="Models\ConfigurationAttributes\**" />
-    <Compile Remove="Models\Departments\**" />
-    <Compile Remove="Models\Domains\**" />
-    <Compile Remove="Models\Genders\**" />
-    <Compile Remove="Models\Groups\**" />
-    <Compile Remove="Models\Permissions\**" />
-    <Compile Remove="Models\PhoneTypes\**" />
-    <Compile Remove="Models\Positions\**" />
-    <Compile Remove="Models\SysConfigs\**" />
     <Compile Remove="Temp\**" />
-    <EmbeddedResource Remove="Models\ActiveStatuses\**" />
-    <EmbeddedResource Remove="Models\AddressTypes\**" />
-    <EmbeddedResource Remove="Models\Companies\**" />
-    <EmbeddedResource Remove="Models\ConfigurationAttributes\**" />
-    <EmbeddedResource Remove="Models\Departments\**" />
-    <EmbeddedResource Remove="Models\Domains\**" />
-    <EmbeddedResource Remove="Models\Genders\**" />
-    <EmbeddedResource Remove="Models\Groups\**" />
-    <EmbeddedResource Remove="Models\Permissions\**" />
-    <EmbeddedResource Remove="Models\PhoneTypes\**" />
-    <EmbeddedResource Remove="Models\Positions\**" />
-    <EmbeddedResource Remove="Models\SysConfigs\**" />
     <EmbeddedResource Remove="Temp\**" />
-    <None Remove="Models\ActiveStatuses\**" />
-    <None Remove="Models\AddressTypes\**" />
-    <None Remove="Models\Companies\**" />
-    <None Remove="Models\ConfigurationAttributes\**" />
-    <None Remove="Models\Departments\**" />
-    <None Remove="Models\Domains\**" />
-    <None Remove="Models\Genders\**" />
-    <None Remove="Models\Groups\**" />
-    <None Remove="Models\Permissions\**" />
-    <None Remove="Models\PhoneTypes\**" />
-    <None Remove="Models\Positions\**" />
-    <None Remove="Models\SysConfigs\**" />
     <None Remove="Temp\**" />
   </ItemGroup>
 
@@ -69,12 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Features\Auths\ActiveStatuses\ValueObjects\" />
     <ProjectReference Include="..\..\Application\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Features\IssueManagement\IssueCustomFeilds\Interfaces\" />
   </ItemGroup>
 
 </Project>

@@ -23,6 +23,7 @@ namespace SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 
 public class Issue : Entity
 {
+
     private Issue() { }
     private Issue(CreateIssueArg arg)
     {
@@ -91,7 +92,7 @@ public class Issue : Entity
 
     public void RunAction(IssueRunActionArg arg)
     {
-        CurrentStateId = new(arg.CurrentStateId);
+        CurrentStateId = arg.CurrentStateId == null ? null : new(arg.CurrentStateId.Value); //new((long)arg.CurrentStateId);
         CurrenStepId = new(arg.CurrentStepId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -170,7 +171,7 @@ public class Issue : Entity
     public virtual WorkFlow CurrentWorkflow { get; private set; }
     public string Code { get; private set; }
     public string Summery { get; private set; }
-    public StateId CurrentStateId { get; private set; }
+    public StateId? CurrentStateId { get; private set; }
     public virtual State CurrentState { get; private set; }
     public StepId CurrenStepId { get; private set; }
     public virtual Step CurrenStep { get; private set; }

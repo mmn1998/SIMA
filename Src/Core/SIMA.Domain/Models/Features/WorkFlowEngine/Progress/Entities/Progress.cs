@@ -9,6 +9,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
 {
     public class Progress : Entity
     {
+
         private Progress()
         {
 
@@ -73,5 +74,9 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         public Step Source { get; private set; }
         public Step Target { get; private set; }
         public WorkFlow.Entities.WorkFlow  WorkFlow { get; set; }
+
+        public StateId? StateId { get; set; }
+        public virtual State? State { get; set; }
+
     }
 }

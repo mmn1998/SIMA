@@ -13,16 +13,15 @@ public class IssueHistory : Entity
     private IssueHistory()
     {
     }
-
     private IssueHistory(CreateIssueHistoryArg arg)
     {
         Id = new IssueHistoryId(IdHelper.GenerateUniqueId());
         Name = arg.Name;
         IssueId = new IssueId(arg.IssueId);
-        SourceStateId = new(arg.SourceStateId);
+        SourceStateId = arg.SourceStateId== null ? null:new(arg.SourceStateId.Value);
         SourceStepId = new(arg.SourceStepId);
         if(arg.TargetStateId.HasValue) TargetStateId = new(arg.TargetStateId.Value);
-        if(arg.TargetStepId.HasValue) TargetStateId = new(arg.TargetStepId.Value);
+        if(arg.TargetStepId.HasValue) TargetStepId = new(arg.TargetStepId.Value);
         PerformerUserId = new(arg.PerformerUserId);
         Description = arg.Description;
         CreatedAt = arg.CreatedAt;
@@ -38,7 +37,7 @@ public class IssueHistory : Entity
     public string Name { get; private set; }
     public IssueId IssueId { get; private set; }
     public virtual Issue Issue { get; private set; }
-    public StateId SourceStateId { get; private set; }
+    public StateId? SourceStateId { get; private set; }
     public virtual State SourceState { get; private set; }
     public StateId? TargetStateId { get; private set; }
     public State? TargetState { get; private set; }

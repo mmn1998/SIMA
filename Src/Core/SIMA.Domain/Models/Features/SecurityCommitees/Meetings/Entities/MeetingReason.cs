@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
+﻿using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -40,19 +42,16 @@ public class MeetingReason
     }
     #endregion
     public MeetingReasonId Id { get; private set; }
-    /// <summary>
-    /// TODO : MeetingHoldingReasonId
-    /// </summary>
+    public MeetingHoldingReasonId MeetingHoldingReasonId { get; private set; }
+    public virtual MeetingHoldingReason MeetingHoldingReason { get; private set; }
     public MeetingId MeetingId { get; private set; }
     public virtual Meeting Meeting { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
+
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
