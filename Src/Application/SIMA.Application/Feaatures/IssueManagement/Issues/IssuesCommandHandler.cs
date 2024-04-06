@@ -18,6 +18,7 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
       ICommandHandler<CreateIssueCommentCommand, Result<long>>
      , ICommandHandler<IssueRunActionCommand, Result<long>>
     {
+
         private readonly IIssueRepository _repository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -42,50 +43,58 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
         }
         public async Task<Result<long>> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
         {
-            if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId)) throw IssueExceptions.CreateIssueWithChechActorException;
-
-            var workflow = await _workFlowRepository.GetWorkflowInfoById(request.CurrentWorkflowId);
-            request.MainAggregateId = workflow.MainAggregateId;
-            var arg = _mapper.Map<CreateIssueArg>(request);
-            arg.IssueWeightCategoryd = await _issueWeightCategoryRepository.GetIdByWeight((int)request.Weight);
-            arg.CurrenStepId = workflow.TargetStepId;
-            arg.CurrentStateId = workflow.TargetStateId;
-
-            #region GenerateCode
-
-            var project = await _projectRepository.GetById(workflow.ProjectId);
-            var lastIsuue = await _repository.GetLastIssue();
-            string codde = "";
-            if (lastIsuue == null)
+            try
             {
-                codde = "356";
+                if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId)) throw IssueExceptions.CreateIssueWithChechActorException;
+
+                var workflow = await _workFlowRepository.GetWorkflowInfoById(request.CurrentWorkflowId);
+                request.MainAggregateId = workflow.MainAggregateId;
+                var arg = _mapper.Map<CreateIssueArg>(request);
+                arg.IssueWeightCategoryd = await _issueWeightCategoryRepository.GetIdByWeight((int)request.Weight);
+                arg.CurrenStepId = workflow.TargetStepId;
+                arg.CurrentStateId = workflow.TargetStateId;
+
+                #region GenerateCode
+
+                var project = await _projectRepository.GetById(workflow.ProjectId);
+                var lastIsuue = await _repository.GetLastIssue();
+                string codde = "";
+                if (lastIsuue == null)
+                {
+                    codde = "356";
+                }
+                else
+                {
+                    codde = lastIsuue.Code;
+                }
+                var code = Convert.ToInt32(codde.Substring(codde.IndexOf("-") + 1)) + 1;
+                arg.Code = project.Code + "-" + code.ToString();
+
+                #endregion
+
+                var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
+                var entity = await Issue.Create(arg, _service);
+                entity.AddIssueLink(arg.IssueLinks);
+                entity.AddIssueDocument(arg.IssueDocument);
+
+                #region IssueHistory
+                var history = _mapper.Map<CreateIssueHistoryArg>(request);
+                history.SourceStateId = workflow.SourceStateId;
+                history.TargetStateId = workflow.TargetStateId;
+                history.SourceStepId = workflow.SourceStepId;
+                history.TargetStepId = workflow.TargetStepId;
+                entity.AddHistory(history);
+                #endregion
+                entity.AddIssueChangeHistory(historyArg);
+                await _repository.Add(entity);
+                await _unitOfWork.SaveChangesAsync();
+                return Result.Ok(entity.Id.Value);
             }
-            else
+            catch(Exception ex)
             {
-                codde = lastIsuue.Code;
+                throw;
             }
-            var code = Convert.ToInt32(codde.Substring(codde.IndexOf("-") + 1)) + 1;
-            arg.Code = project.Code + "-" + code.ToString();
-
-            #endregion
-
-            var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
-            var entity = await Issue.Create(arg, _service);
-            entity.AddIssueLink(arg.IssueLinks);
-            entity.AddIssueDocument(arg.IssueDocument);
-
-            #region IssueHistory
-            var history = _mapper.Map<CreateIssueHistoryArg>(request);
-            history.SourceStateId = workflow.SourceStateId;
-            history.TargetStateId = workflow.TargetStateId;
-            history.SourceStepId = workflow.SourceStepId;
-            history.TargetStepId = workflow.TargetStepId;
-            entity.AddHistory(history);
-            #endregion
-            entity.AddIssueChangeHistory(historyArg);
-            await _repository.Add(entity);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
+            
         }
 
 
@@ -110,7 +119,7 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
         public async Task<Result<long>> Handle(IssueRunActionCommand request, CancellationToken cancellationToken)
         {
             var issue = await _repository.GetById(request.IssueId);
-            var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, request.NextStepId);
+            var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, request.NextStepId , request.ProgressId);
 
             var arg = _mapper.Map<IssueRunActionArg>(request);
             arg.CurrentStepId = nextStep.SourceStepId;
