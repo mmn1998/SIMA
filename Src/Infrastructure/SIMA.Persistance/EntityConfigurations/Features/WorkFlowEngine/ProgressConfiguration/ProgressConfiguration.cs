@@ -19,7 +19,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.Progress
              v => v.Value,
              v => new ProgressId(v))
             .ValueGeneratedNever();
-            entity.Property(e => e.ActiveStatusId).HasColumnName("ActiveStatusID");
+            entity.Property(e => e.ActiveStatusId);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -33,10 +33,17 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.Progress
                .HasConversion(
                v => v.Value,
                v => new WorkFlowId(v));
+            entity.Property(x => x.StateId)
+                   .HasConversion(
+                   v => v.Value,
+                   v => new StateId(v));
+            entity.Property(e => e.StateId);
             entity.HasOne(d => d.WorkFlow).WithMany(p => p.Progresses)
                 .HasForeignKey(d => d.WorkFlowId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 ;
+            entity.HasOne(d => d.State).WithMany(p => p.Progresses)
+                    .HasForeignKey(d => d.StateId);
         }
     }
 }

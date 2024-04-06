@@ -8,9 +8,10 @@ namespace SIMA.Persistance.EntityConfigurations.Features.IssueManagement;
 
 internal class IssueChangeHistoryConfiguration : IEntityTypeConfiguration<IssueChangeHistory>
 {
+
     public void Configure(EntityTypeBuilder<IssueChangeHistory> entity)
     {
-        entity.ToTable("IssueChangeHistoryConfiguration", "IssueManagement");
+        entity.ToTable("IssueChangeHistory", "IssueManagement");
         entity.Property(x => x.Id)
     .HasColumnName("Id")
     .HasConversion(
@@ -63,16 +64,21 @@ internal class IssueChangeHistoryConfiguration : IEntityTypeConfiguration<IssueC
         entity.HasOne(d => d.IssueWeightCategory).WithMany(p => p.IssueChangeHistories)
                 .HasForeignKey(d => d.IssueWeightCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
         entity.HasOne(x => x.CurrenStep).WithMany(p => p.IssueChangeHistories)
-            .HasForeignKey(x => x.CurrenStepId);
+            .HasForeignKey(x => x.CurrenStepId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasOne(x => x.CurrentState).WithMany(p => p.IssueChangeHistories)
-            .HasForeignKey(x => x.CurrentStateId);
+            .HasForeignKey(x => x.CurrentStateId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasOne(x => x.CurrentWorkflow).WithMany(p => p.IssueChangeHistories)
-            .HasForeignKey(x => x.CurrentWorkflowId);
+            .HasForeignKey(x => x.CurrentWorkflowId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasOne(x => x.MainAggregate).WithMany(p => p.IssueChangeHistories)
-            .HasForeignKey(x => x.MainAggregateId);
-        
+            .HasForeignKey(x => x.MainAggregateId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasOne(x => x.Issue).WithMany(p => p.IssueChangeHistories)
-            .HasForeignKey(x => x.IssueId);
+            .HasForeignKey(x => x.IssueId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

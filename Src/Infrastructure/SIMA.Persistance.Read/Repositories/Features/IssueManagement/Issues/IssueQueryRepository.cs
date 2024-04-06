@@ -11,6 +11,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 {
     public class IssueQueryRepository : IIssueQueryRepository
     {
+
         private readonly string _connectionString;
         private readonly ISimaIdentity _simaIdentity;
 
@@ -271,7 +272,9 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 
                          --Progress
                             Select
-                               s.id 
+
+                               FStep.Id ProgressId
+                               ,s.id 
                                ,s.Name 
                                ,FStep.Name TargetName
                                ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId

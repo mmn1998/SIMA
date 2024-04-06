@@ -3,6 +3,7 @@ using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -15,6 +16,7 @@ namespace SIMA.Persistance.Repositories.Features.WorkFlowEngine.WorkFlowReposito
 
 public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 {
+
     private readonly SIMADBContext _context;
     private readonly ISimaIdentity _simaIdentity;
     public WorkFlowRepository(SIMADBContext context, ISimaIdentity simaIdentity) : base(context)
@@ -28,7 +30,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         try
         {
             var workFlowId = new WorkFlowId(Value: id);
-            var workFlow = await _context.WorkFlows.Include(x => x.Steps).ThenInclude(x => x.State).Include(x => x.WorkFlowActors).ThenInclude(x => x.WorkFlowActorSteps).Distinct().FirstOrDefaultAsync(x => x.Id == workFlowId);
+            var workFlow = await _context.WorkFlows.Include(x => x.Steps).Include(x => x.States).Include(x => x.WorkFlowActors).ThenInclude(x => x.WorkFlowActorSteps).Distinct().FirstOrDefaultAsync(x => x.Id == workFlowId);
             if (workFlow is null)
                 workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == workFlowId);
 
@@ -74,12 +76,13 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             var startEventActionTypeId = new ActionTypeId(9);
             var step = workFlow.Steps.Where(s => s.ActionTypeId == startEventActionTypeId).FirstOrDefault();
             var progress = step.SourceProgresses.Where(x => x.SourceId == step.Id).FirstOrDefault();
-
             var nextStep = workFlow.Steps.Where(x => x.Id == progress.TargetId).FirstOrDefault();
-            if (nextStep.StateId is not null)
-                result.TargetStateId = nextStep.StateId.Value;
-            if (step.StateId is not null)
-                result.SourceStateId = step.StateId.Value;
+
+            if (progress.StateId is not null)
+               result.TargetStateId = progress.StateId.Value;
+
+            //if (step.StateId is not null)
+                result.SourceStateId = null;
 
             result.TargetStepId = progress.TargetId.Value;
             result.SourceStepId = step.Id.Value;
@@ -94,19 +97,22 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         }
     }
 
-    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep)
+    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep , long progressId)
     {
         var result = new GetWorkflowInfoByIdResponseQueryResult();
         var workFlow = await _context.WorkFlows
            .Include(x => x.States)
            .Include(x => x.Steps)
+           .Include(x=>x.Progresses)
            .FirstOrDefaultAsync(x => x.Id == new WorkFlowId(workFlowId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
         if (workFlow is not null)
         {
             var step = workFlow.Steps.Where(s => s.Id == new StepId(nextStep)).FirstOrDefault();
 
-            if (step.StateId is not null) result.SourceStateId = step.StateId.Value;
+            var progress = workFlow.Progresses.Where(x => x.Id == new ProgressId(progressId)).FirstOrDefault();
+
+           if (progress.StateId is not null) result.SourceStateId = progress.StateId.Value;
 
             result.SourceStepId = step.Id.Value;
             result.Id = workFlowId;

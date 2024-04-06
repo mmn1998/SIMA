@@ -128,11 +128,11 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                 .IsRowVersion()
                 .IsConcurrencyToken();
             entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
-            entity.Property(x => x.StateId)
-                .HasConversion(
-                v => v.Value,
-                v => new StateId(v));
-            entity.Property(e => e.StateId).HasColumnName("StateID");
+            //s entity.Property(x => x.StateId)
+            //    .HasConversion(
+            //    v => v.Value,
+            //    v => new StateId(v));
+            //entity.Property(e => e.StateId).HasColumnName("StateID");
 
             entity.Property(x => x.WorkFlowId)
                .HasConversion(
@@ -149,9 +149,9 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
 
             entity.Property(e => e.WorkFlowId).HasColumnName("WorkFlowID");
 
-            entity.HasOne(d => d.State).WithMany(p => p.Steps)
-                .HasForeignKey(d => d.StateId)
-                .HasConstraintName("FK_Step_State");
+            //s entity.HasOne(d => d.State).WithMany(p => p.Steps)
+            //    .HasForeignKey(d => d.StateId)
+            //    .HasConstraintName("FK_Step_State");
 
             entity.HasOne(d => d.ActionType).WithMany(p => p.steps)
                .HasForeignKey(d => d.ActionTypeId);

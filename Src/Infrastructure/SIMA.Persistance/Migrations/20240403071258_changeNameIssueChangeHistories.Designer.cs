@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SIMA.Persistance.Persistence;
 
@@ -11,9 +12,11 @@ using SIMA.Persistance.Persistence;
 namespace SIMA.Persistance.Migrations
 {
     [DbContext(typeof(SIMADBContext))]
-    partial class SIMADBContextModelSnapshot : ModelSnapshot
+    [Migration("20240403071258_changeNameIssueChangeHistories")]
+    partial class changeNameIssueChangeHistories
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2570,7 +2573,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("CurrenStepId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CurrentStateId")
+                    b.Property<long>("CurrentStateId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CurrentWorkflowId")
@@ -2840,7 +2843,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("PerformerUserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("SourceStateId")
+                    b.Property<long>("SourceStateId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("SourceStepId")
@@ -4232,7 +4235,9 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", "CurrentState")
                         .WithMany("Issues")
-                        .HasForeignKey("CurrentStateId");
+                        .HasForeignKey("CurrentStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", "CurrentWorkflow")
                         .WithMany("Issues")
@@ -4375,7 +4380,9 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", "SourceState")
                         .WithMany("SourceIssueHistories")
-                        .HasForeignKey("SourceStateId");
+                        .HasForeignKey("SourceStateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "SourceStep")
                         .WithMany("SourceIssueHistories")

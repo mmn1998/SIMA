@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
@@ -26,5 +27,11 @@ public class MeetingScheduleConfiguration : IEntityTypeConfiguration<MeetingSche
         entity.HasOne(x => x.Meeting)
             .WithMany(x => x.MeetingSchedules)
             .HasForeignKey(x => x.MeetingId);
+
+        entity.Property(x => x.MeetingHoldingStatusId)
+            .HasConversion(x => x.Value, v => new MeetingHoldingStatusId(v));
+        entity.HasOne(x => x.MeetingHoldingStatus)
+            .WithMany(x => x.MeetingSchedules)
+            .HasForeignKey(x => x.MeetingHoldingStatusId);
     }
 }

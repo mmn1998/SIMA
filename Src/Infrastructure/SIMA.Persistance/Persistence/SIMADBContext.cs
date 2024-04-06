@@ -36,18 +36,22 @@ using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
-using SIMA.Persistance.EntityConfigurations.Features.BranchManagement;
-using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ActionTypeConfiguration;
-using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProgressConfiguration;
-using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectConfiguration;
-using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowActorConfiguration;
-using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowCompanyConfiguration;
 using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowConfiguration;
 
 namespace SIMA.Persistance.Persistence
@@ -56,11 +60,11 @@ namespace SIMA.Persistance.Persistence
     {
         public SIMADBContext()
         {
-            
+
         }
         public SIMADBContext(DbContextOptions<SIMADBContext> options) : base(options)
         {
-            
+
         }
 
         #region WorkFlowDBSets
@@ -175,6 +179,7 @@ namespace SIMA.Persistance.Persistence
         public DbSet<Issue> Issues { get; set; }
         public DbSet<IssueType> IssueTypes { get; set; }
         public DbSet<IssueWeightCategory> IssueWeightCategories { get; set; }
+        public DbSet<IssueChangeHistory> IssueChangeHistories { get; set; }
 
         #endregion
 
@@ -188,13 +193,32 @@ namespace SIMA.Persistance.Persistence
 
         #endregion
 
+        #region SecurityCommitees
+        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<ApprovalResponsibleAnswer> ApprovalResponsibleAnswers { get; set; }
+        public DbSet<ApprovalResponsibleAnswerDocument> ApprovalResponsibleAnswerDocuments { get; set; }
+        public DbSet<ApprovalSupervisorAnswer> ApprovalSupervisorAnswers { get; set; }
+        public DbSet<ApprovalSupervisorAnswerDocument> SupervisorAnswerDocuments { get; set; }
+        public DbSet<Invitees> Invitees { get; set; }
+        public DbSet<MeetingHoldingReason> MeetingHoldingReasons { get; set; }
+        public DbSet<MeetingHoldingStatus> MeetingHoldingStatuses { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<MeetingDocument> MeetingDocuments { get; set; }
+        public DbSet<MeetingReason> MeetingReasons { get; set; }
+        public DbSet<MeetingSchedule> MeetingSchedules { get; set; }
+        public DbSet<ResponsibleAnswerType> ResponsibleAnswerTypes { get; set; }
+        public DbSet<SubjectPriority> SubjectPriorities { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<SubjectMeeting> SubjectMeetings { get; set; }
+        public DbSet<SupervisorAnswerType> SupervisorAnswerTypes { get; set; }
+        #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(WorkFlowConfiguration).Assembly);
-            
+
 
 
         }
