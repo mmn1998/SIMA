@@ -56,7 +56,8 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
         var createUserPermissionArgs = allPermissions.Select(i => new CreateUserPermissionArg
         {
             UserId = userId,
-            PermissionId = i.Id.Value
+            PermissionId = i.Id.Value,
+            ActiveStatusId = 1
         }).ToList();
 
         await user.AddUserPermissions(createUserPermissionArgs);

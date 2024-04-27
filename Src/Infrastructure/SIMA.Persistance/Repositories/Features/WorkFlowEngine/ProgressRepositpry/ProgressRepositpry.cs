@@ -1,5 +1,7 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Interface;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 
@@ -11,6 +13,12 @@ namespace SIMA.Persistance.Repositories.Features.WorkFlowEngine.ProgressRepositp
         public ProgressRepositpry(SIMADBContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<Progress> GetById(long id)
+        {
+            var entity = await _context.Progresses.FirstOrDefaultAsync(x => x.Id == new ProgressId(id));
+            return entity;
         }
     }
 }

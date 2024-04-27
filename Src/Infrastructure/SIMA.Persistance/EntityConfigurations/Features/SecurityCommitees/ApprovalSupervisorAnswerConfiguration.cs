@@ -10,7 +10,7 @@ public class ApprovalSupervisorAnswerConfiguration : IEntityTypeConfiguration<Ap
 {
     public void Configure(EntityTypeBuilder<ApprovalSupervisorAnswer> entity)
     {
-        entity.ToTable("ApprovalResponsibleAnswer", "SecurityCommitee");
+        entity.ToTable("ApprovalSupervisorAnswer", "SecurityCommitee");
         entity.Property(x => x.Id)
             .HasConversion(x => x.Value, v => new ApprovalSupervisorAnswerId(v));
         entity.HasKey(x => x.Id);

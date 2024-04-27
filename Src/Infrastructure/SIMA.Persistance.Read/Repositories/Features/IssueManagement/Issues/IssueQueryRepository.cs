@@ -371,6 +371,35 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
             }
         }
 
-
+        public async Task<List<GetCasesByWorkflowIdQueryResult>> GetCasesByWorkflowId(long workflowId)
+        {
+            var result = new List<GetCasesByWorkflowIdQueryResult>();
+            string getMainAggregateIdQuery = @"
+        SELECT [MainAggregateId]
+        FROM [Project].[WorkFlow]
+        Where Id = @Id";
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                int mainAggregateId = connection.QueryFirst<int>(getMainAggregateIdQuery, new { Id = workflowId });
+                string mainQuery = string.Empty;
+                switch (mainAggregateId)
+                {
+                    case (int)MainAggregateEnums.SecurityCommitee:
+                        {
+                            mainQuery = @"
+                            SELECT  [Id]
+                                  ,([Description] + ' '  + [Code]) as Title
+                              FROM [SecurityCommitee].[Meeting]
+                            ";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                result = (await connection.QueryAsync<GetCasesByWorkflowIdQueryResult>(mainQuery)).ToList();
+            }
+            return result;
+        }
     }
 }

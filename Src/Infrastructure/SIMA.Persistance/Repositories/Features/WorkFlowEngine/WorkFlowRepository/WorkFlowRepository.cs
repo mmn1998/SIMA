@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Data;
@@ -30,11 +32,18 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         try
         {
             var workFlowId = new WorkFlowId(Value: id);
-            var workFlow = await _context.WorkFlows.Include(x => x.Steps).Include(x => x.States).Include(x => x.WorkFlowActors).ThenInclude(x => x.WorkFlowActorSteps).Distinct().FirstOrDefaultAsync(x => x.Id == workFlowId);
-            if (workFlow is null)
-                workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == workFlowId);
+            var workFlow = await _context.WorkFlows
+                .Include(x => x.Steps)
+                .Include(x => x.States)
+                .Include(x => x.Progresses)
+                .Include(x => x.WorkFlowCompanies)
+                .Include(x => x.Issues)
+                    .ThenInclude(x => x.Meetings)
+                .Include(x => x.WorkFlowActors)
+                    .ThenInclude(x => x.WorkFlowActorSteps)
+                .FirstOrDefaultAsync(x => x.Id == workFlowId);
 
-            return workFlow;
+            return workFlow ?? throw SimaResultException.WorkflowNotFoundError;
         }
         catch (Exception ex)
         {
@@ -79,10 +88,10 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             var nextStep = workFlow.Steps.Where(x => x.Id == progress.TargetId).FirstOrDefault();
 
             if (progress.StateId is not null)
-               result.TargetStateId = progress.StateId.Value;
+                result.TargetStateId = progress.StateId.Value;
 
             //if (step.StateId is not null)
-                result.SourceStateId = null;
+            result.SourceStateId = null;
 
             result.TargetStepId = progress.TargetId.Value;
             result.SourceStepId = step.Id.Value;
@@ -97,13 +106,13 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         }
     }
 
-    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep , long progressId)
+    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep, long progressId)
     {
         var result = new GetWorkflowInfoByIdResponseQueryResult();
         var workFlow = await _context.WorkFlows
            .Include(x => x.States)
            .Include(x => x.Steps)
-           .Include(x=>x.Progresses)
+           .Include(x => x.Progresses)
            .FirstOrDefaultAsync(x => x.Id == new WorkFlowId(workFlowId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
         if (workFlow is not null)
@@ -112,7 +121,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 
             var progress = workFlow.Progresses.Where(x => x.Id == new ProgressId(progressId)).FirstOrDefault();
 
-           if (progress.StateId is not null) result.SourceStateId = progress.StateId.Value;
+            if (progress.StateId is not null) result.SourceStateId = progress.StateId.Value;
 
             result.SourceStepId = step.Id.Value;
             result.Id = workFlowId;
@@ -126,4 +135,9 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         }
     }
 
+    public Task<WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate)
+    {
+        var workFlow = _context.WorkFlows.FirstOrDefaultAsync(x => x.MainAggregateId == new MainAggregateId((long)mainAggregate));
+        return workFlow;
+    }
 }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.Auths.Domains.Entities;
-using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Forms.Entities;
+using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Auths;

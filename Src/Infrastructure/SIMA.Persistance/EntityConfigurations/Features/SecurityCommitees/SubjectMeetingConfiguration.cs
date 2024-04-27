@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
@@ -39,5 +40,11 @@ public class SubjectMeetingConfiguration : IEntityTypeConfiguration<SubjectMeeti
         entity.HasOne(x => x.Meeting)
             .WithMany(x => x.SubjectMeetings)
             .HasForeignKey(x => x.MeetingId);
+        
+        entity.Property(x => x.ConfirmedBy)
+            .HasConversion(x => x.Value, v => new UserId(v));
+        entity.HasOne(x => x.Confirmer)
+            .WithMany(x => x.SubjectMeetings)
+            .HasForeignKey(x => x.ConfirmedBy);
     }
 }

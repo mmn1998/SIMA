@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;

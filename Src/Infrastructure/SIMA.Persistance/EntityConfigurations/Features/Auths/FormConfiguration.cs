@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
-using SIMA.Domain.Models.Features.Auths.Domains.Entities;
 using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Forms.Entities;
+using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Auths
 {
@@ -30,6 +30,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.Auths
               .HasConversion(
                v => v.Value,
                v => new DomainId(v));
+
             entity.HasOne(d => d.Domain).WithMany(d => d.Forms).HasForeignKey(d => d.DomainId);
 
 

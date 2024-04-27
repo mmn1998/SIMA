@@ -34,7 +34,7 @@ public class LocationQueryRepositoryCachingDecorator : ILocationQueryRepository
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Location);
         try
         {
-            var setResult = await _queryRepository.GetAll();
+            var setResult = await _queryRepository.GetAll(new GetAllLocationQuery());
             _redisService.InsertAsync(redisKey, setResult.Data);
 
         }

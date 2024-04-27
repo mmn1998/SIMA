@@ -35,7 +35,7 @@ public class LocationTypeQueryRepositoryCachingDecorator : ILocationTypeQueryRep
 
         try
         {
-            var setResult = await _repository.GetAll();
+            var setResult = await _repository.GetAll(new GetAllLocationTypeQuery());
             _redisService.InsertAsync(redisKey, setResult.Data);
         }
         catch (Exception e)

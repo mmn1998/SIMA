@@ -403,7 +403,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("Domain", "Authentication");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.Form", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -458,7 +458,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("Form", "Authentication");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.FormGroup", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormGroup", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -503,7 +503,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("FormGroup", "Authentication");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.FormRole", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormRole", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -548,7 +548,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("FormRole", "Authentication");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.FormUser", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormUser", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -2914,6 +2914,877 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("IssueLink", "IssueManagement");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.Approval", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ArchivedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("IsArchived")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsPresented")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsSigned")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("IssueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MeetingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ResponsibleCompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ResponsibleDepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ResponsibleStaffId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SupervisorCompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SupervisorDepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SupervisorStaffId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArchivedBy");
+
+                    b.HasIndex("IssueId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("ResponsibleCompanyId");
+
+                    b.HasIndex("ResponsibleDepartmentId");
+
+                    b.HasIndex("ResponsibleStaffId");
+
+                    b.HasIndex("SupervisorCompanyId");
+
+                    b.HasIndex("SupervisorDepartmentId");
+
+                    b.HasIndex("SupervisorStaffId");
+
+                    b.ToTable("Approval", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalResponsibleAnswer", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ApprovalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ReportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ResponsibleAnswerTypeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovalId");
+
+                    b.HasIndex("ResponsibleAnswerTypeId");
+
+                    b.ToTable("ApprovalResponsibleAnswer", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalResponsibleAnswerDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("ApprovalResponsibleAnswerDocument", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalSupervisorAnswer", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ApprovalId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ReportDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("SupervisorAnswerTypeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovalId");
+
+                    b.HasIndex("SupervisorAnswerTypeId");
+
+                    b.ToTable("ApprovalSupervisorAnswer", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalSupervisorAnswerDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("ApprovalSupervisorAnswerDocument", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities.Invitees", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("DepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsCompanyRepresentative")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsPresented")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsSigned")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("MeetingScheduleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("MeetingScheduleId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("Invitees", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Labels.Entities.Label", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("Label", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities.MeetingHoldingReason", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("MeetingHoldingReason", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities.MeetingHoldingStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("MeetingHoldingStatus", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities.MeetingSchedule", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("MeetingDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("MeetingHoldingStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MeetingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingHoldingStatusId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("MeetingSchedule", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("IssueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("MeetingTurn")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("Meeting", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.MeetingDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MeetingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("MeetingDocument", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.MeetingLabel", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LabelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MeetingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LabelId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("MeetingLabel", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.MeetingReason", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MeetingHoldingReasonId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MeetingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeetingHoldingReasonId");
+
+                    b.HasIndex("MeetingId");
+
+                    b.ToTable("MeetingReason", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities.ResponsibleAnswerType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("ResponsibleAnswerType", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities.SubjectPriority", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float?>("Ordering")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("SubjectPriority", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities.Subject", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ArchivedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsArchived")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArchivedBy");
+
+                    b.ToTable("Subject", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities.SubjectMeeting", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ConfirmationDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("ConfirmedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsConfirmed")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IsOutOfOrder")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("MeetingId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SubjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SubjectPriorityId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfirmedBy");
+
+                    b.HasIndex("MeetingId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("SubjectPriorityId");
+
+                    b.ToTable("SubjectMeeting", "SecurityCommitee");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities.SupervisorAnswerType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("SupervisorAnswerType", "SecurityCommitee");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites.ActionType", b =>
                 {
                     b.Property<long>("Id")
@@ -2979,6 +3850,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("BpmnId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConditionExpression")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -3253,6 +4127,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("FormId")
+                        .HasColumnType("bigint");
+
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -3273,6 +4150,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ActionTypeId");
+
+                    b.HasIndex("FormId");
 
                     b.HasIndex("WorkFlowId");
 
@@ -3426,6 +4305,10 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("IsDirectManagerOfIssueCreator")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -3682,7 +4565,7 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.Form", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Domains.Entities.Domain", "Domain")
                         .WithMany("Forms")
@@ -3693,9 +4576,9 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Domain");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.FormGroup", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormGroup", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Domains.Entities.Form", "Form")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", "Form")
                         .WithMany("FormGroups")
                         .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3712,9 +4595,9 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Group");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.FormRole", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormRole", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Domains.Entities.Form", "Form")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", "Form")
                         .WithMany("FormRoles")
                         .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -3731,9 +4614,9 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.FormUser", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormUser", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Domains.Entities.Form", "Form")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", "Form")
                         .WithMany("FormUsers")
                         .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -4428,6 +5311,294 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("IssueLinkedTo");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.Approval", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Users.Entities.User", "Archiver")
+                        .WithMany("Approvals")
+                        .HasForeignKey("ArchivedBy")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
+                    b.HasOne("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", "Issue")
+                        .WithMany("Approvals")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", "Meeting")
+                        .WithMany("Approvals")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Companies.Entities.Company", "ResponsibleCompany")
+                        .WithMany("ResponsibleApprovals")
+                        .HasForeignKey("ResponsibleCompanyId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "ResponsibleDepartment")
+                        .WithMany("ResponsibleApprovals")
+                        .HasForeignKey("ResponsibleDepartmentId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "ResponsibleStaff")
+                        .WithMany("ResponsibleApprovals")
+                        .HasForeignKey("ResponsibleStaffId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Companies.Entities.Company", "SupervisorCompany")
+                        .WithMany("SupervisorApprovals")
+                        .HasForeignKey("SupervisorCompanyId")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "SupervisorDepartment")
+                        .WithMany("SupervisorApprovals")
+                        .HasForeignKey("SupervisorDepartmentId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "SupervisorStaff")
+                        .WithMany("SupervisorApprovals")
+                        .HasForeignKey("SupervisorStaffId")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
+                    b.Navigation("Archiver");
+
+                    b.Navigation("Issue");
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("ResponsibleCompany");
+
+                    b.Navigation("ResponsibleDepartment");
+
+                    b.Navigation("ResponsibleStaff");
+
+                    b.Navigation("SupervisorCompany");
+
+                    b.Navigation("SupervisorDepartment");
+
+                    b.Navigation("SupervisorStaff");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalResponsibleAnswer", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.Approval", "Approval")
+                        .WithMany("ApprovalResponsibleAnswers")
+                        .HasForeignKey("ApprovalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities.ResponsibleAnswerType", "ResponsibleAnswerType")
+                        .WithMany("ApprovalResponsibleAnswers")
+                        .HasForeignKey("ResponsibleAnswerTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approval");
+
+                    b.Navigation("ResponsibleAnswerType");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalResponsibleAnswerDocument", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", "Document")
+                        .WithMany("ApprovalResponsibleAnswerDocuments")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalSupervisorAnswer", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.Approval", "Approval")
+                        .WithMany("ApprovalSupervisorAnswers")
+                        .HasForeignKey("ApprovalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities.SupervisorAnswerType", "SupervisorAnswerType")
+                        .WithMany("ApprovalSupervisorAnswers")
+                        .HasForeignKey("SupervisorAnswerTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Approval");
+
+                    b.Navigation("SupervisorAnswerType");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.ApprovalSupervisorAnswerDocument", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", "Document")
+                        .WithMany("ApprovalSupervisorAnswerDocuments")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities.Invitees", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Companies.Entities.Company", "Company")
+                        .WithMany("Invitees")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "Department")
+                        .WithMany("Invitees")
+                        .HasForeignKey("DepartmentId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities.MeetingSchedule", "MeetingSchedule")
+                        .WithMany("Inviteeses")
+                        .HasForeignKey("MeetingScheduleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Staff")
+                        .WithMany("Invitees")
+                        .HasForeignKey("StaffId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Department");
+
+                    b.Navigation("MeetingSchedule");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities.MeetingSchedule", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities.MeetingHoldingStatus", "MeetingHoldingStatus")
+                        .WithMany("MeetingSchedules")
+                        .HasForeignKey("MeetingHoldingStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", "Meeting")
+                        .WithMany("MeetingSchedules")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("MeetingHoldingStatus");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", "Issue")
+                        .WithMany("Meetings")
+                        .HasForeignKey("IssueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Issue");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.MeetingDocument", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", "Document")
+                        .WithMany("MeetingDocuments")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", "Meeting")
+                        .WithMany("MeetingDocuments")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+
+                    b.Navigation("Meeting");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.MeetingLabel", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Labels.Entities.Label", "Label")
+                        .WithMany("MeetingLabels")
+                        .HasForeignKey("LabelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", "Meeting")
+                        .WithMany("MeetingLabels")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Label");
+
+                    b.Navigation("Meeting");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.MeetingReason", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities.MeetingHoldingReason", "MeetingHoldingReason")
+                        .WithMany("meetingReasons")
+                        .HasForeignKey("MeetingHoldingReasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", "Meeting")
+                        .WithMany("MeetingReasons")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("MeetingHoldingReason");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities.Subject", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Users.Entities.User", "Archiver")
+                        .WithMany("Subjects")
+                        .HasForeignKey("ArchivedBy");
+
+                    b.Navigation("Archiver");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities.SubjectMeeting", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Users.Entities.User", "Confirmer")
+                        .WithMany("SubjectMeetings")
+                        .HasForeignKey("ConfirmedBy");
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", "Meeting")
+                        .WithMany("SubjectMeetings")
+                        .HasForeignKey("MeetingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities.Subject", "Subject")
+                        .WithMany("SubjectMeetings")
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities.SubjectPriority", "SubjectPriority")
+                        .WithMany("SubjectMeetings")
+                        .HasForeignKey("SubjectPriorityId");
+
+                    b.Navigation("Confirmer");
+
+                    b.Navigation("Meeting");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("SubjectPriority");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities.Progress", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "Source")
@@ -4522,12 +5693,18 @@ namespace SIMA.Persistance.Migrations
                         .WithMany("steps")
                         .HasForeignKey("ActionTypeId");
 
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", "Form")
+                        .WithMany("Steps")
+                        .HasForeignKey("FormId");
+
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", "WorkFlow")
                         .WithMany("Steps")
                         .HasForeignKey("WorkFlowId")
                         .HasConstraintName("FK_Step_WorkFlow");
 
                     b.Navigation("ActionType");
+
+                    b.Navigation("Form");
 
                     b.Navigation("WorkFlow");
                 });
@@ -4674,6 +5851,12 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("Departments");
 
+                    b.Navigation("Invitees");
+
+                    b.Navigation("ResponsibleApprovals");
+
+                    b.Navigation("SupervisorApprovals");
+
                     b.Navigation("Users");
 
                     b.Navigation("WorkFlowCompanies");
@@ -4694,7 +5877,13 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("InverseParent");
 
+                    b.Navigation("Invitees");
+
                     b.Navigation("Positions");
+
+                    b.Navigation("ResponsibleApprovals");
+
+                    b.Navigation("SupervisorApprovals");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.Domain", b =>
@@ -4710,13 +5899,15 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("UserDomainAccesses");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Domains.Entities.Form", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", b =>
                 {
                     b.Navigation("FormGroups");
 
                     b.Navigation("FormRoles");
 
                     b.Navigation("FormUsers");
+
+                    b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Genders.Entities.Gender", b =>
@@ -4816,17 +6007,29 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ChiefBranches");
 
                     b.Navigation("DeputyBranches");
+
+                    b.Navigation("Invitees");
+
+                    b.Navigation("ResponsibleApprovals");
+
+                    b.Navigation("SupervisorApprovals");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Users.Entities.User", b =>
                 {
                     b.Navigation("AdminLocationAccesses");
 
+                    b.Navigation("Approvals");
+
                     b.Navigation("FormUsers");
 
                     b.Navigation("IssueHistories");
 
                     b.Navigation("ProjectMembers");
+
+                    b.Navigation("SubjectMeetings");
+
+                    b.Navigation("Subjects");
 
                     b.Navigation("UserConfigs");
 
@@ -4869,7 +6072,13 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", b =>
                 {
+                    b.Navigation("ApprovalResponsibleAnswerDocuments");
+
+                    b.Navigation("ApprovalSupervisorAnswerDocuments");
+
                     b.Navigation("IssueDocuments");
+
+                    b.Navigation("MeetingDocuments");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities.IssueLinkReason", b =>
@@ -4900,6 +6109,8 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", b =>
                 {
+                    b.Navigation("Approvals");
+
                     b.Navigation("IssueChangeHistories");
 
                     b.Navigation("IssueComments");
@@ -4913,6 +6124,70 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("IssueLinks");
 
                     b.Navigation("IssuesLinkedTo");
+
+                    b.Navigation("Meetings");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.Approval", b =>
+                {
+                    b.Navigation("ApprovalResponsibleAnswers");
+
+                    b.Navigation("ApprovalSupervisorAnswers");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Labels.Entities.Label", b =>
+                {
+                    b.Navigation("MeetingLabels");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities.MeetingHoldingReason", b =>
+                {
+                    b.Navigation("meetingReasons");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities.MeetingHoldingStatus", b =>
+                {
+                    b.Navigation("MeetingSchedules");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities.MeetingSchedule", b =>
+                {
+                    b.Navigation("Inviteeses");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities.Meeting", b =>
+                {
+                    b.Navigation("Approvals");
+
+                    b.Navigation("MeetingDocuments");
+
+                    b.Navigation("MeetingLabels");
+
+                    b.Navigation("MeetingReasons");
+
+                    b.Navigation("MeetingSchedules");
+
+                    b.Navigation("SubjectMeetings");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities.ResponsibleAnswerType", b =>
+                {
+                    b.Navigation("ApprovalResponsibleAnswers");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities.SubjectPriority", b =>
+                {
+                    b.Navigation("SubjectMeetings");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities.Subject", b =>
+                {
+                    b.Navigation("SubjectMeetings");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities.SupervisorAnswerType", b =>
+                {
+                    b.Navigation("ApprovalSupervisorAnswers");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites.ActionType", b =>

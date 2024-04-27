@@ -37,6 +37,8 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
             entity.HasOne(x => x.WorkFlow)
                .WithMany(x => x.WorkFlowActors)
                .HasForeignKey(x => x.WorkFlowId);
+            entity.Property(e => e.IsDirectManagerOfIssueCreator)
+               .HasMaxLength(1);
 
         }
     }

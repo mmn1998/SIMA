@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
@@ -13,9 +14,15 @@ namespace SIMA.Persistance.Repositories.Features.IssueManagement
     {
         private readonly SIMADBContext _context;
 
-        public IssueRepository(SIMADBContext context) : base(context)
+        public IssueRepository(SIMADBContext context, IConfiguration configuration) : base(context)
         {
             _context = context;
+        }
+
+        public async Task ExcecuteStoreProcedure(string spName)
+        {
+            //spName = "SpRegisterCustomer @cmbGender = $Value,@nAge = $Value, @txtFirtName = N'$Value', @cmbDegree=$Value";
+            await _context.Database.ExecuteSqlAsync($"EXEC {spName}");
         }
 
         public async Task<Issue> GetById(long id)

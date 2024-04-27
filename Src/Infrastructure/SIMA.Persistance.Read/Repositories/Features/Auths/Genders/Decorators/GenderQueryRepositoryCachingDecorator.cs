@@ -30,7 +30,7 @@ public class GenderQueryRepositoryCachingDecorator : IGenderQueryRepository
         string appName = _configuration.GetSection("AppName").Value ?? "";
         string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Genders);
 
-        var setResult = await _repository.GetAll();
+        var setResult = await _repository.GetAll(new GetAllGenderQuery());
         _redisService.InsertAsync(redisKey, setResult.Data);
 
 

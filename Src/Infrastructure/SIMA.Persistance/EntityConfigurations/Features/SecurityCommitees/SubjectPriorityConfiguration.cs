@@ -19,5 +19,9 @@ public class SubjectPriorityConfiguration : IEntityTypeConfiguration<SubjectPrio
         entity.Property(x => x.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
+        entity.HasIndex(x => x.Code).IsUnique();
+        entity.Property(x => x.Name).HasMaxLength(200).IsUnicode();
+        entity.Property(x => x.Code)
+                    .HasMaxLength(20).IsUnicode();
     }
 }

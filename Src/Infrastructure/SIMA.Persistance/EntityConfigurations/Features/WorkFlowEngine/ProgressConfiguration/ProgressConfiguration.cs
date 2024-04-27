@@ -33,17 +33,19 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.Progress
                .HasConversion(
                v => v.Value,
                v => new WorkFlowId(v));
+
             entity.Property(x => x.StateId)
                    .HasConversion(
                    v => v.Value,
                    v => new StateId(v));
-            entity.Property(e => e.StateId);
+
             entity.HasOne(d => d.WorkFlow).WithMany(p => p.Progresses)
                 .HasForeignKey(d => d.WorkFlowId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 ;
             entity.HasOne(d => d.State).WithMany(p => p.Progresses)
-                    .HasForeignKey(d => d.StateId);
+                    .HasForeignKey(d => d.StateId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

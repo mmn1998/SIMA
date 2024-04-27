@@ -12,4 +12,5 @@ public interface IIssueQueryRepository : IQueryRepository
     Task<bool> IsCodeUnique(string code, long id);
     Task<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>> GetIssueHistoryByIssueId(long issueId);
     Task<GetIssueHistoriesByIdQueryResult> GetIssueHistoryById(long id);
+    Task<List<GetCasesByWorkflowIdQueryResult>> GetCasesByWorkflowId(long workflowId);
 }

@@ -1,7 +1,11 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Project;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Framework.Common.Exceptions;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -18,28 +22,70 @@ public class ProjectQueryRepository : IProjectQueryRepository
     }
     public async Task<GetProjectQueryResult> FindById(long id)
     {
-        var response = new GetProjectQueryResult();
-        using (var connection = new SqlConnection(_connectionString))
+        try
         {
-            await connection.OpenAsync();
-            string query = $@"
-                SELECT DISTINCT 
-	       P.[Id]
-          ,P.[DomainID]
-          ,P.[Name]
-          ,P.[Code]
-          ,P.[ActiveStatusID]
-	      ,D.[Name] DomainName
-	      ,A.[Name] ActiveStatus
-      FROM [Project].[Project] P
-  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-  INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
-              WHERE P.[ActiveStatusID] <> 3 and P.Id = @Id";
-            var result = await connection.QueryFirstOrDefaultAsync<GetProjectQueryResult>(query, new { Id = id });
-            if (result is null) throw SimaResultException.ProjectNotFoundError;
-            response = result;
+            var response = new GetProjectQueryResult();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                                            string query = $@"
+                           SELECT DISTINCT 
+                                  P.[Id]
+                                    ,P.[DomainID]
+                                    ,P.[Name]
+                                    ,P.[Code]
+                                    ,P.[ActiveStatusID]
+                                    ,D.[Name] DomainName
+                                   ,A.[Name] ActiveStatus
+                                FROM [Project].[Project] P
+                            INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
+                                        WHERE P.[ActiveStatusID] <> 3 and P.Id = @Id
+                            
+                            --ProjectMember
+                            
+                             SELECT DISTINCT 
+                            	    PM.[IsAdminProject]
+                            	    ,PM.[IsManager]
+                            	    ,PM.[Id] ProjectMemberId
+                            	    ,U.[Id] UserId
+                            	    ,U.[Username]
+                                FROM [Project].[Project] P
+                            INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
+                            left join [Project].[ProjectMember] PM on P.Id = PM.ProjectID
+                            left join [Authentication].[Users] U on PM.UserID = u.Id
+                            WHERE P.[ActiveStatusID] <> 3 and PM.[ActiveStatusID] <> 3 and P.Id = @Id
+                            
+                            
+                            --ProjectGroup
+
+                            SELECT  
+                            	   G.[Name] GroupName
+                            	   ,G.[Id] GroupId
+                            	   ,PG.[Id] ProjectGroupId
+                                FROM [Project].[Project] P
+                            INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
+                            left join [Project].[ProjectGroup] PG on PG.ProjectId = P.Id
+                            left join [Authentication].[Groups] G on PG.GroupId = G.Id 
+                            WHERE P.[ActiveStatusID] <> 3 and  PG.[ActiveStatusID] <> 3 and P.Id = @Id";
+                using (var multi = await connection.QueryMultipleAsync(query, new { Id = id }))
+                {
+                    response = multi.ReadAsync<GetProjectQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.ProjectNotFoundError;
+                    response.ProjectMembers = multi.ReadAsync<GetProjectMemberResult>().GetAwaiter().GetResult().ToList();
+                    response.ProjectGroups = multi.ReadAsync<GetProjectGroupResult>().GetAwaiter().GetResult().ToList();
+                }
+                response.NullCheck();
+
+            }
+            return response;
         }
-        return response;
+        catch   (Exception ex)
+        {
+            throw;
+        }
+        
     }
 
     public async Task<Result<IEnumerable<GetProjectQueryResult>>> GetAll(GetAllProjectsQuery request)

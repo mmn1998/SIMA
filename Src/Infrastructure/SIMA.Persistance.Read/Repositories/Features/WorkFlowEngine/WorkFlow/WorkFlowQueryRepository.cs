@@ -36,6 +36,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
                     join [PROJECT].Project P on C.ProjectID = P.Id
 					INNER JOIN [Basic].[ActiveStatus] A on C.ActiveStatusID = A.ID
 					INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                    INNER JOIN [Authentication].[MainAggregate] M on C.MainAggregateId  = M.Id
                 WHERE C.[ActiveStatusID] <> 3
                 and (@SearchValue is null OR (C.Name like @SearchValue or C.Code like @SearchValue or C.[Description] like @SearchValue or P.Name like @SearchValue or D.[Name] like @SearchValue or A.[Name] like @SearchValue))
 ";
@@ -55,10 +56,13 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 				  ,D.Id DomainId
 				  ,D.[Name] DomainName
                   ,c.[CreatedAt]
+                  ,M.[Id] MainAggregateId
+	              ,M.[Name] MainAggregateName
                     FROM [PROJECT].[WorkFlow] C
                     join [PROJECT].Project P on C.ProjectID = P.Id
 					INNER JOIN [Basic].[ActiveStatus] A on C.ActiveStatusID = A.ID
 					INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                    INNER JOIN [Authentication].[MainAggregate] M on C.MainAggregateId  = M.Id
                 WHERE C.[ActiveStatusID] <> 3
                 and (@SearchValue is null OR (C.Name like @SearchValue or C.Code like @SearchValue or C.[Description] like @SearchValue or P.Name like @SearchValue or D.[Name] like @SearchValue or A.[Name] like @SearchValue))
                   order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
@@ -98,10 +102,13 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 				  ,A.[Name] ActiveStatus
 				  ,D.Id DomainId
 				  ,D.[Name] DomainName
+                  ,M.[Id] MainAggregateId
+	              ,M.[Name] MainAggregateName
                     FROM [PROJECT].[WorkFlow] C
                     join [PROJECT].Project P on C.ProjectID = P.Id
 					INNER JOIN [Basic].[ActiveStatus] A on C.ActiveStatusID = A.ID
 					INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                    INNER JOIN [Authentication].[MainAggregate] M on C.MainAggregateId  = M.Id
               WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetWorkFlowQueryResult>(query, new { Id = id });
             if (result is null) throw SimaResultException.WorkflowNotFoundError;
@@ -119,11 +126,11 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
             var queryCount = @"
                          SELECT COUNT(*) Result
                               FROM [PROJECT].[STEP] C
-                              left join [PROJECT].[State] S on C.StateID = S.Id
                               join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
                         	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
                         	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
                         	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                              Left JOIN [Authentication].[Form] F on C.FormId = F.Id
                           WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
                               and (@SearchValue is null OR C.[Name] like @SearchValue)
                               AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId);";
@@ -133,8 +140,6 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
                           SELECT DISTINCT C.[ID] as Id
                                    ,C.[Name]
                                    ,C.[workFlowId]
-                                   ,C.[stateId]
-                                   ,S.[Name] as StateName
                                    ,C.[BpmnId]
                                    ,C.[ActionTypeId]
                                    ,W.[Name] as WorkFlowName
@@ -144,12 +149,14 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
                         		   ,D.[Name] DomainName
                         		   ,D.[Id] DomainId
                         		   ,c.[CreatedAt]
+                        		   ,c.[FormId] 
+                        		   ,F.[Title] FormName
                                FROM [PROJECT].[STEP] C
-                               left join [PROJECT].[State] S on C.StateID = S.Id
                               join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
                         	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
                         	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
                         	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                              Left JOIN [Authentication].[Form] F on C.FormId = F.Id
                          WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
                                 and (@SearchValue is null OR C.[Name] like @SearchValue)
                                AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR P.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
@@ -183,29 +190,28 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
         {
             await connection.OpenAsync();
             string query = $@"
-  SELECT DISTINCT C.[ID] as Id
-           ,C.[Name]
-           ,C.[workFlowId]
-           ,C.[stateId]
-           ,C.[BpmnId]
-           ,C.[ActionTypeId]
-         	 ,S.[Id] as StateId
-         	 ,S.[Name] as StateName
-           ,W.[Name] as WorkFlowName
-		   ,A.[Name] ActiveStatus
-,P.[Name] ProjectName
-,P.Id ProjectId
-,D.[Name] DomainName
-,D.[Id] DomainId
-,c.[CreatedAt]
-       FROM  [PROJECT].[STEP] C
-       left join  [PROJECT].[State] S on C.StateID = S.Id
-      join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
-	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
-	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-WHERE C.[ActiveStatusID] <> 3   and W.Id=@id             
-Order By c.[CreatedAt] desc
+                          SELECT DISTINCT C.[ID] as Id
+                                   ,C.[Name]
+                                   ,C.[workFlowId]
+                                   ,C.[BpmnId]
+                                   ,C.[ActionTypeId]
+                                   ,W.[Name] as WorkFlowName
+                        		   ,A.[Name] ActiveStatus
+                                   ,P.[Name] ProjectName
+                                   ,P.Id ProjectId
+                                   ,D.[Name] DomainName
+                                   ,D.[Id] DomainId
+                                   ,c.[CreatedAt]
+                                   ,c.[FormId] 
+                        		   ,F.[Title] FormName
+                              FROM  [PROJECT].[STEP] C
+                              join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
+                        	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
+                        	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                        	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                              Left JOIN [Authentication].[Form] F on C.FormId = F.Id
+                        WHERE C.[ActiveStatusID] <> 3   and W.Id=@id             
+                        Order By c.[CreatedAt] desc
 ";
             var result = await connection.QueryAsync<GetStepQueryResult>(query, new { id = id });
             response = result.ToList();
@@ -222,26 +228,25 @@ Order By c.[CreatedAt] desc
             await connection.OpenAsync();
             string query = $@"
                        SELECT DISTINCT C.[ID] as Id
-           ,C.[Name]
-           ,C.[workFlowId]
-           ,C.[stateId]
-           ,C.[BpmnId]
-           ,C.[ActionTypeId]
-         	 ,S.[Id] as StateId
-         	 ,S.[Name] as StateName
-           ,W.[Name] as WorkFlowName
-		   ,A.[Name] ActiveStatus
-,P.[Name] ProjectName
-,P.Id ProjectId
-,D.[Name] DomainName
-,D.[Id] DomainId
-       FROM [PROJECT].[STEP] C
-       left join [PROJECT].[State] S on C.StateID = S.Id
-      join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
-	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
-	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
+                            ,C.[Name]
+                            ,C.[workFlowId]
+                            ,C.[BpmnId]
+                            ,C.[ActionTypeId]
+                            ,W.[Name] as WorkFlowName
+                            ,A.[Name] ActiveStatus
+                            ,P.[Name] ProjectName
+                            ,P.Id ProjectId
+                            ,D.[Name] DomainName
+                            ,D.[Id] DomainId
+                            ,c.[FormId] 
+                            ,F.[Title] FormName
+                           FROM [PROJECT].[STEP] C
+                           join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
+                           INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
+                           INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                           INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                           Left JOIN [Authentication].[Form] F on C.FormId = F.Id
+                           WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetStepQueryResult>(query, new { Id = id });
             response = result;
         }

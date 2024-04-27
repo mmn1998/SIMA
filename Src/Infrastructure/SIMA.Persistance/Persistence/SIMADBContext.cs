@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.Auths.AdminLocationAccesses.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
-using SIMA.Domain.Models.Features.Auths.Domains.Entities;
+using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Genders.Entities;
 using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
@@ -38,6 +38,7 @@ using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Labels.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
@@ -211,6 +212,8 @@ namespace SIMA.Persistance.Persistence
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<SubjectMeeting> SubjectMeetings { get; set; }
         public DbSet<SupervisorAnswerType> SupervisorAnswerTypes { get; set; }
+        public DbSet<Label> Lables { get; set; }
+        public DbSet<MeetingLabel> MeetingLabels { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
