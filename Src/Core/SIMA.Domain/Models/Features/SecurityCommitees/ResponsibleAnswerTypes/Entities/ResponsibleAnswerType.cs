@@ -3,10 +3,11 @@ using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
 
-public class ResponsibleAnswerType
+public class ResponsibleAnswerType : Entity
 {
     private ResponsibleAnswerType()
     {

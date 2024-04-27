@@ -19,7 +19,7 @@ public class IssueChangeHistory : Entity
         Code = arg.Code;
         Summery = arg.Summery;
         CurrentWorkflowId = new(arg.CurrentWorkflowId);
-        CurrentStateId = new(arg.CurrentStateId);
+        CurrentStateId = arg.CurrentStateId != 0 ? new(arg.CurrentStateId) : null;
         CurrenStepId = new(arg.CurrenStepId);
         MainAggregateId = new(arg.MainAggregateId);
         SourceId = arg.SourceId;

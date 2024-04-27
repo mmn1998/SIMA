@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+﻿using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
@@ -22,13 +23,14 @@ public class SubjectMeeting
         IsOutOfOrder = arg.IsOutOfOrder;
         IsConfirmed = arg.IsConfirmed;
         if (arg.ConfirmedBy.HasValue) ConfirmedBy = new(arg.ConfirmedBy.Value);
+        ConfirmationDateTime = arg.ConfirmationDateTime;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<SubjectMeeting> Create(CreateSubjectMeetingArg arg, ISubjectMeetingDomainService service)
+    public static SubjectMeeting Create(CreateSubjectMeetingArg arg)
     {
-        await CreateGuards(arg, service);
+        //await CreateGuards(arg, service);
         return new SubjectMeeting(arg);
     }
     public async Task Modify(ModifySubjectMeetingArg arg, ISubjectMeetingDomainService service)
@@ -39,6 +41,7 @@ public class SubjectMeeting
         IsOutOfOrder = arg.IsOutOfOrder;
         IsConfirmed = arg.IsConfirmed;
         if (arg.ConfirmedBy.HasValue) ConfirmedBy = new(arg.ConfirmedBy.Value);
+        ConfirmationDateTime = arg.ConfirmationDateTime;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -64,13 +67,12 @@ public class SubjectMeeting
     public string? IsOutOfOrder { get; private set; }
     public string? IsConfirmed { get; private set; }
     public UserId? ConfirmedBy { get; private set; }
+    public virtual User? Confirmer { get; private set; }
+    public DateTime? ConfirmationDateTime { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
     public void Delete()
     {

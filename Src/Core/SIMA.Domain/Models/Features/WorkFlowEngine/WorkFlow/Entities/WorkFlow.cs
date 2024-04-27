@@ -37,9 +37,10 @@ public class WorkFlow : Entity
         ActiveStatusId = arg.ActiveStatusId;
         MainAggregateId = new(arg.MainAggregateId);
         Ordering = arg.Ordering;
+        Description = arg.Description;
 
     }
-    public static async Task<WorkFlow> New(CreateWorkFlowArg arg , IWorkFlowDomainService service)
+    public static async Task<WorkFlow> New(CreateWorkFlowArg arg, IWorkFlowDomainService service)
     {
         await CreateGuards(arg, service);
         return new WorkFlow(arg);
@@ -64,7 +65,7 @@ public class WorkFlow : Entity
         var actors = args.Select(WorkFlowActor.Entites.WorkFlowActor.New);
         _workFlowActors.AddRange(actors);
     }
-    public async Task Modify(ModifyWorkFlowArg arg , IWorkFlowDomainService service)
+    public async Task Modify(ModifyWorkFlowArg arg, IWorkFlowDomainService service)
     {
         await ModifyGuards(arg, service);
         Code = arg.Code;
@@ -74,6 +75,10 @@ public class WorkFlow : Entity
         ModifiedBy = arg.ModifiedBy;
         MainAggregateId = new(arg.MainAggregateId);
         Ordering = arg.Ordering;
+        Description = arg.Description;
+        ProjectId = new ProjectId(arg.ProjectId);
+        Ordering = arg.Ordering;
+        if (arg.ManagerRoleId.HasValue) ManagerRoleId = new(arg.ManagerRoleId.Value);
     }
 
     public async Task Modify(ModifyFileContentArg arg)
@@ -110,7 +115,7 @@ public class WorkFlow : Entity
         var existProgressArgs = args.Where(x => existsBpmnIds.Contains(x.BpmnId));
         foreach (var item in existProgressArgs)
         {
-            var progress = _progress.FirstOrDefault(x => x.BpmnId ==  item.BpmnId);
+            var progress = _progress.FirstOrDefault(x => x.BpmnId == item.BpmnId);
             progress.Modify(item);
         }
     }
@@ -156,7 +161,33 @@ public class WorkFlow : Entity
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        #region DeactiveRealtedEntities
 
+        foreach (var step in _step)
+        {
+            step.Delete();
+        }
+        foreach (var state in _states)
+        {
+            state.Delete();
+        }
+        foreach (var workflowCompany in _workFlowCompany)
+        {
+            workflowCompany.Delete();
+        }
+        foreach (var progress in _progress)
+        {
+            progress.Delete();
+        }
+        foreach (var workflowActor in _workFlowActors)
+        {
+            workflowActor.Delete();
+        }
+        foreach (var issue in _Issues)
+        {
+            issue.Delete();
+        }
+        #endregion
     }
     public bool DeleteStep(long stepId)
     {
@@ -189,25 +220,25 @@ public class WorkFlow : Entity
             result.Modify(arg);
         }
     }
-    public async Task ModifyState(ModifyStateArgs arg , IWorkFlowDomainService service)
+    public async Task ModifyState(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
         var result = _states.Where(x => x.Id == new StateId(arg.Id)).FirstOrDefault();
         //ToDo Sanaz should return error if it is null!!!
         if (result is not null)
         {
-             await result.Modify(arg , service);
+            await result.Modify(arg, service);
         }
     }
-    public Step AddStep(StepArg arg )
+    public Step AddStep(StepArg arg)
     {
         var step = Step.New(arg);
         _step.Add(step);
         return step;
 
     }
-    public async Task<State> AddState(CreateStateArg arg ,IWorkFlowDomainService service)
+    public async Task<State> AddState(CreateStateArg arg, IWorkFlowDomainService service)
     {
-        var state = await State.New(arg , service);
+        var state = await State.New(arg, service);
         _states.Add(state);
         return state;
 
@@ -227,7 +258,7 @@ public class WorkFlow : Entity
         arg.ActiveStatusId.NullCheck();
         if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
         if (await service.IsCodeUnique(arg.Code, arg.Id)) throw WorkFlowExceptions.WorkFlowCodeIsUniqueException;
-        
+
     }
 
     private static async Task ModifyGuards(ModifyWorkFlowArg arg, IWorkFlowDomainService service)

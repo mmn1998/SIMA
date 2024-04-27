@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.Auths.Domains.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;

@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.DMS.Documents.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
+using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
+using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
@@ -22,12 +24,13 @@ public class Step : Entity
         Name = arg.Name ?? "";
         //TODO sanaz should check ActionTypeId
         //WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
-         if(arg.ActionTypeId.HasValue) ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
-        if (arg.StateId.HasValue) StateId = new StateId((long)arg.StateId);
+        if (arg.ActionTypeId.HasValue) ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
+        //if (arg.StateId.HasValue) StateId = new StateId((long)arg.StateId);
         BpmnId = arg.BpmnId;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedBy = arg.UserId;
         CreatedAt = arg.CreatedAt;
+        
     }
 
     public void Modify(StepArg arg)
@@ -38,10 +41,10 @@ public class Step : Entity
         {
             ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
         }
-        if (arg.StateId.HasValue)
-        {
-            StateId = new StateId((long)arg.StateId);
-        }
+        //if (arg.StateId.HasValue)
+        //{
+        //    StateId = new StateId((long)arg.StateId);
+        //}
         ModifiedBy = arg.UserId;
         var allBmpnIds = arg.ActorStepArgs.Select(x => x.BpmnId);
 
@@ -66,10 +69,11 @@ public class Step : Entity
         Name = arg.Name;
         WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
         //ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
-        StateId = new StateId((long)arg.StateId);
+        //StateId = new StateId((long)arg.StateId);
         //BpmnId = arg.BpmnId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        FormId = new FormId(arg.FormId);
     }
     public static Step New(StepArg arg)
     {
@@ -86,22 +90,19 @@ public class Step : Entity
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
-    public StepId Id { get; set; }
-    public string? Name { get; set; }
-    public WorkFlowId? WorkFlowId { get; set; }
-    public ActionTypeId? ActionTypeId { get; set; }
-  //  public FormId? FormId { get; set; }
-    public StateId? StateId { get; set; }
+    public StepId Id { get; private set; }
+    public string? Name { get; private set; }
+    public WorkFlowId? WorkFlowId { get; private set; }
+    public ActionTypeId? ActionTypeId { get; private set; }
+    public FormId? FormId { get; private set; }
+    public virtual Form? Form { get; private set; }
     public string? BpmnId { get; private set; }
-    public long? ActiveStatusId { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public long? CreatedBy { get; set; }
-    public byte[]? ModifiedAt { get; set; }
-    public long? ModifiedBy { get; set; }
+    public long? ActiveStatusId { get; private set; }
+    public DateTime? CreatedAt { get; private set; }
+    public long? CreatedBy { get; private set; }
+    public byte[]? ModifiedAt { get; private set; }
+    public long? ModifiedBy { get; private set; }
 
-    //public virtual Form.Entities.Form? Form { get; set; }
-    //private List<Form.Entities.Form> _form = new();
-    public virtual State? State { get; set; }
     private List<Progress.Entities.Progress> _sourceProgresses = new();
     public List<Progress.Entities.Progress> SourceProgresses => _sourceProgresses;
     private List<Progress.Entities.Progress> _targetProgresses = new();
@@ -119,7 +120,7 @@ public class Step : Entity
 
     private List<IssueChangeHistory> _issueChangeHistories = new();
     public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
-  
+
     private List<IssueHistory> _sourceissueHistories = new();
     public ICollection<IssueHistory> SourceIssueHistories => _sourceissueHistories;
     private List<IssueHistory> _targetissueHistories = new();

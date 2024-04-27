@@ -46,49 +46,106 @@ public class WorkFlowActor : Entity
     {
         Code = arg.Code;
         Name = arg.Name;
-        WorkFlowId = new WorkFlowId(arg.WorkFlowId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        IsDirectManagerOfIssueCreator = arg.IsDirectManagerOfIssueCreator;
     }
 
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        #region DeletertelatedEntities
+        foreach (var workflowActorStep in _workFlowActorSteps)
+        {
+            workflowActorStep.Delete();
+        }
+        #endregion
     }
 
-    public void AddActorRoles(List<CreateWorkFlowActorRoleArg> args)
+    public void AddActorRoles(List<CreateWorkFlowActorRoleArg> args , long workFlowActorId)
     {
-        foreach (var arg in args)
+        var previousRoleId = _workFlowActorRoles.Where(x=>x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId)).ToList();
+
+        foreach (var role in args)
         {
-            if (!_workFlowActorRoles.Any(war => war.WorkFlowActorId == Id && war.RoleId == new RoleId(arg.RoleId)))
+            if(_workFlowActorRoles.Any(x=>(x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.RoleId ==new RoleId(role.RoleId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active))
             {
-                arg.WorkFlowActorId = Id;
-                var actorRole = WorkFlowActorRole.New(arg);
-                _workFlowActorRoles.Add(actorRole);
+                var entity = _workFlowActorRoles.FirstOrDefault(x => x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.RoleId == new RoleId(role.RoleId));
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Active;
+            }
+            else if(!_workFlowActorRoles.Any(x => (x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.RoleId == new RoleId(role.RoleId)) && x.ActiveStatusId == (long)ActiveStatusEnum.Active))
+            {
+               var arg =  WorkFlowActorRole.New(role);
+               _workFlowActorRoles.Add(arg);
+            }
+        }
+
+        foreach (var role in previousRoleId)
+        {
+            var roles = args.FirstOrDefault(x => x.RoleId == role.RoleId.Value);
+            if ( roles is null)
+            {
+                var entity = _workFlowActorRoles.FirstOrDefault(x =>x.RoleId == role.RoleId);
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Delete;
             }
         }
     }
-    public void AddActorUsers(List<CreateWorkFlowActorUserArg> args)
+    public void AddActorUsers(List<CreateWorkFlowActorUserArg> args , long workFlowActorId)
     {
-        foreach (var arg in args)
+
+        var previousUserId = _workFlowActorUsers.Where(x => x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId)).ToList();
+
+        foreach (var user in args)
         {
-            if (!_workFlowActorUsers.Any(wau => wau.WorkFlowActorId == Id && wau.UserId == new UserId(arg.UserId)))
+            if (_workFlowActorUsers.Any(x => (x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.UserId == new UserId(user.UserId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active))
             {
-                arg.WorkFlowActorId = Id;
-                var actorUser = WorkFlowActorUser.New(arg);
-                _workFlowActorUsers.Add(actorUser);
+                var entity = _workFlowActorUsers.FirstOrDefault(x => x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.UserId == new UserId(user.UserId));
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Active;
+            }
+            else if (!_workFlowActorUsers.Any(x => (x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.UserId == new UserId(user.UserId)) && x.ActiveStatusId == (long)ActiveStatusEnum.Active))
+            {
+                var arg = WorkFlowActorUser.New(user);
+                _workFlowActorUsers.Add(arg);
+            }
+        }
+
+        foreach (var role in previousUserId)
+        {
+            var users = args.FirstOrDefault(x => x.UserId == role.UserId.Value);
+            if (users is null)
+            {
+                var entity = _workFlowActorUsers.FirstOrDefault(x => x.UserId == role.UserId);
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Delete;
             }
         }
     }
-    public void AddActorGroups(List<CreateWorkFlowActorGroupArg> args)
+    public void AddActorGroups(List<CreateWorkFlowActorGroupArg> args, long workFlowActorId)
     {
-        foreach (var arg in args)
+
+
+        var previousGroupId = _workFlowActorGroups.Where(x => x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId)).ToList();
+
+        foreach (var group in args)
         {
-            if (!_workFlowActorGroups.Any(wag => wag.WorkFlowActorId == Id && wag.GroupId == new GroupId(arg.GroupId)))
+            if (_workFlowActorGroups.Any(x => (x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.GroupId == new GroupId(group.GroupId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active))
             {
-                arg.WorkFlowActorId = Id;
-                var actorGroup = WorkFlowActorGroup.New(arg);
-                _workFlowActorGroups.Add(actorGroup);
+                var entity = _workFlowActorGroups.FirstOrDefault(x => x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.GroupId == new GroupId(group.GroupId));
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Active;
+            }
+            else if (!_workFlowActorGroups.Any(x => (x.WorkFlowActorId == new WorkFlowActorId(workFlowActorId) && x.GroupId == new GroupId(group.GroupId)) && x.ActiveStatusId == (long)ActiveStatusEnum.Active))
+            {
+                var arg = WorkFlowActorGroup.New(group);
+                _workFlowActorGroups.Add(arg);
+            }
+        }
+
+        foreach (var role in previousGroupId)
+        {
+            var groups = args.FirstOrDefault(x => x.GroupId == role.GroupId.Value);
+            if (groups is null)
+            {
+                var entity = _workFlowActorGroups.FirstOrDefault(x => x.GroupId == role.GroupId);
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Delete;
             }
         }
     }
@@ -140,6 +197,7 @@ public class WorkFlowActor : Entity
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
+    public string? IsDirectManagerOfIssueCreator { get; private set; }
     public string BpmnId { get; private set; }
     public long? ModifiedBy { get; set; }
     public WorkFlow.Entities.WorkFlow WorkFlow { get; private set; }

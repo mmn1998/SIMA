@@ -8,8 +8,8 @@ public class CreateSubjectMeetingArg
     public string? IsOutOfOrder { get; set; }
     public string? IsConfirmed { get; set; }
     public long? ConfirmedBy { get; set; }
+    public DateTime? ConfirmationDateTime { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
-
     public long? CreatedBy { get; set; }
 }

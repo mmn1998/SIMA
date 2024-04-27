@@ -1,6 +1,7 @@
 ﻿using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Repository;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface
@@ -13,6 +14,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface
         Task<Entities.WorkFlow> GetWorkFlowByDomainId(long domainId);
         Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoById(long workFlowId);
         Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long targetId , long progressId);
+        Task<Entities.WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate);
 
     }
 }

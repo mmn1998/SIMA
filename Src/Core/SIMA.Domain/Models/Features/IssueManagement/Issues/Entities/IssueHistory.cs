@@ -20,7 +20,7 @@ public class IssueHistory : Entity
         IssueId = new IssueId(arg.IssueId);
         SourceStateId = arg.SourceStateId== null ? null:new(arg.SourceStateId.Value);
         SourceStepId = new(arg.SourceStepId);
-        if(arg.TargetStateId.HasValue) TargetStateId = new(arg.TargetStateId.Value);
+        if(arg.TargetStateId.HasValue && arg.TargetStateId != 0) TargetStateId = new(arg.TargetStateId.Value);
         if(arg.TargetStepId.HasValue) TargetStepId = new(arg.TargetStepId.Value);
         PerformerUserId = new(arg.PerformerUserId);
         Description = arg.Description;

@@ -1,20 +1,22 @@
-﻿using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
-using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Args;
+﻿using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Domain;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 
-public class SubjectPriority
+public class SubjectPriority : Entity
 {
     private SubjectPriority() { }
     private SubjectPriority(CreateSubjectPriorityArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        Title = arg.Title;
-        Description = arg.Description;
+        Name = arg.Name;
+        Code = arg.Code;
         Ordering = arg.Ordering;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -28,8 +30,8 @@ public class SubjectPriority
     public async Task Modify(ModifySubjectPriorityArg arg, ISubjectPriorityDomainService service)
     {
         await ModifyGuards(arg, service);
-        Title = arg.Title;
-        Description = arg.Description;
+        Name = arg.Name;
+        Code = arg.Code;
         Ordering = arg.Ordering;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
@@ -38,16 +40,40 @@ public class SubjectPriority
     #region Guards
     private static async Task CreateGuards(CreateSubjectPriorityArg arg, ISubjectPriorityDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
+        arg.ActiveStatusId.NullCheck();
 
+        if (arg.Name.Length >= 200)
+            throw SimaResultException.LengthNameException;
+
+        if (arg.Code.Length >= 20)
+            throw SimaResultException.LengthCodeException;
+
+        if (await service.IsCodeUnique(arg.Code, 0))
+            throw SimaResultException.UniqueCodeError;
     }
     private async Task ModifyGuards(ModifySubjectPriorityArg arg, ISubjectPriorityDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
+        arg.ActiveStatusId.NullCheck();
 
+        if (arg.Name.Length >= 200)
+            throw SimaResultException.LengthNameException;
+
+        if (arg.Code.Length >= 20)
+            throw SimaResultException.LengthCodeException;
+
+        if (await service.IsCodeUnique(arg.Code, arg.Id))
+            throw SimaResultException.UniqueCodeError;
     }
     #endregion
     public SubjectPriorityId Id{ get; private set; }
-    public string? Title { get; private set; }
-    public string? Description { get; private set; }
+    public string? Name { get; private set; }
+    public string? Code { get; private set; }
     public float? Ordering { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

@@ -4,15 +4,16 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 
-public class Subject
+public class Subject : Entity
 {
     private Subject() { }
     private Subject(CreateSubjectArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
+        Id = new SubjectId(arg.Id);
         Title = arg.Title;
         Description = arg.Description;
         IsArchived = arg.IsArchived;
@@ -21,9 +22,8 @@ public class Subject
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<Subject> Create(CreateSubjectArg arg, ISubjectDomainService service)
+    public static async Task<Subject> Create(CreateSubjectArg arg)
     {
-        await CreateGuards(arg, service);
         return new Subject(arg);
     }
     public async Task Modify(ModifySubjectArg arg, ISubjectDomainService service)

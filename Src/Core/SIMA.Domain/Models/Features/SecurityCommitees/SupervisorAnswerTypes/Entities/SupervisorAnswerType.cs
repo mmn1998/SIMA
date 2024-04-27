@@ -1,10 +1,11 @@
 ﻿using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
 
-public class SupervisorAnswerType
+public class SupervisorAnswerType : Entity
 {
     private SupervisorAnswerType()
     {

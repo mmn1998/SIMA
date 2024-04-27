@@ -1,7 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Exceptions;
@@ -66,23 +68,62 @@ public partial class Project : Entity
             return false;
 
     }
-    public void AddProjectGroup(List<long> groupId)
+    public void AddProjectGroup(List<CreateProjectGroupArg> groups, long ProjectId)
     {
-        var projectGroup = groupId.Select(x => ProjectGroup.New(new CreateProjectGroupArg { GroupId = x, ProjectId = Id, ActiveStatusId = (long)ActiveStatusEnum.Active }));
-        _projectGroups.AddRange(projectGroup);
+        var previousProjectGroups = _projectGroups.Where(x => x.ProjectId == new ProjectId(ProjectId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addGroup = groups.Where(x => !previousProjectGroups.Any(c => c.GroupId.Value == x.GroupId)).ToList();
+        var deleteGroup = previousProjectGroups.Where(x => !groups.Any(c => c.GroupId == x.GroupId.Value)).ToList();
+
+
+        foreach (var group in addGroup)
+        {
+            var entity = _projectGroups.Where(x => (x.GroupId == new GroupId(group.GroupId) && x.ProjectId == new ProjectId(ProjectId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Active;
+            }
+            else
+            {
+                entity = ProjectGroup.New(group);
+                _projectGroups.Add(entity);
+            }
+        }
+
+        foreach (var group in deleteGroup)
+        {
+            group.ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        }
     }
-    public void AddProjectMember(List<CreateProjectMemberArg> request)
+    public void AddProjectMember(List<CreateProjectMemberArg> request, long projectId)
     {
-        var x = request.Count(x => x.IsManager == "1");
-        if(x > 1) throw ProjectExceptions.ProjectMemberIsManagerError;
-var projectMember = request.Select(x => ProjectMember.New(new CreateProjectMemberArg
-        { 
-            UserId = x.UserId,
-            ProjectId = Id,
-            IsAdminProject = x.IsAdminProject,
-            IsManager = x.IsManager }
-        ));
-        _projectMember.AddRange(projectMember);
+        var checkManager = request.Count(x => x.IsManager == "1");
+        if (checkManager > 1) throw ProjectExceptions.ProjectMemberIsManagerError;
+
+        var previousProjectMembers = _projectMember.Where(x => x.ProjectId == new ProjectId(projectId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addMember = request.Where(x => !previousProjectMembers.Any(c => c.UserId.Value == x.UserId)).ToList();
+        var deleteMember = previousProjectMembers.Where(x => !request.Any(c => c.UserId == x.UserId.Value)).ToList();
+
+
+        foreach (var member in addMember)
+        {
+            var entity = _projectMember.Where(x => (x.UserId == new UserId(member.UserId) && x.ProjectId == new ProjectId(projectId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                entity.ActiveStatusId = (long)ActiveStatusEnum.Active;
+            }
+            else
+            {
+                entity = ProjectMember.New(member);
+                _projectMember.Add(entity);
+            }
+        }
+
+        foreach (var member in deleteMember)
+        {
+            member.ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        }
     }
     public ProjectId Id { get; set; }
     public DomainId? DomainId { get; set; }

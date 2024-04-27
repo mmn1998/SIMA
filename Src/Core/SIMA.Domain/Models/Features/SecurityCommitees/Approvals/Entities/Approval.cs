@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Args;
@@ -12,10 +13,11 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 
-public class Approval
+public class Approval : Entity
 {
     private Approval() { }
     private Approval(CreateApprovalArg arg)
@@ -95,6 +97,7 @@ public class Approval
     public string? IsSigned { get; private set; }
     public string? IsArchived { get; private set; }
     public UserId? ArchivedBy { get; private set; }
+    public virtual User? Archiver { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
 

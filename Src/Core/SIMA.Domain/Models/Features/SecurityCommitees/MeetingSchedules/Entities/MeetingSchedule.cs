@@ -1,16 +1,17 @@
 ﻿using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
-using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities;
-using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.ValueObjects;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 
-public class MeetingSchedule
+public class MeetingSchedule : Entity
 {
     private MeetingSchedule() { }
     private MeetingSchedule(CreateMeetingScheduleArg arg)

@@ -19,9 +19,9 @@ public class MeetingDocument
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<MeetingDocument> Create(CreateMeetingDocumentArg arg, IMeetingDocumentDomainService service)
+    public static MeetingDocument Create(CreateMeetingDocumentArg arg)
     {
-        await CreateGuards(arg, service);
+        //await CreateGuards(arg, service);
         return new MeetingDocument(arg);
     }
     public async Task Modify(ModifyMeetingDocumentArg arg, IMeetingDocumentDomainService service)

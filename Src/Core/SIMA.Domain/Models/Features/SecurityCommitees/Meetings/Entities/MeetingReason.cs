@@ -1,5 +1,5 @@
-﻿using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities;
-using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.ValueObjects;
+﻿using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
@@ -17,10 +17,11 @@ public class MeetingReason
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        MeetingHoldingReasonId = new MeetingHoldingReasonId(arg.MeetingHoldingReasonId);
     }
-    public static async Task<MeetingReason> Create(CreateMeetingReasonArg arg, IMeetingReasonDomainService service)
+    public static MeetingReason Create(CreateMeetingReasonArg arg)
     {
-        await CreateGuards(arg, service);
+        //await CreateGuards(arg, service);
         return new MeetingReason(arg);
     }
     public async Task Modify(ModifyMeetingReasonArg arg, IMeetingReasonDomainService service)

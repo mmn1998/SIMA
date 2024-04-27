@@ -11,10 +11,11 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 
-public class Invitees
+public class Invitees : Entity
 {
     private Invitees() { }
     private Invitees(CreateInviteesArg arg)

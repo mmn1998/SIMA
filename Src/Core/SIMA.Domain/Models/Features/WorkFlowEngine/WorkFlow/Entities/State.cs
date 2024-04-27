@@ -60,8 +60,7 @@ public class State : Entity
     public long? CreatedBy { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
-    private List<Step> _steps = new();
-    public virtual ICollection<Step> Steps => _steps;
+
     private List<IssueChangeHistory> _issueChangeHistories = new();
     public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
     private List<Issue> _issues = new();

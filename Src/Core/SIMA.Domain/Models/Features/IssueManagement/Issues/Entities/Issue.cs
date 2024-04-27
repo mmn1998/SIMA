@@ -1,7 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
-using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
@@ -10,7 +7,6 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
-using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
@@ -31,7 +27,7 @@ public class Issue : Entity
         Code = arg.Code;
         Summery = arg.Summery;
         CurrentWorkflowId = new(arg.CurrentWorkflowId);
-        CurrentStateId = new(arg.CurrentStateId);
+        CurrentStateId = arg.CurrentStateId != 0 ? new(arg.CurrentStateId) : null;
         CurrenStepId = new(arg.CurrenStepId);
         MainAggregateId = new(arg.MainAggregateId);
         SourceId = arg.SourceId;
@@ -50,6 +46,7 @@ public class Issue : Entity
 
     public static async Task<Issue> Create(CreateIssueArg arg, IIssueDomainService service)
     {
+
         await GuardAgainstCodeUniqueness(arg.Id, arg.Code, service);
         await CreateGuards(arg, service);
 
@@ -196,6 +193,12 @@ public class Issue : Entity
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        #region DeleteRealatedEntities
+        foreach (var meeting in _meetings)
+        {
+            meeting.Delete();
+        }
+        #endregion
     }
     private List<IssueComment> _issueComments = new();
     public ICollection<IssueComment> IssueComments => _issueComments;
@@ -208,14 +211,14 @@ public class Issue : Entity
     private List<IssueHistory> _issueHistories = new();
     public ICollection<IssueHistory> IssueHistories => _issueHistories;
     public ICollection<IssueLink> IssuesLinkedTo { get; private set; }
-    private List<IssueCustomFeild> _issueCustomFeilds => new();
+    private List<IssueCustomFeild> _issueCustomFeilds = new();
     public ICollection<IssueCustomFeild> IssueCustomFeilds => _issueCustomFeilds;
 
-    private List<IssueChangeHistory> _issueChangeHistories => new();
+    private List<IssueChangeHistory> _issueChangeHistories = new();
     public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
-    private List<Approval> _approvals => new();
+    private List<Approval> _approvals = new();
     public ICollection<Approval> Approvals => _approvals;
-    private List<Meeting> _meetings => new();
+    private List<Meeting> _meetings = new();
     public ICollection<Meeting> Meetings => _meetings;
 
     #region Gaurds

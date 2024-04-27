@@ -9,4 +9,5 @@ public class CreateWorkFlowActorGroupArg
     public long ACtiveStatusId { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
+    public long ActiveStatusId { get; set; }
 }

@@ -9,6 +9,7 @@ public class ModifySubjectMeetingArg
     public string? IsConfirmed { get; set; }
     public long? ConfirmedBy { get; set; }
     public long ActiveStatusId { get; set; }
+    public DateTime? ConfirmationDateTime { get; set; }
     public byte[]? ModifiedAt { get; set; }
 
     public long? ModifiedBy { get; set; }
