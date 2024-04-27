@@ -14,16 +14,15 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Scrutor" Version="4.2.2" />
-    <PackageReference Include="SIMA.Framework.Common" Version="1.7.9" />
-    <PackageReference Include="SIMA.Framework.Core" Version="1.1.5" />
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.5" />
+    <PackageReference Include="SIMA.Framework.Common" Version="1.8.2" />
+    <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj" />
-    <ProjectReference Include="..\SIMA.Application.Contract\SIMA.Application.Contract.csproj" />
     <ProjectReference Include="..\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
   </ItemGroup>
 

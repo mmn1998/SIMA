@@ -9,4 +9,6 @@ public class GetProjectQueryResult
     public string? Code { get; set; }
     public int? ActiveStatusId { get; set; }
     public string? ActiveStatus { get; set; }
+    public List<GetProjectGroupResult> ProjectGroups { get; set; }
+    public List<GetProjectMemberResult> ProjectMembers { get; set; }
 }

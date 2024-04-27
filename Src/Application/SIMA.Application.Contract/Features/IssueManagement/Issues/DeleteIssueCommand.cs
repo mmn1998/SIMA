@@ -8,3 +8,4 @@ namespace SIMA.Application.Contract.Features.IssueManagement.Issues
         public long Id { get; set; }
     }
 }
+  

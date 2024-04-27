@@ -17,6 +17,8 @@
         public string FileContent { get; set; }
         public string? Description { get; set; }
         public int? ActiveStatusId { get; set; }
+        public long? MainAggregateId { get; set; }
+        public string? MainAggregateName { get; set; }
 
     }
 }

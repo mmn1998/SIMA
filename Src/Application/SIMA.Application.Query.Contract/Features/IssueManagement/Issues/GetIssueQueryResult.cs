@@ -41,34 +41,3 @@ public class GetIssueQueryResult
     public List<GetRelatedProgressQueryResult> RelatedProgresses { get; set; }
    
 }
-public class GetIssueLinkQueryResult
-{
-    public long IssueIdLinkedTo { get; set; }
-    public string IssueSummeryLinkedTo { get; set; }
-    public long IssueLinkReasonId { get; set; }
-    public string IssueLinkReasonName { get; set; }
-    public string IssueLinkReasonCode { get; set; }
-}
-public class GetIssueDocumentQueryResult
-{
-    public long DocumentId { get; set; }
-    public string DocumentPath { get; set; }
-    public string DocumentExtentionName { get; set; }
-}
-public class GetIssueCommentQueryResult
-{
-    public long Id { get; set; }
-    public string Comment { get; set; }
-    public long CreatorId { get; set; }
-    public string CreatorFullname { get; set; }
-    public DateTime CommentDate { get; set; }
-    public string? PersianCommentDate => DateHelper.ToPersianDateTime(CommentDate);
-}
-public class GetRelatedProgressQueryResult
-{
-    public long Id { get; set; }
-    public long ProgressId { get; set; }
-    public string Name { get; set; }
-    public long TargetId { get; set; }
-    public string TargetName { get; set; }
-}

@@ -38,19 +38,19 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
         if (request.RoleId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-            actor.AddActorRoles(args);
+            actor.AddActorRoles(args , actor.Id.Value);
         }
 
         if (request.GroupId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-            actor.AddActorGroups(args);
+            actor.AddActorGroups(args, actor.Id.Value);
         }
 
         if (request.UserId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-            actor.AddActorUsers(args);
+            actor.AddActorUsers(args, actor.Id.Value);
         }
 
         await _unitOfWork.SaveChangesAsync();
@@ -66,6 +66,26 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowActorArg>(request);
             entity.Modify(arg);
+
+            if(request.RoleId is not null && request.RoleId.Count > 0) 
+            {
+                var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+                entity.AddActorRoles(args , request.Id);
+            }
+
+            if (request.GroupId is not null && request.GroupId.Count > 0)
+            {
+                var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+                entity.AddActorGroups(args , request.Id);
+            }
+
+            if (request.UserId is not null && request.UserId.Count > 0)
+            {
+                var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+                entity.AddActorUsers(args, request.Id);
+            }
+
+
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }
@@ -94,7 +114,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
         var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-        entity.AddActorRoles(args);
+        entity.AddActorRoles(args, request.WorkFlowActorId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.WorkFlowActorId);
     }
@@ -109,7 +129,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
         var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-        entity.AddActorUsers(args);
+        entity.AddActorUsers(args , request.WorkFlowActorId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.WorkFlowActorId);
 
@@ -125,7 +145,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
         var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-        entity.AddActorGroups(args);
+        entity.AddActorGroups(args, request.WorkFlowActorId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.WorkFlowActorId);
 
@@ -144,19 +164,19 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
         if (request.RoleId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-            actor.AddActorRoles(args);
+            actor.AddActorRoles(args, request.Id);
         }
 
         if (request.GroupId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-            actor.AddActorGroups(args);
+            actor.AddActorGroups(args, request.Id);
         }
 
         if (request.UserId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-            actor.AddActorUsers(args);
+            actor.AddActorUsers(args, request.Id);
         }
 
         await _unitOfWork.SaveChangesAsync();

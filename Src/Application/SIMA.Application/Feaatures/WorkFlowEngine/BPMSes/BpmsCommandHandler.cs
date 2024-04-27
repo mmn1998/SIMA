@@ -39,12 +39,21 @@ public class BpmsCommandHandler : ICommandHandler<CreateBpmsCommand, Result<long
     }
     public async Task<Result<long>> Handle(CreateBpmsCommand request, CancellationToken cancellationToken)
     {
+        try
+        {
         var workflow = await _workflowRepository.GetById(request.WorkFlowId);
         var arg = BpmsMapper.Map(request);
         workflow.Modify(arg);
         await _unitOfWork.SaveChangesAsync();
         var workFlowId = workflow.Id.Value;
         return Result.Ok(workFlowId);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
 
     }
 

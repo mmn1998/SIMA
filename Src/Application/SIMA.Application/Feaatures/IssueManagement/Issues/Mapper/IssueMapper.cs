@@ -2,6 +2,7 @@
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Events;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 using System.Text;
@@ -45,6 +46,14 @@ public class IssueMapper : Profile
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
 
+        CreateMap<CreateIssueArg, CreateIssueHistoryArg>()
+           .ForMember(x => x.Id, act => act.MapFrom(src => IdHelper.GenerateUniqueId()))
+           .ForMember(x => x.PerformerUserId, act => act.MapFrom(src => simaIdentity.UserId))
+           .ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
+           .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
+           .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
+           .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
+
         CreateMap<ModifyIssueCommand, ModifyIssueArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
@@ -75,6 +84,18 @@ public class IssueMapper : Profile
           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
           .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
+
+        CreateMap<MeetingCreatedEvent, CreateIssueArg>()
+           .ForMember(x => x.Id, act => act.MapFrom(src => src.issueId))
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+           .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+           .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
+           .ForMember(dest => dest.IssueDate, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.Summery, act => act.MapFrom(source => source.Name))
+           .ForMember(dest => dest.Description, act => act.MapFrom(source => source.Name))
+           .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.MainAggregateType))
+           ;
 
     }
 

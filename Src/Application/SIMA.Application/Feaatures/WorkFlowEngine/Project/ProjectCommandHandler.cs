@@ -11,8 +11,8 @@ using SIMA.Framework.Core.Mediator;
 namespace SIMA.Application.Feaatures.WorkFlowEngine.Project;
 
 public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Result<long>>, ICommandHandler<DeleteProjectCommand, Result<long>>, ICommandHandler<ModifyProjectCommand, Result<long>>
-    , ICommandHandler<CreateProjectGroupCommand, Result<long>>, ICommandHandler<DeleteProjectGroupCommand, Result<long>>
-    , ICommandHandler<CreateProjectMemberCommand, Result<long>>, ICommandHandler<DeleteProjectMemberCommand, Result<long>>
+    , /*ICommandHandler<CreateProjectGroupCommand, Result<long>>,*/ ICommandHandler<DeleteProjectGroupCommand, Result<long>>
+    , /*ICommandHandler<CreateProjectMemberCommand, Result<long>>,*/ ICommandHandler<DeleteProjectMemberCommand, Result<long>>
 {
     private readonly IProjectRepository _repository;
     private readonly IWorkFlowRepository _workFlowRepository;
@@ -33,10 +33,18 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
         var entity = await Domain.Models.Features.WorkFlowEngine.Project.Entites.Project.New(arg);
         await _repository.Add(entity);
 
-        entity.AddProjectGroup(request.GroupId);
+        if (request.GroupId is not null && request.GroupId.Count > 0)
+        {
+            var groupArg = _mapper.Map<List<CreateProjectGroupArg>>(request.GroupId);
+            entity.AddProjectGroup(groupArg, entity.Id.Value);
+        }
 
-        var memberArg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
-        entity.AddProjectMember(memberArg);
+        if (request.ProjectMember is not null && request.ProjectMember.Count > 0)
+        {
+            var memberArg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
+            entity.AddProjectMember(memberArg, entity.Id.Value);
+        }
+
         await _unitOfWork.SaveChangesAsync();
 
         return Result.Ok(entity.Id.Value);
@@ -47,6 +55,18 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyProjectArg>(request);
         await entity.Modify(arg);
+
+        if (request.GroupId is not null && request.GroupId.Count > 0)
+        {
+            var groupArg = _mapper.Map<List<CreateProjectGroupArg>>(request.GroupId);
+            entity.AddProjectGroup(groupArg, request.Id);
+        }
+        if (request.ProjectMember is not null && request.ProjectMember.Count > 0)
+        {
+            var memberArg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
+            entity.AddProjectMember(memberArg, entity.Id.Value);
+        }
+
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -57,21 +77,21 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-    public async Task<Result<long>> Handle(CreateProjectGroupCommand request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var entity = await _repository.GetById(request.ProjectId);
-            entity.AddProjectGroup(request.GroupId);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.ProjectId);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+    //public async Task<Result<long>> Handle(CreateProjectGroupCommand request, CancellationToken cancellationToken)
+    //{
+    //    try
+    //    {
+    //        var entity = await _repository.GetById(request.ProjectId);
+    //        entity.AddProjectGroup(request.GroupId);
+    //        await _unitOfWork.SaveChangesAsync();
+    //        return Result.Ok(request.ProjectId);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw;
+    //    }
 
-    }
+    //}
     public async Task<Result<long>> Handle(DeleteProjectGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.ProjectId);
@@ -79,22 +99,22 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-    public async Task<Result<long>> Handle(CreateProjectMemberCommand request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var entity = await _repository.GetById(request.ProjectId);
-            var arg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
-            entity.AddProjectMember(arg);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(request.ProjectId);
-        }
-        catch (Exception ex)
-        {
-            throw;
-        }
+    //public async Task<Result<long>> Handle(CreateProjectMemberCommand request, CancellationToken cancellationToken)
+    //{
+    //    try
+    //    {
+    //        var entity = await _repository.GetById(request.ProjectId);
+    //        var arg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
+    //        entity.AddProjectMember(arg);
+    //        await _unitOfWork.SaveChangesAsync();
+    //        return Result.Ok(request.ProjectId);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        throw;
+    //    }
 
-    }
+    //}
     public async Task<Result<long>> Handle(DeleteProjectMemberCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.ProjectId);

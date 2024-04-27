@@ -11,5 +11,6 @@ namespace SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow
         public long ProjectId { get; set; }
         public long? ManagerRoleId { get; set; }
         public string? Description { get; set; }
+        public long? MainAggregateId { get; set; }
     }
 }

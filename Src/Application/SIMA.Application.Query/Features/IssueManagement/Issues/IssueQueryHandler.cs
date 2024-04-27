@@ -11,7 +11,8 @@ public class IssueQueryHandler :
     IQueryHandler<GetMyIssueListQuery, Result<IEnumerable<GetAllIssueQueryResult>>>,
     IQueryHandler<GetIssuesQuery, Result<GetIssueQueryResult>>,
     IQueryHandler<GetIssueHistoriesByIdQuery, Result<GetIssueHistoriesByIdQueryResult>>,
-    IQueryHandler<GetIssueHistoriesByIssueIdQuery, Result<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>>>
+    IQueryHandler<GetIssueHistoriesByIssueIdQuery, Result<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>>>,
+    IQueryHandler<GetCasesByWorkflowIdQuery, Result<List<GetCasesByWorkflowIdQueryResult>>>
 {
     private readonly IIssueQueryRepository _repository;
 
@@ -45,5 +46,20 @@ public class IssueQueryHandler :
     {
         var result = await _repository.GetIssueHistoryById(request.Id);
         return Result.Ok(result);
+    }
+
+    public async Task<Result<List<GetCasesByWorkflowIdQueryResult>>> Handle(GetCasesByWorkflowIdQuery request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _repository.GetCasesByWorkflowId(request.WorkFlowId);
+            return Result.Ok(result);
+
+        }
+        catch (Exception e)
+        {
+
+            throw;
+        }
     }
 }

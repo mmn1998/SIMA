@@ -45,7 +45,15 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
     }
     public async Task<Result<IEnumerable<GetStepQueryResult>>> Handle(GetAllStepsQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllStep(request);
+        try
+        {
+            return await _repository.GetAllStep(request);
+        }
+        catch (Exception e)
+        {
+
+            throw;
+        }
 
     }
     public async Task<Result<GetStateQueryResult>> Handle(GetStateQuery request, CancellationToken cancellationToken)
@@ -71,8 +79,17 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
 
     public async Task<Result<List<GetStepQueryResult>>> Handle(GetStepsByWorkFlowQuery request, CancellationToken cancellationToken)
     {
+        try
+        {
+
         var entites = await _repository.GetAllStepByWorkFlowId(request.Id);
         return Result.Ok(entites);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
     }
 
     public async Task<Result<IEnumerable<GetWorkFlowQueryResult>>> Handle(GetAllWorkFlowForIssue request, CancellationToken cancellationToken)
@@ -81,5 +98,5 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
         return Result.Ok(entites);
     }
 
-    
+
 }

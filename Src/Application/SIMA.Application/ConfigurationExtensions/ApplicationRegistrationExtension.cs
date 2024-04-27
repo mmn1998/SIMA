@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using MediatR;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SIMA.Application.Feaatures.Auths.AddressTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Companies;
 using SIMA.Application.Feaatures.Auths.Companies.Mappers;
 using SIMA.Application.Feaatures.Auths.ConfigurationAttributes.Mappers;
 using SIMA.Application.Feaatures.Auths.Departments.Mappers;
+using SIMA.Application.Feaatures.Auths.Forms.Mappers;
 using SIMA.Application.Feaatures.Auths.Genders.Mappers;
 using SIMA.Application.Feaatures.Auths.Groups.Mappers;
 using SIMA.Application.Feaatures.Auths.Locations.Mappers;
@@ -29,15 +31,21 @@ using SIMA.Application.Feaatures.DMS.DocumentTypes.Mappers;
 using SIMA.Application.Feaatures.DMS.WorkFlowDocumentTypes.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.IssueLinkReasons.Mapper;
 using SIMA.Application.Feaatures.IssueManagement.IssuePriorities.Mappers;
+using SIMA.Application.Feaatures.IssueManagement.Issues;
 using SIMA.Application.Feaatures.IssueManagement.Issues.Mapper;
 using SIMA.Application.Feaatures.IssueManagement.IssueTypes.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.IssueWeightCategories.Mappers;
+using SIMA.Application.Feaatures.SecurityCommitees.Labels;
+using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingReasons.Mappers;
+using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingStatus.Mapper;
+using SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper;
+using SIMA.Application.Feaatures.SecurityCommitees.SubjectPriorities.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers;
+using SIMA.Application.Feaatures.WorkFlowEngine.Progress.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.Project.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany.Mapper;
-using SIMA.Domain.Models.Features.DMS.Documents.Interfaces;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
@@ -72,10 +80,12 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new StaffMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new SysConfigMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new UserMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new FormMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 #endregion
 
                 #region WorkFlows
 
+                conf.AddProfile(new ProgressMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new WorkFlowMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new WorkFlowActorMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new ProjectMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
@@ -114,12 +124,25 @@ public static class ApplicationRegistrationExtension
                     scopedServiceProvider.GetRequiredService<IFileService>(),
                     serviceProvider));
                 #endregion
+
+                #region SecurityCommitees
+                conf.AddProfile(new SubjectPriorityMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new MeetingHoldingReasonMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new MeetingHoldingStatusMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new MeetingMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                #endregion
             }
         }, Array.Empty<Type>());
 
     }
     public static IServiceCollection AddCommandHandlerServices(this IServiceCollection services)
     {
+        services.Scan(scan =>
+          scan.FromAssemblyOf<LabelEventHandler>()
+          .AddClasses(classes => classes.AssignableTo(typeof(INotificationHandler<>)))
+          .AsImplementedInterfaces()
+          .WithScopedLifetime());
+
         return services.Scan(scan =>
             scan.FromAssemblyOf<CompanyCommandHandler>()
             .AddClasses(classes => classes.AssignableTo(typeof(ICommandHandler<,>)))
