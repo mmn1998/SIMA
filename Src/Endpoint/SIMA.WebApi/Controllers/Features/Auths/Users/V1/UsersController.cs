@@ -20,27 +20,47 @@ public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IDistributedRedisService _redisService;
+    private readonly IConfiguration _configuration;
 
     public UsersController(IMediator mediator,
-        IDistributedRedisService redisService)
+        IDistributedRedisService redisService, IConfiguration configuration)
     {
         _mediator = mediator;
         _redisService = redisService;
+        _configuration = configuration;
     }
 
     [HttpPost("Login")]
     [AllowAnonymous]
     public async Task<Result> Post([FromBody] LoginUserQuery command)
     {
-        var result = await _mediator.Send(command);
-        //#region SetPermissionsInRedis
-        //string key = MemoryCacheKeys.Permissions + result.Data.UserId.ToString();
-        //string value = JsonSerializer.Serialize(result.Data.Permissions);
+        try
+        {
+            var result = await _mediator.Send(command);
+            #region DisAllowMoreThanOneActiveSessions
+            string key = MemoryCacheKeys.Permissions + result.Data?.UserInfoLogin?.UserId.ToString();
+            string token = result.Data?.Token ?? string.Empty;
+            TimeSpan expirtionTime = TimeSpan.FromMinutes(_configuration.GetValue<byte>("TokenModel:TokenLifeTime"));
+            _redisService.Delete(key);
+            await _redisService.InsertAsync(key, token, expirtionTime);
+            #endregion
+            #region Permissions
+            //#region SetPermissionsInRedis
+            //string key = MemoryCacheKeys.Permissions + result.Data.UserId.ToString();
+            //string value = JsonSerializer.Serialize(result.Data.Permissions);
 
-        //TimeSpan expirtionTime = TimeSpan.FromHours(3);
-        //await _redisService.InsertAsync(key, value, expirtionTime);
-        //#endregion
-        return result;
+            //TimeSpan expirtionTime = TimeSpan.FromHours(3);
+            //await _redisService.InsertAsync(key, value, expirtionTime);
+            //#endregion
+            #endregion
+            return result;
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
     }
     [HttpGet("Logout")]
     public async Task Logout()

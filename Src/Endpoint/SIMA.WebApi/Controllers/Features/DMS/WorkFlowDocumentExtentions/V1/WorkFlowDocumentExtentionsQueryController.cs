@@ -9,11 +9,11 @@ namespace SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentExtentions.V1
 
     [Route("[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "WorkFlowDocumentExtentions")]
-    public class WorkFlowDocumentExtentionsQueryController : ControllerBase
+    [ApiExplorerSettings(GroupName = "WorkflowDocumentExtentions")]
+    public class WorkflowDocumentExtentionsQueryController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public WorkFlowDocumentExtentionsQueryController(IMediator mediator)
+        public WorkflowDocumentExtentionsQueryController(IMediator mediator)
         {
             _mediator = mediator;
         }

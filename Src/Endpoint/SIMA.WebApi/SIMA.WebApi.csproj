@@ -24,6 +24,8 @@
     <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsController.cs" />
     <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Domains\V1\DomainsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Forms\V1\FormsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Forms\V1\FormsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Genders\V1\GenderController.cs" />
     <Compile Include="Controllers\Features\Auths\Genders\V1\GenderQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Groups\V1\GroupsController.cs" />
@@ -73,7 +75,18 @@
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentExtentions\V1\WorkFlowDocumentExtentionsQueryController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\Cartables\V1\CartablesQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\Cartables\V1\CartablesController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingReasons\V1\MeetingHoldingReasonsController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingReasons\V1\MeetingHoldingReasonsQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingStatus\MeetingHoldingStatusController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingStatus\MeetingHoldingStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\Meetings\MeetingController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\BPMSes\BPMSController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressQueryController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\Projects\ProjectController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\Projects\ProjectQueryController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\WorkFlowActors\V1\WorkFlowActorsController.cs" />
@@ -109,8 +122,9 @@
     <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SIMA.Framework.Common" Version="1.7.9" />
-    <PackageReference Include="SIMA.Framework.Core" Version="1.1.5" />
+    <PackageReference Include="SIMA.Framework.Common" Version="1.8.2" />
+    <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.WebApi" Version="1.1.7" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>

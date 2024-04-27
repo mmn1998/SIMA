@@ -36,7 +36,7 @@ Log.Logger = new LoggerConfiguration()
     //.Enrich.WithClientAgent()
     .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
     .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose)
-    .WriteTo.File(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error, path: logSettings.ErrorFilePath, rollingInterval: RollingInterval.Day)
+    .WriteTo.File(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information, path: logSettings.ErrorFilePath, rollingInterval: RollingInterval.Day)
 
     .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(logSettings.ElasticsearchUri))
     {

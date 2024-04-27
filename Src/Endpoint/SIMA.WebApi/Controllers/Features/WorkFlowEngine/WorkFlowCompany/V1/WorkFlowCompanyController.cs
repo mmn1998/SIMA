@@ -10,13 +10,13 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlowCompany.V1
 
     [Route("[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "WorkFlowCompany")]
+    [ApiExplorerSettings(GroupName = "WorkflowCompany")]
     [Authorize]
-    public class WorkFlowCompanyController : ControllerBase
+    public class WorkflowCompanyController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public WorkFlowCompanyController(IMediator mediator)
+        public WorkflowCompanyController(IMediator mediator)
         {
             _mediator = mediator;
         }
