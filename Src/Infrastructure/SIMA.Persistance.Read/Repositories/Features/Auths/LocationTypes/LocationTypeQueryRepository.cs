@@ -70,7 +70,7 @@ public class LocationTypeQueryRepository : ILocationTypeQueryRepository
 
             using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 request.Skip,
                 request.PageSize
             }))

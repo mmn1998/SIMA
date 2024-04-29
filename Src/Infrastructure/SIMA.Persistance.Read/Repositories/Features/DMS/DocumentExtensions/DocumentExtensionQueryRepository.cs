@@ -46,7 +46,7 @@ OFFSET @Skip rows FETCH NEXT @Take rows only;
             {
                 request.Skip,
                 Take = request.PageSize,
-                SearchValue = "%" + request.Filter + "%"
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%"
             }))
             {
                 response = (await result.ReadAsync<GetDocumentExtensionQueryResult>()).ToList();

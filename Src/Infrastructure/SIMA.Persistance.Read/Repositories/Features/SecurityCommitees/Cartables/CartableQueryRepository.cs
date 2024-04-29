@@ -93,7 +93,7 @@ public class CartableQueryRepository : ICartableQueryRepository
             {
                 userId,
                 roleIds,
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 groupIds,
                 //request.WorkFlowId,
                 //request.DomainId,

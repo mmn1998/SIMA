@@ -87,7 +87,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                 {
                     userId,
                     roleIds,
-                    SearchValue = "%" + request.Filter + "%",
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                     groupIds,
                     request.WorkFlowId,
                     request.DomainId,
@@ -170,7 +170,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                 using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
                 {
                     userId,
-                    SearchValue = "%" + request.Filter + "%",
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                     request.WorkFlowId,
                     request.DomainId,
                     request.ProjectId,

@@ -136,7 +136,7 @@ namespace SIMA.Persistance.Persistence
 
         public virtual DbSet<LocationType> LocationTypes { get; set; }
 
-        public virtual DbSet<MainAggregate> MainEntities { get; set; }
+        public virtual DbSet<MainAggregate> MainAggregates { get; set; }
 
         public virtual DbSet<Permission> Permissions { get; set; }
 

@@ -46,7 +46,7 @@ public class IssuePriorityQueryRepository : IIssuePriorityQueryRepository
                                   OFFSET @Skip rows FETCH NEXT @PageSize rows only ;";
             using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 request.Skip,
                 request.PageSize
             }))

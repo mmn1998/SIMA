@@ -70,7 +70,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 
             using (var result = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 Take = request.PageSize,
                 request.Skip,
             }))
@@ -167,7 +167,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
             using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
 
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 WorkFlowId = request.WorkFlowId,
                 ProjectId = request.ProjectId,
                 DomainId = request.DomainId,
@@ -299,7 +299,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
             using (var multi = await connection.QueryMultipleAsync(query + " " + queryCount, new
             {
 
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 WorkFlowId = request.WorkFlowId,
                 ProjectId = request.ProjectId,
                 DomainId = request.DomainId,

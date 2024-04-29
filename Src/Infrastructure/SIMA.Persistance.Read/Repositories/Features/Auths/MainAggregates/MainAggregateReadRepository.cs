@@ -47,7 +47,7 @@ OFFSET @Skip rows FETCH NEXT @Take rows only;
             await connection.OpenAsync();
            using (var result = await connection.QueryMultipleAsync(query + countQuery , new
            {
-               SearchValue = "%" + request.Filter + "%",
+               SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                Take = request.PageSize,
                Skip = request.Skip
            }))

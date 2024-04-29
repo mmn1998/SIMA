@@ -26,8 +26,9 @@ public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
                   SELECT DISTINCT C.[ID] as Id
           ,C.[Name]
           ,C.[Code]
-         	,C.[WorkFlowId]
-         	,W.[Name] as WorkFlowName
+          ,C.[WorkFlowId]
+          ,C.[IsDirectManagerOfIssueCreator]
+          ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
 		  ,A.[Name] ActiveStatus
 		  ,P.[Name] ProjectName
@@ -120,6 +121,7 @@ Order By c.[CreatedAt] desc  ";
                                       ,C.[Name]
                                       ,C.[Code]
                                       ,C.[WorkFlowId]
+                                      ,C.[IsDirectManagerOfIssueCreator]
                                       ,W.[Name] as WorkFlowName
                                       ,C.[activeStatusId]
                             		  ,A.[Name] ActiveStatus
@@ -143,7 +145,7 @@ Order By c.[CreatedAt] desc  ";
             using (var multi = await connection.QueryMultipleAsync(query + " " + queryCount, new
             {
 
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 WorkFlowId = request.WorkFlowId,
                 ProjectId = request.ProjectId,
                 DomainId = request.DomainId,

@@ -50,11 +50,13 @@ public class ProjectQueryRepository : IProjectQueryRepository
                             	    ,PM.[Id] ProjectMemberId
                             	    ,U.[Id] UserId
                             	    ,U.[Username]
+                                    ,Pro.[FirstName] + ' ' + Pro.[LastName] as FullName
                                 FROM [Project].[Project] P
                             INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
                             INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
                             left join [Project].[ProjectMember] PM on P.Id = PM.ProjectID
                             left join [Authentication].[Users] U on PM.UserID = u.Id
+                            left join [Authentication].[Profile] Pro on Pro.Id = U.ProfileID
                             WHERE P.[ActiveStatusID] <> 3 and PM.[ActiveStatusID] <> 3 and P.Id = @Id
                             
                             
@@ -128,7 +130,7 @@ public class ProjectQueryRepository : IProjectQueryRepository
 
             using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
             {
-                SearchValue = "%" + request.Filter + "%",
+                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
                 DomainId = request.DomainId,
                 Take = request.PageSize,
                 request.Skip,
