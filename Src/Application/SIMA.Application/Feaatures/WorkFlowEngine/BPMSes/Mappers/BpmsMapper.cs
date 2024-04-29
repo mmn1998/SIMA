@@ -26,17 +26,27 @@ public class BpmsMapper : Profile
     }
     public static ModifyFileContentArg Map(ModifyBpmsCommand request, workFlow.WorkFlow workFlow)
     {
-        var content = JsonConvert.DeserializeObject<string>(request.Data);
-
-        XmlDocument xmlDoc = new XmlDocument();
-        xmlDoc.LoadXml(content);
-        XmlSerializer serializer = new XmlSerializer(typeof(TDefinitions));
-        using (XmlReader reader = XmlReader.Create(new StringReader(content)))
+        try
         {
-            var data = (TDefinitions)serializer.Deserialize(reader);
-            var result = Map(data, workFlow);
-            result.FileContent = content;
-            return result;
+
+
+            var content = JsonConvert.DeserializeObject<string>(request.Data);
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(content);
+            XmlSerializer serializer = new XmlSerializer(typeof(TDefinitions));
+            using (XmlReader reader = XmlReader.Create(new StringReader(content)))
+            {
+                var data = (TDefinitions)serializer.Deserialize(reader);
+                var result = Map(data, workFlow);
+                result.FileContent = content;
+                return result;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw;
         }
     }
     public static ModifyFileContentArg Map(TDefinitions definition, workFlow.WorkFlow workFlow)
@@ -92,6 +102,7 @@ public class BpmsMapper : Profile
                             StepId = step.Id,
                             ActiveStatusId = (long)ActiveStatusEnum.Active,
                             WorkFlowActorId = actorId,
+                            ActorBpmnId = actor.BpmnId,
                             Id = IdHelper.GenerateUniqueId()
                         };
                         if (existActor != null)
@@ -110,6 +121,17 @@ public class BpmsMapper : Profile
         }
         result.WorkFlowActors = actors;
         result.Progresses = progress;
+        foreach (var step in steps.Values)
+        {
+            if (string.IsNullOrEmpty(step.Name) && step.ActionTypeId == (int)ActionTypeEnum.startEvent)
+            {
+                step.Name = "شروع فرایند";
+            }
+            if (string.IsNullOrEmpty(step.Name) && step.ActionTypeId == (int)ActionTypeEnum.endEvent)
+            {
+                step.Name = "پایان فرایند";
+            }
+        }
         result.Steps = steps.Values.ToList();
         return result;
     }
@@ -175,6 +197,7 @@ public class BpmsMapper : Profile
                             BpmnId = flowId,
                             StepId = step.Id,
                             ActiveStatusId = (long)ActiveStatusEnum.Active,
+                            ActorBpmnId = actor.BpmnId,
                             WorkFlowActorId = actorId,
                             Id = IdHelper.GenerateUniqueId()
                         };
@@ -185,6 +208,17 @@ public class BpmsMapper : Profile
         }
         result.WorkFlowActors = actors;
         result.Progresses = progress;
+        foreach (var step in steps.Values)
+        {
+            if (string.IsNullOrEmpty(step.Name) && step.ActionTypeId == (int)ActionTypeEnum.startEvent)
+            {
+                step.Name = "شروع فرایند";
+            }
+            if (string.IsNullOrEmpty(step.Name) && step.ActionTypeId == (int)ActionTypeEnum.endEvent)
+            {
+                step.Name = "پایان فرایند";
+            }
+        }
         result.Steps = steps.Values.ToList();
         return result;
     }

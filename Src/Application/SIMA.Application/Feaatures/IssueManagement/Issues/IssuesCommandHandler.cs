@@ -90,11 +90,11 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             throw;
         }
-        
+
     }
 
 
@@ -103,13 +103,15 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyIssueArg>(request);
+        arg.IssueWeightCategoryd = await _issueWeightCategoryRepository.GetIdByWeight((int)request.Weight);
         var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
         await entity.Modify(arg, _service);
         historyArg.CompanyId = entity.CompanyId;
         historyArg.MainAggregateId = entity.MainAggregateId.Value;
         historyArg.SourceId = entity.SourceId;
         historyArg.CurrenStepId = entity.CurrenStepId.Value;
-        historyArg.CurrentStateId = entity.CurrentStateId.Value;
+        if (entity.CurrentStateId is not null)
+            historyArg.CurrentStateId = entity.CurrentStateId.Value;
         historyArg.Code = entity.Code;
         entity.AddIssueChangeHistory(historyArg);
         await _unitOfWork.SaveChangesAsync();
@@ -129,7 +131,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         //}
 
         var issue = await _repository.GetById(request.IssueId);
-        var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, request.NextStepId , request.ProgressId);
+        var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, request.NextStepId, request.ProgressId);
 
         var arg = _mapper.Map<IssueRunActionArg>(request);
         arg.CurrentStepId = nextStep.SourceStepId;
@@ -142,9 +144,9 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         }
 
         #region IssueHistory
-
         var history = _mapper.Map<CreateIssueHistoryArg>(issue);
-        history.SourceStateId = issue.CurrentStateId.Value;
+        if (issue.CurrentStateId is not null)
+            history.SourceStateId = issue.CurrentStateId.Value;
         history.TargetStateId = nextStep.SourceStateId;
         history.SourceStepId = issue.CurrenStepId.Value;
         history.TargetStepId = nextStep.SourceStepId;

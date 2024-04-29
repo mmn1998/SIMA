@@ -8,5 +8,11 @@
         public string? StatusName { get; set; }
         public int? ActiveStatusId { get; set; }
         public string? ActiveStatus { get; set; }
+        public string? WorkFlowName { get; set; }
+        public long? WorkFlowId { get; set; }
+        public string? DomainName { get; set; }
+        public long? DomainID { get; set; }
+        public string? ProjectName { get; set; }
+        public long? ProjectId { get; set; }
     }
 }

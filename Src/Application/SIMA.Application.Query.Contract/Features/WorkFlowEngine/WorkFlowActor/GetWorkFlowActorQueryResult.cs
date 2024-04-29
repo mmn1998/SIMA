@@ -12,7 +12,7 @@
         public long? ProjectId { get; set; }
         public string? ProjectName { get; set; }
         public string? ActiveStatus { get; set; }
-
+        public string? IsDirectManagerOfIssueCreator { get; set; }
         public string? Code { get; set; }
 
         public long? ActiveStatusId { get; set; }

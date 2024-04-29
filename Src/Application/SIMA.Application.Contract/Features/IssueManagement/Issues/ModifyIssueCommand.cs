@@ -10,8 +10,8 @@ public class ModifyIssueCommand : ICommand<Result<long>>
     public string Description { get; set; }
     public string Summery { get; set; }
     public long IssuePriorityId { get; set; }
-    public long IssueWeightCategoryd { get; set; }
     public int Weight { get; set; }
-    public DateTime DueDate { get; set; }
+    public string? DueDate { get; set; }
+    public long ActiveStatusId { get; set; }
 
 }

@@ -16,21 +16,23 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
 {
     private readonly IProjectRepository _repository;
     private readonly IWorkFlowRepository _workFlowRepository;
+    private readonly IProjectDomainService _projectDomainService;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public ProjectCommandHandler(IProjectRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IWorkFlowRepository workFlowRepository)
+    public ProjectCommandHandler(IProjectRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IWorkFlowRepository workFlowRepository , IProjectDomainService projectDomainService)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _workFlowRepository = workFlowRepository;
+        _projectDomainService = projectDomainService;
     }
 
     public async Task<Result<long>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateProjectArg>(request);
-        var entity = await Domain.Models.Features.WorkFlowEngine.Project.Entites.Project.New(arg);
+        var entity = await Domain.Models.Features.WorkFlowEngine.Project.Entites.Project.New(arg , _projectDomainService);
         await _repository.Add(entity);
 
         if (request.GroupId is not null && request.GroupId.Count > 0)
@@ -54,7 +56,7 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyProjectArg>(request);
-        await entity.Modify(arg);
+        await entity.Modify(arg , _projectDomainService);
 
         if (request.GroupId is not null && request.GroupId.Count > 0)
         {

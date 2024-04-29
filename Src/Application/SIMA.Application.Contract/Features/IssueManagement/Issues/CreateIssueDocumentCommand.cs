@@ -5,6 +5,6 @@ namespace SIMA.Application.Contract.Features.IssueManagement.Issues
 {
     public class CreateIssueDocumentCommand : ICommand<Result<long>>
     {
-        public long DocumentId { get; set; }
+        public long? DocumentId { get; set; }
     }
 }

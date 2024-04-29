@@ -14,10 +14,11 @@ public class IssueMapper : Profile
     public IssueMapper(ISimaIdentity simaIdentity)
     {
         CreateMap<CreateIssueArg, CreateIssueChangeHistoryArg>();
+
+
         CreateMap<ModifyIssueArg, CreateIssueChangeHistoryArg>()
-            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => source.ModifiedAt))
-            .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => source.ModifiedBy))
-            ;
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => source.ModifiedBy));
 
 
         CreateMap<CreateIssueCommand, CreateIssueArg>()
@@ -54,9 +55,12 @@ public class IssueMapper : Profile
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
 
+
+        
+
         CreateMap<ModifyIssueCommand, ModifyIssueArg>()
-            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            .ForMember(dest => dest.DueDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.DueDate)))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
 
         CreateMap<IssueRunActionCommand, IssueRunActionArg>()

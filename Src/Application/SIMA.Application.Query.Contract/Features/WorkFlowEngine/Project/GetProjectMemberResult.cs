@@ -7,5 +7,7 @@
         public string IsAdminProject { get; set; }
         public string IsManager { get; set; }
         public string Username { get; set; }
+        public string? FullName { get; set; }
+
     }
 }
