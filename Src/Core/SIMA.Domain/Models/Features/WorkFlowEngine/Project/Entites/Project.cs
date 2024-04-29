@@ -1,12 +1,16 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Args;
+using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Exceptions;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Exceptions;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -28,12 +32,14 @@ public partial class Project : Entity
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public static async Task<Project> New(CreateProjectArg arg)
+    public static async Task<Project> New(CreateProjectArg arg , IProjectDomainService service)
     {
+        await CreateGuard(arg, service);
         return new Project(arg);
     }
-    public async Task Modify(ModifyProjectArg arg)
+    public async Task Modify(ModifyProjectArg arg, IProjectDomainService service)
     {
+        await ModifyGuard(arg, service);
         Code = arg.Code;
         Name = arg.Name;
         if (arg.DomainId.HasValue) DomainId = new(arg.DomainId.Value);
@@ -141,4 +147,29 @@ public partial class Project : Entity
     private List<ProjectMember> _projectMember = new();
     public virtual List<ProjectMember> ProjectMembers => _projectMember;
     public virtual ICollection<WorkFlow.Entities.WorkFlow> WorkFlows { get; set; } = new List<WorkFlow.Entities.WorkFlow>();
+
+
+    #region Guards
+    private static async Task CreateGuard(CreateProjectArg arg, IProjectDomainService service)
+    {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
+
+        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
+        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
+        if (await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+    }
+
+    private async Task ModifyGuard(ModifyProjectArg arg, IProjectDomainService service)
+    {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
+
+        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
+        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
+        if (await service.IsCodeUnique(arg.Code, Id.Value)) throw SimaResultException.UniqueCodeError;
+    }
+    #endregion
 }

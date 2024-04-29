@@ -10,6 +10,7 @@
         public long? ActiveStatusId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public long? UserId { get; set; }
+        public long? LastId { get; set; }
 
     }
 }

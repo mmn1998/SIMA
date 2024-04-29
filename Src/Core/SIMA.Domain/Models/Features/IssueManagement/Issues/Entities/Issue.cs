@@ -137,7 +137,7 @@ public class Issue : Entity
             return;
         foreach (var item in issueLinkArgs)
         {
-            if (item.IssueIdLinkedTo > 0)
+            if (item.IssueIdLinkedTo > 0 )
             {
                 item.IssueId = Id.Value;
                 var issuelink = await IssueLink.Create(item);

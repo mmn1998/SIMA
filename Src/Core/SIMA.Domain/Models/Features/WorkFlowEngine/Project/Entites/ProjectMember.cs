@@ -24,6 +24,7 @@ public partial class ProjectMember : Entity
         IsManager = arg.IsManager;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        ActiveStatusId = arg.ActiveStatusId;
     }
     public static ProjectMember New(CreateProjectMemberArg arg)
     {

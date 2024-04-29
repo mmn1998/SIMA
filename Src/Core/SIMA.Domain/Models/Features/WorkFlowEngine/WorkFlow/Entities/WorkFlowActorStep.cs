@@ -31,6 +31,7 @@ public class WorkFlowActorStep : Entity
     {
         StepId = new StepId(arg.StepId);
         CreatedAt = DateTime.UtcNow;
+        WorkFlowActorId = new WorkFlowActorId(arg.WorkFlowActorId);
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
     public void Delete()

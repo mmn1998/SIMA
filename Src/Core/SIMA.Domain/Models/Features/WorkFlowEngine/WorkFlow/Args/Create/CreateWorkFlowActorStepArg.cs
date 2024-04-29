@@ -6,6 +6,7 @@
         public long StepId { get; set; }
         public long ActiveStatusId { get; set; }
         public string BpmnId { get; set; }
+        public string ActorBpmnId { get; set; }
         public long Id { get; set; }
     }
 }

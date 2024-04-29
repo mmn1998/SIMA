@@ -96,11 +96,21 @@ public class WorkFlow : Entity
         BpmnId = arg.BpmnId;
         ModifiedBy = arg.ModifyBy;
         FileContent = arg.FileContent;
-        ModifySteps(arg.Steps);
         ModifyActors(arg.WorkFlowActors);
+        UpdateStepArg(arg.Steps, arg.WorkFlowActors);
+        ModifySteps(arg.Steps);
         ModifyProgresses(arg.Progresses);
     }
+    private void UpdateStepArg(List<StepArg> stepsArg, List<WorkFlowActorArg> actorsArg)
+    {
+        var actorSteps = stepsArg.SelectMany(x => x.ActorStepArgs);
 
+        foreach (var item in actorSteps)
+        {
+            var actor = actorsArg.FirstOrDefault(x => x.BpmnId == item.ActorBpmnId);
+            item.WorkFlowActorId = actor.LastId ?? actor.Id;
+        }
+    }
     private void ModifyProgresses(List<ProgressArg> args)
     {
         var allBmpnIds = args.Select(x => x.BpmnId);
@@ -135,6 +145,9 @@ public class WorkFlow : Entity
         foreach (var item in existActorArgs)
         {
             var actor = _workFlowActors.FirstOrDefault(x => x.BpmnId == item.BpmnId);
+            if (actor is null)
+                continue;
+            item.LastId = actor.Id.Value;
             actor.Modify(item);
         }
     }
