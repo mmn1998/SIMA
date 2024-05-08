@@ -61,7 +61,7 @@ public class Subject : Entity
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
-    private List<SubjectMeeting> _subjectMeetings => new();
+    private List<SubjectMeeting> _subjectMeetings = new();
     public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
     public void Delete()
     {

@@ -16,7 +16,7 @@ public class MeetingLabel
         Id = new(IdHelper.GenerateUniqueId());
         MeetingId = new(arg.MeetingId);
         LabelId = new(arg.LabelId);
-        ActiveStatusId = arg.ActiveStatusId;
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
@@ -28,6 +28,7 @@ public class MeetingLabel
         LabelId = new(labelId);
         ActiveStatusId = (long)ActiveStatusEnum.Active;
         CreatedAt = DateTime.Now;
+        
     }
     public static MeetingLabel Create(CreateMeetingLabelArg arg)
     {

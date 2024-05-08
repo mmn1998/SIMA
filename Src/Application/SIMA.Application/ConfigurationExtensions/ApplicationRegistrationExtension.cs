@@ -68,7 +68,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new AddressTypeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new ConfigurationttributeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new DepartmentMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
-                conf.AddProfile(new GrenderMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new GenderMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new GroupMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new LocationMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new LocationTypeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));

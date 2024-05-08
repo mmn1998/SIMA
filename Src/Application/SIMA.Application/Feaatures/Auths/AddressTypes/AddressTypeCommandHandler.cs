@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.AddressTypes.Args;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Framework.Infrastructure.Cachings;
 
@@ -21,10 +22,11 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
     private readonly IDistributedRedisService _redisService;
     private readonly IConfiguration _configuration;
     private readonly IAddressTypeDomainService _service;
+    private readonly ISimaIdentity _simaIdentity;
 
     public AddressTypeCommandHandler(IAddressTypeRepository repository, IUnitOfWork unitOfWork,
         IMapper mapper, IDistributedRedisService redisService, IConfiguration configuration,
-        IAddressTypeDomainService service)
+        IAddressTypeDomainService service, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
@@ -32,6 +34,7 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
         _redisService = redisService;
         _configuration = configuration;
         _service = service;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(DeleteAddressTypeCommand request, CancellationToken cancellationToken)
     {
@@ -46,6 +49,7 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
     public async Task<Result<long>> Handle(CreateAddressTypeCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateAddressTypeArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var addressType = await AddressType.Create(arg, _service);
         await _repository.Add(addressType);
         await _unitOfWork.SaveChangesAsync();
@@ -57,6 +61,7 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
     {
         var addressType = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyAddressTypeArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await addressType.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();

@@ -85,12 +85,18 @@ namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.Progress
                                      ,D.Name DomainName
                             		 ,Pro.Id ProjectId
                                      ,Pro.Name ProjectName
+                                     ,src.[Name] SourceName
+                                     ,src.[Id] SourceId
+                                     ,trg.[Name] TargetName
+                                     ,trg.[Id] TargetId
                              FROM [Project].[Progress] P
                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
                              left JOIN [Project].[State] S on P.StateId = s.Id         
                              join [PROJECT].[WorkFlow] W on P.WorkFlowID = W.Id
                              join Project.Project Pro on Pro.Id=W.ProjectID
                              join Authentication.Domain D on D.Id=Pro.DomainID
+                             left join Project.Step src on src.Id = P.SourceId
+                             left join Project.Step trg on trg.Id = P.TargetId
                              WHERE  P.ActiveStatusId != 3 and W.ActiveStatusId != 3 
                              and (@SearchValue is null OR P.[Name] like @SearchValue)
                              AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR Pro.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)

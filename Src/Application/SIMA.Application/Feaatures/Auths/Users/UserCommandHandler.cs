@@ -40,11 +40,13 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     private readonly IProfileService _profileService;
     private readonly IProfileRepository _profileRepository;
     private readonly IUserQueryRepository _queryrepository;
+    private readonly ISimaIdentity _simaIdentity;
     private readonly TokenModel _securitySettings;
 
     public UserCommandHandler(IMapper mapper, IUserRepository repository,
          IUnitOfWork unitOfWork, IUserService service, ILogger<UserCommandHandler> logger, IProfileRepository profileRepository,
-         IProfileService profileService, IUserQueryRepository queryrepository, IOptions<TokenModel> securitySettings)
+         IProfileService profileService, IUserQueryRepository queryrepository, IOptions<TokenModel> securitySettings,
+         ISimaIdentity simaIdentity)
     {
         _mapper = mapper;
         _repository = repository;
@@ -53,6 +55,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         _profileService = profileService;
         _profileRepository = profileRepository;
         _queryrepository = queryrepository;
+        _simaIdentity = simaIdentity;
         _securitySettings = securitySettings.Value;
     }
     public async Task<Result<long>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
@@ -66,6 +69,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public async Task<Result<long>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateUserArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await User.Create(_service, arg);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -76,6 +80,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     {
         var entity = await _repository.GetById(request.UserId);
         var arg = _mapper.Map<CreateUserRoleArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await entity.AddUserRole(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -85,6 +90,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     {
         var entity = await _repository.GetById(request.UserId);
         var arg = _mapper.Map<CreateUserPermissionArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await entity.AddUserPermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -94,6 +100,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     {
         var entity = await _repository.GetById(request.UserId);
         var arg = _mapper.Map<CreateUserDomainArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await entity.AddUserDomain(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -103,46 +110,51 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     {
         var entity = await _repository.GetById(request.UserId);
         var arg = _mapper.Map<CreateUserLocationAccessArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await entity.AddUserLocation(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
 
-        public async Task<Result<long>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.Id);
-            var arg = _mapper.Map<ModifyUserArg>(request);
-            await entity.Modify(arg, _service);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
-        }
+    public async Task<Result<long>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.Id);
+        var arg = _mapper.Map<ModifyUserArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.Modify(arg, _service);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(entity.Id.Value);
+    }
 
-        public async Task<Result<long>> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.UserId);
-            var arg = _mapper.Map<ModifyUserRoleArg>(request);
-            await entity.ModifyUserRole(arg);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
-        }
+    public async Task<Result<long>> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.UserId);
+        var arg = _mapper.Map<ModifyUserRoleArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.ModifyUserRole(arg);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(entity.Id.Value);
+    }
 
-        public async Task<Result<long>> Handle(UpdateUserPermissionCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.UserId);
-            var arg = _mapper.Map<ModifyUserPermissionArg>(request);
-            await entity.ModifyUserPermission(arg);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
-        }
+    public async Task<Result<long>> Handle(UpdateUserPermissionCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.UserId);
+        var arg = _mapper.Map<ModifyUserPermissionArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.ModifyUserPermission(arg);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(entity.Id.Value);
+    }
 
-        public async Task<Result<long>> Handle(UpdateUserDomainCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.UserId);
-            var arg = _mapper.Map<ModifyUserDomainArg>(request);
-            await entity.ModifyUserDomain(arg);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
-        }
+    public async Task<Result<long>> Handle(UpdateUserDomainCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.UserId);
+        var arg = _mapper.Map<ModifyUserDomainArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.ModifyUserDomain(arg);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(entity.Id.Value);
+    }
 
     //public async Task<int> Handle(UpdateUserGroupCommand request, CancellationToken cancellationToken)
     //{
@@ -153,14 +165,15 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     //    return user.Id;
     //}
 
-        public async Task<Result<long>> Handle(UpdateUserLocationCommand request, CancellationToken cancellationToken)
-        {
-            var entity = await _repository.GetById(request.UserId);
-            var arg = _mapper.Map<ModifyUserLocationArg>(request);
-            await entity.ModifyUserLocation(arg);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(entity.Id.Value);
-        }
+    public async Task<Result<long>> Handle(UpdateUserLocationCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(request.UserId);
+        var arg = _mapper.Map<ModifyUserLocationArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.ModifyUserLocation(arg);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(entity.Id.Value);
+    }
 
     public async Task<Result<long>> Handle(DeleteUserDomainCommand request, CancellationToken cancellationToken)
     {
@@ -203,12 +216,14 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         {
             var userDomainsArgs = _mapper.Map<List<CreateUserDomainArg>>(request.UserDomains);
             foreach (var domain in userDomainsArgs) domain.UserId = entity.Id.Value;
+            foreach (var item in userDomainsArgs) item.CreatedBy = _simaIdentity.UserId;    
             await entity.AddUserDomains(userDomainsArgs);
         }
         if (request.UserPermissions != null && request.UserPermissions.Count != 0)
         {
             var userPermissionsArgs = _mapper.Map<List<CreateUserPermissionArg>>(request.UserPermissions);
             foreach (var permission in userPermissionsArgs) permission.UserId = entity.Id.Value;
+            foreach (var item in userPermissionsArgs) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddUserPermissions(userPermissionsArgs);
         }
 
@@ -216,12 +231,14 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         {
             var userRolesArgs = _mapper.Map<List<CreateUserRoleArg>>(request.UserRoles);
             foreach (var role in userRolesArgs) role.UserId = entity.Id.Value;
+            foreach (var item in userRolesArgs) item.UserId = _simaIdentity.UserId;
             await entity.AddUserRoles(userRolesArgs);
         }
         if (request.UserLocations != null && request.UserLocations.Count != 0)
         {
             var userLocationsArgs = _mapper.Map<List<CreateUserLocationAccessArg>>(request.UserLocations);
             foreach (var location in userLocationsArgs) location.UserId = entity.Id.Value;
+            foreach (var item in userLocationsArgs) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddUserLocations(userLocationsArgs);
         }
 

@@ -7,6 +7,7 @@ using SIMA.Domain.Models.Features.Auths.Genders.Args;
 using SIMA.Domain.Models.Features.Auths.Genders.Entities;
 using SIMA.Domain.Models.Features.Auths.Genders.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Framework.Infrastructure.Cachings;
 
@@ -21,10 +22,11 @@ public class GenderCommandHandler : ICommandHandler<CreateGenderCommand, Result<
     private readonly IDistributedRedisService _redisService;
     private readonly IConfiguration _configuration;
     private readonly IGenderService _service;
+    private readonly ISimaIdentity _simaIdentity;
 
     public GenderCommandHandler(IMapper mapper, IGenderRepository repository,
         IUnitOfWork unitOfWork, IDistributedRedisService redisService, IConfiguration configuration,
-        IGenderService service)
+        IGenderService service, ISimaIdentity simaIdentity)
     {
         _mapper = mapper;
         _repository = repository;
@@ -32,10 +34,12 @@ public class GenderCommandHandler : ICommandHandler<CreateGenderCommand, Result<
         _redisService = redisService;
         _configuration = configuration;
         _service = service;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateGenderCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateGenderArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await Gender.Create(arg, _service);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -46,6 +50,7 @@ public class GenderCommandHandler : ICommandHandler<CreateGenderCommand, Result<
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyGenderArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();

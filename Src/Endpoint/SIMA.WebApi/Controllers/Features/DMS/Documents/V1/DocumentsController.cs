@@ -22,6 +22,11 @@ public class DocumentsController : ControllerBase
     {
         return await _mediator.Send(command);
     }
+    [HttpPost("multi")]
+    public async Task<Result> Post([FromBody] MultiCreateDocumentCommand command)
+    {
+        return await _mediator.Send(command);
+    }
     //[HttpPut]
     //public async Task<Result> Put([FromBody] ModifyDocumentCommand command)
     //{

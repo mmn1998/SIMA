@@ -61,6 +61,10 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         {
             ActiveStatusId = (int)ActiveStatusEnum.Delete;
         }
+        public void Activate()
+        {
+            ActiveStatusId = (int)ActiveStatusEnum.Active;
+        }
 
 
 

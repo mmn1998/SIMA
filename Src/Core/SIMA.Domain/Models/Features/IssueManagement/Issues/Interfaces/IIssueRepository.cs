@@ -8,4 +8,9 @@ public interface IIssueRepository : IRepository<Entities.Issue>
     Task<Entities.Issue> GetById(long id);
     Task<Entities.Issue> GetLastIssue();
     Task ExcecuteStoreProcedure(string spName);
+
+
+    Task<long> GetHighestPriority();
+    Task<long> GetIssueTypeRequest();
+    Task<(long,int)> GetIssueMiddleWeight();
 }

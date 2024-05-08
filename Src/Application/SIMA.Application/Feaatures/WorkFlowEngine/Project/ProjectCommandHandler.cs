@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.WorkFlowEngine.Project;
@@ -17,33 +18,40 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
     private readonly IProjectRepository _repository;
     private readonly IWorkFlowRepository _workFlowRepository;
     private readonly IProjectDomainService _projectDomainService;
+    private readonly ISimaIdentity _simaIdentity;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public ProjectCommandHandler(IProjectRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IWorkFlowRepository workFlowRepository , IProjectDomainService projectDomainService)
+    public ProjectCommandHandler(IProjectRepository repository, IUnitOfWork unitOfWork, IMapper mapper,
+        IWorkFlowRepository workFlowRepository, IProjectDomainService projectDomainService,
+        ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _workFlowRepository = workFlowRepository;
         _projectDomainService = projectDomainService;
+        _simaIdentity = simaIdentity;
     }
 
     public async Task<Result<long>> Handle(CreateProjectCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateProjectArg>(request);
-        var entity = await Domain.Models.Features.WorkFlowEngine.Project.Entites.Project.New(arg , _projectDomainService);
+        arg.CreatedBy = _simaIdentity.UserId;
+        var entity = await Domain.Models.Features.WorkFlowEngine.Project.Entites.Project.New(arg, _projectDomainService);
         await _repository.Add(entity);
 
         if (request.GroupId is not null && request.GroupId.Count > 0)
         {
             var groupArg = _mapper.Map<List<CreateProjectGroupArg>>(request.GroupId);
+            foreach (var item in groupArg) item.CreatedBy = _simaIdentity.UserId;
             entity.AddProjectGroup(groupArg, entity.Id.Value);
         }
 
         if (request.ProjectMember is not null && request.ProjectMember.Count > 0)
         {
             var memberArg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
+            foreach (var item in memberArg) item.CreatedBy = _simaIdentity.UserId;
             entity.AddProjectMember(memberArg, entity.Id.Value);
         }
 
@@ -56,16 +64,19 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyProjectArg>(request);
-        await entity.Modify(arg , _projectDomainService);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.Modify(arg, _projectDomainService);
 
         if (request.GroupId is not null && request.GroupId.Count > 0)
         {
             var groupArg = _mapper.Map<List<CreateProjectGroupArg>>(request.GroupId);
+            foreach (var item in groupArg) item.CreatedBy = _simaIdentity.UserId;
             entity.AddProjectGroup(groupArg, request.Id);
         }
         if (request.ProjectMember is not null && request.ProjectMember.Count > 0)
         {
             var memberArg = _mapper.Map<List<CreateProjectMemberArg>>(request.ProjectMember);
+            foreach (var item in memberArg) item.CreatedBy = _simaIdentity.UserId;
             entity.AddProjectMember(memberArg, entity.Id.Value);
         }
 

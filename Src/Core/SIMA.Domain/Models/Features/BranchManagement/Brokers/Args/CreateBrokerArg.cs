@@ -18,5 +18,5 @@ public class CreateBrokerArg
 
     public DateTime? CreatedAt { get; set; }
 
-    public int? CreatedBy { get; set; }
+    public long CreatedBy { get; set; }
 }

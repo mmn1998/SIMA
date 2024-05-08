@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.DMS.WorkFlowDocumentTypes.Args;
 using SIMA.Domain.Models.Features.DMS.WorkFlowDocumentTypes.Entities;
 using SIMA.Domain.Models.Features.DMS.WorkFlowDocumentTypes.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.DMS.WorkFlowDocumentTypes;
@@ -16,18 +17,21 @@ public class WorkFlowDocumentTypesCommandHandler : ICommandHandler<CreateWorkflo
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IWorkflowDocumentTypeDomainService _domainService;
+    private readonly ISimaIdentity _simaIdentity;
 
     public WorkFlowDocumentTypesCommandHandler(IWorkflowDocumentTypeRepository repository, IUnitOfWork unitOfWork,
-        IMapper mapper, IWorkflowDocumentTypeDomainService domainService)
+        IMapper mapper, IWorkflowDocumentTypeDomainService domainService, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _domainService = domainService;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateWorkflowDocumentTypeCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateWorkFlowDocumentTypeArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await WorkflowDocumentType.Create(arg, _domainService);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -38,6 +42,7 @@ public class WorkFlowDocumentTypesCommandHandler : ICommandHandler<CreateWorkflo
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyWorkFlowDocumentTypeArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _domainService);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);

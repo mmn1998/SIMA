@@ -159,6 +159,12 @@ public class WorkFlow : Entity
         foreach (var item in deActiveSteps)
         {
             item.Delete();
+            // business rule for deactive step
+            var relatedIssues = _Issues.Where(i => i.CurrenStepId == item.Id);
+            foreach (var relatedIssue in relatedIssues)
+            {
+                relatedIssue.Delete();
+            }
         }
         var existsBpmnIds = _step.Select(x => x.BpmnId);
         var notExistsSteps = args.Where(x => !existsBpmnIds.Contains(x.BpmnId));
@@ -199,6 +205,37 @@ public class WorkFlow : Entity
         foreach (var issue in _Issues)
         {
             issue.Delete();
+        }
+        #endregion
+    }
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+        #region ActivateRealtedEntities
+
+        foreach (var step in _step)
+        {
+            step.Activate();
+        }
+        foreach (var state in _states)
+        {
+            state.Activate();
+        }
+        foreach (var workflowCompany in _workFlowCompany)
+        {
+            workflowCompany.Activate();
+        }
+        foreach (var progress in _progress)
+        {
+            progress.Activate();
+        }
+        foreach (var workflowActor in _workFlowActors)
+        {
+            workflowActor.Activate();
+        }
+        foreach (var issue in _Issues)
+        {
+            issue.Activate();
         }
         #endregion
     }
@@ -274,8 +311,12 @@ public class WorkFlow : Entity
 
     }
 
-    private static async Task ModifyGuards(ModifyWorkFlowArg arg, IWorkFlowDomainService service)
+    private async Task ModifyGuards(ModifyWorkFlowArg arg, IWorkFlowDomainService service)
     {
+        if (arg.ActiveStatusId == (long)ActiveStatusEnum.Active && ActiveStatusId != (long)ActiveStatusEnum.Active)
+        {
+            Activate();
+        }
         arg.Name.NullCheck();
         if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
         if (await service.IsCodeUnique(arg.Code, arg.Id)) throw WorkFlowExceptions.WorkFlowCodeIsUniqueException;

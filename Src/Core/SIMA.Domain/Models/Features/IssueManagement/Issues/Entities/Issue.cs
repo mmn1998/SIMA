@@ -200,6 +200,16 @@ public class Issue : Entity
         }
         #endregion
     }
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+        #region ActivateRealatedEntities
+        foreach (var meeting in _meetings)
+        {
+            meeting.Activate();
+        }
+        #endregion
+    }
     private List<IssueComment> _issueComments = new();
     public ICollection<IssueComment> IssueComments => _issueComments;
 

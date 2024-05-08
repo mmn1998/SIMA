@@ -7,6 +7,7 @@ using SIMA.Domain.Models.Features.Auths.LocationTypes.Args;
 using SIMA.Domain.Models.Features.Auths.LocationTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.LocationTypes.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Framework.Infrastructure.Cachings;
 
@@ -21,9 +22,11 @@ public class LocationTypeCommandHandler : ICommandHandler<CreateLocationTypeComm
     private readonly IDistributedRedisService _redisService;
     private readonly IConfiguration _configuration;
     private readonly ILocationTypeService _service;
+    private readonly ISimaIdentity _simaIdentity;
 
     public LocationTypeCommandHandler(IMapper mapper, ILocationTypeRepository repository, IUnitOfWork unitOfWork,
-        IDistributedRedisService redisService, IConfiguration configuration, ILocationTypeService service)
+        IDistributedRedisService redisService, IConfiguration configuration, ILocationTypeService service
+        ,ISimaIdentity simaIdentity)
     {
         _mapper = mapper;
         _repository = repository;
@@ -31,10 +34,12 @@ public class LocationTypeCommandHandler : ICommandHandler<CreateLocationTypeComm
         _redisService = redisService;
         _configuration = configuration;
         _service = service;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateLocationTypeCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateLocationTypeArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await LocationType.Create(arg, _service);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -45,6 +50,7 @@ public class LocationTypeCommandHandler : ICommandHandler<CreateLocationTypeComm
     {
         var entity = await _repository.GetById((int)request.Id);
         var arg = _mapper.Map<ModifyLocationTypeArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();

@@ -14,5 +14,9 @@
         public long? DomainID { get; set; }
         public string? ProjectName { get; set; }
         public long? ProjectId { get; set; }
+        public string? SourceName { get; set; }
+        public long? SourceId { get; set; }
+        public string? TargetName { get; set; }
+        public long? TargetNameId { get; set; }
     }
 }

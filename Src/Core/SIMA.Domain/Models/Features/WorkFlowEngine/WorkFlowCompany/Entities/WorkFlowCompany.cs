@@ -42,6 +42,10 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities
         {
             ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
+        public void Activate()
+        {
+            ActiveStatusId = (long)ActiveStatusEnum.Active;
+        }
         public WorkFlowCompanyId Id { get; private set; }
         public CompanyId CompanyId { get; set; }
         public virtual Company Company { get; set; }

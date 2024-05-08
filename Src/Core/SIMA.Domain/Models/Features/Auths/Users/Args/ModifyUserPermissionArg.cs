@@ -10,5 +10,5 @@ public class ModifyUserPermissionArg
 
     public string? IsActive { get; set; }
     public byte[]? ModifiedAt { get; set; }
-    public int ModifiedBy { get; set; }
+    public long ModifiedBy { get; set; }
 }

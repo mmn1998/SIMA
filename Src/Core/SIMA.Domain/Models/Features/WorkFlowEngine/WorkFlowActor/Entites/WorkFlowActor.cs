@@ -54,10 +54,20 @@ public class WorkFlowActor : Entity
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
-        #region DeletertelatedEntities
+        #region DeleteRtelatedEntities
         foreach (var workflowActorStep in _workFlowActorSteps)
         {
             workflowActorStep.Delete();
+        }
+        #endregion
+    }
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+        #region ActivateRtelatedEntities
+        foreach (var workflowActorStep in _workFlowActorSteps)
+        {
+            workflowActorStep.Activate();
         }
         #endregion
     }

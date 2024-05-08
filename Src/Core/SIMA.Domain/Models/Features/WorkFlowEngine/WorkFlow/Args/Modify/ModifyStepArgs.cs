@@ -5,6 +5,7 @@
 
         public long Id { get; set; }
         public string? Name { get; set; }
+        public string? CompleteName { get; set; }
         public long? WorkFlowId { get; set; }
         //public long? ActionTypeId { get; set; }
         public long FormId { get; set; }

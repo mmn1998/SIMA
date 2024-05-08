@@ -27,7 +27,7 @@ public class State : Entity
     }
     public async Task Modify(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
-        ModifyGuards(arg, service);
+        await ModifyGuards(arg, service);
         Name = arg.Name;
         Code = arg.Code;
         WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
@@ -44,11 +44,14 @@ public class State : Entity
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
 
     }
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 
     public void Deactive()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Deactive;
-
     }
 
     public StateId Id { get; set; }

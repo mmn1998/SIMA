@@ -8,6 +8,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
+using SIMA.Framework.Common.Security;
 using SIMA.Persistance;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues
@@ -21,16 +22,18 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
         private readonly IIssueDomainService _service;
         private readonly IWorkFlowRepository _workFlowRepository;
         private readonly IProjectRepository _projectRepository;
+        private readonly ISimaIdentity _simaIdentity;
 
         public IssueEventHandler(IIssueRepository repository,
           IMapper mapper, IIssueDomainService service,
-          IWorkFlowRepository workFlowRepository, IProjectRepository projectRepository)
+          IWorkFlowRepository workFlowRepository, IProjectRepository projectRepository, ISimaIdentity simaIdentity)
         {
             _repository = repository;
             _mapper = mapper;
             _service = service;
             _workFlowRepository = workFlowRepository;
             _projectRepository = projectRepository;
+            _simaIdentity = simaIdentity;
         }
 
         public async Task Handle(MeetingCreatedEvent notification, CancellationToken cancellationToken)
@@ -42,15 +45,19 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
                 //if (!await _workFlowDomainService.CheckCreateIssueWithActor(workFlowEnity.Id.Value)) throw IssueExceptions.CreateIssueWithChechActorException;
 
                 var workflow = await _workFlowRepository.GetWorkflowInfoById(workFlowEnity.Id.Value);
-
+                var issuePriorityId = _repository.GetHighestPriority();
+                var issueTypeId = _repository.GetIssueTypeRequest();
+                var issueweight = _repository.GetIssueMiddleWeight();
                 var arg = _mapper.Map<CreateIssueArg>(notification);
+                arg.CreatedBy = _simaIdentity.UserId;
                 arg.CurrenStepId = workflow.TargetStepId;
                 arg.CurrentStateId = workflow.TargetStateId;
                 arg.CurrentWorkflowId = workflow.Id;
-                arg.IssuePriorityId = 7678559058;
-                arg.IssueTypeId = 4131511500;
-                arg.IssueWeightCategoryd = 432435;
-                arg.Weight = 10;
+                arg.IssuePriorityId = issuePriorityId.Result;// 7678559058;
+                arg.IssueTypeId = issueTypeId.Result;// 4131511500;
+                arg.IssueWeightCategoryd = issueweight.Result.Item1;
+                arg.Weight = issueweight.Result.Item2;
+                arg.DueDate = DateTime.Now.AddDays(30);
                 #region GenerateCode
 
                 var project = await _projectRepository.GetById(workflow.ProjectId);
@@ -70,10 +77,12 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
                 #endregion
 
                 var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
+                historyArg.CreatedBy = _simaIdentity.UserId;
                 var entity = await Issue.Create(arg, _service);
 
                 #region IssueHistory
                 var history = _mapper.Map<CreateIssueHistoryArg>(arg);
+                history.CreatedBy = _simaIdentity.UserId;
                 history.SourceStateId = workflow.SourceStateId;
                 history.TargetStateId = workflow.TargetStateId;
                 history.SourceStepId = workflow.SourceStepId;

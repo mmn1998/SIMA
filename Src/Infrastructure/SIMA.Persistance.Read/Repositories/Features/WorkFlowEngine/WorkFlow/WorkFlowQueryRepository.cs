@@ -139,6 +139,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
             string query = $@"
                           SELECT DISTINCT C.[ID] as Id
                                    ,C.[Name]
+                                   ,C.[CompleteName]
                                    ,C.[workFlowId]
                                    ,C.[BpmnId]
                                    ,C.[ActionTypeId]
@@ -192,6 +193,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
             string query = $@"
                           SELECT DISTINCT C.[ID] as Id
                                    ,C.[Name]
+                                   ,C.[CompleteName]
                                    ,C.[workFlowId]
                                    ,C.[BpmnId]
                                    ,C.[ActionTypeId]
@@ -229,6 +231,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
             string query = $@"
                        SELECT DISTINCT C.[ID] as Id
                             ,C.[Name]
+                            ,C.[CompleteName]
                             ,C.[workFlowId]
                             ,C.[BpmnId]
                             ,C.[ActionTypeId]
@@ -373,7 +376,6 @@ Order By c.[CreatedAt] desc";
         }
         return response;
     }
-
     public async Task<List<GetWorkFlowQueryResult>> GetByProjectId(long projectId)
     {
         var response = new List<GetWorkFlowQueryResult>();
@@ -404,7 +406,6 @@ Order By c.[CreatedAt] desc
         }
         return response;
     }
-
     public async Task<IEnumerable<GetWorkFlowQueryResult>> GetAllWorkFlowForIssue()
     {
         var userid = _simaIdentity.UserId;

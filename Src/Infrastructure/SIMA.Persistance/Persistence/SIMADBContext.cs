@@ -219,11 +219,7 @@ namespace SIMA.Persistance.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(WorkFlowConfiguration).Assembly);
-
-
-
         }
     }
 }

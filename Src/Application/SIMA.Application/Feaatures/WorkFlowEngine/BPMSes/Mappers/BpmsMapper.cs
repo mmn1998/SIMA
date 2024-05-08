@@ -2,6 +2,7 @@
 using AutoBPM.Bpmn.Models;
 using AutoMapper;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Asn1.Ocsp;
 using SIMA.Application.Contract.Features.WorkFlowEngine.BPMSes;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
@@ -15,7 +16,6 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers;
 
 public class BpmsMapper : Profile
 {
-
     private ISimaIdentity _simaIdentity;
     public BpmsMapper(ISimaIdentity simaIdentity)
     {
@@ -28,8 +28,6 @@ public class BpmsMapper : Profile
     {
         try
         {
-
-
             var content = JsonConvert.DeserializeObject<string>(request.Data);
 
             XmlDocument xmlDoc = new XmlDocument();
@@ -174,34 +172,69 @@ public class BpmsMapper : Profile
                 var progresses = NextFlows(nextNodes, process.Id, definition, ref steps);
                 progress.AddRange(progresses);
             }
+            int counter = 1;
             foreach (var laneSet in process.LaneSets)
             {
-                foreach (ILane lane in laneSet.Children)
+                foreach (TLane lane in laneSet.Children)
                 {
-                    var actorId = IdHelper.GenerateUniqueId();
-                    var actor = new WorkFlowActorArg
+                    if (lane.ChildLaneSet is not null)
                     {
-                        BpmnId = lane.Id,
-                        ActiveStatusId = (long)ActiveStatusEnum.Active,
-                        Code = actorId.ToString(),
-                        CreatedAt = DateTime.Now,
-                        Id = actorId,
-                        Name = lane.Name
-                    };
-                    actors.Add(actor);
-                    foreach (var flowId in lane.FlowNodeRefs)
-                    {
-                        var step = steps.GetValueOrDefault(flowId);
-                        var workflowStepArg = new CreateWorkFlowActorStepArg
+                        foreach (var item in lane.ChildLaneSet.Lane)
                         {
-                            BpmnId = flowId,
-                            StepId = step.Id,
-                            ActiveStatusId = (long)ActiveStatusEnum.Active,
-                            ActorBpmnId = actor.BpmnId,
-                            WorkFlowActorId = actorId,
-                            Id = IdHelper.GenerateUniqueId()
-                        };
-                        step.ActorStepArgs.Add(workflowStepArg);
+                            if (item.ChildLaneSet != null)
+                            {
+                                foreach (var child in item.ChildLaneSet.Lane)
+                                {
+                                    var actor = AddActor(lane.Id, child.Name);
+                                    actors.Add(actor);
+                                    foreach (var flowId in child.FlowNodeRef)
+                                    {
+                                        var step = steps.GetValueOrDefault(flowId);
+                                        if (step.ActionTypeId == (int)ActionTypeEnum.task)
+                                        {
+                                            step.CompleteName = child.Name + " - " + step.Name + " - " + counter;
+                                            counter++;
+                                        }
+                                        var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id);
+                                        step.ActorStepArgs.Add(workflowStepArg);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                var actor = AddActor(lane.Id, item.Name);
+                                actors.Add(actor);
+                                foreach (var flowId in item.FlowNodeRef)
+                                {
+                                    var step = steps.GetValueOrDefault(flowId);
+                                    if (step.ActionTypeId == (int)ActionTypeEnum.task)
+                                    {
+                                        step.CompleteName = item.Name + " - " + step.Name + " - " + counter;
+                                        counter++;
+                                    }
+                                    var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id);
+                                    step.ActorStepArgs.Add(workflowStepArg);
+                                }
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        var actor = AddActor(lane.Id, lane.Name);
+                        actors.Add(actor);
+                        foreach (var flowId in lane.FlowNodeRef)
+                        {
+                            var step = steps.GetValueOrDefault(flowId);
+                            if (step.ActionTypeId == (int)ActionTypeEnum.task)
+                            {
+                                step.CompleteName = lane.Name + " - " + step.Name + " - " + counter;
+                                counter++;
+                            }
+                            var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id);
+                            step.ActorStepArgs.Add(workflowStepArg);
+                        }
                     }
                 }
             }
@@ -273,6 +306,7 @@ public class BpmsMapper : Profile
                 Name = flow.Name,
                 ActiveStatusId = (long)ActiveStatusEnum.Active,
                 ActionTypeId = actionTypeValue,
+                //NormalizedName = 
             };
             if (string.IsNullOrEmpty(flow.Name) && actionTypeValue == (int)ActionTypeEnum.startEvent)
             {
@@ -457,11 +491,11 @@ public class BpmsMapper : Profile
             var id = IdHelper.GenerateUniqueId();
             progressArg.CreatedAt = DateTime.Now;
             progressArg.Description = sequence.Name;
+            progressArg.Name = sequence.Name;
 
             if (step.ActionTypeId != 6 && string.IsNullOrEmpty(sequence.Name))
                 progressArg.Name = "تایید";
 
-            progressArg.Name = sequence.Name;
             progressArg.BpmnId = sequence.Id;
             progressArg.ActiveStatusId = (long)ActiveStatusEnum.Active;
             flowArg.CreateProgresses.Add(progressArg);
@@ -470,5 +504,33 @@ public class BpmsMapper : Profile
         }
 
         return result;
+    }
+
+    private static CreateWorkFlowActorStepArg AddActorStep(string flowId, long stepId, long actorId)
+    {
+        var workflowStepArg = new CreateWorkFlowActorStepArg
+        {
+            BpmnId = flowId,
+            StepId = stepId,
+            ActiveStatusId = (long)ActiveStatusEnum.Active,
+            WorkFlowActorId = actorId,
+            Id = IdHelper.GenerateUniqueId()
+        };
+        return workflowStepArg;
+    }
+
+    private static WorkFlowActorArg AddActor(string laneId, string name)
+    {
+        long actorId = IdHelper.GenerateUniqueId();
+        var actor = new WorkFlowActorArg
+        {
+            BpmnId = laneId,
+            ActiveStatusId = (long)ActiveStatusEnum.Active,
+            Code = actorId.ToString(),
+            CreatedAt = DateTime.Now,
+            Id = actorId,
+            Name = name
+        };
+        return actor;
     }
 }

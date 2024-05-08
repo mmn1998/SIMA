@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Roles.Args;
 using SIMA.Domain.Models.Features.Auths.Roles.Entities;
 using SIMA.Domain.Models.Features.Auths.Roles.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.Auths.Roles;
@@ -19,14 +20,16 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IRoleService _roleService;
+    private readonly ISimaIdentity _simaIdentity;
 
     public RoleCommandHandler(IRoleRepository repository,
-        IUnitOfWork unitOfWork, IMapper mapper, IRoleService roleService)
+        IUnitOfWork unitOfWork, IMapper mapper, IRoleService roleService, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _roleService = roleService;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
@@ -39,6 +42,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     public async Task<Result<long>> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateRoleArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await Role.Create(_roleService, arg);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -49,6 +53,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     {
         var entity = await _repository.GetById(request.RoleId);
         var arg = _mapper.Map<CreateRolePermissionArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await entity.AddRolePermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -58,6 +63,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     {
         var entity = await _repository.GetById(request.RoleId);
         var arg = _mapper.Map<ModifyRolePermissionArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.ModifyRolePermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -67,6 +73,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyRoleArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _roleService);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -89,6 +96,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
         {
             foreach (var permission in request.RolePermissions) permission.RoleId = entity.Id.Value;
             var args = _mapper.Map<List<CreateRolePermissionArg>>(request.RolePermissions);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddRolePermissions(args);
         }
         await _unitOfWork.SaveChangesAsync();

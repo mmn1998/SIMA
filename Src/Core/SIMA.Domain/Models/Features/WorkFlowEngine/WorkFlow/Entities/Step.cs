@@ -26,6 +26,7 @@ public class Step : Entity
         //WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
         if (arg.ActionTypeId.HasValue) ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
         //if (arg.StateId.HasValue) StateId = new StateId((long)arg.StateId);
+        CompleteName = arg.CompleteName;
         BpmnId = arg.BpmnId;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedBy = arg.UserId;
@@ -71,6 +72,7 @@ public class Step : Entity
         //ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
         //StateId = new StateId((long)arg.StateId);
         //BpmnId = arg.BpmnId;
+        CompleteName = arg.CompleteName;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         FormId = new FormId(arg.FormId);
@@ -89,9 +91,13 @@ public class Step : Entity
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
     public StepId Id { get; private set; }
     public string? Name { get; private set; }
+    public string? CompleteName { get; private set; }
     public WorkFlowId? WorkFlowId { get; private set; }
     public ActionTypeId? ActionTypeId { get; private set; }
     public FormId? FormId { get; private set; }

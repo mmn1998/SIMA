@@ -8,9 +8,9 @@ using System.Text;
 
 namespace SIMA.Application.Feaatures.Auths.Genders.Mappers;
 
-public class GrenderMapper : Profile
+public class GenderMapper : Profile
 {
-    public GrenderMapper(ISimaIdentity simaIdentity)
+    public GenderMapper(ISimaIdentity simaIdentity)
     {
         CreateMap<CreateGenderCommand, CreateGenderArg>()
          .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))

@@ -271,8 +271,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                          order by IC.CreatedAt desc
 
                          --Progress
-                            Select
-
+                            Select distinct
                                FStep.Id ProgressId
                                ,s.id 
                                ,s.Name 

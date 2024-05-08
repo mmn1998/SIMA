@@ -3,42 +3,42 @@ using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.WorkFlowEngine.Progress;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Interface;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
-namespace SIMA.Application.Feaatures.WorkFlowEngine.Progress
+namespace SIMA.Application.Feaatures.WorkFlowEngine.Progress;
+
+public class ProgressCommandHandler : ICommandHandler<ChangeStatusCommand, Result<long>>
 {
-    public class ProgressCommandHandler : ICommandHandler<ChangeStatusCommand, Result<long>>
+    private readonly IProgressRepository _progressRepository;
+    private readonly ISimaIdentity _simaIdentity;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+
+    public ProgressCommandHandler( IUnitOfWork unitOfWork, IMapper mapper,
+        IProgressRepository progressRepository, ISimaIdentity simaIdentity)
     {
-        private readonly IProgressRepository _progressRepository;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        _progressRepository = progressRepository;
+        _simaIdentity = simaIdentity;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-        public ProgressCommandHandler( IUnitOfWork unitOfWork, IMapper mapper, IProgressRepository progressRepository)
+    public async Task<Result<long>> Handle(ChangeStatusCommand request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _progressRepository = progressRepository;
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            var entity = await _progressRepository.GetById(request.Id);
+            var arg = _mapper.Map<ChangeStatusArg>(request);
+            arg.ModifiedBy = _simaIdentity.UserId;
+            entity.ChangeStatus(arg);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
         }
-
-        public async Task<Result<long>> Handle(ChangeStatusCommand request, CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            try
-            {
-                var entity = await _progressRepository.GetById(request.Id);
-                var arg = _mapper.Map<ChangeStatusArg>(request);
-                entity.ChangeStatus(arg);
-                await _unitOfWork.SaveChangesAsync();
-                return Result.Ok(entity.Id.Value);
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
-           
-
+            throw;
         }
     }
 }

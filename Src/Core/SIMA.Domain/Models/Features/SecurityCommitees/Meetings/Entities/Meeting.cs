@@ -18,7 +18,7 @@ namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 public class Meeting : Entity
 {
     private Meeting() { }
-    private Meeting(CreateMeetingArg arg, List<CreateLabelArg> labels) 
+    private Meeting(CreateMeetingArg arg, List<CreateLabelArg> labels)
     {
         Id = new MeetingId(arg.Id);
         Code = arg.Code;
@@ -28,9 +28,10 @@ public class Meeting : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         Description = arg.Description;
-        CreateLable(labels);
+        //CreateLable(labels);
+        CreateMeetingLable(labels);
 
-        AddDomainEvent(new MeetingCreatedEvent(IssueId.Value, MainAggregateEnums.SecurityCommitee, arg.Description, arg.Id , labels.Where(x=>x.IsNew) , arg.NewSubject));
+        AddDomainEvent(new MeetingCreatedEvent(IssueId.Value, MainAggregateEnums.SecurityCommitee, arg.Description, arg.Id, labels.Where(x => x.IsNew), arg.NewSubject));
     }
     public static async Task<Meeting> Create(CreateMeetingArg arg, IMeetingDomainService service)
     {
@@ -39,7 +40,7 @@ public class Meeting : Entity
         return new Meeting(arg, label);
     }
 
-    
+
 
     public async Task Modify(ModifyMeetingArg arg, IMeetingDomainService service)
     {
@@ -57,6 +58,12 @@ public class Meeting : Entity
         var meetingLabelsArg = lables.Select(x => MeetingLabel.Create(Id.Value, x.Id));
         _meetingLabels.AddRange(meetingLabelsArg);
     }
+    public void CreateMeetingLable(List<CreateLabelArg> lables)
+    {
+        //sanaz
+        var meetingLabel = lables.Select(it => MeetingLabel.Create(new CreateMeetingLabelArg { MeetingId = Id.Value, LabelId = it.Id, CreatedBy = it.CreatedBy, }));
+        _meetingLabels.AddRange(meetingLabel);
+    }
 
     public void CreateMeetingLabel(IEnumerable<CreateMeetingLabelArg> args)
     {
@@ -72,6 +79,7 @@ public class Meeting : Entity
 
     public void CreateMeetingReason(IEnumerable<CreateMeetingReasonArg> args)
     {
+        //sanaz
         var meetingReason = args.Select(MeetingReason.Create);
         _meetingReasons.AddRange(meetingReason);
     }
@@ -119,20 +127,31 @@ public class Meeting : Entity
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+
     private List<Approval> _approvals = new();
     public ICollection<Approval> Approvals => _approvals;
+
     private List<MeetingDocument> _meetingDocuments = new();
     public virtual ICollection<MeetingDocument> MeetingDocuments => _meetingDocuments;
+
     private List<MeetingReason> _meetingReasons = new();
     public virtual ICollection<MeetingReason> MeetingReasons => _meetingReasons;
+
     private List<MeetingSchedule> _meetingSchedules = new();
     public ICollection<MeetingSchedule> MeetingSchedules => _meetingSchedules;
+
     private List<SubjectMeeting> _subjectMeetings = new();
     public virtual ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
-    private  List<MeetingLabel> _meetingLabels = new();
+
+    private List<MeetingLabel> _meetingLabels = new();
     public virtual ICollection<MeetingLabel> MeetingLabels => _meetingLabels;
+
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 }

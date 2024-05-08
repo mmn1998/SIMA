@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Args;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using System.Globalization;
 
@@ -17,18 +18,21 @@ public class DocumentExtensionHandler : ICommandHandler<CreateDocumentExtensionC
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDocumentExtensionDomainService _domainService;
     private readonly IMapper _mapper;
+    private readonly ISimaIdentity _simaIdentity;
 
     public DocumentExtensionHandler(IDocumentExtensionRepository repository, IUnitOfWork unitOfWork,
-        IDocumentExtensionDomainService domainService, IMapper mapper)
+        IDocumentExtensionDomainService domainService, IMapper mapper, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _domainService = domainService;
         _mapper = mapper;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateDocumentExtensionCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateDocumentExtensionArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await DocumentExtension.Create(arg, _domainService);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -39,6 +43,7 @@ public class DocumentExtensionHandler : ICommandHandler<CreateDocumentExtensionC
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyDocumentExtensionArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _domainService);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);

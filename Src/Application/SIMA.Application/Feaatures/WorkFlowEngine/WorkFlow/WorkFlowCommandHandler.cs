@@ -10,14 +10,18 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
 
 namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
 {
-    public class WorkFlowCommandHandler : ICommandHandler<CreateWorkFlowCommand, Result<long>>, ICommandHandler<DeleteWorkFlowCommand, Result<long>>, ICommandHandler<ModifyWorkFlowCommand, Result<long>>,
-        ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<ModifyStepCommand, Result<long>>, ICommandHandler<DeleteStepCommand, Result<long>>,
-        ICommandHandler<CreateStateCommand, Result<long>>, ICommandHandler<ModifyStateCommand, Result<long>>, ICommandHandler<DeleteStateCommand, Result<long>>
+    public class WorkFlowCommandHandler : ICommandHandler<CreateWorkFlowCommand, Result<long>>, ICommandHandler<DeleteWorkFlowCommand, Result<long>>,
+        ICommandHandler<ModifyWorkFlowCommand, Result<long>>,
+        ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<ModifyStepCommand, Result<long>>,
+        ICommandHandler<DeleteStepCommand, Result<long>>,
+        ICommandHandler<CreateStateCommand, Result<long>>, ICommandHandler<ModifyStateCommand, Result<long>>,
+        ICommandHandler<DeleteStateCommand, Result<long>>
     //,ICommandHandler<CreateRejectionReasonCommand, Result<long>>, ICommandHandler<DeleteRejectionReasonCommand, Result<long>>
 
     {
@@ -25,19 +29,23 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IWorkFlowDomainService _service;
+        private readonly ISimaIdentity _simaIdentity;
 
-        public WorkFlowCommandHandler(IWorkFlowRepository repository, IUnitOfWork unitOfWork, IMapper mapper, IWorkFlowDomainService service)
+        public WorkFlowCommandHandler(IWorkFlowRepository repository, IUnitOfWork unitOfWork, IMapper mapper,
+            IWorkFlowDomainService service, ISimaIdentity simaIdentity)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _service = service;
+            _simaIdentity = simaIdentity;
         }
 
         #region Workflow
         public async Task<Result<long>> Handle(CreateWorkFlowCommand request, CancellationToken cancellationToken)
         {
             var arg = _mapper.Map<CreateWorkFlowArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
             var entity = await Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg , _service);
             await _repository.Add(entity);
             var id = entity.Id.Value;
@@ -48,6 +56,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowArg>(request);
+            arg.ModifiedBy = _simaIdentity.UserId;
             await entity.Modify(arg , _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
@@ -67,6 +76,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             var workflow = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<StepArg>(request);
+            arg.UserId = _simaIdentity.UserId;
             var step = workflow.AddStep(arg);
 
 
@@ -90,6 +100,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             var entity = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStepArgs>(request);
+            arg.ModifiedBy = _simaIdentity.UserId;
             await entity.ModifyStep(arg);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
@@ -110,6 +121,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
             var workflow = await _repository.GetById2(new WorkFlowId(Value: (long)request.WorkFlowId));
             var arg = _mapper.Map<CreateStateArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
             var state = await workflow.AddState(arg, _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(state.Id.Value);
@@ -119,6 +131,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
             var entity = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStateArgs>(request);
+            arg.ModifiedBy = _simaIdentity.UserId;
             await entity.ModifyState(arg, _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);

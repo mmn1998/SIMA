@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.Auths.Groups;
@@ -21,18 +22,21 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     private readonly IGroupRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IGroupService _service;
+    private readonly ISimaIdentity _simaIdentity;
 
     public GroupCommandHandler(IMapper mapper, IGroupRepository repository,
-        IUnitOfWork unitOfWork, IGroupService service)
+        IUnitOfWork unitOfWork, IGroupService service, ISimaIdentity simaIdentity)
     {
         _mapper = mapper;
         _repository = repository;
         _unitOfWork = unitOfWork;
         _service = service;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateGroupArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await Group.Create(arg, _service);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -50,6 +54,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyGroupArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -59,7 +64,8 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.GroupId);
         var arg = _mapper.Map<CreateGroupPermissionArg>(request);
-        entity.AddGroupPermission(arg);
+        arg.CreatedBy = _simaIdentity.UserId;
+        await entity.AddGroupPermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -68,6 +74,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.GroupId);
         var arg = _mapper.Map<ModifyGroupPermissionArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.ModifyGroupPermission(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -77,6 +84,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.GroupId);
         var arg = _mapper.Map<CreateUserGroupArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await entity.AddGroupUser(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -86,6 +94,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     {
         var entity = await _repository.GetById(request.GroupId);
         var arg = _mapper.Map<ModifyUserGroupArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         await entity.ModifyGroupUser(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -110,18 +119,21 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     public async Task<Result<long>> Handle(CreateGroupAggregate request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateGroupArg>(request.Group);
+        arg.CreatedBy = _simaIdentity.UserId;
         var entity = await Group.Create(arg, _service);
         await _repository.Add(entity);
         if (request.UserGroups != null && request.UserGroups.Count != 0)
         {
             foreach (var group in request.UserGroups) group.GroupId = entity.Id.Value;
             var args = _mapper.Map<List<CreateUserGroupArg>>(request.UserGroups);
+            foreach (var GroupArg in args) GroupArg.CreatedBy = _simaIdentity.UserId;
             await entity.AddGroupUsers(args);
         }
         if (request.GroupPermissions != null && request.GroupPermissions.Count != 0)
         {
             foreach (var permission in request.GroupPermissions) permission.GroupId = entity.Id.Value;
             var args = _mapper.Map<List<CreateGroupPermissionArg>>(request.GroupPermissions);
+            foreach (var GroupArg in args) GroupArg.CreatedBy = _simaIdentity.UserId;
             await entity.AddGroupPermissions(args);
         }
         await _unitOfWork.SaveChangesAsync();

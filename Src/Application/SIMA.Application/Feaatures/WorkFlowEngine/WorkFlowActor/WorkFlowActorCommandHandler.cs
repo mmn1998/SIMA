@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Interface;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor;
@@ -20,17 +21,21 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     private readonly IWorkFlowActorRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly ISimaIdentity _simaIdentity;
 
-    public WorkFlowActorCommandHandler(IWorkFlowActorRepository repository, IUnitOfWork unitOfWork, IMapper mapper)
+    public WorkFlowActorCommandHandler(IWorkFlowActorRepository repository, IUnitOfWork unitOfWork,
+        IMapper mapper, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateWorkFlowActorCommand request, CancellationToken cancellationToken)
     {
 
         var arg = _mapper.Map<WorkFlowActorArg>(request);
+        arg.UserId = _simaIdentity.UserId;
         var actor = Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor.New(arg);
         await _repository.Add(actor);
         //request.Id = new WorkFlowActorId(actor.Id);
@@ -38,18 +43,21 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
         if (request.RoleId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             actor.AddActorRoles(args , actor.Id.Value);
         }
 
         if (request.GroupId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             actor.AddActorGroups(args, actor.Id.Value);
         }
 
         if (request.UserId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             actor.AddActorUsers(args, actor.Id.Value);
         }
 
@@ -65,23 +73,27 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
         {
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowActorArg>(request);
+            arg.ModifiedBy = _simaIdentity.UserId;
             entity.Modify(arg);
 
             if(request.RoleId is not null && request.RoleId.Count > 0) 
             {
                 var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+                foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
                 entity.AddActorRoles(args , request.Id);
             }
 
             if (request.GroupId is not null && request.GroupId.Count > 0)
             {
                 var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+                foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
                 entity.AddActorGroups(args , request.Id);
             }
 
             if (request.UserId is not null && request.UserId.Count > 0)
             {
                 var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+                foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
                 entity.AddActorUsers(args, request.Id);
             }
 
@@ -114,6 +126,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
         var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+        foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
         entity.AddActorRoles(args, request.WorkFlowActorId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.WorkFlowActorId);
@@ -129,6 +142,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
         var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+        foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
         entity.AddActorUsers(args , request.WorkFlowActorId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.WorkFlowActorId);
@@ -145,6 +159,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
         var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+        foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
         entity.AddActorGroups(args, request.WorkFlowActorId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.WorkFlowActorId);
@@ -164,18 +179,21 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
         if (request.RoleId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             actor.AddActorRoles(args, request.Id);
         }
 
         if (request.GroupId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             actor.AddActorGroups(args, request.Id);
         }
 
         if (request.UserId is not null)
         {
             var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
+            foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
             actor.AddActorUsers(args, request.Id);
         }
 

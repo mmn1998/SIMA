@@ -38,6 +38,10 @@ public class WorkFlowActorStep : Entity
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    public void Activate()
+    {
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 
     public WorkFlowActorStepId Id { get; set; }
     public WorkFlowActorId WorkFlowActorId { get; set; }

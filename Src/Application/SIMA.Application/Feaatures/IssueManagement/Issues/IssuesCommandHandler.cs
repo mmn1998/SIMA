@@ -8,6 +8,7 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
 
@@ -24,13 +25,15 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     private readonly IMapper _mapper;
     private readonly IIssueDomainService _service;
     private readonly IWorkFlowDomainService _workFlowDomainService;
+    private readonly ISimaIdentity _simaIdentity;
     private readonly IWorkFlowRepository _workFlowRepository;
     private readonly IIssueWeightCategoryQueryRepository _issueWeightCategoryRepository;
     private readonly IProjectRepository _projectRepository;
 
     public IssueCommandHandler(IIssueRepository repository, IUnitOfWork unitOfWork,
         IMapper mapper, IIssueDomainService service,
-      IWorkFlowRepository workFlowRepository, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository, IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService)
+      IWorkFlowRepository workFlowRepository, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository,
+      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
@@ -40,6 +43,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         _issueWeightCategoryRepository = issueWeightCategoryRepository;
         _projectRepository = projectRepository;
         _workFlowDomainService = workFlowDomainService;
+        _simaIdentity = simaIdentity;
     }
     public async Task<Result<long>> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
     {
@@ -50,9 +54,11 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             var workflow = await _workFlowRepository.GetWorkflowInfoById(request.CurrentWorkflowId);
             request.MainAggregateId = workflow.MainAggregateId;
             var arg = _mapper.Map<CreateIssueArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
             arg.IssueWeightCategoryd = await _issueWeightCategoryRepository.GetIdByWeight((int)request.Weight);
             arg.CurrenStepId = workflow.TargetStepId;
             arg.CurrentStateId = workflow.TargetStateId;
+            arg.CreatedBy = _simaIdentity.UserId;
 
             #region GenerateCode
 
@@ -73,12 +79,14 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             #endregion
 
             var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
+            historyArg.CreatedBy = _simaIdentity.UserId;
             var entity = await Issue.Create(arg, _service);
             entity.AddIssueLink(arg.IssueLinks);
             entity.AddIssueDocument(arg.IssueDocument);
 
             #region IssueHistory
             var history = _mapper.Map<CreateIssueHistoryArg>(request);
+            history.CreatedBy = _simaIdentity.UserId;
             history.SourceStateId = workflow.SourceStateId;
             history.TargetStateId = workflow.TargetStateId;
             history.SourceStepId = workflow.SourceStepId;
@@ -96,15 +104,14 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         }
 
     }
-
-
-
     public async Task<Result<long>> Handle(ModifyIssueCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyIssueArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         arg.IssueWeightCategoryd = await _issueWeightCategoryRepository.GetIdByWeight((int)request.Weight);
         var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
+        historyArg.CreatedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
         historyArg.CompanyId = entity.CompanyId;
         historyArg.MainAggregateId = entity.MainAggregateId.Value;
@@ -134,6 +141,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, request.NextStepId, request.ProgressId);
 
         var arg = _mapper.Map<IssueRunActionArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
         arg.CurrentStepId = nextStep.SourceStepId;
         arg.CurrentStateId = nextStep.SourceStateId;
 
@@ -145,6 +153,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
 
         #region IssueHistory
         var history = _mapper.Map<CreateIssueHistoryArg>(issue);
+        history.CreatedBy = _simaIdentity.UserId;
         if (issue.CurrentStateId is not null)
             history.SourceStateId = issue.CurrentStateId.Value;
         history.TargetStateId = nextStep.SourceStateId;
@@ -170,6 +179,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     {
         var issue = await _repository.GetById(request.IssueId);
         var arg = _mapper.Map<CreateIssueCommentArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
         await issue.AddComment(arg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.IssueId);
