@@ -6,10 +6,10 @@ using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 
-public class BusinessContinuityStategy : Entity, IAggregateRoot
+public class BusinessContinuityStrategy : Entity, IAggregateRoot
 {
-    private BusinessContinuityStategy() { }
-    private BusinessContinuityStategy(CreateBusinessContinuityStategyArg arg)
+    private BusinessContinuityStrategy() { }
+    private BusinessContinuityStrategy(CreateBusinessContinuityStategyArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
         Title = arg.Title;
@@ -22,10 +22,10 @@ public class BusinessContinuityStategy : Entity, IAggregateRoot
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<BusinessContinuityStategy> Create(CreateBusinessContinuityStategyArg arg, IBusinessContinuityStategyDomainService service)
+    public static async Task<BusinessContinuityStrategy> Create(CreateBusinessContinuityStategyArg arg, IBusinessContinuityStategyDomainService service)
     {
         await CreateGuards(arg, service);
-        return new BusinessContinuityStategy(arg);
+        return new BusinessContinuityStrategy(arg);
     }
     public async Task Modify(ModifyBusinessContinuityStategyArg arg, IBusinessContinuityStategyDomainService service)
     {
@@ -50,7 +50,7 @@ public class BusinessContinuityStategy : Entity, IAggregateRoot
 
     }
     #endregion
-    public BusinessContinuityStategyId Id { get; private set; }
+    public BusinessContinuityStrategyId Id { get; private set; }
     /// TODO : CordinatorId
     public long CordinatorId { get; private set; }
     public string? Title { get; private set; }
@@ -67,4 +67,8 @@ public class BusinessContinuityStategy : Entity, IAggregateRoot
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<BusinessContinuityStrategyObjective> _businessContinuityStrategyObjectives = new();
+    public ICollection<BusinessContinuityStrategyObjective> BusinessContinuityStrategyObjectives => _businessContinuityStrategyObjectives;
+    private List<BusinessContinuityStrategyStaff> _businessContinuityStrategyStaff = new();
+    public ICollection<BusinessContinuityStrategyStaff> BusinessContinuityStrategyStaff => _businessContinuityStrategyStaff;
 }

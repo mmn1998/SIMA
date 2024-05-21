@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Args;
 using SIMA.Domain.Models.Features.Auths.Staffs.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Staffs.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
@@ -125,6 +126,8 @@ public class Staff : Entity
     public ICollection<Invitees> Invitees => _invitees;
     private List<BusinessImpactAnalysisAnnouncement> _businessImpactAnalysisAnnouncements => new();
     public ICollection<BusinessImpactAnalysisAnnouncement> BusinessImpactAnalysisAnnouncements => _businessImpactAnalysisAnnouncements;
+    private List<BusinessContinuityStrategyStaff> _businessContinuityStrategyStaff = new();
+    public ICollection<BusinessContinuityStrategyStaff> BusinessContinuityStrategyStaff => _businessContinuityStrategyStaff;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
