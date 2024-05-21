@@ -8,6 +8,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Users;
 
@@ -81,7 +82,7 @@ public class UserQueryRepository : IUserQueryRepository
 
             var user = await _readContext.Users
                         .FirstOrDefaultAsync(u => u.Username == username);
-            if (user is null) throw SimaResultException.InvalidUsernameOrPasswordError;
+            if (user is null) throw new SimaResultException("10002",Messages.InvalidUsernameOrPasswordError);
             user.Password.Verify(password);
 
             var query = @"
@@ -197,7 +198,7 @@ public class UserQueryRepository : IUserQueryRepository
             {
                 using (var multi = await connection.QueryMultipleAsync(query, new { UserId = user.Id.Value }))
                 {
-                    response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
+                    response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code,Messages.NotFound);
                     response.RoleIds = await multi.ReadAsync<long>();
                     response.GroupIds = await multi.ReadAsync<long>();
                     response.Permissions = await multi.ReadAsync<int>();
@@ -299,7 +300,7 @@ public class UserQueryRepository : IUserQueryRepository
                           WHERE        (u.ID = @UserID)";
             using (var multi = await connection.QueryMultipleAsync(query, new { UserID = userId }))
             {
-                response.UserInfo = multi.ReadAsync<UserInfo>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.UserNotFoundError;
+                response.UserInfo = multi.ReadAsync<UserInfo>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code,Messages.UserNotFoundError);
                 response.Phones = multi.ReadAsync<PhoneResult>().GetAwaiter().GetResult().ToList();
                 response.Positions = multi.ReadAsync<PositionResult>().GetAwaiter().GetResult().ToList();
                 response.Addresses = multi.ReadAsync<AddressResult>().GetAwaiter().GetResult().ToList();
@@ -376,7 +377,7 @@ public class UserQueryRepository : IUserQueryRepository
 
             using (var multi = await connection.QueryMultipleAsync(query, new { ProfileID = profileId }))
             {
-                response.ProfileInfo = multi.ReadAsync<ProfileInfo>()?.GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
+                response.ProfileInfo = multi.ReadAsync<ProfileInfo>()?.GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code,Messages.NotFound);
                 response.Phones = multi.ReadAsync<PhoneResult>().GetAwaiter().GetResult().ToList();
                 response.Addresses = multi.ReadAsync<AddressResult>().GetAwaiter().GetResult().ToList();
                 response.Users = multi.ReadAsync<UserResult>().GetAwaiter().GetResult().ToList();
@@ -394,7 +395,7 @@ public class UserQueryRepository : IUserQueryRepository
     {
         var user = await _readContext.Users.FirstOrDefaultAsync(u => u.Id == new UserId(userId));
         user.NullCheck();
-        return user?.ProfileId?.Value ?? throw SimaResultException.ProfileNotFoundError;
+        return user?.ProfileId?.Value ?? throw new SimaResultException("10055",Messages.ProfileNotFoundError);
     }
 
     public async Task<GetUserQueryResult> FindByIdQuery(long id)
@@ -415,9 +416,9 @@ public class UserQueryRepository : IUserQueryRepository
                       join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
               WHERE U.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetUserQueryResult>(query, new { Id = id });
-            if (result is null) throw SimaResultException.UserNotFoundError;
-            if (result.IsDeleted) throw SimaResultException.UserIsDeletedError;
-            if (result.IsDeactivated) throw SimaResultException.UserIsDeactiveError;
+            if (result is null) throw new SimaResultException("10051",Messages.UserNotFoundError);
+            if (result.IsDeleted) throw new SimaResultException("10008",Messages.UserIsDeletedError);
+            if (result.IsDeactivated) throw new SimaResultException("10009",Messages.UserIsDeactiveError);
             return result;
         }
 
@@ -425,13 +426,65 @@ public class UserQueryRepository : IUserQueryRepository
 
     public async Task<Result<IEnumerable<GetUserQueryResult>>> GetAll(GetAllUserQuery? request = null)
     {
-
-        
-
         using (var connection = new SqlConnection(_connectionString))
         {
-
-            string queryCount = @"
+            await connection.OpenAsync();
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT U.ID as Id,
+                        		C.Name as CompanyName,
+                        		(P.FirstName + ' ' + P.LastName) as FullName,
+                        		U.Username,
+                        		U.ActiveStatusId,
+                        		A.Name as ActiveStatus
+                        		,u.[CreatedAt]
+                        FROM [Authentication].[Users] U
+                        INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
+                        INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+                        join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
+                        WHERE U.ActiveStatusId != 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT U.ID as Id,
+                        		C.Name as CompanyName,
+                        		(P.FirstName + ' ' + P.LastName) as FullName,
+                        		U.Username,
+                        		U.ActiveStatusId,
+                        		A.Name as ActiveStatus
+                        		,u.[CreatedAt]
+                        FROM [Authentication].[Users] U
+                        INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
+                        INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+                        join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
+                        WHERE U.ActiveStatusId != 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetUserQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
+                string queryCount = @"
                         SELECT Count(*) Result
                         FROM [Authentication].[Users] U
                         INNER JOIN [Authentication].[Profile] P on U.ProfileID = P.ID
@@ -439,8 +492,7 @@ public class UserQueryRepository : IUserQueryRepository
                         join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
                         WHERE (@SearchValue is null OR C.Name like @SearchValue OR P.FirstName like @SearchValue OR
                         P.LastName like @SearchValue OR U.Username like @SearchValue) and U.ActiveStatusId != 3";
-            await connection.OpenAsync();
-            string query = $@"
+                string query = $@"
                         SELECT DISTINCT U.ID as Id,
                         		C.Name as CompanyName,
                         		(P.FirstName + ' ' + P.LastName) as FullName,
@@ -457,19 +509,19 @@ public class UserQueryRepository : IUserQueryRepository
                         order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
                         OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
 
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                var response = await multi.ReadAsync<GetUserQueryResult>();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetUserQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
-
     }
 
     public async Task<GetUserRoleQueryResult> GetUserRole(long userRoleId)
@@ -592,7 +644,7 @@ SELECT DISTINCT
 ";
             using (var multi = await connection.QueryMultipleAsync(query, new { UserID = userId }))
             {
-                response.User = multi.ReadAsync<GetUserQueryForAggregate>().GetAwaiter().GetResult().FirstOrDefault() ?? throw SimaResultException.NotFound;
+                response.User = multi.ReadAsync<GetUserQueryForAggregate>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code,Messages.NotFound);
                 response.UserPermissions = multi.ReadAsync<GetUserPermissionQueryForAggregate>().GetAwaiter().GetResult().ToList();
                 response.UserRoles = multi.ReadAsync<GetUserRoleQueryForAggregate>().GetAwaiter().GetResult().ToList();
                 response.UserDomains = multi.ReadAsync<GetUserDomainQueryForAggregate>().GetAwaiter().GetResult().ToList();

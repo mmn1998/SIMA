@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SIMA.Application.Contract.Features.SecurityCommitees.Cartables;
+using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.SecurityCommitees.Cartables.V1;
 
@@ -13,5 +15,10 @@ public class CartablesController : ControllerBase
     public CartablesController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+    [HttpPost]
+    public async Task<Result> Post([FromBody] CartableCommand command)
+    {
+        return await _mediator.Send(command);
     }
 }

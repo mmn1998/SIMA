@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Brokers;
 using SIMA.Domain.Models.Features.BranchManagement.Brokers.Interfaces;
 using SIMA.Framework.Common.Helper;
@@ -19,12 +20,66 @@ public class BrokerReadRepository : IBrokerReadRepository
 
     public async Task<Result<IEnumerable<GetBrokerQueryResult>>> GetAll(GetAllBrokerQuery request)
     {
-        
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            
-
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT B.[Id]
+                              ,B.[Name]
+                              ,B.[Code]
+                              ,B.[BrokerTypeId]
+                              ,B.[PhoneNumber]
+                              ,B.[Address]
+                              ,B.[ActiveStatusId]
+	                          ,FORMAT(B.[ExpireDate], 'yyyy/MM/dd', 'fa') as ExpireDatePersian
+                              ,S.[Name] as ActiveStatus
+                              ,b.[CreatedAt]
+                       FROM [Bank].[Broker] B
+                       INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+                       WHERE  B.ActiveStatusId != 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT B.[Id]
+                              ,B.[Name]
+                              ,B.[Code]
+                              ,B.[BrokerTypeId]
+                              ,B.[PhoneNumber]
+                              ,B.[Address]
+                              ,B.[ActiveStatusId]
+	                          ,FORMAT(B.[ExpireDate], 'yyyy/MM/dd', 'fa') as ExpireDatePersian
+                              ,S.[Name] as ActiveStatus
+                              ,b.[CreatedAt]
+                       FROM [Bank].[Broker] B
+                       INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+                       WHERE  B.ActiveStatusId != 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetBrokerQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
                 string queryCount = @"SELECT Count(*) Result
                         FROM [Bank].[Broker] B
                         INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
@@ -52,16 +107,17 @@ public class BrokerReadRepository : IBrokerReadRepository
                                              ";
 
 
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                var response = await multi.ReadAsync<GetBrokerQueryResult>();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetBrokerQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
     }

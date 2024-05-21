@@ -2,6 +2,7 @@
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.SecurityCommitees.Cartables;
 using SIMA.Application.Query.Features.Auths.Forms;
+using SIMA.Framework.Common.Helper.FormMaker;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Forms;
@@ -37,29 +38,29 @@ public class CartableQueryHandler : IQueryHandler<GetAllCartableQuery, Result<Li
     }
     private async Task<string> ProcessJsonContent(string jsonContent, List<GetRelatedProgressQueryResult> dbButtons)
     {
-        var allComponents = JsonConvert.DeserializeObject<FormWrapper>(jsonContent).Components;
+        var allComponents = JsonConvert.DeserializeObject<FormWrapper>(jsonContent).components;
 
-        var SelectList = allComponents.Where(it => it.Type == FormInputType.select.ToString()).ToList();
-        var ButtonList = allComponents.Where(it => it.Type == FormInputType.button.ToString()).ToList();
+        var SelectList = allComponents.Where(it => it.type == FormInputType.select.ToString()).ToList();
+        var ButtonList = allComponents.Where(it => it.type == FormInputType.button.ToString()).ToList();
 
 
         foreach (var select in SelectList)
         {
-            var viewName = select.Properties?.SourceData;
+            var viewName = select.properties?.sourceData;
             if (!string.IsNullOrEmpty(viewName))
             {
                 var dropDownData = await _formQueryRepository.FetchFromView(viewName);
-                select.ValuesKey = JsonConvert.SerializeObject(dropDownData);
+                select.valuesKey = JsonConvert.SerializeObject(dropDownData);
             }
         }
         foreach (var button in ButtonList)
         {
             foreach (var dbButton in dbButtons)
             {
-                if (string.Equals(button.Label, dbButton.Name, StringComparison.InvariantCultureIgnoreCase))
+                if (string.Equals(button.label, dbButton.Name, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    button.Properties.TargetId = dbButton.TargetId.ToString();
-                    button.Properties.ProgressId = dbButton.ProgressId.ToString();
+                    button.properties.targetId = dbButton.TargetId.ToString();
+                    button.properties.progressId = dbButton.ProgressId.ToString();
                 }
             }
         }

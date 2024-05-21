@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Args;
@@ -16,6 +17,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.DMS.Documents.Entities;
 
@@ -64,9 +66,9 @@ public class Document : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyDocumentArg arg, IDocumentDomainService service)
     {
@@ -74,9 +76,9 @@ public class Document : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
     public DocumentId Id { get; private set; }
@@ -107,6 +109,7 @@ public class Document : Entity
     public ICollection<ApprovalResponsibleAnswerDocument> ApprovalResponsibleAnswerDocuments { get; set; }
     public ICollection<ApprovalSupervisorAnswerDocument> ApprovalSupervisorAnswerDocuments { get; set; }
     public ICollection<MeetingDocument> MeetingDocuments { get; set; }
+    public ICollection<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

@@ -36,7 +36,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{D3
 		Sccaffold.txt = Sccaffold.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIMA.LicenseKeyGenerator", "SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.LicenseKeyGenerator", "SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIMA.Resources", "SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -84,6 +86,10 @@ Global
 		{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17516A77-3D55-4DE4-9A83-293A676E463D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17516A77-3D55-4DE4-9A83-293A676E463D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17516A77-3D55-4DE4-9A83-293A676E463D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17516A77-3D55-4DE4-9A83-293A676E463D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +109,7 @@ Global
 		{9A5CD073-2513-48CF-BA87-9DD3B6EA4A3D} = {CF51B8E6-7DE4-47E7-AD00-2091748D99D6}
 		{B732C3EB-A6D8-49C8-BB46-704C0C65E096} = {07BBDC2A-762B-4C3C-818A-2F63D31759CD}
 		{F409D6EF-F7A1-4819-9B88-D2C33633ABBE} = {E2D74D18-B9F8-4C2E-A7D7-483C99BA592B}
+		{17516A77-3D55-4DE4-9A83-293A676E463D} = {07BBDC2A-762B-4C3C-818A-2F63D31759CD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {877E7345-024C-410C-B229-5434754B84C8}

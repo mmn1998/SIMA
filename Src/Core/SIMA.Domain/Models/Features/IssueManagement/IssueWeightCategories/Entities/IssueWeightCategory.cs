@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Interfac
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
 
@@ -49,12 +50,12 @@ public class IssueWeightCategory : Entity
 
         arg.MinRange.NullCheck();
         arg.MaxRange.NullCheck();
-        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw SimaResultException.RangeNotValidError;
-        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, 0)) throw SimaResultException.RangeAlreadyAllocatedError;
+        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw new SimaResultException("10047",Messages.RangeNotValidError);
+        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, 0)) throw new SimaResultException("10048",Messages.RangeAlreadyAllocatedError);
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyIssueWeightCategoryArg arg, IIssueWeightCategoryDomainService service)
     {
@@ -64,12 +65,12 @@ public class IssueWeightCategory : Entity
 
         arg.MinRange.NullCheck();
         arg.MaxRange.NullCheck();
-        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw SimaResultException.RangeNotValidError;
-        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, arg.Id)) throw SimaResultException.RangeAlreadyAllocatedError;
+        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw new SimaResultException("10047",Messages.RangeNotValidError);
+        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, arg.Id)) throw new SimaResultException("10048",Messages.RangeAlreadyAllocatedError);
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
     public IssueWeightCategoryId Id { get; private set; }

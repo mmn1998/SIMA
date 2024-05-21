@@ -7,10 +7,12 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues;
 
@@ -49,7 +51,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     {
         try
         {
-            if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId)) throw IssueExceptions.CreateIssueWithChechActorException;
+            if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId)) throw new SimaResultException(CodeMessges._400Code, Messages.CreateIssueWithChechActorException);
 
             var workflow = await _workFlowRepository.GetWorkflowInfoById(request.CurrentWorkflowId);
             request.MainAggregateId = workflow.MainAggregateId;

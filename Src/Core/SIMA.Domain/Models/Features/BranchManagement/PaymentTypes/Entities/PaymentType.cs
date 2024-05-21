@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Entities;
 
@@ -64,11 +65,12 @@ public class PaymentType : Entity
         arg.ActiveStatusId.NullCheck();
         if (arg.Name.Length >= 200)
         {
-            throw PaymentTypeExceptions.LengthPaymentTypeNameException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.LengthPaymentTypeNameException);
+
         }
         if (await paymentTypeDomainService.IsCodeUnique(arg.Code, arg.Id))
         {
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
         }
     }
     private async Task ModifyGuards(ModifyPaymentTypeArg arg, IPaymentTypeDomainService paymentTypeDomainService)
@@ -79,11 +81,11 @@ public class PaymentType : Entity
         arg.ActiveStatusId.NullCheck();
         if (arg.Name.Length >= 200)
         {
-            throw PaymentTypeExceptions.LengthPaymentTypeNameException;
+           throw new SimaResultException(CodeMessges._400Code, Messages.LengthPaymentTypeNameException);
         }
         if (await paymentTypeDomainService.IsCodeUnique(arg.Code, arg.Id))
         {
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
         }
     }
 

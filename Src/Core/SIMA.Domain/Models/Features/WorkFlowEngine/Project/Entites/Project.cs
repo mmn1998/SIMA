@@ -13,6 +13,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Exceptions;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 
@@ -104,7 +105,7 @@ public partial class Project : Entity
     public void AddProjectMember(List<CreateProjectMemberArg> request, long projectId)
     {
         var checkManager = request.Count(x => x.IsManager == "1");
-        if (checkManager > 1) throw ProjectExceptions.ProjectMemberIsManagerError;
+        if (checkManager > 1) throw new SimaResultException(CodeMessges._400Code , Messages.ProjectMemberIsManagerError);
 
         var previousProjectMembers = _projectMember.Where(x => x.ProjectId == new ProjectId(projectId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
@@ -156,9 +157,9 @@ public partial class Project : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
 
     private async Task ModifyGuard(ModifyProjectArg arg, IProjectDomainService service)
@@ -167,9 +168,9 @@ public partial class Project : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (await service.IsCodeUnique(arg.Code, Id.Value)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (await service.IsCodeUnique(arg.Code, Id.Value)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
 }

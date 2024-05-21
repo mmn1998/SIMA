@@ -19,12 +19,15 @@ using SIMA.WebApi.Middlwares;
 using System.Globalization;
 using SIMA.WebApi.Dtos;
 using SIMA.WebApi.Settings;
+using AspNetCoreRateLimit;
+using Microsoft.Extensions.Configuration;
 
 #region AddConfigurationFiles
 var configuration = new ConfigurationBuilder()
               .AddJsonFile("appsettings.json")
               .AddJsonFile("appsettings.Development.json")
               .AddJsonFile("appsettings.RedisConfigs.json")
+              .AddJsonFile("appsettings.RateLimit.json")
               .Build();
 #endregion
 
@@ -64,9 +67,22 @@ try
     builder.Services.Configure<TokenModel>(
         builder.Configuration.GetSection(
             key: nameof(TokenModel)));
+    builder.Services.Configure<PasswordPolicy>(
+        builder.Configuration.GetSection(
+            key: nameof(PasswordPolicy)));
     builder.Services.Configure<ApplicationSettings>(
         builder.Configuration.GetSection(
             key: nameof(ApplicationSettings)));
+    #region RateLimit(DDOS prevention)
+    builder.Services.AddMemoryCache();
+    builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+    builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+
+    builder.Services.AddInMemoryRateLimiting();
+
+    builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
+    #endregion
     #region Redis
 
     var redisSettingSection = configuration.GetSection("RedisSettings");

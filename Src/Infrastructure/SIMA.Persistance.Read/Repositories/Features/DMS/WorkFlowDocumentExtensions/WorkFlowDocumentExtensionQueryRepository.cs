@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.DMS.WorkFlowDocumentExtensions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
@@ -23,11 +24,59 @@ public class WorkFlowDocumentExtensionQueryRepository : IWorkFlowDocumentExtensi
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string countQuery = @"SELECT COUNT(*) Result
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT WDT.[Id]
+                              ,WDT.[WorkflowId]
+                              ,WDT.[DocumentExtensionId]
+                              ,WDT.[ActiveStatusId]
+	                          ,S.Name ActiveStatus
+                              ,WDT.[CreatedAt]
+                          FROM [DMS].[WorkflowDocumentExtension] WDT
+                          INNER JOIN [Basic].[ActiveStatus] S on WDT.ActiveStatusId = S.ID
+                         WHERE WDT.ActiveStatusId <> 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT WDT.[Id]
+                              ,WDT.[WorkflowId]
+                              ,WDT.[DocumentExtensionId]
+                              ,WDT.[ActiveStatusId]
+	                          ,S.Name ActiveStatus
+                              ,WDT.[CreatedAt]
+                          FROM [DMS].[WorkflowDocumentExtension] WDT
+                          INNER JOIN [Basic].[ActiveStatus] S on WDT.ActiveStatusId = S.ID
+                         WHERE WDT.ActiveStatusId <> 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    response = (await multi.ReadAsync<GetWorkFlowDocumentExtensionQueryResult>()).ToList();
+                    totalCount = await multi.ReadSingleAsync<int>();
+                }
+            }
+            else
+            {
+                string countQuery = @"SELECT COUNT(*) Result
   FROM [DMS].[WorkflowDocumentExtension] WDT
   INNER JOIN [Basic].[ActiveStatus] S on WDT.ActiveStatusId = S.ID
  WHERE (WDT.[WorkflowId] like @SearchValue OR WDT.[DocumentExtensionId] like @SearchValue OR S.Name like @SearchValue)  and WDT.ActiveStatusId<>3";
-            string query = $@"
+                string query = $@"
 SELECT DISTINCT WDT.[Id]
       ,WDT.[WorkflowId]
       ,WDT.[DocumentExtensionId]
@@ -40,17 +89,17 @@ SELECT DISTINCT WDT.[Id]
  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
 OFFSET @Skip rows FETCH NEXT @PageSize rows only;
 ";
-            using (var result = await connection.QueryMultipleAsync(query + countQuery, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.PageSize,
-                request.Skip
-            }))
-            {
-                response = (await result.ReadAsync<GetWorkFlowDocumentExtensionQueryResult>()).ToList();
-                totalCount = await result.ReadSingleAsync<int>();
+                using (var result = await connection.QueryMultipleAsync(query + countQuery, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.PageSize,
+                    request.Skip
+                }))
+                {
+                    response = (await result.ReadAsync<GetWorkFlowDocumentExtensionQueryResult>()).ToList();
+                    totalCount = await result.ReadSingleAsync<int>();
+                }
             }
-
             return Result.Ok(response, totalCount, request.PageSize, request.Page);
         }
     }

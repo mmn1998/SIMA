@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
@@ -18,19 +19,68 @@ public class IssuePriorityQueryRepository : IIssuePriorityQueryRepository
 
     public async Task<Result<IEnumerable<GetIssuePriorotyQueryResult>>> GetAll(GetAllIssuePriorotiesQuery request)
     {
-        
-
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string queryCount = @"
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT P.[Id]
+                                    ,P.[Name]
+                                    ,P.[Code]
+                                    ,P.[Ordering]
+                                    ,P.[ActiveStatusId]
+	                                , S.[Name] as ActiveStatus
+                                    ,p.[CreatedAt]
+                                FROM [IssueManagement].[IssuePriority] P
+                                INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                        WHERE P.ActiveStatusId <> 3 
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT P.[Id]
+                                    ,P.[Name]
+                                    ,P.[Code]
+                                    ,P.[Ordering]
+                                    ,P.[ActiveStatusId]
+	                                , S.[Name] as ActiveStatus
+                                    ,p.[CreatedAt]
+                                FROM [IssueManagement].[IssuePriority] P
+                                INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                        WHERE P.ActiveStatusId <> 3 
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetIssuePriorotyQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
+                string queryCount = @"
                               SELECT COUNT(*) Result
                                       FROM [IssueManagement].[IssuePriority] P
                                       INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
                                        WHERE (@SearchValue is null OR  (P.[Ordering] like @SearchValue or P.[Name] like @SearchValue or P.[Code] like @SearchValue or S.[Name] like @SearchValue)) and 
                                        P.ActiveStatusId <> 3 ";
 
-            string query = $@"
+                string query = $@"
                               SELECT DISTINCT P.[Id]
                                     ,P.[Name]
                                     ,P.[Code]
@@ -44,16 +94,17 @@ public class IssuePriorityQueryRepository : IIssuePriorityQueryRepository
                                            P.ActiveStatusId <> 3  
                                  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}            
                                   OFFSET @Skip rows FETCH NEXT @PageSize rows only ;";
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                var response = await multi.ReadAsync<GetIssuePriorotyQueryResult>();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetIssuePriorotyQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
     }

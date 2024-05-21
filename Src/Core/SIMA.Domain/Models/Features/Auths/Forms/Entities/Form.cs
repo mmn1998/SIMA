@@ -84,4 +84,12 @@ public class Form : Entity
 
     private List<Step> _steps = new();
     public List<Step> Steps => _steps;
+
+    public void AddFromField(CreateFormFieldArg arg)
+    {
+        var entity = FormField.Create(arg);
+        _formFields.Add(entity);
+    }
+    private List<FormField> _formFields = new();
+    public List<FormField> FormFields => _formFields;
 }

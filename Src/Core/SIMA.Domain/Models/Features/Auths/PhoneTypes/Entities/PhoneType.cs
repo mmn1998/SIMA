@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
 
@@ -45,7 +46,7 @@ public class PhoneType : Entity
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyPhoneTypeArg arg, IPhoneTypeService service)
     {
@@ -53,7 +54,7 @@ public class PhoneType : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
     public PhoneTypeId Id { get; private set; }

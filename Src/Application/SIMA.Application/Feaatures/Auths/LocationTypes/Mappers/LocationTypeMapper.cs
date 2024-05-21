@@ -15,13 +15,13 @@ public class LocationTypeMapper : Profile
         CreateMap<CreateLocationTypeCommand, CreateLocationTypeArg>()
             .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
             .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => (int)ActiveStatusEnum.Active))
-            .ForMember(x => x.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
+            //.ForMember(x => x.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()));
         ;
 
         CreateMap<ModifyLocationTypeCommand, ModifyLocationTypeArg>()
            .ForMember(x => x.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
-            .ForMember(x => x.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
+            //.ForMember(x => x.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             ;
     }
 }

@@ -14,6 +14,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 
@@ -58,7 +59,7 @@ public class Issue : Entity
         var isCodeUnique = await service.IsCodeUnique(code, id);
         if (isCodeUnique)
         {
-            throw IssueExceptions.IssueCodeIsNotUnique;
+            throw new SimaResultException(CodeMessges._400Code,  Messages.IssueCodeIsNotUnique);
         }
     }
 
@@ -237,7 +238,7 @@ public class Issue : Entity
     {
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
     }
     private async Task ModifyGuards(ModifyIssueArg arg, IIssueDomainService service)

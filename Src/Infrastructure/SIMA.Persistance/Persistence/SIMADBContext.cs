@@ -19,6 +19,7 @@ using SIMA.Domain.Models.Features.Auths.Roles.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.SysConfigs.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.ViewLists.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Entities;
@@ -109,65 +110,38 @@ namespace SIMA.Persistance.Persistence
         public virtual DbSet<FormGroup> FormGroups { get; set; }
         public virtual DbSet<FormUser> FormUsers { get; set; }
         public virtual DbSet<ActiveStatus> ActiveStatuses { get; set; }
-
         public virtual DbSet<AddressBook> AddressBooks { get; set; }
-
         public virtual DbSet<AddressType> AddressTypes { get; set; }
-
         public virtual DbSet<AdminLocationAccess> AdminLocationAccesses { get; set; }
-
         public virtual DbSet<Company> Companies { get; set; }
-
         public virtual DbSet<ConfigurationAttribute> ConfigurationAttributes { get; set; }
-
         public virtual DbSet<ConfigurationAttributeValue> ConfigurationAttributeValues { get; set; }
-
         public virtual DbSet<Department> Departments { get; set; }
-
         public virtual DbSet<Domain.Models.Features.Auths.Domains.Entities.Domain> Domains { get; set; }
-
         public virtual DbSet<Gender> Genders { get; set; }
-
         public virtual DbSet<Group> Groups { get; set; }
-
         public virtual DbSet<GroupPermission> GroupPermissions { get; set; }
-
         public virtual DbSet<Location> Locations { get; set; }
-
         public virtual DbSet<LocationType> LocationTypes { get; set; }
-
         public virtual DbSet<MainAggregate> MainAggregates { get; set; }
-
         public virtual DbSet<Permission> Permissions { get; set; }
-
         public virtual DbSet<PhoneType> PhoneTypes { get; set; }
-
         public virtual DbSet<PhoneBook> PhoneBooks { get; set; }
-
         public virtual DbSet<Position> Positions { get; set; }
-
         public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
-
         public virtual DbSet<Staff> Staff { get; set; }
-
         public virtual DbSet<SysConfig> SysConfigs { get; set; }
-
         public virtual DbSet<User> Users { get; set; }
-
         public virtual DbSet<UserConfig> UserConfigs { get; set; }
-
         public virtual DbSet<UserDomainAccess> UserDomainAccesses { get; set; }
-
         public virtual DbSet<UserGroup> UserGroups { get; set; }
-
         public virtual DbSet<UserLocationAccess> UserLocationAccesses { get; set; }
-
         public virtual DbSet<UserPermission> UserPermissions { get; set; }
-
         public virtual DbSet<UserRole> UserRoles { get; set; }
+        public virtual DbSet<ViewField> ViewFields { get; set; }
+        public virtual DbSet<ViewList> ViewLists { get; set; }
 
         #endregion
 

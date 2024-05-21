@@ -9,6 +9,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Groups.Entities;
 
@@ -50,7 +51,7 @@ public class Group : Entity
         arg.GroupId.NullCheck();
         if (_userGroups.Any(ur => ur.GroupId == new GroupId(arg.GroupId.Value) && ur.UserId == new UserId(arg.UserId.Value)))
         {
-            throw SimaResultException.UserGroupDuplicateError;
+            throw new SimaResultException("10018",Messages.UserGroupDuplicateError);
         }
         var entity = await UserGroup.Create(arg);
         _userGroups.Add(entity);
@@ -59,7 +60,7 @@ public class Group : Entity
     {
         if (_groupPermissions.Any(ur => ur.GroupId == new GroupId(arg.GroupId) && ur.PermissionId == new PermissionId(arg.PermissionId)))
         {
-            throw SimaResultException.GroupPermoissionDuplicateError;
+            throw new SimaResultException("10018",Messages.GroupPermoissionDuplicateError);
         }
         var entity = await GroupPermission.Create(arg);
         _groupPermissions.Add(entity);
@@ -87,7 +88,7 @@ public class Group : Entity
         arg.UserId.NullCheck();
         if (_userGroups.Any(ur => ur.GroupId == new GroupId(arg.GroupId) && ur.UserId == new UserId(arg.UserId.Value)))
         {
-            throw SimaResultException.UserGroupDuplicateError;
+            throw new SimaResultException("10018",Messages.UserGroupDuplicateError);
         }
         var entity = _userGroups.FirstOrDefault(ug => ug.Id == new UserGroupId(arg.Id));
         entity.NullCheck();
@@ -122,7 +123,7 @@ public class Group : Entity
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyGroupArg arg, IGroupService service)
     {
@@ -130,7 +131,7 @@ public class Group : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
 

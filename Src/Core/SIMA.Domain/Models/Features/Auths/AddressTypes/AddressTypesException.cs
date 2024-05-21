@@ -1,10 +1,5 @@
-﻿using SIMA.Auth.Domain.Resources;
-using SIMA.Framework.Common.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SIMA.Framework.Common.Exceptions;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.AddressTypes
 {

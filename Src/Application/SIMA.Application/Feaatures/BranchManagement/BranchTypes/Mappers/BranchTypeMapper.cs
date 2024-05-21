@@ -13,12 +13,12 @@ public class BranchTypeMapper : Profile
     {
         CreateMap<CreateBranchTypeCommand, CreateBranchTypeArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-            .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
         CreateMap<ModifyBranchTypeCommand, ModifyBranchTypeArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-            .ForMember(dest => dest.ModifyBy, act => act.MapFrom(source => simaIdentity.UserId))
+            //.ForMember(dest => dest.ModifyBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.ModifyAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
     }
 }

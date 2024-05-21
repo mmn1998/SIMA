@@ -1,12 +1,17 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Auths.Forms;
+using SIMA.Application.Feaatures.Auths.Forms.Mappers;
 using SIMA.Domain.Models.Features.Auths.Forms.Args;
 using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Forms.Interfaces;
+using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Helper.FormMaker;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using System.Net.Http.Json;
 
 namespace SIMA.Application.Feaatures.Auths.Forms;
 
@@ -39,16 +44,51 @@ public class FormCommandHandler : ICommandHandler<CreateFormCommand, Result<long
         {
             throw;
         }
-       
+
     }
 
     public async Task<Result<long>> Handle(ModifyFormCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(request.Id);
+        try
+        {
+            var entity = await _repository.GetById(request.Id);
 
-        var arg = _mapper.Map<ModifyFormArg>(request);
-        await entity.Modify(arg);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(request.Id);
+            var arg = _mapper.Map<ModifyFormArg>(request);
+            await entity.Modify(arg);
+            #region FormFields
+            if (!string.IsNullOrEmpty(arg.JsonContent))
+            {
+                var formComponents = JsonConvert.DeserializeObject<FormWrapper>(arg.JsonContent)?.components;
+                if (formComponents != null)
+                {
+                    foreach (var formComponent in formComponents)
+                    {
+                        if (!string.Equals(formComponent.type, FormInputType.button.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            var formFieldArg = new CreateFormFieldArg
+                            {
+                                ActiveStatusId = (long) ActiveStatusEnum.Active,
+                                CreatedAt = DateTime.Now,
+                                CreatedBy = _simaIdentity.UserId,
+                                FormId = entity.Id.Value,
+                                Type = formComponent.type,
+                                Name = formComponent.label ?? ""
+                            };
+                            entity.AddFromField(formFieldArg);
+                        }
+                    }
+                }
+            }
+            #endregion
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(request.Id);
+        }
+        catch (Exception e)
+        {
+
+            throw;
+        }
     }
 }
+
+

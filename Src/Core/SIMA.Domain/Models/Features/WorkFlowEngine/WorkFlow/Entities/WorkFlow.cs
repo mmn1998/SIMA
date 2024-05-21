@@ -14,6 +14,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 
@@ -306,8 +307,8 @@ public class WorkFlow : Entity
     {
         arg.Name.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (await service.IsCodeUnique(arg.Code, arg.Id)) throw WorkFlowExceptions.WorkFlowCodeIsUniqueException;
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.WorkFlowNameRequiredException);
 
     }
 
@@ -318,8 +319,8 @@ public class WorkFlow : Entity
             Activate();
         }
         arg.Name.NullCheck();
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (await service.IsCodeUnique(arg.Code, arg.Id)) throw WorkFlowExceptions.WorkFlowCodeIsUniqueException;
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.WorkFlowCodeIsUniqueException);
 
     }
 

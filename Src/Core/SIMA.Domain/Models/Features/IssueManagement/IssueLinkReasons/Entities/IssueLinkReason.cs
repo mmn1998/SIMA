@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities
 {
@@ -64,14 +65,14 @@ namespace SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities
             arg.Name.NullCheck();
             arg.Code.NullCheck();
             arg.ActiveStatusId.NullCheck();
-            if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+            if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
         }
         private async Task ModifyGuards(ModifyIssueLinkReasonArg arg, IIssueLinkReasonDomainService service)
         {
             arg.Name.NullCheck();
             arg.Code.NullCheck();
             arg.ActiveStatusId.NullCheck();
-            if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+            if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
         }
         #endregion
     }

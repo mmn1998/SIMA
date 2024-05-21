@@ -8,6 +8,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Security;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Application.Feaatures.DMS.Documents.Mappers;
@@ -20,7 +21,7 @@ public class DocumentMapper : Profile
     {
         CreateMap<CreateDocumentCommand, CreateDocumentArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-                .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+                //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
                 .ForMember(dest => dest.Code, act => act.MapFrom(source => IdHelper.GenerateUniqueId().ToString()))
                 .ForMember(dest => dest.FileAddress, act =>
                     act.MapFrom(source =>
@@ -29,7 +30,7 @@ public class DocumentMapper : Profile
                         .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
         CreateMap<ModifyDocumentCommand, ModifyDocumentArg>()
-            .ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            //.ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.Code, act => act.MapFrom(source => IdHelper.GenerateUniqueId().ToString()))
                 .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
         _serviceProvider = serviceProvider;
@@ -42,7 +43,7 @@ public class DocumentMapper : Profile
             var fileContent = fileService.GetBytesFromBase64(base64);
             if (fileContent is null || fileContent.Length == 0)
             {
-                throw new SimaResultException("400", "فایل خالی است");
+                throw new SimaResultException(CodeMessges._400Code, Messages.FileNotFoundError);
             }
             var filePath = await fileService.Upload(fileContent, fileName, rootPath);
             try
@@ -58,7 +59,7 @@ public class DocumentMapper : Profile
         }
         catch (Exception)
         {
-            throw new SimaResultException("500", "بارگذاری فایل با خطا مواجه شد.لطفا دوباره سعی کنید");
+            throw new SimaResultException(CodeMessges._500Code,Messages.FileUploadException);
         }
     }
     #region FileValidations
@@ -67,7 +68,7 @@ public class DocumentMapper : Profile
         var fileExtension = Path.GetExtension(filePath).Replace(".", "");
         if (extensionTypeId == null)
         {
-            throw new SimaResultException("400", "جنس فایل انتخاب نشده است");
+            throw new SimaResultException(CodeMessges._400Code, Messages.FileTypeNotSelect);
         }
         using (var scope = _serviceProvider.CreateScope())
         {
@@ -75,7 +76,7 @@ public class DocumentMapper : Profile
             var extensionName = await service.GetDocumentExtension(extensionTypeId.Value);
             if (!string.Equals(extensionName, fileExtension, StringComparison.InvariantCultureIgnoreCase))
             {
-                throw new SimaResultException("400", "جنس فایل اشتباه است");
+                throw new SimaResultException("10042", Messages.FileTypeError);
             }
         }
     }

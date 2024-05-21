@@ -8,6 +8,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 
@@ -40,12 +41,12 @@ public class Profile : Entity
     private static async Task CreateGuards(CreateProfileArg arg, IProfileService service)
     {
         arg.NullCheck();
-        if (!service.IsValidNationalCode(arg.NationalId)) throw SimaResultException.NationalCodeIsInvalidError;
+        if (!service.IsValidNationalCode(arg.NationalId)) throw new SimaResultException("10007",Messages.NationalCodeIsInvalidError);
     }
     //private async Task ModifyGuards(CreateProfileArg arg, IProfileService service)
     //{
     //    arg.NullCheck();
-    //    if (!service.IsValidNationalCode(arg.NationalId)) throw SimaResultException.NationalCodeIsInvalidError;
+    //    if (!service.IsValidNationalCode(arg.NationalId)) throw new SimaResultException(CodeMessges._400Code,Messages.NationalCodeIsInvalidError;
     //}
     #endregion
     public ProfileId Id { get; private set; }

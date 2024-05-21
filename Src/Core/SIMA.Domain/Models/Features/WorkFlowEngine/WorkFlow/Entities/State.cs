@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 
@@ -80,14 +81,14 @@ public class State : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (await service.SteteIsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (await service.SteteIsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
         arg.Name.NullCheck();
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (await service.SteteIsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (await service.SteteIsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
 }

@@ -13,6 +13,7 @@ using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 
@@ -121,28 +122,28 @@ public class Branch : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await domainService.IsCodeUnique(arg.Code, arg.Id))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
 
-        if (!arg.Longitude.HasValue || arg.Longitude == 0) throw SimaResultException.NullException;
-        if (!arg.Latitude.HasValue || arg.Latitude == 0) throw SimaResultException.NullException;
+        if (!arg.Longitude.HasValue || arg.Longitude == 0) throw new SimaResultException(CodeMessges._400Code,Messages.NullException);
+        if (!arg.Latitude.HasValue || arg.Latitude == 0) throw new SimaResultException(CodeMessges._400Code,Messages.NullException);
 
         if (arg.BranchDeputyId.HasValue && arg.BranchChiefOfficerId.HasValue && (arg.BranchChiefOfficerId == arg.BranchDeputyId))
-            throw BranchExceptions.ChiefAndDeputyAreSameException;
+            throw new SimaResultException(CodeMessges._400Code , Messages.ChiefAndDeputyAreSameException);
 
         if (arg.BranchChiefOfficerId.HasValue && (!await domainService.IsStaffHasAnyRoleInOtherBrfanches(new(arg.BranchChiefOfficerId.Value), Id)))
-            throw BranchExceptions.StaffCantHaveRoleInTwoBranchesException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.StaffCantHaveRoleInTwoBranchesException);
 
         if (arg.BranchDeputyId.HasValue && (!await domainService.IsStaffHasAnyRoleInOtherBrfanches(new(arg.BranchDeputyId.Value), Id)))
-            throw BranchExceptions.StaffCantHaveRoleInTwoBranchesException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.StaffCantHaveRoleInTwoBranchesException);
 
         if (!await domainService.IsNearExistingLocations(arg.Latitude.Value, arg.Longitude.Value))
-            throw BranchExceptions.BranchDistanceException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.BranchDistanceException);
     }
     private static async Task CreateGuards(CreateBranchArg arg, IBranchDomainService domainService)
     {
@@ -150,35 +151,35 @@ public class Branch : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (!arg.Longitude.HasValue || arg.Longitude == 0) throw SimaResultException.NullException;
-        if (!arg.Latitude.HasValue || arg.Latitude == 0) throw SimaResultException.NullException;
+        if (!arg.Longitude.HasValue || arg.Longitude == 0) throw new SimaResultException(CodeMessges._400Code,Messages.NullException);
+        if (!arg.Latitude.HasValue || arg.Latitude == 0) throw new SimaResultException(CodeMessges._400Code,Messages.NullException);
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await domainService.IsCodeUnique(arg.Code, arg.Id))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
 
         if (arg.BranchDeputyId.HasValue && arg.BranchChiefOfficerId.HasValue && (arg.BranchChiefOfficerId == arg.BranchDeputyId))
-            throw BranchExceptions.ChiefAndDeputyAreSameException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.ChiefAndDeputyAreSameException);
 
         if (arg.BranchChiefOfficerId.HasValue && (await domainService.IsStaffHasAnyRoleInOtherBrfanches(new(arg.BranchChiefOfficerId.Value))))
-            throw BranchExceptions.StaffCantHaveRoleInTwoBranchesException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.StaffCantHaveRoleInTwoBranchesException);
 
         if (arg.BranchDeputyId.HasValue && (await domainService.IsStaffHasAnyRoleInOtherBrfanches(new(arg.BranchDeputyId.Value))))
-            throw BranchExceptions.StaffCantHaveRoleInTwoBranchesException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.StaffCantHaveRoleInTwoBranchesException);
 
         if ((arg.BranchDeputyId.HasValue && arg.LocationId.HasValue) && !await domainService.IsStaffFromSelectedLocation(new(arg.BranchDeputyId.Value), new(arg.LocationId.Value)))
-            throw BranchExceptions.StaffShouldBeInSelectedException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.StaffShouldBeInSelectedException);
 
 
         if ((arg.BranchChiefOfficerId.HasValue && arg.LocationId.HasValue) && !await domainService.IsStaffFromSelectedLocation(new(arg.BranchChiefOfficerId.Value), new(arg.LocationId.Value)))
-            throw BranchExceptions.StaffShouldBeInSelectedException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.StaffShouldBeInSelectedException);
 
         if (await domainService.IsNearExistingLocations(arg.Latitude.Value, arg.Longitude.Value))
-            throw BranchExceptions.BranchDistanceException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.BranchDistanceException);
     }
 }

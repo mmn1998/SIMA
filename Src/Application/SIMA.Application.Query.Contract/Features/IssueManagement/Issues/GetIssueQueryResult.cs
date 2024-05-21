@@ -13,6 +13,7 @@ public class GetIssueQueryResult
     public string DomainName { get; set; }
     public long MainAggregateId { get; set; }
     public long SourceId { get; set; }
+    public string? SourceCode { get; set; }
     public long IssueTypeId { get; set; }
     public string IssueTypeName { get; set; }
     public long IssuePriorityId { get; set; }

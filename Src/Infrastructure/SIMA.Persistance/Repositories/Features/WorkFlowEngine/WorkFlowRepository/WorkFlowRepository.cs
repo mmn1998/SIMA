@@ -14,6 +14,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace SIMA.Persistance.Repositories.Features.WorkFlowEngine.WorkFlowRepository;
@@ -45,7 +46,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
                     .ThenInclude(x => x.WorkFlowActorSteps)
                 .FirstOrDefaultAsync(x => x.Id == workFlowId);
 
-            return workFlow ?? throw SimaResultException.WorkflowNotFoundError;
+            return workFlow ?? throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
         }
         catch (Exception ex)
         {
@@ -137,7 +138,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             }
             else
             {
-                throw IssueExceptions.IssueErrorException;
+                throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
             }
         }
             return result;
@@ -168,7 +169,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         }
         else
         {
-            throw IssueExceptions.IssueErrorException;
+            throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
         }
     }
 

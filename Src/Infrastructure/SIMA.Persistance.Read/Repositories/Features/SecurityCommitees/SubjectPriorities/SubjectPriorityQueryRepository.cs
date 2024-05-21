@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.SecurityCommitees.SubjectPriorities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -21,14 +22,63 @@ public class SubjectPriorityQueryRepository : ISubjectPriorityQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            string queryCount = @"
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT SP.[Id]
+                                  ,SP.[Name]
+                                  ,SP.[Code]
+                                  ,SP.[Ordering]
+	                              ,S.[Name] ActiveStatus
+                                  ,SP.[CreatedAt]
+                        FROM [SecurityCommitee].[SubjectPriority] SP
+                        INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                        WHERE SP.ActiveStatusId <> 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT SP.[Id]
+                                  ,SP.[Name]
+                                  ,SP.[Code]
+                                  ,SP.[Ordering]
+	                              ,S.[Name] ActiveStatus
+                                  ,SP.[CreatedAt]
+                        FROM [SecurityCommitee].[SubjectPriority] SP
+                        INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                        WHERE SP.ActiveStatusId <> 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    response = (await multi.ReadAsync<GetSubjectPriorityQueryResult>()).ToList();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
+                string queryCount = @"
                               SELECT COUNT(*) Result
                                       FROM [SecurityCommitee].[SubjectPriority] SP
                                       INNER JOIN [Basic].[ActiveStatus] S on S.ID = SP.ActiveStatusId
                                        WHERE (@SearchValue is null OR  (SP.[Ordering] like @SearchValue or SP.[Name] like @SearchValue or SP.[Code] like @SearchValue or S.[Name] like @SearchValue)) and 
                                        SP.ActiveStatusId <> 3 ;";
 
-            string query = $@"
+                string query = $@"
                                                           SELECT SP.[Id]
                                   ,SP.[Name]
                                   ,SP.[Code]
@@ -41,16 +91,17 @@ public class SubjectPriorityQueryRepository : ISubjectPriorityQueryRepository
                                            SP.ActiveStatusId <> 3  
                                  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}            
                                   OFFSET @Skip rows FETCH NEXT @Take rows only ;";
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                response = (await multi.ReadAsync<GetSubjectPriorityQueryResult>()).ToList();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    response = (await multi.ReadAsync<GetSubjectPriorityQueryResult>()).ToList();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
     }

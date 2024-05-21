@@ -8,6 +8,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Repositories.Features.Auths;
 
@@ -30,7 +31,7 @@ public class UserRepository : Repository<User>, IUserRepository
         .Include(u => u.AdminLocationAccesses)
         .Include(u => u.UserDomainAccesses)
             .FirstOrDefaultAsync(u => u.Id == new UserId(id));
-        if (entity is null) throw SimaResultException.UserNotFoundError;
+        if (entity is null) throw new SimaResultException("10051",Messages.UserNotFoundError);
         return entity;
     }
 

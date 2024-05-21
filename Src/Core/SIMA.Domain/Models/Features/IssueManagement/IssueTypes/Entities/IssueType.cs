@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 
@@ -73,11 +74,11 @@ public class IssueType : Entity
         arg.Code.NullCheck();
 
         if (!string.IsNullOrEmpty(arg.ColorHex))
-            if (!service.IsHexCodeValid(arg.ColorHex)) throw SimaResultException.ColorHexCodeIsInorrectError;
+            if (!service.IsHexCodeValid(arg.ColorHex)) throw new SimaResultException("10039" , Messages.ColorHexCodeIsInorrectError);
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw  new SimaResultException(CodeMessges._400Code , Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
 
     private async Task ModifyGuard(ModifyIssueTypeArg arg, IIssueTypeDomainService service)
@@ -87,11 +88,11 @@ public class IssueType : Entity
         arg.Code.NullCheck();
 
         if (!string.IsNullOrEmpty(arg.ColorHex))
-            if (!service.IsHexCodeValid(arg.ColorHex)) throw SimaResultException.ColorHexCodeIsInorrectError;
+            if (!service.IsHexCodeValid(arg.ColorHex)) throw new SimaResultException("10039", Messages.ColorHexCodeIsInorrectError);
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
 

@@ -9,6 +9,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Companies.Entities;
 
@@ -53,10 +54,10 @@ public class Company : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
-        if (await service.IsCompanyParent(arg.ParentId)) throw SimaResultException.ParentCompaniesCannotDefinedAsChildError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException("10022",Messages.ParentCompaniesCannotDefinedAsChildError);
     }
     private async Task ModifyGuards(ModifyCompanyArg arg, ICompanyService service)
     {
@@ -64,10 +65,10 @@ public class Company : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw SimaResultException.LengthNameException;
-        if (arg.Code.Length > 20) throw SimaResultException.LengthCodeException;
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
-        if (await service.IsCompanyParent(arg.ParentId)) throw SimaResultException.ParentCompaniesCannotDefinedAsChildError;
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException("10022",Messages.ParentCompaniesCannotDefinedAsChildError);
     }
     #endregion
     public void Delete()

@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 
@@ -53,13 +54,13 @@ public class Broker : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await service.IsCodeUnique(arg.Code, 0))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyBrokerArg arg, IBrokerService service)
     {
@@ -69,13 +70,13 @@ public class Broker : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await service.IsCodeUnique(arg.Code, arg.Id))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
     public BrokerId Id { get; private set; }

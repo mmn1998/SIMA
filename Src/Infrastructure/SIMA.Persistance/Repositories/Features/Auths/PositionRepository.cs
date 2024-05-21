@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Repositories.Features.Auths;
 
@@ -20,7 +21,7 @@ public class PositionRepository : Repository<Position>, IPositionRepository
     public async Task<Position> GetById(long id)
     {
         var entity = await _context.Positions.FirstOrDefaultAsync(x => x.Id == new PositionId(id));
-        if (entity is null) throw SimaResultException.PositionNotFoundError;
+        if (entity is null) throw new SimaResultException("10054",Messages.PositionNotFoundError);
         return entity;
     }
 }

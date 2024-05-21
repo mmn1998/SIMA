@@ -1,11 +1,9 @@
 ﻿using Dapper;
-using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.AddressTypes;
-using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Request;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.AddressTypes;
@@ -48,17 +46,70 @@ public class AddressTypeQueryRepository : IAddressTypeQueryRepository
 
     public async Task<Result<List<GetAddressTypeQueryResult>>> GetAll(GetAllAddressTypesQuery request)
     {
-        
+
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            var queryCount = @" SELECT  COUNT(*) Result
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT
+                                     at.[ID] as Id
+                                   ,at.[Name]
+                                   ,at.[Code]
+                                   ,a.ID ActiveStatusId
+                                   ,a.Name ActiveStatus
+                                   ,at.[CreatedAt]
+                               FROM [Basic].[AddressType]  at
+                                    join Basic.ActiveStatus a
+                                    on at.ActiveStatusId = a.ID
+                        WHERE  at.[ActiveStatusID] <> 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT 
+                                    at.[ID] as Id
+                                   ,at.[Name]
+                                   ,at.[Code]
+                                   ,a.ID ActiveStatusId
+                                   ,a.Name ActiveStatus
+                                   ,at.[CreatedAt]
+                               FROM [Basic].[AddressType]  at
+                                    join Basic.ActiveStatus a
+                                    on at.ActiveStatusId = a.ID
+                    WHERE  at.[ActiveStatusID] <> 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = (await multi.ReadAsync<GetAddressTypeQueryResult>()).ToList();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
+                var queryCount = @" SELECT  COUNT(*) Result
                                 FROM [Basic].[AddressType]  at
                                 join Basic.ActiveStatus a
                                 on at.ActiveStatusId = a.ID
                                WHERE (@SearchValue is null OR (at.Name like @SearchValue OR at.Code like @SearchValue)) AND at.[ActiveStatusID] <> 3";
 
-            string query = $@"
+                string query = $@"
                                  SELECT DISTINCT 
                                     at.[ID] as Id
                                    ,at.[Name]
@@ -72,16 +123,17 @@ public class AddressTypeQueryRepository : IAddressTypeQueryRepository
                                 WHERE (@SearchValue is null OR (at.Name like @SearchValue OR at.Code like @SearchValue)) AND at.[ActiveStatusID] <> 3
                                 order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                var response = (await multi.ReadAsync<GetAddressTypeQueryResult>()).ToList();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = (await multi.ReadAsync<GetAddressTypeQueryResult>()).ToList();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
     }

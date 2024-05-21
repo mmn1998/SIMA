@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Sima.Framework.Core.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
+using SIMA.Resources;
 using System.Security.Cryptography;
 
 namespace SIMA.Domain.Models.Features.Auths.Users.ValueObjects
@@ -42,7 +43,7 @@ namespace SIMA.Domain.Models.Features.Auths.Users.ValueObjects
         {
             var isEqual = hashedValue.SequenceEqual(expectedHashBytes);
             if (!isEqual)
-                throw SimaResultException.InvalidUsernameOrPasswordError
+                throw new SimaResultException("10002",Messages.InvalidUsernameOrPasswordError)
                     ;
         }
 

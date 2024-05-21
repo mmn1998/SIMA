@@ -6,6 +6,7 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 
 public interface IUserService : IDomainService
 {
+    bool IsPasswordSatisfied(string password);
     Task<bool> IsUsernameUnique(string username);
     Task<bool> IsUsrConfigSatisfied(long configurationId, long userId);
     bool IsUsernameValidRegex(string username);

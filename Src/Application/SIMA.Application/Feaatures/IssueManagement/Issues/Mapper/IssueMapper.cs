@@ -24,7 +24,7 @@ public class IssueMapper : Profile
         CreateMap<CreateIssueCommand, CreateIssueArg>()
             .ForMember(x => x.Id, act => act.MapFrom(src => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-            //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            ////.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
             .ForMember(dest => dest.IssueDate , act => act.MapFrom(source=>DateTime.Now))
             .ForMember(dest => dest.DueDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.DueDate)))
@@ -33,7 +33,7 @@ public class IssueMapper : Profile
 
         CreateMap<CreateIssueCommand, CreateIssueHistoryArg>()
             .ForMember(x => x.Id, act => act.MapFrom(src => IdHelper.GenerateUniqueId()))
-            .ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
+            //.ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
             .ForMember(x => x.PerformerUserId, act => act.MapFrom(src => simaIdentity.UserId))
             .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
             .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
@@ -42,7 +42,7 @@ public class IssueMapper : Profile
         CreateMap<Issue, CreateIssueHistoryArg>()
            .ForMember(x => x.Id, act => act.MapFrom(src => IdHelper.GenerateUniqueId()))
            .ForMember(x => x.PerformerUserId, act => act.MapFrom(src => simaIdentity.UserId))
-           .ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
+           //.ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
            .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
@@ -50,7 +50,7 @@ public class IssueMapper : Profile
         CreateMap<CreateIssueArg, CreateIssueHistoryArg>()
            .ForMember(x => x.Id, act => act.MapFrom(src => IdHelper.GenerateUniqueId()))
            .ForMember(x => x.PerformerUserId, act => act.MapFrom(src => simaIdentity.UserId))
-           .ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
+           //.ForMember(x => x.CreatedBy, act => act.MapFrom(src => simaIdentity.UserId))
            .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
@@ -59,40 +59,40 @@ public class IssueMapper : Profile
         
 
         CreateMap<ModifyIssueCommand, ModifyIssueArg>()
-            .ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            //.ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.DueDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.DueDate)))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
 
         CreateMap<IssueRunActionCommand, IssueRunActionArg>()
-        .ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
+        //.ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
         .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
 
         CreateMap<CreateIssueLinkCommand, CreateIssueLinkArg>()
            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-           .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+           //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
 
         CreateMap<CreateIssueDocumentCommand, CreateIssueDocumentArg>()
            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-          .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+          //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
         CreateMap<CreateIssueCommentCommand, CreateIssueCommentArg>()
            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-           .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+           //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
 
         CreateMap<IssueRunActionCommand, CreateIssueCommentArg>()
           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-          .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+          //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
         CreateMap<MeetingCreatedEvent, CreateIssueArg>()
            .ForMember(x => x.Id, act => act.MapFrom(src => src.issueId))
            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-           .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+           //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
            .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
            .ForMember(dest => dest.IssueDate, act => act.MapFrom(source => DateTime.Now))
            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))

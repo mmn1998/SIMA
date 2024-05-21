@@ -13,12 +13,12 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany.Mapper
         {
             CreateMap<CreateWorkFlowCompanyCommand, CreateWorkFlowCompanyArg>()
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
+                //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
                 .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
 
             CreateMap<ModifyWorkFlowCompanyCommand, ModifyWorkFlowCompanyArg>()
-         .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
-         .ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
+         .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())));
+         //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
         }
     }
 }

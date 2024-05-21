@@ -10,6 +10,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Roles.Entities;
 
@@ -60,7 +61,7 @@ public class Role : Entity
     {
         if (_rolePermissions.Any(rp => rp.PermissionId == new PermissionId(arg.PermissionId) && rp.RoleId == new RoleId(arg.RoleId)))
         {
-            throw SimaResultException.RolePermoissionDuplicateError;
+            throw new SimaResultException("10027",Messages.RolePermoissionDuplicateError);
         }
         var entity = await RolePermission.Create(arg);
         _rolePermissions.Add(entity);
@@ -76,7 +77,7 @@ public class Role : Entity
     {
         if (_rolePermissions.Any(rp => rp.PermissionId == new PermissionId(arg.PermissionId) && rp.RoleId == new RoleId(arg.RoleId)))
         {
-            throw SimaResultException.RolePermoissionDuplicateError;
+            throw new SimaResultException("10027",Messages.RolePermoissionDuplicateError);
         }
         var rolePermission = _rolePermissions.FirstOrDefault(rp => rp.Id == new RolePermissionId(arg.Id));
         rolePermission.NullCheck();

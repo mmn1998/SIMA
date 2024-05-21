@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 
@@ -39,7 +40,7 @@ public class BranchType : Entity
     }
     public async Task Delete()
     {
-        ActiveStatusId = 2;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
     public string? Name { get; private set; }
@@ -62,13 +63,13 @@ public class BranchType : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await branchTypeDomainService.IsCodeUnique(arg.Code, arg.Id))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyBranchTypeArg arg, IBranchTypeDomainService branchTypeDomainService)
     {
@@ -78,13 +79,13 @@ public class BranchType : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await branchTypeDomainService.IsCodeUnique(arg.Code, arg.Id))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
 
     #endregion

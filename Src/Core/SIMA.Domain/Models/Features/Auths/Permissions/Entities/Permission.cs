@@ -8,6 +8,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 
@@ -44,7 +45,7 @@ public class Permission : Entity
         arg.EnglishKey.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
 
     public PermissionId Id { get; private set; }

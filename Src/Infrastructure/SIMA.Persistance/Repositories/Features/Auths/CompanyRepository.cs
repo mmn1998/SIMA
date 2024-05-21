@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Repositories.Features.Auths
 {
@@ -20,7 +21,7 @@ namespace SIMA.Persistance.Repositories.Features.Auths
         public async Task<Company> GetById(long id)
         {
             var entity = await _context.Companies.FirstOrDefaultAsync(c => c.Id == new CompanyId(id));
-            if (entity is null) throw SimaResultException.CompanyNotFoundError;
+            if (entity is null) throw new SimaResultException("10052",Messages.CompanyNotFoundError);
             return entity;
         }
     }

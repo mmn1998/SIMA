@@ -12,6 +12,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Resources;
 
 
 namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
@@ -118,7 +119,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         #region State
         public async Task<Result<long>> Handle(CreateStateCommand request, CancellationToken cancellationToken)
         {
-            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
+            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
             var workflow = await _repository.GetById2(new WorkFlowId(Value: (long)request.WorkFlowId));
             var arg = _mapper.Map<CreateStateArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
@@ -128,7 +129,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         }
         public async Task<Result<long>> Handle(ModifyStateCommand request, CancellationToken cancellationToken)
         {
-            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
+            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
             var entity = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStateArgs>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
@@ -138,7 +139,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         }
         public async Task<Result<long>> Handle(DeleteStateCommand request, CancellationToken cancellationToken)
         {
-            if (!await _service.CheckWorkFlow(request.WorkFlowId)) throw SimaResultException.WorkflowNotFoundError;
+            if (!await _service.CheckWorkFlow(request.WorkFlowId)) throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
             var entity = await _repository.GetById(request.WorkFlowId);
             entity.DeleteState(request.Id);
             await _unitOfWork.SaveChangesAsync();

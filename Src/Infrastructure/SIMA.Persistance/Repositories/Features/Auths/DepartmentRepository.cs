@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Repositories.Features.Auths;
 
@@ -20,7 +21,7 @@ public class DepartmentRepository : Repository<Department>, IDepartmentRepositor
     public async Task<Department> GetById(long id)
     {
         var entity = await _context.Departments.FirstOrDefaultAsync(x => x.Id == new DepartmentId(id));
-        if (entity is null) throw SimaResultException.DepartmentNotFoundError;
+        if (entity is null) throw new SimaResultException("10053",Messages.DepartmentNotFoundError);
         return entity;
     }
 }

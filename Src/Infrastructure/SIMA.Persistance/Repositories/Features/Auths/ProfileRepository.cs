@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Repositories.Features.Auths
 {
@@ -18,7 +19,7 @@ namespace SIMA.Persistance.Repositories.Features.Auths
         public async Task<Profile> GetById(long id)
         {
             var entity = await _context.Profiles.Include(x => x.AddressBooks).FirstOrDefaultAsync(i => i.Id == new ProfileId(id));
-            if (entity is null) throw SimaResultException.ProfileNotFoundError;
+            if (entity is null) throw new SimaResultException("10055",Messages.ProfileNotFoundError);
             return entity;
         }
     }

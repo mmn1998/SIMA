@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.IdentityModel.Tokens;
 using SIMA.Application.Feaatures.Auths.Companies.Mappers;
@@ -29,6 +30,7 @@ namespace SIMA.WebApi.Extensions
             services.AddControllers(options =>
             {
                 options.Conventions.Add(new ModelConvention());
+                options.Filters.Add(new RequestSizeLimitAttribute(1024 * 1024)); // 1 MB limit
 
             }).PartManager.ApplicationParts.Add(new AssemblyPart(typeof(UsersController).Assembly));
             return services;

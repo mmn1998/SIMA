@@ -6,12 +6,14 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Args;
 using SIMA.Domain.Models.Features.Auths.Staffs.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Staffs.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 
@@ -65,7 +67,7 @@ public class Staff : Entity
 
         if (arg.PositionId.HasValue && arg.ProfileId.HasValue)
         {
-            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw SimaResultException.PersonHasDuplicatePositionError;
+            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw new SimaResultException("10011",Messages.PersonHasDuplicatePositionError);
             if (!await service.IsStaffSatisfied(arg.ProfileId.Value, arg.PositionId.Value)) throw StaffExceptions.StaffNotSatisfiedException;
         }
     }
@@ -78,7 +80,7 @@ public class Staff : Entity
 
         if (arg.PositionId.HasValue && arg.ProfileId.HasValue)
         {
-            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw SimaResultException.PersonHasDuplicatePositionError;
+            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw new SimaResultException("10011",Messages.PersonHasDuplicatePositionError);
             if (!await service.IsStaffSatisfied(arg.ProfileId.Value, arg.PositionId.Value)) throw StaffExceptions.StaffNotSatisfiedException;
         }
     }
@@ -121,6 +123,8 @@ public class Staff : Entity
     public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
     private List<Invitees> _invitees => new();
     public ICollection<Invitees> Invitees => _invitees;
+    private List<BusinessImpactAnalysisAnnouncement> _businessImpactAnalysisAnnouncements => new();
+    public ICollection<BusinessImpactAnalysisAnnouncement> BusinessImpactAnalysisAnnouncements => _businessImpactAnalysisAnnouncements;
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

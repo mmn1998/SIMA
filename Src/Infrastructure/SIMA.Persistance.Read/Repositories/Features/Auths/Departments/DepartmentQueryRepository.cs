@@ -2,10 +2,10 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Departments;
-using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Request;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
+using SIMA.Resources;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Departments;
 
@@ -39,20 +39,76 @@ public class DepartmentQueryRepository : IDepartmentQueryRepository
 
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetDepartmentQueryResult>(query, new { Id = id });
-            if (result is null) throw SimaResultException.DepartmentNotFoundError;
-            if (result.ActiveStatusId == 3) throw SimaResultException.DepartmentDeleteError;
-            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw SimaResultException.DepartmentDeleteError;
+            if (result is null) throw new SimaResultException("10053",Messages.DepartmentNotFoundError);
+            if (result.ActiveStatusId == 3) throw new SimaResultException("10033",Messages.DepartmentDeleteError);
+            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException("10033",Messages.DepartmentDeleteError);
             return result;
         }
     }
 
     public async Task<Result<IEnumerable<GetDepartmentQueryResult>>> GetAll(GetAllDepartmentsQuery? request = null)
     {
-        
-                    using (var connection = new SqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
             {
-                            await connection.OpenAsync();
-            var queryCount = @" SELECT  COUNT(*) Result
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT 
+                            D.[ID] as Id
+                            ,D.[Name]
+                            ,D.[Code]
+	                        , (select DP.Name from [Organization].Department DP where  DP.ID = D.ParentID   ) as ParentName
+	                        ,C.Name as CompanyName
+                            ,a.ID ActiveStatusId
+                            ,a.Name ActiveStatus
+                            ,d.[CreatedAt]
+                            FROM [Organization].Department D
+                            join Basic.ActiveStatus a on D.ActiveStatusId = a.ID
+                            LEFT JOIN [Organization].[Company] C on C.ID = D.CompanyID AND C.[ActiveStatusID] <> 3
+                        WHERE D.[ActiveStatusID] <> 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT 
+                            D.[ID] as Id
+                            ,D.[Name]
+                            ,D.[Code]
+	                        , (select DP.Name from [Organization].Department DP where  DP.ID = D.ParentID   ) as ParentName
+	                        ,C.Name as CompanyName
+                            ,a.ID ActiveStatusId
+                            ,a.Name ActiveStatus
+                            ,d.[CreatedAt]
+                            FROM [Organization].Department D
+                            join Basic.ActiveStatus a on D.ActiveStatusId = a.ID
+                            LEFT JOIN [Organization].[Company] C on C.ID = D.CompanyID AND C.[ActiveStatusID] <> 3
+                        WHERE D.[ActiveStatusID] <> 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetDepartmentQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
+                var queryCount = @" SELECT  COUNT(*) Result
                                  FROM [Organization].Department D
                                        join Basic.ActiveStatus a
                                       on D.ActiveStatusId = a.ID
@@ -74,16 +130,17 @@ public class DepartmentQueryRepository : IDepartmentQueryRepository
                                         WHERE (@SearchValue is null OR (D.[Name] like @SearchValue OR C.[Name] like @SearchValue OR D.[Code] like @SearchValue)) AND D.[ActiveStatusID] <> 3
                                         order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
                                         OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                var response = await multi.ReadAsync<GetDepartmentQueryResult>();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetDepartmentQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
     }

@@ -13,12 +13,12 @@ public class MeetingHoldingReasonMapper : Profile
     {
         CreateMap<CreateMeetingHoldingReasonCommand, CreateMeetingHoldingReasonArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-            .ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             ;
         CreateMap<ModifyMeetingHoldingReasonCommand, ModifyMeetingHoldingReasonArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-            .ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
+            //.ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
             ;
     }

@@ -5,6 +5,7 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Infrastructure.Cachings;
 using SIMA.Framework.WebApi.Services;
 using SIMA.Framework.WebApi.Services.Models;
+using SIMA.Resources;
 using SIMA.WebApi.Dtos.Captcha;
 
 namespace SIMA.WebApi.Controllers.Features.Auths.Helpers.V1;
@@ -31,7 +32,7 @@ public class CaptchaController : ControllerBase
     {
         if (configurations?.height == 0 || configurations?.width == 0 || configurations?.codeLength == 0 || configurations?.textSize == 0)
         {
-            return Result.Failed(new SimaResultException("400", "کانفیگ های ارسالی نباید صفر باشند"));
+            return Result.Failed(new SimaResultException(CodeMessges._400Code, "کانفیگ های ارسالی نباید صفر باشند"));
         }
         var captchaResult = _captchaService.GenerateCaptcha(configurations);
         var id = Guid.NewGuid().ToString();
@@ -76,8 +77,8 @@ public class CaptchaController : ControllerBase
             result = _captchaService.ValidateCaptcha(captchaValidRequest);
 
         }
-        else throw SimaResultException.CaptchaError;
-        if (!result) throw SimaResultException.CaptchaError;
+        else throw new SimaResultException("10003", Messages.CaptchaError);
+        if (!result) throw new SimaResultException("10003", Messages.CaptchaError);
         return Result.Ok(result);
     }
 }

@@ -12,6 +12,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Auths.Departments.Entities;
 
@@ -54,14 +55,14 @@ public class Department : Entity
         arg.NullCheck();
         arg.Code.NullCheck();
         arg.Name.NullCheck();
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyDepartmentArg arg, IDepartmentService service)
     {
         arg.NullCheck();
         arg.Code.NullCheck();
         arg.Name.NullCheck();
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw SimaResultException.UniqueCodeError;
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
     public DepartmentId Id { get; private set; }

@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingReasons.Entities;
 
@@ -43,13 +44,13 @@ public class MeetingHoldingReason : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await service.IsCodeUnique(arg.Code, 0))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyMeetingHoldingReasonArg arg, IMeetingHoldingReasonDomainService service)
     {
@@ -59,13 +60,13 @@ public class MeetingHoldingReason : Entity
         arg.ActiveStatusId.NullCheck();
 
         if (arg.Name.Length >= 200)
-            throw SimaResultException.LengthNameException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
 
         if (arg.Code.Length >= 20)
-            throw SimaResultException.LengthCodeException;
+            throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
 
         if (await service.IsCodeUnique(arg.Code, arg.Id))
-            throw SimaResultException.UniqueCodeError;
+            throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
     }
     #endregion
     public MeetingHoldingReasonId Id { get; private set; }

@@ -34,6 +34,7 @@ public class DomainQueryRepository : IDomainQueryRepository
 
     public async Task<List<GetDomainQueryResult>> GetAll()
     {
+        /// TODO : Should chage to dapper
         return await _readContext.Domains.Select(d => new GetDomainQueryResult
         {
             Id = d.Id.Value,

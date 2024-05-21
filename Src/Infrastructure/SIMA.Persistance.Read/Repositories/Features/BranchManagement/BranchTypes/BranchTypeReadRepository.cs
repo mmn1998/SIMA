@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.BranchManagement.BranchTypes;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -17,20 +19,67 @@ public class BranchTypeReadRepository : IBranchTypeReadRepository
     }
     public async Task<Result<IEnumerable<GetBranchTypeQueryResult>>> GetAll(GetAllBranchTypesQuery request)
     {
-        
-
         using (var connection = new SqlConnection(_connectionString))
         {
-            string queryCount = @"
+            await connection.OpenAsync();
+            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+            {
+                var splitedFilter = request.Filter.Split(":");
+                string? SearchValue = splitedFilter[1].Trim().Sanitize();
+                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
+                string queryCount = @$" 
+                    SELECT COUNT(*)
+                    FROM (
+                        SELECT DISTINCT BT.[ID]
+                              ,BT.[Name]
+                              ,BT.[Code]
+                              ,BT.[ActiveStatusID]
+                           	  ,A.Name ActiveStatus
+                              ,bt.[CreatedAt]
+                          FROM [Bank].[BranchType] BT
+                          INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
+                          WHERE  BT.ActiveStatusId != 3
+                    ) as Query
+                    WHERE {filterClause};";
+                string query = $@"
+                    SELECT *
+                    FROM (
+                        SELECT DISTINCT BT.[ID]
+                              ,BT.[Name]
+                              ,BT.[Code]
+                              ,BT.[ActiveStatusID]
+                           	  ,A.Name ActiveStatus
+                              ,bt.[CreatedAt]
+                          FROM [Bank].[BranchType] BT
+                          INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
+                          WHERE  BT.ActiveStatusId != 3
+                    ) as Query
+                    WHERE {filterClause}
+                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
+                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
+";
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetBranchTypeQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
+            }
+            else
+            {
+                string queryCount = @"
                                 SELECT Count(*) Result
                              FROM [Bank].[BranchType] BT
                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = BT.ActiveStatusID
                              WHERE  BT.ActiveStatusId != 3
                                  and (@SearchValue is null OR BT.[Name] like @SearchValue or BT.[Code] like @SearchValue)";
 
-            await connection.OpenAsync();
 
-            string query = $@"
+                string query = $@"
                          SELECT DISTINCT BT.[ID]
                               ,BT.[Name]
                               ,BT.[Code]
@@ -46,16 +95,17 @@ public class BranchTypeReadRepository : IBranchTypeReadRepository
                             ";
 
 
-            using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-            {
-                SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                request.Skip,
-                request.PageSize
-            }))
-            {
-                var response = await multi.ReadAsync<GetBranchTypeQueryResult>();
-                var count = await multi.ReadSingleAsync<int>();
-                return Result.Ok(response, count, request.PageSize, request.Page);
+                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
+                {
+                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
+                    request.Skip,
+                    request.PageSize
+                }))
+                {
+                    var response = await multi.ReadAsync<GetBranchTypeQueryResult>();
+                    var count = await multi.ReadSingleAsync<int>();
+                    return Result.Ok(response, count, request.PageSize, request.Page);
+                }
             }
         }
     }
