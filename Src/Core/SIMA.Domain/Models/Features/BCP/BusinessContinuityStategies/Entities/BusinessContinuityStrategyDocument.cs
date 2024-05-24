@@ -1,41 +1,41 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
+using SIMA.Domain.Models.Features.DMS.Documents.Entities;
+using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 
-public class BusinessContinuityStrategyObjective : Entity
+public class BusinessContinuityStrategyDocument : Entity
 {
-    private BusinessContinuityStrategyObjective() { }
-    private BusinessContinuityStrategyObjective(CreateBusinessContinuityStrategyObjectiveArg arg)
+    private BusinessContinuityStrategyDocument() { }
+    private BusinessContinuityStrategyDocument(CreateBusinessContinuityStrategyDocumentArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        Title = arg.Title;
-        Code = arg.Code;
+        DocumentId = new(arg.DocumentId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static BusinessContinuityStrategyObjective Create(CreateBusinessContinuityStrategyObjectiveArg arg)
+    public static BusinessContinuityStrategyDocument Create(CreateBusinessContinuityStrategyDocumentArg arg)
     {
-        return new BusinessContinuityStrategyObjective(arg);
+        return new BusinessContinuityStrategyDocument(arg);
     }
-    public void Modify(ModifyBusinessContinuityStrategyObjectiveArg arg)
+    public void Modify(ModifyBusinessContinuityStrategyDocumentArg arg)
     {
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        Title = arg.Title;
-        Code = arg.Code;
+        DocumentId = new(arg.DocumentId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public BusinessContinuityStrategyObjectiveId Id { get; set; }
+    public BusinessContinuityStategyStaffId Id { get; set; }
     public BusinessContinuityStrategyId BusinessContinuityStategyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStategy { get; private set; }
-    public string? Code { get; private set; }
-    public string? Title { get; private set; }
+    public DocumentId DocumentId { get; private set; }
+    public virtual Document Document { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

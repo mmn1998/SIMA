@@ -71,4 +71,10 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     public ICollection<BusinessContinuityStrategyObjective> BusinessContinuityStrategyObjectives => _businessContinuityStrategyObjectives;
     private List<BusinessContinuityStrategyStaff> _businessContinuityStrategyStaff = new();
     public ICollection<BusinessContinuityStrategyStaff> BusinessContinuityStrategyStaff => _businessContinuityStrategyStaff;
+    private List<BusinessContinuityStrategyRisk> _businessContinuityStrategyRisks = new();
+    public ICollection<BusinessContinuityStrategyRisk> BusinessContinuityStrategyRisks => _businessContinuityStrategyRisks;
+    private List<BusinessContinuityStrategyDocument> _businessContinuityStrategyDocuments = new();
+    public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments => _businessContinuityStrategyDocuments;
+    private List<BusinessContinuityStrategyService> _businessContinuityStrategyServices = new();
+    public ICollection<BusinessContinuityStrategyService> BusinessContinuityStrategyServices => _businessContinuityStrategyServices;
 }

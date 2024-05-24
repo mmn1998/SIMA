@@ -5,37 +5,37 @@ using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 
-public class BusinessContinuityStrategyObjective : Entity
+public class BusinessContinuityStrategyService : Entity
 {
-    private BusinessContinuityStrategyObjective() { }
-    private BusinessContinuityStrategyObjective(CreateBusinessContinuityStrategyObjectiveArg arg)
+    private BusinessContinuityStrategyService() { }
+    private BusinessContinuityStrategyService(CreateBusinessContinuityStrategyServiceArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        Title = arg.Title;
-        Code = arg.Code;
+        //ServiceId = new(arg.ServiceId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static BusinessContinuityStrategyObjective Create(CreateBusinessContinuityStrategyObjectiveArg arg)
+    public static BusinessContinuityStrategyService Create(CreateBusinessContinuityStrategyServiceArg arg)
     {
-        return new BusinessContinuityStrategyObjective(arg);
+        return new BusinessContinuityStrategyService(arg);
     }
-    public void Modify(ModifyBusinessContinuityStrategyObjectiveArg arg)
+    public void Modify(ModifyBusinessContinuityStrategyServiceArg arg)
     {
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        Title = arg.Title;
-        Code = arg.Code;
+        //ServiceId = new(arg.ServiceId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public BusinessContinuityStrategyObjectiveId Id { get; set; }
+    public BusinessContinuityStrategyServiceId Id { get; set; }
     public BusinessContinuityStrategyId BusinessContinuityStategyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStategy { get; private set; }
-    public string? Code { get; private set; }
-    public string? Title { get; private set; }
+    /// <summary>
+    /// TODO : ServiceId
+    /// </summary>
+    //public long? ServiceId { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

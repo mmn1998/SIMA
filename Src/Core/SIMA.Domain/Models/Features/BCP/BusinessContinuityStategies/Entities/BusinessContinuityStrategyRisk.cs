@@ -5,37 +5,37 @@ using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 
-public class BusinessContinuityStrategyObjective : Entity
+public class BusinessContinuityStrategyRisk : Entity
 {
-    private BusinessContinuityStrategyObjective() { }
-    private BusinessContinuityStrategyObjective(CreateBusinessContinuityStrategyObjectiveArg arg)
+    private BusinessContinuityStrategyRisk() { }
+    private BusinessContinuityStrategyRisk(CreateBusinessContinuityStrategyRiskArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        Title = arg.Title;
-        Code = arg.Code;
+        //RiskId = new(arg.RiskId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static BusinessContinuityStrategyObjective Create(CreateBusinessContinuityStrategyObjectiveArg arg)
+    public static BusinessContinuityStrategyRisk Create(CreateBusinessContinuityStrategyRiskArg arg)
     {
-        return new BusinessContinuityStrategyObjective(arg);
+        return new BusinessContinuityStrategyRisk(arg);
     }
-    public void Modify(ModifyBusinessContinuityStrategyObjectiveArg arg)
+    public void Modify(ModifyBusinessContinuityStrategyRiskArg arg)
     {
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        Title = arg.Title;
-        Code = arg.Code;
+        //RiskId = new(arg.RiskId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public BusinessContinuityStrategyObjectiveId Id { get; set; }
+    public BusinessContinuityStrategyRiskId Id { get; set; }
     public BusinessContinuityStrategyId BusinessContinuityStategyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStategy { get; private set; }
-    public string? Code { get; private set; }
-    public string? Title { get; private set; }
+    /// <summary>
+    /// TODO : RiskId
+    /// </summary>
+    //public long? RiskId { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
