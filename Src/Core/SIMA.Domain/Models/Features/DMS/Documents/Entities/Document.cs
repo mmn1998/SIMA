@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.ValueObjects;
@@ -110,6 +111,7 @@ public class Document : Entity
     public ICollection<ApprovalSupervisorAnswerDocument> ApprovalSupervisorAnswerDocuments { get; set; }
     public ICollection<MeetingDocument> MeetingDocuments { get; set; }
     public ICollection<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
+    public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments { get; set; }
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
