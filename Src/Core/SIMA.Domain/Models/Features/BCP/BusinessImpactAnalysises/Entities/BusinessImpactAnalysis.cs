@@ -115,4 +115,8 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     public ICollection<BusinessImpactAnalysisAnnouncement> BusinessImpactAnalysisAnnouncements => _businessImpactAnalysisAnnouncements;
     private List<BusinessImpactAnalysisAsset> _businessImpactAnalysisAssets = new();
     public ICollection<BusinessImpactAnalysisAsset> BusinessImpactAnalysisAssets => _businessImpactAnalysisAssets;
+    private List<BusinessImpactAnalysisCriticalActivity> _businessImpactAnalysisCriticalActivities = new();
+    public ICollection<BusinessImpactAnalysisCriticalActivity> BusinessImpactAnalysisCriticalActivities => _businessImpactAnalysisCriticalActivities;
+    private List<BusinessImpactAnalysisStaff> _businessImpactAnalysisStaff = new();
+    public ICollection<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaff => _businessImpactAnalysisStaff;
 }
