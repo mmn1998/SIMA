@@ -3,37 +3,37 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{9880E4E8-85C1-4ADB-BA3F-EF78CE8C8D43}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9880E4E8-85C1-4ADB-BA3F-EF78CE8C8D43}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{07BBDC2A-762B-4C3C-818A-2F63D31759CD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{76AC47DC-402D-4B41-B55E-BB6AD11FC0E2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Endpoint", "Endpoint", "{E2D74D18-B9F8-4C2E-A7D7-483C99BA592B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{E2D74D18-B9F8-4C2E-A7D7-483C99BA592B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Domain", "Src\Core\SIMA.Domain\SIMA.Domain.csproj", "{8D53AD04-3781-4E1B-8F9B-281986654AD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Domain", "src\Core\SIMA.Domain\SIMA.Domain.csproj", "{8D53AD04-3781-4E1B-8F9B-281986654AD3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{CF51B8E6-7DE4-47E7-AD00-2091748D99D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application", "Src\Application\SIMA.Application\SIMA.Application.csproj", "{1BCCE6F0-0F45-4028-A4F5-6FB68E1386FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application", "src\Application\SIMA.Application\SIMA.Application.csproj", "{1BCCE6F0-0F45-4028-A4F5-6FB68E1386FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Query", "Src\Application\SIMA.Application.Query\SIMA.Application.Query.csproj", "{7BECCAE4-5489-4D47-BC4E-DCBA3F39400F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Query", "src\Application\SIMA.Application.Query\SIMA.Application.Query.csproj", "{7BECCAE4-5489-4D47-BC4E-DCBA3F39400F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Query.Contract", "Src\Application\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj", "{A6274434-D56F-44BE-B44B-D1C30FAB35BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Query.Contract", "src\Application\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj", "{A6274434-D56F-44BE-B44B-D1C30FAB35BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Persistance", "Src\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj", "{65E1BB30-E79D-4787-9D9D-830E128C6760}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Persistance", "src\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj", "{65E1BB30-E79D-4787-9D9D-830E128C6760}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Persistance.Read", "Src\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj", "{281CCBF7-D5A4-476A-AADE-CA491AE9462D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Persistance.Read", "src\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj", "{281CCBF7-D5A4-476A-AADE-CA491AE9462D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.WebApi", "Src\Endpoint\SIMA.WebApi\SIMA.WebApi.csproj", "{411FC5C1-2B51-4196-9627-ECDB9C5C2B98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.WebApi", "src\Presentation\SIMA.WebApi\SIMA.WebApi.csproj", "{411FC5C1-2B51-4196-9627-ECDB9C5C2B98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Contract", "Src\Application\SIMA.Application.Contract\SIMA.Application.Contract.csproj", "{9A5CD073-2513-48CF-BA87-9DD3B6EA4A3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Contract", "src\Application\SIMA.Application.Contract\SIMA.Application.Contract.csproj", "{9A5CD073-2513-48CF-BA87-9DD3B6EA4A3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.DomainService", "Src\Core\SIMA.DomainService\SIMA.DomainService.csproj", "{B732C3EB-A6D8-49C8-BB46-704C0C65E096}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.DomainService", "src\Core\SIMA.DomainService\SIMA.DomainService.csproj", "{B732C3EB-A6D8-49C8-BB46-704C0C65E096}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.LicenseKeyGenerator", "SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.LicenseKeyGenerator", "src\Presentation\SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Resources", "SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Resources", "src\Core\SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
