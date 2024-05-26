@@ -30,7 +30,7 @@ public class BusinessImpactAnalysisCriticalActivity : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public BusinessContinuityStrategyCriticalActivityId Id { get; set; }
+    public BusinessImpactAnalysisCriticalActivityId Id { get; set; }
     public BusinessImpactAnalysisId BusinessImpactAnalysisId { get; private set; }
     public virtual BusinessImpactAnalysis BusinessImpactAnalysis { get; private set; }
     /// <summary>

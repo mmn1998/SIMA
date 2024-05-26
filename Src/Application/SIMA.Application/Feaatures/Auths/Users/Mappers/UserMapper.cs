@@ -19,8 +19,10 @@ public class UserMapper : Profile
             .ForMember(x => x.ActiveFrom, opt => opt.MapFrom(src => DateOnly.FromDateTime(DateTime.Now)))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
+            .ForMember(x => x.IsFirstLogin, opt => opt.MapFrom(src => "1"))
             ////.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
+
         CreateMap<CreateUserRoleCommand, CreateUserRoleArg>()
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
             //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
@@ -57,6 +59,14 @@ public class UserMapper : Profile
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             ;
+
+        CreateMap<ChangePasswordCommand, ChangePasswordArg>()
+            .ForMember(dest => dest.ChangePasswordDate, opt => opt.MapFrom(src => DateTime.Now))
+            .ForMember(dest => dest.AccessFailedCount, opt => opt.MapFrom(src => "0"))
+            .ForMember(x => x.IsFirstLogin, opt => opt.MapFrom(src => "0"));
+
+
+
 
     }
 

@@ -156,6 +156,12 @@
     <value>شرکت مورد نظر یافت نشد.</value>
     <comment>10052</comment>
   </data>
+  <data name="ConfirmNewPasswordIsNull" xml:space="preserve">
+    <value> لطفا تکرار کلمه عبور جدید را وارد نمایید</value>
+  </data>
+  <data name="ConfirmPasswordNotValid" xml:space="preserve">
+    <value>تکرار کلمه عبور با کلمه عبور جدید مغایرت دارد</value>
+  </data>
   <data name="CreateIssueWithChechActorException" xml:space="preserve">
     <value>شما دسترسی ایجاد مورد برای این فرایند را ندارید</value>
   </data>
@@ -274,6 +280,12 @@
     <value>کد ملی نا معتبر است .</value>
     <comment>10007</comment>
   </data>
+  <data name="NewPasswordIsNull" xml:space="preserve">
+    <value>لطفا کلمه عبور جدید را وارد نمایید</value>
+  </data>
+  <data name="NotAllowtoChangePassword" xml:space="preserve">
+    <value>در این بازه زمانی شما اجازه تغییر کلمه عبور را ندارید</value>
+  </data>
   <data name="NotFound" xml:space="preserve">
     <value>اطلاعات خواسته شده یافت نشد</value>
   </data>
@@ -297,6 +309,9 @@
   <data name="ParentCompaniesCannotDefinedAsChildError" xml:space="preserve">
     <value>شرکت های راس هرم نمی توانند مجددا به عنوان یک زیر مجموعه تعریف شوند.</value>
     <comment>10022</comment>
+  </data>
+  <data name="PasswordNotValidException" xml:space="preserve">
+    <value>کلمه عبور معتبر نیست!</value>
   </data>
   <data name="PermissionIsDeactiveError" xml:space="preserve">
     <value>دسترسی مورد نظر غیر فعال شده است</value>
@@ -351,6 +366,9 @@
   <data name="RangeNotValidError" xml:space="preserve">
     <value>حداقل و حداکثر محدوده انتخاب ش ده با یکدیگر مطابقت ندارند.</value>
     <comment>10047</comment>
+  </data>
+  <data name="RequiredProp" xml:space="preserve">
+    <value>لطفا {0} تکمیل نمایید </value>
   </data>
   <data name="RoleActorDuplicateError" xml:space="preserve">
     <value>نقش مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است.</value>
@@ -421,6 +439,9 @@
     <value>کاربر حذف شده است .</value>
     <comment>10008</comment>
   </data>
+  <data name="UserIsLocked" xml:space="preserve">
+    <value>کاربری شما به دلیل بیش از اندازه اشتباه وارد کردن  کلمه عبور قفل شده است لطفا با پشتیبانی سایت تماس حاصل فرمایید</value>
+  </data>
   <data name="UserIsNotAuthorizedError" xml:space="preserve">
     <value>کاربر مجاز نمیباشد</value>
     <comment>10010</comment>
@@ -428,6 +449,12 @@
   <data name="UserIsNotValidInActorScopeError" xml:space="preserve">
     <value>کاربر در محدوده بازیگر مجاز برای اجرای این فعالیت نیست.</value>
     <comment>10023</comment>
+  </data>
+  <data name="UsernameNotUniqueException" xml:space="preserve">
+    <value>نام کاربری تکراری است!</value>
+  </data>
+  <data name="UsernameNotValidException" xml:space="preserve">
+    <value>نام کاربری معتبر نیست!</value>
   </data>
   <data name="UserNotFoundError" xml:space="preserve">
     <value>کاربر مورد نظر یافت نشد.</value>

@@ -190,4 +190,12 @@ public class UsersController : ControllerBase
         return await _mediator.Send(query);
     }
 
+    [HttpPost("ChangePassword")]
+    [SimaAuthorize(Permissions.ChangePassword)]
+    public async Task<Result> Post([FromBody] ChangePasswordCommand request)
+    {
+        var result = await _mediator.Send(request);
+        return result;
+    }
+
 }

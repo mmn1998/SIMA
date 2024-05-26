@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 using SIMA.Resources;
@@ -15,10 +16,12 @@ namespace SIMA.Persistance.Repositories.Features.Auths;
 public class UserRepository : Repository<User>, IUserRepository
 {
     private readonly SIMADBContext _context;
+    private readonly ISimaIdentity _simaIdentity;
 
-    public UserRepository(SIMADBContext context) : base(context)
+    public UserRepository(SIMADBContext context, ISimaIdentity simaIdentity) : base(context)
     {
         _context = context;
+        _simaIdentity = simaIdentity;
     }
 
     public async Task<User> GetById(long id)
@@ -31,7 +34,7 @@ public class UserRepository : Repository<User>, IUserRepository
         .Include(u => u.AdminLocationAccesses)
         .Include(u => u.UserDomainAccesses)
             .FirstOrDefaultAsync(u => u.Id == new UserId(id));
-        if (entity is null) throw new SimaResultException("10051",Messages.UserNotFoundError);
+        if (entity is null) throw new SimaResultException("10051", Messages.UserNotFoundError);
         return entity;
     }
 
@@ -48,13 +51,47 @@ public class UserRepository : Repository<User>, IUserRepository
         entity.NullCheck();
         return entity;
     }
-
     public async Task<SSOInfoUserEvent> GetUserInfoWithSSO(string tiket)
     {
         var username = await GetUserNameSSO(tiket);
         SSOInfoUserEvent ssoInfo = await GetSSOUserInfo(username);
         return ssoInfo;
     }
+    public async Task<User> GetUserForChangePassword(long userId, string password)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == new UserId(userId));
+        if (user is not null)
+        {
+            if (!string.IsNullOrEmpty(password))
+            {
+                var checkPassword = user.Password.Verify(password);
+                if (!checkPassword) throw new SimaResultException("10002", Messages.InvalidUsernameOrPasswordError);
+
+                if (_simaIdentity.RoleIds.Contains(2))
+                {
+                    if (user.ChangePasswordDate is not null)
+                    {
+                        var changeDate = DateTime.Now;
+                        var difference = (DateTime)user.ChangePasswordDate - changeDate;
+                        if (difference.TotalDays <= 30)
+                        {
+                            throw new SimaResultException(CodeMessges._400Code, Messages.NotAllowtoChangePassword);
+                        }
+                    }
+                }
+            }
+            else
+                throw new SimaResultException("10051", Messages.PasswordNotValidException);
+
+            return user;
+        }
+        else
+        {
+            throw new SimaResultException(CodeMessges._400Code, Messages.UserNotFoundError);
+        }
+
+    }
+
     private async Task<string> GetUserNameSSO(string tiket)
     {
         string UserName = string.Empty;
@@ -125,4 +162,5 @@ public class UserRepository : Repository<User>, IUserRepository
             return result;
         }
     }
+
 }

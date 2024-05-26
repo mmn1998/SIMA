@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Sima.Framework.Core.Repository;
 using SIMA.Application.Query.Contract.Features.Auths.Users;
 using SIMA.Application.Query.Features.Auths.Users.Mappers;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Users;
+using SIMA.Resources;
 
 namespace SIMA.Application.Query.Features.Auths.Users;
 public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQueryResult>>,
@@ -21,28 +24,30 @@ public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQu
          IQueryHandler<GetProfileByProfileIdQuery, Result<GetProfileByProfileIdQueryResult>>
 {
     private readonly IUserQueryRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly TokenModel _securitySettings;
 
-    public UserQueryHandler(IUserQueryRepository userQueryRepository, IOptions<TokenModel> securitySettings, IMapper mapper)
+    public UserQueryHandler(IUserQueryRepository userQueryRepository, IOptions<TokenModel> securitySettings, IMapper mapper, IUnitOfWork unitOfWork)
     {
         _repository = userQueryRepository;
         _mapper = mapper;
         _securitySettings = securitySettings.Value;
+        _unitOfWork = unitOfWork;
     }
     public async Task<Result<LoginUserQueryResult>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
-            var result = UserQueryMapper.MapToToken(user, _securitySettings);
-            return Result.Ok(result);
-        }
-        catch (Exception e)
-        {
+        var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
 
-            throw;
-        }
+        await _unitOfWork.SaveChangesAsync();
+
+        if (user.UserInfoLogin.AccessFailedCount > 0)
+            throw new SimaResultException(CodeMessges._400Code, Messages.InvalidUsernameOrPasswordError);
+
+
+        if (user.UserInfoLogin.IsLocked == "1") throw new SimaResultException(CodeMessges._400Code, Messages.UserIsLocked);
+        var result = UserQueryMapper.MapToToken(user, _securitySettings);
+        return Result.Ok(result);
     }
     public async Task<Result<GetInfoByUserIdQueryResult>> Handle(GetInfoByUserIdQuery request, CancellationToken cancellationToken)
     {

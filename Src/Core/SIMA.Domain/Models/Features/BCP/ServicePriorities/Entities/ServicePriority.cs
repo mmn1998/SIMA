@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.Args;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.Contracts;
+using SIMA.Domain.Models.Features.BCP.ServicePriorities.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -48,13 +49,13 @@ public class ServicePriority : Entity, IAggregateRoot
 
     }
     #endregion
-    public ImportanceDegreeId Id { get; set; }
+    public ServicePriorityId Id { get; set; }
     public string? Name { get; private set; }
 
     public string? Code { get; private set; }
 
-    public long ActiveStatusId { get; private set; }
     public float Ordering { get; private set; }
+    public long ActiveStatusId { get; private set; }
 
     public DateTime? CreatedAt { get; private set; }
 

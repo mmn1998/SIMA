@@ -160,6 +160,24 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  لطفا تکرار کلمه عبور جدید را وارد نمایید.
+        /// </summary>
+        public static string ConfirmNewPasswordIsNull {
+            get {
+                return ResourceManager.GetString("ConfirmNewPasswordIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تکرار کلمه عبور با کلمه عبور جدید مغایرت دارد.
+        /// </summary>
+        public static string ConfirmPasswordNotValid {
+            get {
+                return ResourceManager.GetString("ConfirmPasswordNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شما دسترسی ایجاد مورد برای این فرایند را ندارید.
         /// </summary>
         public static string CreateIssueWithChechActorException {
@@ -448,6 +466,24 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to لطفا کلمه عبور جدید را وارد نمایید.
+        /// </summary>
+        public static string NewPasswordIsNull {
+            get {
+                return ResourceManager.GetString("NewPasswordIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to در این بازه زمانی شما اجازه تغییر کلمه عبور را ندارید.
+        /// </summary>
+        public static string NotAllowtoChangePassword {
+            get {
+                return ResourceManager.GetString("NotAllowtoChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to اطلاعات خواسته شده یافت نشد.
         /// </summary>
         public static string NotFound {
@@ -507,6 +543,15 @@ namespace SIMA.Resources {
         public static string ParentCompaniesCannotDefinedAsChildError {
             get {
                 return ResourceManager.GetString("ParentCompaniesCannotDefinedAsChildError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کلمه عبور معتبر نیست!.
+        /// </summary>
+        public static string PasswordNotValidException {
+            get {
+                return ResourceManager.GetString("PasswordNotValidException", resourceCulture);
             }
         }
         
@@ -633,6 +678,15 @@ namespace SIMA.Resources {
         public static string RangeNotValidError {
             get {
                 return ResourceManager.GetString("RangeNotValidError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to لطفا {0} تکمیل نمایید .
+        /// </summary>
+        public static string RequiredProp {
+            get {
+                return ResourceManager.GetString("RequiredProp", resourceCulture);
             }
         }
         
@@ -799,6 +853,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to کاربری شما به دلیل بیش از اندازه اشتباه وارد کردن  کلمه عبور قفل شده است لطفا با پشتیبانی سایت تماس حاصل فرمایید.
+        /// </summary>
+        public static string UserIsLocked {
+            get {
+                return ResourceManager.GetString("UserIsLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کاربر مجاز نمیباشد.
         /// </summary>
         public static string UserIsNotAuthorizedError {
@@ -813,6 +876,24 @@ namespace SIMA.Resources {
         public static string UserIsNotValidInActorScopeError {
             get {
                 return ResourceManager.GetString("UserIsNotValidInActorScopeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نام کاربری تکراری است!.
+        /// </summary>
+        public static string UsernameNotUniqueException {
+            get {
+                return ResourceManager.GetString("UsernameNotUniqueException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نام کاربری معتبر نیست!.
+        /// </summary>
+        public static string UsernameNotValidException {
+            get {
+                return ResourceManager.GetString("UsernameNotValidException", resourceCulture);
             }
         }
         

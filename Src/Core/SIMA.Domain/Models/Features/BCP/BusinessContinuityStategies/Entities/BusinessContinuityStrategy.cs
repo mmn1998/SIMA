@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Contracts;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -77,4 +78,8 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments => _businessContinuityStrategyDocuments;
     private List<BusinessContinuityStrategyService> _businessContinuityStrategyServices = new();
     public ICollection<BusinessContinuityStrategyService> BusinessContinuityStrategyServices => _businessContinuityStrategyServices;
+
+
+    private List<BusinessContinuityPlan> _businessContinuityPlans = new();
+    public ICollection<BusinessContinuityPlan> BusinessContinuityPlans => _businessContinuityPlans;
 }

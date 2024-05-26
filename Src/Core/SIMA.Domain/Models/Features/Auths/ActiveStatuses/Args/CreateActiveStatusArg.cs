@@ -13,6 +13,7 @@ public partial class CreateActiveStatusArg
 
     public DateTime? CreatedAt { get; set; }
 
+
     public long? CreatedBy { get; set; }
 
 

@@ -27,7 +27,9 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         Result<long>>, ICommandHandler<DeleteUserDomainCommand, Result<long>>
     , ICommandHandler<DeleteUserLocationCommand, Result<long>>, ICommandHandler<DeleteUserPermissionCommand, Result<long>>,
     ICommandHandler<DeleteUserRoleCommand, Result<long>>, ICommandHandler<CreateUserAggregateCommand, Result<long>>,
-    ICommandHandler<GetUserNameWithSSO, Result<LoginUserQueryResult>>
+    ICommandHandler<GetUserNameWithSSO, Result<LoginUserQueryResult>>,
+    ICommandHandler<ChangePasswordCommand, Result<long>>
+
 
 
 {
@@ -216,7 +218,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         {
             var userDomainsArgs = _mapper.Map<List<CreateUserDomainArg>>(request.UserDomains);
             foreach (var domain in userDomainsArgs) domain.UserId = entity.Id.Value;
-            foreach (var item in userDomainsArgs) item.CreatedBy = _simaIdentity.UserId;    
+            foreach (var item in userDomainsArgs) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddUserDomains(userDomainsArgs);
         }
         if (request.UserPermissions != null && request.UserPermissions.Count != 0)
@@ -244,6 +246,17 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
 
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
+    }
+
+    public async Task<Result<long>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetUserForChangePassword(_simaIdentity.UserId, request.CurrentPassword);
+        var arg = _mapper.Map<ChangePasswordArg>(request);
+        await user.ChangePassword(arg);
+        _unitOfWork.SaveChangesAsync();
+
+        return user.Id.Value;
+
     }
 
     //ForSSO
@@ -307,4 +320,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             return Result.Ok(result);
         }
     }
+
+
 }

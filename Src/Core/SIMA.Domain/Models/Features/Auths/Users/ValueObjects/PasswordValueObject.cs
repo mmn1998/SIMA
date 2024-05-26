@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Sima.Framework.Core.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Resources;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 
 namespace SIMA.Domain.Models.Features.Auths.Users.ValueObjects
@@ -32,19 +34,20 @@ namespace SIMA.Domain.Models.Features.Auths.Users.ValueObjects
             yield return SecretKey;
         }
 
-        public void Verify(string textToCheck)
+        public bool Verify(string textToCheck)
         {
             var byteSalt = Convert.FromBase64String(SecretKey);
             var hashedValue = CalculateHashedValue(textToCheck, byteSalt);
             var expectedHashBytes = Convert.FromBase64String(Password);
-            GuardAgainstPasswordEquality(hashedValue, expectedHashBytes);
+            var result = GuardAgainstPasswordEquality(hashedValue, expectedHashBytes);
+            return result;
         }
-        private void GuardAgainstPasswordEquality(byte[] hashedValue, byte[] expectedHashBytes)
+        private bool GuardAgainstPasswordEquality(byte[] hashedValue, byte[] expectedHashBytes)
         {
-            var isEqual = hashedValue.SequenceEqual(expectedHashBytes);
-            if (!isEqual)
-                throw new SimaResultException("10002",Messages.InvalidUsernameOrPasswordError)
-                    ;
+            var isEqual = false;
+            isEqual = hashedValue.SequenceEqual(expectedHashBytes);
+            return isEqual;
+
         }
 
         private static byte[] CalculateHashedValue(string plainText, byte[] salt)

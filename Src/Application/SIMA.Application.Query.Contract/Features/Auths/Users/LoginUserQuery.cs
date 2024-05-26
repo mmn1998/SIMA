@@ -36,6 +36,11 @@ public class UserInfoLogin
     public string Username { get; set; }
     public long CompanyId { get; set; }
     public long UserId { get; set; }
+    public string IsFirstLogin { get; set; }
+    public string IsLocked { get; set; }
+    public int AccessFailedCount { get; set; }
+    public int AccessFailedOverallCount { get; set; }
+    public DateTime? AccessFaildDate { get; set; }
 }
 public class Menue
 {

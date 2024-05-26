@@ -31,7 +31,7 @@ public class BusinessContinuityStrategyDocument : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public BusinessContinuityStategyStaffId Id { get; set; }
+    public BusinessContinuityStrategyDocumentId Id { get; set; }
     public BusinessContinuityStrategyId BusinessContinuityStategyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStategy { get; private set; }
     public DocumentId DocumentId { get; private set; }
