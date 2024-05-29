@@ -9,7 +9,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.WorkFlowEngine.Progress;
 
-public class ProgressCommandHandler : ICommandHandler<ChangeStatusCommand, Result<long>>
+public class ProgressCommandHandler : ICommandHandler<ModifyProgressCommand, Result<long>>
 {
     private readonly IProgressRepository _progressRepository;
     private readonly ISimaIdentity _simaIdentity;
@@ -25,7 +25,7 @@ public class ProgressCommandHandler : ICommandHandler<ChangeStatusCommand, Resul
         _mapper = mapper;
     }
 
-    public async Task<Result<long>> Handle(ChangeStatusCommand request, CancellationToken cancellationToken)
+    public async Task<Result<long>> Handle(ModifyProgressCommand request, CancellationToken cancellationToken)
     {
         try
         {

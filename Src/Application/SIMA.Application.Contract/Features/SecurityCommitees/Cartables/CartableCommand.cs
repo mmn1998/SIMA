@@ -9,5 +9,6 @@ public class CartableCommand : ICommand<Result<long>>
     public long? ProgressId { get; set; }
     public long? NextStepId { get; set; }
     public string? SpName { get; set; }
+    public string? ConditionValue { get; set; }
 }
 

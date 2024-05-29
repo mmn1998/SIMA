@@ -10,10 +10,13 @@ using SIMA.Domain.Models.Features.Auths.Profiles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Framework.Infrastructure.Cachings;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Users;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.Auths.Users;
 
@@ -28,7 +31,9 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     , ICommandHandler<DeleteUserLocationCommand, Result<long>>, ICommandHandler<DeleteUserPermissionCommand, Result<long>>,
     ICommandHandler<DeleteUserRoleCommand, Result<long>>, ICommandHandler<CreateUserAggregateCommand, Result<long>>,
     ICommandHandler<GetUserNameWithSSO, Result<LoginUserQueryResult>>,
-    ICommandHandler<ChangePasswordCommand, Result<long>>
+    ICommandHandler<ChangePasswordCommand, Result<long>>,
+    ICommandHandler<CheckUserCommand, Result<long>>,
+    ICommandHandler<ConfirmCodeCommand, Result<long>>
 
 
 
@@ -44,11 +49,12 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     private readonly IUserQueryRepository _queryrepository;
     private readonly ISimaIdentity _simaIdentity;
     private readonly TokenModel _securitySettings;
+    private readonly IDistributedRedisService _redisService;
 
     public UserCommandHandler(IMapper mapper, IUserRepository repository,
          IUnitOfWork unitOfWork, IUserService service, ILogger<UserCommandHandler> logger, IProfileRepository profileRepository,
          IProfileService profileService, IUserQueryRepository queryrepository, IOptions<TokenModel> securitySettings,
-         ISimaIdentity simaIdentity)
+         ISimaIdentity simaIdentity, IDistributedRedisService redisService)
     {
         _mapper = mapper;
         _repository = repository;
@@ -59,6 +65,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         _queryrepository = queryrepository;
         _simaIdentity = simaIdentity;
         _securitySettings = securitySettings.Value;
+        _redisService = redisService;
     }
     public async Task<Result<long>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
@@ -258,6 +265,44 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         return user.Id.Value;
 
     }
+
+    public async Task<Result<long>> Handle(CheckUserCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _repository.GetByUserName(request.UserName);
+        var code = await user.GenerateCode(_service);
+        //SendSMS
+
+        #region Expirtion Code
+        string key = RedisKeys.SendSMS + user.Id.Value;
+        TimeSpan expirtionTime = TimeSpan.FromMinutes(1);
+        _redisService.Delete(key);
+        await _redisService.InsertAsync(key, code, expirtionTime);
+        #endregion
+
+        await _unitOfWork.SaveChangesAsync();
+        return user.Id.Value;
+    }
+
+    public async Task<Result<long>> Handle(ConfirmCodeCommand request, CancellationToken cancellationToken)
+    {
+        string redisKey = RedisKeys.SendSMS + request.UserId;
+        var code = await _redisService.GetAsync(redisKey);
+        if (code is not null)
+        {
+            var user = await _repository.CheckForgetPasswordCode(request.UserId, request.Code);
+            var password = await user.GeneratePassword(_service);
+            await _unitOfWork.SaveChangesAsync();
+            return user.Id.Value;
+        }
+        else
+        {
+            throw new SimaResultException(CodeMessges._400Code, Messages.CodeIsExpired);
+        }
+
+        //SendSMS
+    }
+
+
 
     //ForSSO
     public async Task<Result<LoginUserQueryResult>> Handle(GetUserNameWithSSO request, CancellationToken cancellationToken)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
@@ -13,6 +14,7 @@ using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
 using SIMA.Resources;
+using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues;
 
@@ -29,13 +31,14 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     private readonly IWorkFlowDomainService _workFlowDomainService;
     private readonly ISimaIdentity _simaIdentity;
     private readonly IWorkFlowRepository _workFlowRepository;
+    private readonly IWorkFlowQueryRepository _workFlowQueryRepository;
     private readonly IIssueWeightCategoryQueryRepository _issueWeightCategoryRepository;
     private readonly IProjectRepository _projectRepository;
 
     public IssueCommandHandler(IIssueRepository repository, IUnitOfWork unitOfWork,
         IMapper mapper, IIssueDomainService service,
       IWorkFlowRepository workFlowRepository, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository,
-      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity)
+      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity, IWorkFlowQueryRepository workFlowQueryRepository)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
@@ -46,6 +49,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         _projectRepository = projectRepository;
         _workFlowDomainService = workFlowDomainService;
         _simaIdentity = simaIdentity;
+        _workFlowQueryRepository = workFlowQueryRepository;
     }
     public async Task<Result<long>> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
     {
@@ -132,15 +136,16 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         ///
         ///  TODO : new changes in run action
         ///
-        //if ((string.Equals(request.RunActionType, RunActionType.Sp.ToString(), StringComparison.InvariantCultureIgnoreCase) ||
-        //    string.Equals(request.RunActionType, RunActionType.Both.ToString(), StringComparison.InvariantCultureIgnoreCase))
-        //    && request.SpName is not null)
-        //{
-        //    await _repository.ExcecuteStoreProcedure(request.SpName);
-        //}
+        ///if ((string.Equals(request.RunActionType, RunActionType.Sp.ToString(), StringComparison.InvariantCultureIgnoreCase) ||
+        ///    string.Equals(request.RunActionType, RunActionType.Both.ToString(), StringComparison.InvariantCultureIgnoreCase))
+        ///    && request.SpName is not null)
+        ///{
+        ///    await _repository.ExcecuteStoreProcedure(request.SpName);
+        ///}
 
         var issue = await _repository.GetById(request.IssueId);
-        var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, request.NextStepId, request.ProgressId);
+        var nextStepModel = _mapper.Map<GetNextStepQuery>(request);
+        var nextStep = await _workFlowQueryRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel);
 
         var arg = _mapper.Map<IssueRunActionArg>(request);
         arg.ModifiedBy = _simaIdentity.UserId;

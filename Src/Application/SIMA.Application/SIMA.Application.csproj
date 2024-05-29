@@ -16,7 +16,7 @@
     <PackageReference Include="Scrutor" Version="4.2.2" />
     <PackageReference Include="SIMA.Framework.Common" Version="1.8.9" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +29,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
     <ProjectReference Include="..\SIMA.Application.Contract\SIMA.Application.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Feaatures\SecurityCommitees\Cartables\Mappers\" />
   </ItemGroup>
 
 </Project>

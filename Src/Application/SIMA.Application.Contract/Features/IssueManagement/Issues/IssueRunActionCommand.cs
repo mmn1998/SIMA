@@ -9,6 +9,5 @@ public class IssueRunActionCommand : ICommand<Result<long>>
     public long ProgressId { get; set; }
     public long NextStepId { get; set; }
     public string? Comment { get; set; }
-
+    public List<FormDataModel> Form { get; set; }
 }
-

@@ -11,7 +11,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.Progress.Mapper
     {
         public ProgressMapper(ISimaIdentity simaIdentity)
         {
-            CreateMap<ChangeStatusCommand, ChangeStatusArg>()
+            CreateMap<ModifyProgressCommand, ChangeStatusArg>()
              .ForMember(x => x.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString())))
              //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
              .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));

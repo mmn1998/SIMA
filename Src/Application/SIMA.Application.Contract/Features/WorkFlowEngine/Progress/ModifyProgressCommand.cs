@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace SIMA.Application.Contract.Features.WorkFlowEngine.Progress
 {
-    public class ChangeStatusCommand : ICommand<Result<long>>
+    public class ModifyProgressCommand : ICommand<Result<long>>
     {
         public long Id { get; set; }
         public long StateId { get; set; }
+        public string ConditionExpression { get; set; }
     }
 }

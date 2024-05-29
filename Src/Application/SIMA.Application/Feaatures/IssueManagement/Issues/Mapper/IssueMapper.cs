@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Events;
@@ -54,9 +55,11 @@ public class IssueMapper : Profile
            .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
+        CreateMap<FormDataModel, FormModel>();
+        CreateMap<IssueRunActionCommand, GetNextStepQuery>();
 
 
-        
+
 
         CreateMap<ModifyIssueCommand, ModifyIssueArg>()
             //.ForMember(dest => dest.ModifiedBy, act => act.MapFrom(source => simaIdentity.UserId))

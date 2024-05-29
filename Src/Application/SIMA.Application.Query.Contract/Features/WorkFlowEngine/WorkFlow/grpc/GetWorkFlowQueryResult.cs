@@ -10,4 +10,17 @@ public class GetWorkflowInfoByIdResponseQueryResult
     public long ProjectId { get; set; }
     public long MainAggregateId { get; set; }
 }
-
+// long workflowId, long nextStepId, long progressId, string ConditionValue
+public class GetNextStepQuery
+{
+    public long WorkflowId { get; set; }
+    public long NextStepId { get; set; }
+    public long ProgressId { get; set; }
+    public string ConditionValue { get; set; }
+    public List<FormModel> Form { get; set; }
+}
+public class FormModel
+{
+    public string Key { get; set; }
+    public string Value { get; set; }
+}

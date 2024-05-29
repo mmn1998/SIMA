@@ -9,6 +9,7 @@ namespace SIMA.Application.Feaatures.BranchManagement.Branches.Mappers;
 
 public class BranchMapper : Profile
 {
+
     public BranchMapper(ISimaIdentity simaIdentity)
     {
         CreateMap<CreateBranchCommand, CreateBranchArg>()
