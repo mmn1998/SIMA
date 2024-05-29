@@ -1,4 +1,5 @@
 ﻿using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
 using SIMA.Framework.Common.Response;
@@ -18,4 +19,5 @@ public interface IWorkFlowQueryRepository : IQueryRepository
     Task<List<GetWorkFlowQueryResult>> GetByProjectId(long projectId);
     Task<List<GetStateQueryResult>> GetAllStatesByWorkFlowId(long id);
     Task<IEnumerable<GetWorkFlowQueryResult>> GetAllWorkFlowForIssue();
+    Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query);
 }

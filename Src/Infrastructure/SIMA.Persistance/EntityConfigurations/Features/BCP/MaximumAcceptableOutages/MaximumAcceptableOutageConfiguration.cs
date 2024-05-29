@@ -9,7 +9,7 @@ public class MaximumAcceptableOutageConfiguration : IEntityTypeConfiguration<Max
 {
     public void Configure(EntityTypeBuilder<MaximumAcceptableOutage> entity)
     {
-        entity.ToTable("BCP", "MaximumAcceptableOutage");
+        entity.ToTable("MaximumAcceptableOutage", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(

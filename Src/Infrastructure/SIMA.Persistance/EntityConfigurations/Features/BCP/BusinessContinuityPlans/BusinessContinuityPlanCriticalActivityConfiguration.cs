@@ -9,7 +9,7 @@ public class BusinessContinuityPlanCriticalActivityConfiguration : IEntityTypeCo
 {
     public void Configure(EntityTypeBuilder<BusinessContinuityPlanCriticalActivity> entity)
     {
-        entity.ToTable("BCP", "BusinessContinuityPlanCriticalActivity");
+        entity.ToTable("BusinessContinuityPlanCriticalActivity", "BCP");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,

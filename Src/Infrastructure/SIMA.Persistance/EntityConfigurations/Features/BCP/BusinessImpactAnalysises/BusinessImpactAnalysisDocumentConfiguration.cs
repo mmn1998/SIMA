@@ -10,7 +10,7 @@ public class BusinessImpactAnalysisDocumentConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<BusinessImpactAnalysisDocument> entity)
     {
-        entity.ToTable("BCP", "BusinessImpactAnalysisDocument");
+        entity.ToTable("BusinessImpactAnalysisDocument", "BCP");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,

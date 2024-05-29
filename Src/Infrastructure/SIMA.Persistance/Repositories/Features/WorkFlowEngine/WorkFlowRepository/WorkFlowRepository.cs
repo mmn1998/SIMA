@@ -144,34 +144,34 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             return result;
     }
 
-    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep, long progressId)
-    {
-        var result = new GetWorkflowInfoByIdResponseQueryResult();
-        var workFlow = await _context.WorkFlows
-           .Include(x => x.States)
-           .Include(x => x.Steps)
-           .Include(x => x.Progresses)
-           .FirstOrDefaultAsync(x => x.Id == new WorkFlowId(workFlowId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+    //public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep, long progressId)
+    //{
+    //    var result = new GetWorkflowInfoByIdResponseQueryResult();
+    //    var workFlow = await _context.WorkFlows
+    //       .Include(x => x.States)
+    //       .Include(x => x.Steps)
+    //       .Include(x => x.Progresses)
+    //       .FirstOrDefaultAsync(x => x.Id == new WorkFlowId(workFlowId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
-        if (workFlow is not null)
-        {
-            var step = workFlow.Steps.Where(s => s.Id == new StepId(nextStep)).FirstOrDefault();
+    //    if (workFlow is not null)
+    //    {
+    //        var step = workFlow.Steps.Where(s => s.Id == new StepId(nextStep)).FirstOrDefault();
 
-            var progress = workFlow.Progresses.Where(x => x.Id == new ProgressId(progressId)).FirstOrDefault();
+    //        var progress = workFlow.Progresses.Where(x => x.Id == new ProgressId(progressId)).FirstOrDefault();
 
-            if (progress.StateId is not null) result.SourceStateId = progress.StateId.Value;
+    //        if (progress.StateId is not null) result.SourceStateId = progress.StateId.Value;
 
-            result.SourceStepId = step.Id.Value;
-            result.Id = workFlowId;
+    //        result.SourceStepId = step.Id.Value;
+    //        result.Id = workFlowId;
 
-            return result;
+    //        return result;
 
-        }
-        else
-        {
-            throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
-        }
-    }
+    //    }
+    //    else
+    //    {
+    //        throw IssueExceptions.IssueErrorException;
+    //    }
+    //}
 
     public Task<WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate)
     {

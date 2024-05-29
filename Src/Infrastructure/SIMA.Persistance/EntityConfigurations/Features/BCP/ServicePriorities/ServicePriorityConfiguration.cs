@@ -9,7 +9,7 @@ public class ServicePriorityConfiguration : IEntityTypeConfiguration<ServicePrio
 {
     public void Configure(EntityTypeBuilder<ServicePriority> entity)
     {
-        entity.ToTable("BCP", "ServicePriority");
+        entity.ToTable("ServicePriority", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(

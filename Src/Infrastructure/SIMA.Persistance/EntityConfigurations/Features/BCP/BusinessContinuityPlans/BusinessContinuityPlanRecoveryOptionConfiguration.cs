@@ -9,7 +9,7 @@ public class BusinessContinuityPlanRecoveryOptionConfiguration : IEntityTypeConf
 {
     public void Configure(EntityTypeBuilder<BusinessContinuityPlanRecoveryOption> entity)
     {
-        entity.ToTable("BCP", "BusinessContinuityPlanRecoveryOption");
+        entity.ToTable("BusinessContinuityPlanRecoveryOption", "BCP");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,

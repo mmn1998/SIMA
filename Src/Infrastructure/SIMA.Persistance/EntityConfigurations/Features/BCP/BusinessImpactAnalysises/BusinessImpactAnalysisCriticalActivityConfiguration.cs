@@ -9,7 +9,7 @@ public class BusinessImpactAnalysisCriticalActivityConfiguration : IEntityTypeCo
 {
     public void Configure(EntityTypeBuilder<BusinessImpactAnalysisCriticalActivity> entity)
     {
-        entity.ToTable("BCP", "BusinessImpactAnalysisCriticalActivity");
+        entity.ToTable("BusinessImpactAnalysisCriticalActivity", "BCP");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,

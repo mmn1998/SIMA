@@ -37,6 +37,19 @@ using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Vulnerabilities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Labels.Entities;
@@ -188,6 +201,26 @@ namespace SIMA.Persistance.Persistence
         public DbSet<SupervisorAnswerType> SupervisorAnswerTypes { get; set; }
         public DbSet<Label> Lables { get; set; }
         public DbSet<MeetingLabel> MeetingLabels { get; set; }
+        #endregion
+
+        #region RiskManagement
+        public DbSet<RiskDegree> RiskDegrees { get; set; }
+        public DbSet<RiskLevel> RiskLevels { get; set; }
+        public DbSet<RiskImpact> RiskImpacts { get; set; }
+        public DbSet<RiskPossibility> RiskPossibilities { get; set; }
+        public DbSet<RiskType> RiskTypes { get; set; }
+        public DbSet<ImpactScale> ImpactScales { get; set; }
+        public DbSet<RiskCriteria> RiskCriterias { get; set; }
+        public DbSet<RiskLevelMeasure> RiskLevelMeasures { get; set; }
+        public DbSet<Risk> Risks { get; set; }
+        public DbSet<CorrectiveAction> CorrectiveActions { get; set; }
+        public DbSet<PreventiveAction> PreventiveActions { get; set; }
+        public DbSet<EffectedAsset> EffectedAssets { get; set; }
+        public DbSet<RiskRelatedIssue> RiskRelatedIssues { get; set; }
+        public DbSet<Vulnerability> vulnerabilities { get; set; }
+        public DbSet<ServiceRiskImpact> ServiceRiskImpacts { get; set; }
+        public DbSet<Threat> Threats { get; set; }
+        public DbSet<ThreatType> ThreatTypes { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 

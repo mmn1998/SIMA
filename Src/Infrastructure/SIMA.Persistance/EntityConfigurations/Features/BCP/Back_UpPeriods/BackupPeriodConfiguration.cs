@@ -9,7 +9,7 @@ public class BackupPeriodConfiguration : IEntityTypeConfiguration<BackupPeriod>
 {
     public void Configure(EntityTypeBuilder<BackupPeriod> entity)
     {
-        entity.ToTable("BCP", "BackupPeriod");
+        entity.ToTable("BackupPeriod", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(
@@ -20,7 +20,7 @@ public class BackupPeriodConfiguration : IEntityTypeConfiguration<BackupPeriod>
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
-        
+
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();

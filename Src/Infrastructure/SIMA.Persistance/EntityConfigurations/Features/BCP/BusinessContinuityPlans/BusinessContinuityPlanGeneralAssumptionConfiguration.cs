@@ -9,7 +9,7 @@ public class BusinessContinuityPlanGeneralAssumptionConfiguration : IEntityTypeC
 {
     public void Configure(EntityTypeBuilder<BusinessContinuityPlanGeneralAssumption> entity)
     {
-        entity.ToTable("BCP", "BusinessContinuityPlanGeneralAssumption");
+        entity.ToTable("BusinessContinuityPlanGeneralAssumption", "BCP");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,

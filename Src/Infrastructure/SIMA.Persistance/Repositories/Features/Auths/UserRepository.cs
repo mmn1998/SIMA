@@ -7,6 +7,7 @@ using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
+using SIMA.Framework.Core.Entities;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 using SIMA.Resources;
@@ -67,7 +68,7 @@ public class UserRepository : Repository<User>, IUserRepository
                 var checkPassword = user.Password.Verify(password);
                 if (!checkPassword) throw new SimaResultException("10002", Messages.InvalidUsernameOrPasswordError);
 
-                if (_simaIdentity.RoleIds.Contains(2))
+                if (_simaIdentity.RoleIds is not null && _simaIdentity.RoleIds.Contains(2))
                 {
                     if (user.ChangePasswordDate is not null)
                     {
@@ -163,4 +164,13 @@ public class UserRepository : Repository<User>, IUserRepository
         }
     }
 
+    public async Task<User> CheckForgetPasswordCode(long userId, string code)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == new UserId(userId));
+        user.NullCheck();
+        if(user.ConfirmCode == code)
+            return user;
+        else
+            throw new SimaResultException(CodeMessges._400Code, Messages.CodeNotValid);
+    }
 }

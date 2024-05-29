@@ -9,7 +9,7 @@ public class ImportanceDegreeConfiguration : IEntityTypeConfiguration<Importance
 {
     public void Configure(EntityTypeBuilder<ImportanceDegree> entity)
     {
-        entity.ToTable("BCP", "ImportanceDegree");
+        entity.ToTable("ImportanceDegree", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(

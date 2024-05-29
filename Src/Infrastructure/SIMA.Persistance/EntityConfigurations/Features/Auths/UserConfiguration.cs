@@ -36,16 +36,21 @@ namespace SIMA.Persistance.EntityConfigurations.Features.Auths
                 .IsConcurrencyToken();
             entity.OwnsOne(p => p.Password, p =>
             {
-                p.Property(pp => pp.SecretKey).HasColumnName("SecretKey").HasColumnType("text");
+                p.Property(pp => pp.SecretKey).HasColumnName("SecretKey").HasColumnType("nvarchar(max)");
                 p.Property(pp => pp.Password).HasColumnName("Password").HasMaxLength(128).IsUnicode(false);
             });
             entity.Property(e => e.ProfileId).HasColumnName("ProfileID");
-            entity.Property(e => e.SecretKey).HasColumnType("text");
+            entity.Property(e => e.SecretKey).HasColumnType("nvarchar(max)");
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .IsUnicode(false);
 
             entity.Property(e => e.IsFirstLogin)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength();
+
+            entity.Property(e => e.IsLocked)
                .HasMaxLength(1)
                .IsUnicode(false)
                .IsFixedLength();

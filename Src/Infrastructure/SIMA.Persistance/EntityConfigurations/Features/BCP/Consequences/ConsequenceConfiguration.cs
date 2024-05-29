@@ -9,7 +9,7 @@ public class ConsequenceConfiguration : IEntityTypeConfiguration<Consequence>
 {
     public void Configure(EntityTypeBuilder<Consequence> entity)
     {
-        entity.ToTable("BCP", "Consequence");
+        entity.ToTable("Consequence", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(

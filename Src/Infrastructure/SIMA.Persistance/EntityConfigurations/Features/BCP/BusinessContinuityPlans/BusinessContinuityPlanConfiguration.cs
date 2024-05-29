@@ -12,7 +12,7 @@ public class BusinessContinuityPlanConfiguration : IEntityTypeConfiguration<Busi
 {
     public void Configure(EntityTypeBuilder<BusinessContinuityPlan> entity)
     {
-        entity.ToTable("BCP", "BusinessContinuityPlan");
+        entity.ToTable("BusinessContinuityPlan", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(

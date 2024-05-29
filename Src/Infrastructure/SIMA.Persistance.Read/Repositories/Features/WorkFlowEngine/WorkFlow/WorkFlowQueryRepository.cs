@@ -1,14 +1,19 @@
 ﻿using Dapper;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Resources;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
 
@@ -26,6 +31,7 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
     {
         var response = new List<GetWorkFlowQueryResult>();
         int totalCount = 0;
+
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
@@ -653,4 +659,289 @@ Order By c.[CreatedAt] desc
             return result;
         }
     }
+
+    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query)
+    {
+        var model = new Dictionary<long, NextProgressInfo>();
+        var getNextStepQuery = @"select distinct wp.StateId CurrentProgressStateId, wp.ProgressId CurrentProgressId, s.Id StepId, s.WorkFlowID WorkflowId, s.ActionTypeId, p.TargetId, p.ConditionExpression, p.StateId NextStateId, p.Extension from project.Step s
+                                  inner join project.WorkFlow w on w.Id = s.WorkFlowID
+                                  left join Project.Progress p on p.SourceId = s.Id
+                                  left join (SELECT iwp.Id ProgressId, iwp.StateId, iwp.WorkFlowId from Project.Progress iwp where iwp.Id = @ProgressId) wp on wp.WorkFlowId = w.Id
+                                  where w.Id = @WorkflowId and s.Id = @NextStepId and w.ActiveStatusID = 1";
+        var result = new GetNextStepInfoQueryResult();
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            var queryResult = await connection.QueryAsync<dynamic>(getNextStepQuery, new { WorkflowId = workflowId, NextStepId = query.NextStepId, ProgressId = query.ProgressId });
+            foreach (var current in queryResult)
+            {
+                NextProgressInfo item;
+                if (current.TargetId != null)
+                {
+                    if (!model.TryGetValue(current.TargetId, out item))
+                    {
+                        item = new NextProgressInfo { ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId };
+                        model.Add(current.TargetId, item);
+                    }
+                }
+
+                result.CurrentProgressId = current.CurrentProgressId;
+                result.CurrentProgressStateId = current.CurrentProgressStateId;
+                result.StepId = current.StepId;
+                result.WorkflowId = current.WorkflowId;
+                result.ActionTypeId = current.ActionTypeId;
+            }
+            result.NextProgressInfo = model.Values.Any() ? model.Values.ToList() : null;
+            if (result.ActionTypeId == 6)
+            {
+                return await EvaluateNextProgress(result.NextProgressInfo, query.ConditionValue, query.Form);
+            }
+            return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = result.StepId, SourceStateId = result.CurrentProgressStateId };
+
+        }
+    }
+    private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<NextProgressInfo> progresses, string ConditionValue, List<FormModel> formData)
+    {
+
+        foreach (var item in progresses)
+        {
+            var condition = item.ConditionExpression;
+            var extension = item.Extension ?? string.Empty;
+            var isView = condition.Trim().StartsWith("@");
+            if (isView)
+            {
+                var allQueries = GetAllViewQueries(condition, extension);
+                var conditionResult = await EvaluateViewCondition(allQueries);
+                if (conditionResult)
+                {
+                    return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = item.TargetId.Value, SourceStateId = item.NextStateId };
+                }
+            }
+            else
+            {
+                var formConditionResult = await GetAllFormQueries(condition, formData);
+                if (formConditionResult)
+                {
+                    return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = item.TargetId.Value, SourceStateId = item.NextStateId };
+                }
+            }
+
+        }
+        throw new Exception("No Condition Was Correct");
+    }
+
+    private async Task<bool> GetAllFormQueries(string condition, List<FormModel> formData)
+    {
+        var result = false;
+        string[] allFormCheck = condition.Split('#', StringSplitOptions.None);
+        foreach (var item in allFormCheck)
+        {
+            if (string.IsNullOrWhiteSpace(item))
+                continue;
+            var aqlQuery = GetFormConditions(item, formData);
+            result = await EvaluateFormCondition(aqlQuery);
+            if (!result)
+            {
+                return false;
+            }
+        }
+        return result;
+    }
+    private List<QueryWithCheckerModel> GetFormConditions(string condition, List<FormModel> formData)
+    {
+        var result = new List<QueryWithCheckerModel>();
+        var items = condition.Split('$');
+        foreach (var item in items)
+        {
+            string pattern = @$"({string.Join("|", splitWords)})";
+            var checker = Regex.Match(item, pattern);
+            var splittedCondition = item.Split(splitWords, StringSplitOptions.None);
+            if (string.IsNullOrWhiteSpace(item) || splittedCondition.Length < 1)
+            {
+                continue;
+            }
+            var query = formData.FirstOrDefault(x => x.Key.ToLower() == splittedCondition[0].ToLower());
+            var data = new QueryWithCheckerModel { Checker = checker.Value, Query = query?.Value ?? string.Empty, ValueToCheck = splittedCondition[1] };
+            result.Add(data);
+        }
+        return result;
+    }
+    private async Task<bool> EvaluateFormCondition(List<QueryWithCheckerModel> queries)
+    {
+        var result = false;
+        foreach (var query in queries)
+        {
+            try
+            {
+                if (!query.IsLong)
+                {
+
+                    result = CheckStringCondition(query.Query, query.Checker, query.ValueToCheck);
+                    if (!result)
+                    {
+                        break;
+                    }
+                }
+                else
+                {
+                    var longData = long.Parse(query.Query);
+                    result = CheckLongCondition(longData, query.Checker, Convert.ToInt64(query.ValueToCheck));
+                    if (!result)
+                    {
+                        break;
+                    }
+                }
+            }
+            catch
+            {
+                break;
+            }
+
+        }
+        return result;
+    }
+    private async Task<bool> EvaluateViewCondition(List<QueryWithCheckerModel> queries)
+    {
+        var result = false;
+        foreach (var query in queries)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                try
+                {
+                    if (!query.IsLong)
+                    {
+
+                        var stringChecker = await connection.QuerySingleOrDefaultAsync<string>(query.Query);
+                        result = CheckStringCondition(stringChecker, query.Checker, query.ValueToCheck);
+                        if (!result)
+                        {
+                            break;
+                        }
+
+
+                    }
+                    else
+                    {
+                        var longChecker = await connection.QuerySingleOrDefaultAsync<long>(query.Query);
+                        result = CheckLongCondition(longChecker, query.Checker, Convert.ToInt64(query.ValueToCheck));
+                        if (!result)
+                        {
+                            break;
+                        }
+                    }
+                }
+                catch
+                {
+                    break;
+                }
+
+
+            }
+
+        }
+        return result;
+    }
+    private bool CheckStringCondition(string check, string checker, string valueToCheck)
+    {
+        return checker switch
+        {
+            "==" => check.Trim().Equals(valueToCheck.Trim()),
+            "!=" => !check.Trim().Equals(valueToCheck.Trim()),
+            _ => false
+        };
+    }
+    private bool CheckLongCondition(long check, string checker, long valueToCheck)
+    {
+        return checker switch
+        {
+            "==" => check == valueToCheck,
+            "<=" => check <= valueToCheck,
+            ">=" => check >= valueToCheck,
+            "!=" => check != valueToCheck,
+            ">" => check > valueToCheck,
+            "<" => check < valueToCheck,
+            _ => false
+        };
+    }
+    private List<QueryWithCheckerModel> GetAllViewQueries(string condition, string extension)
+    {
+        //string pattern = @"(?=(" + string.Join("|", splitWords) + @"))";
+        var aqlQuery = GetQueryConditions(condition, extension);
+
+        string[] allQueries = aqlQuery.Split('@', StringSplitOptions.None);
+
+        allQueries = Array.FindAll(allQueries, s => !string.IsNullOrWhiteSpace(s));
+        var queries = new List<QueryWithCheckerModel>();
+        foreach (var item in allQueries)
+        {
+            var query = GetQuery(item);
+            queries.Add(query);
+        }
+        return queries;
+    }
+    private string[] splitWords = new string[] { "!=", "==", "<=", ">=", ">", "<" };
+
+    private QueryWithCheckerModel GetQuery(string aqlQuery)
+    {
+        string pattern = @$"({string.Join("|", splitWords)})";
+        var checker = Regex.Match(aqlQuery, pattern);
+        var queries = aqlQuery.Split(splitWords, StringSplitOptions.None);
+        var query = queries[0];
+        var conditionSplitter = query.Split('?');
+        var tableColumn = conditionSplitter[0].Split(".");
+        var sqlQuery = SelectGenerator(tableColumn);
+        var conditionaql = conditionSplitter[1];
+        var conditionSql = ConditionGenerator(conditionaql);
+        var result = $"{sqlQuery} WHERE {conditionSql}";
+        return new QueryWithCheckerModel { Checker = checker.Value, Query = result, ValueToCheck = queries[1] };
+    }
+
+    private string SelectGenerator(string[] tableAndColumn)
+    {
+        var column = tableAndColumn.LastOrDefault();
+        var query = $"SELECT {column} FROM {tableAndColumn[0]}";
+        return query;
+    }
+    private string ConditionGenerator(string condition)
+    {
+        var result = condition.Replace("&", " AND ");
+        return result;
+    }
+    private string CastVariableToQuery(string value, string extension)
+    {
+        var expression = value.Split(' ');
+        var variable = expression[0];
+        var extensions = extension.Split("|");
+        var result = string.Empty;
+        if (extensions.Length < 2)
+        {
+            return value;
+        }
+        foreach (var item in extensions)
+        {
+            var definedVariable = item.Split(":");
+            
+            if (definedVariable[0].Trim() != variable)
+            {
+                continue;
+            }
+
+            result = definedVariable[1];
+            break;
+        }
+        return result;
+    }
+    private string GetQueryConditions(string condition, string extension)
+    {
+        var result = condition;
+        var items = condition.Split('$');
+        foreach (var item in items)
+        {
+            var castedVariable = CastVariableToQuery(item, extension);
+            result.Replace(item, castedVariable);
+        }
+        return result;
+    }
+
 }
