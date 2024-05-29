@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MD.PersianDateTime" Version="4.5.0" />
+    <PackageReference Include="Portable.Licensing" Version="1.1.0" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
+  </ItemGroup>
+
+</Project>
