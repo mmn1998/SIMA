@@ -32,29 +32,29 @@ public class User : Entity, IAggregateRoot
     private User()
     {
 
-        }
-        private User(CreateUserArg arg)
+    }
+    private User(CreateUserArg arg)
+    {
+        Id = new UserId(IdHelper.GenerateUniqueId());
+        ProfileId = new ProfileId(arg.ProfileId);
+        CompanyId = new CompanyId(arg.CompanyId);
+        Username = arg.Username;
+        Password = PasswordValueObject.New(arg.Password);
+        ActiveStatusId = arg.ActiveStatusId;
+        ActiveFrom = arg.ActiveFrom;
+        CreatedBy = arg.CreatedBy;
+        CreatedAt = arg.CreatedAt;
+        IsFirstLogin = arg.IsFirstLogin;
+    }
+    #region AddMethods
+    public async Task AddUserRole(CreateUserRoleArg arg)
+    {
+        if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
         {
-            Id = new UserId(IdHelper.GenerateUniqueId());
-            ProfileId = new ProfileId(arg.ProfileId);
-            CompanyId = new CompanyId(arg.CompanyId);
-            Username = arg.Username;
-            Password = PasswordValueObject.New(arg.Password);
-            ActiveStatusId = arg.ActiveStatusId;
-            ActiveFrom = arg.ActiveFrom;
-            CreatedBy = arg.CreatedBy;
-            CreatedAt = arg.CreatedAt;
-            IsFirstLogin = arg.IsFirstLogin;
+            throw new SimaResultException("10017", Messages.UserRoleDuplicateError);
         }
-        #region AddMethods
-        public async Task AddUserRole(CreateUserRoleArg arg)
-        {
-            if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
-            {
-                throw new SimaResultException("10017",Messages.UserRoleDuplicateError);
-            }
-            var entity = await UserRole.Create(arg);
-            _userRoles.Add(entity);
+        var entity = await UserRole.Create(arg);
+        _userRoles.Add(entity);
 
     }
     public async Task AddUserPermission(CreateUserPermissionArg arg)
@@ -142,80 +142,101 @@ public class User : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
     }
 
-        public async Task ChangePassword(ChangePasswordArg arg)
-        {
-            await ChangePasswordGuards(arg);
-            Password = PasswordValueObject.New(arg.NewPassword);
-            IsFirstLogin = arg.IsFirstLogin;
-            ChangePasswordDate = arg.ChangePasswordDate;
-            AccessFailedCount = arg.AccessFailedCount;
-        }
+    public async Task ChangePassword(ChangePasswordArg arg)
+    {
+        await ChangePasswordGuards(arg);
+        Password = PasswordValueObject.New(arg.NewPassword);
+        IsFirstLogin = arg.IsFirstLogin;
+        ChangePasswordDate = arg.ChangePasswordDate;
+        AccessFailedCount = arg.AccessFailedCount;
+    }
 
-        public async Task AccessFaild(UserInfoLogin arg)
-        {
-            AccessFailedCount = arg.AccessFailedCount;
-            AccessFaildDate = arg.AccessFaildDate;
-            AccessFailedOverallCount = arg.AccessFailedOverallCount;
-            IsLocked = arg.IsLocked;
-        }
-        public string? SecretKey { get; set; }
-        public ProfileId? ProfileId { get; private set; }
-        public CompanyId CompanyId { get; private set; }
-        public long ActiveStatusId { get; private set; }
-        public string Username { get; private set; }
-        public PasswordValueObject Password { get; private set; }
-        public string? IsLoggedIn { get; private set; }
-        public DateOnly? ActiveFrom { get; private set; }
-        public DateOnly? ActiveTo { get; private set; }
-        public UserId Id { get; private set; }
-        public string IsFirstLogin { get; set; }
-        public string IsLocked { get; set; }
-        public DateTime? ChangePasswordDate { get; private set; }
-        public int? AccessFailedCount { get; private set; }
-        public int? AccessFailedOverallCount { get; private set; }
-        public DateTime? AccessFaildDate { get; private set; }
-        public DateTime? CreatedAt { get; private set; }
-        public long? CreatedBy { get; private set; }
-        public byte[]? ModifiedAt { get; private set; }
-        public long? ModifiedBy { get; private set; }
-        public virtual Company? Company { get; private set; }
-        public virtual Profile? Profile { get; private set; }
+    public async Task<string> GenerateCode(IUserService userService)
+    {
+        var code = userService.GenerateCode();
+        ConfirmCode = code;
+        ConfirmCodeSendDate = DateTime.Now;
+        return code;
+    }
 
-        #region ModifyMethods
-        public async Task ModifyUserRole(ModifyUserRoleArg arg)
+    public async Task<string> GeneratePassword(IUserService userService)
+    {
+        string newPassword = userService.GeneratePassword();
+        Password = PasswordValueObject.New(newPassword);
+        ConfirmCode = null;
+        ConfirmCodeSendDate = null;
+        IsFirstLogin = "1";
+        ChangePasswordDate = DateTime.Now;
+        return newPassword;
+    }
+
+    public async Task AccessFaild(UserInfoLogin arg)
+    {
+        AccessFailedCount = arg.AccessFailedCount;
+        AccessFaildDate = arg.AccessFaildDate;
+        AccessFailedOverallCount = arg.AccessFailedOverallCount;
+        IsLocked = arg.IsLocked;
+    }
+    public string? SecretKey { get; set; }
+    public ProfileId? ProfileId { get; private set; }
+    public CompanyId CompanyId { get; private set; }
+    public long ActiveStatusId { get; private set; }
+    public string Username { get; private set; }
+    public PasswordValueObject Password { get; private set; }
+    public string? IsLoggedIn { get; private set; }
+    public DateOnly? ActiveFrom { get; private set; }
+    public DateOnly? ActiveTo { get; private set; }
+    public UserId Id { get; private set; }
+    public string IsFirstLogin { get; set; }
+    public string IsLocked { get; set; }
+    public DateTime? ChangePasswordDate { get; private set; }
+    public int? AccessFailedCount { get; private set; }
+    public int? AccessFailedOverallCount { get; private set; }
+    public DateTime? AccessFaildDate { get; private set; }
+    public string? ConfirmCode { get; private set; }
+    public DateTime? ConfirmCodeSendDate { get; private set; }
+    public DateTime? CreatedAt { get; private set; }
+    public long? CreatedBy { get; private set; }
+    public byte[]? ModifiedAt { get; private set; }
+    public long? ModifiedBy { get; private set; }
+    public virtual Company? Company { get; private set; }
+    public virtual Profile? Profile { get; private set; }
+
+    #region ModifyMethods
+    public async Task ModifyUserRole(ModifyUserRoleArg arg)
+    {
+        if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
         {
-            if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
-            {
-                throw new SimaResultException("10017",Messages.UserRoleDuplicateError);
-            }
-            var entity = _userRoles.FirstOrDefault(ur => ur.Id == new UserRoleId(arg.Id));
-            entity.NullCheck();
-            entity.Modify(arg);
+            throw new SimaResultException("10017", Messages.UserRoleDuplicateError);
         }
-        public async Task ModifyUserPermission(ModifyUserPermissionArg arg)
+        var entity = _userRoles.FirstOrDefault(ur => ur.Id == new UserRoleId(arg.Id));
+        entity.NullCheck();
+        entity.Modify(arg);
+    }
+    public async Task ModifyUserPermission(ModifyUserPermissionArg arg)
+    {
+        if (_userPermission.Any(ur => ur.PermissionId == new PermissionId(arg.PermissionId) && ur.UserId == new UserId(arg.UserId.Value)))
         {
-            if (_userPermission.Any(ur => ur.PermissionId == new PermissionId(arg.PermissionId) && ur.UserId == new UserId(arg.UserId.Value)))
-            {
-                throw new SimaResultException("10028",Messages.UserPermoissionDuplicateError);
-            }
-            var entity = _userPermission.FirstOrDefault(up => up.Id == new UserPermissionId(arg.Id));
-            entity.NullCheck();
-            entity.Modify(arg);
+            throw new SimaResultException("10028", Messages.UserPermoissionDuplicateError);
         }
-        public async Task ModifyUserLocation(ModifyUserLocationArg arg)
-        {
-            var entity = _userLocationAccesses.FirstOrDefault(ul => ul.Id == new UserLocationAccessId(arg.Id));
-            entity.NullCheck();
-            entity.Modify(arg);
-        }
-        public async Task ModifyUserGroup(ModifyUserGroupArg arg)
-        {
-            var entity = _userGroup.FirstOrDefault(ug => ug.Id == new UserGroupId(arg.Id));
-            entity.NullCheck();
-            entity.Modify(arg);
-        }
-        public async Task ModifyUserDomain(ModifyUserDomainArg arg)
-        {
+        var entity = _userPermission.FirstOrDefault(up => up.Id == new UserPermissionId(arg.Id));
+        entity.NullCheck();
+        entity.Modify(arg);
+    }
+    public async Task ModifyUserLocation(ModifyUserLocationArg arg)
+    {
+        var entity = _userLocationAccesses.FirstOrDefault(ul => ul.Id == new UserLocationAccessId(arg.Id));
+        entity.NullCheck();
+        entity.Modify(arg);
+    }
+    public async Task ModifyUserGroup(ModifyUserGroupArg arg)
+    {
+        var entity = _userGroup.FirstOrDefault(ug => ug.Id == new UserGroupId(arg.Id));
+        entity.NullCheck();
+        entity.Modify(arg);
+    }
+    public async Task ModifyUserDomain(ModifyUserDomainArg arg)
+    {
 
         var entity = _userDomainAccesses.FirstOrDefault(ud => ud.Id == new UserDomainAccessId(arg.Id));
         entity.NullCheck();
@@ -287,27 +308,27 @@ public class User : Entity, IAggregateRoot
     private List<SubjectMeeting> _subjectMeetings = new();
     public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
 
-        public ICollection<AdminLocationAccess> AdminLocationAccesses => _adminLocationAccesses;
-        private static async Task CreateGuards(IUserService userService, CreateUserArg arg)
-        {
-            arg.Password.NullCheck();
-            arg.Username.NullCheck();
-            if (!userService.IsUsernameValidRegex(arg.Username)) throw new  SimaResultException(CodeMessges._400Code, Messages.UsernameNotValidException);
-            if (!await userService.IsUsernameUnique(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
-        }
-        private async Task ModifyGuards(IUserService userService, ModifyUserArg arg)
-        {
-            arg.Password.NullCheck();
-            arg.Username.NullCheck();
-            if (!userService.IsUsernameValidRegex(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotValidException);
-            if (!await userService.IsUsernameUnique(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
-        }
+    public ICollection<AdminLocationAccess> AdminLocationAccesses => _adminLocationAccesses;
+    private static async Task CreateGuards(IUserService userService, CreateUserArg arg)
+    {
+        arg.Password.NullCheck();
+        arg.Username.NullCheck();
+        if (!userService.IsUsernameValidRegex(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotValidException);
+        if (!await userService.IsUsernameUnique(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
+    }
+    private async Task ModifyGuards(IUserService userService, ModifyUserArg arg)
+    {
+        arg.Password.NullCheck();
+        arg.Username.NullCheck();
+        if (!userService.IsUsernameValidRegex(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotValidException);
+        if (!await userService.IsUsernameUnique(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
+    }
 
-        private async Task ChangePasswordGuards(ChangePasswordArg request)
-        {
-            if (request.NewPassword is null) throw new SimaResultException(CodeMessges._400Code, Messages.NewPasswordIsNull);
-            if (request.ConfirmNewPassword is null) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmNewPasswordIsNull);
-            if(request.NewPassword != request.ConfirmNewPassword) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmPasswordNotValid);
-        }
+    private async Task ChangePasswordGuards(ChangePasswordArg request)
+    {
+        if (request.NewPassword is null) throw new SimaResultException(CodeMessges._400Code, Messages.NewPasswordIsNull);
+        if (request.ConfirmNewPassword is null) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmNewPasswordIsNull);
+        if (request.NewPassword != request.ConfirmNewPassword) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmPasswordNotValid);
+    }
 
 }

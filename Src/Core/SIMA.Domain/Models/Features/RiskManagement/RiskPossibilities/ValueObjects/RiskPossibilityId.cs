@@ -1,0 +1,1 @@
+﻿public record RiskPossibilityId(long Value);

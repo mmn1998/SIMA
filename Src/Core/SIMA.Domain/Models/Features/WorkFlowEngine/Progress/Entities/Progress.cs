@@ -45,6 +45,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         public void ChangeStatus(ChangeStatusArg arg)
         {
             StateId = new StateId(arg.StateId);
+            ConditionExpression = arg.ConditionExpression;
         }
         public async Task Modify(ModifyProgressArg arg)
         {
@@ -76,6 +77,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         public string? BpmnId { get; private set; }
         public string? Description { get; private set; }
         public string? ConditionExpression { get; private set; }
+        public string? Extension { get; private set; }
         public long? ActiveStatusId { get; private set; }
         public DateTime? CreatedAt { get; private set; }
         public long? CreatedBy { get; private set; }
@@ -83,7 +85,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         public long? ModifiedBy { get; private set; }
         public Step Source { get; private set; }
         public Step Target { get; private set; }
-        public WorkFlow.Entities.WorkFlow  WorkFlow { get; private set; }
+        public WorkFlow.Entities.WorkFlow WorkFlow { get; private set; }
 
         public StateId? StateId { get; private set; }
         public virtual State? State { get; private set; }

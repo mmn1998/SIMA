@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Algorithm;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Framework.Common.Security;
 using SIMA.Persistance.Persistence;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Users;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace SIMA.DomainService.Features.Auths.Users;
@@ -27,6 +29,47 @@ public class UserService : IUserService
         _repository = repository;
         _context = context;
         _passwordPolicy = passwordPolicy.Value;
+    }
+
+    public string GenerateCode()
+    {
+        int length = 5;
+        const string chars = "0123456789";
+        char[] code = new char[length];
+        using (var rng = new RNGCryptoServiceProvider())
+        {
+            byte[] randomBytes = new byte[length];
+            rng.GetBytes(randomBytes);
+            for (int i = 0; i < length; i++)
+            {
+                int randomIndex = randomBytes[i] % chars.Length;
+                code[i] = chars[randomIndex];
+            }
+        }
+        return new string(code);
+    }
+
+    public string GeneratePassword()
+    {
+        int length = 8;
+        const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const string lowerCase = "abcdefghijklmnopqrstuvwxyz";
+        const string digits = "0123456789";
+        const string specialChars = "!@#$%^&*()-_=+[]{}|;:,.<>?";
+
+        string allChars = upperCase + lowerCase + digits + specialChars;
+        char[] password = new char[length];
+        using (var rng = new RNGCryptoServiceProvider())
+        {
+            byte[] randomBytes = new byte[length];
+            rng.GetBytes(randomBytes);
+            for (int i = 0; i < length; i++)
+            {
+                int randomIndex = randomBytes[i] % allChars.Length;
+                password[i] = allChars[randomIndex];
+            }
+        }
+        return new string(password);
     }
 
     public async Task<bool> IsCompanyMatchPersonCompany(CompanyId companyId, ProfileId profileId)

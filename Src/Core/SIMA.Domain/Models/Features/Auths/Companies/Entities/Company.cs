@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -93,6 +94,7 @@ public class Company : Entity
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
+    public virtual Company? Parent { get; set; }
 
     private List<Department> _department = new();
 
@@ -102,17 +104,19 @@ public class Company : Entity
     private List<User> _users = new();
     public ICollection<User> Users => _users;
 
-    //private List<Company> _companies = new();
-
-    //public virtual ICollection<Company> InverseParent=> _companies;
     private List<WorkFlowCompany> _workFlowCompanies = new();
-
     public virtual ICollection<WorkFlowCompany> WorkFlowCompanies => _workFlowCompanies;
-    private List<Approval> _responsibleApprovals => new();
+
+    private List<Approval> _responsibleApprovals = new();
     public ICollection<Approval> ResponsibleApprovals => _responsibleApprovals;
-    private List<Approval> _supervisorApprovals => new();
+
+    private List<Approval> _supervisorApprovals = new();
     public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
-    private List<Invitees> _invitees => new();
+
+    private List<Invitees> _invitees = new();
     public ICollection<Invitees> Invitees => _invitees;
-    public virtual Company? Parent { get; set; }
+
+    private List<ServiceProvider> _serviceProviders = new();
+    public ICollection<ServiceProvider> ServiceProviders => _serviceProviders;
+
 }

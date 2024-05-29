@@ -9,6 +9,9 @@ using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -33,7 +36,7 @@ public class Department : Entity
         if (arg.LocationId.HasValue) LocationId = new LocationId(arg.LocationId.Value);
     }
     public static async Task<Department> Create(CreateDepartmentArg arg, IDepartmentService service)
-    { 
+    {
         await CreateGuards(arg, service);
         return new Department(arg);
     }
@@ -106,6 +109,18 @@ public class Department : Entity
     public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
     private List<Invitees> _invitees => new();
     public ICollection<Invitees> Invitees => _invitees;
+
+    private List<Service> _ownerServices => new();
+    public ICollection<Service> OwnerService => _ownerServices;
+    
+    private List<Service> _technicalSupervisorServices => new();
+    public ICollection<Service> TechnicalSupervisorServices => _technicalSupervisorServices;
+
+    private List<CriticalActivity> _criticalActivities=> new();
+    public ICollection<CriticalActivity> CriticalActivities => _criticalActivities;
+    private List<Api> _apis = new();
+    public ICollection<Api> OwnerApis => _apis;
+
     public void Delete()
     {
         ActiveStatusId = (int)ActiveStatusEnum.Delete;

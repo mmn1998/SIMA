@@ -1,0 +1,1 @@
+﻿public record CriticalActivityExecutionPlanId(long Value);

@@ -13,7 +13,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface
         Task<Step> GetStepById(long id);
         Task<Entities.WorkFlow> GetWorkFlowByDomainId(long domainId);
         Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoById(long workFlowId);
-        Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long targetId , long progressId);
+
         Task<Entities.WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate);
 
     }

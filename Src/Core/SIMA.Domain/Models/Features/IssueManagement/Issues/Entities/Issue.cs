@@ -7,8 +7,10 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -39,10 +41,10 @@ public class Issue : Entity
         IssueDate = arg.IssueDate;
         Description = arg.Description;
         DueDate = arg.DueDate;
+        CompanyId = arg.CompanyId;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        CompanyId = arg.CompanyId;
     }
 
     public static async Task<Issue> Create(CreateIssueArg arg, IIssueDomainService service)
@@ -231,6 +233,12 @@ public class Issue : Entity
     public ICollection<Approval> Approvals => _approvals;
     private List<Meeting> _meetings = new();
     public ICollection<Meeting> Meetings => _meetings;
+    
+    private List<ServiceRelatedIssue> _serviceRelatedIssues = new();
+    public ICollection<ServiceRelatedIssue> ServiceRelatedIssues => _serviceRelatedIssues;
+
+    private List<RiskRelatedIssue> _riskRelatedIssues = new();
+    public ICollection<RiskRelatedIssue> RiskRelatedIssues => _riskRelatedIssues;
 
     #region Gaurds
 

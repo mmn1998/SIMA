@@ -11,5 +11,7 @@ public interface IUserService : IDomainService
     Task<bool> IsUsrConfigSatisfied(long configurationId, long userId);
     bool IsUsernameValidRegex(string username);
     Task<bool> IsCompanyMatchPersonCompany(CompanyId companyId, ProfileId profileId);
+    string GenerateCode();
+    string GeneratePassword();
 }
 

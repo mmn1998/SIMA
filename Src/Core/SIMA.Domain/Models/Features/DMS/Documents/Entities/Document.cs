@@ -13,6 +13,8 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -110,6 +112,12 @@ public class Document : Entity
     public ICollection<ApprovalResponsibleAnswerDocument> ApprovalResponsibleAnswerDocuments { get; set; }
     public ICollection<ApprovalSupervisorAnswerDocument> ApprovalSupervisorAnswerDocuments { get; set; }
     public ICollection<MeetingDocument> MeetingDocuments { get; set; }
+
+    private List<ServiceDocument> _serviceDocuments = new();
+    public ICollection<ServiceDocument> ServiceDocuments => _serviceDocuments;
+    private List<ApiDocument> _apiDocuments = new();
+    public ICollection<ApiDocument> ApiDocuments => _apiDocuments;
+
     public ICollection<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
     public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments { get; set; }
     public void Delete()

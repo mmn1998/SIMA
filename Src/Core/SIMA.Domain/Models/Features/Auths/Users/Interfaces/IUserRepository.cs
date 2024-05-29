@@ -10,5 +10,6 @@ public interface IUserRepository : IRepository<User>
     Task<User> GetByUserName(string userName);
     Task<SSOInfoUserEvent> GetUserInfoWithSSO(string tiket);
     Task<User> GetUserForChangePassword(long userId, string password);
+    Task<User> CheckForgetPasswordCode(long userId, string code);
 
 }

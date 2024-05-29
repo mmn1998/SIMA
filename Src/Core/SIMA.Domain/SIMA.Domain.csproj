@@ -15,12 +15,33 @@
   <ItemGroup>
     <PackageReference Include="SIMA.Framework.Common" Version="1.8.9" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\SIMA.Resources\SIMA.Resources.csproj" />
     <ProjectReference Include="..\..\Application\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceCustomerTypes\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceCustomerTypes\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceTypes\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceTypes\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceUserTypes\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceUserTypes\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceBoundles\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceBoundles\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\Services\Interfaces\" />
+    <Folder Include="Models\Features\ServiceCatalogs\Services\Exceptions\" />
   </ItemGroup>
 
 </Project>
