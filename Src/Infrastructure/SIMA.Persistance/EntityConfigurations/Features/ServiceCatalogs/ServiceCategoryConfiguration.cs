@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.sanazConfiguration;
 

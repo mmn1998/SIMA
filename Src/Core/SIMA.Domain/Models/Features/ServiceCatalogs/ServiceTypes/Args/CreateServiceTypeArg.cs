@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Args
+namespace SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Args;
+
+public class CreateServiceTypeArg
 {
-    public class CreateServiceTypeArg
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Code { get; set; }
-        public long? ActiveStatusId { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public long? CreatedBy { get; set; }
-    }
+    public long Id { get; set; }
+    public string Name { get; set; }
+    public string Code { get; set; }
+    public long? ActiveStatusId { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public long? CreatedBy { get; set; }
 }

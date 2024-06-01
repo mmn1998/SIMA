@@ -85,6 +85,12 @@
     <Compile Include="Controllers\Features\SecurityCommitees\Meetings\MeetingController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesQueryController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategoriesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategorysQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypeController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesQueryController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\BPMSes\BPMSController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressQueryController.cs" />

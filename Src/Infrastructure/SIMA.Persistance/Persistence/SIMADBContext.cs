@@ -61,6 +61,9 @@ using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entit
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
@@ -221,6 +224,12 @@ namespace SIMA.Persistance.Persistence
         public DbSet<ServiceRiskImpact> ServiceRiskImpacts { get; set; }
         public DbSet<Threat> Threats { get; set; }
         public DbSet<ThreatType> ThreatTypes { get; set; }
+        #endregion
+
+        #region ServiceCatalog
+        public DbSet<ServiceType> ServiceTypes { get; set; }
+        public DbSet<ServiceCategory> ServiceCategories { get; set; }
+        public DbSet<ServiceBoundle> ServiceBoundles { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 

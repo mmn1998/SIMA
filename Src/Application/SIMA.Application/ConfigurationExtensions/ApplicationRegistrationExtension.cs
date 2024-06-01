@@ -40,6 +40,8 @@ using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingReasons.Mappers
 using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingStatus.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.SubjectPriorities.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.ServiceTypes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.Progress.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.Project.Mapper;
@@ -130,6 +132,12 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new MeetingHoldingReasonMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new MeetingHoldingStatusMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new MeetingMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                #endregion
+
+                #region ServiceCatalog
+                conf.AddProfile(new ServiceTypeMapper());
+                conf.AddProfile(new ServiceCategoryMapper());
+
                 #endregion
             }
         }, Array.Empty<Type>());
