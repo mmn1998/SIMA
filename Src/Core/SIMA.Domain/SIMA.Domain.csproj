@@ -35,7 +35,6 @@
     <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceUserTypes\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServiceUserTypes\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceBoundles\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\Services\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\Services\Exceptions\" />
