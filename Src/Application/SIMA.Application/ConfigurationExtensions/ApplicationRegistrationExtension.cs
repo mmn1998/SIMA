@@ -44,6 +44,7 @@ using SIMA.Application.Feaatures.ServiceCatalog.ServiceBoundles.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCustomerTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceTypes.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.ServiceUserTypes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.Progress.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.Project.Mapper;
@@ -141,7 +142,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ServiceCustomerTypeMapper());
                 conf.AddProfile(new ServiceCategoryMapper());
                 conf.AddProfile(new ServiceBoundleMapper());
-
+                conf.AddProfile(new ServiceUserTypeMapper());
                 #endregion
             }
         }, Array.Empty<Type>());
