@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ServiceCatalog\ServiceCustomerTypes\" />
+  </ItemGroup>
+
 </Project>

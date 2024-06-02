@@ -89,6 +89,8 @@
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategoriesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategorysQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCustomerTypes\V1\ServiceCustomerTypesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCustomerTypes\V1\ServiceCustomerTypesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypeController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesQueryController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\BPMSes\BPMSController.cs" />

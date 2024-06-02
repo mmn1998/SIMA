@@ -63,6 +63,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
@@ -230,6 +231,7 @@ namespace SIMA.Persistance.Persistence
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<ServiceBoundle> ServiceBoundles { get; set; }
+        public DbSet<ServiceCustomerType> ServiceCustomerTypes { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 

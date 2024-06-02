@@ -29,7 +29,6 @@
     <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceCustomerTypes\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServiceCustomerTypes\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Exceptions\" />
