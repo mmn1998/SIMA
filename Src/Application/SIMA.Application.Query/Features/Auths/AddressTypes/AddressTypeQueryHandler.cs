@@ -2,6 +2,7 @@
 using Azure;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.AddressTypes;
+using SIMA.Application.Query.Contract.Features.Auths.LocationTypes;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Framework.Infrastructure.Cachings;
@@ -32,26 +33,39 @@ public class AddressTypeQueryHandler : IQueryHandler<GetAddressTypeQuery, Result
 
     public async Task<Result<List<GetAddressTypeQueryResult>>> Handle(GetAllAddressTypesQuery request, CancellationToken cancellationToken)
     {
-        string appName = _configuration.GetSection("AppName").Value ?? "";
-        string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.AddressTypes);
-        bool redisResult = false;
+        #region Redis
+        //string appName = _configuration.GetSection("AppName").Value ?? "";
+        //string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.AddressTypes);
+        //bool redisResult = false;
 
-        try
-        {
-            redisResult = _redisService.TryGet(redisKey, out List<GetAddressTypeQueryResult> values);
-            if (!redisResult) throw new Exception();
+        //try
+        //{
+        //    redisResult = _redisService.TryGet(redisKey, out List<GetAddressTypeQueryResult> values);
+        //    if (!redisResult) throw new Exception();
+        //    if (request.Filters != null)
+        //    {
+        //        if (request.Filters.Any(x => x.Key == nameof(GetAddressTypeQueryResult.Name)))
+        //        {
+        //            var name = request.Filters.First(x => x.Key == nameof(GetAddressTypeQueryResult.Name)).Value;
+        //            values = values.Where(x => x.Name.Contains(name)).ToList();
+        //        }
+        //        if (request.Filters.Any(x => x.Key == nameof(GetAddressTypeQueryResult.Code)))
+        //        {
+        //            var code = request.Filters.First(x => x.Key == nameof(GetAddressTypeQueryResult.Code)).Value;
+        //            values = values.Where(x => x.Code.Contains(code)).ToList();
+        //        }
+        //    }
 
-            values = string.IsNullOrEmpty(request.Filter) ? values : values
-                .Where(it => it.Name.Contains(request.Filter) || it.Code.Contains(request.Filter) || it.ActiveStatus.Contains(request.Filter))
-                .ToList();
-            int totalCount = values.Count();
-            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
-            return Result.Ok(values, totalCount, request.PageSize, request.Page);
-        }
-        catch
-        {
-            return await _repository.GetAll(request);
-        }
 
+        //    int totalCount = values.Count();
+        //    values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+        //    return Result.Ok(values, totalCount, request.PageSize, request.Page);
+        //}
+        //catch
+        //{
+        //    return await _repository.GetAll(request);
+        //}
+        #endregion
+        return await _repository.GetAll(request);
     }
 }

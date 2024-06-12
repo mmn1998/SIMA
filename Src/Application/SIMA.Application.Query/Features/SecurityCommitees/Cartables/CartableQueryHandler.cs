@@ -10,7 +10,7 @@ using SIMA.Persistance.Read.Repositories.Features.SecurityCommitees.Cartables;
 
 namespace SIMA.Application.Query.Features.SecurityCommitees.Cartables;
 
-public class CartableQueryHandler : IQueryHandler<GetAllCartableQuery, Result<List<GetAllCartableQueryResult>>>,
+public class CartableQueryHandler : IQueryHandler<GetAllCartableQuery, Result<IEnumerable<GetAllCartableQueryResult>>>,
     IQueryHandler<GetCartableQuery, Result<GetCartableQueryResult>>
 {
     private readonly ICartableQueryRepository _repository;
@@ -21,7 +21,7 @@ public class CartableQueryHandler : IQueryHandler<GetAllCartableQuery, Result<Li
         _repository = repository;
         _formQueryRepository = formQueryRepository;
     }
-    public async Task<Result<List<GetAllCartableQueryResult>>> Handle(GetAllCartableQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetAllCartableQueryResult>>> Handle(GetAllCartableQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

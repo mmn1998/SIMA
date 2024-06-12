@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.AddressTypes;
 using SIMA.Application.Query.Contract.Features.Auths.Gender;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
@@ -29,25 +30,36 @@ public class GenderQueryHandler : IQueryHandler<GetGenderQuery, Result<GetGender
 
     public async Task<Result<IEnumerable<GetGenderQueryResult>>> Handle(GetAllGenderQuery request, CancellationToken cancellationToken)
     {
-        string appName = _configuration.GetSection("AppName").Value ?? "";
-        string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Genders);
-        bool redisResult = false;
+        #region Redis
+        //string appName = _configuration.GetSection("AppName").Value ?? "";
+        //string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Genders);
+        //bool redisResult = false;
 
-        try
-        {
+        //try
+        //{
 
-            redisResult = _redisService.TryGet(redisKey, out List<GetGenderQueryResult> values);
-            if (!redisResult) throw new Exception();
-            values = string.IsNullOrEmpty(request.Filter) ? values : values
-                .Where(it => it.Name.Contains(request.Filter) || it.Code.Contains(request.Filter) || it.ActiveStatus.Contains(request.Filter)).ToList();
-            int totalCount = values.Count;
-            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
-            return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);
-        }
-        catch
-        {
-            return await _repository.GetAll(request);
-        }
+        //    redisResult = _redisService.TryGet(redisKey, out List<GetGenderQueryResult> values);
+        //    if (!redisResult) throw new Exception();
+        //    if (request.Filters.Any(x => x.Key == nameof(GetGenderQueryResult.Name)))
+        //    {
+        //        var name = request.Filters.First(x => x.Key == nameof(GetGenderQueryResult.Name)).Value;
+        //        values = values.Where(x => x.Name.Contains(name)).ToList();
+        //    }
+        //    if (request.Filters.Any(x => x.Key == nameof(GetGenderQueryResult.Code)))
+        //    {
+        //        var code = request.Filters.First(x => x.Key == nameof(GetGenderQueryResult.Code)).Value;
+        //        values = values.Where(x => x.Code.Contains(code)).ToList();
+        //    }
 
+        //    int totalCount = values.Count;
+        //    values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+        //    return Result.Ok(values.AsEnumerable(), request, totalCount);
+        //}
+        //catch
+        //{
+        //    return await _repository.GetAll(request);
+        //}
+        #endregion
+        return await _repository.GetAll(request);
     }
 }

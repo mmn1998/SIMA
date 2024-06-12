@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.ConfigurationAttributes;
 
-public class GetAllConfigurationAttributes : IQuery<Result<List<GetConfigurationAttributeQueryResult>>>
+public class GetAllConfigurationAttributes : BaseRequest, IQuery<Result<List<GetConfigurationAttributeQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.MainAggregates;
 
-public class GetAllMainAggregateQuery : BaseRequest, IQuery<Result<List<GetMainAggregateQueryResult>>>
+public class GetAllMainAggregateQuery : BaseRequest, IQuery<Result<IEnumerable<GetMainAggregateQueryResult>>>
 {
 }

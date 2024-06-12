@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 
-public class GetAllWorkFlowsQuery : BaseRequest, IQuery<Result<List<GetWorkFlowQueryResult>>>
+public class GetAllWorkFlowsQuery : BaseRequest, IQuery<Result<IEnumerable<GetWorkFlowQueryResult>>>
 {
 }

@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.DMS.DocumentExtensions;
 
 namespace SIMA.Application.Query.Features.DMS.DocumentExtensions;
 
-public class DocumentExtensionQueryHandler : IQueryHandler<GetAllDocumentExtensionsQuery, Result<List<GetDocumentExtensionQueryResult>>>,
+public class DocumentExtensionQueryHandler : IQueryHandler<GetAllDocumentExtensionsQuery, Result<IEnumerable<GetDocumentExtensionQueryResult>>>,
     IQueryHandler<GetDocumentExtensionQuery, Result<GetDocumentExtensionQueryResult>>
 {
     private readonly IDocumentExtensionQueryRepository _repository;
@@ -15,7 +15,7 @@ public class DocumentExtensionQueryHandler : IQueryHandler<GetAllDocumentExtensi
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetDocumentExtensionQueryResult>>> Handle(GetAllDocumentExtensionsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetDocumentExtensionQueryResult>>> Handle(GetAllDocumentExtensionsQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

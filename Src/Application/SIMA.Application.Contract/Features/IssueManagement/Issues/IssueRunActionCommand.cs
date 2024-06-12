@@ -9,5 +9,7 @@ public class IssueRunActionCommand : ICommand<Result<long>>
     public long ProgressId { get; set; }
     public long NextStepId { get; set; }
     public string? Comment { get; set; }
-    public List<FormDataModel> Form { get; set; }
+    public long? StepApprovalOptionId { get; set; }
+    public string? ApprovalDescription { get; set; }
+    public List<InputParamModel> InputParams { get; set; }
 }

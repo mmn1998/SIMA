@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.ViewLists;
 
 namespace SIMA.Application.Query.Features.Auths.ViewLists
 {
-    public class ViewListQueryHandler : IQueryHandler<GetAllViewListQuery, Result<List<GetViewListQueryResult>>>, IQueryHandler<GetAllViewFieldQuery, Result<List<GetViewFieldQueryResult>>>
+    public class ViewListQueryHandler : IQueryHandler<GetAllViewListQuery, Result<IEnumerable<GetViewListQueryResult>>>, IQueryHandler<GetAllViewFieldQuery, Result<IEnumerable<GetViewFieldQueryResult>>>
     {
         private readonly IViewListQueryRepositorty _repository;
 
@@ -14,12 +14,12 @@ namespace SIMA.Application.Query.Features.Auths.ViewLists
         {
             _repository = repository;
         }
-        public async Task<Result<List<GetViewListQueryResult>>> Handle(GetAllViewListQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetViewListQueryResult>>> Handle(GetAllViewListQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetAll(request);
         }
 
-        public async Task<Result<List<GetViewFieldQueryResult>>> Handle(GetAllViewFieldQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetViewFieldQueryResult>>> Handle(GetAllViewFieldQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetAllViewFeild(request);
         }

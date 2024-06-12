@@ -33,26 +33,43 @@ public class LocationTypeQueryHandler : IQueryHandler<GetLocationTypeQuery, Resu
 
     public async Task<Result<IEnumerable<GetLocationTypeQueryResult>>> Handle(GetAllLocationTypeQuery request, CancellationToken cancellationToken)
     {
-        string appName = _configuration.GetSection("AppName").Value ?? "";
-        string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.LocationType);
-        bool redisResult = false;
+        #region Redis
+        //string appName = _configuration.GetSection("AppName").Value ?? "";
+        //string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.LocationType);
+        //bool redisResult = false;
 
-        try
-        {
+        //try
+        //{
+        //    redisResult = _redisService.TryGet(redisKey, out List<GetLocationTypeQueryResult> values);
+        //    if (!redisResult) throw new Exception();
+        //    if (request.Filters != null && request.Filters.Count != 0)
+        //    {
 
-            redisResult = _redisService.TryGet(redisKey, out List<GetLocationTypeQueryResult> values);
-            if (!redisResult) throw new Exception();
-            values = string.IsNullOrEmpty(request.Filter) ? values : values
-                .Where(it => it.Name.Contains(request.Filter) || it.Code.Contains(request.Filter)
-                || it.ActiveStatus.Contains(request.Filter) || it.ParentName.Contains(request.Filter))
-                .ToList();
-            int totalCount = values.Count();
-            values = values.Skip(request.Skip).Take(request.PageSize).ToList();
-            return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);
-        }
-        catch
-        {
-            return await _repository.GetAll(request);
-        }
+        //        if (request.Filters.Any(x => x.Key == nameof(GetLocationTypeQueryResult.Name)))
+        //        {
+        //            var name = request.Filters.First(x => x.Key == nameof(GetLocationTypeQueryResult.Name)).Value;
+        //            values = values.Where(x => x.Name.Contains(name)).ToList();
+        //        }
+        //        if (request.Filters.Any(x => x.Key == nameof(GetLocationTypeQueryResult.Code)))
+        //        {
+        //            var code = request.Filters.First(x => x.Key == nameof(GetLocationTypeQueryResult.Code)).Value;
+        //            values = values.Where(x => x.Code.Contains(code)).ToList();
+        //        }
+        //        if (request.Filters.Any(x => x.Key == nameof(GetLocationTypeQueryResult.ParentName)))
+        //        {
+        //            var parentName = request.Filters.First(x => x.Key == nameof(GetLocationTypeQueryResult.ParentName)).Value;
+        //            values = values.Where(x => x.ParentName.Contains(parentName)).ToList();
+        //        }
+        //    }
+        //    int totalCount = values.Count();
+        //    values = values.Skip(request.Skip).Take(request.PageSize).ToList();
+        //    return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);
+        //}
+        //catch
+        //{
+        //    return await _repository.GetAll(request);
+        //}
+        #endregion
+        return await _repository.GetAll(request);
     }
 }

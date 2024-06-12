@@ -40,5 +40,6 @@ public class GetIssueQueryResult
     public List<GetIssueDocumentQueryResult> IssueDocuments { get; set; }
     public List<GetIssueCommentQueryResult> IssueComments { get; set; }
     public List<GetRelatedProgressQueryResult> RelatedProgresses { get; set; }
+    public List<GetApprovalOptionQueryResult> ApprovalOptions { get; set; }
    
 }

@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.SecurityCommitees.MeetingHoldingReasons;
 
-public class GetAllMeetingHoldingReasonsQuery : BaseRequest, IQuery<Result<List<GetMeetingHoldingReasonQueryResult>>>
+public class GetAllMeetingHoldingReasonsQuery : BaseRequest, IQuery<Result<IEnumerable<GetMeetingHoldingReasonQueryResult>>>
 {
 }

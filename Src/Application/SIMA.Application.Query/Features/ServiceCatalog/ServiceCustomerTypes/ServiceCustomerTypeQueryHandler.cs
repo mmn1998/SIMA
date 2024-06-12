@@ -22,6 +22,13 @@ public class ServiceCustomerTypeQueryHandler : IQueryHandler<GetServiceCustomerT
 
     public async Task<Result<IEnumerable<GetServiceCustomerTypeQueryResult>>> Handle(GetAllServiceCustomerTypesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        try
+        {
+            return await _repository.GetAll(request);
+        }
+        catch (Exception e)
+        {
+            throw;
+        }
     }
 }

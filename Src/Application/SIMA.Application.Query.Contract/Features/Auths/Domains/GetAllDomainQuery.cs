@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Domains;
 
-public class GetAllDomainQuery : IQuery<Result<List<GetDomainQueryResult>>>
+public class GetAllDomainQuery : BaseRequest, IQuery<Result<List<GetDomainQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

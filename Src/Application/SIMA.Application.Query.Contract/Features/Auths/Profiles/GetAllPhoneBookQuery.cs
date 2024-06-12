@@ -4,8 +4,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Profiles;
 
-public class GetAllPhoneBookQuery : IQuery<Result<List<GetPhoneBookQueryResult>>>
+public class GetAllPhoneBookQuery :BaseRequest, IQuery<Result<IEnumerable<GetPhoneBookQueryResult>>>
 {
     public long Id { get; set; }
-    public BaseRequest Request { get; set; }
 }

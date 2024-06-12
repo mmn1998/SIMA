@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.SecurityCommitees.SubjectPrior
 namespace SIMA.Application.Query.Features.SecurityCommitees.SubjectPriorities;
 
 public class SubjectPriorityQueryHandler : IQueryHandler<GetSubjectPriorityQuery, Result<GetSubjectPriorityQueryResult>>,
-    IQueryHandler<GetAllSubjectPrioritiesQuery, Result<List<GetSubjectPriorityQueryResult>>>
+    IQueryHandler<GetAllSubjectPrioritiesQuery, Result<IEnumerable<GetSubjectPriorityQueryResult>>>
 {
     private readonly ISubjectPriorityQueryRepository _repository;
 
@@ -14,7 +14,7 @@ public class SubjectPriorityQueryHandler : IQueryHandler<GetSubjectPriorityQuery
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetSubjectPriorityQueryResult>>> Handle(GetAllSubjectPrioritiesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetSubjectPriorityQueryResult>>> Handle(GetAllSubjectPrioritiesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

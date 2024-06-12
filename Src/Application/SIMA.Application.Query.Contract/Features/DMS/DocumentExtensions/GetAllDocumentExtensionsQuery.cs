@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.DMS.DocumentExtensions;
 
-public class GetAllDocumentExtensionsQuery : BaseRequest, IQuery<Result<List<GetDocumentExtensionQueryResult>>>
+public class GetAllDocumentExtensionsQuery : BaseRequest, IQuery<Result<IEnumerable<GetDocumentExtensionQueryResult>>>
 {
 }

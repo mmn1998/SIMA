@@ -8,11 +8,11 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Profiles;
 namespace SIMA.Application.Query.Features.Auths.Profiles;
 
 public class ProfileQueryHandler : IQueryHandler<GetProfileQuery, Result<GetProfileQueryResult>>,
-    IQueryHandler<GetAllProfileQuery, Result<List<GetProfileQueryResult>>>,
+    IQueryHandler<GetAllProfileQuery, Result<IEnumerable<GetProfileQueryResult>>>,
     IQueryHandler<GetAllShortProfileQuery, Result<List<GetShortProfileQueryResult>>>,
     IQueryHandler<GetManagersByCompanyId, Result<List<SelectModel>>>,
-    IQueryHandler<GetAllPhoneBookQuery, Result<List<GetPhoneBookQueryResult>>>,
-    IQueryHandler<GetAllAddressBookQuery, Result<List<GetAddressBookQueryResult>>>
+    IQueryHandler<GetAllPhoneBookQuery, Result<IEnumerable<GetPhoneBookQueryResult>>>,
+    IQueryHandler<GetAllAddressBookQuery, Result<IEnumerable<GetAddressBookQueryResult>>>
 {
     private readonly IMapper _mapper;
     private readonly IProfileQueryRepository _repository;
@@ -35,19 +35,19 @@ public class ProfileQueryHandler : IQueryHandler<GetProfileQuery, Result<GetProf
         return Result.Ok(entity);
     }
 
-    public async Task<Result<List<GetProfileQueryResult>>> Handle(GetAllProfileQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetProfileQueryResult>>> Handle(GetAllProfileQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request.Request);
+        return await _repository.GetAll(request);
     }
 
-    public async Task<Result<List<GetPhoneBookQueryResult>>> Handle(GetAllPhoneBookQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetPhoneBookQueryResult>>> Handle(GetAllPhoneBookQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllPhoneBooks((int)request.Id, request.Request);
+        return await _repository.GetAllPhoneBooks((int)request.Id, request);
     }
 
-    public async Task<Result<List<GetAddressBookQueryResult>>> Handle(GetAllAddressBookQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetAddressBookQueryResult>>> Handle(GetAllAddressBookQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.FindWithAddressBook(request.Id, request.Request);
+        return await _repository.FindWithAddressBook(request.Id, request);
     }
 
     public async Task<Result<List<SelectModel>>> Handle(GetManagersByCompanyId request, CancellationToken cancellationToken)

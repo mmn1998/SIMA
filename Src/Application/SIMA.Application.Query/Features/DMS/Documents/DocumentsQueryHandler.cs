@@ -7,7 +7,7 @@ using SIMA.Persistance.Read.Repositories.Features.DMS.Documents;
 
 namespace SIMA.Application.Query.Features.DMS.Documents;
 
-public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, GetDownloadDocumentQueryResult>, IQueryHandler<GetAllDocumentsQuery, Result<List<GetAllDocumentQueryResult>>>
+public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, GetDownloadDocumentQueryResult>, IQueryHandler<GetAllDocumentsQuery, Result<IEnumerable<GetAllDocumentQueryResult>>>
 {
     private readonly IDocumentQueryRepository _repository;
     private readonly IFileService _fileService;
@@ -31,7 +31,7 @@ public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, Get
         return response;
     }
 
-    public async Task<Result<List<GetAllDocumentQueryResult>>> Handle(GetAllDocumentsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetAllDocumentQueryResult>>> Handle(GetAllDocumentsQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

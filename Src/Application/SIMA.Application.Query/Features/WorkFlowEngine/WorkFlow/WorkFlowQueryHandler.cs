@@ -10,7 +10,7 @@ using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
 
 namespace SIMA.Application.Query.Features.WorkFlowEngine.WorkFlow;
 
-public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<List<GetWorkFlowQueryResult>>>, IQueryHandler<GetWorkFlowQuery, Result<GetWorkFlowQueryResult>>,
+public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<IEnumerable<GetWorkFlowQueryResult>>>, IQueryHandler<GetWorkFlowQuery, Result<GetWorkFlowQueryResult>>,
     IQueryHandler<GetAllStepsQuery, Result<IEnumerable<GetStepQueryResult>>>, IQueryHandler<GetStepQuery, Result<GetStepQueryResult>>,
     IQueryHandler<GetAllStatesQuery, Result<IEnumerable<GetStateQueryResult>>>
     , IQueryHandler<GetStateQuery, Result<GetStateQueryResult>>
@@ -34,7 +34,7 @@ public class WorkFlowQueryHandler : IQueryHandler<GetAllWorkFlowsQuery, Result<L
         var actor = await _repository.FindById(request.Id);
         return Result.Ok(actor);
     }
-    public async Task<Result<List<GetWorkFlowQueryResult>>> Handle(GetAllWorkFlowsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetWorkFlowQueryResult>>> Handle(GetAllWorkFlowsQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

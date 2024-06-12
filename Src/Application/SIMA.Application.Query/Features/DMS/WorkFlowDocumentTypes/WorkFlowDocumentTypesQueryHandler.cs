@@ -5,7 +5,7 @@ using SIMA.Persistance.Read.Repositories.Features.DMS.WorkFlowDocumentTypes;
 
 namespace SIMA.Application.Query.Features.DMS.WorkFlowDocumentTypes;
 
-public class WorkFlowDocumentTypesQueryHandler : IQueryHandler<GetAllWorkFlowDocumentTypesQuery, Result<List<GetWorkFlowDocumentTypeQueryResult>>>,
+public class WorkFlowDocumentTypesQueryHandler : IQueryHandler<GetAllWorkFlowDocumentTypesQuery, Result<IEnumerable<GetWorkFlowDocumentTypeQueryResult>>>,
     IQueryHandler<GetWorkFlowDocumentTypeQuery, Result<GetWorkFlowDocumentTypeQueryResult>>
 {
     private readonly IWorkFlowDocumentTypeQueryRepository _repository;
@@ -14,7 +14,7 @@ public class WorkFlowDocumentTypesQueryHandler : IQueryHandler<GetAllWorkFlowDoc
     {
         _repository = repository;
     }
-    public async Task<Result<List<GetWorkFlowDocumentTypeQueryResult>>> Handle(GetAllWorkFlowDocumentTypesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetWorkFlowDocumentTypeQueryResult>>> Handle(GetAllWorkFlowDocumentTypesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

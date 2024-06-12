@@ -5,7 +5,7 @@ using SIMA.Persistance.Read.Repositories.Features.DMS.WorkFlowDocumentExtensions
 
 namespace SIMA.Application.Query.Features.DMS.WorkFlowDocumentExtensions
 {
-    public class WorkFlowDocumentExtensionsQueryHandler : IQueryHandler<GetAllWorkFlowDocumentExtensionQuery, Result<List<GetWorkFlowDocumentExtensionQueryResult>>>,
+    public class WorkFlowDocumentExtensionsQueryHandler : IQueryHandler<GetAllWorkFlowDocumentExtensionQuery, Result<IEnumerable<GetWorkFlowDocumentExtensionQueryResult>>>,
     IQueryHandler<GetWorkFlowDocumentExtensionQuery, Result<GetWorkFlowDocumentExtensionQueryResult>>
     {
         private readonly IWorkFlowDocumentExtensionQueryRepository _repository;
@@ -14,7 +14,7 @@ namespace SIMA.Application.Query.Features.DMS.WorkFlowDocumentExtensions
         {
             _repository = repository;
         }
-        public async Task<Result<List<GetWorkFlowDocumentExtensionQueryResult>>> Handle(GetAllWorkFlowDocumentExtensionQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetWorkFlowDocumentExtensionQueryResult>>> Handle(GetAllWorkFlowDocumentExtensionQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetAll(request);
         }

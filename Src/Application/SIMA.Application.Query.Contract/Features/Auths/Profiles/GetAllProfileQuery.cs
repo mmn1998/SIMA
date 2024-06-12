@@ -4,7 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.Profiles;
 
-public class GetAllProfileQuery : IQuery<Result<List<GetProfileQueryResult>>>
+public class GetAllProfileQuery : BaseRequest,  IQuery<Result<IEnumerable<GetProfileQueryResult>>>
 {
-    public BaseRequest Request { get; set; }
 }

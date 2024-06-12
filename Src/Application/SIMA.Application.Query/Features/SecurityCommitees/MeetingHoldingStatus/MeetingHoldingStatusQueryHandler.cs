@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.SecurityCommitees.MeetingHoldi
 namespace SIMA.Application.Query.Features.SecurityCommitees.MeetingHoldingStatus
 {
     public class MeetingHoldingStatusQueryHandler : IQueryHandler<GetMeetingHoldingStatusQuery, Result<GetMeetingHoldingStatusQueryResult>>,
-    IQueryHandler<GetAllMeetingHoldingStatusQuery, Result<List<GetMeetingHoldingStatusQueryResult>>>
+    IQueryHandler<GetAllMeetingHoldingStatusQuery, Result<IEnumerable<GetMeetingHoldingStatusQueryResult>>>
     {
         private readonly IMeetingHoldingStatusQueryRepository _repository;
 
@@ -14,7 +14,7 @@ namespace SIMA.Application.Query.Features.SecurityCommitees.MeetingHoldingStatus
         {
             _repository = repository;
         }
-        public async Task<Result<List<GetMeetingHoldingStatusQueryResult>>> Handle(GetAllMeetingHoldingStatusQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetMeetingHoldingStatusQueryResult>>> Handle(GetAllMeetingHoldingStatusQuery request, CancellationToken cancellationToken)
         {
             return await _repository.GetAll(request);
         }

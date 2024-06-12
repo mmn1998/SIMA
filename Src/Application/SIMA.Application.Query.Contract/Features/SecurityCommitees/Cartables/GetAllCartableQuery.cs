@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.SecurityCommitees.Cartables;
 
-public class GetAllCartableQuery : BaseRequest, IQuery<Result<List<GetAllCartableQueryResult>>>
+public class GetAllCartableQuery : BaseRequest, IQuery<Result<IEnumerable<GetAllCartableQueryResult>>>
 {
 }

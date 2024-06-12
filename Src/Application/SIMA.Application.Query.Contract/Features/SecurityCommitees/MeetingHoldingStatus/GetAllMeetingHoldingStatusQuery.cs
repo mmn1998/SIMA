@@ -4,7 +4,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.SecurityCommitees.MeetingHoldingStatus
 {
-    public class GetAllMeetingHoldingStatusQuery : BaseRequest, IQuery<Result<List<GetMeetingHoldingStatusQueryResult>>>
+    public class GetAllMeetingHoldingStatusQuery : BaseRequest, IQuery<Result<IEnumerable<GetMeetingHoldingStatusQueryResult>>>
     {
     }
 }

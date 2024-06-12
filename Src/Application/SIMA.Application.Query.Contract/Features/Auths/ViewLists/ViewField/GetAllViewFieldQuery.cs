@@ -4,7 +4,7 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.Auths.ViewLists.ViewField
 {
-    public class GetAllViewFieldQuery : BaseRequest, IQuery<Result<List<GetViewFieldQueryResult>>>
+    public class GetAllViewFieldQuery : BaseRequest, IQuery<Result<IEnumerable<GetViewFieldQueryResult>>>
     {
         public long ViewId { get; set; }
     }

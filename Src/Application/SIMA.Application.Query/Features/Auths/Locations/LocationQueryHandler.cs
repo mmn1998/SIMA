@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Gender;
 using SIMA.Application.Query.Contract.Features.Auths.Locations;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
@@ -37,10 +38,24 @@ public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLo
         {
             redisResult = _redisService.TryGet(redisKey, out List<GetLocationQueryResult> values);
             if (!redisResult) throw new Exception();
-            values = string.IsNullOrEmpty(request.Filter) ? values : values
-                .Where(it => it.LocationName.Contains(request.Filter) || it.LocationTypeName.Contains(request.Filter)
-                || it.ParentLocationTypeName.Contains(request.Filter) || it.ActiveStatus.Contains(request.Filter) || it.LocationCode.Contains(request.Filter))
-                .ToList();
+            if (request.Filters != null && request.Filters.Count != 0)
+            {
+                if (request.Filters.Any(x => x.Key == nameof(GetLocationQueryResult.LocationName)))
+                {
+                    var name = request.Filters.First(x => x.Key == nameof(GetLocationQueryResult.LocationName)).Value;
+                    values = values.Where(x => x.LocationName.Contains(name)).ToList();
+                }
+                if (request.Filters.Any(x => x.Key == nameof(GetLocationQueryResult.LocationTypeName)))
+                {
+                    var code = request.Filters.First(x => x.Key == nameof(GetLocationQueryResult.LocationTypeName)).Value;
+                    values = values.Where(x => x.LocationTypeName.Contains(code)).ToList();
+                }
+                if (request.Filters.Any(x => x.Key == nameof(GetLocationQueryResult.ParentLocationTypeName)))
+                {
+                    var code = request.Filters.First(x => x.Key == nameof(GetLocationQueryResult.ParentLocationTypeName)).Value;
+                    values = values.Where(x => x.ParentLocationTypeName.Contains(code)).ToList();
+                }
+            }
             int totalCount = values.Count();
             values = values.Skip(request.Skip).Take(request.PageSize).ToList();
             return Result.Ok(values.AsEnumerable(), totalCount, request.PageSize, request.Page);

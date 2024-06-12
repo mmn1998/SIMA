@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.DMS.WorkFlowDocumentExtensions;
 
-public class GetAllWorkFlowDocumentExtensionQuery : BaseRequest, IQuery<Result<List<GetWorkFlowDocumentExtensionQueryResult>>>
+public class GetAllWorkFlowDocumentExtensionQuery : BaseRequest, IQuery<Result<IEnumerable<GetWorkFlowDocumentExtensionQueryResult>>>
 {
 }

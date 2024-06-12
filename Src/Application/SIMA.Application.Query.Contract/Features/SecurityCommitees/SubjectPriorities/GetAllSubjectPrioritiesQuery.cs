@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.SecurityCommitees.SubjectPriorities;
 
-public class GetAllSubjectPrioritiesQuery : BaseRequest, IQuery<Result<List<GetSubjectPriorityQueryResult>>>
+public class GetAllSubjectPrioritiesQuery : BaseRequest, IQuery<Result<IEnumerable<GetSubjectPriorityQueryResult>>>
 {
 }
