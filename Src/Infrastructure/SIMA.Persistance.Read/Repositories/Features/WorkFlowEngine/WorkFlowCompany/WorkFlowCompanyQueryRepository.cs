@@ -1,6 +1,8 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlowActor;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlowCompany;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -38,69 +40,14 @@ public class WorkFlowCompanyQueryRepository : IWorkFlowCompanyQueryRepository
         return response;
     }
 
-    public async Task<Result<List<GetWorkFlowCompanyQueryResult>>> GetAll(GetAllWorkFlowCompanyQuery request)
+    public async Task<Result<IEnumerable<GetWorkFlowCompanyQueryResult>>> GetAll(GetAllWorkFlowCompanyQuery request)
     {
-        var response = new List<GetWorkFlowCompanyQueryResult>();
-        int totalCount = 0;
-
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
-            {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT DISTINCT C.[ID] as Id
-                            ,C.[WorkFlowId]
-                            ,C.[CompanyId]
-                            ,C.[ActiveFrom]
-                            ,C.[ActiveTo]
-                            ,C.[activeStatusId]
-                            ,c.[CreatedAt]
-                        FROM [PROJECT].[WORKFLOWCOMPANY] C
-                        WHERE C.[ActiveStatusID] <> 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT DISTINCT C.[ID] as Id
-                            ,C.[WorkFlowId]
-                            ,C.[CompanyId]
-                            ,C.[ActiveFrom]
-                            ,C.[ActiveTo]
-                            ,C.[activeStatusId]
-                            ,c.[CreatedAt]
-                        FROM [PROJECT].[WORKFLOWCOMPANY] C
-                        WHERE C.[ActiveStatusID] <> 3
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    response = (await multi.ReadAsync<GetWorkFlowCompanyQueryResult>()).ToList();
-                    totalCount = await multi.ReadSingleAsync<int>();
-                }
-            }
-            else
-            {
-                string countQuery = @"
-SELECT Count(*) Result
- FROM [PROJECT].[WORKFLOWCOMPANY] C
-                 WHERE C.[ActiveStatusID] = 1
-";
-                string query = $@"
-                   SELECT DISTINCT C.[ID] as Id
+            
+                string queryCount = @"WITH Query as(
+						                            SELECT DISTINCT C.[ID] as Id
                      ,C.[WorkFlowId]
                      ,C.[CompanyId]
                      ,C.[ActiveFrom]
@@ -109,21 +56,35 @@ SELECT Count(*) Result
 ,c.[CreatedAt]
                  FROM [PROJECT].[WORKFLOWCOMPANY] C
                  WHERE C.[ActiveStatusID] <> 3
- order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"} 
-OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
-
-                using (var result = await connection.QueryMultipleAsync(query + countQuery, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    request.PageSize,
-                    request.Skip
-                }))
-                {
-                    response = (await result.ReadAsync<GetWorkFlowCompanyQueryResult>()).ToList();
-                    totalCount = await result.ReadSingleAsync<int>();
-                }
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ;
+";
+                string query = $@"
+                   WITH Query as(
+							                   SELECT DISTINCT C.[ID] as Id
+                     ,C.[WorkFlowId]
+                     ,C.[CompanyId]
+                     ,C.[ActiveFrom]
+                     ,C.[ActiveTo]
+                     ,C.[activeStatusId]
+,c.[CreatedAt]
+                 FROM [PROJECT].[WORKFLOWCOMPANY] C
+                 WHERE C.[ActiveStatusID] <> 3
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetWorkFlowCompanyQueryResult>();
+                return Result.Ok(response, request, count);
             }
         }
-        return Result.Ok(response, totalCount, request.PageSize, request.Page);
     }
 }

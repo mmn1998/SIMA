@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.ServiceCatalogs.NewFolder;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.sanazConfiguration;
+namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
 internal class PreRequisiteServicesConfiguration : IEntityTypeConfiguration<PreRequisiteServices>
 {
@@ -26,7 +26,7 @@ internal class PreRequisiteServicesConfiguration : IEntityTypeConfiguration<PreR
         entity.HasOne(d => d.Service).WithMany(p => p.PreRequisiteServicess)
                 .HasForeignKey(d => d.ServiceId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.PreRequiredServiceId)
       .HasConversion(v => v.Value, v => new ServiceId(v));
         entity.HasOne(d => d.PreRequiredService).WithMany(p => p.RequiredServicess)

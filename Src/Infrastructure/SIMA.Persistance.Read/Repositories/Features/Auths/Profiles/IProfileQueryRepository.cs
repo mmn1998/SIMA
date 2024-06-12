@@ -7,11 +7,11 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.Profiles;
 
 public interface IProfileQueryRepository : IQueryRepository
 {
-    Task<Result<List<GetAddressBookQueryResult>>> FindWithAddressBook(long id, BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetAddressBookQueryResult>>> FindWithAddressBook(long id, BaseRequest? baseRequest = null);
     Task<List<GetPhoneBookQueryResult>> FindWithPhoneBook(long id);
     Task<GetProfileQueryResult> FindById(long id);
     Task<List<GetShortProfileQueryResult>> GetShort();
-    Task<Result<List<GetProfileQueryResult>>> GetAll(BaseRequest? baseRequest = null);
-    Task<Result<List<GetPhoneBookQueryResult>>> GetAllPhoneBooks(int profileId, BaseRequest? baseRequest = null);
+    Task<Result<IEnumerable<GetProfileQueryResult>>> GetAll(GetAllProfileQuery request);
+    Task<Result<IEnumerable<GetPhoneBookQueryResult>>> GetAllPhoneBooks(int profileId, BaseRequest? baseRequest = null);
     Task<List<SelectModel>> GetMangersByCompanyId(long id);
 }

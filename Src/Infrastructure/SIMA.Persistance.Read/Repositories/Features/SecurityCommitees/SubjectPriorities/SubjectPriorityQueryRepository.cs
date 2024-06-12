@@ -1,6 +1,8 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
+using SIMA.Application.Query.Contract.Features.SecurityCommitees.MeetingHoldingStatus;
 using SIMA.Application.Query.Contract.Features.SecurityCommitees.SubjectPriorities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -16,93 +18,50 @@ public class SubjectPriorityQueryRepository : ISubjectPriorityQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
-    public async Task<Result<List<GetSubjectPriorityQueryResult>>> GetAll(GetAllSubjectPrioritiesQuery request)
+    public async Task<Result<IEnumerable<GetSubjectPriorityQueryResult>>> GetAll(GetAllSubjectPrioritiesQuery request)
     {
-        var response = new List<GetSubjectPriorityQueryResult>();
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
-            {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT SP.[Id]
-                                  ,SP.[Name]
-                                  ,SP.[Code]
-                                  ,SP.[Ordering]
-	                              ,S.[Name] ActiveStatus
-                                  ,SP.[CreatedAt]
-                        FROM [SecurityCommitee].[SubjectPriority] SP
-                        INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-                        WHERE SP.ActiveStatusId <> 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT SP.[Id]
-                                  ,SP.[Name]
-                                  ,SP.[Code]
-                                  ,SP.[Ordering]
-	                              ,S.[Name] ActiveStatus
-                                  ,SP.[CreatedAt]
-                        FROM [SecurityCommitee].[SubjectPriority] SP
-                        INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-                        WHERE SP.ActiveStatusId <> 3
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    response = (await multi.ReadAsync<GetSubjectPriorityQueryResult>()).ToList();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
-            }
-            else
-            {
-                string queryCount = @"
-                              SELECT COUNT(*) Result
-                                      FROM [SecurityCommitee].[SubjectPriority] SP
-                                      INNER JOIN [Basic].[ActiveStatus] S on S.ID = SP.ActiveStatusId
-                                       WHERE (@SearchValue is null OR  (SP.[Ordering] like @SearchValue or SP.[Name] like @SearchValue or SP.[Code] like @SearchValue or S.[Name] like @SearchValue)) and 
-                                       SP.ActiveStatusId <> 3 ;";
+            
+                string queryCount = @" WITH Query as(  SELECT SP.[Id]
+    ,SP.[Name]
+    ,SP.[Code]
+    ,SP.[Ordering]
+    ,S.[Name] ActiveStatus
+    ,SP.[CreatedAt]
+FROM [SecurityCommitee].[SubjectPriority] SP
+  INNER JOIN [Basic].[ActiveStatus] S on S.ID = SP.ActiveStatusId
+  WHERE SP.ActiveStatusId <> 3  
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
 
-                string query = $@"
-                                                          SELECT SP.[Id]
-                                  ,SP.[Name]
-                                  ,SP.[Code]
-                                  ,SP.[Ordering]
-	                              ,S.[Name] ActiveStatus
-                                  ,SP.[CreatedAt]
-                              FROM [SecurityCommitee].[SubjectPriority] SP
-                                INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-                                WHERE (@SearchValue is null OR  (SP.[Ordering] like @SearchValue or SP.[Name] like @SearchValue or SP.[Code] like @SearchValue or S.[Name] like @SearchValue)) and 
-                                           SP.ActiveStatusId <> 3  
-                                 order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}            
-                                  OFFSET @Skip rows FETCH NEXT @Take rows only ;";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    response = (await multi.ReadAsync<GetSubjectPriorityQueryResult>()).ToList();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
+                string query = $@" WITH Query as(
+							 SELECT SP.[Id]
+    ,SP.[Name]
+    ,SP.[Code]
+    ,SP.[Ordering]
+    ,S.[Name] ActiveStatus
+    ,SP.[CreatedAt]
+FROM [SecurityCommitee].[SubjectPriority] SP
+  INNER JOIN [Basic].[ActiveStatus] S on S.ID = SP.ActiveStatusId
+  WHERE SP.ActiveStatusId <> 3  
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetSubjectPriorityQueryResult>();
+                return Result.Ok(response, request, count);
             }
+            
         }
     }
 

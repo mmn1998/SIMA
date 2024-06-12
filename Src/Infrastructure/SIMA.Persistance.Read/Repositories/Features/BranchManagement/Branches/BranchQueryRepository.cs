@@ -1,5 +1,7 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.ViewLists.ViewField;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Framework.Common.Exceptions;
@@ -21,119 +23,67 @@ public class BranchQueryRepository : IBranchQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+
+            string queryCount = @" WITH Query as(
+						                    SELECT DISTINCT B.[Id]
+                        ,B.[Name]
+                        ,B.[Code]
+                        ,B.[BranchTypeId]
+                        ,B.[BranchChiefOfficerId]
+                        ,B.ActiveStatusId
+                        ,B.[BranchDeputyId]
+                        ,B.[Latitude]
+                        ,B.[Longitude]
+                        ,B.[LocationId]
+                        ,B.[PhoneNumber]
+                        ,B.[PostalCode]
+                        ,B.[Address]
+                        ,B.[IsMultiCurrencyBranch]
+                        ,S.[Name] as ActiveStatus
+				  ,b.[CreatedAt]
+FROM [Bank].[Branch] B
+INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+WHERE  B.ActiveStatusId != 3
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
+
+
+            string query = $@" WITH Query as(
+							                  SELECT DISTINCT B.[Id]
+                        ,B.[Name]
+                        ,B.[Code]
+                        ,B.[BranchTypeId]
+                        ,B.[BranchChiefOfficerId]
+                        ,B.ActiveStatusId
+                        ,B.[BranchDeputyId]
+                        ,B.[Latitude]
+                        ,B.[Longitude]
+                        ,B.[LocationId]
+                        ,B.[PhoneNumber]
+                        ,B.[PostalCode]
+                        ,B.[Address]
+                        ,B.[IsMultiCurrencyBranch]
+                        ,S.[Name] as ActiveStatus
+				  ,b.[CreatedAt]
+FROM [Bank].[Branch] B
+INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
+WHERE  B.ActiveStatusId != 3
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.[BranchChiefOfficerId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                              ,S.[Name] as ActiveStatus
-							  ,b.[CreatedAt]
-                          FROM [Bank].[Branch] B
-                          INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-                          WHERE  B.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.[BranchChiefOfficerId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                              ,S.[Name] as ActiveStatus
-							  ,b.[CreatedAt]
-                          FROM [Bank].[Branch] B
-                          INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-                          WHERE  B.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetBranchQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetBranchQueryResult>();
+                return Result.Ok(response, request, count);
             }
-            else
-            {
-                string queryCount = @" 
-                SELECT Count(*) Result
-                      FROM [Bank].[Branch] B
-                      INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-                      WHERE  B.ActiveStatusId != 3
-                      and (@SearchValue is null OR B.[Name] like @SearchValue or B.[Code] like @SearchValue) ";
 
-
-                string query = $@"
-                        SELECT DISTINCT B.[Id]
-                              ,B.[Name]
-                              ,B.[Code]
-                              ,B.[BranchTypeId]
-                              ,B.[BranchChiefOfficerId]
-                              ,B.ActiveStatusId
-                              ,B.[BranchDeputyId]
-                              ,B.[Latitude]
-                              ,B.[Longitude]
-                              ,B.[LocationId]
-                              ,B.[PhoneNumber]
-                              ,B.[PostalCode]
-                              ,B.[Address]
-                              ,B.[IsMultiCurrencyBranch]
-                              ,S.[Name] as ActiveStatus
-							  ,b.[CreatedAt]
-      FROM [Bank].[Branch] B
-      INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-      WHERE  B.ActiveStatusId != 3
-      and (@SearchValue is null OR B.[Name] like @SearchValue or B.[Code] like @SearchValue)
-      order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-      OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetBranchQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
-            }
         }
     }
 
@@ -171,5 +121,5 @@ public class BranchQueryRepository : IBranchQueryRepository
     }
 }
 
-       
-       
+
+

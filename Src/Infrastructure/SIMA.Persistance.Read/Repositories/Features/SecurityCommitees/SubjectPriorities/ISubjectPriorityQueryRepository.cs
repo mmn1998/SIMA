@@ -7,5 +7,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.SecurityCommitees.SubjectP
 public interface ISubjectPriorityQueryRepository : IQueryRepository
 {
     Task<GetSubjectPriorityQueryResult> GetById(long Id);
-    Task<Result<List<GetSubjectPriorityQueryResult>>> GetAll(GetAllSubjectPrioritiesQuery request);
+    Task<Result<IEnumerable<GetSubjectPriorityQueryResult>>> GetAll(GetAllSubjectPrioritiesQuery request);
 }

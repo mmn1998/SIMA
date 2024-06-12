@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.DMS.DocumentExtensions;
@@ -18,74 +19,16 @@ public class DocumentQueryRepository : IDocumentQueryRepository
         _connectionString = configuration.GetConnectionString();
     }
 
-    public async Task<Result<List<GetAllDocumentQueryResult>>> GetAll(GetAllDocumentsQuery request)
+    public async Task<Result<IEnumerable<GetAllDocumentQueryResult>>> GetAll(GetAllDocumentsQuery request)
     {
-        var response = new List<GetAllDocumentQueryResult>();
         int totalCount = 0;
         
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
-            {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT DISTINCT P.[ID] as Id
-                	        ,P.[Name]
-                	        ,P.[Code]
-                	        ,P.[ActiveStatusID]
-                	        ,A.[Name] as ActiveStatus 
-                	        ,D.Name as DepartmentName
-                	        ,C.Name as CompanyName
-                	        ,p.[CreatedAt]
-                        FROM [Organization].Position P
-                        LEFT JOIN [Organization].Department D on D.ID = P.DepartmentID
-                        LEFT JOIN [Organization].[Company] C on C.ID = D.CompanyID
-                        join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
-                        WHERE P.[ActiveStatusID] <> 3 AND D.[ActiveStatusID] <> 3 AND C.[ActiveStatusID] <> 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT DISTINCT
-		                    D.[Id]
-                          ,D.[Code]
-                          ,D.[Name]
-	                      ,DE.[Name] Extension
-                        ,D.[CreatedAt] CreatedAt
-                      FROM [DMS].[Documents] D
-                      INNER JOIN [DMS].[DocumentExtension] DE on D.FileExtensionId = DE.Id
-                      WHERE DE.ActiveStatus
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    response = (await multi.ReadAsync<GetAllDocumentQueryResult>()).ToList();
-                    totalCount = await multi.ReadSingleAsync<int>();
-                }
-            }
-            else
-            {
-                string countQuery = @"
-SELECT COUNT(*) Result
-  FROM [DMS].[Documents] D
-  INNER JOIN [DMS].[DocumentExtension] DE on D.FileExtensionId = DE.Id
-  WHERE (@SearchValue is null OR DE.Name like @SearchValue OR D.Code like @SearchValue OR D.Name like @SearchValue)
-";
-                string query = $@"
-SELECT DISTINCT
+            
+                string queryCount = @" WITH Query as(
+						   SELECT DISTINCT
 		D.[Id]
       ,D.[Code]
       ,D.[Name]
@@ -93,23 +36,34 @@ SELECT DISTINCT
 ,d.[CreatedAt] CreatedAt
   FROM [DMS].[Documents] D
   INNER JOIN [DMS].[DocumentExtension] DE on D.FileExtensionId = DE.Id
-  WHERE DE.ActiveStatus (@SearchValue is null OR DE.Name like @SearchValue OR D.Code like @SearchValue OR D.Name like @SearchValue)
- order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"} 
-OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var result = await connection.QueryMultipleAsync(query + countQuery, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    request.PageSize,
-                    request.Skip,
-                }))
-                {
-                    response = (await result.ReadAsync<GetAllDocumentQueryResult>()).ToList();
-                    totalCount = await result.ReadSingleAsync<int>();
-                }
-            }
+  WHERE DE.ActiveStatusId <> 3
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 ; ";
+                string query = $@" WITH Query as(
+							 SELECT DISTINCT
+		D.[Id]
+      ,D.[Code]
+      ,D.[Name]
+	  ,DE.[Name] Extension
+,d.[CreatedAt] CreatedAt
+  FROM [DMS].[Documents] D
+  INNER JOIN [DMS].[DocumentExtension] DE on D.FileExtensionId = DE.Id
+  WHERE DE.ActiveStatusId <> 3
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetAllDocumentQueryResult>();
+                return Result.Ok(response, request, count);
+            }            
         }
-        return Result.Ok(response, totalCount, request.PageSize, request.Page);
     }
 
     public async Task<GetDocumentResult> GetForDownload(long documentId)

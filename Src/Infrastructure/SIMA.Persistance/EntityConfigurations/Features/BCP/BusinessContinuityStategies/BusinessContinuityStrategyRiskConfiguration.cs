@@ -31,5 +31,14 @@ public class BusinessContinuityStrategyRiskConfiguration : IEntityTypeConfigurat
         entity.HasOne(x => x.BusinessContinuityStategy)
             .WithMany(x => x.BusinessContinuityStrategyRisks)
             .HasForeignKey(x => x.BusinessContinuityStategyId);
+        
+        entity.Property(x => x.RiskId)
+            .HasConversion(
+            x => x.Value,
+            x => new RiskId(x)
+            );
+        entity.HasOne(x => x.Risk)
+            .WithMany(x => x.BusinessContinuityStrategyRisks)
+            .HasForeignKey(x => x.RiskId);
     }
 }

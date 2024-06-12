@@ -3,7 +3,7 @@ using SIMA.Domain.Models.Features.RiskManagement.Risks.Interfaces;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 
-namespace SIMA.Persistance.Repositories.Features.RiskManagers.Risks
+namespace SIMA.Persistance.Repositories.Features.RiskManagement.Risks
 {
     public class RiskRepository : Repository<Risk>, IRiskRepository
     {

@@ -1,7 +1,9 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Progress;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Project;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
@@ -99,107 +101,57 @@ public class ProjectQueryRepository : IProjectQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+           
+                string queryCount = @"  WITH Query as(
+						          SELECT DISTINCT 
+      	    P.[Id]
+          ,P.[DomainID]
+          ,P.[Name]
+          ,P.[Code]
+          ,P.[ActiveStatusID]
+      	   ,D.[Name] DomainName
+      	   ,A.[Name] ActiveStatus
+          ,p.[CreatedAt]
+  FROM [Project].[Project] P
+  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+  INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
+  WHERE  P.ActiveStatusId != 3
+     AND  (@DomainId is null OR P.DomainID = @DomainId) 
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
+
+                string query = $@" WITH Query as(
+							 SELECT DISTINCT 
+      	    P.[Id]
+          ,P.[DomainID]
+          ,P.[Name]
+          ,P.[Code]
+          ,P.[ActiveStatusID]
+      	   ,D.[Name] DomainName
+      	   ,A.[Name] ActiveStatus
+          ,p.[CreatedAt]
+  FROM [Project].[Project] P
+  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+  INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
+  WHERE  P.ActiveStatusId != 3
+     AND  (@DomainId is null OR P.DomainID = @DomainId) 
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            dynaimcParameters.Item2.Add("DomainId", request.DomainId);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT DISTINCT 
-                	            P.[Id]
-                               ,P.[DomainID]
-                               ,P.[Name]
-                               ,P.[Code]
-                               ,P.[ActiveStatusID]
-                	           ,D.[Name] DomainName
-                	           ,A.[Name] ActiveStatus
-                               ,p.[CreatedAt]
-                       FROM [Project].[Project] P
-                       INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-                       INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
-               WHERE  P.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT DISTINCT 
-                	            P.[Id]
-                               ,P.[DomainID]
-                               ,P.[Name]
-                               ,P.[Code]
-                               ,P.[ActiveStatusID]
-                	           ,D.[Name] DomainName
-                	           ,A.[Name] ActiveStatus
-                               ,p.[CreatedAt]
-                       FROM [Project].[Project] P
-                       INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-                       INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
-                       WHERE  P.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetProjectQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetProjectQueryResult>();
+                return Result.Ok(response, request, count);
             }
-            else
-            {
-                string queryCount = @" 
-              SELECT DISTINCT 
-               	    Count(*) Result
-              FROM [Project].[Project] P
-              INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-              INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
-              WHERE  P.ActiveStatusId != 3
-                 and (@SearchValue is null OR P.[Name] like @SearchValue or P.[Code] like @SearchValue)
-                 AND  (@DomainId is null OR P.DomainID = @DomainId) ";
-
-                string query = $@"
-              SELECT DISTINCT 
-                	    P.[Id]
-                       ,P.[DomainID]
-                       ,P.[Name]
-                       ,P.[Code]
-                       ,P.[ActiveStatusID]
-                	   ,D.[Name] DomainName
-                	   ,A.[Name] ActiveStatus
-                       ,p.[CreatedAt]
-               FROM [Project].[Project] P
-               INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-               INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
-               WHERE  P.ActiveStatusId != 3
-                  and (@SearchValue is null OR P.[Name] like @SearchValue or P.[Code] like @SearchValue)
-                  AND  (@DomainId is null OR P.DomainID = @DomainId) 
-                  order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                  OFFSET @Skip rows FETCH NEXT @Take rows only; 
-                                ";
-
-
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    DomainId = request.DomainId,
-                    Take = request.PageSize,
-                    request.Skip,
-                }))
-                {
-                    var response = await multi.ReadAsync<GetProjectQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
-            }
+            
         }
     }
 

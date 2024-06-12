@@ -6,6 +6,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.SecurityCommitees.Cartable
 
 public interface ICartableQueryRepository:IQueryRepository
 {
-    Task<Result<List<GetAllCartableQueryResult>>> GetAll(GetAllCartableQuery request);
+    Task<Result<IEnumerable<GetAllCartableQueryResult>>> GetAll(GetAllCartableQuery request);
     Task<GetCartableQueryResult> GetDetail(GetCartableQuery request);
 }

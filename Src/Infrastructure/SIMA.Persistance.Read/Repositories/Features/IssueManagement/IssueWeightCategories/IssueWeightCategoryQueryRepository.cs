@@ -1,7 +1,9 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssueLinkReasons;
+using SIMA.Application.Query.Contract.Features.IssueManagement.IssueTypes;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssueWeightCategories;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -20,94 +22,51 @@ public class IssueWeightCategoryQueryRepository : IIssueWeightCategoryQueryRepos
     }
     public async Task<Result<IEnumerable<GetIssueWeightCategoryQueryResult>>> GetAll(GetAllIssueWeightCategoriesQuery request)
     {
-        
+
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
-            {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT WG.[Id]
-                                    ,WG.[Name]
-                                    ,WG.[Code]
-                                    ,WG.[MinRange]
-                                    ,WG.[MaxRange]
-                                    ,WG.[ActiveStatusId]
-                                    ,S.[Name] ActiveStatus
-                                    ,wg.[CreatedAt]
-                        FROM [IssueManagement].[IssueWeightCategory] WG
-                        INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
-                        WHERE WG.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT WG.[Id]
-                                    ,WG.[Name]
-                                    ,WG.[Code]
-                                    ,WG.[MinRange]
-                                    ,WG.[MaxRange]
-                                    ,WG.[ActiveStatusId]
-                                    ,S.[Name] ActiveStatus
-                                    ,wg.[CreatedAt]
-                        FROM [IssueManagement].[IssueWeightCategory] WG
-                        INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
-                        WHERE WG.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetIssueWeightCategoryQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
-            }
-            else
-            {
-                var queryCount = @"
-                              SELECT  COUNT(*) Result  
-                                  FROM [IssueManagement].[IssueWeightCategory] WG
-                                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
-                                    WHERE (@SearchValue is null OR (WG.[MinRange] like @SearchValue or WG.[MaxRange] like @SearchValue or WG.[Name] like @SearchValue or WG.[Code] like @SearchValue )) and WG.ActiveStatusId != 3";
-                var query = $@"
-                              SELECT WG.[Id]
-                                    ,WG.[Name]
-                                    ,WG.[Code]
-                                    ,WG.[MinRange]
-                                    ,WG.[MaxRange]
-                                    ,WG.[ActiveStatusId]
-                                    ,S.[Name] ActiveStatus
-                                    ,wg.[CreatedAt]
-                                FROM [IssueManagement].[IssueWeightCategory] WG
-                                INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
-                                  WHERE (@SearchValue is null OR (WG.[MinRange] like @SearchValue or WG.[MaxRange] like @SearchValue or WG.[Name] like @SearchValue or WG.[Code] like @SearchValue )) and WG.ActiveStatusId != 3
-                               order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                                OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
 
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetIssueWeightCategoryQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
+            var queryCount = @" WITH Query as(
+						   SELECT WG.[Id]
+       ,WG.[Name]
+       ,WG.[Code]
+       ,WG.[MinRange]
+       ,WG.[MaxRange]
+       ,WG.[ActiveStatusId]
+       ,S.[Name] ActiveStatus
+       ,wg.[CreatedAt]
+   FROM [IssueManagement].[IssueWeightCategory] WG
+   INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
+     WHERE WG.ActiveStatusId != 3
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ;";
+            var query = $@"WITH Query as(
+							SELECT WG.[Id]
+       ,WG.[Name]
+       ,WG.[Code]
+       ,WG.[MinRange]
+       ,WG.[MaxRange]
+       ,WG.[ActiveStatusId]
+       ,S.[Name] ActiveStatus
+       ,wg.[CreatedAt]
+   FROM [IssueManagement].[IssueWeightCategory] WG
+   INNER JOIN [Basic].[ActiveStatus] S on S.ID = Wg.ActiveStatusId
+     WHERE WG.ActiveStatusId != 3
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetIssueWeightCategoryQueryResult>();
+                return Result.Ok(response, request, count);
             }
         }
     }

@@ -7,6 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.SecurityCommitees.MeetingH
     public interface IMeetingHoldingStatusQueryRepository : IQueryRepository
     {
         Task<GetMeetingHoldingStatusQueryResult> GetById(long Id);
-        Task<Result<List<GetMeetingHoldingStatusQueryResult>>> GetAll(GetAllMeetingHoldingStatusQuery request);
+        Task<Result<IEnumerable<GetMeetingHoldingStatusQueryResult>>> GetAll(GetAllMeetingHoldingStatusQuery request);
     }
 }

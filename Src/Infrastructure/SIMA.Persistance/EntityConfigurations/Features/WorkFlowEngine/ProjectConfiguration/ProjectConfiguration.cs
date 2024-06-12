@@ -45,6 +45,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
                 .HasForeignKey(x => x.DomainId);
         }
     }
+    
     public class ProjectGroupConfiguration : IEntityTypeConfiguration<ProjectGroup>
     {
         public void Configure(EntityTypeBuilder<ProjectGroup> entity)
@@ -124,7 +125,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.ProjectC
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_ProjectMember_Project");
             entity.HasOne(d => d.User).WithMany(p => p.ProjectMembers)
-                .HasForeignKey(d => d.UserId);                
+                .HasForeignKey(d => d.UserId);
         }
     }
 }

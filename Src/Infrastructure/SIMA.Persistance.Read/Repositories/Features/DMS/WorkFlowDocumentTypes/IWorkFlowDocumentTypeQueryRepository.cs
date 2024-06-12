@@ -7,6 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.DMS.WorkFlowDocumentTypes;
 
 public interface IWorkFlowDocumentTypeQueryRepository : IQueryRepository
 {
-    Task<Result<List<GetWorkFlowDocumentTypeQueryResult>>> GetAll(GetAllWorkFlowDocumentTypesQuery request);
+    Task<Result<IEnumerable<GetWorkFlowDocumentTypeQueryResult>>> GetAll(GetAllWorkFlowDocumentTypesQuery request);
     Task<GetWorkFlowDocumentTypeQueryResult> GetById(long id);
 }

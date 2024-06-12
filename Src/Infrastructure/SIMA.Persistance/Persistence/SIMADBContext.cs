@@ -20,6 +20,11 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.SysConfigs.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.ViewLists.Entities;
+using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
+using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
+using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
+using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
+using SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Entities;
@@ -43,7 +48,7 @@ using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
@@ -61,14 +66,17 @@ using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entit
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
+using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
+using SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
@@ -102,6 +110,8 @@ namespace SIMA.Persistance.Persistence
         public virtual DbSet<Progress> Progresses { get; set; }
         public virtual DbSet<ActionType> ActionTypes { get; set; }
         public virtual DbSet<WorkFlowCompany> WorkFlowCompanies { get; set; }
+        public virtual DbSet<ApprovalOption> ApprovalOptions { get; set; }
+        public virtual DbSet<StepApprovalOption> StepApprovalOptions { get; set; }
         #endregion
 
         #region BranchDbSets
@@ -234,6 +244,15 @@ namespace SIMA.Persistance.Persistence
         public DbSet<ServiceBoundle> ServiceBoundles { get; set; }
         public DbSet<ServiceCustomerType> ServiceCustomerTypes { get; set; }
         public DbSet<ServiceUserType> ServiceUserTypes { get; set; }
+        public DbSet<ChannelType> ChannelTypes { get; set; }
+        #endregion
+
+        #region BCP
+        public DbSet<ImportanceDegree> ImportanceDegrees { get; set; }
+        public DbSet<OrganizationalServicePriority> OrganizationalServicePriorities { get; set; }
+        public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
+        public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
+        public DbSet<Consequence> Consequences { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 

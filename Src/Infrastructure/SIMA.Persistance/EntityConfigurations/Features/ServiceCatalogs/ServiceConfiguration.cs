@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.sanazConfiguration;
+namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 internal class ServiceConfiguration : IEntityTypeConfiguration<Service>
 {
     public void Configure(EntityTypeBuilder<Service> entity)

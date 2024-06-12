@@ -5,7 +5,6 @@ using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.MaximumAcceptableOutages.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessImpactAnalysises;
@@ -43,7 +42,7 @@ public class BusinessImpactAnalysisConfiguration : IEntityTypeConfiguration<Busi
         entity.Property(x => x.ServicePriorityId)
             .HasConversion(
             x => x.Value,
-            x => new ServicePriorityId(x)
+            x => new OrganizationalServicePriorityId(x)
             );
         entity.HasOne(x => x.ServicePriority)
             .WithMany(x => x.BusinessImpactAnalyses)
@@ -58,22 +57,14 @@ public class BusinessImpactAnalysisConfiguration : IEntityTypeConfiguration<Busi
             .WithMany(x => x.BusinessImpactAnalyses)
             .HasForeignKey(x => x.BackupPeriodId);
         
-        entity.Property(x => x.MaximumAcceptableOutageId)
-            .HasConversion(
-            x => x.Value,
-            x => new MaximumAcceptableOutageId(x)
-            );
-        entity.HasOne(x => x.MaximumAcceptableOutage)
-            .WithMany(x => x.BusinessImpactAnalyses)
-            .HasForeignKey(x => x.MaximumAcceptableOutageId);
         
-        entity.Property(x => x.ConsequenceId)
+        entity.Property(x => x.ServiceId)
             .HasConversion(
             x => x.Value,
-            x => new ConsequenceId(x)
+            x => new ServiceId(x)
             );
-        entity.HasOne(x => x.Consequence)
+        entity.HasOne(x => x.Service)
             .WithMany(x => x.BusinessImpactAnalyses)
-            .HasForeignKey(x => x.ConsequenceId);
+            .HasForeignKey(x => x.ServiceId);
     }
 }

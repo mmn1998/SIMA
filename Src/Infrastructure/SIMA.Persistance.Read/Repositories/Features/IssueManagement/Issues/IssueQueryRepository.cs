@@ -1,7 +1,11 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
+using SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -33,174 +37,94 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
+
+                var queryCount = @"   WITH Query as(
+						   SELECT  
+        I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
+       ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
+       ,I.issuePriorityId,IPP.Name issuePriorityName
+       ,I.weight,I.currentStateId
+       ,ST.Name currentStateName
+       ,S.id currentStepId
+       ,S.Name currentStepName
+       ,I.summery,I.description
+       ,P.[FirstName] as FirstName
+       ,P.[LastName] as LastName
+       ,I.[CreatedAt] 
+       ,I.[CreatedBy] 
+       from IssueManagement.Issue I  
+       join Project.Step S on I.CurrenStepId = S.Id
+       join Project.WorkFlowActorStep WS on S.Id = WS.StepID
+       join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
+       left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
+       left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
+       left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
+       left join Project.State ST on I.CurrentStateId = ST.Id
+       join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
+							join Project.Project project on project.Id = W.ProjectID
+       left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
+       left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
+       join  [Authentication].[Users] U on I.CreatedBy = U.Id
+       join  [Authentication].[Profile] P on P.Id = U.ProfileID
+       WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
+       and I.ActiveStatusId != 3
+       AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
+                string query = $@"
+                             WITH Query as(
+							 SELECT  
+        I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
+       ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
+       ,I.issuePriorityId,IPP.Name issuePriorityName
+       ,I.weight,I.currentStateId
+       ,ST.Name currentStateName
+       ,S.id currentStepId
+       ,S.Name currentStepName
+       ,I.summery,I.description
+       ,P.[FirstName] as FirstName
+       ,P.[LastName] as LastName
+       ,I.[CreatedAt] 
+       ,I.[CreatedBy] 
+       from IssueManagement.Issue I  
+       join Project.Step S on I.CurrenStepId = S.Id
+       join Project.WorkFlowActorStep WS on S.Id = WS.StepID
+       join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
+       left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
+       left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
+       left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
+       left join Project.State ST on I.CurrentStateId = ST.Id
+       join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
+							join Project.Project project on project.Id = W.ProjectID
+       left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
+       left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
+       join  [Authentication].[Users] U on I.CreatedBy = U.Id
+       join  [Authentication].[Profile] P on P.Id = U.ProfileID
+       WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
+       and I.ActiveStatusId != 3
+       AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+                var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+                dynaimcParameters.Item2.Add("roleIds", roleIds);
+                dynaimcParameters.Item2.Add("userId", userId);
+                dynaimcParameters.Item2.Add("groupIds", groupIds);
+                dynaimcParameters.Item2.Add("WorkFlowId", request.WorkFlowId);
+                dynaimcParameters.Item2.Add("DomainId", request.DomainId);
+                dynaimcParameters.Item2.Add("ProjectId", request.ProjectId);
+                using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
                 {
-                    var splitedFilter = request.Filter.Split(":");
-                    string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                    string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                    string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT  
-                               I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
-                              ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
-                              ,I.issuePriorityId,IPP.Name issuePriorityName
-                              ,I.weight,I.currentStateId
-                              ,ST.Name currentStateName
-                              ,S.id currentStepId
-                              ,S.Name currentStepName
-                              ,I.summery,I.description
-                              ,P.[FirstName] as FirstName
-                              ,P.[LastName] as LastName
-                              ,I.[CreatedAt] 
-                              ,I.[CreatedBy] 
-                              from IssueManagement.Issue I  
-                              join Project.Step S on I.CurrenStepId = S.Id
-                              join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                              join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                              left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                              left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                              left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                              left join Project.State ST on I.CurrentStateId = ST.Id
-                              join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-						                        join Project.Project project on project.Id = W.ProjectID
-                              left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                              left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                              join  [Authentication].[Users] U on I.CreatedBy = U.Id
-                              join  [Authentication].[Profile] P on P.Id = U.ProfileID
-                        WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-                        and I.ActiveStatusId != 3
-                        AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
-                    ) as Query
-                    WHERE {filterClause};";
-                    string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT  
-                               I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
-                              ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
-                              ,I.issuePriorityId,IPP.Name issuePriorityName
-                              ,I.weight,I.currentStateId
-                              ,ST.Name currentStateName
-                              ,S.id currentStepId
-                              ,S.Name currentStepName
-                              ,I.summery,I.description
-                              ,P.[FirstName] as FirstName
-                              ,P.[LastName] as LastName
-                              ,I.[CreatedAt] 
-                              ,I.[CreatedBy] 
-                              from IssueManagement.Issue I  
-                              join Project.Step S on I.CurrenStepId = S.Id
-                              join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                              join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                              left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                              left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                              left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                              left join Project.State ST on I.CurrentStateId = ST.Id
-                              join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-						                        join Project.Project project on project.Id = W.ProjectID
-                              left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                              left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                              join  [Authentication].[Users] U on I.CreatedBy = U.Id
-                              join  [Authentication].[Profile] P on P.Id = U.ProfileID
-                        WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-                        and I.ActiveStatusId != 3
-                        AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                    using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                    {
-                        userId,
-                        roleIds,
-                        groupIds,
-                        request.WorkFlowId,
-                        request.DomainId,
-                        request.ProjectId,
-                        request.Skip,
-                        request.PageSize,
-                    }))
-                    {
-                        var response = await multi.ReadAsync<GetAllIssueQueryResult>();
-                        var count = await multi.ReadSingleAsync<int>();
-                        return Result.Ok(response, count, request.PageSize, request.Page);
-                    }
+                    var count = await multi.ReadFirstAsync<int>();
+                    var response = await multi.ReadAsync<GetAllIssueQueryResult>();
+                    return Result.Ok(response, request, count);
                 }
-                else
-                {
-                    var queryCount = @" SELECT  COUNT(*) Result
-                                    from IssueManagement.Issue I  
-                                    join Project.Step S on I.CurrenStepId = S.Id
-                                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                                    left join Project.State ST on I.CurrentStateId = ST.Id
-                                    join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-									join Project.Project project on project.Id = W.ProjectID
-                                    left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                                    left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join  [Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join  [Authentication].[Profile] P on P.Id = U.ProfileID
-                                    WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-                                    and I.ActiveStatusId != 3
-                                    and (@SearchValue is null OR I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
-                                    AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId));";
-                    string query = $@"
-                              SELECT  
-                                     I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
-                                    ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
-                                    ,I.issuePriorityId,IPP.Name issuePriorityName
-                                    ,I.weight,I.currentStateId
-                                    ,ST.Name currentStateName
-                                    ,S.id currentStepId
-                                    ,S.Name currentStepName
-                                    ,I.summery,I.description
-                                    ,P.[FirstName] as FirstName
-                                    ,P.[LastName] as LastName
-                                    ,I.[CreatedAt] 
-                                    ,I.[CreatedBy] 
-                                    from IssueManagement.Issue I  
-                                    join Project.Step S on I.CurrenStepId = S.Id
-                                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-                                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-                                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-                                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-                                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                                    left join Project.State ST on I.CurrentStateId = ST.Id
-                                    join Project.WorkFlow W on I.CurrentWorkflowId = W.Id
-									join Project.Project project on project.Id = W.ProjectID
-                                    left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-                                    left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-                                    join  [Authentication].[Users] U on I.CreatedBy = U.Id
-                                    join  [Authentication].[Profile] P on P.Id = U.ProfileID
-                                    WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-                                    and I.ActiveStatusId != 3
-                                    AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
-                                    and (@SearchValue is null OR I.[Summery] like @SearchValue or I.[Code] like @SearchValue or I.[Description] like @SearchValue)
-                                    order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
-                    using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                    {
-                        userId,
-                        roleIds,
-                        groupIds,
-                        request.WorkFlowId,
-                        request.DomainId,
-                        request.ProjectId,
-                        request.Skip,
-                        request.PageSize,
-                        SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    }))
-                    {
-                        var response = await multi.ReadAsync<GetAllIssueQueryResult>();
-                        var count = await multi.ReadSingleAsync<int>();
-                        return Result.Ok(response, count, request.PageSize, request.Page);
-                    }
-                }
+
             }
         }
 
@@ -211,187 +135,103 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
-                {
-                    var splitedFilter = request.Filter.Split(":");
-                    string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                    string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                    string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT DISTINCT 
-                                      i.Id
-                                      ,i.Code
-                                      ,i.CurrentWorkflowId WorkflowId
-                                      ,w.Name WorkflowName
-                                      ,i.MainAggregateId
-                                      ,i.SourceId
-                                      ,i.IssueTypeId
-                                      ,ist.Name IssueTypeName
-                                      ,i.IssuePriorityId
-                                      ,ipp.Name IssuePriorityName
-                                      ,i.Weight
-                                      ,i.CurrentStateId
-                                      ,ST.Name currentStateName
-                                      ,i.CurrenStepId
-                                      ,SP.Name CurrentStepName
-                                      ,i.Summery
-                                      ,i.Description
-                                      -- ,i.IssueDate
-                                      -- ,i.DueDate
-                                      ,i.ActiveStatusId
-                                      , S.Name as ActiveStatus
-                                      ,P.[FirstName] as FirstName
-                                      ,P.[LastName] as LastName
-                                      ,I.[CreatedAt] 
-                                      FROM IssueManagement.Issue i
-                                      INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                                      inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                              	      join Project.Project project on project.Id = W.ProjectID
-                                      inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                                      right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                                      LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                                      LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                                      join [Authentication].[Users] U on I.CreatedBy = U.Id
-                                      join [Authentication].[Profile] P on P.Id = U.ProfileID
-                        WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
-                        AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                    ) as Query
-                    WHERE {filterClause};";
-                    string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT DISTINCT 
-                                      i.Id
-                                      ,i.Code
-                                      ,i.CurrentWorkflowId WorkflowId
-                                      ,w.Name WorkflowName
-                                      ,i.MainAggregateId
-                                      ,i.SourceId
-                                      ,i.IssueTypeId
-                                      ,ist.Name IssueTypeName
-                                      ,i.IssuePriorityId
-                                      ,ipp.Name IssuePriorityName
-                                      ,i.Weight
-                                      ,i.CurrentStateId
-                                      ,ST.Name currentStateName
-                                      ,i.CurrenStepId
-                                      ,SP.Name CurrentStepName
-                                      ,i.Summery
-                                      ,i.Description
-                                      -- ,i.IssueDate
-                                      -- ,i.DueDate
-                                      ,i.ActiveStatusId
-                                      , S.Name as ActiveStatus
-                                      ,P.[FirstName] as FirstName
-                                      ,P.[LastName] as LastName
-                                      ,I.[CreatedAt] 
-                                      FROM IssueManagement.Issue i
-                                      INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                                      inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                              	      join Project.Project project on project.Id = W.ProjectID
-                                      inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                                      right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                                      LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                                      LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                                      join [Authentication].[Users] U on I.CreatedBy = U.Id
-                                      join [Authentication].[Profile] P on P.Id = U.ProfileID
-                        WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
-                        AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                    using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                    {
-                        userId,
-                        request.WorkFlowId,
-                        request.DomainId,
-                        request.ProjectId,
-                        request.Skip,
-                        request.PageSize,
-                    }))
-                    {
-                        var response = await multi.ReadAsync<GetAllIssueQueryResult>();
-                        var count = await multi.ReadSingleAsync<int>();
-                        return Result.Ok(response, count, request.PageSize, request.Page);
-                    }
-                }
-                else
-                {
-                    var queryCount = @"
-                                   SELECT COUNT(*) Result
-                                         FROM IssueManagement.Issue i
-                                         INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                                         inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                                 		join Project.Project project on project.Id = W.ProjectID
-                                         inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                                         right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                                         LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                                         LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                                         join  [Authentication].[Users] U on I.CreatedBy = U.Id
-                                         join  [Authentication].[Profile] P on P.Id = U.ProfileID
-                                         WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
-                                             and (@SearchValue is null OR i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
-                                         AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)";
-                    string query = $@"
-                                SELECT DISTINCT 
-                                      i.Id
-                                      ,i.Code
-                                      ,i.CurrentWorkflowId WorkflowId
-                                      ,w.Name WorkflowName
-                                      ,i.MainAggregateId
-                                      ,i.SourceId
-                                      ,i.IssueTypeId
-                                      ,ist.Name IssueTypeName
-                                      ,i.IssuePriorityId
-                                      ,ipp.Name IssuePriorityName
-                                      ,i.Weight
-                                      ,i.CurrentStateId
-                                      ,ST.Name currentStateName
-                                      ,i.CurrenStepId
-                                      ,SP.Name CurrentStepName
-                                      ,i.Summery
-                                      ,i.Description
-                                      -- ,i.IssueDate
-                                      -- ,i.DueDate
-                                      ,i.ActiveStatusId
-                                      , S.Name as ActiveStatus
-                                      ,P.[FirstName] as FirstName
-                                      ,P.[LastName] as LastName
-                                      ,I.[CreatedAt] 
-                                      FROM IssueManagement.Issue i
-                                      INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
-                                      inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
-                              	      join Project.Project project on project.Id = W.ProjectID
-                                      inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
-                                      right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
-                                      LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
-                                      LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
-                                      join [Authentication].[Users] U on I.CreatedBy = U.Id
-                                      join [Authentication].[Profile] P on P.Id = U.ProfileID
-                                      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
-                                      AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
-                                      and (@SearchValue is null OR i.[Summery] like @SearchValue or i.[Code] like @SearchValue or i.[Description] like @SearchValue)
-                                      order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                                      OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
 
-                    using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                    {
-                        SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                        userId,
-                        request.WorkFlowId,
-                        request.DomainId,
-                        request.ProjectId,
-                        request.Skip,
-                        request.PageSize,
-                    }))
-                    {
-                        var response = await multi.ReadAsync<GetAllIssueQueryResult>();
-                        var count = await multi.ReadSingleAsync<int>();
-                        return Result.Ok(response, count, request.PageSize, request.Page);
-                    }
+                var queryCount = @"   WITH Query as(
+						  SELECT DISTINCT 
+      i.Id
+      ,i.Code
+      ,i.CurrentWorkflowId WorkflowId
+      ,w.Name WorkflowName
+      ,i.MainAggregateId
+      ,i.SourceId
+      ,i.IssueTypeId
+      ,ist.Name IssueTypeName
+      ,i.IssuePriorityId
+      ,ipp.Name IssuePriorityName
+      ,i.Weight
+      ,i.CurrentStateId
+      ,ST.Name currentStateName
+      ,i.CurrenStepId
+      ,SP.Name CurrentStepName
+      ,i.Summery
+      ,i.Description
+      -- ,i.IssueDate
+      -- ,i.DueDate
+      ,i.ActiveStatusId
+      , S.Name as ActiveStatus
+      ,P.[FirstName] as FirstName
+      ,P.[LastName] as LastName
+      ,I.[CreatedAt] 
+      FROM IssueManagement.Issue i
+      INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
+      inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
+ 	      join Project.Project project on project.Id = W.ProjectID
+      inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
+      right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
+      LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
+      LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
+      join [Authentication].[Users] U on I.CreatedBy = U.Id
+      join [Authentication].[Profile] P on P.Id = U.ProfileID
+      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
+      AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
+                string query = $@" WITH Query as(
+							SELECT DISTINCT 
+      i.Id
+      ,i.Code
+      ,i.CurrentWorkflowId WorkflowId
+      ,w.Name WorkflowName
+      ,i.MainAggregateId
+      ,i.SourceId
+      ,i.IssueTypeId
+      ,ist.Name IssueTypeName
+      ,i.IssuePriorityId
+      ,ipp.Name IssuePriorityName
+      ,i.Weight
+      ,i.CurrentStateId
+      ,ST.Name currentStateName
+      ,i.CurrenStepId
+      ,SP.Name CurrentStepName
+      ,i.Summery
+      ,i.Description
+      -- ,i.IssueDate
+      -- ,i.DueDate
+      ,i.ActiveStatusId
+      , S.Name as ActiveStatus
+      ,P.[FirstName] as FirstName
+      ,P.[LastName] as LastName
+      ,I.[CreatedAt] 
+      FROM IssueManagement.Issue i
+      INNER JOIN Basic.ActiveStatus S on S.ID = i.ActiveStatusId
+      inner join Project.WorkFlow w on w.Id= i.CurrentWorkflowId
+ 	      join Project.Project project on project.Id = W.ProjectID
+      inner join IssueManagement.IssueType ist on ist.Id= i.IssueTypeId
+      right outer join IssueManagement.IssuePriority ipp on  ipp.Id=i.IssuePriorityId 
+      LEFT OUTER JOIN Project.State ST  on ST.Id=i.CurrentStateId
+      LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
+      join [Authentication].[Users] U on I.CreatedBy = U.Id
+      join [Authentication].[Profile] P on P.Id = U.ProfileID
+      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
+      AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+                var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+                dynaimcParameters.Item2.Add("userId", userId);
+                dynaimcParameters.Item2.Add("WorkFlowId", request.WorkFlowId);
+                dynaimcParameters.Item2.Add("DomainId", request.DomainId);
+                dynaimcParameters.Item2.Add("ProjectId", request.ProjectId);
+                using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+                {
+                    var count = await multi.ReadFirstAsync<int>();
+                    var response = await multi.ReadAsync<GetAllIssueQueryResult>();
+                    return Result.Ok(response, request, count);
                 }
             }
         }
@@ -504,14 +344,22 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                                inner   join  [Project].[Step] ST on P.TargetId = ST.Id
                                CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
                                Where    I.Id = @Id and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
-                               I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3 ";
-                using (var multi = await connection.QueryMultipleAsync(query, new { Id = id, userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
+                               I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3
+
+                               --ApprovalOption
+
+                                EXEC [Project].[ReturnApprovalList] @Id";
+
+
+                              
+                using (var multi = await connection.QueryMultipleAsync(query, new { Id = id,  userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
                 {
                     response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
                     response.IssueLinks = multi.ReadAsync<GetIssueLinkQueryResult>().GetAwaiter().GetResult().ToList();
                     response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
                     response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();
                     response.RelatedProgresses = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
+                    response.ApprovalOptions = multi.ReadAsync<GetApprovalOptionQueryResult>().GetAwaiter().GetResult().ToList();
                 }
                 response.NullCheck();
                 return response;

@@ -7,5 +7,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlowCom
 public interface IWorkFlowCompanyQueryRepository : IQueryRepository
 {
     Task<GetWorkFlowCompanyQueryResult> FindById(long id);
-    Task<Result<List<GetWorkFlowCompanyQueryResult>>> GetAll(GetAllWorkFlowCompanyQuery request);
+    Task<Result<IEnumerable<GetWorkFlowCompanyQueryResult>>> GetAll(GetAllWorkFlowCompanyQuery request);
 }

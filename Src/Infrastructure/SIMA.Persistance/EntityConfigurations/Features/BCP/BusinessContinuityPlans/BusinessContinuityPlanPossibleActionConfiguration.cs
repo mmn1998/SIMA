@@ -5,15 +5,15 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessContinuityPlans;
 
-public class BusinessContinuityPlanGeneralAssumptionConfiguration : IEntityTypeConfiguration<BusinessContinuityPlanGeneralAssumption>
+public class BusinessContinuityPlanPossibleActionConfiguration : IEntityTypeConfiguration<BusinessContinuityPlanPossibleAction>
 {
-    public void Configure(EntityTypeBuilder<BusinessContinuityPlanGeneralAssumption> entity)
+    public void Configure(EntityTypeBuilder<BusinessContinuityPlanPossibleAction> entity)
     {
-        entity.ToTable("BusinessContinuityPlanGeneralAssumption", "BCP");
+        entity.ToTable("BusinessContinuityPlanPossibleAction", "BCP");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new BusinessContinuityGeneralAssumptionId(v)).ValueGeneratedNever();
+             v => new BusinessContinuityPossibleActionId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(e => e.Code).HasMaxLength(50);
@@ -32,7 +32,7 @@ public class BusinessContinuityPlanGeneralAssumptionConfiguration : IEntityTypeC
             x => new BusinessContinuityPlanId(x)
             );
         entity.HasOne(x => x.BusinessContinuityPlan)
-            .WithMany(x => x.BusinessContinuityPlanGeneralAssumptions)
+            .WithMany(x => x.BusinessContinuityPlanPossibleActions)
             .HasForeignKey(x => x.BusinessContinuityPlanId);
     }
 }

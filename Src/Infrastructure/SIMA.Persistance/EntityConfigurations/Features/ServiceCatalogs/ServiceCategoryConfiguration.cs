@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.sanazConfiguration;
+namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
 internal class ServiceCategoryConfiguration : IEntityTypeConfiguration<ServiceCategory>
 {

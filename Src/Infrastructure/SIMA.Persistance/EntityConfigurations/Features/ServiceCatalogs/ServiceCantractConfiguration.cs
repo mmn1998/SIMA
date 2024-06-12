@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.sanazConfiguration;
+namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
 internal class ServiceCantractConfiguration : IEntityTypeConfiguration<ServiceCantract>
 {
@@ -20,7 +20,7 @@ internal class ServiceCantractConfiguration : IEntityTypeConfiguration<ServiceCa
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
- 
+
         entity.Property(x => x.ServiceId)
          .HasConversion(v => v.Value, v => new ServiceId(v));
         entity.HasOne(d => d.Service).WithMany(p => p.ServiceCantracts)

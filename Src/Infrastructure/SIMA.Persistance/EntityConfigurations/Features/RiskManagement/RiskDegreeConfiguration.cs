@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.Auths.AddressTypes.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement
 {
@@ -24,6 +22,8 @@ namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement
             entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
             entity.Property(e => e.Degree).IsRequired();
             entity.Property(e => e.Color).IsRequired().HasMaxLength(10);
+            entity.Property(e => e.IsImportantBia)
+                .HasMaxLength(1);
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")

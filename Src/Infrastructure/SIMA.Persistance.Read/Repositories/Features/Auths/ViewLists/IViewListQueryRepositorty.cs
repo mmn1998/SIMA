@@ -7,7 +7,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Auths.ViewLists
 {
     public interface IViewListQueryRepositorty : IQueryRepository
     {
-        Task<Result<List<GetViewListQueryResult>>> GetAll(GetAllViewListQuery request);
-        Task<Result<List<GetViewFieldQueryResult>>> GetAllViewFeild(GetAllViewFieldQuery request);
+        Task<Result<IEnumerable<GetViewListQueryResult>>> GetAll(GetAllViewListQuery request);
+        Task<Result<IEnumerable<GetViewFieldQueryResult>>> GetAllViewFeild(GetAllViewFieldQuery request);
     }
 }

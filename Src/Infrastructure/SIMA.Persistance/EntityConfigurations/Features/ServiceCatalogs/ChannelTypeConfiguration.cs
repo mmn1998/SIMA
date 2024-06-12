@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.ChannelTypeCatalogs.ChannelTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.sanazConfiguration;
+namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
 internal class ChannelTypeConfiguration : IEntityTypeConfiguration<ChannelType>
 {

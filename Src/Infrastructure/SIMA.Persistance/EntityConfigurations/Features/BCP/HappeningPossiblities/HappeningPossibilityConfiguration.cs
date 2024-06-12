@@ -1,20 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.BCP.MaximumAcceptableOutages.Entities;
-using SIMA.Domain.Models.Features.BCP.MaximumAcceptableOutages.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
+using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.BCP.MaximumAcceptableOutages;
+namespace SIMA.Persistance.EntityConfigurations.Features.BCP.HappeningPossiblities;
 
-public class MaximumAcceptableOutageConfiguration : IEntityTypeConfiguration<MaximumAcceptableOutage>
+public class HappeningPossibilityConfiguration : IEntityTypeConfiguration<HappeningPossibility>
 {
-    public void Configure(EntityTypeBuilder<MaximumAcceptableOutage> entity)
+    public void Configure(EntityTypeBuilder<HappeningPossibility> entity)
     {
-        entity.ToTable("MaximumAcceptableOutage", "BCP");
+        entity.ToTable("HappeningPossibility", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new MaximumAcceptableOutageId(v)).ValueGeneratedNever();
+             v => new HappeningPossibilityId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(50);
         entity.Property(e => e.CreatedAt)

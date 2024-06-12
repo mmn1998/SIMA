@@ -31,5 +31,14 @@ public class BusinessContinuityPlanServiceConfiguration : IEntityTypeConfigurati
         entity.HasOne(x => x.BusinessContinuityPlan)
             .WithMany(x => x.BusinessContinuityPlanServices)
             .HasForeignKey(x => x.BusinessContinuityPlanId);
+        
+        entity.Property(x => x.ServiceId)
+            .HasConversion(
+            x => x.Value,
+            x => new ServiceId(x)
+            );
+        entity.HasOne(x => x.Service)
+            .WithMany(x => x.BusinessContinuityPlanServices)
+            .HasForeignKey(x => x.ServiceId);
     }
 }

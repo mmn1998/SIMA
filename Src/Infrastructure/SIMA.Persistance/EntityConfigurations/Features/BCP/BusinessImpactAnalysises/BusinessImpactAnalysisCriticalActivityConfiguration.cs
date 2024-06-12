@@ -31,5 +31,14 @@ public class BusinessImpactAnalysisCriticalActivityConfiguration : IEntityTypeCo
         entity.HasOne(x => x.BusinessImpactAnalysis)
             .WithMany(x => x.BusinessImpactAnalysisCriticalActivities)
             .HasForeignKey(x => x.BusinessImpactAnalysisId);
+        
+        entity.Property(x => x.CriticalActivityId)
+            .HasConversion(
+            x => x.Value,
+            x => new CriticalActivityId(x)
+            );
+        entity.HasOne(x => x.CriticalActivity)
+            .WithMany(x => x.BusinessImpactAnalysisCriticalActivities)
+            .HasForeignKey(x => x.CriticalActivityId);
     }
 }

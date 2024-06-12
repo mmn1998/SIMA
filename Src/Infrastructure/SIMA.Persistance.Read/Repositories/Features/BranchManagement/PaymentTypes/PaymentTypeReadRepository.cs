@@ -1,6 +1,8 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
+using SIMA.Application.Query.Contract.Features.BranchManagement.CurrencyTypes;
 using SIMA.Application.Query.Contract.Features.BranchManagement.PaymentTypes;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
@@ -24,89 +26,47 @@ public class PaymentTypeReadRepository : IPaymentTypeReadRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            if (!string.IsNullOrEmpty(request.Filter) && request.Filter.Contains(":"))
-            {
-                var splitedFilter = request.Filter.Split(":");
-                string? SearchValue = splitedFilter[1].Trim().Sanitize();
-                string filterClause = $"{splitedFilter[0].Trim()} Like N'%{SearchValue}%'";
-                string queryCount = @$" 
-                    SELECT COUNT(*)
-                    FROM (
-                        SELECT DISTINCT PT.[ID]
-                                ,PT.[Name]
-                                ,PT.[Code]
-                          	    ,A.Name ActiveStatus
-                          	    ,PT.ActiveStatusId
-                                ,pt.[CreatedAt]
-                            FROM [Bank].[PaymentType] PT
-                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = PT.ActiveStatusID
-                            WHERE  PT.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause};";
-                string query = $@"
-                    SELECT *
-                    FROM (
-                        SELECT DISTINCT PT.[ID]
-                                ,PT.[Name]
-                                ,PT.[Code]
-                          	    ,A.Name ActiveStatus
-                          	    ,PT.ActiveStatusId
-                                ,pt.[CreatedAt]
-                            FROM [Bank].[PaymentType] PT
-                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = PT.ActiveStatusID
-                            WHERE  PT.ActiveStatusId != 3
-                    ) as Query
-                    WHERE {filterClause}
-                    ORDER BY {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;
-";
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetPaymentTypeQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
-            }
-            else
-            {
-                string queryCount = @"
-                              SELECT Count(*) Result
-                              FROM [Bank].[PaymentType] PT
-                              INNER JOIN [Basic].[ActiveStatus] A on A.ID = PT.ActiveStatusID
-                              WHERE  PT.ActiveStatusId != 3
-                            and (@SearchValue is null OR PT.[Name] like @SearchValue or PT.[Code] like @SearchValue)";
 
-                string query = $@"
-                          SELECT DISTINCT PT.[ID]
-                                ,PT.[Name]
-                                ,PT.[Code]
-                          	    ,A.Name ActiveStatus
-                          	    ,PT.ActiveStatusId
-                                ,pt.[CreatedAt]
-                            FROM [Bank].[PaymentType] PT
-                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = PT.ActiveStatusID
-                            WHERE  PT.ActiveStatusId != 3
-                          and (@SearchValue is null OR PT.[Name] like @SearchValue or PT.[Code] like @SearchValue)
-                          order by {request.Sort?.Replace(":", " ") ?? "CreatedAt desc"}
-                          OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+            string queryCount = @" WITH Query as(
+						  SELECT DISTINCT PT.[ID]
+      ,PT.[Name]
+      ,PT.[Code]
+   	    ,A.Name ActiveStatus
+   	    ,PT.ActiveStatusId
+      ,pt.[CreatedAt]
+  FROM [Bank].[PaymentType] PT
+  INNER JOIN [Basic].[ActiveStatus] A on A.ID = PT.ActiveStatusID
+  WHERE  PT.ActiveStatusId != 3
+							)
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
 
-                using (var multi = await connection.QueryMultipleAsync(query + queryCount, new
-                {
-                    SearchValue = request.Filter is null ? null : "%" + request.Filter + "%",
-                    request.Skip,
-                    request.PageSize
-                }))
-                {
-                    var response = await multi.ReadAsync<GetPaymentTypeQueryResult>();
-                    var count = await multi.ReadSingleAsync<int>();
-                    return Result.Ok(response, count, request.PageSize, request.Page);
-                }
+            string query = $@" WITH Query as(
+							SELECT DISTINCT PT.[ID]
+      ,PT.[Name]
+      ,PT.[Code]
+   	    ,A.Name ActiveStatus
+   	    ,PT.ActiveStatusId
+      ,pt.[CreatedAt]
+  FROM [Bank].[PaymentType] PT
+  INNER JOIN [Basic].[ActiveStatus] A on A.ID = PT.ActiveStatusID
+  WHERE  PT.ActiveStatusId != 3
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetPaymentTypeQueryResult>();
+                return Result.Ok(response, request, count);
             }
         }
+
     }
 
     public async Task<GetPaymentTypeQueryResult> GetById(long id)
