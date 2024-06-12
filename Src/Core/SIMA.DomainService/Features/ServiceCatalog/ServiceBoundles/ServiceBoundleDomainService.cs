@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Interfaces;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Interfaces;
 using SIMA.Persistance.Persistence;
 
