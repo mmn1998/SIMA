@@ -55,7 +55,7 @@ public class IssueMapper : Profile
            .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
-        CreateMap<FormDataModel, FormModel>();
+        CreateMap<InputParamModel, FormModel>();
         CreateMap<IssueRunActionCommand, GetNextStepQuery>();
 
 
@@ -103,6 +103,12 @@ public class IssueMapper : Profile
            .ForMember(dest => dest.Description, act => act.MapFrom(source => source.Name))
            .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.MainAggregateType))
            ;
+
+        CreateMap<IssueRunActionCommand, CreateIssueApprovalArg>()
+          .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+          .ForMember(dest => dest.Description, act => act.MapFrom(source=>source.ApprovalDescription))
+          .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source=>DateTime.Now))
+          ;
 
     }
 

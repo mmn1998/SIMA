@@ -19,6 +19,11 @@ using SIMA.Application.Feaatures.Auths.Roles.Mappers;
 using SIMA.Application.Feaatures.Auths.Staffs.Mappers;
 using SIMA.Application.Feaatures.Auths.SysConfigs.Mappers;
 using SIMA.Application.Feaatures.Auths.Users.Mappers;
+using SIMA.Application.Feaatures.BCP.Consequences.Mappers;
+using SIMA.Application.Feaatures.BCP.HappeningPossiblities.Mappers;
+using SIMA.Application.Feaatures.BCP.ImportanceDegrees.Mappers;
+using SIMA.Application.Feaatures.BCP.RecoveryPointObjectives.Mappers;
+using SIMA.Application.Feaatures.BCP.ServicePriorities.Mapper;
 using SIMA.Application.Feaatures.BranchManagement.Branches.Mappers;
 using SIMA.Application.Feaatures.BranchManagement.BranchTypes.Mappers;
 using SIMA.Application.Feaatures.BranchManagement.Brokers.Mappers;
@@ -31,26 +36,38 @@ using SIMA.Application.Feaatures.DMS.DocumentTypes.Mappers;
 using SIMA.Application.Feaatures.DMS.WorkFlowDocumentTypes.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.IssueLinkReasons.Mapper;
 using SIMA.Application.Feaatures.IssueManagement.IssuePriorities.Mappers;
-using SIMA.Application.Feaatures.IssueManagement.Issues;
 using SIMA.Application.Feaatures.IssueManagement.Issues.Mapper;
 using SIMA.Application.Feaatures.IssueManagement.IssueTypes.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.IssueWeightCategories.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.ImpactScales.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskCriterias.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskDegrees.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskImpacts.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskLevelMeasures.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskLevels.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskPossibilities.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.Risks.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskTypes.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.ThreatTypes.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.Labels;
 using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingReasons.Mappers;
 using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingStatus.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.SubjectPriorities.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.ChannelTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceBoundles.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCustomerTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceUserTypes.Mappers;
+using SIMA.Application.Feaatures.WorkFlowEngine.ApprovalOptions.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.Progress.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.Project.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany.Mapper;
+using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
@@ -96,6 +113,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ProjectMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new BpmsMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new WorkFlowCompanyMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new ApprovalOptionMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
 
                 #endregion
 
@@ -137,12 +155,35 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new MeetingMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 #endregion
 
+                #region RiskManagement
+                conf.AddProfile(new ImpactScaleMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskDegreeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskImpactMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskLevelMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskPossibilityMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskTypeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new ThreatTypeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskLevelMeasureMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new RiskCriteriaMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>())); ;
+
+                #endregion
+
                 #region ServiceCatalog
                 conf.AddProfile(new ServiceTypeMapper());
                 conf.AddProfile(new ServiceCustomerTypeMapper());
                 conf.AddProfile(new ServiceCategoryMapper());
                 conf.AddProfile(new ServiceBoundleMapper());
                 conf.AddProfile(new ServiceUserTypeMapper());
+                conf.AddProfile(new ChannelTypeMapper());
+                #endregion
+
+                #region BCP
+                conf.AddProfile(new ImportanceDegreeMapper());
+                conf.AddProfile(new OrganizationalServicePriorityMapper());
+                conf.AddProfile(new HappeningPossibilityMapper());
+                conf.AddProfile(new ConsequenceMapper());
+                conf.AddProfile(new RecoveryPointObjectiveMapper());
                 #endregion
             }
         }, Array.Empty<Type>());

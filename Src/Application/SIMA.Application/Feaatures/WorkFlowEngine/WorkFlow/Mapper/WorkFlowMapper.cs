@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.State;
+using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.Steps;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
@@ -41,6 +42,11 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
                 .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
+
+            CreateMap<AddStepApprovalOption, CreateStepApprovalOptionArg>()
+               .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+               //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
+               .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
 
             CreateMap<ModifyStepCommand, ModifyStepArgs>()
         .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())));

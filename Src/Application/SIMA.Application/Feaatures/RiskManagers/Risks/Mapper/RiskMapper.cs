@@ -2,12 +2,13 @@
 using SIMA.Application.Contract.Features.RiskManagers.Risks;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.Application.Feaatures.RiskManagers.Risks.Mapper
 {
     public class RiskMapper : Profile
     {
-        public RiskMapper()
+        public RiskMapper(ISimaIdentity simaIdentity)
         {
             CreateMap<CreateRiskCommand, CreateRiskArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

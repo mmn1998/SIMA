@@ -16,7 +16,7 @@ public class ProgressCommandHandler : ICommandHandler<ModifyProgressCommand, Res
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public ProgressCommandHandler( IUnitOfWork unitOfWork, IMapper mapper,
+    public ProgressCommandHandler(IUnitOfWork unitOfWork, IMapper mapper,
         IProgressRepository progressRepository, ISimaIdentity simaIdentity)
     {
         _progressRepository = progressRepository;
@@ -31,6 +31,33 @@ public class ProgressCommandHandler : ICommandHandler<ModifyProgressCommand, Res
         {
             var entity = await _progressRepository.GetById(request.Id);
             var arg = _mapper.Map<ChangeStatusArg>(request);
+            //var v1 = new List<ProgressStoreProcedureArg>();
+            //foreach (var item in request.StoreProcedures)
+            //{
+            //    var v2 = _mapper.Map<ProgressStoreProcedureArg>(item);
+            //    foreach (var item2 in item.Params)
+            //    {
+            //        var v3 = _mapper.Map<List<ProgressStoreProcedureParamArg>>(item2);
+            //        v2.ProgressStoreProcedureParams = v3;
+            //    }
+            //    v1.Add(v2);
+            //}
+            //arg.ProgressStoreProcedures = v1;
+            //foreach (var procedure in arg.ProgressStoreProcedures)
+            //{
+            //    procedure.ProgressStoreProcedureParams = _mapper.Map<List<ProgressStoreProcedureParamArg>>(procedure.ProgressStoreProcedureParams);
+            //}
+            //foreach (var item in request.StoreProcedures)
+            //{
+            //    foreach (var item2 in item.Params)
+            //    {
+            //        foreach (var item3 in arg.ProgressStoreProcedures)
+            //        {
+            //            item3.ProgressStoreProcedureParams = _mapper.Map<List<ProgressStoreProcedureParamArg>>(item.Params);
+            //        }
+            //        break;
+            //    }
+            //}
             arg.ModifiedBy = _simaIdentity.UserId;
             entity.ChangeStatus(arg);
             await _unitOfWork.SaveChangesAsync();

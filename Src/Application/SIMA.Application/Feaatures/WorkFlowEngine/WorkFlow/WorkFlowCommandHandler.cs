@@ -2,6 +2,7 @@
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.State;
+using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.Steps;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
@@ -19,7 +20,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
 {
     public class WorkFlowCommandHandler : ICommandHandler<CreateWorkFlowCommand, Result<long>>, ICommandHandler<DeleteWorkFlowCommand, Result<long>>,
         ICommandHandler<ModifyWorkFlowCommand, Result<long>>,
-        ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<ModifyStepCommand, Result<long>>,
+        ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask.ModifyStepCommand, Result<long>>,
         ICommandHandler<DeleteStepCommand, Result<long>>,
         ICommandHandler<CreateStateCommand, Result<long>>, ICommandHandler<ModifyStateCommand, Result<long>>,
         ICommandHandler<DeleteStateCommand, Result<long>>
@@ -103,6 +104,10 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             var arg = _mapper.Map<ModifyStepArgs>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
             await entity.ModifyStep(arg);
+
+            var approvalArg = _mapper.Map<List<CreateStepApprovalOptionArg>>(request.StepApprovalOptions);
+            await entity.AddStepApproval(approvalArg, request.Id);
+
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
@@ -113,7 +118,6 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
-
         #endregion
 
         #region State
@@ -145,6 +149,9 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
+
+        
+        
 
         #endregion
     }

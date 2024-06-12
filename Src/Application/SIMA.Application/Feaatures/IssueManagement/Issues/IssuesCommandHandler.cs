@@ -15,6 +15,7 @@ using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
 using SIMA.Resources;
 using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Interface;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues;
 
@@ -31,6 +32,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     private readonly IWorkFlowDomainService _workFlowDomainService;
     private readonly ISimaIdentity _simaIdentity;
     private readonly IWorkFlowRepository _workFlowRepository;
+    private readonly IWorkFlowActorRepository _workFlowActorRepository;
     private readonly IWorkFlowQueryRepository _workFlowQueryRepository;
     private readonly IIssueWeightCategoryQueryRepository _issueWeightCategoryRepository;
     private readonly IProjectRepository _projectRepository;
@@ -38,7 +40,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     public IssueCommandHandler(IIssueRepository repository, IUnitOfWork unitOfWork,
         IMapper mapper, IIssueDomainService service,
       IWorkFlowRepository workFlowRepository, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository,
-      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity, IWorkFlowQueryRepository workFlowQueryRepository)
+      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity, IWorkFlowQueryRepository workFlowQueryRepository , IWorkFlowActorRepository workFlowActorRepository)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
@@ -50,6 +52,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         _workFlowDomainService = workFlowDomainService;
         _simaIdentity = simaIdentity;
         _workFlowQueryRepository = workFlowQueryRepository;
+        _workFlowActorRepository = workFlowActorRepository;
     }
     public async Task<Result<long>> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
     {
@@ -157,6 +160,21 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             var commentArg = _mapper.Map<CreateIssueCommentArg>(request);
             await issue.AddComment(commentArg);
         }
+
+        #region Approval
+
+        if(request.StepApprovalOptionId is not null  && request.StepApprovalOptionId > 0)
+        {
+            var approvalArg = _mapper.Map<CreateIssueApprovalArg>(request);
+            approvalArg.ApprovedBy = _simaIdentity.UserId;
+            approvalArg.CreatedBy = _simaIdentity.UserId;
+            var workFlowActor = await _workFlowActorRepository.GetWorkFlowActorByUser(issue.CurrentWorkflowId.Value);
+            approvalArg.WorkflowActorId = workFlowActor.Id.Value;
+            await issue.AddIssueApproval(approvalArg);
+             
+        }
+
+        #endregion
 
         #region IssueHistory
         var history = _mapper.Map<CreateIssueHistoryArg>(issue);

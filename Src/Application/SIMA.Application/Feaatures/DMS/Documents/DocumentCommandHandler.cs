@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.DMS.Documents;
 using SIMA.Domain.Models.Features.DMS.Documents.Args;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.Interfaces;
-using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
