@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="CodeMessges.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
