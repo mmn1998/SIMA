@@ -18,8 +18,8 @@ public class CartablesQueryController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllCartableQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllCartableQuery query)
     {
         return await _mediator.Send(query);
     }

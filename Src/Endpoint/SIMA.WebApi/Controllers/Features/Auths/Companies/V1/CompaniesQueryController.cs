@@ -30,9 +30,9 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Companies.V1
             return result;
         }
 
-        [HttpGet]
+        [HttpPost("GetAll")]
         //    [SimaAuthorize(Permissions.CompanyGetAll)]
-        public async Task<Result> Get([FromQuery] GetAllCompanyQuery request)
+        public async Task<Result> Get(GetAllCompanyQuery request)
         {
             return await _mediator.Send(request);
         }

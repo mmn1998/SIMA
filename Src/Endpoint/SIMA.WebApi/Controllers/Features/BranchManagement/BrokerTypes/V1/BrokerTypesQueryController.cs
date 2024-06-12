@@ -26,9 +26,9 @@ public class BrokerTypesQueryController : ControllerBase
         var query = new GetBrokerTypeQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.BrokerTypeGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllBrokerTypesQuery query)
+    public async Task<Result> Get(GetAllBrokerTypesQuery query)
     {
         return await _mediator.Send(query);
     }

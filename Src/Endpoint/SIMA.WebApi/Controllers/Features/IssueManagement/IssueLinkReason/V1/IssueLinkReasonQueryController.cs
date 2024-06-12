@@ -27,9 +27,9 @@ public class IssueLinkReasonQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.IssueLinkReasonsGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllIssueLinkReasonsQuery request)
+    public async Task<Result> Get(GetAllIssueLinkReasonsQuery request)
     {
         return await _mediator.Send(request);
     }

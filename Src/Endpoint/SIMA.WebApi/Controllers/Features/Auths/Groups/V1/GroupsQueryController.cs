@@ -29,9 +29,9 @@ public class GroupsQueryController : ControllerBase
         return await _mediator.Send(query);
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.GroupGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllGroupQuery request)
+    public async Task<Result> Get(GetAllGroupQuery request)
     {
         return await _mediator.Send(request);
     }

@@ -54,6 +54,14 @@
     <Compile Include="Controllers\Features\Auths\Users\V1\UsersController.cs" />
     <Compile Include="Controllers\Features\Auths\Users\V1\UsersQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\ViewLists\ViewListQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\RecoveryPointObjectives\RecoveryPointObjectivesController.cs" />
+    <Compile Include="Controllers\Features\BCP\RecoveryPointObjectives\RecoveryPointObjectivesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\HappeningPossiblities\V1\HappeningPossiblitiesController.cs" />
+    <Compile Include="Controllers\Features\BCP\HappeningPossiblities\V1\HappeningPossiblitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\Consequences\ConsequencesController.cs" />
+    <Compile Include="Controllers\Features\BCP\Consequences\ConsequencesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ServicePriorities\V1\OrganizationalServicePrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ServicePriorities\V1\OrganizationalServicePrioritiesController.cs" />
     <Compile Include="Controllers\Features\BranchManagement\Branches\V1\BranchesController.cs" />
     <Compile Include="Controllers\Features\BranchManagement\Branches\V1\BranchesQueryController.cs" />
     <Compile Include="Controllers\Features\BranchManagement\BranchTypes\V1\BranchTypesController.cs" />
@@ -76,6 +84,25 @@
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentExtentions\V1\WorkFlowDocumentExtentionsQueryController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskCriterias\RiskCriteriaController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskCriterias\RiskCriteriaQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskDegrees\RiskDegreeController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskDegrees\RiskDegreeQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskImpacts\RiskImpactController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskImpacts\RiskImpactQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelMeasures\RiskLevelMeasureController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelMeasures\RiskLevelMeasureQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevels\RiskLevelController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevels\RiskLevelQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskPossibilities\RiskPossibilityController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskPossibilities\RiskPossibilityQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Risks\RiskController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskTypes\RiskTypeController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskTypes\RiskTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ThreatTypes\ThreatTypeController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ThreatTypes\ThreatTypeQueryController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\Cartables\V1\CartablesQueryController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\Cartables\V1\CartablesController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingReasons\V1\MeetingHoldingReasonsController.cs" />
@@ -91,10 +118,16 @@
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategorysQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCustomerTypes\V1\ServiceCustomerTypesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCustomerTypes\V1\ServiceCustomerTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ChannelTypes\V1\ChannelTypesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ChannelTypes\V1\ChannelTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ImportanceDegrees\ImportanceDegreesController.cs" />
+    <Compile Include="Controllers\Features\BCP\ImportanceDegrees\ImportanceDegreesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypeController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceUserTypes\V1\ServiceUserTypesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceUserTypes\V1\ServiceUserTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\ApprovalOptions\ApprovalOptionController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\ApprovalOptions\ApprovalOptionQueryController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\BPMSes\BPMSController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressQueryController.cs" />
@@ -134,7 +167,7 @@
     <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SIMA.Framework.Common" Version="1.8.9" />
+    <PackageReference Include="SIMA.Framework.Common" Version="1.9.6" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
     <PackageReference Include="SIMA.Framework.WebApi" Version="1.1.7" />

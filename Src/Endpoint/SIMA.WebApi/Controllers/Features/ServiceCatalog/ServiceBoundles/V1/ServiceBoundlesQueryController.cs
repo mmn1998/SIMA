@@ -22,8 +22,8 @@ public class ServiceBoundlesQueryController : ControllerBase
         var query = new GetServiceBoundleQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllServiceBoundlesQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get([FromBody] GetAllServiceBoundlesQuery query)
     {
         return await _mediator.Send(query);
     }

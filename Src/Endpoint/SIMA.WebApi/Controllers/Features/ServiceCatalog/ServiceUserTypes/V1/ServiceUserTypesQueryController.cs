@@ -22,8 +22,8 @@ public class ServiceUserTypesQueryController : ControllerBase
         var query = new GetServiceUserTypeQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllServiceUserTypesQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get([FromBody] GetAllServiceUserTypesQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -28,9 +28,9 @@ namespace SIMA.WebApi.Controllers.Features.BranchManagement.BranchTypes.V1
             var query = new GetBranchTypeQuery { Id = id };
             return await _mediator.Send(query);
         }
-        [HttpGet]
+        [HttpPost("GetAll")]
         [SimaAuthorize(Permissions.BranchTypeGet)]
-        public async Task<Result> Get([FromQuery] GetAllBranchTypesQuery query)
+        public async Task<Result> Get(GetAllBranchTypesQuery query)
         {
             return await _mediator.Send(query);
         }

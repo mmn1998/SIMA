@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SIMA.Application.Contract.Features.ServiceCatalog.ChannelTypes;
 using SIMA.Application.Contract.Features.ServiceCatalog.ServiceBoundles;
 using SIMA.Framework.Common.Response;
 

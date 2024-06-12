@@ -16,8 +16,8 @@ public class SubjectPrioritiesQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllSubjectPrioritiesQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllSubjectPrioritiesQuery query)
     {
         return await _mediator.Send(query);
     }

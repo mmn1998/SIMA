@@ -17,9 +17,9 @@ public class IssueTypesQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.IssueTypesGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllIssueTypesQuery request)
+    public async Task<Result> Get(GetAllIssueTypesQuery request)
     {
         return await _mediator.Send(request);
     }

@@ -35,8 +35,8 @@ public class DocumentsQueryController : ControllerBase
         response.ContentType = response.Extension.GetContentType();
         return Result.Ok(response);
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllDocumentsQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllDocumentsQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -34,9 +34,9 @@ public class IssuesQueryController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.IssueGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllIssuesQuery request)
+    public async Task<Result> Get(GetAllIssuesQuery request)
     {
         return await _mediator.Send(request);
     }

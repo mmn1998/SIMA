@@ -30,9 +30,9 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Positions.V1
             return result;
         }
 
-        [HttpGet]
+        [HttpPost("GetAll")]
         [SimaAuthorize(Permissions.PositionsGetAll)]
-        public async Task<Result> Get([FromQuery] GetAllPositionsQuery request)
+        public async Task<Result> Get(GetAllPositionsQuery request)
         {
             return await _mediator.Send(request);
         }

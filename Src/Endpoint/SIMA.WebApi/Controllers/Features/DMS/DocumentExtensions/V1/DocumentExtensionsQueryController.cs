@@ -18,9 +18,9 @@ public class DocumentExtensionsQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.DocumentExtensionsGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllDocumentExtensionsQuery query)
+    public async Task<Result> Get(GetAllDocumentExtensionsQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -28,7 +28,7 @@ public class SysConfigsQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.GenderGetAll)]
     public async Task<Result> Get([FromQuery] BaseRequest request)
     {

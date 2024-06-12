@@ -52,9 +52,9 @@ public class UsersQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.UserGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllUserQuery request)
+    public async Task<Result> Get(GetAllUserQuery request)
     {
         return await _mediator.Send(request);
     }

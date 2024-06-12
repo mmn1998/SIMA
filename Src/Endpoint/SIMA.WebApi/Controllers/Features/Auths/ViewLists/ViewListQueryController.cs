@@ -18,16 +18,16 @@ namespace SIMA.WebApi.Controllers.Features.Auths.ViewLists
             _mediator = mediator;
         }
 
-        [HttpGet("GetAll")]
-        public async Task<Result> Get([FromQuery] GetAllViewListQuery request)
+        [HttpPost("GetAll")]
+        public async Task<Result> Get(GetAllViewListQuery request)
         {
             request = new GetAllViewListQuery();
             return await _mediator.Send(request);
         }
 
-        [HttpGet("GetViewFeild")]
+        [HttpPost("GetViewFeild")]
 
-        public async Task<Result> Get([FromQuery] GetAllViewFieldQuery request)
+        public async Task<Result> Get(GetAllViewFieldQuery request)
         {
             return await _mediator.Send(request);
         }

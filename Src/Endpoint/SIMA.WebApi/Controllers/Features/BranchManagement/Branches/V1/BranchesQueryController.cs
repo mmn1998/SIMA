@@ -19,9 +19,9 @@ public class BranchesQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.BranchGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllBranchQuery query)
+    public async Task<Result> Get(GetAllBranchQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -17,8 +17,8 @@ namespace SIMA.WebApi.Controllers.Features.SecurityCommitees.MeetingHoldingStatu
         {
             _mediator = mediator;
         }
-        [HttpGet]
-        public async Task<Result> Get([FromQuery] GetAllMeetingHoldingStatusQuery query)
+        [HttpPost("GetAll")]
+        public async Task<Result> Get(GetAllMeetingHoldingStatusQuery query)
         {
             return await _mediator.Send(query);
         }

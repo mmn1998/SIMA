@@ -27,9 +27,9 @@ public class CurrencyTypesQueryController : ControllerBase
         var query = new GetCurrencyTypeQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.CurrencyTypeGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllCurrencyTypesQuery query)
+    public async Task<Result> Get(GetAllCurrencyTypesQuery query)
     {
         return await _mediator.Send(query);
     }

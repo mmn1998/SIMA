@@ -30,9 +30,9 @@ public class LocationsQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.LocationGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllLocationQuery request)
+    public async Task<Result> Get(GetAllLocationQuery request)
     {
         return await _mediator.Send(request);
     }

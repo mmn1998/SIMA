@@ -30,12 +30,11 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Profiles.V1
             return result;
         }
 
-        [HttpGet]
+        [HttpPost("GetAll")]
         [SimaAuthorize(Permissions.ProfileGet)]
-        public async Task<Result> Get([FromQuery] BaseRequest request)
+        public async Task<Result> Get(GetAllProfileQuery request)
         {
-            var query = new GetAllProfileQuery { Request = request };
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(request);
             return result;
         }
 
@@ -49,19 +48,17 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Profiles.V1
 
         }
 
-        [HttpGet("GetPhoneBooksByProfileId/{ProfileId}")]
-        public async Task<Result> GetPhoneBookByProfileId(int ProfileId, [FromQuery] BaseRequest baseRequest)
+        [HttpPost("GetPhoneBooksByProfileId")]
+        public async Task<Result> GetPhoneBookByProfileId(GetAllPhoneBookQuery request)
         {
-            var query = new GetAllPhoneBookQuery { Id = ProfileId, Request = baseRequest };
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(request);
             return result;
         }
 
-        [HttpGet("GetAddressBooksByProfileId/{ProfileId}")]
-        public async Task<Result> GetAddressBookByProfileId(int ProfileId, [FromQuery] BaseRequest baseRequest)
+        [HttpPost("GetAddressBooksByProfileId")]
+        public async Task<Result> GetAddressBookByProfileId(GetAllAddressBookQuery request)
         {
-            var query = new GetAllAddressBookQuery { Id = ProfileId , Request = baseRequest  };
-            var result = await _mediator.Send(query);
+            var result = await _mediator.Send(request);
             return result;
         }
 

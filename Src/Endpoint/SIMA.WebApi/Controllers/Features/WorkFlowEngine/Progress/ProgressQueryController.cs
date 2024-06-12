@@ -27,9 +27,9 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.Progress
             return result;
         }
 
-        [HttpGet]
+        [HttpPost("GetAll")]
         //[SimaAuthorize(Permissions.ProjectGetAll)]
-        public async Task<Result> Get([FromQuery] GetAllProgressQuery query)
+        public async Task<Result> Get(GetAllProgressQuery query)
         {
             var result = await _mediator.Send(query);
             return result;

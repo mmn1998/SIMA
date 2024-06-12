@@ -19,8 +19,8 @@ public class BrokersQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllBrokerQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllBrokerQuery query)
     {
         return await _mediator.Send(query);
     }

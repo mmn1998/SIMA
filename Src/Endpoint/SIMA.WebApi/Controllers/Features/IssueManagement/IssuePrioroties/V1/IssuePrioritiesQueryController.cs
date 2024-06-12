@@ -17,9 +17,9 @@ public class IssuePrioritiesQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.IssuePriorotiesGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllIssuePriorotiesQuery request)
+    public async Task<Result> Get(GetAllIssuePriorotiesQuery request)
     {
         return await _mediator.Send(request);
     }

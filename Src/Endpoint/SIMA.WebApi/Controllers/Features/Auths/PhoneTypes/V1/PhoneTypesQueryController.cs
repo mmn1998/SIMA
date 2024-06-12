@@ -30,9 +30,9 @@ public class PhoneTypesQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.PhoneTypesGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllPhoneTypesQuery request)
+    public async Task<Result> Get(GetAllPhoneTypesQuery request)
     {
         return await _mediator.Send(request);
 

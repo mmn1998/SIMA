@@ -24,9 +24,10 @@ public class MeetingHoldingReasonsQueryController : ControllerBase
         var query = new GetMeetingHoldingReasonQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllMeetingHoldingReasonsQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllMeetingHoldingReasonsQuery query)
     {
+        //todo: Hossein: does not have Handler
         return await _mediator.Send(query);
     }
 }

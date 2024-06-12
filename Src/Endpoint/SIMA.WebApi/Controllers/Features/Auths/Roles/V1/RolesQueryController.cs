@@ -29,9 +29,9 @@ public class RolesQueryController : ControllerBase
         var result = await _mediator.Send(query);
         return result;
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.RoleGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllRoleQuery request)
+    public async Task<Result> Get(GetAllRoleQuery request)
     {
         return await _mediator.Send(request);
     }

@@ -29,11 +29,10 @@ public class AddressTypesQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.AddressTypesGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllAddressTypesQuery request)
+    public async Task<Result> Get(GetAllAddressTypesQuery request)
     {
-        request = new GetAllAddressTypesQuery();
         return await _mediator.Send(request);
     }
 }

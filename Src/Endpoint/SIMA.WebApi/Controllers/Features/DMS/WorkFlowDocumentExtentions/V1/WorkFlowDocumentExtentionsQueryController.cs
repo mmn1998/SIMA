@@ -18,8 +18,8 @@ namespace SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentExtentions.V1
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<Result> Get([FromQuery] GetAllWorkFlowDocumentExtensionQuery query)
+        [HttpPost("GetAll")]
+        public async Task<Result> Get(GetAllWorkFlowDocumentExtensionQuery query)
         {
             return await _mediator.Send(query);
         }

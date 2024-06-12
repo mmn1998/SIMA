@@ -29,12 +29,11 @@ public class DomainsQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.DomainsGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get(GetAllDomainQuery request)
     {
-        var query = new GetAllDomainQuery { Request = request };
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(request);
         return result;
     }
 }

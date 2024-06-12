@@ -35,9 +35,9 @@ public class GenderQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.GenderGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllGenderQuery request)
+    public async Task<Result> Get(GetAllGenderQuery request)
     {
         return await _mediator.Send(request);
         

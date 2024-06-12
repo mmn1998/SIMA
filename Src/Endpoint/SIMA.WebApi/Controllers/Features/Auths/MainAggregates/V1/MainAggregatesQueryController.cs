@@ -18,8 +18,8 @@ public class MainAggregatesQueryController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllMainAggregateQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllMainAggregateQuery query)
     {
         return await _mediator.Send(query);
     }

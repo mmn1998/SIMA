@@ -1,10 +1,8 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SIMA.WebApi.Controllers.Features.IssueManagement.Issues.V1;
 

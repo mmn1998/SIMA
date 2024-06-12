@@ -29,16 +29,16 @@ public class FormsQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     //[SimaAuthorize(Permissions.FormGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllFormQuery request)
+    public async Task<Result> Get(GetAllFormQuery request)
     {
         return await _mediator.Send(request);
 
     }
-    [HttpGet("FormFields")]
+    [HttpPost("FormFields")]
     //[SimaAuthorize(Permissions.FormGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllFormFieldsQuery request)
+    public async Task<Result> Get(GetAllFormFieldsQuery request)
     {
         return await _mediator.Send(request);
 

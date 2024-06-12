@@ -28,12 +28,11 @@ public class ConfigurationAttributesQueryController : ControllerBase
         return await _mediator.Send(query);
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.ConfigurationAttributesGetAll)]
-    public async Task<Result> Get([FromQuery] BaseRequest request)
+    public async Task<Result> Get(GetAllConfigurationAttributes request)
     {
-        var query = new GetAllConfigurationAttributes { Request = request };
-        return await _mediator.Send(query);
+        return await _mediator.Send(request);
     }
 }
 

@@ -22,8 +22,8 @@ public class ServiceCategoriesQueryController : ControllerBase
         var query = new GetServiceCategoryQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
-    public async Task<Result> Get([FromQuery] GetAllServiceCategoriesQuery query)
+    [HttpPost("GetAll")]
+    public async Task<Result> Get([FromBody] GetAllServiceCategoriesQuery query)
     {
         return await _mediator.Send(query);
     }

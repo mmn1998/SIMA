@@ -31,10 +31,10 @@ public class PermissionsQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet]
+    [HttpPost]
     [SimaAuthorize(Permissions.PermisionsGetAll)] /// TODO Mehdi
                                                   /// MEHDI : it doesnt have any wireframes !!!
-    public async Task<Result> Get([FromQuery] GetAllPermissionsQuery request)
+    public async Task<Result> Get(GetAllPermissionsQuery request)
     {
         return await _mediator.Send(request);
     }

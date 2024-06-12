@@ -18,9 +18,9 @@ public class IssueWeightCategoriesQueryController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.IssueWeightCategoriesGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllIssueWeightCategoriesQuery request)
+    public async Task<Result> Get(GetAllIssueWeightCategoriesQuery request)
     {
         return await _mediator.Send(request);
     }

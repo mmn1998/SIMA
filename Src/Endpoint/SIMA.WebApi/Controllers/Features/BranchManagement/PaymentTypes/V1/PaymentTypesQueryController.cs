@@ -26,9 +26,9 @@ public class PaymentTypesQueryController : ControllerBase
         var query = new GetPaymentTypeQuery { Id = id };
         return await _mediator.Send(query);
     }
-    [HttpGet]
+    [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.PaymentTypeGetAll)]
-    public async Task<Result> Get([FromQuery] GetAllPaymentTypesQuery query)
+    public async Task<Result> Get(GetAllPaymentTypesQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -35,9 +35,9 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1
             return result;
         }
 
-        [HttpGet]
+        [HttpPost("GetAll")]
         [SimaAuthorize(Permissions.WorkFlowGetAll)]
-        public async Task<Result> Get([FromQuery] GetAllWorkFlowsQuery query)
+        public async Task<Result> Get(GetAllWorkFlowsQuery query)
         {
             var result = await _mediator.Send(query);
             return result;
@@ -64,9 +64,9 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1
         #endregion
 
         #region -- Step --
-        [HttpGet("GetSteps")]
+        [HttpPost("GetSteps")]
         [SimaAuthorize(Permissions.WorkFlowStepGetAll)]
-        public async Task<Result> GetSteps([FromQuery] GetAllStepsQuery query)
+        public async Task<Result> GetSteps(GetAllStepsQuery query)
         {
             return await _mediator.Send(query);
         }
@@ -90,9 +90,9 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.WorkFlows.V1
         #endregion
 
         #region -- State --
-        [HttpGet("GetStates")]
+        [HttpPost("GetStates")]
         [SimaAuthorize(Permissions.WorkFlowStateGetAll)]
-        public async Task<Result> GetStates([FromQuery] GetAllStatesQuery query)
+        public async Task<Result> GetStates(GetAllStatesQuery query)
         {
             return await _mediator.Send(query);
         }
