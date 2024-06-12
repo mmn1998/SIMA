@@ -2,15 +2,15 @@
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
-using SIMA.Domain.Models.Features.ChannelTypeCatalogs.ChannelTypes.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.NewFolder;
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 public class Service : Entity
@@ -127,5 +127,11 @@ public class Service : Entity
     public ICollection<PreRequisiteServices> RequiredServicess => _requiredServicess;
     private List<PreRequisiteServices> _preRequisiteServicess = new();
     public ICollection<PreRequisiteServices> PreRequisiteServicess => _preRequisiteServicess;
+    private List<BusinessImpactAnalysis> _businessImpactAnalyses = new();
+    public ICollection<BusinessImpactAnalysis> BusinessImpactAnalyses => _businessImpactAnalyses;
+    private List<BusinessContinuityStrategyService> _businessContinuityStrategyServices = new();
+    public ICollection<BusinessContinuityStrategyService> BusinessContinuityStrategyServices => _businessContinuityStrategyServices
+        ;private List<BusinessContinuityPlanService> _businessContinuityPlanServices = new();
+    public ICollection<BusinessContinuityPlanService> BusinessContinuityPlanServices => _businessContinuityPlanServices;
 
 }

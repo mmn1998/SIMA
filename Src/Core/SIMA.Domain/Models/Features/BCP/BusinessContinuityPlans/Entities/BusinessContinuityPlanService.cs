@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -30,10 +31,8 @@ public class BusinessContinuityPlanService : Entity
     public BusinessContinuityPlanServiceId Id { get; private set; }
     public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
     public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
-    /// <summary>
-    /// TODO : ServiceId
-    /// </summary>
-    //public long ServiceId { get; set; }
+    public ServiceId ServiceId { get; private set; }
+    public virtual Service Service { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

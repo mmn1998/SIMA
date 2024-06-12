@@ -1,9 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.Threats.Args;
-using SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.Threats.Entities
 {

@@ -52,7 +52,6 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     }
     #endregion
     public BusinessContinuityStrategyId Id { get; private set; }
-    /// TODO : CordinatorId
     public long CordinatorId { get; private set; }
     public string? Title { get; private set; }
     public string? Description { get; private set; }

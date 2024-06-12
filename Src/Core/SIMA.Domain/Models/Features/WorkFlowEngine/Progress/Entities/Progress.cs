@@ -9,10 +9,8 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
 {
     public class Progress : Entity
     {
-
         private Progress()
         {
-
         }
         private Progress(ProgressArg arg)
         {
@@ -38,14 +36,21 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
             SourceId = new StepId(arg.SourceId);
             TargetId = arg.TargetId.HasValue ? new StepId(arg.TargetId.Value) : null;
             BpmnId = arg.BpmnId;
+          //  HasStoreProcedure = arg.HasStoreProcedure;
             ModifiedBy = arg.CreatedBy;
             ActiveStatusId = arg.ActiveStatusId;
         }
-
+        public void SetStoreProcedures(List<ProgressStoreProcedureArg> progressStoreProcedureArgs)
+        {
+            var storeProcedures = progressStoreProcedureArgs.Select(ProgressStoreProcedure.Create);
+            _progressStoreProcedures.AddRange(storeProcedures);
+        }
         public void ChangeStatus(ChangeStatusArg arg)
         {
-            StateId = new StateId(arg.StateId);
+            StateId = arg.StateId.HasValue ? new StateId(arg.StateId.Value) : null; 
             ConditionExpression = arg.ConditionExpression;
+            HasStoreProcedure = arg.ProgressStoreProcedures.Any() ? "1" : "0";
+            SetStoreProcedures(arg.ProgressStoreProcedures);
         }
         public async Task Modify(ModifyProgressArg arg)
         {
@@ -67,8 +72,6 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
             ActiveStatusId = (int)ActiveStatusEnum.Active;
         }
 
-
-
         public ProgressId Id { get; private set; }
         public StepId SourceId { get; set; }
         public StepId? TargetId { get; set; }
@@ -77,6 +80,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         public string? BpmnId { get; private set; }
         public string? Description { get; private set; }
         public string? ConditionExpression { get; private set; }
+        public string? HasStoreProcedure { get; private set; }
         public string? Extension { get; private set; }
         public long? ActiveStatusId { get; private set; }
         public DateTime? CreatedAt { get; private set; }
@@ -86,6 +90,8 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         public Step Source { get; private set; }
         public Step Target { get; private set; }
         public WorkFlow.Entities.WorkFlow WorkFlow { get; private set; }
+        private List<ProgressStoreProcedure> _progressStoreProcedures = new();
+        public ICollection<ProgressStoreProcedure> ProgressStoreProcedures => _progressStoreProcedures;
 
         public StateId? StateId { get; private set; }
         public virtual State? State { get; private set; }

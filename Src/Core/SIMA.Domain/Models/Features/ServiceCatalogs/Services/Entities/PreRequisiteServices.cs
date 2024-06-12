@@ -1,10 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Core.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
-namespace SIMA.Domain.Models.Features.ServiceCatalogs.NewFolder;
+namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 public class PreRequisiteServices : Entity
 {
@@ -15,7 +14,7 @@ public class PreRequisiteServices : Entity
     private PreRequisiteServices(CreatePreRequisiteServicesArg arg)
     {
         Id = new PreRequisiteServicesId(arg.Id);
-    
+
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -29,7 +28,7 @@ public class PreRequisiteServices : Entity
     public virtual Service Service { get; private set; }
     public ServiceId ServiceId { get; private set; }
     public ServiceId PreRequiredServiceId { get; private set; }
-    public virtual  Service PreRequiredService { get; private set; }
+    public virtual Service PreRequiredService { get; private set; }
     public long? ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

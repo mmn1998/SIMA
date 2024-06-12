@@ -1,15 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Args;
-using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Events;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
-using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Exceptions;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

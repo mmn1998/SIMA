@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="1.8.9" />
+    <PackageReference Include="SIMA.Framework.Common" Version="1.9.6" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>
@@ -24,10 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
+    <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
+    <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />
+    <Folder Include="Models\Features\Logistics\PaymentCommands\Args\" />
+    <Folder Include="Models\Features\Logistics\PaymentCommands\Contracts\" />
+    <Folder Include="Models\Features\Logistics\PriceEstimations\Args\" />
+    <Folder Include="Models\Features\Logistics\PriceEstimations\Contracts\" />
     <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceCustomerTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Interfaces\" />

@@ -1,6 +1,6 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Args;
-using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -33,10 +33,9 @@ public class BusinessImpactAnalysisCriticalActivity : Entity
     public BusinessImpactAnalysisCriticalActivityId Id { get; set; }
     public BusinessImpactAnalysisId BusinessImpactAnalysisId { get; private set; }
     public virtual BusinessImpactAnalysis BusinessImpactAnalysis { get; private set; }
-    /// <summary>
-    /// TODO : CriticalActivity
-    /// </summary>
-    //public long CriticalActivityId { get; private set; }
+    
+    public CriticalActivityId CriticalActivityId { get; private set; }
+    public virtual CriticalActivity CriticalActivity { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

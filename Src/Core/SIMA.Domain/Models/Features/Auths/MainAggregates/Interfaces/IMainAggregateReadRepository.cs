@@ -6,5 +6,5 @@ namespace SIMA.Domain.Models.Features.Auths.MainAggregates.Interfaces;
 
 public interface IMainAggregateReadRepository : IQueryRepository
 {
-    Task<Result<List<GetMainAggregateQueryResult>>> GetAll(GetAllMainAggregateQuery request);
+    Task<Result<IEnumerable<GetMainAggregateQueryResult>>> GetAll(GetAllMainAggregateQuery request);
 }

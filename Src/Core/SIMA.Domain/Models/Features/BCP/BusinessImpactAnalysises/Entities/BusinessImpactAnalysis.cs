@@ -7,10 +7,9 @@ using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.MaximumAcceptableOutages.Entities;
-using SIMA.Domain.Models.Features.BCP.MaximumAcceptableOutages.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -31,12 +30,8 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
         ImportanceDegreeId = new(arg.ImportanceDegreeId);
         ServicePriorityId = new(arg.ServicePriorityId);
         BackupPeriodId = new(arg.BackupPeriodId);
-        if (arg.MaximumAcceptableOutageId.HasValue) MaximumAcceptableOutageId = new(arg.MaximumAcceptableOutageId.Value);
-        if (arg.ConsequenceId.HasValue) ConsequenceId = new(arg.ConsequenceId.Value);
-        RTO = arg.RTO;
-        MTD = arg.MTD;
-        WRT = arg.WRT;
-        RPO = arg.RPO;
+        ServiceId = new(arg.ServiceId);
+        RestartReason = arg.RestartReason;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
@@ -54,12 +49,7 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
         ImportanceDegreeId = new(arg.ImportanceDegreeId);
         ServicePriorityId = new(arg.ServicePriorityId);
         BackupPeriodId = new(arg.BackupPeriodId);
-        if (arg.MaximumAcceptableOutageId.HasValue) MaximumAcceptableOutageId = new(arg.MaximumAcceptableOutageId.Value);
-        if (arg.ConsequenceId.HasValue) ConsequenceId = new(arg.ConsequenceId.Value);
-        RTO = arg.RTO;
-        MTD = arg.MTD;
-        WRT = arg.WRT;
-        RPO = arg.RPO;
+        RestartReason = arg.RestartReason;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
@@ -76,17 +66,12 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     public BusinessImpactAnalysisId Id { get; private set; }
     public ImportanceDegreeId ImportanceDegreeId { get; private set; }
     public virtual ImportanceDegree ImportanceDegree { get; private set; }
-    public ServicePriorityId ServicePriorityId { get; private set; }
-    public virtual ServicePriority ServicePriority { get; private set; }
+    public OrganizationalServicePriorityId ServicePriorityId { get; private set; }
+    public virtual OrganizationalServicePriority ServicePriority { get; private set; }
     public BackupPeriodId BackupPeriodId { get; private set; }
     public virtual BackupPeriod BackupPeriod { get; private set; }
-    public MaximumAcceptableOutageId? MaximumAcceptableOutageId { get; private set; }
-    public virtual MaximumAcceptableOutage? MaximumAcceptableOutage { get; private set; }
-    public ConsequenceId? ConsequenceId { get; private set; }
-    public virtual Consequence? Consequence { get; private set; }
-    
-    /// TODO : ServiceId
-    //public long ServiceId { get; private set; }
+    public ServiceId ServiceId { get; private set; }
+    public virtual Service Service { get; private set; }
     public string? Name { get; private set; }
     public float? RTO { get; private set; }
     public float? RPO { get; private set; }
@@ -119,4 +104,6 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     public ICollection<BusinessImpactAnalysisCriticalActivity> BusinessImpactAnalysisCriticalActivities => _businessImpactAnalysisCriticalActivities;
     private List<BusinessImpactAnalysisStaff> _businessImpactAnalysisStaff = new();
     public ICollection<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaff => _businessImpactAnalysisStaff;
+    private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
+    public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
 }

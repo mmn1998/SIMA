@@ -10,6 +10,7 @@ using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
@@ -117,6 +118,8 @@ public class Document : Entity
     public ICollection<ServiceDocument> ServiceDocuments => _serviceDocuments;
     private List<ApiDocument> _apiDocuments = new();
     public ICollection<ApiDocument> ApiDocuments => _apiDocuments;
+    private List<LogisticsRequestDocument> _logisticsRequestDocuments = new();
+    public ICollection<LogisticsRequestDocument> LogisticsRequestDocuments => _logisticsRequestDocuments;
 
     public ICollection<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
     public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments { get; set; }

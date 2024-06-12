@@ -271,6 +271,12 @@ public class WorkFlow : Entity
             result.Modify(arg);
         }
     }
+
+    public async Task AddStepApproval(List<CreateStepApprovalOptionArg> args  , long StepId)
+    {
+        var step  = _step.Where(x=>x.Id == new StepId(StepId)).FirstOrDefault();
+        await step.AddStepApprovalOption(args, StepId);
+    }
     public async Task ModifyState(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
         var result = _states.Where(x => x.Id == new StateId(arg.Id)).FirstOrDefault();

@@ -1,8 +1,4 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities;
-
-namespace SIMA.Domain.Models.Features.RiskManagement.Threats.Args
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.Threats.Args
 {
     public class CreateThreatArg
     {

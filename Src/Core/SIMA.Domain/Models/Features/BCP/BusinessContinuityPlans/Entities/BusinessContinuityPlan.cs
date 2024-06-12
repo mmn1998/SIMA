@@ -88,8 +88,8 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
     public ICollection<BusinessContinuityPlanCriticalActivity> BusinessContinuityPlanCriticalActivities => _businessContinuityPlanCriticalActivities;
     private List<BusinessContinuityPlanDetailPlanningAssumption> _businessContinuityPlanDetailPlanningAssumptions = new();
     public ICollection<BusinessContinuityPlanDetailPlanningAssumption> BusinessContinuityPlanDetailPlanningAssumptions => _businessContinuityPlanDetailPlanningAssumptions;
-    private List<BusinessContinuityPlanGeneralAssumption> _businessContinuityPlanGeneralAssumptions = new();
-    public ICollection<BusinessContinuityPlanGeneralAssumption> BusinessContinuityPlanGeneralAssumptions => _businessContinuityPlanGeneralAssumptions;
+    private List<BusinessContinuityPlanPossibleAction> _businessContinuityPlanPossibleActions = new();
+    public ICollection<BusinessContinuityPlanPossibleAction> BusinessContinuityPlanPossibleActions => _businessContinuityPlanPossibleActions;
     private List<BusinessContinuityPlanRecoveryCriteria> _businessContinuityPlanRecoveryCriterias = new();
     public ICollection<BusinessContinuityPlanRecoveryCriteria> BusinessContinuityPlanRecoveryCriterias => _businessContinuityPlanRecoveryCriterias;
     private List<BusinessContinuityPlanRecoveryOption> _businessContinuityPlanRecoveryOptions = new();

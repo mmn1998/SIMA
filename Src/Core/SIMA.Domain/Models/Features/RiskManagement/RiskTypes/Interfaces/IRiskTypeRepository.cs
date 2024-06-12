@@ -5,5 +5,6 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Interfaces
 {
     public interface IRiskTypeRepository : IRepository<RiskType>
     {
+        Task<RiskType> GetById(long id);
     }
 }

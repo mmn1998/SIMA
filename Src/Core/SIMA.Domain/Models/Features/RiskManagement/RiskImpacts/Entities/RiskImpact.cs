@@ -2,9 +2,13 @@
 using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Args;
+using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Interfaces;
 using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities
 {
@@ -25,12 +29,14 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities
             CreatedBy = arg.CreatedBy;
         }
 
-        public static async Task<RiskImpact> Create(CreateRiskImpactArgs arg)
+        public static async Task<RiskImpact> Create(CreateRiskImpactArgs arg, IRiskImpactDomainService service)
         {
+            await CreateGuard(arg, service);
             return new RiskImpact(arg);
         }
-        public async Task Modify(ModifyRiskImpactArgs arg)
+        public async Task Modify(ModifyRiskImpactArgs arg, IRiskImpactDomainService service)
         {
+            await ModifyGuard(arg, service);
             Name = arg.Name;
             Code = arg.Code;
             Impact = arg.Impact;
@@ -60,6 +66,30 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities
 
         private List<ServiceRiskImpact> _serviceRiskImpacts = new();
         public ICollection<ServiceRiskImpact> ServiceRiskImpacts => _serviceRiskImpacts;
+
+        #region Guards
+        private static async Task CreateGuard(CreateRiskImpactArgs arg, IRiskImpactDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+
+        private async Task ModifyGuard(ModifyRiskImpactArgs arg, IRiskImpactDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+            if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+        #endregion
 
 
     }

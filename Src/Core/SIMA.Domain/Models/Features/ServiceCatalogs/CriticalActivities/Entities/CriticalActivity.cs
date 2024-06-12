@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -65,4 +66,6 @@ public class CriticalActivity : Entity
     public ICollection<CriticalActivityExecutionPlan> CriticalActivityExecutionPlans => _criticalActivityExecutionPlans;
     private List<CriticalActivityService> _criticalActivityServices = new();
     public ICollection<CriticalActivityService> CriticalActivityServices => _criticalActivityServices;
+    private List<BusinessImpactAnalysisCriticalActivity> _businessImpactAnalysisCriticalActivities = new();
+    public ICollection<BusinessImpactAnalysisCriticalActivity> BusinessImpactAnalysisCriticalActivities => _businessImpactAnalysisCriticalActivities;
 }

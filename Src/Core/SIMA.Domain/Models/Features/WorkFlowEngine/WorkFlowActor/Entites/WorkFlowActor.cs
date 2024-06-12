@@ -220,6 +220,7 @@ public class WorkFlowActor : Entity
     public ICollection<WorkFlowActorUser> WorkFlowActorUsers => _workFlowActorUsers;
     private List<WorkFlowActorGroup> _workFlowActorGroups = new();
     public ICollection<WorkFlowActorGroup> WorkFlowActorGroups => _workFlowActorGroups;
+
     private List<IssueApproval> _issueApprovals = new();
     public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
 

@@ -14,6 +14,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args
         public long? ActiveStatusId { get; set; }
         public DateTime? CreatedAt { get; set; }
         public long? CreatedBy { get; set; }
+        public string? HasStoreProcedure { get; set; }
         public StepArg Source { get; set; }
         public StepArg Target { get; set; }
     }

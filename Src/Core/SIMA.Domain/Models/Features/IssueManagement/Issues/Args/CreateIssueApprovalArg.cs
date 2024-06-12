@@ -1,0 +1,13 @@
+﻿namespace SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
+
+public class CreateIssueApprovalArg
+{
+    public long IssueId { get; set; }
+    public long StepApprovalOptionId { get; set; }
+    public long ApprovedBy { get; set; }
+    public long WorkflowActorId { get; set; }
+    public string Description { get; set; }
+    public long ActiveStatusId { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public long? CreatedBy { get; set; }
+}

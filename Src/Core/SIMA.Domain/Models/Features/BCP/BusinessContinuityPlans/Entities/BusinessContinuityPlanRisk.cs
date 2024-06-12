@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 
@@ -30,10 +31,8 @@ public class BusinessContinuityPlanRisk : Entity
     public BusinessContinuityPlanRiskId Id { get; private set; }
     public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
     public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
-    /// <summary>
-    /// TODO : RiskId
-    /// </summary>
-    //public long RiskId { get; set; }
+    public RiskId RiskId { get; private set; }
+    public virtual Risk Risk { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

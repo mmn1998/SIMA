@@ -5,5 +5,6 @@ namespace SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Interfaces
 {
     public interface IImpactScaleRepository : IRepository<ImpactScale>
     {
+        Task<ImpactScale> GetById(long id);
     }
 }

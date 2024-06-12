@@ -1,7 +1,11 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Args;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Args;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Interfaces;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities
 {
@@ -22,12 +26,14 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities
             CreatedBy = arg.CreatedBy;
         }
 
-        public static async Task<RiskLevel> Create(CreateRiskLevelArgs arg)
+        public static async Task<RiskLevel> Create(CreateRiskLevelArgs arg, IRiskLevelDomainService service)
         {
+            await CreateGuard(arg, service);
             return new RiskLevel(arg);
         }
-        public async Task Modify(ModifyRiskLevelArgs arg)
+        public async Task Modify(ModifyRiskLevelArgs arg, IRiskLevelDomainService service)
         {
+            await ModifyGuard(arg, service);
             Name = arg.Name;
             Code = arg.Code;
             Level = arg.Level;
@@ -51,6 +57,30 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities
 
         private List<RiskLevelMeasure> _riskLevelMeasures = new();
         public ICollection<RiskLevelMeasure> RiskLevelMeasures => _riskLevelMeasures;
+
+        #region Guards
+        private static async Task CreateGuard(CreateRiskLevelArgs arg, IRiskLevelDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+
+        private async Task ModifyGuard(ModifyRiskLevelArgs arg, IRiskLevelDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+            if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+        #endregion
 
     }
 }

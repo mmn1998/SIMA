@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Args;
+﻿using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Interfaces;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Interfaces;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Contracts;

@@ -2,6 +2,7 @@
 {
     public class ModifyRiskCriteriaArg
     {
+        public long Id { get; set; }
         public string Code { get;  set; }
         public long RiskDegreeId { get;  set; }
         public long RiskPossibilityId { get;  set; }

@@ -1,6 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Arg;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;

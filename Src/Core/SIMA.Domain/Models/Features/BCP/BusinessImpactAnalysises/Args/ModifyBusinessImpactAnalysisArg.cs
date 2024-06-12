@@ -15,14 +15,6 @@ public class ModifyBusinessImpactAnalysisArg
     public long ImportanceDegreeId { get; set; }
     public long ServicePriorityId { get; set; }
     public long BackupPeriodId { get; set; }
-    public long? MaximumAcceptableOutageId { get; set; }
-    public long? ConsequenceId { get; set; }
-
-    /// TODO : ServiceId
-    //public long ServiceId { get; set; }
-    public float? RTO { get; set; }
-    public float? RPO { get; set; }
-    public float? WRT { get; set; }
-    public float? MTD { get; set; }
+    public long ServiceId { get; set; }
     public string? RestartReason { get; set; }
 }

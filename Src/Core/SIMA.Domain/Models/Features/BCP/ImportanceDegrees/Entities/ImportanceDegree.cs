@@ -2,8 +2,10 @@
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Args;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Contracts;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
 
@@ -15,7 +17,7 @@ public class ImportanceDegree : Entity, IAggregateRoot
     }
     private ImportanceDegree(CreateImportanceDegreeArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
+        Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;
@@ -41,11 +43,23 @@ public class ImportanceDegree : Entity, IAggregateRoot
     #region Guards
     private static async Task CreateGuards(CreateImportanceDegreeArg arg, IImportanceDegreeDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyImportanceDegreeArg arg, IImportanceDegreeDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public ImportanceDegreeId Id { get; set; }

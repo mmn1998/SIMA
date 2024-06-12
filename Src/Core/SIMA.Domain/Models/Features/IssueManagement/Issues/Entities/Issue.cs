@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
@@ -7,6 +8,7 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
@@ -101,6 +103,12 @@ public class Issue : Entity
     {
         var comment = await IssueComment.Create(issueCommentArg);
         _issueComments.Add(comment);
+    }
+
+    public async Task AddIssueApproval(CreateIssueApprovalArg issueApproval)
+    {
+        var approval = await IssueApproval.Create(issueApproval);
+        _issueApprovals.Add(approval);
     }
     public void DeleteComment(IssueCommentId issueCommentId)
     {
@@ -239,6 +247,12 @@ public class Issue : Entity
 
     private List<RiskRelatedIssue> _riskRelatedIssues = new();
     public ICollection<RiskRelatedIssue> RiskRelatedIssues => _riskRelatedIssues;
+    private List<LogisticsRequest> _logistics = new();
+    public ICollection<LogisticsRequest> Logistics => _logistics;
+
+    private List<IssueApproval> _issueApprovals = new();
+    public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
+
 
     #region Gaurds
 

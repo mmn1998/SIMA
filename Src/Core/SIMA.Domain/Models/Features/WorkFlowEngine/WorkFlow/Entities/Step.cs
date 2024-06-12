@@ -1,9 +1,14 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
+using SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -87,6 +92,34 @@ public class Step : Entity
         _workFlowActorStep.AddRange(actorStep);
     }
 
+    public async Task AddStepApprovalOption(List<CreateStepApprovalOptionArg> arg, long stepId)
+    {
+        var previousStepApprovalOptions = _stepApprovalOptions.Where(x => x.StepId == new StepId(stepId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addStepApprovalOption = arg.Where(x => !previousStepApprovalOptions.Any(c => c.ApprovalOptionId.Value == x.ApprovalOptionId)).ToList();
+        var deleteStepApprovalOption = previousStepApprovalOptions.Where(x => !arg.Any(c => c.ApprovalOptionId == x.ApprovalOptionId.Value)).ToList();
+
+
+        foreach (var item in addStepApprovalOption)
+        {
+            var entity = _stepApprovalOptions.Where(x => (x.ApprovalOptionId == new ApprovalOptionId(item.ApprovalOptionId) && x.StepId == new StepId(stepId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+               await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = StepApprovalOption.Create(item);
+                _stepApprovalOptions.Add(entity);
+            }
+        }
+
+        foreach (var item in deleteStepApprovalOption)
+        {
+            item.Delete();
+        }
+    }
+
     public void Delete()
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
@@ -119,8 +152,7 @@ public class Step : Entity
     public ICollection<WorkFlowActorStep> WorkFlowActorSteps => _workFlowActorStep;
     private List<Document> _documents = new();
     public ICollection<Document> Documents => _documents;
-    private List<IssueApproval> _issueApprovals = new();
-    public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
+   
     private List<Issue> _issues = new();
     public ICollection<Issue> Issues => _issues;
 
@@ -131,4 +163,9 @@ public class Step : Entity
     public ICollection<IssueHistory> SourceIssueHistories => _sourceissueHistories;
     private List<IssueHistory> _targetissueHistories = new();
     public ICollection<IssueHistory>? TargetIssueHistories => _targetissueHistories;
+
+    private List<StepApprovalOption> _stepApprovalOptions = new();
+    public ICollection<StepApprovalOption> StepApprovalOptions => _stepApprovalOptions;
+    private List<StepOutputParam> _stepOutputParams = new();
+    public ICollection<StepOutputParam> StepOutputParams => _stepOutputParams;
 }

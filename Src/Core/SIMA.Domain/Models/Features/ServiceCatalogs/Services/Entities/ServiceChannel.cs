@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.ChannelTypeCatalogs.ChannelTypes.Entities;
+﻿using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Core.Entities;
 

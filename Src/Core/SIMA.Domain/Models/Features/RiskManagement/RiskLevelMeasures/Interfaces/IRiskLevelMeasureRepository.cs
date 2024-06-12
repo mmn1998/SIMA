@@ -5,5 +5,6 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Interface
 {
     public interface IRiskLevelMeasureRepository : IRepository<RiskLevelMeasure>
     {
+        Task<RiskLevelMeasure> GetById(long id);
     }
 }

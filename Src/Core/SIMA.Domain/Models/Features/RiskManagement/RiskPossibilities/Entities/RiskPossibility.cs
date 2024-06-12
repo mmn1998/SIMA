@@ -1,21 +1,20 @@
-﻿using Org.BouncyCastle.Crypto;
-using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Args;
-using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Args;
-using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Interfaces;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
-namespace SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities
+namespace SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities
 {
     public class RiskPossibility : Entity
     {
         private RiskPossibility()
         {
-            
+
         }
         private RiskPossibility(CreateRiskPossibilityArgs arg)
         {
@@ -28,12 +27,14 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities
             CreatedBy = arg.CreatedBy;
         }
 
-        public static async Task<RiskPossibility> Create(CreateRiskPossibilityArgs arg)
+        public static async Task<RiskPossibility> Create(CreateRiskPossibilityArgs arg, IRiskPossibilityDomainService service)
         {
+            await CreateGuard(arg, service);
             return new RiskPossibility(arg);
         }
-        public async Task Modify(ModifyRiskPossibilityArgs arg)
+        public async Task Modify(ModifyRiskPossibilityArgs arg, IRiskPossibilityDomainService service)
         {
+            await ModifyGuard(arg, service);
             Name = arg.Name;
             Code = arg.Code;
             Possibility = arg.Possibility;
@@ -63,6 +64,30 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskPossibillities.Entities
 
         private List<Threat> _threats = new();
         public ICollection<Threat> Threats => _threats;
+
+        #region Guards
+        private static async Task CreateGuard(CreateRiskPossibilityArgs arg, IRiskPossibilityDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+
+        private async Task ModifyGuard(ModifyRiskPossibilityArgs arg, IRiskPossibilityDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+            if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+        #endregion
 
     }
 }

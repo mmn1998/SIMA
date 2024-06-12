@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Exceptions;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -88,5 +89,6 @@ public class PaymentType : Entity
             throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
         }
     }
-
+    private List<PaymentHistory> _paymentHistories = new();
+    public ICollection<PaymentHistory> PaymentHistories => _paymentHistories;
 }

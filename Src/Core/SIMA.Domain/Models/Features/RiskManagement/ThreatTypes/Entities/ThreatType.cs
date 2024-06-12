@@ -1,9 +1,10 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Args;
-using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Args;
+using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Interfaces;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities
 {
@@ -23,12 +24,14 @@ namespace SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities
             CreatedBy = arg.CreatedBy;
         }
 
-        public static async Task<ThreatType> Create(CreateThreatTypeArg arg)
+        public static async Task<ThreatType> Create(CreateThreatTypeArg arg, IThreatTypeDomainService service )
         {
+            await CreateGuard( arg, service );
             return new ThreatType(arg);
         }
-        public async Task Modify(ModifyThreatTypeArg arg)
+        public async Task Modify(ModifyThreatTypeArg arg ,IThreatTypeDomainService service)
         {
+            await ModifyGuard(arg, service);
             Name = arg.Name;
             Code = arg.Code;
             ModifiedAt = arg.ModifiedAt;
@@ -50,5 +53,29 @@ namespace SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities
 
         private List<Threat> _threats = new();
         public ICollection<Threat> Threats => _threats;
+
+        #region Guards
+        private static async Task CreateGuard(CreateThreatTypeArg arg, IThreatTypeDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+
+        private async Task ModifyGuard(ModifyThreatTypeArg arg, IThreatTypeDomainService service)
+        {
+            arg.NullCheck();
+            arg.Name.NullCheck();
+            arg.Code.NullCheck();
+
+            if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+            if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+            if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        }
+        #endregion
     }
 }
