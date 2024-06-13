@@ -28,7 +28,7 @@ public class ChannelTypeQueryRepository : IChannelTypeQueryRepository
 								,F.[Code]
                                 ,F.CreatedAt
 								,F.[ActiveStatusId]
-								,A.[Name] ActiveStatusName
+								,A.[Name] ActiveStatus
 								From ServiceCatalog.ChannelType F
 								join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
 								WHERE F.[ActiveStatusID] <> 3

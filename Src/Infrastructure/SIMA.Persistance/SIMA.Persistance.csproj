@@ -33,6 +33,7 @@
     <Folder Include="EntityConfigurations\Features\Logistics\PaymentCommands\" />
     <Folder Include="EntityConfigurations\Features\Logistics\PriceEstimations\" />
     <Folder Include="EntityConfigurations\Features\Logistics\Goodses\" />
+    <Folder Include="Repositories\Features\Logistics\Goods\" />
   </ItemGroup>
 
 </Project>

@@ -84,6 +84,10 @@
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentExtentions\V1\WorkFlowDocumentExtentionsQueryController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsQuorumPrices\V1\GoodsQuorumPricesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsQuorumPrices\V1\GoodsQuorumPricesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\RiskCriterias\RiskCriteriaController.cs" />
@@ -112,6 +116,8 @@
     <Compile Include="Controllers\Features\SecurityCommitees\Meetings\MeetingController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesQueryController.cs" />
     <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\UnitMeasurements\V1\UnitMeasurementsController.cs" />
+    <Compile Include="Controllers\Features\Logistics\UnitMeasurements\V1\UnitMeasurementsQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategoriesController.cs" />
@@ -175,6 +181,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Features\Logistics\Goods\" />
     <Folder Include="SeriLog_Logs\" />
   </ItemGroup>
 

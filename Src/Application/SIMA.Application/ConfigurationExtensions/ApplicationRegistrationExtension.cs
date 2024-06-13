@@ -39,6 +39,7 @@ using SIMA.Application.Feaatures.IssueManagement.IssuePriorities.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.Issues.Mapper;
 using SIMA.Application.Feaatures.IssueManagement.IssueTypes.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.IssueWeightCategories.Mappers;
+using SIMA.Application.Feaatures.Logistics.UnitMeasurements.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ImpactScales.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskCriterias.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskDegrees.Mapper;
@@ -184,6 +185,10 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new HappeningPossibilityMapper());
                 conf.AddProfile(new ConsequenceMapper());
                 conf.AddProfile(new RecoveryPointObjectiveMapper());
+                #endregion
+
+                #region Logistics
+                conf.AddProfile(new UnitMeasurementMapper());
                 #endregion
             }
         }, Array.Empty<Type>());

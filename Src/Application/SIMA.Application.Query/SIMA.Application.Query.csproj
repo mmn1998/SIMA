@@ -25,4 +25,9 @@
     <ProjectReference Include="..\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Logistics\GoodsQuorumPrices\" />
+    <Folder Include="Features\Logistics\Goods\" />
+  </ItemGroup>
+
 </Project>
