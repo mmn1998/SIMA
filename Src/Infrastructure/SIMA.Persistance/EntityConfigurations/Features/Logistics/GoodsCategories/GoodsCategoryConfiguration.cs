@@ -88,11 +88,11 @@ public class GoodsConfiguration : IEntityTypeConfiguration<Goods>
             .WithMany(x => x.Goods)
             .HasForeignKey(x => x.UnitMeasurementId).OnDelete(DeleteBehavior.ClientSetNull);
         
-        entity.Property(x => x.LogisticsRequestId)
-            .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
-        entity.HasOne(x => x.LogisticsRequest)
+        entity.Property(x => x.GoodsCategoryId)
+            .HasConversion(x => x.Value, x => new GoodsCategoryId(x));
+        entity.HasOne(x => x.GoodsCategory)
             .WithMany(x => x.Goods)
-            .HasForeignKey(x => x.LogisticsRequestId).OnDelete(DeleteBehavior.ClientSetNull);
+            .HasForeignKey(x => x.GoodsCategoryId).OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
 public class SupplierConfiguration : IEntityTypeConfiguration<Supplier>

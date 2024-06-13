@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Args;
 using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Contracts;
 using SIMA.Domain.Models.Features.Logistics.GoodsCategories.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -72,4 +73,6 @@ public class GoodsCategory : Entity, IAggregateRoot
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<Goods> _goods = new();
+    public ICollection<Goods> Goods => _goods;
 }

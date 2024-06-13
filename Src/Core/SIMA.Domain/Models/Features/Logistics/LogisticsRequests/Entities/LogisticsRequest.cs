@@ -63,8 +63,6 @@ public class LogisticsRequest : Entity, IAggregateRoot
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<Goods> _goods = new();
-    public ICollection<Goods> Goods => _goods;
     private List<PaymentCommand> _paymentCommands = new();
     public ICollection<PaymentCommand> PaymentCommands => _paymentCommands;
     private List<PriceEstimation> _priceEstimations = new();

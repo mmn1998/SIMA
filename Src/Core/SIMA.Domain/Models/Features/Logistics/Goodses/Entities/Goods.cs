@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Logistics.Goodses.Args;
+﻿using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Entities;
+using SIMA.Domain.Models.Features.Logistics.GoodsCategories.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Goodses.Args;
 using SIMA.Domain.Models.Features.Logistics.Goodses.Contracts;
 using SIMA.Domain.Models.Features.Logistics.Goodses.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
@@ -16,7 +18,7 @@ public class Goods : Entity, IAggregateRoot
     private Goods(CreateGoodsArg arg)
     {
         Id = new(arg.Id);
-        LogisticsRequestId = new(arg.LogisticsRequestId);
+        GoodsCategoryId = new(arg.GoodsCategoryId);
         UnitMeasurementId = new(arg.UnitMeasurementId);
         Name = arg.Name;
         Code = arg.Code;
@@ -33,7 +35,7 @@ public class Goods : Entity, IAggregateRoot
     public async Task Modify(ModifyGoodsArg arg, IGoodsDomainService service)
     {
         await ModifyGuards(arg, service);
-        LogisticsRequestId = new(arg.LogisticsRequestId);
+        GoodsCategoryId = new(arg.GoodsCategoryId);
         UnitMeasurementId = new(arg.UnitMeasurementId);
         Name = arg.Name;
         Code = arg.Code;
@@ -53,8 +55,8 @@ public class Goods : Entity, IAggregateRoot
     }
     #endregion
     public GoodsId Id { get; private set; }
-    public LogisticsRequestId LogisticsRequestId { get; private set; }
-    public virtual LogisticsRequest LogisticsRequest { get; private set; }
+    public GoodsCategoryId GoodsCategoryId { get; private set; }
+    public virtual GoodsCategory GoodsCategory { get; private set; }
     public UnitMeasurementId UnitMeasurementId { get; private set; }
     public virtual UnitMeasurement UnitMeasurement { get; private set; }
     public string? IsFixedAsset { get; private set; }
