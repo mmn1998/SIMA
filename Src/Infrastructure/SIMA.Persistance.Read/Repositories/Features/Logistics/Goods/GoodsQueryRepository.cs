@@ -1,22 +1,22 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
+using SIMA.Application.Query.Contract.Features.Logistics.Goods;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsTypes;
+namespace SIMA.Persistance.Read.Repositories.Features.Logistics.Goods;
 
-public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
+public class GoodsQueryRepository : IGoodsQueryRepository
 {
     private readonly string _connectionString;
-    public GoodsTypeQueryRepository(IConfiguration configuration)
+    public GoodsQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
     }
 
-    public async Task<Result<IEnumerable<GetGoodsTypeQueryResult>>> GetAll(GetAllGoodsTypeQuery request)
+    public async Task<Result<IEnumerable<GetGoodsQueryResult>>> GetAll(GetAllGoodsesQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -26,12 +26,18 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
 								 F.[Id]
 								,F.[Name]
 								,F.[Code]
-								,F.[IsRequireItConfirmation]
+								,F.[GoodsCategoryId]
+								,F.[UnitMeasurementId]
+								,F.[IsFixedAsset]
+								,gc.Name GoodsCategory
+								,um.Name UnitMeasurement
                                 ,F.CreatedAt
 								,F.[ActiveStatusId]
 								,A.[Name] ActiveStatus
-								From Logistics.GoodsType F
+								From Logistics.Goods F
 								join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+                                inner join [Logistics].[GoodsCategory] gc on F.GoodsCategoryId = gc.Id
+                                inner join [Logistics].[UnitMeasurement] um on F.UnitMeasurementId = um.Id
 								WHERE F.[ActiveStatusID] <> 3
 							";
             var queryCount = $@"
@@ -51,29 +57,38 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
             using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
                 var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetGoodsTypeQueryResult>();
+                var response = await multi.ReadAsync<GetGoodsQueryResult>();
                 return Result.Ok(response, request, count);
             }
 
         }
     }
 
-    public async Task<GetGoodsTypeQueryResult> GetById(GetGoodsTypeQuery request)
+    public async Task<GetGoodsQueryResult> GetById(GetGoodsQuery request)
     {
         var query = @"
-          SELECT C.[Id]
-              ,C.[Name]
-              ,C.[Code] 
-              ,C.[IsRequireItConfirmation]
-              ,A.[Name] ActiveStatus
-          FROM [Logistics].[GoodsType] C
-          INNER JOIN [Basic].[ActiveStatus] A ON C.ActiveStatusId = A.ID
-          WHERE C.[Id] = @Id AND C.ActiveStatusId <> 3";
+          Select 
+			 F.[Id]
+			,F.[Name]
+			,F.[Code]
+			,F.[GoodsCategoryId]
+			,F.[UnitMeasurementId]
+			,F.[IsFixedAsset]
+			,gc.Name GoodsCategory
+			,um.Name UnitMeasurement
+            ,F.CreatedAt
+			,F.[ActiveStatusId]
+			,A.[Name] ActiveStatus
+			From Logistics.Goods F
+			join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+            inner join [Logistics].[GoodsCategory] gc on F.GoodsCategoryId = gc.Id
+            inner join [Logistics].[UnitMeasurement] um on F.UnitMeasurementId = um.Id
+          WHERE F.[Id] = @Id AND F.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            var result = await connection.QueryFirstAsync<GetGoodsTypeQueryResult>(query, new { request.Id });
+            var result = await connection.QueryFirstAsync<GetGoodsQueryResult>(query, new { request.Id });
             return result ?? throw SimaResultException.NotFound;
         }
-    }
+    }   
 }

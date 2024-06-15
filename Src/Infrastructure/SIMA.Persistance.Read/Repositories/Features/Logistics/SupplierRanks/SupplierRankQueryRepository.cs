@@ -1,22 +1,22 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
+using SIMA.Application.Query.Contract.Features.Logistics.SupplierRanks;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsTypes;
+namespace SIMA.Persistance.Read.Repositories.Features.Logistics.SupplierRanks;
 
-public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
+public class SupplierRankQueryRepository : ISupplierRankQueryRepository
 {
     private readonly string _connectionString;
-    public GoodsTypeQueryRepository(IConfiguration configuration)
+    public SupplierRankQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
     }
 
-    public async Task<Result<IEnumerable<GetGoodsTypeQueryResult>>> GetAll(GetAllGoodsTypeQuery request)
+    public async Task<Result<IEnumerable<GetSupplierRankQueryResult>>> GetAll(GetAllSupplierRanksQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -26,11 +26,11 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
 								 F.[Id]
 								,F.[Name]
 								,F.[Code]
-								,F.[IsRequireItConfirmation]
+                                ,F.Ordering
                                 ,F.CreatedAt
 								,F.[ActiveStatusId]
 								,A.[Name] ActiveStatus
-								From Logistics.GoodsType F
+								From Logistics.SupplierRank F
 								join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
 								WHERE F.[ActiveStatusID] <> 3
 							";
@@ -51,28 +51,28 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
             using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
                 var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetGoodsTypeQueryResult>();
+                var response = await multi.ReadAsync<GetSupplierRankQueryResult>();
                 return Result.Ok(response, request, count);
             }
 
         }
     }
 
-    public async Task<GetGoodsTypeQueryResult> GetById(GetGoodsTypeQuery request)
+    public async Task<GetSupplierRankQueryResult> GetById(GetSupplierRankQuery request)
     {
         var query = @"
           SELECT C.[Id]
               ,C.[Name]
-              ,C.[Code] 
-              ,C.[IsRequireItConfirmation]
+              ,C.[Code]
+              ,C.Ordering
               ,A.[Name] ActiveStatus
-          FROM [Logistics].[GoodsType] C
+          FROM [Logistics].[SupplierRank] C
           INNER JOIN [Basic].[ActiveStatus] A ON C.ActiveStatusId = A.ID
           WHERE C.[Id] = @Id AND C.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            var result = await connection.QueryFirstAsync<GetGoodsTypeQueryResult>(query, new { request.Id });
+            var result = await connection.QueryFirstAsync<GetSupplierRankQueryResult>(query, new { request.Id });
             return result ?? throw SimaResultException.NotFound;
         }
     }

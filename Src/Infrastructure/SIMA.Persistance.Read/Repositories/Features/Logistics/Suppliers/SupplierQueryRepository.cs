@@ -1,22 +1,22 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
+using SIMA.Application.Query.Contract.Features.Logistics.Suppliers;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsTypes;
+namespace SIMA.Persistance.Read.Repositories.Features.Logistics.Suppliers;
 
-public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
+public class SupplierQueryRepository : ISupplierQueryRepository
 {
     private readonly string _connectionString;
-    public GoodsTypeQueryRepository(IConfiguration configuration)
+    public SupplierQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
     }
 
-    public async Task<Result<IEnumerable<GetGoodsTypeQueryResult>>> GetAll(GetAllGoodsTypeQuery request)
+    public async Task<Result<IEnumerable<GetSupplierQueryResult>>> GetAll(GetAllSuppliersQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -26,12 +26,20 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
 								 F.[Id]
 								,F.[Name]
 								,F.[Code]
-								,F.[IsRequireItConfirmation]
+								,F.MobileNumber
+	                            ,F.IsInBlackList
+	                            ,F.Address
+	                            ,F.FaxNumber
+	                            ,F.PhoneNumber
+	                            ,F.PostalCode
+	                            ,F.SupplierRankId
+	                            ,sp.Name SupplierRank
                                 ,F.CreatedAt
 								,F.[ActiveStatusId]
 								,A.[Name] ActiveStatus
-								From Logistics.GoodsType F
+								From Logistics.Supplier F
 								join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+                                join Logistics.SupplierRank sp on sp.Id = f.SupplierRankId
 								WHERE F.[ActiveStatusID] <> 3
 							";
             var queryCount = $@"
@@ -51,28 +59,39 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
             using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
                 var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetGoodsTypeQueryResult>();
+                var response = await multi.ReadAsync<GetSupplierQueryResult>();
                 return Result.Ok(response, request, count);
             }
 
         }
     }
 
-    public async Task<GetGoodsTypeQueryResult> GetById(GetGoodsTypeQuery request)
+    public async Task<GetSupplierQueryResult> GetById(GetSupplierQuery request)
     {
         var query = @"
-          SELECT C.[Id]
-              ,C.[Name]
-              ,C.[Code] 
-              ,C.[IsRequireItConfirmation]
-              ,A.[Name] ActiveStatus
-          FROM [Logistics].[GoodsType] C
-          INNER JOIN [Basic].[ActiveStatus] A ON C.ActiveStatusId = A.ID
-          WHERE C.[Id] = @Id AND C.ActiveStatusId <> 3";
+          Select 
+			 F.[Id]
+			,F.[Name]
+			,F.[Code]
+			,F.MobileNumber
+	        ,F.IsInBlackList
+	        ,F.Address
+	        ,F.FaxNumber
+	        ,F.PhoneNumber
+	        ,F.PostalCode
+	        ,F.SupplierRankId
+	        ,sp.Name SupplierRank
+            ,F.CreatedAt
+			,F.[ActiveStatusId]
+			,A.[Name] ActiveStatus
+			From Logistics.Supplier F
+			join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+            join Logistics.SupplierRank sp on sp.Id = f.SupplierRankId
+          WHERE F.[Id] = @Id AND F.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            var result = await connection.QueryFirstAsync<GetGoodsTypeQueryResult>(query, new { request.Id });
+            var result = await connection.QueryFirstAsync<GetSupplierQueryResult>(query, new { request.Id });
             return result ?? throw SimaResultException.NotFound;
         }
     }

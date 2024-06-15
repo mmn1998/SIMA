@@ -1,22 +1,22 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
+using SIMA.Application.Query.Contract.Features.Logistics.GoodsCategories;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsTypes;
+namespace SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsCategories;
 
-public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
+public class GoodsCategoryQueryRepository : IGoodsCategoryQueryRepository
 {
     private readonly string _connectionString;
-    public GoodsTypeQueryRepository(IConfiguration configuration)
+    public GoodsCategoryQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
     }
 
-    public async Task<Result<IEnumerable<GetGoodsTypeQueryResult>>> GetAll(GetAllGoodsTypeQuery request)
+    public async Task<Result<IEnumerable<GetGoodsCategoryQueryResult>>> GetAll(GetAllGoodsCategoriesQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -26,12 +26,19 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
 								 F.[Id]
 								,F.[Name]
 								,F.[Code]
-								,F.[IsRequireItConfirmation]
+								,F.[GoodsTypeId]
+								,GT.[Name] GoodsType
+								,F.[IsRequiredSecurityCheck]
+								,F.[IsTechnological]
+								,F.[IsGoods]
+								,F.[IsHardware]
                                 ,F.CreatedAt
 								,F.[ActiveStatusId]
 								,A.[Name] ActiveStatus
-								From Logistics.GoodsType F
+								From Logistics.GoodsCategory F
 								join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+                                join Logistics.GoodsType GT on GT.Id = F.GoodsTypeId
+
 								WHERE F.[ActiveStatusID] <> 3
 							";
             var queryCount = $@"
@@ -51,28 +58,37 @@ public class GoodsTypeQueryRepository : IGoodsTypeQueryRepository
             using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
                 var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetGoodsTypeQueryResult>();
+                var response = await multi.ReadAsync<GetGoodsCategoryQueryResult>();
                 return Result.Ok(response, request, count);
             }
 
         }
     }
 
-    public async Task<GetGoodsTypeQueryResult> GetById(GetGoodsTypeQuery request)
+    public async Task<GetGoodsCategoryQueryResult> GetById(GetGoodsCategoryQuery request)
     {
         var query = @"
-          SELECT C.[Id]
-              ,C.[Name]
-              ,C.[Code] 
-              ,C.[IsRequireItConfirmation]
-              ,A.[Name] ActiveStatus
-          FROM [Logistics].[GoodsType] C
-          INNER JOIN [Basic].[ActiveStatus] A ON C.ActiveStatusId = A.ID
-          WHERE C.[Id] = @Id AND C.ActiveStatusId <> 3";
+          Select 
+			 F.[Id]
+			,F.[Name]
+			,F.[Code]
+			,F.[GoodsTypeId]
+			,GT.[Name] GoodsType
+			,F.[IsRequiredSecurityCheck]
+			,F.[IsTechnological]
+			,F.[IsGoods]
+			,F.[IsHardware]
+            ,F.CreatedAt
+			,F.[ActiveStatusId]
+			,A.[Name] ActiveStatus
+			From Logistics.GoodsCategory F
+			join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+            join Logistics.GoodsType GT on GT.Id = F.GoodsTypeId
+          WHERE F.[Id] = @Id AND F.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            var result = await connection.QueryFirstAsync<GetGoodsTypeQueryResult>(query, new { request.Id });
+            var result = await connection.QueryFirstAsync<GetGoodsCategoryQueryResult>(query, new { request.Id });
             return result ?? throw SimaResultException.NotFound;
         }
     }
