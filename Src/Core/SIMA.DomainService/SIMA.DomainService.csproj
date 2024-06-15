@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Features\BCP\HappeningPossiblities\" />
-    <Folder Include="Features\Logistics\Goods\" />
   </ItemGroup>
 
 </Project>
