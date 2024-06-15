@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Feaatures\Logistics\Goods\" />
     <Folder Include="Feaatures\SecurityCommitees\Cartables\Mappers\" />
   </ItemGroup>
 

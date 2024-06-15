@@ -1,0 +1,27 @@
+﻿using SIMA.Application.Query.Contract.Features.Logistics.Suppliers;
+using SIMA.Framework.Common.Response;
+using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.Logistics.Suppliers;
+
+namespace SIMA.Application.Query.Features.Logistics.Suppliers;
+
+public class SupplierQueryHandler : IQueryHandler<GetSupplierQuery, Result<GetSupplierQueryResult>>,
+    IQueryHandler<GetAllSuppliersQuery, Result<IEnumerable<GetSupplierQueryResult>>>
+{
+    private readonly ISupplierQueryRepository _repository;
+
+    public SupplierQueryHandler(ISupplierQueryRepository repository)
+    {
+        _repository = repository;
+    }
+    public async Task<Result<GetSupplierQueryResult>> Handle(GetSupplierQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetById(request);
+        return Result.Ok(result);
+    }
+
+    public async Task<Result<IEnumerable<GetSupplierQueryResult>>> Handle(GetAllSuppliersQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetAll(request);
+    }
+}

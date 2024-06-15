@@ -12,8 +12,4 @@
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Logistics\Goods\" />
-  </ItemGroup>
-
 </Project>

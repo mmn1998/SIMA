@@ -39,6 +39,12 @@ using SIMA.Application.Feaatures.IssueManagement.IssuePriorities.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.Issues.Mapper;
 using SIMA.Application.Feaatures.IssueManagement.IssueTypes.Mappers;
 using SIMA.Application.Feaatures.IssueManagement.IssueWeightCategories.Mappers;
+using SIMA.Application.Feaatures.Logistics.GoodsCategories.Mappers;
+using SIMA.Application.Feaatures.Logistics.Goodses.Mappers;
+using SIMA.Application.Feaatures.Logistics.GoodsQuorumPrices.Mappers;
+using SIMA.Application.Feaatures.Logistics.GoodsTypes.Mappers;
+using SIMA.Application.Feaatures.Logistics.SupplierRanks.Mappers;
+using SIMA.Application.Feaatures.Logistics.Suppliers.Mappers;
 using SIMA.Application.Feaatures.Logistics.UnitMeasurements.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ImpactScales.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskCriterias.Mapper;
@@ -68,7 +74,6 @@ using SIMA.Application.Feaatures.WorkFlowEngine.Project.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany.Mapper;
-using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
@@ -189,6 +194,12 @@ public static class ApplicationRegistrationExtension
 
                 #region Logistics
                 conf.AddProfile(new UnitMeasurementMapper());
+                conf.AddProfile(new GoodsMapper());
+                conf.AddProfile(new GoodsTypeMapper());
+                conf.AddProfile(new GoodsQuorumPriceMapper());
+                conf.AddProfile(new SupplierMapper());
+                conf.AddProfile(new SupplierRankMapper());
+                conf.AddProfile(new GoodsCategoryMapper());
                 #endregion
             }
         }, Array.Empty<Type>());
