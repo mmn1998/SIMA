@@ -4,8 +4,10 @@ using SIMA.Domain.Models.Features.Logistics.GoodsCategories.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.Logistics.GoodsCategories.Entities;
 
@@ -48,11 +50,23 @@ public class GoodsCategory : Entity, IAggregateRoot
     #region Guards
     private static async Task CreateGuards(CreateGoodsCategoryArg arg, IGoodsCategoryDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyGoodsCategoryArg arg, IGoodsCategoryDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public GoodsCategoryId Id { get; private set; }

@@ -1,0 +1,11 @@
+﻿using SIMA.Application.Query.Contract.Features.Logistics.Suppliers;
+using SIMA.Framework.Common.Response;
+using SIMA.Framework.Core.Repository;
+
+namespace SIMA.Persistance.Read.Repositories.Features.Logistics.Suppliers;
+
+public interface ISupplierQueryRepository : IQueryRepository
+{
+    Task<GetSupplierQueryResult> GetById(GetSupplierQuery request);
+    Task<Result<IEnumerable<GetSupplierQueryResult>>> GetAll(GetAllSuppliersQuery request);
+}

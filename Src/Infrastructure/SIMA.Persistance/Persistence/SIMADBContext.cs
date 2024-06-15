@@ -42,6 +42,13 @@ using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
+using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Entities;
+using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
+using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Entities;
+using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
+using SIMA.Domain.Models.Features.Logistics.SupplierRanks.Entities;
+using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
+using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities;
@@ -253,6 +260,16 @@ namespace SIMA.Persistance.Persistence
         public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
         public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
         public DbSet<Consequence> Consequences { get; set; }
+        #endregion
+
+        #region Logistics
+        public DbSet<UnitMeasurement> UnitMeasurements { get; set; }
+        public DbSet<GoodsType> GoodsTypes { get; set; }
+        public DbSet<GoodsCategory> GoodsCategories { get; set; }
+        public DbSet<Goods> Goods { get; set; }
+        public DbSet<GoodsQuorumPrice> GoodsQuorumPrices { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<SupplierRank> SupplierRanks { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
