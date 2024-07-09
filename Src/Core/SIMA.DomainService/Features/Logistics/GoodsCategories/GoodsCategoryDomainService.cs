@@ -17,7 +17,7 @@ public class GoodsCategoryDomainService : IGoodsCategoryDomainService
     {
         bool result = false;
         if (Id == null) result = !await _context.GoodsCategories.AnyAsync(x => x.Code == code);
-        else result = !await _context.GoodsCategories.AnyAsync(x => x.Code == code && x.Id == Id);
+        else result = !await _context.GoodsCategories.AnyAsync(x => x.Code == code && x.Id != Id);
         return result;
     }
 }

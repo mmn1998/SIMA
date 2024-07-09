@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Framework.Common.Response;
@@ -9,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.IssueManagement.Issues.V1;
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "Issues")]
-//[Authorize]
+[Authorize]
 public class IssuesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -56,7 +57,7 @@ public class IssuesController : ControllerBase
     }
 
     [HttpPost("IssueRunAction")]
-    //[SimaAuthorize(Permissions.IssueRunActionPost)]
+    [SimaAuthorize(Permissions.IssueRunActionPost)]
     public async Task<Result> IssueRunAction([FromBody] IssueRunActionCommand command)
     {
         return await _mediator.Send(command);

@@ -13,8 +13,8 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface
         Task<Step> GetStepById(long id);
         Task<Entities.WorkFlow> GetWorkFlowByDomainId(long domainId);
         Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoById(long workFlowId);
-
         Task<Entities.WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate);
+        Task<bool> CheckDocumentForStep(long stepId);
 
     }
 }

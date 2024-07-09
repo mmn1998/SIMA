@@ -19,6 +19,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 
@@ -110,30 +111,30 @@ public class Issue : Entity
         var approval = await IssueApproval.Create(issueApproval);
         _issueApprovals.Add(approval);
     }
-    public void DeleteComment(IssueCommentId issueCommentId)
+    public void DeleteComment(IssueCommentId issueCommentId, long userId)
     {
         var comment = _issueComments.FirstOrDefault(c => c.Id == issueCommentId);
         comment.NullCheck();
-        comment?.Delete();
+        comment?.Delete(userId);
     }
-    public bool DeleteIssueLink(long issueLinkId)
+    public bool DeleteIssueLink(long issueLinkId, long userId)
     {
         var result = _issueLink.Where(x => x.Id == new IssueLinkId(issueLinkId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(userId);
             return true;
         }
         else
             return false;
 
     }
-    public bool DeleteIssueDocument(long issueDocumentId)
+    public bool DeleteIssueDocument(long issueDocumentId, long userId)
     {
         var result = _issueDocuments.Where(x => x.Id == new IssueDocumentId(issueDocumentId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(userId);
             return true;
         }
         else
@@ -142,7 +143,7 @@ public class Issue : Entity
     }
 
 
-    public async void AddIssueLink(List<CreateIssueLinkArg> issueLinkArgs)
+    public async Task AddIssueLink(List<CreateIssueLinkArg> issueLinkArgs)
     {
         if (!issueLinkArgs.Any())
             return;
@@ -157,7 +158,7 @@ public class Issue : Entity
 
         }
     }
-    public async void AddIssueDocument(List<CreateIssueDocumentArg> issueDocumentArgs)
+    public async Task AddIssueDocument(List<CreateIssueDocumentArg> issueDocumentArgs)
     {
         if (!issueDocumentArgs.Any())
             return;
@@ -201,23 +202,27 @@ public class Issue : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
         #region DeleteRealatedEntities
         foreach (var meeting in _meetings)
         {
-            meeting.Delete();
+            meeting.Delete(userId);
         }
         #endregion
     }
-    public void Activate()
+    public void Activate(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
         #region ActivateRealatedEntities
         foreach (var meeting in _meetings)
         {
-            meeting.Activate();
+            meeting.Activate(userId);
         }
         #endregion
     }

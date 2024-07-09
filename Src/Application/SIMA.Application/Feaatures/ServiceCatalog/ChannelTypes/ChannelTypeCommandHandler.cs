@@ -51,7 +51,7 @@ public class ChannelTypeCommandHandler : ICommandHandler<CreateChannelTypeComman
     public async Task<Result<long>> Handle(DeleteChannelTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new ChannelTypeId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

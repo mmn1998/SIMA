@@ -1,4 +1,5 @@
-﻿using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
+﻿using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 
@@ -13,4 +14,6 @@ public interface IIssueQueryRepository : IQueryRepository
     Task<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>> GetIssueHistoryByIssueId(long issueId);
     Task<GetIssueHistoriesByIdQueryResult> GetIssueHistoryById(long id);
     Task<List<GetCasesByWorkflowIdQueryResult>> GetCasesByWorkflowId(long workflowId);
+    Task AddDocToSp(List<AddDocumentToSPQuery> docs);
+    Task UpdateDocuments(List<long> documentIds, long issueId, long currrentWorkflowId);
 }

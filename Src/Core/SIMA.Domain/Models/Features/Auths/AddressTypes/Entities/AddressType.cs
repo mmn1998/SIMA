@@ -6,6 +6,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.AddressTypes.Entities;
 
@@ -59,9 +60,11 @@ public class AddressType : Entity
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
     private List<AddressBook> _addressBooks = new();

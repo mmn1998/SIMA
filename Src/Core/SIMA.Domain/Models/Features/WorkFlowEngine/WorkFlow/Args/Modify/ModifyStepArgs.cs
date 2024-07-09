@@ -7,12 +7,10 @@
         public string? Name { get; set; }
         public string? CompleteName { get; set; }
         public long? WorkFlowId { get; set; }
-        //public long? ActionTypeId { get; set; }
         public long FormId { get; set; }
-
-        //public long? MainEntityId { get; set; }
-        //public string? BpmnId { get; private set; }
         public byte[]? ModifiedAt { get; set; }
         public long? ModifiedBy { get; set; }
+        public string HasDocument { get; set; }
+
     }
 }

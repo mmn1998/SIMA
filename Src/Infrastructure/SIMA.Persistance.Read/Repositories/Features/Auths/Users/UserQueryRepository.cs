@@ -91,7 +91,7 @@ public class UserQueryRepository : IUserQueryRepository
                 UserInfoLogin userInfo = new UserInfoLogin();
                 userInfo.AccessFailedCount = (int)user.AccessFailedCount + 1;
                 userInfo.AccessFailedOverallCount = (int)user.AccessFailedOverallCount + 1;
-                userInfo.AccessFaildDate = DateTime.Now;
+                userInfo.AccessFailedDate = DateTime.Now;
 
                 if (user.AccessFailedCount < 4)
                     userInfo.IsLocked = "0";
@@ -105,7 +105,7 @@ public class UserQueryRepository : IUserQueryRepository
                         --user
 
                         select distinct
-                        u.Id UserId, u.CompanyId,u.Username, u.IsFirstLogin , u.IsLocked , u.AccessFailedOverallCount , u.AccessFaildDate
+                        u.Id UserId, u.CompanyId,u.Username, u.IsFirstLogin , u.IsLocked , u.AccessFailedOverallCount , u.AccessFailedDate
                         from Authentication.Users u
                         where U.Id=@UserId  
 

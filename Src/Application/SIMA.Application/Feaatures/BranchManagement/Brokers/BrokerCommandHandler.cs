@@ -54,7 +54,7 @@ public class BrokerCommandHandler : ICommandHandler<CreateBrokerCommand, Result<
     {
         var brokerId = new BrokerId(request.Id);
         var entity = await _repository.GetById(brokerId);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Domains.Entities;
 
@@ -54,4 +55,10 @@ public class Domain
 
     private List<Form> _forms = new();
     public ICollection<Form> Forms => _forms;
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
 }

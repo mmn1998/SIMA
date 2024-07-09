@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Forms.Entities;
 
@@ -77,8 +78,10 @@ public class Form : Entity
     private List<FormGroup> _formGroups = new();
 
     public ICollection<FormGroup> FormGroups => _formGroups;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 

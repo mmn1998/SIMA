@@ -7,6 +7,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 
@@ -80,8 +81,10 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     private List<BusinessContinuityPlanCriticalActivity> _businessContinuityPlanCriticalActivities = new();

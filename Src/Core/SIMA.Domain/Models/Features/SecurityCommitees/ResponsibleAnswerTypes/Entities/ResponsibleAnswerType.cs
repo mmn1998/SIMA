@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Inter
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
 
@@ -59,8 +60,10 @@ public class ResponsibleAnswerType : Entity
     public long? ModifiedBy { get; private set; }
     private List<ApprovalResponsibleAnswer> _approvalResponsibleAnswers => new();
     public ICollection<ApprovalResponsibleAnswer> ApprovalResponsibleAnswers => _approvalResponsibleAnswers;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

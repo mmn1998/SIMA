@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="1.9.6" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.0.3" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
   </ItemGroup>
 
 </Project>

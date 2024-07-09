@@ -2,6 +2,8 @@
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.Entities;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
@@ -13,8 +15,10 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Domain;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 
@@ -118,7 +122,7 @@ public class WorkFlow : Entity
         var deActiveActors = _progress.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveActors)
         {
-            item.Delete();
+            item.Delete(args.First().CreatedBy.Value);
         }
         var existsBpmnIds = _progress.Select(x => x.BpmnId);
         var notExistsProgresses = args.Where(x => !existsBpmnIds.Contains(x.BpmnId));
@@ -137,7 +141,7 @@ public class WorkFlow : Entity
         var deActiveActors = _workFlowActors.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveActors)
         {
-            item.Delete();
+            item.Delete(args.First().UserId);
         }
         var existsBpmnIds = _workFlowActors.Select(x => x.BpmnId);
         var notExistsActors = args.Where(x => !existsBpmnIds.Contains(x.BpmnId));
@@ -159,12 +163,12 @@ public class WorkFlow : Entity
         var deActiveSteps = _step.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveSteps)
         {
-            item.Delete();
+            item.Delete(args.First().UserId.Value);
             // business rule for deactive step
             var relatedIssues = _Issues.Where(i => i.CurrenStepId == item.Id);
             foreach (var relatedIssue in relatedIssues)
             {
-                relatedIssue.Delete();
+                relatedIssue.Delete(args.First().UserId.Value);
             }
         }
         var existsBpmnIds = _step.Select(x => x.BpmnId);
@@ -178,85 +182,89 @@ public class WorkFlow : Entity
         }
     }
 
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
         #region DeactiveRealtedEntities
 
         foreach (var step in _step)
         {
-            step.Delete();
+            step.Delete(userId);
         }
         foreach (var state in _states)
         {
-            state.Delete();
+            state.Delete(userId);
         }
         foreach (var workflowCompany in _workFlowCompany)
         {
-            workflowCompany.Delete();
+            workflowCompany.Delete(userId);
         }
         foreach (var progress in _progress)
         {
-            progress.Delete();
+            progress.Delete(userId);
         }
         foreach (var workflowActor in _workFlowActors)
         {
-            workflowActor.Delete();
+            workflowActor.Delete(userId);
         }
         foreach (var issue in _Issues)
         {
-            issue.Delete();
+            issue.Delete(userId);
         }
         #endregion
     }
-    public void Activate()
+    public void Activate(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
         #region ActivateRealtedEntities
 
         foreach (var step in _step)
         {
-            step.Activate();
+            step.Activate(userId);
         }
         foreach (var state in _states)
         {
-            state.Activate();
+            state.Activate(userId);
         }
         foreach (var workflowCompany in _workFlowCompany)
         {
-            workflowCompany.Activate();
+            workflowCompany.Activate(userId);
         }
         foreach (var progress in _progress)
         {
-            progress.Activate();
+            progress.Activate(userId);
         }
         foreach (var workflowActor in _workFlowActors)
         {
-            workflowActor.Activate();
+            workflowActor.Activate(userId);
         }
         foreach (var issue in _Issues)
         {
-            issue.Activate();
+            issue.Activate(userId);
         }
         #endregion
     }
-    public bool DeleteStep(long stepId)
+    public bool DeleteStep(long stepId, long userId)
     {
         var result = _step.Where(x => x.Id == new StepId(stepId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(userId);
             return true;
         }
         else
             return false;
     }
-    public bool DeleteState(long stateId)
+    public bool DeleteState(long stateId, long userId)
     {
         var result = _states.Where(x => x.Id == new StateId(stateId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(userId);
             return true;
         }
         else
@@ -265,22 +273,32 @@ public class WorkFlow : Entity
     public async Task ModifyStep(ModifyStepArgs arg)
     {
         var result = _step.Where(x => x.Id == new StepId(arg.Id)).FirstOrDefault();
-        //ToDo Sanaz Should return error if it is null
         if (result is not null)
         {
             result.Modify(arg);
         }
     }
 
-    public async Task AddStepApproval(List<CreateStepApprovalOptionArg> args  , long StepId)
+    public async Task AddStepApproval(List<CreateStepApprovalOptionArg> args, long StepId, IWorkFlowDomainService service)
     {
-        var step  = _step.Where(x=>x.Id == new StepId(StepId)).FirstOrDefault();
-        await step.AddStepApprovalOption(args, StepId);
+        var checkApproval = await service.AllowAddApprovalForStep(StepId);
+        if (checkApproval)
+        {
+            var step = _step.Where(x => x.Id == new StepId(StepId)).FirstOrDefault();
+            await step.AddStepApprovalOption(args, StepId);
+        }
+        else
+            throw new SimaResultException(CodeMessges._400Code, Messages.StepNotAllowedAddApproval);
+
+    }
+    public async Task AddRequirmentDocument(List<CreateStepRequiredDocumentArg> args, long StepId)
+    {
+        var step = _step.Where(x => x.Id == new StepId(StepId)).FirstOrDefault();
+        await step.AddStepRequirmentDocument(args, StepId);
     }
     public async Task ModifyState(ModifyStateArgs arg, IWorkFlowDomainService service)
     {
         var result = _states.Where(x => x.Id == new StateId(arg.Id)).FirstOrDefault();
-        //ToDo Sanaz should return error if it is null!!!
         if (result is not null)
         {
             await result.Modify(arg, service);
@@ -313,7 +331,7 @@ public class WorkFlow : Entity
     {
         arg.Name.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.WorkFlowNameRequiredException);
 
     }
@@ -322,10 +340,10 @@ public class WorkFlow : Entity
     {
         if (arg.ActiveStatusId == (long)ActiveStatusEnum.Active && ActiveStatusId != (long)ActiveStatusEnum.Active)
         {
-            Activate();
+            Activate(Id.Value);
         }
         arg.Name.NullCheck();
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.WorkFlowCodeIsUniqueException);
 
     }

@@ -8,4 +8,5 @@ public interface IGoodsCategoryQueryRepository : IQueryRepository
 {
     Task<GetGoodsCategoryQueryResult> GetById(GetGoodsCategoryQuery request);
     Task<Result<IEnumerable<GetGoodsCategoryQueryResult>>> GetAll(GetAllGoodsCategoriesQuery request);
+    Task<Result<IEnumerable<GetGoodsCategoryQueryResult>>> GetByGoodsTypeId(long goodsTypeId);
 }

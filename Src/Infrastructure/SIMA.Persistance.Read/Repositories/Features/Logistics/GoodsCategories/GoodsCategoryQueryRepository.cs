@@ -65,6 +65,30 @@ public class GoodsCategoryQueryRepository : IGoodsCategoryQueryRepository
         }
     }
 
+    public async Task<Result<IEnumerable<GetGoodsCategoryQueryResult>>> GetByGoodsTypeId(long goodsTypeId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var mainQuery = @"
+                               Select 
+								 F.[Id]
+								,F.[Name]
+								,F.[Code]
+								,F.[GoodsTypeId]
+								From Logistics.GoodsCategory F
+								WHERE F.[ActiveStatusID] <> 3 And F.GoodsTypeId = @GoodsTypeId
+							";
+           
+            using (var multi = await connection.QueryMultipleAsync(mainQuery ,new { GoodsTypeId  = goodsTypeId}))
+            {
+                var response = await multi.ReadAsync<GetGoodsCategoryQueryResult>();
+                return Result.Ok(response);
+            }
+
+        }
+    }
+
     public async Task<GetGoodsCategoryQueryResult> GetById(GetGoodsCategoryQuery request)
     {
         var query = @"

@@ -48,6 +48,7 @@ using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
 using SIMA.Domain.Models.Features.Logistics.SupplierRanks.Entities;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
@@ -83,7 +84,6 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
-using SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
@@ -270,6 +270,7 @@ namespace SIMA.Persistance.Persistence
         public DbSet<GoodsQuorumPrice> GoodsQuorumPrices { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SupplierRank> SupplierRanks { get; set; }
+        public DbSet<LogisticsRequest> LogisticsRequests { get; set; }
         #endregion
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 

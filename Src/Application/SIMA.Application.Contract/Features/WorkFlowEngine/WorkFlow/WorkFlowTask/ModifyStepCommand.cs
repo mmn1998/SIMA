@@ -8,9 +8,17 @@ namespace SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTas
     {
 
         public long Id { get; set; }
-        public List<AddStepApprovalOption> StepApprovalOptions { get; set; }
+        public List<AddStepApprovalOption>? ApprovalOptions { get; set; }
         public string? Name { get; set; }
         public long? WorkFlowId { get; set; }
         public long? FormId { get; set; }
+        public string HasDocument { get; set; }
+        public List<RequiredDocument>? RequiredDocuments { get; set; }
+    }
+
+    public class RequiredDocument
+    {
+        public int Count { get; set; }
+        public long DocumentTypeId { get; set; }
     }
 }

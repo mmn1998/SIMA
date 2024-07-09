@@ -52,7 +52,7 @@ public class GoodsCommandHandler : ICommandHandler<CreateGoodsCommand, Result<lo
     public async Task<Result<long>> Handle(DeleteGoodsCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new GoodsId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

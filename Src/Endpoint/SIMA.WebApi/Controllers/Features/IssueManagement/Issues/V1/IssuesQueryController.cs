@@ -1,15 +1,18 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
+using SIMA.WebApi.Extensions;
 
 namespace SIMA.WebApi.Controllers.Features.IssueManagement.Issues.V1;
 
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "Issues")]
+[Authorize]
 public class IssuesQueryController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -23,9 +26,9 @@ public class IssuesQueryController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <returns></returns>
-    [HttpGet("myIssueList")]
+    [HttpPost("myIssueList")]
     [SimaAuthorize(Permissions.MyIssueList)]
-    public async Task<Result> MyIssueList([FromQuery] GetMyIssueListQuery request)
+    public async Task<Result> MyIssueList(GetMyIssueListQuery request)
     {
         return await _mediator.Send(request);
     }
@@ -45,7 +48,12 @@ public class IssuesQueryController : ControllerBase
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetIssuesQuery { Id = id };
-        return await _mediator.Send(query);
+        var result = await _mediator.Send(query);
+        foreach (var document in result.Data.IssueDocuments)
+        {
+            document.DocumentContentType = document.DocumentExtentionName.GetContentType();
+        }
+        return result;
     }
 
     [HttpGet("History/{issueId}")]

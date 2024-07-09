@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Vulnerabilities.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.Risks.Entities
 {
@@ -42,11 +43,12 @@ namespace SIMA.Domain.Models.Features.RiskManagement.Risks.Entities
             ModifiedBy = arg.ModifiedBy;
             ActiveStatusId = arg.ActiveStatusId;
         }
-        public void Delete()
+        public void Delete(long userId)
         {
-            ActiveStatusId = (int)ActiveStatusEnum.Delete;
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
-
         public EffectedAssetId Id { get; private set; }
         public RiskId RiskId { get; private set; }
         public virtual Risk Risk { get; private set; }

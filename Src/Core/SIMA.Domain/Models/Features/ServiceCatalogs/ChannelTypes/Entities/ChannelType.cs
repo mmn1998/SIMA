@@ -5,6 +5,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities;
 
@@ -37,8 +38,10 @@ public class ChannelType : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     #region Guards

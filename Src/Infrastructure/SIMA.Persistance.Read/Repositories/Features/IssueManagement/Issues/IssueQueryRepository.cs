@@ -1,12 +1,15 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -14,31 +17,30 @@ using SIMA.Framework.Common.Security;
 using SIMA.Resources;
 using System.Data.SqlClient;
 
-namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
+namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues;
+
+public class IssueQueryRepository : IIssueQueryRepository
 {
-    public class IssueQueryRepository : IIssueQueryRepository
+
+    private readonly string _connectionString;
+    private readonly ISimaIdentity _simaIdentity;
+
+    public IssueQueryRepository(IConfiguration configuration, ISimaIdentity simaIdentity)
     {
+        _connectionString = configuration.GetConnectionString();
+        _simaIdentity = simaIdentity;
+    }
+    public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAll(GetAllIssuesQuery request)
+    {
+        var userId = _simaIdentity.UserId;
+        var roleIds = _simaIdentity.RoleIds;
+        var groupIds = _simaIdentity.GroupId;
 
-        private readonly string _connectionString;
-        private readonly ISimaIdentity _simaIdentity;
-
-        public IssueQueryRepository(IConfiguration configuration, ISimaIdentity simaIdentity)
+        using (var connection = new SqlConnection(_connectionString))
         {
-            _connectionString = configuration.GetConnectionString();
-            _simaIdentity = simaIdentity;
-        }
+            await connection.OpenAsync();
 
-        public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAll(GetAllIssuesQuery request)
-        {
-            var userId = _simaIdentity.UserId;
-            var roleIds = _simaIdentity.RoleIds;
-            var groupIds = _simaIdentity.GroupId;
-
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                var queryCount = @"   WITH Query as(
+            var queryCount = @"   WITH Query as(
 						   SELECT  
         I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
        ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
@@ -67,14 +69,14 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
        join  [Authentication].[Users] U on I.CreatedBy = U.Id
        join  [Authentication].[Profile] P on P.Id = U.ProfileID
        WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-       and I.ActiveStatusId != 3
+       and I.ActiveStatusId != 3   and I.SourceId = 0
        AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
 								 
 								 ; ";
-                string query = $@"
+            string query = $@"
                              WITH Query as(
 							 SELECT  
         I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
@@ -104,39 +106,38 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
        join  [Authentication].[Users] U on I.CreatedBy = U.Id
        join  [Authentication].[Profile] P on P.Id = U.ProfileID
        WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-       and I.ActiveStatusId != 3
+       and I.ActiveStatusId != 3 and I.SourceId = 0
        AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId))
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-                var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
-                dynaimcParameters.Item2.Add("roleIds", roleIds);
-                dynaimcParameters.Item2.Add("userId", userId);
-                dynaimcParameters.Item2.Add("groupIds", groupIds);
-                dynaimcParameters.Item2.Add("WorkFlowId", request.WorkFlowId);
-                dynaimcParameters.Item2.Add("DomainId", request.DomainId);
-                dynaimcParameters.Item2.Add("ProjectId", request.ProjectId);
-                using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
-                {
-                    var count = await multi.ReadFirstAsync<int>();
-                    var response = await multi.ReadAsync<GetAllIssueQueryResult>();
-                    return Result.Ok(response, request, count);
-                }
-
-            }
-        }
-
-        public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAllMyIssue(GetMyIssueListQuery request)
-        {
-            var userId = _simaIdentity.UserId;
-
-            using (var connection = new SqlConnection(_connectionString))
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            dynaimcParameters.Item2.Add("roleIds", roleIds);
+            dynaimcParameters.Item2.Add("userId", userId);
+            dynaimcParameters.Item2.Add("groupIds", groupIds);
+            dynaimcParameters.Item2.Add("WorkFlowId", request.WorkFlowId);
+            dynaimcParameters.Item2.Add("DomainId", request.DomainId);
+            dynaimcParameters.Item2.Add("ProjectId", request.ProjectId);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
-                await connection.OpenAsync();
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetAllIssueQueryResult>();
+                return Result.Ok(response, request, count);
+            }
 
-                var queryCount = @"   WITH Query as(
+        }
+    }
+    public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> GetAllMyIssue(GetMyIssueListQuery request)
+    {
+        var userId = _simaIdentity.UserId;
+
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+
+            var queryCount = @"   WITH Query as(
 						  SELECT DISTINCT 
       i.Id
       ,i.Code
@@ -172,14 +173,14 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
       LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
       join [Authentication].[Users] U on I.CreatedBy = U.Id
       join [Authentication].[Profile] P on P.Id = U.ProfileID
-      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
+      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3 and i.SourceId = 0
       AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
 								 
 								 ; ";
-                string query = $@" WITH Query as(
+            string query = $@" WITH Query as(
 							SELECT DISTINCT 
       i.Id
       ,i.Code
@@ -215,35 +216,34 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
       LEFT OUTER JOIN Project.Step SP  on SP.Id=i.CurrenStepId
       join [Authentication].[Users] U on I.CreatedBy = U.Id
       join [Authentication].[Profile] P on P.Id = U.ProfileID
-      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3
+      WHERE  i.CreatedBy =@userId  and i.ActiveStatusId != 3 and i.SourceId = 0
       AND (@WorkFlowId is null OR W.Id = @WorkFlowId) AND (@DomainId is null OR project.DomainID = @DomainId) AND (@ProjectId is null OR w.ProjectID = @ProjectId)
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-                var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
-                dynaimcParameters.Item2.Add("userId", userId);
-                dynaimcParameters.Item2.Add("WorkFlowId", request.WorkFlowId);
-                dynaimcParameters.Item2.Add("DomainId", request.DomainId);
-                dynaimcParameters.Item2.Add("ProjectId", request.ProjectId);
-                using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
-                {
-                    var count = await multi.ReadFirstAsync<int>();
-                    var response = await multi.ReadAsync<GetAllIssueQueryResult>();
-                    return Result.Ok(response, request, count);
-                }
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            dynaimcParameters.Item2.Add("userId", userId);
+            dynaimcParameters.Item2.Add("WorkFlowId", request.WorkFlowId);
+            dynaimcParameters.Item2.Add("DomainId", request.DomainId);
+            dynaimcParameters.Item2.Add("ProjectId", request.ProjectId);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetAllIssueQueryResult>();
+                return Result.Ok(response, request, count);
             }
         }
-
-        public async Task<GetIssueQueryResult> GetById(long id)
+    }
+    public async Task<GetIssueQueryResult> GetById(long id)
+    {
+        var userId = _simaIdentity.UserId;
+        var response = new GetIssueQueryResult();
+        using (var connection = new SqlConnection(_connectionString))
         {
-            var userId = _simaIdentity.UserId;
-            var response = new GetIssueQueryResult();
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                string query = @"
+            await connection.OpenAsync();
+            string query = @"
                            SELECT  I.[Id]
                             ,I.[CurrentWorkflowId]
                          	,W.[Name] As WorkFlowName
@@ -274,6 +274,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                             ,W.FileContent WorkFlowFileContent 
                             ,A.Name ActiveStatus    
                             ,I.ActiveStatusId
+                            ,S.HasDocument
                         FROM  [IssueManagement].[Issue] I
                         JOIN [Basic].[ActiveStatus] A on A.Id = I.ActiveStatusId
                         JOIN  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
@@ -300,6 +301,17 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                          Join  [IssueManagement].[Issue] ILT on IL.IssueIdLinkedTo = ILT.Id
                             Where I.ActiveStatusId != 3 and I.Id = @Id 
                     
+                            -- StepRequiredDocument
+                             SELECT 
+                            	 dt.Id DocumentTypeId,
+                            	 dt.Name DocumentTypeName,
+                            	 srd.Count
+                              FROM  [IssueManagement].[Issue] I
+                              JOIN  [Project].[Step] S on I.CurrenStepId = S.Id
+                              left join Project.StepRequiredDocument srd on srd.StepId = s.Id
+                              left join DMS.DocumentType dt on dt.Id =srd.DocumentTypeId
+                            Where I.ActiveStatusId != 3 and I.Id =  @Id and srd.ActiveStatusID <>3
+
                     	   --Document
                     	   select 
                     	   ID.[DocumentId]
@@ -329,8 +341,11 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                             Select distinct
                                FStep.Id ProgressId
                                ,s.id 
-                               ,s.Name 
+                               ,s.Name
+                               ,P.HasStoreProcedure HasStoredProcedure
                                ,FStep.Name TargetName
+                               ,psp.Id ProgressStoredProcedureId
+                               ,case when p.HasStoreProcedure = '1' then Convert(varchar, PSPP.Id) + ':' + PSPP.Name + ':' + IsNull(PSPP.IsSystemParam, ' ')  + ':' + IsNull(PSPP.SystemParamName, ' ') + ':' +IsNull(PSPP.DisplayName, ' ') else null end as ProcedureInfo
                                ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId
                                From  [IssueManagement].[Issue] I
                                inner join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
@@ -341,37 +356,81 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 	                           left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
 	                           left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
                                inner  join  [Project].[Progress] P on S.Id = P.SourceId
+                               left join [Project].ProgressStoreProcedure PSP on PSP.ProgressId = P.Id
+                               left join Project.ProgressStoreProcedureParam PSPP on PSP.Id = pspp.ProgressStoreProcedureId
                                inner   join  [Project].[Step] ST on P.TargetId = ST.Id
                                CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
                                Where    I.Id = @Id and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
                                I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3
-
+                              
                                --ApprovalOption
 
                                 EXEC [Project].[ReturnApprovalList] @Id";
 
 
-                              
-                using (var multi = await connection.QueryMultipleAsync(query, new { Id = id,  userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
-                {
-                    response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
-                    response.IssueLinks = multi.ReadAsync<GetIssueLinkQueryResult>().GetAwaiter().GetResult().ToList();
-                    response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
-                    response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();
-                    response.RelatedProgresses = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
-                    response.ApprovalOptions = multi.ReadAsync<GetApprovalOptionQueryResult>().GetAwaiter().GetResult().ToList();
-                }
-                response.NullCheck();
-                return response;
-            }
-        }
 
-        public async Task<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>> GetIssueHistoryByIssueId(long issueId)
-        {
-            using (var connection = new SqlConnection(_connectionString))
+            using (var multi = await connection.QueryMultipleAsync(query, new { Id = id, userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
             {
-                await connection.OpenAsync();
-                var query = @"SELECT I.[Id]
+                response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+                response.IssueLinks = multi.ReadAsync<GetIssueLinkQueryResult>().GetAwaiter().GetResult().ToList();
+                response.RequiredDocuments = multi.ReadAsync<GetStepRequiredDocumentQueryResult>().GetAwaiter().GetResult().ToList();
+                response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
+                response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();
+                response.RelatedProgresses = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
+                response.ApprovalOptions = multi.ReadAsync<GetApprovalOptionQueryResult>().GetAwaiter().GetResult().ToList();
+            }
+            var paramList = new List<StoreProcedureParams>();
+            var groupedResults = response.RelatedProgresses.GroupBy(x => new { x.ProgressId/*, x.ProgressStoreProcedureId */})
+                .Select(g => new
+                {
+                    ProgressId = g.Key.ProgressId,
+                    // ProgressStoreProcedureId = g.Key.ProgressStoreProcedureId
+                    Items = g.ToList()
+                });
+            foreach (var progress in response.RelatedProgresses)
+            {
+                if (progress.HasStoredProcedure == "1" && !string.IsNullOrEmpty(progress.ProcedureInfo) && progress.ProcedureInfo.Contains(":"))
+                {
+                    var obj = new StoreProcedureParams();
+                    /// <summary>
+                    /// splitedinfo[0] is ProgressStoreProcedureId, splitedinfo[1] is Name, splitedinfo[2] is IsSystemParam, splitedinfo[3] is SystemParam and splitedinfo[4] is DisplayName
+                    /// </summary>
+                    var splitedinfo = progress.ProcedureInfo.Split(":");
+                    obj.ProgressStoredProcedureParamId = Convert.ToInt64(splitedinfo[0].ToString());
+                    obj.Name = splitedinfo[1];
+                    obj.DisplayName = splitedinfo[4];
+                    if (splitedinfo[2] == "0")
+                    {
+                        paramList.Add(obj);
+                    }
+                }
+            }
+            response.RelatedProgresses.ToList().Clear();
+            response.RelatedProgresses = new();
+            foreach (var item in groupedResults)
+            {
+                var obj = new GetRelatedProgressQueryResult
+                {
+                    Params = paramList,
+                    Id = item.Items[0].Id,
+                    Name = item.Items[0].Name,
+                    ProgressId = item.ProgressId,
+                    TargetId = item.Items[0].TargetId,
+                    TargetName = item.Items[0].TargetName,
+                    //ProgressStoreProcedureId = item.ProgressStoreProcedureId,
+                };
+                response.RelatedProgresses.Add(obj);
+            }
+            response.NullCheck();
+            return response;
+        }
+    }
+    public async Task<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>> GetIssueHistoryByIssueId(long issueId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var query = @"SELECT I.[Id]
                               ,I.[Name]
                               ,I.[IssueId]
                               ,I.[SourceStateId]
@@ -396,16 +455,16 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
 						  join  [Authentication].[Users] U on I.PerformerUserId = U.Id
 						  join  [Authentication].[Profile] P on P.Id = U.ProfileID WHERE IssueId = @IssueId
                             order by I.CreatedAt desc";
-                var result = await connection.QueryAsync<GetIssueHistoriesByIssueIdQueryResult>(query, new { IssueId = issueId });
-                return result;
-            }
+            var result = await connection.QueryAsync<GetIssueHistoriesByIssueIdQueryResult>(query, new { IssueId = issueId });
+            return result;
         }
-        public async Task<GetIssueHistoriesByIdQueryResult> GetIssueHistoryById(long id)
+    }
+    public async Task<GetIssueHistoriesByIdQueryResult> GetIssueHistoryById(long id)
+    {
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var query = @"SELECT TOP (1) [Id]
+            await connection.OpenAsync();
+            var query = @"SELECT TOP (1) [Id]
                               ,[Name]
                               ,[IssueId]
                               ,[SourceStateId]
@@ -418,50 +477,75 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues
                               ,[CreatedBy]
                           FROM  [IssueManagement].[IssueHistory]
                           WHERE Id = @Id";
-                var result = await connection.QueryFirstOrDefaultAsync<GetIssueHistoriesByIdQueryResult>(query, new { Id = id });
-                return result;
-            }
+            var result = await connection.QueryFirstOrDefaultAsync<GetIssueHistoriesByIdQueryResult>(query, new { Id = id });
+            return result;
         }
-        public async Task<bool> IsCodeUnique(string code, long id)
+    }
+    public async Task<bool> IsCodeUnique(string code, long id)
+    {
+        using (var connection = new SqlConnection(_connectionString))
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-                var query = "select top 1 1 FROM IssueManagement.Issue where id<>@Id and Code = @Code";
-                var result = await connection.QuerySingleOrDefaultAsync<bool>(query, new { Id = id, Code = code });
-                return result;
-            }
+            await connection.OpenAsync();
+            var query = "select top 1 1 FROM IssueManagement.Issue where id<>@Id and Code = @Code";
+            var result = await connection.QuerySingleOrDefaultAsync<bool>(query, new { Id = id, Code = code });
+            return result;
         }
-
-        public async Task<List<GetCasesByWorkflowIdQueryResult>> GetCasesByWorkflowId(long workflowId)
-        {
-            var result = new List<GetCasesByWorkflowIdQueryResult>();
-            string getMainAggregateIdQuery = @"
+    }
+    public async Task<List<GetCasesByWorkflowIdQueryResult>> GetCasesByWorkflowId(long workflowId)
+    {
+        var result = new List<GetCasesByWorkflowIdQueryResult>();
+        string getMainAggregateIdQuery = @"
         SELECT [MainAggregateId]
         FROM [Project].[WorkFlow]
         Where Id = @Id";
-            using (var connection = new SqlConnection(_connectionString))
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            int mainAggregateId = connection.QueryFirst<int>(getMainAggregateIdQuery, new { Id = workflowId });
+            string mainQuery = string.Empty;
+            switch (mainAggregateId)
             {
-                await connection.OpenAsync();
-                int mainAggregateId = connection.QueryFirst<int>(getMainAggregateIdQuery, new { Id = workflowId });
-                string mainQuery = string.Empty;
-                switch (mainAggregateId)
-                {
-                    case (int)MainAggregateEnums.SecurityCommitee:
-                        {
-                            mainQuery = @"
+                case (int)MainAggregateEnums.SecurityCommitee:
+                    {
+                        mainQuery = @"
                             SELECT  [Id]
                                   ,([Description] + ' '  + [Code]) as Title
                               FROM [SecurityCommitee].[Meeting]
                             ";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                result = (await connection.QueryAsync<GetCasesByWorkflowIdQueryResult>(mainQuery)).ToList();
+                    }
+                    break;
+                default:
+                    break;
             }
-            return result;
+            result = (await connection.QueryAsync<GetCasesByWorkflowIdQueryResult>(mainQuery)).ToList();
+        }
+        return result;
+    }
+    public async Task AddDocToSp(List<AddDocumentToSPQuery> docs)
+    {
+        var json = JsonConvert.SerializeObject(docs);
+        var sp = $"[Logistics].[InsertLogisticstDocument] N'{json}'";
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            try
+            {
+                await connection.ExecuteAsync(sp);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+    }
+
+    public async Task UpdateDocuments(List<long> documentIds, long issueId, long currrentWorkflowId)
+    {
+        string script = @"";
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+
         }
     }
 }

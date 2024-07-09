@@ -2,10 +2,8 @@
 {
     public class GetApprovalOptionQueryResult
     {
-        public long TargetId { get; set; }
-        public long SourceId { get; set; }
+        public long StepId { get; set; }
         public long WorkFlowId { get; set; }
-        public string ProgressName { get; set; }
         public string StepName{ get; set; }
         public long StepApprovalOptionId { get; set; }
         public string ApprovalOptionName { get; set; }

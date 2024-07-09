@@ -7,6 +7,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
 
@@ -44,9 +45,11 @@ public class RiskCriteria : Entity
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public RiskCriteriaId Id { get; set; }
     public string Code { get; private set; }

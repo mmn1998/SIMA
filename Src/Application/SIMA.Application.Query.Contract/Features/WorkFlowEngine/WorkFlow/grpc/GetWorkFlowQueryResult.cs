@@ -17,10 +17,17 @@ public class GetNextStepQuery
     public long NextStepId { get; set; }
     public long ProgressId { get; set; }
     public string ConditionValue { get; set; }
-    public List<FormModel> Form { get; set; }
+    public List<InputModel> SystemParams { get; set; } = new List<InputModel>();
+   
 }
-public class FormModel
+public class InputModel
 {
     public string Key { get; set; }
     public string Value { get; set; }
+}
+public class InputParamQueryModel
+{
+    public long Id { get; set; }
+    public string ParamName { get; set; }
+    public string ParamValue { get; set; }
 }

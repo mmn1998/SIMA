@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 
@@ -63,8 +64,10 @@ public class Subject : Entity
     public long? ModifiedBy { get; private set; }
     private List<SubjectMeeting> _subjectMeetings = new();
     public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

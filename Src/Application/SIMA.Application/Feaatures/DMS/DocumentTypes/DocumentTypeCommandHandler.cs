@@ -50,7 +50,7 @@ public class DocumentTypeCommandHandler : ICommandHandler<CreateDocumentTypeComm
     public async Task<Result<long>> Handle(DeleteDocumentTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
 

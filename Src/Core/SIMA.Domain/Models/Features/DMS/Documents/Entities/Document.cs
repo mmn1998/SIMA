@@ -12,7 +12,6 @@ using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
-using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
@@ -22,6 +21,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.DMS.Documents.Entities;
 
@@ -35,7 +35,7 @@ public class Document : Entity
         Code = arg.Code;
         if (arg.MainAggregateId.HasValue) MainAggregateId = new(arg.MainAggregateId.Value);
         SourceId = arg.SourceId;
-        AttachStepId = new(arg.AttachStepId);
+        if (arg.AttachStepId.HasValue) AttachStepId = new(arg.AttachStepId.Value);
         FileAddress = arg.FileAddress;
         FileExtensionId = new(arg.FileExtensionId);
         DocumentTypeId = new(arg.DocumentTypeId);
@@ -70,9 +70,9 @@ public class Document : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyDocumentArg arg, IDocumentDomainService service)
     {
@@ -80,9 +80,9 @@ public class Document : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public DocumentId Id { get; private set; }
@@ -123,8 +123,10 @@ public class Document : Entity
 
     public ICollection<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
     public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments { get; set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

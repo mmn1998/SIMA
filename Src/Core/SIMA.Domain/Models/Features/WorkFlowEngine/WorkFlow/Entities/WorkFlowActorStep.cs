@@ -1,8 +1,11 @@
-﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
+﻿using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 
@@ -34,12 +37,16 @@ public class WorkFlowActorStep : Entity
         WorkFlowActorId = new WorkFlowActorId(arg.WorkFlowActorId);
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    public void Activate()
+    public void Activate(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 

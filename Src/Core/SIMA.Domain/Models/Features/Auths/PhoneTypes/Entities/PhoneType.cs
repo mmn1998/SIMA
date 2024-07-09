@@ -6,6 +6,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
 
@@ -73,8 +74,10 @@ public class PhoneType : Entity
     public long? ModifiedBy { get; private set; }
     private List<PhoneBook> _phoneBooks = new();
     public virtual ICollection<PhoneBook> PhoneBooks => _phoneBooks;
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

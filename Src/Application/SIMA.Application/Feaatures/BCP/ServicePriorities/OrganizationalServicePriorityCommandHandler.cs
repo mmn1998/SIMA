@@ -52,7 +52,7 @@ public class OrganizationalServicePriorityCommandHandler : ICommandHandler<Creat
     public async Task<Result<long>> Handle(DeleteOrganizationalServicePriorityCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new OrganizationalServicePriorityId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

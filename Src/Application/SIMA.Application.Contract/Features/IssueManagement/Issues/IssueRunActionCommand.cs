@@ -12,4 +12,11 @@ public class IssueRunActionCommand : ICommand<Result<long>>
     public long? StepApprovalOptionId { get; set; }
     public string? ApprovalDescription { get; set; }
     public List<InputParamModel> InputParams { get; set; }
+    public List<InputDocument>? InputDocuments { get; set; }
+}
+
+
+public class InputDocument
+{
+    public long DocumentId { get; set; }
 }

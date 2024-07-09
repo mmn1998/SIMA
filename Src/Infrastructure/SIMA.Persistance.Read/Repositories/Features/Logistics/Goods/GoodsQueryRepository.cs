@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Logistics.Goods;
+using SIMA.Domain.Models.Features.Logistics.GoodsCategories.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
@@ -64,6 +65,29 @@ public class GoodsQueryRepository : IGoodsQueryRepository
         }
     }
 
+    public async Task<Result<IEnumerable<GetGoodsQueryResult>>> GetbyGoodsCategoryId(long goodsCategoryId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var mainQuery = @"
+                               Select 
+								 F.[Id]
+								,F.[Name]
+								,F.[Code]
+								,F.[GoodsCategoryId]
+								From Logistics.Goods F
+								WHERE F.[ActiveStatusID] <> 3 and GoodsCategoryId = @GoodsCategoryId
+							";
+            using (var multi = await connection.QueryMultipleAsync(mainQuery , new { GoodsCategoryId  = goodsCategoryId}))
+            {
+                var response = await multi.ReadAsync<GetGoodsQueryResult>();
+                return Result.Ok(response);
+            }
+
+        }
+    }
+
     public async Task<GetGoodsQueryResult> GetById(GetGoodsQuery request)
     {
         var query = @"
@@ -76,12 +100,15 @@ public class GoodsQueryRepository : IGoodsQueryRepository
 			,F.[IsFixedAsset]
 			,gc.Name GoodsCategory
 			,um.Name UnitMeasurement
+			,GT.Id GoodsTypeId
+			,GT.Name GoodsTypeName
             ,F.CreatedAt
 			,F.[ActiveStatusId]
 			,A.[Name] ActiveStatus
 			From Logistics.Goods F
 			join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
             inner join [Logistics].[GoodsCategory] gc on F.GoodsCategoryId = gc.Id
+            Join [Logistics].[Goodstype] GT on GT.Id = gc.GoodsTypeId
             inner join [Logistics].[UnitMeasurement] um on F.UnitMeasurementId = um.Id
           WHERE F.[Id] = @Id AND F.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))

@@ -51,7 +51,8 @@ public class ServiceCategoryCommandHandler : ICommandHandler<CreateServiceCatego
     public async Task<Result<long>> Handle(DeleteServiceCategoryCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new ServiceCategoryId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;
+        entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

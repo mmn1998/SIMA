@@ -5,6 +5,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Entities;
 
@@ -50,7 +51,7 @@ public class GoodsQuorumPrice : Entity, IAggregateRoot
         arg.NullCheck();
         arg.Name.NullCheck();
         arg.Code.NullCheck();
-
+        if (arg.MaxPrice < arg.MinPrice) throw new SimaResultException(CodeMessges._400Code, Messages.MinNumberBiggerThanMaxNumber);
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
@@ -60,7 +61,7 @@ public class GoodsQuorumPrice : Entity, IAggregateRoot
         arg.NullCheck();
         arg.Name.NullCheck();
         arg.Code.NullCheck();
-
+        if (arg.MaxPrice < arg.MinPrice) throw new SimaResultException(CodeMessges._400Code, Messages.MinNumberBiggerThanMaxNumber);
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
@@ -79,8 +80,10 @@ public class GoodsQuorumPrice : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

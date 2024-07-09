@@ -2,12 +2,8 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Groups;
 using SIMA.Application.Query.Contract.Features.Auths.LocationTypes;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Resources;
 
@@ -34,6 +30,7 @@ public class LocationTypeQueryRepository : ILocationTypeQueryRepository
                                 ,LT.[ActiveStatusID]
                                 ,A.[Name] as ActiveStatus
 	                            ,PLT.[Name] ParentName
+                                ,PLT.Id ParentId
                   FROM [Basic].[LocationType] LT
                   left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
                   join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
@@ -57,6 +54,7 @@ public class LocationTypeQueryRepository : ILocationTypeQueryRepository
       		,LT.[ActiveStatusID]
       		,A.[Name] as ActiveStatus
       		,PLT.[Name] ParentName
+            ,PLT.Id ParentId
       		,lt.[CreatedAt]
 FROM [Basic].[LocationType] LT
 left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
@@ -74,6 +72,7 @@ WHERE  LT.ActiveStatusId != 3
       		,LT.[ActiveStatusID]
       		,A.[Name] as ActiveStatus
       		,PLT.[Name] ParentName
+            ,PLT.Id ParentId
       		,lt.[CreatedAt]
 FROM [Basic].[LocationType] LT
 left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID

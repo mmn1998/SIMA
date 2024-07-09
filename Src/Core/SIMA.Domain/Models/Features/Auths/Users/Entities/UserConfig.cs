@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Users.Entities;
 
@@ -48,8 +49,10 @@ public class UserConfig
     public virtual ConfigurationAttribute? Configuration { get; private set; }
 
     public virtual User? User { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

@@ -8,5 +8,6 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface
         Task<bool> SteteIsCodeUnique(string code, long id);
         Task<bool> CheckWorkFlow(long workflowId);
         Task<bool> CheckCreateIssueWithActor(long workflowId);
+        Task<bool> AllowAddApprovalForStep(long stepId);
     }
 }

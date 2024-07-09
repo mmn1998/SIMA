@@ -112,7 +112,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
         try
         {
             var entity = await _repository.GetById(request.Id);
-            entity.Delete();
+            long userId = _simaIdentity.UserId;entity.Delete(userId);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }
@@ -134,7 +134,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     public async Task<Result<long>> Handle(DeleteWorkFlowActorRoleCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
-        entity.DeleteRole(request.Id);
+        entity.DeleteRole(request.Id, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -151,7 +151,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     public async Task<Result<long>> Handle(DeleteWorkFlowActorUserCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
-        entity.DeleteUser(request.Id);
+        entity.DeleteUser(request.Id, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -168,7 +168,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     public async Task<Result<long>> Handle(DeleteWorkFlowActorGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.WorkFlowActorId);
-        entity.DeleteGroup(request.Id);
+        entity.DeleteGroup(request.Id, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

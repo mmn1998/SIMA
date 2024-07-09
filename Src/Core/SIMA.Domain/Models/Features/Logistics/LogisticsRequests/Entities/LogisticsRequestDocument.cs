@@ -1,12 +1,45 @@
 ﻿using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Args;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 
 public class LogisticsRequestDocument : Entity
 {
+
+    private  LogisticsRequestDocument()
+    {
+    }
+    private  LogisticsRequestDocument(CreateLogisticsRequestDocumentArg arg)
+    {
+        Id = new  LogisticsRequestDocumentId(IdHelper.GenerateUniqueId());
+        LogisticsRequestId = new LogisticsRequestId(arg.LogisticsRequestId);
+        DocumentId= new DocumentId(arg.DocumentId); 
+        ActiveStatusId = arg.ActiveStatusId;
+        CreatedAt = arg.CreatedAt;
+        CreatedBy = arg.CreatedBy;
+    }
+    public static async Task<LogisticsRequestDocument> Create(CreateLogisticsRequestDocumentArg arg)
+    {
+        return new LogisticsRequestDocument(arg);
+    }
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
+
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+
     public LogisticsRequestDocumentId Id { get; private set; }
     public LogisticsRequestId LogisticsRequestId { get; private set; }
     public virtual LogisticsRequest LogisticsRequest { get; private set; }
@@ -17,6 +50,8 @@ public class LogisticsRequestDocument : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+
     private List<Ordering> _orderings = new();
     public ICollection<Ordering> Orderings => _orderings;
     private List<DeliveryOrder> _deliveryOrders = new();

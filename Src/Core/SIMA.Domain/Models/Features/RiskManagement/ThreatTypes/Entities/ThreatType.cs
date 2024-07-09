@@ -5,6 +5,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities
 {
@@ -38,9 +39,11 @@ namespace SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities
             ModifiedBy = arg.ModifiedBy;
             ActiveStatusId = arg.ActiveStatusId;
         }
-        public void Delete()
+        public void Delete(long userId)
         {
-            ActiveStatusId = (int)ActiveStatusEnum.Delete;
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
         public ThreatTypeId Id { get; private set; }
         public string Name { get; private set; }

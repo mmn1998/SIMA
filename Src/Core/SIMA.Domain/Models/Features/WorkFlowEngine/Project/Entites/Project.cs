@@ -9,6 +9,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 
@@ -42,28 +43,30 @@ public partial class Project : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    public bool DeleteProjectGroup(long groupId)
+    public bool DeleteProjectGroup(long groupId, long loginUserId)
     {
         var result = _projectGroups.Where(x => x.Id == new ProjectGroupId(groupId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(loginUserId);
             return true;
         }
         else
             return false;
 
     }
-    public bool DeleteProjectMmeber(long userId)
+    public bool DeleteProjectMmeber(long userId, long loginUserId)
     {
         var result = _projectMember.Where(x => x.UserId == new UserId(userId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(loginUserId);
             return true;
         }
         else

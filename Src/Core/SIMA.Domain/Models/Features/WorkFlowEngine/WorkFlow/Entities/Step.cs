@@ -1,19 +1,22 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
+using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
-using SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 
@@ -36,7 +39,7 @@ public class Step : Entity
         ActiveStatusId = arg.ActiveStatusId;
         CreatedBy = arg.UserId;
         CreatedAt = arg.CreatedAt;
-        
+
     }
 
     public void Modify(StepArg arg)
@@ -57,7 +60,7 @@ public class Step : Entity
         var deActiveSteps = _workFlowActorStep.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveSteps)
         {
-            item.Delete();
+            item.Delete(arg.UserId.Value);
         }
         var existsBpmnIds = _workFlowActorStep.Select(x => x.BpmnId);
         var notExistsSteps = arg.ActorStepArgs.Where(x => !existsBpmnIds.Contains(x.BpmnId));
@@ -72,15 +75,13 @@ public class Step : Entity
     }
     public void Modify(ModifyStepArgs arg)
     {
-        Name = arg.Name;
+        //Name = arg.Name;
         WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
-        //ActionTypeId = new ActionTypeId((long)arg.ActionTypeId);
-        //StateId = new StateId((long)arg.StateId);
-        //BpmnId = arg.BpmnId;
         CompleteName = arg.CompleteName;
+        HasDocument = arg.HasDocument;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
-        FormId = new FormId(arg.FormId);
+        FormId = new FormId(arg.FormId).Value != 0 ? new FormId(arg.FormId) : null;
     }
     public static Step New(StepArg arg)
     {
@@ -105,7 +106,7 @@ public class Step : Entity
             var entity = _stepApprovalOptions.Where(x => (x.ApprovalOptionId == new ApprovalOptionId(item.ApprovalOptionId) && x.StepId == new StepId(stepId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
-               await entity.ChangeStatus(ActiveStatusEnum.Active);
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
             }
             else
             {
@@ -116,21 +117,59 @@ public class Step : Entity
 
         foreach (var item in deleteStepApprovalOption)
         {
-            item.Delete();
+            item.Delete(arg.First().CreatedBy);
+        }
+    }
+    public async Task AddStepRequirmentDocument(List<CreateStepRequiredDocumentArg> arg, long stepId)
+    {
+        var previousDocuments = _stepRequiredDocuments.Where(x => x.StepId == new StepId(stepId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active).ToList();
+
+        var changeCount = arg.Where(x => previousDocuments.Any(c => c.DocumentTypeId.Value == x.DocumentTypeId && c.Count != x.Count)).ToList();
+        var addStepDocuments = arg.Where(x => !previousDocuments.Any(c => c.DocumentTypeId.Value == x.DocumentTypeId)).ToList();
+        var deleteStepDocuments = previousDocuments.Where(x => !arg.Any(c => c.DocumentTypeId == x.DocumentTypeId.Value)).ToList();
+
+        foreach (var item in changeCount)
+        {
+            var entity = _stepRequiredDocuments.Where(x => x.DocumentTypeId.Value == item.DocumentTypeId).FirstOrDefault();
+            await entity.Modify(item);
+        }
+
+        foreach (var item in addStepDocuments)
+        {
+            var entity = _stepRequiredDocuments.Where(x => (x.DocumentTypeId == new DocumentTypeId(item.DocumentTypeId) && x.StepId == new StepId(stepId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = StepRequiredDocument.Create(item);
+                _stepRequiredDocuments.Add(entity);
+            }
+        }
+
+        foreach (var item in deleteStepDocuments)
+        {
+            item.Delete((arg.First().CreatedBy).Value);
         }
     }
 
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    public void Activate()
+    public void Activate(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
     public StepId Id { get; private set; }
     public string? Name { get; private set; }
     public string? CompleteName { get; private set; }
+    public string? HasDocument { get; private set; }
     public WorkFlowId? WorkFlowId { get; private set; }
     public ActionTypeId? ActionTypeId { get; private set; }
     public FormId? FormId { get; private set; }
@@ -152,7 +191,7 @@ public class Step : Entity
     public ICollection<WorkFlowActorStep> WorkFlowActorSteps => _workFlowActorStep;
     private List<Document> _documents = new();
     public ICollection<Document> Documents => _documents;
-   
+
     private List<Issue> _issues = new();
     public ICollection<Issue> Issues => _issues;
 
@@ -168,4 +207,7 @@ public class Step : Entity
     public ICollection<StepApprovalOption> StepApprovalOptions => _stepApprovalOptions;
     private List<StepOutputParam> _stepOutputParams = new();
     public ICollection<StepOutputParam> StepOutputParams => _stepOutputParams;
+
+    private List<StepRequiredDocument> _stepRequiredDocuments = new();
+    public ICollection<StepRequiredDocument> StepRequiredDocuments => _stepRequiredDocuments;
 }

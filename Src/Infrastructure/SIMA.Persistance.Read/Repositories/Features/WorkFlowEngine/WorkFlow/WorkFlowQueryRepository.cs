@@ -1,22 +1,23 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Forms;
-using SIMA.Application.Query.Contract.Features.Auths.Permission;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
-using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
-using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
+using SIMA.Persistance.Migrations;
 using SIMA.Resources;
 using System.Data.SqlClient;
-using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using Newtonsoft.Json;
+using System.Linq;
+using static Dapper.SqlMapper;
 
 namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
 
@@ -265,33 +266,56 @@ WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
         {
             await connection.OpenAsync();
             string query = $@"
-                       SELECT DISTINCT C.[ID] as Id
-                            ,C.[Name]
-                            ,C.[CompleteName]
-                            ,C.[workFlowId]
-                            ,C.[BpmnId]
-                            ,C.[ActionTypeId]
-                            ,W.[Name] as WorkFlowName
-                            ,A.[Name] ActiveStatus
-                            ,P.[Name] ProjectName
-                            ,P.Id ProjectId
-                            ,D.[Name] DomainName
-                            ,D.[Id] DomainId
-                            ,c.[FormId] 
-                            ,F.[Title] FormName
-                           FROM [PROJECT].[STEP] C
-                           join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
-                           INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
-                           INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-                           INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-                           Left JOIN [Authentication].[Form] F on C.FormId = F.Id
-                           WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
-            var result = await connection.QueryFirstOrDefaultAsync<GetStepQueryResult>(query, new { Id = id });
-            response = result;
+                     SELECT DISTINCT C.[ID] as Id
+                             ,C.[Name]
+                             ,C.[CompleteName]
+                             ,C.[workFlowId]
+                             ,C.[BpmnId]
+                             ,C.[ActionTypeId]
+                             ,W.[Name] as WorkFlowName
+                             ,A.[Name] ActiveStatus
+                             ,P.[Name] ProjectName
+                             ,P.Id ProjectId
+                             ,D.[Name] DomainName
+                             ,D.[Id] DomainId
+                             ,c.[FormId] 
+                             ,F.[Title] FormName
+	                         FROM [PROJECT].[STEP] C
+                            join [PROJECT].[WorkFlow] W on C.WorkFlowId = W.Id
+                            INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
+                            INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                            Left JOIN [Authentication].[Form] F on C.FormId = F.Id
+	                        WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id
+
+	                         SELECT DISTINCT 
+  	                         ap.Id ApprovalOptionId
+	                         ,ap.Name ApprovalOption
+
+                            FROM [PROJECT].[STEP] C
+	                        left join Project.StepApprovalOption sap on sap.StepId = c.Id
+	                        left join Project.ApprovalOption ap on ap.Id=sap.ApprovalOptionId
+	                        WHERE C.[ActiveStatusID] <> 3 and  sap.[ActiveStatusID] <> 3  and C.Id = @Id
+	                         SELECT DISTINCT 
+  	                          srd.Count Count
+	                         ,srd.DocumentTypeId DocumentTypeId,
+	                         dt.Name DocumentType
+                            FROM [PROJECT].[STEP] C
+	                        left join Project.StepRequiredDocument srd  on srd.StepId = c.Id
+	                        left join DMS.DocumentType dt on dt.Id=srd.DocumentTypeId
+                            WHERE C.[ActiveStatusID] <> 3 and  srd.[ActiveStatusID] <> 3 and C.Id = @Id
+                                   ";
+
+            using (var multi = await connection.QueryMultipleAsync(query, new { id = id }))
+            {
+                response = multi.ReadAsync<GetStepQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+                response.ApprovalOptions = multi.ReadAsync<StepApprovalOptionQueryResult>().GetAwaiter().GetResult().ToList();
+                response.RequiredDocuments = multi.ReadAsync<RequiredDocumentQueryResult>().GetAwaiter().GetResult().ToList();
+            }
         }
         return response;
-
     }
+
     public async Task<Result<IEnumerable<GetStateQueryResult>>> GetAllStates(GetAllStatesQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))
@@ -480,15 +504,49 @@ Order By c.[CreatedAt] desc
             return result;
         }
     }
+    public async Task<bool> AllowAddApprovalForStep(long stepId)
+    {
+        bool result = false;
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            string query = @"
+                   select
+                        s.Name as StepName , S.Id as StepId
+                        ,Ps.Name as ProgressSourceName , Ps.Id as PSourceId , PS.SourceId PSSourceId , Ps.TargetId PSTargetId ,PS.ConditionExpression ,PS.HasStoreProcedure,
+                        ST.Name as StepNameTarget , ST.Id as StepIdTarget
+                        ,PT.Name as ProgressTargetName , PT.Id as PTourceId , PT.SourceId PTSourceId , PT.TargetId PTTargetId ,Pt.ConditionExpression ,Pt.HasStoreProcedure
+                        from Project.Step S
+                        join Project.Progress PS on S.Id = PS.SourceId
+                        join Project.Step ST on PS.TargetId = ST.Id
+                        join Project.Progress PT on ST.Id = PT.SourceId
+                    where (s.Id  =@StepId) and ST.ActionTypeId = 6 And( PS.HasStoreProcedure is not null or PT.ConditionExpression is not null)";
+            var response = await connection.QueryFirstOrDefaultAsync<GetStateQueryResult>(query, new { StepId = stepId });
+            if (response is not null) return true;
 
+        }
+        return result;
+    }
     public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query)
     {
         var model = new Dictionary<long, NextProgressInfo>();
-        var getNextStepQuery = @"select distinct wp.StateId CurrentProgressStateId, wp.ProgressId CurrentProgressId, s.Id StepId, s.WorkFlowID WorkflowId, s.ActionTypeId, p.TargetId, p.ConditionExpression, p.StateId NextStateId, p.Extension from project.Step s
+        // var spParams = new Dictionary<long, StoreProcedureParams>();
+
+        var getNextStepQuery = @"select distinct wp.StateId CurrentProgressStateId, 
+								 wp.ProgressId CurrentProgressId, 
+								 s.Id StepId, 
+								 s.WorkFlowID WorkflowId, 
+								 s.ActionTypeId, 
+								 p.TargetId, 
+								 p.ConditionExpression, 
+								 p.HasStoreProcedure, 
+								 p.StateId NextStateId, 
+								 p.Extension
+								 from project.Step s
                                   inner join project.WorkFlow w on w.Id = s.WorkFlowID
                                   left join Project.Progress p on p.SourceId = s.Id
                                   left join (SELECT iwp.Id ProgressId, iwp.StateId, iwp.WorkFlowId from Project.Progress iwp where iwp.Id = @ProgressId) wp on wp.WorkFlowId = w.Id
-                                  where w.Id = @WorkflowId and s.Id = @NextStepId and w.ActiveStatusID = 1";
+				                  where w.Id = @WorkflowId and s.Id = @NextStepId and w.ActiveStatusID = 1";
         var result = new GetNextStepInfoQueryResult();
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -500,37 +558,59 @@ Order By c.[CreatedAt] desc
                 {
                     if (!model.TryGetValue(current.TargetId, out item))
                     {
-                        item = new NextProgressInfo { ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId };
+                        item = new NextProgressInfo { ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId, SpName = current.SpName };
                         model.Add(current.TargetId, item);
                     }
                 }
+                //StoreProcedureParams spParam;
+                //if (current.Id != null)
+                //{
+                //    if (!spParams.TryGetValue(current.Id, out spParam))
+                //    {
+                //        spParam = new StoreProcedureParams { Id = current.Id, IsRequired = current.IsRequired, Name = current.Name };
+                //        spParams.Add(current.TargetId, spParam);
 
+                //    }
+                //}
                 result.CurrentProgressId = current.CurrentProgressId;
                 result.CurrentProgressStateId = current.CurrentProgressStateId;
+
                 result.StepId = current.StepId;
                 result.WorkflowId = current.WorkflowId;
                 result.ActionTypeId = current.ActionTypeId;
             }
             result.NextProgressInfo = model.Values.Any() ? model.Values.ToList() : null;
+            //  result.Params = spParams.Values.Any() ? spParams.Values.ToList() : null;
             if (result.ActionTypeId == 6)
             {
-                return await EvaluateNextProgress(result.NextProgressInfo, query.ConditionValue, query.Form);
+                return await EvaluateNextProgress(result.NextProgressInfo, query.ConditionValue, query.SystemParams);
             }
             return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = result.StepId, SourceStateId = result.CurrentProgressStateId };
 
         }
     }
-    private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<NextProgressInfo> progresses, string ConditionValue, List<FormModel> formData)
+    public static string ContainsComparisonOperator(string text)
+    {
+        // Array of comparison operators to check for
+        string[] operators = { "(!=)", "(==)", "(<=)", "(>=)", "(>)", "(<)" };
+
+        // Use Any method for efficient check
+        return operators.FirstOrDefault(op => text.Contains(op));
+    }
+    private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<NextProgressInfo> progresses, string ConditionValue, List<InputModel> inputs)
     {
 
         foreach (var item in progresses)
         {
             var condition = item.ConditionExpression;
-            var extension = item.Extension ?? string.Empty;
+            var extension = item.Extension;
+
+            var evalueatedExtension = await GetExtension(extension, inputs);
+            var conditionWithExtension = EvaluateConditionExtension(condition, evalueatedExtension);
             var isView = condition.Trim().StartsWith("@");
             if (isView)
             {
-                var allQueries = GetAllViewQueries(condition, extension);
+                var allQueries = GetAllViewQueries(conditionWithExtension, inputs);
                 var conditionResult = await EvaluateViewCondition(allQueries);
                 if (conditionResult)
                 {
@@ -539,7 +619,7 @@ Order By c.[CreatedAt] desc
             }
             else
             {
-                var formConditionResult = await GetAllFormQueries(condition, formData);
+                var formConditionResult = await GetAllFormQueries(conditionWithExtension, inputs);
                 if (formConditionResult)
                 {
                     return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = item.TargetId.Value, SourceStateId = item.NextStateId };
@@ -549,8 +629,83 @@ Order By c.[CreatedAt] desc
         }
         throw new Exception("No Condition Was Correct");
     }
+    private string EvaluateConditionExtension(string condition, Dictionary<string, string> evalueatedExtension)
+    {
+        if (!condition.Contains("*"))
+        {
+            return condition;
+        }
+        var extensionValues = condition.Split('*', StringSplitOptions.RemoveEmptyEntries);
+        foreach (var item in extensionValues)
+        {
+            var allVariables = item.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (var variable in allVariables)
+            {
+                var findValue = evalueatedExtension.TryGetValue(variable, out var value);
+                if (!findValue)
+                {
+                    continue;
+                }
+                condition = condition.Replace($"*{variable}", value);
 
-    private async Task<bool> GetAllFormQueries(string condition, List<FormModel> formData)
+            }
+        }
+        return condition;
+    }
+    private async Task<Dictionary<string, string>> GetExtension(string? extension, List<InputModel> inputs)
+    {
+        var result = new Dictionary<string, string>();
+        if (string.IsNullOrEmpty(extension))
+            return result;
+
+        var allVariables = extension.Split('|', StringSplitOptions.RemoveEmptyEntries);
+        foreach (var item in allVariables)
+        {
+            var variable = item.Split(':', StringSplitOptions.RemoveEmptyEntries);
+            if (variable.Length > 2)
+                continue;
+            var keyValue = new KeyValuePair<string, string>();
+            var variableName = variable[0].Trim().Substring(1);
+            var variableValue = variable[1];
+            if (variableValue.StartsWith('#'))
+            {
+
+                var query = inputs.FirstOrDefault(x => x.Key.ToLower() == variableName.ToLower());
+                result.Add(query.Key, query.Value);
+                continue;
+            }
+            else if (variableValue.StartsWith('@') || variableValue.StartsWith("\"@"))
+            {
+                var isString = variableValue.StartsWith("\"");
+                variableValue = isString ? variableValue.Substring(2) : variableValue.Substring(1);
+                var aqlQuery = GetQueryConditions(variableValue, inputs);
+                var conditionSplitter = aqlQuery.Split('?');
+                var tableColumn = conditionSplitter[0].Split(".");
+                var sqlQuery = SelectGenerator(tableColumn);
+                var conditionaql = conditionSplitter[1];
+                var conditionSql = ConditionGenerator(conditionaql);
+                var query = $"{sqlQuery} WHERE {conditionSql}";
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    if (!isString)
+                    {
+                        var longResult = await connection.QuerySingleOrDefaultAsync<long>(query);
+                        result.Add(variableName, longResult.ToString());
+                        continue;
+                    }
+                    var queryResult = await connection.QuerySingleOrDefaultAsync<string>(query);
+                    result.Add(variableName, queryResult.ToString());
+                }
+            }
+            else
+            {
+                result.Add(variable[0], variableValue);
+            }
+        }
+        return result;
+    }
+    private async Task<bool> GetAllFormQueries(string condition, List<InputModel> formData)
     {
         var result = false;
         string[] allFormCheck = condition.Split('#', StringSplitOptions.None);
@@ -567,21 +722,23 @@ Order By c.[CreatedAt] desc
         }
         return result;
     }
-    private List<QueryWithCheckerModel> GetFormConditions(string condition, List<FormModel> formData)
+    private List<QueryWithCheckerModel> GetFormConditions(string condition, List<InputModel> formData)
     {
         var result = new List<QueryWithCheckerModel>();
         var items = condition.Split('$');
         foreach (var item in items)
         {
             string pattern = @$"({string.Join("|", splitWords)})";
-            var checker = Regex.Match(item, pattern);
-            var splittedCondition = item.Split(splitWords, StringSplitOptions.None);
+            var checker = ContainsComparisonOperator(condition);
+            var splittedCondition = item.Split(splitWords, StringSplitOptions.RemoveEmptyEntries);
             if (string.IsNullOrWhiteSpace(item) || splittedCondition.Length < 1)
             {
                 continue;
             }
-            var query = formData.FirstOrDefault(x => x.Key.ToLower() == splittedCondition[0].ToLower());
-            var data = new QueryWithCheckerModel { Checker = checker.Value, Query = query?.Value ?? string.Empty, ValueToCheck = splittedCondition[1] };
+            var query = formData.FirstOrDefault(x => x.Key.ToLower() == splittedCondition[0].Trim().ToLower());
+            if (query is null)
+                continue;
+            var data = new QueryWithCheckerModel { Checker = checker, Query = query?.Value ?? string.Empty, ValueToCheck = splittedCondition[1] };
             result.Add(data);
         }
         return result;
@@ -644,7 +801,7 @@ Order By c.[CreatedAt] desc
                     }
                     else
                     {
-                        var longChecker = await connection.QuerySingleOrDefaultAsync<long>(query.Query);
+                        var longChecker = await connection.QueryFirstOrDefaultAsync<long>(query.Query);
                         result = CheckLongCondition(longChecker, query.Checker, Convert.ToInt64(query.ValueToCheck));
                         if (!result)
                         {
@@ -676,23 +833,23 @@ Order By c.[CreatedAt] desc
     {
         return checker switch
         {
-            "==" => check == valueToCheck,
-            "<=" => check <= valueToCheck,
-            ">=" => check >= valueToCheck,
-            "!=" => check != valueToCheck,
-            ">" => check > valueToCheck,
-            "<" => check < valueToCheck,
+            "(==)" => check == valueToCheck,
+            "(<=)" => check <= valueToCheck,
+            "(>=)" => check >= valueToCheck,
+            "(!=)" => check != valueToCheck,
+            "(>)" => check > valueToCheck,
+            "(<)" => check < valueToCheck,
             _ => false
         };
     }
-    private List<QueryWithCheckerModel> GetAllViewQueries(string condition, string extension)
+    private List<QueryWithCheckerModel> GetAllViewQueries(string condition, List<InputModel> inputModels)
     {
         //string pattern = @"(?=(" + string.Join("|", splitWords) + @"))";
-        var aqlQuery = GetQueryConditions(condition, extension);
+        var aqlQuery = GetQueryConditions(condition, inputModels);
 
-        string[] allQueries = aqlQuery.Split('@', StringSplitOptions.None);
+        string[] allQueries = aqlQuery.Split('@', StringSplitOptions.RemoveEmptyEntries);
 
-        allQueries = Array.FindAll(allQueries, s => !string.IsNullOrWhiteSpace(s));
+        //allQueries = Array.FindAll(allQueries, s => !string.IsNullOrWhiteSpace(s));
         var queries = new List<QueryWithCheckerModel>();
         foreach (var item in allQueries)
         {
@@ -701,13 +858,12 @@ Order By c.[CreatedAt] desc
         }
         return queries;
     }
-    private string[] splitWords = new string[] { "!=", "==", "<=", ">=", ">", "<" };
-
+    private string[] splitWords = new string[] { "(!=)", "(==)", "(<=)", "(>=)", "(>)", "(<)" };
     private QueryWithCheckerModel GetQuery(string aqlQuery)
     {
         string pattern = @$"({string.Join("|", splitWords)})";
-        var checker = Regex.Match(aqlQuery, pattern);
-        var queries = aqlQuery.Split(splitWords, StringSplitOptions.None);
+        var checker = ContainsComparisonOperator(aqlQuery);
+        var queries = aqlQuery.Split(splitWords, StringSplitOptions.RemoveEmptyEntries);
         var query = queries[0];
         var conditionSplitter = query.Split('?');
         var tableColumn = conditionSplitter[0].Split(".");
@@ -715,9 +871,8 @@ Order By c.[CreatedAt] desc
         var conditionaql = conditionSplitter[1];
         var conditionSql = ConditionGenerator(conditionaql);
         var result = $"{sqlQuery} WHERE {conditionSql}";
-        return new QueryWithCheckerModel { Checker = checker.Value, Query = result, ValueToCheck = queries[1] };
+        return new QueryWithCheckerModel { Checker = checker, Query = result, ValueToCheck = queries[1] };
     }
-
     private string SelectGenerator(string[] tableAndColumn)
     {
         var column = tableAndColumn.LastOrDefault();
@@ -727,6 +882,7 @@ Order By c.[CreatedAt] desc
     private string ConditionGenerator(string condition)
     {
         var result = condition.Replace("&", " AND ");
+
         return result;
     }
     private string CastVariableToQuery(string value, string extension)
@@ -753,16 +909,115 @@ Order By c.[CreatedAt] desc
         }
         return result;
     }
-    private string GetQueryConditions(string condition, string extension)
+    private string GetQueryConditions(string condition, List<InputModel> inputData)
     {
-        var result = condition;
-        var items = condition.Split('$');
+        var result = new List<QueryWithCheckerModel>();
+        var firstParamIndex = condition.IndexOf('$');
+        if (firstParamIndex < 0)
+        {
+            return condition;
+        }
+        var conditionQuery = condition.Substring(firstParamIndex - 1);
+        var items = conditionQuery.Trim().Split('$', StringSplitOptions.RemoveEmptyEntries);
+
         foreach (var item in items)
         {
-            var castedVariable = CastVariableToQuery(item, extension);
-            result.Replace(item, castedVariable);
+            var spaceIndex = item.IndexOf(' ');
+
+            var value = spaceIndex > 0 ? item.Substring(0, spaceIndex) : item.Substring(0);
+
+            var input = inputData.FirstOrDefault(x => x.Key == value);
+            if (input is null)
+                continue;
+            condition = condition.Replace("$" + value, input.Value);
         }
-        return result;
+        return condition;
+    }
+    public async Task ExecuteSP(long ProgressId, string mainAggregateName, List<InputModel> SystemParams, List<InputParamQueryModel> InputParam, List<AddDocumentToSPQuery> docs)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            #region -- exe Sp --
+            var SpQury = @"select 
+                  p.Id ProgressId,
+                  ps.StoreProcedureName StoreProcedureName,
+                  ps.Id ProgressStoreProcedureId,
+                  psp.Id ParamId,
+                  psp.Name ParamName,
+                  psp.IsSystemParam IsSystemParam,
+                  psp.SystemParamName SystemParamName,
+                  psp.DataTypeId,
+                  ps.ExecutionOrdering
+                  from
+                  Project.Progress p join 
+                  Project.ProgressStoreProcedure ps on p.Id = ps.ProgressId 
+                  left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id
+                  
+                  where p.Id= @ProgressId
+                  ";
+            var spQuery = await connection.QueryAsync<StoreProcedureInfo>(SpQury, new { ProgressId });
+            var spGroup = spQuery.OrderBy(x => x.ExecutionOrdering).GroupBy(x => x.StoreProcedureName);
+            foreach (var item in spGroup)
+            {
+                string sp = string.Empty;
+                if (item.Key.Contains(mainAggregateName + "Document"))
+                {
+                    var json = JsonConvert.SerializeObject(docs);
+                    sp = $"{item.Key} N'{json}'";
+                }
+                else
+                {
+                    var paramas = new List<StoreProcedureParamInfo>();
+                    paramas = item.Select(it => new StoreProcedureParamInfo
+                    {
+                        ParamName = it.ParamName,
+                        IsSystemParam = it.IsSystemParam,
+                        ParamId = it.ParamId,
+                        SystemParamName = it.SystemParamName,
+                        DataTypeId = it.DataTypeId,
+                    }).ToList();
+                    // build-in params
+                    foreach (var p in InputParam)
+                    {
+                        var param = paramas.Where(it => it.ParamId == p.Id).FirstOrDefault();
+                        if (param != null) param.Value = p.ParamValue;
+                    }
+
+                    foreach (var p in paramas)
+                    {
+
+                        if (p.IsSystemParam == "1")
+                        {
+                            if (p.SystemParamName == "Id")
+                            {
+                                var id = IdHelper.GenerateUniqueId();
+                                p.Value = id.ToString();
+                            }
+                            var param2 = SystemParams.FirstOrDefault(it => it.Key == p.SystemParamName);
+                            if (param2 != null) p.Value = param2.Value;
+                        }
+                    }
+                    sp = $"{item.Key} ";
+                    foreach (var i in paramas)
+                    {
+                        if (i.DataTypeId == 2)
+                            sp += $"@{i.ParamName} = N'{i.Value}' ,";
+                        else
+                            sp += $"@{i.ParamName} = {i.Value} ,";
+                    }
+                    sp = sp.Remove(sp.Length - 1);
+                }
+                try
+                {
+                    await connection.ExecuteAsync(sp);
+                }
+                catch (Exception ex)
+                {
+                    throw new SimaResultException(CodeMessges._400Code, Messages.ExecStoreProcedureError);
+                }
+            }
+            #endregion
+        }
     }
 
 }

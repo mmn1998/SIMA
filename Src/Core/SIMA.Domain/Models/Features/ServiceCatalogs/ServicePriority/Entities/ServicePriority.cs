@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities;
 
@@ -25,8 +26,10 @@ public class ServicePriority : Entity
     {
         return new ServicePriority(arg);
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public ServicePriorityId Id { get; private set; }

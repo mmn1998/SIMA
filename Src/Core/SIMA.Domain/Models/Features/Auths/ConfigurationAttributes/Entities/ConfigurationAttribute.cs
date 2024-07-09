@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.SysConfigs.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities;
 
@@ -58,8 +59,10 @@ public class ConfigurationAttribute : Entity
     private List<UserConfig> _userConfigs = new();
 
     public ICollection<UserConfig> UserConfigs => _userConfigs;
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
 {
@@ -36,7 +37,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
             SourceId = new StepId(arg.SourceId);
             TargetId = arg.TargetId.HasValue ? new StepId(arg.TargetId.Value) : null;
             BpmnId = arg.BpmnId;
-          //  HasStoreProcedure = arg.HasStoreProcedure;
+            //  HasStoreProcedure = arg.HasStoreProcedure;
             ModifiedBy = arg.CreatedBy;
             ActiveStatusId = arg.ActiveStatusId;
         }
@@ -47,7 +48,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
         }
         public void ChangeStatus(ChangeStatusArg arg)
         {
-            StateId = arg.StateId.HasValue ? new StateId(arg.StateId.Value) : null; 
+            StateId = arg.StateId.HasValue ? new StateId(arg.StateId.Value) : null;
             ConditionExpression = arg.ConditionExpression;
             HasStoreProcedure = arg.ProgressStoreProcedures.Any() ? "1" : "0";
             SetStoreProcedures(arg.ProgressStoreProcedures);
@@ -63,12 +64,16 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities
             ActiveStatusId = arg.ActiveStatusId;
         }
 
-        public void Delete()
+        public void Delete(long userId)
         {
-            ActiveStatusId = (int)ActiveStatusEnum.Delete;
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
-        public void Activate()
+        public void Activate(long userId)
         {
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
             ActiveStatusId = (int)ActiveStatusEnum.Active;
         }
 

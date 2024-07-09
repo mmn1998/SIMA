@@ -48,7 +48,7 @@ public class BranchTypeCommandHandler : ICommandHandler<CreateBranchTypeCommand,
     public async Task<Result<long>> Handle(DeleteBranchTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        await entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

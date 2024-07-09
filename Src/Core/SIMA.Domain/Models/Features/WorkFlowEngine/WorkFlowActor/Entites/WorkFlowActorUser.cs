@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 
@@ -26,8 +27,10 @@ public partial class WorkFlowActorUser : Entity
     {
         return new WorkFlowActorUser(arg);
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
 
     }

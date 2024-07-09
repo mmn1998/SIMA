@@ -7,7 +7,8 @@ public class GetLocationQueryResult
     public string? LocationName { get; set; }
 
     public string? LocationCode { get; set; }
-
+    public long ParentId { get; set; }
+    public string? ParentName { get; set; }
     public string LocationTypeName { get; set; }
     public string ParentLocationTypeName { get; set; }
     public long ActiveStatusId { get; set; }

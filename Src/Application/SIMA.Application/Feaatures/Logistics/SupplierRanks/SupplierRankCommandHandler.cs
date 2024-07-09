@@ -52,7 +52,7 @@ public class SupplierRankCommandHandler : ICommandHandler<CreateSupplierRankComm
     public async Task<Result<long>> Handle(DeleteSupplierRankCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new SupplierRankId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

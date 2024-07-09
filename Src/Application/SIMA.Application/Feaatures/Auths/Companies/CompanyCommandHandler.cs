@@ -60,7 +60,7 @@ public class CompanyCommandHandler : ICommandHandler<CreateCompanyCommand, Resul
     public async Task<Result<long>> Handle(DeleteCompanyCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

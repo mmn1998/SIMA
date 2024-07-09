@@ -11,6 +11,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Companies.Entities;
 
@@ -72,9 +73,11 @@ public class Company : Entity
         if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException("10022",Messages.ParentCompaniesCannotDefinedAsChildError);
     }
     #endregion
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
     public CompanyId Id { get; private set; }

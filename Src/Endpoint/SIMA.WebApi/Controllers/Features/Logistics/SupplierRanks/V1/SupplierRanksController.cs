@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.Logistics.SupplierRanks;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.Logistics.SupplierRanks.V1;
 
@@ -17,16 +18,19 @@ public class SupplierRanksController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
+    [SimaAuthorize(Permissions.SupplierRanksPost)]
     public async Task<Result> Post([FromBody] CreateSupplierRankCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
+    [SimaAuthorize(Permissions.SupplierRanksPut)]
     public async Task<Result> Put([FromBody] ModifySupplierRankCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
+    [SimaAuthorize(Permissions.SupplierRanksDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteSupplierRankCommand { Id = id };

@@ -1,6 +1,5 @@
 ﻿using Sima.Framework.Core.Mediator;
 using SIMA.Framework.Common.Response;
-using System.Windows.Input;
 
 namespace SIMA.Application.Contract.Features.Auths.Profiles;
 

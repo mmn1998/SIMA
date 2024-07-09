@@ -37,6 +37,9 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             var workFlowId = new WorkFlowId(Value: id);
             var workFlow = await _context.WorkFlows
                 .Include(x => x.Steps)
+                .ThenInclude(x=>x.StepRequiredDocuments)
+                 .Include(x => x.Steps)
+                .ThenInclude(x => x.StepApprovalOptions)
                 .Include(x => x.States)
                 .Include(x => x.Progresses)
                 .Include(x => x.WorkFlowCompanies)
@@ -46,7 +49,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
                     .ThenInclude(x => x.WorkFlowActorSteps)
                 .FirstOrDefaultAsync(x => x.Id == workFlowId);
 
-            return workFlow ?? throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
+            return workFlow ?? throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
         }
         catch (Exception ex)
         {
@@ -92,7 +95,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             foreach (var actor in workFlow.WorkFlowActors)
             {
                 var sss = actor.WorkFlowActorUsers.Where(x => x.UserId == new UserId(_simaIdentity.UserId) && x.ActiveStatusId != (long)ActiveStatusEnum.Delete).FirstOrDefault();
-                if(sss is not null)
+                if (sss is not null)
                 {
                     var actorStep = actor.WorkFlowActorSteps.Select(x => x.StepId);
                     var step = workFlow.Steps.Where(s => actorStep.Contains(s.Id) && s.ActionTypeId == startEventActionTypeId).FirstOrDefault();
@@ -141,7 +144,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
                 throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
             }
         }
-            return result;
+        return result;
     }
 
     //public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workFlowId, long nextStep, long progressId)
@@ -175,7 +178,20 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 
     public Task<WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate)
     {
+        var xx = (long)mainAggregate;
+
         var workFlow = _context.WorkFlows.FirstOrDefaultAsync(x => x.MainAggregateId == new MainAggregateId((long)mainAggregate));
         return workFlow;
+    }
+
+    public async Task<bool> CheckDocumentForStep(long stepId)
+    {
+        var result = false;
+        var checkDoc = await _context.Steps.FirstOrDefaultAsync(x => x.Id == new StepId(stepId));
+        if (checkDoc != null)
+            if (checkDoc.HasDocument == "1") result = true;
+
+        return result;
+
     }
 }

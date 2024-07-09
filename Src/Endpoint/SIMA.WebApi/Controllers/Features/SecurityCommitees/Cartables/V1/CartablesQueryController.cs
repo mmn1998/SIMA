@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.SecurityCommitees.Cartables;
 using SIMA.Application.Query.Contract.Features.SecurityCommitees.MeetingHoldingReasons;
 using SIMA.Framework.Common.Response;
+using SIMA.WebApi.Extensions;
 
 namespace SIMA.WebApi.Controllers.Features.SecurityCommitees.Cartables.V1;
 
@@ -26,7 +27,12 @@ public class CartablesQueryController : ControllerBase
     [HttpGet("Detail")]
     public async Task<Result> Get([FromQuery] GetCartableQuery query)
     {
-        return await _mediator.Send(query);
+        var result = await _mediator.Send(query);
+        foreach (var document in result.Data.IssueDocuments)
+        {
+            document.DocumentContentType = document.DocumentExtentionName.GetContentType();
+        }
+        return result;
     }
 
 

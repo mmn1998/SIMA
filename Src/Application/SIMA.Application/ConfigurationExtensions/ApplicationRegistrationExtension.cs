@@ -43,6 +43,7 @@ using SIMA.Application.Feaatures.Logistics.GoodsCategories.Mappers;
 using SIMA.Application.Feaatures.Logistics.Goodses.Mappers;
 using SIMA.Application.Feaatures.Logistics.GoodsQuorumPrices.Mappers;
 using SIMA.Application.Feaatures.Logistics.GoodsTypes.Mappers;
+using SIMA.Application.Feaatures.Logistics.LogisticRequests.Mapper;
 using SIMA.Application.Feaatures.Logistics.SupplierRanks.Mappers;
 using SIMA.Application.Feaatures.Logistics.Suppliers.Mappers;
 using SIMA.Application.Feaatures.Logistics.UnitMeasurements.Mappers;
@@ -200,6 +201,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new SupplierMapper());
                 conf.AddProfile(new SupplierRankMapper());
                 conf.AddProfile(new GoodsCategoryMapper());
+                conf.AddProfile(new LogisticRequestMapper());
                 #endregion
             }
         }, Array.Empty<Type>());

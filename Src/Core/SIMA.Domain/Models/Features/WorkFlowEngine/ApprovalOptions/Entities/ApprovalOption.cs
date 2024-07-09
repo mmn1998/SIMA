@@ -1,12 +1,13 @@
 ﻿using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.ValueObjects;
-using SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities
 {
@@ -40,11 +41,12 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities
             ModifiedAt = arg.ModifiedAt;
             ModifiedBy = arg.ModifiedBy;
         }
-        public void Delete()
+        public void Delete(long userId)
         {
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
             ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
-
         public ApprovalOptionId Id { get; private set; }
         public string Name { get; private set; }
         public string Code { get; private set; }

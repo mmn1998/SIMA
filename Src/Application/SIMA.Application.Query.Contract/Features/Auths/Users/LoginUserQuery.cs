@@ -40,7 +40,7 @@ public class UserInfoLogin
     public string IsLocked { get; set; }
     public int AccessFailedCount { get; set; }
     public int AccessFailedOverallCount { get; set; }
-    public DateTime? AccessFaildDate { get; set; }
+    public DateTime? AccessFailedDate { get; set; }
 }
 public class Menue
 {

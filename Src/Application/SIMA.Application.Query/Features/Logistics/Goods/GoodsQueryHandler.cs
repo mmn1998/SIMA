@@ -6,7 +6,8 @@ using SIMA.Persistance.Read.Repositories.Features.Logistics.Goods;
 namespace SIMA.Application.Query.Features.Logistics.Goods;
 
 public class GoodsQueryHandler : IQueryHandler<GetGoodsQuery, Result<GetGoodsQueryResult>>,
-    IQueryHandler<GetAllGoodsesQuery, Result<IEnumerable<GetGoodsQueryResult>>>
+    IQueryHandler<GetAllGoodsesQuery, Result<IEnumerable<GetGoodsQueryResult>>>,
+    IQueryHandler<GetAllGoodsByGoodsCategoryQuery, Result<IEnumerable<GetGoodsQueryResult>>>
 {
     private readonly IGoodsQueryRepository _repository;
 
@@ -23,5 +24,10 @@ public class GoodsQueryHandler : IQueryHandler<GetGoodsQuery, Result<GetGoodsQue
     public async Task<Result<IEnumerable<GetGoodsQueryResult>>> Handle(GetAllGoodsesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
+    }
+
+    public async Task<Result<IEnumerable<GetGoodsQueryResult>>> Handle(GetAllGoodsByGoodsCategoryQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetbyGoodsCategoryId(request.GoodsCategoryId);
     }
 }

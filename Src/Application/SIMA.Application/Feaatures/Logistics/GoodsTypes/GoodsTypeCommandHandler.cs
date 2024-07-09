@@ -52,7 +52,7 @@ public class GoodsTypeCommandHandler : ICommandHandler<CreateGoodsTypeCommand, R
     public async Task<Result<long>> Handle(DeleteGoodsTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new GoodsTypeId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

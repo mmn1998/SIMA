@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 
@@ -35,13 +36,12 @@ public class ProjectGroup : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
-
     }
-    
     public ProjectGroupId Id { get; set; }
     public ProjectId ProjectId { get; set; }
     public virtual Project Project { get; set; }

@@ -51,7 +51,7 @@ public class ServiceCustomerTypeCommandHandler : ICommandHandler<CreateServiceCu
     public async Task<Result<long>> Handle(DeleteServiceCustomerTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new ServiceCustomerTypeId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

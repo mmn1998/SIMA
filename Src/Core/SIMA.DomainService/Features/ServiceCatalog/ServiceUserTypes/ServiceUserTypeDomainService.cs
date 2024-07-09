@@ -16,7 +16,7 @@ public class ServiceUserTypeDomainService : IServiceUserTypeDomainService
     {
         bool result = false;
         if (Id == null) result = !await _context.ServiceUserTypes.AnyAsync(x => x.Code == code);
-        else result = !await _context.ServiceUserTypes.AnyAsync(x => x.Code == code && x.Id == Id);
+        else result = !await _context.ServiceUserTypes.AnyAsync(x => x.Code == code && x.Id != Id);
         return result;
     }
 }

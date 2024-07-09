@@ -17,7 +17,15 @@ public class SupplierRankDomainService : ISupplierRankDomainService
     {
         bool result = false;
         if (Id == null) result = !await _context.SupplierRanks.AnyAsync(x => x.Code == code);
-        else result = !await _context.SupplierRanks.AnyAsync(x => x.Code == code && x.Id == Id);
+        else result = !await _context.SupplierRanks.AnyAsync(x => x.Code == code && x.Id != Id);
+        return result;
+    }
+
+    public async Task<bool> IsOrderingUnique(string ordering, SupplierRankId? id = null)
+    {
+        bool result = false;
+        if (id == null) result = !await _context.SupplierRanks.AnyAsync(x => x.Ordering == ordering);
+        else result = !await _context.SupplierRanks.AnyAsync(x => x.Ordering == ordering && x.Id != id);
         return result;
     }
 }

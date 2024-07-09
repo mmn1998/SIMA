@@ -45,7 +45,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     public async Task<Result<long>> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -103,7 +103,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     public async Task<Result<long>> Handle(DeleteUserGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.GroupId);
-        entity.DeleteUserGroup(request.UserGroupId);
+        entity.DeleteUserGroup(request.UserGroupId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -111,7 +111,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
     public async Task<Result<long>> Handle(DeleteGroupPermissionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.GroupId);
-        entity.DeleteUserGroup(request.GroupPermissionId);
+        entity.DeleteUserGroup(request.GroupPermissionId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

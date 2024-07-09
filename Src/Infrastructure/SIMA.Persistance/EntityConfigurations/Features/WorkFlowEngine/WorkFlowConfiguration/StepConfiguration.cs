@@ -29,7 +29,7 @@ public class StepConfiguration : IEntityTypeConfiguration<Step>
             .IsRowVersion()
             .IsConcurrencyToken();
         entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
-
+        entity.Property(e => e.CompleteName).HasColumnType("varchar(MAX)");
 
         entity.Property(x => x.FormId)
             .HasConversion(
@@ -46,7 +46,10 @@ public class StepConfiguration : IEntityTypeConfiguration<Step>
           v => v.Value,
           v => new ActionTypeId(v));
 
-
+        entity.Property(e => e.HasDocument)
+               .HasMaxLength(1)
+               .IsUnicode(false)
+               .IsFixedLength();
 
 
         entity.Property(e => e.WorkFlowId).HasColumnName("WorkFlowID");

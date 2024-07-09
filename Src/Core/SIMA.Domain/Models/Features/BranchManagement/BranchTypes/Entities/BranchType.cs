@@ -6,6 +6,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 
@@ -38,7 +39,7 @@ public class BranchType : Entity
         ModifyAt = arg.ModifyAt;
         ModifyBy = arg.ModifyBy;
     }
-    public async Task Delete()
+    public void Delete(long userId)
     {
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }

@@ -86,7 +86,7 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
     public async Task<Result<long>> Handle(DeleteProjectCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -108,7 +108,7 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
     public async Task<Result<long>> Handle(DeleteProjectGroupCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.ProjectId);
-        entity.DeleteProjectGroup(request.Id);
+        entity.DeleteProjectGroup(request.Id, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -131,7 +131,7 @@ public class ProjectCommandHandler : ICommandHandler<CreateProjectCommand, Resul
     public async Task<Result<long>> Handle(DeleteProjectMemberCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.ProjectId);
-        entity.DeleteProjectMmeber(request.Id);
+        entity.DeleteProjectMmeber(request.Id, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

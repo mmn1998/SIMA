@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualBasic;
+using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
 using SIMA.Framework.Common.Helper;
 using System.Text.Json.Serialization;
 
@@ -29,6 +30,7 @@ public class GetIssueQueryResult
     public string Code { get; set; }
     public string Description { get; set; }
     public string? ActiveStatus { get; set; }
+    public string? HasDocument { get; set; }
     public long ActiveStatusId { get; set; }
     [JsonIgnore]
     public DateTime DueDate { get; set; }
@@ -36,10 +38,11 @@ public class GetIssueQueryResult
     [JsonIgnore]
     public string? BpmnId { get; set; }
     public string PersianDueDate => DateHelper.ToPersianDate(DueDate);
-    public List<GetIssueLinkQueryResult> IssueLinks { get; set; }
-    public List<GetIssueDocumentQueryResult> IssueDocuments { get; set; }
-    public List<GetIssueCommentQueryResult> IssueComments { get; set; }
+    public IEnumerable<GetIssueLinkQueryResult> IssueLinks { get; set; }
+    public IEnumerable<GetStepRequiredDocumentQueryResult> RequiredDocuments { get; set; }
+    public IEnumerable<GetIssueDocumentQueryResult> IssueDocuments { get; set; }
+    public IEnumerable<GetIssueCommentQueryResult> IssueComments { get; set; }
     public List<GetRelatedProgressQueryResult> RelatedProgresses { get; set; }
-    public List<GetApprovalOptionQueryResult> ApprovalOptions { get; set; }
+    public IEnumerable<GetApprovalOptionQueryResult> ApprovalOptions { get; set; }
    
 }

@@ -17,40 +17,36 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper
         {
             CreateMap<CreateWorkFlowCommand, CreateWorkFlowArg>()
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
                 .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
 
             CreateMap<ModifyWorkFlowCommand, ModifyWorkFlowArg>()
-           .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
-           //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
-            ;
+           .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())));
 
 
             CreateMap<CreateStepCommand, StepArg>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                //.ForMember(dest => dest.UserId, opt => opt.MapFrom(src => simaIdentity.UserId))
                 .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
-
 
 
             CreateMap<ModifyStateCommand, ModifyStateArgs>()
           .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())));
-          //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
 
             CreateMap<CreateStateCommand, CreateStateArg>()
-                .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
-                .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
+               .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+               .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
 
             CreateMap<AddStepApprovalOption, CreateStepApprovalOptionArg>()
                .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-               //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
-               .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
+             .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
+
+            CreateMap<RequiredDocument, CreateStepRequiredDocumentArg>()
+               .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active))
+               .ForMember(x => x.DocumentTypeId, opt => opt.MapFrom(src => src.DocumentTypeId))
+               .ForMember(x => x.Count, opt => opt.MapFrom(src => src.Count));
 
             CreateMap<ModifyStepCommand, ModifyStepArgs>()
         .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())));
-        //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
         }
     }
 }

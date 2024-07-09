@@ -8,6 +8,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 
@@ -63,8 +64,10 @@ public class MeetingSchedule : Entity
     public long? ModifiedBy { get; private set; }
     public virtual ICollection<Invitees> Inviteeses { get; private set; }
 
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

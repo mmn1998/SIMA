@@ -7,6 +7,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 
@@ -103,8 +104,10 @@ public class Broker : Entity
     public long? ModifiedBy { get; private set; }
 
     public virtual BrokerType? BrokerType { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

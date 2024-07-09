@@ -6,6 +6,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Entities;
 
@@ -38,9 +39,11 @@ public class BrokerType : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public async Task Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = 2;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public BrokerTypeId Id { get; private set; }
     public string? Name { get; private set; }

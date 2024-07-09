@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 
@@ -53,8 +54,10 @@ public class ApprovalResponsibleAnswerDocument
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 

@@ -11,6 +11,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 public class Service : Entity
@@ -40,8 +41,10 @@ public class Service : Entity
     {
         return new Service(arg);
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public ServiceId Id { get; private set; }

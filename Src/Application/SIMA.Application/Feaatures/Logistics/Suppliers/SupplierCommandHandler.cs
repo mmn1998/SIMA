@@ -52,7 +52,7 @@ public class SupplierCommandHandler : ICommandHandler<CreateSupplierCommand, Res
     public async Task<Result<long>> Handle(DeleteSupplierCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new SupplierId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

@@ -1,6 +1,7 @@
 ﻿using Flurl.Util;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
@@ -40,6 +41,13 @@ namespace SIMA.Persistance.Repositories.Features.IssueManagement
             return result.Id.Value;
         }
 
+        public async Task<Issue> GetIssueBySourceId(long sourceId, MainAggregateEnums mainAggregate)
+        {
+            var result = await _context.Issues.FirstOrDefaultAsync(x=>x.SourceId == sourceId && x.MainAggregateId == new MainAggregateId((long)mainAggregate));
+            result.NullCheck();
+            return result;
+        }
+
         public async Task<(long, int)> GetIssueMiddleWeight()
         {
             var orderedQuery = _context.IssueWeightCategories.OrderBy(it => it.MinRange);
@@ -69,8 +77,8 @@ namespace SIMA.Persistance.Repositories.Features.IssueManagement
 
         public async Task<long> GetIssueTypeRequest()
         {
-            var result = _context.IssueTypes.FirstOrDefaultAsync(it => it.Name.Trim() == "درخواست");
-            return result.Id;
+            var result = await _context.IssueTypes.FirstOrDefaultAsync(it => it.Name.Trim() == "درخواست");
+            return result.Id.Value;
         }
 
         public async Task<Issue> GetLastIssue()

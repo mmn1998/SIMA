@@ -7,7 +7,10 @@ public class GetNextStepInfoQueryResult
     public long StepId { get; set; }
     public long WorkflowId { get; set; }
     public long ActionTypeId { get; set; }
+    public string? SpName { get; set; }
     public List<NextProgressInfo> NextProgressInfo { get; set; }
+    //public List<StoreProcedureParams> Params { get; set; }
+
 }
 
 public class GetProgressModel

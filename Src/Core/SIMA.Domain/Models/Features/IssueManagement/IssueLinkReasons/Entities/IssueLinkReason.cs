@@ -5,6 +5,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities
 {
@@ -47,14 +48,18 @@ namespace SIMA.Domain.Models.Features.IssueManagement.IssueLinkReasons.Entities
         public long? ModifiedBy { get; private set; }
         public ICollection<IssueLink> IssueLinks { get; private set; }
 
-        public void Delete()
+        public void Delete(long userId)
         {
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
             ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
 
-        public void Deactive()
+        public void Deactive(long userId)
         {
-            ActiveStatusId = (long)ActiveStatusEnum.Deactive;
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
 
 

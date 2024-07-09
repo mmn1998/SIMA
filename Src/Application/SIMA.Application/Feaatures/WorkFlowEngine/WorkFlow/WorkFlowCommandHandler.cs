@@ -6,6 +6,7 @@ using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.Steps;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -48,7 +49,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         {
             var arg = _mapper.Map<CreateWorkFlowArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
-            var entity = await Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg , _service);
+            var entity = await Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow.New(arg, _service);
             await _repository.Add(entity);
             var id = entity.Id.Value;
             await _unitOfWork.SaveChangesAsync();
@@ -59,14 +60,14 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowArg>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
-            await entity.Modify(arg , _service);
+            await entity.Modify(arg, _service);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
         public async Task<Result<long>> Handle(DeleteWorkFlowCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetById(request.Id);
-            entity.Delete();
+            long userId = _simaIdentity.UserId; entity.Delete(userId);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
@@ -105,8 +106,19 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
             arg.ModifiedBy = _simaIdentity.UserId;
             await entity.ModifyStep(arg);
 
-            var approvalArg = _mapper.Map<List<CreateStepApprovalOptionArg>>(request.StepApprovalOptions);
-            await entity.AddStepApproval(approvalArg, request.Id);
+            if (request.ApprovalOptions is not null && request.ApprovalOptions.Count > 0)
+            {
+                var approvalArg = _mapper.Map<List<CreateStepApprovalOptionArg>>(request.ApprovalOptions);
+                approvalArg.ForEach(it => it.CreatedBy = _simaIdentity.UserId);
+                await entity.AddStepApproval(approvalArg, request.Id, _service);
+            }
+            if (request.RequiredDocuments is not null && request.RequiredDocuments.Count > 0)
+            {
+                var requirmentDocumentsArg = _mapper.Map<List<CreateStepRequiredDocumentArg>>(request.RequiredDocuments);
+                requirmentDocumentsArg.ForEach(it => it.StepId = arg.Id);
+                requirmentDocumentsArg.ForEach(it => it.CreatedBy = _simaIdentity.UserId);
+                await entity.AddRequirmentDocument(requirmentDocumentsArg, request.Id);
+            }
 
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
@@ -114,7 +126,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         public async Task<Result<long>> Handle(DeleteStepCommand request, CancellationToken cancellationToken)
         {
             var entity = await _repository.GetById(request.WorkFlowId);
-            entity.DeleteStep(request.Id);
+            entity.DeleteStep(request.Id, _simaIdentity.UserId);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
@@ -123,7 +135,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         #region State
         public async Task<Result<long>> Handle(CreateStateCommand request, CancellationToken cancellationToken)
         {
-            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
+            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
             var workflow = await _repository.GetById2(new WorkFlowId(Value: (long)request.WorkFlowId));
             var arg = _mapper.Map<CreateStateArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
@@ -133,7 +145,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         }
         public async Task<Result<long>> Handle(ModifyStateCommand request, CancellationToken cancellationToken)
         {
-            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
+            if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
             var entity = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStateArgs>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
@@ -143,15 +155,12 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         }
         public async Task<Result<long>> Handle(DeleteStateCommand request, CancellationToken cancellationToken)
         {
-            if (!await _service.CheckWorkFlow(request.WorkFlowId)) throw new SimaResultException("10057",Messages.WorkflowNotFoundError);
+            if (!await _service.CheckWorkFlow(request.WorkFlowId)) throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
             var entity = await _repository.GetById(request.WorkFlowId);
-            entity.DeleteState(request.Id);
+            entity.DeleteState(request.Id, _simaIdentity.UserId);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
         }
-
-        
-        
 
         #endregion
     }

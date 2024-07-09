@@ -58,7 +58,7 @@ public class LocationCommandHandler : ICommandHandler<CreateLocationCommand, Res
     public async Task<Result<long>> Handle(DeleteLocationCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById((int)request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();
         return Result.Ok(entity.Id.Value);

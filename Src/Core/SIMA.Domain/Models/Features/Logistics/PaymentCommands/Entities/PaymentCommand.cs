@@ -13,7 +13,6 @@ public class PaymentCommand : Entity, IAggregateRoot
 
     public DateTime CommandDate { get; private set; }
     public string? CommandDescription { get; private set; }
-    public string? Description { get; private set; }
     public string? IsPrePayment { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

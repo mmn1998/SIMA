@@ -53,14 +53,14 @@ public class DocumentCommandHandler : ICommandHandler<CreateDocumentCommand, Res
     public async Task<Result<long>> Handle(DeleteDocumentCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
 
     public async Task<Result<List<long>>> Handle(MultiCreateDocumentCommand request, CancellationToken cancellationToken)
     {
-        var args = _mapper.Map<List<CreateDocumentArg>>(request);
+        var args = _mapper.Map<List<CreateDocumentArg>>(request.Documents);
         List<long> documentIds = new List<long>();
         foreach (var arg in args)
         {

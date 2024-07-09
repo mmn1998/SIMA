@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 
@@ -54,4 +55,10 @@ public class MainAggregate
     public ICollection<Issue> Issues => _issues;
     private List<WorkFlow> _workFlows = new();
     public ICollection<WorkFlow> WorkFlows => _workFlows;
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
 }

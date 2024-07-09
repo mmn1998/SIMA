@@ -10,6 +10,7 @@ using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequestGoodss.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.PaymentCommands.Entities;

@@ -44,7 +44,7 @@ public class ProfileCommandHandler :
     public async Task<Result<long>> Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -92,7 +92,7 @@ public class ProfileCommandHandler :
         var entity = await _repository.GetById(request.ProfileId);
         var phoneBookArg = _mapper.Map<ModifyPhoneBookArg>(request);
         phoneBookArg.ModifiedBy = _simaIdentity.UserId;
-        await entity.ModifyPhoneBook(phoneBookArg);
+        entity.ModifyPhoneBook(phoneBookArg);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.ProfileId);
     }

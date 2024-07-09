@@ -2,6 +2,7 @@
 
 public class InputParamModel
 {
-    public string Key { get; set; }
-    public string Value { get; set; }
+    public long Id { get; set; }
+    public string ParamName { get; set; }
+    public string ParamValue { get; set; }
 }

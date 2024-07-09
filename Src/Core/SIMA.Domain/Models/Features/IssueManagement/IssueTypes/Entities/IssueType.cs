@@ -5,6 +5,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 
@@ -60,8 +61,10 @@ public class IssueType : Entity
     private List<IssueChangeHistory> _issueChangeHistories = new();
     public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
 
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 

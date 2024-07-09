@@ -9,4 +9,7 @@ public class CreateLogisticsRequestArg
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }
+    public long IssuePreorityId { get; set; }
+    public int Weight { get; set; }
+    public DateTime DueDate { get; set; }
 }

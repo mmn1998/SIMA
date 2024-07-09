@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Logistics.Goodses.Args;
+﻿using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
+using SIMA.Domain.Models.Features.Logistics.Goodses.Args;
 using SIMA.Domain.Models.Features.Logistics.SupplierRanks.Entities;
 using SIMA.Domain.Models.Features.Logistics.SupplierRanks.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.Args;
@@ -8,6 +9,8 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
 
@@ -29,6 +32,7 @@ public class Supplier : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        
     }
     public static async Task<Supplier> Create(CreateSupplierArg arg, ISupplierDomainService service)
     {
@@ -89,8 +93,10 @@ public class Supplier : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     private List<SupplierBlackListHistory> _supplierBlackListHistories = new();

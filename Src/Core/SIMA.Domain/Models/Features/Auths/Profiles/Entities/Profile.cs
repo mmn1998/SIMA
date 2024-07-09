@@ -9,6 +9,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 
@@ -107,18 +108,18 @@ public class Profile : Entity
         _phoneBooks.Add(phoneBook);
     }
 
-    public void RemovePhoneBook(long phoneId)
+    public void RemovePhoneBook(long phoneId, long loginUserId)
     {
         var phonebook = _phoneBooks.FirstOrDefault(x => x.Id == new PhoneBookId(phoneId));
         phonebook.NullCheck();
-        phonebook.Delete();
+        phonebook?.Delete(loginUserId);
     }
 
-    public async Task ModifyPhoneBook(ModifyPhoneBookArg arg)
+    public void ModifyPhoneBook(ModifyPhoneBookArg arg)
     {
         var phone = _phoneBooks.FirstOrDefault(x => x.Id == new PhoneBookId(arg.Id));
         phone.NullCheck();
-        phone.Modify(arg);
+        phone?.Modify(arg);
     }
     #endregion
 
@@ -135,8 +136,10 @@ public class Profile : Entity
     // یوزر هم در اگریگیت خودش ایجاد میشه
     private List<User> _user = new();
     public ICollection<User> Users => _user;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

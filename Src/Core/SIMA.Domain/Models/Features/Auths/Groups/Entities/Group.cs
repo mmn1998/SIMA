@@ -10,6 +10,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Groups.Entities;
 
@@ -102,17 +103,17 @@ public class Group : Entity
     }
     #endregion
     #region DeleteMethods
-    public void DeleteUserGroup(long userGroupId)
+    public void DeleteUserGroup(long userGroupId, long loginUserId)
     {
         var entity = _userGroups.FirstOrDefault(g => g.Id == new UserGroupId(userGroupId));
         entity.NullCheck();
-        entity.Delete();
+        entity?.Delete(loginUserId);
     }
-    public void DeleteGroupPermission(long groupPermissionId)
+    public void DeleteGroupPermission(long groupPermissionId, long loginUserId)
     {
         var entity = _groupPermissions.FirstOrDefault(gp => gp.Id == new GroupPermissionId(groupPermissionId));
         entity.NullCheck();
-        entity.Delete();
+        entity?.Delete(loginUserId);
     }
     #endregion
     #region Guards
@@ -167,11 +168,10 @@ public class Group : Entity
     public ICollection<ProjectGroup> ProjectGroups => _projectGroups;
     private List<WorkFlowActorGroup> _workFlowActorGroups = new();
     public ICollection<WorkFlowActorGroup> WorkFlowActorGroups => _workFlowActorGroups;
-
-
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-
 }

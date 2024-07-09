@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Groups.Entities;
 
@@ -56,8 +57,10 @@ public class GroupPermission
     public virtual Group? Group { get; private set; }
 
     public virtual Permission? Permission { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

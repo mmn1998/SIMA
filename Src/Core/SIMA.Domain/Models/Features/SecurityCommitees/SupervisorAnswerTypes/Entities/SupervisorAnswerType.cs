@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
 
@@ -57,8 +58,10 @@ public class SupervisorAnswerType : Entity
     public long? ModifiedBy { get; private set; }
     private List<ApprovalSupervisorAnswer> _approvalSupervisorAnswers => new();
     public ICollection<ApprovalSupervisorAnswer> ApprovalSupervisorAnswers => _approvalSupervisorAnswers;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

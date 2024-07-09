@@ -1,13 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.Logistics.GoodsQuorumPrices;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.Logistics.GoodsQuorumPrices.V1;
 
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "GoodsQuorumPrices")]
+[Authorize]
 public class GoodsQuorumPricesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -17,16 +20,19 @@ public class GoodsQuorumPricesController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
+    [SimaAuthorize(Permissions.GoodsQuorumPricesPost)]
     public async Task<Result> Post([FromBody] CreateGoodsQuorumPriceCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
+    [SimaAuthorize(Permissions.GoodsQuorumPricessPut)]
     public async Task<Result> Put([FromBody] ModifyGoodsQuorumPriceCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
+    [SimaAuthorize(Permissions.GoodsQuorumPricesDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteGoodsQuorumPriceCommand { Id = id };

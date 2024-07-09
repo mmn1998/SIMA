@@ -1546,11 +1546,11 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("AccessFaildDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<DateTime?>("AccessFailedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("AccessFailedOverallCount")
                         .HasColumnType("int");
@@ -4710,6 +4710,48 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("GoodsCoding", "Logistics");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequestGoodss.Entities.LogisticsRequestGoods", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("GoodsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LogisticsRequestId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodsId");
+
+                    b.HasIndex("LogisticsRequestId");
+
+                    b.ToTable("LogisticsRequestGoods", "Logistics");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.DeliveryOrder", b =>
                 {
                     b.Property<long>("Id")
@@ -4838,51 +4880,6 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("LogisticsRequestId");
 
                     b.ToTable("LogisticsRequestDocument", "Logistics");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.LogisticsRequestGoods", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("GoodsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("LogisticsRequestId")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("GoodsId");
-
-                    b.HasIndex("LogisticsRequestId");
-
-                    b.ToTable("LogisticsRequestGoods", "Logistics");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.Ordering", b =>
@@ -5253,9 +5250,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IsPrePayment")
                         .HasMaxLength(1)
@@ -9325,9 +9319,17 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("DataTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("IsRequired")
                         .HasMaxLength(1)
                         .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("IsSystemParam")
+                        .HasMaxLength(1)
+                        .HasColumnType("char");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -9344,6 +9346,9 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long>("ProgressStoreProcedureId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("SystemParamName")
+                        .HasColumnType("varchar");
 
                     b.HasKey("Id");
 
@@ -9502,47 +9507,6 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ProjectMember", "Project");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities.StepApprovalOption", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Id");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("ActiveStatusID");
-
-                    b.Property<long>("ApprovalOptionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("StepId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApprovalOptionId");
-
-                    b.HasIndex("StepId");
-
-                    b.ToTable("StepApprovalOption", "Project");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", b =>
                 {
                     b.Property<long>("Id")
@@ -9611,7 +9575,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompleteName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("varchar(MAX)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -9623,6 +9587,12 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long?>("FormId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("HasDocument")
+                        .HasMaxLength(1)
+                        .IsUnicode(false)
+                        .HasColumnType("char(1)")
+                        .IsFixedLength();
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -9650,6 +9620,47 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("WorkFlowId");
 
                     b.ToTable("Step", "Project");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepApprovalOption", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("ActiveStatusID");
+
+                    b.Property<long>("ApprovalOptionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StepId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApprovalOptionId");
+
+                    b.HasIndex("StepId");
+
+                    b.ToTable("StepApprovalOption", "Project");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepOutputParam", b =>
@@ -9695,6 +9706,50 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("StepId");
 
                     b.ToTable("StepOutputParam", "Project");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepRequiredDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long?>("ActiveStatusId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("ActiveStatusID");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DocumentTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StepId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("StepId");
+
+                    b.ToTable("StepRequiredDocument", "Project");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", b =>
@@ -11036,7 +11091,7 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_IssueApproval_Issue");
 
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities.StepApprovalOption", "StepApprovalOption")
+                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepApprovalOption", "StepApprovalOption")
                         .WithMany("IssueApprovals")
                         .HasForeignKey("StepApprovalOptionId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -11318,6 +11373,23 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("LogisticsRequest");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequestGoodss.Entities.LogisticsRequestGoods", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Logistics.Goodses.Entities.Goods", "Goods")
+                        .WithMany("LogisticsRequestGoods")
+                        .HasForeignKey("GoodsId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.LogisticsRequest", "LogisticsRequest")
+                        .WithMany("LogisticsRequestGoods")
+                        .HasForeignKey("LogisticsRequestId")
+                        .IsRequired();
+
+                    b.Navigation("Goods");
+
+                    b.Navigation("LogisticsRequest");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.DeliveryOrder", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.LogisticsRequest", "LogisticsRequest")
@@ -11358,23 +11430,6 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Document");
-
-                    b.Navigation("LogisticsRequest");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.LogisticsRequestGoods", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.Logistics.Goodses.Entities.Goods", "Goods")
-                        .WithMany("LogisticsRequestGoods")
-                        .HasForeignKey("GoodsId")
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities.LogisticsRequest", "LogisticsRequest")
-                        .WithMany("LogisticsRequestGoods")
-                        .HasForeignKey("LogisticsRequestId")
-                        .IsRequired();
-
-                    b.Navigation("Goods");
 
                     b.Navigation("LogisticsRequest");
                 });
@@ -12727,25 +12782,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities.StepApprovalOption", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities.ApprovalOption", "ApprovalOption")
-                        .WithMany("StepApprovalOptions")
-                        .HasForeignKey("ApprovalOptionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "Step")
-                        .WithMany("StepApprovalOptions")
-                        .HasForeignKey("StepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApprovalOption");
-
-                    b.Navigation("Step");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", "WorkFlow")
@@ -12778,6 +12814,25 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkFlow");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepApprovalOption", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities.ApprovalOption", "ApprovalOption")
+                        .WithMany("StepApprovalOptions")
+                        .HasForeignKey("ApprovalOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "Step")
+                        .WithMany("StepApprovalOptions")
+                        .HasForeignKey("StepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApprovalOption");
+
+                    b.Navigation("Step");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepOutputParam", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.Auths.DataTypes.Entities.DataType", "DataType")
@@ -12791,6 +12846,25 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("DataType");
+
+                    b.Navigation("Step");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepRequiredDocument", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities.DocumentType", "DocumentType")
+                        .WithMany("StepRequiredDocuments")
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.Step", "Step")
+                        .WithMany("StepRequiredDocuments")
+                        .HasForeignKey("StepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentType");
 
                     b.Navigation("Step");
                 });
@@ -13302,6 +13376,8 @@ namespace SIMA.Persistance.Migrations
                 {
                     b.Navigation("Documents");
 
+                    b.Navigation("StepRequiredDocuments");
+
                     b.Navigation("WorkflowDocumentTypes");
                 });
 
@@ -13755,11 +13831,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkFlows");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities.StepApprovalOption", b =>
-                {
-                    b.Navigation("IssueApprovals");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.State", b =>
                 {
                     b.Navigation("IssueChangeHistories");
@@ -13789,11 +13860,18 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("StepOutputParams");
 
+                    b.Navigation("StepRequiredDocuments");
+
                     b.Navigation("TargetIssueHistories");
 
                     b.Navigation("TargetProgresses");
 
                     b.Navigation("WorkFlowActorSteps");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.StepApprovalOption", b =>
+                {
+                    b.Navigation("IssueApprovals");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities.WorkFlow", b =>

@@ -1,11 +1,12 @@
 ﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
-using SIMA.Domain.Models.Features.WorkFlowEngine.StepApprovalOptions.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 
@@ -43,8 +44,10 @@ public class IssueApproval : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public IssueApprovalId Id { get; private set; }

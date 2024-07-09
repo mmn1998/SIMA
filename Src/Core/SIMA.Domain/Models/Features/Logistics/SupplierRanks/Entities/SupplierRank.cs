@@ -6,6 +6,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Logistics.SupplierRanks.Entities;
 
@@ -47,6 +48,7 @@ public class SupplierRank : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsOrderingUnique(arg.Ordering)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
     }
     private async Task ModifyGuards(ModifySupplierRankArg arg, ISupplierRankDomainService service)
     {
@@ -57,6 +59,7 @@ public class SupplierRank : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsOrderingUnique(arg.Ordering)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
     }
     #endregion
     public SupplierRankId Id { get; private set; }
@@ -69,8 +72,10 @@ public class SupplierRank : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     private List<Supplier> _suppliers = new();

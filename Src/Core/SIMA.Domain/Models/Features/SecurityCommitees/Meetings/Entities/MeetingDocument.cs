@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Args;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 
@@ -56,8 +57,10 @@ public class MeetingDocument
     public byte[]? ModifiedAt { get; private set; }
 
     public long? ModifiedBy { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 
@@ -32,9 +33,11 @@ public class CriticalActivity : Entity
     {
         return new CriticalActivity(arg);
     }
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public CriticalActivityId Id { get; private set; }
     public string Name { get; private set; }

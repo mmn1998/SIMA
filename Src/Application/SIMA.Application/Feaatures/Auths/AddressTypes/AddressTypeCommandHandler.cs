@@ -38,11 +38,11 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
     }
     public async Task<Result<long>> Handle(DeleteAddressTypeCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById((int)request.Id);
+        var entity = await _repository.GetById(request.Id);
 
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(entity.Id.Value);
     }
 
@@ -53,7 +53,7 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
         var addressType = await AddressType.Create(arg, _service);
         await _repository.Add(addressType);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(addressType.Id.Value);
 
     }
@@ -64,7 +64,7 @@ public class AddressTypeCommandHandler : ICommandHandler<DeleteAddressTypeComman
         arg.ModifiedBy = _simaIdentity.UserId;
         await addressType.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(addressType.Id.Value);
     }
     /// <summary>

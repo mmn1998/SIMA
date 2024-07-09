@@ -17,4 +17,20 @@ public class GetStepQueryResult
     public string? BpmnId { get; set; }
     public long FormId { get; set; }
     public string FormName { get; set; }
+
+    public List<RequiredDocumentQueryResult>? RequiredDocuments { get; set; }
+    public List<StepApprovalOptionQueryResult>? ApprovalOptions { get; set; }
+}
+
+public class RequiredDocumentQueryResult
+{
+    public int Count { get; set; }
+    public string DocumentType { get; set; }
+    public long DocumentTypeId { get; set; }
+}
+
+public class StepApprovalOptionQueryResult
+{
+    public long ApprovalOptionId { get; set; }
+    public string ApprovalOption { get; set; }
 }

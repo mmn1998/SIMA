@@ -23,6 +23,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Users.Entities;
 
@@ -173,7 +174,7 @@ public class User : Entity, IAggregateRoot
     public async Task AccessFaild(UserInfoLogin arg)
     {
         AccessFailedCount = arg.AccessFailedCount;
-        AccessFaildDate = arg.AccessFaildDate;
+        AccessFailedDate = arg.AccessFailedDate;
         AccessFailedOverallCount = arg.AccessFailedOverallCount;
         IsLocked = arg.IsLocked;
     }
@@ -192,7 +193,7 @@ public class User : Entity, IAggregateRoot
     public DateTime? ChangePasswordDate { get; private set; }
     public int? AccessFailedCount { get; private set; }
     public int? AccessFailedOverallCount { get; private set; }
-    public DateTime? AccessFaildDate { get; private set; }
+    public DateTime? AccessFailedDate { get; private set; }
     public string? ConfirmCode { get; private set; }
     public DateTime? ConfirmCodeSendDate { get; private set; }
     public DateTime? CreatedAt { get; private set; }
@@ -245,35 +246,35 @@ public class User : Entity, IAggregateRoot
     #endregion
 
     #region DeleteMethods
-    public void DeleteUserConfig(long userConfigId)
+    public void DeleteUserConfig(long userConfigId, long userId)
     {
         var entity = _usreConfig.FirstOrDefault(uc => uc.Id == new UserConfigId(userConfigId));
         entity.NullCheck();
-        entity?.Delete();
+        entity?.Delete(userId);
     }
-    public void DeleteUserDomainAccess(long UserDomainAccessId)
+    public void DeleteUserDomainAccess(long UserDomainAccessId, long userId)
     {
         var entity = _userDomainAccesses.FirstOrDefault(uc => uc.Id == new UserDomainAccessId(UserDomainAccessId));
         entity.NullCheck();
-        entity?.Delete();
+        entity?.Delete(userId);
     }
-    public void DeleteUserLocationAccess(long UserLocationId)
+    public void DeleteUserLocationAccess(long UserLocationId, long userId)
     {
         var entity = _userLocationAccesses.FirstOrDefault(uc => uc.Id == new UserLocationAccessId(UserLocationId));
         entity.NullCheck();
-        entity?.Delete();
+        entity?.Delete(userId);
     }
-    public void DeleteUserPermission(long userPermissionId)
+    public void DeleteUserPermission(long userPermissionId, long userId)
     {
         var entity = _userPermission.FirstOrDefault(uc => uc.Id == new UserPermissionId(userPermissionId));
         entity.NullCheck();
-        entity?.Delete();
+        entity?.Delete(userId);
     }
-    public void DeleteUserRole(long userRoleId)
+    public void DeleteUserRole(long userRoleId, long userId)
     {
         var entity = _usreConfig.FirstOrDefault(uc => uc.Id == new UserConfigId(userRoleId));
         entity.NullCheck();
-        entity?.Delete();
+        entity?.Delete(userId);
     }
     #endregion
     private List<UserConfig> _usreConfig = new();
@@ -330,5 +331,10 @@ public class User : Entity, IAggregateRoot
         if (request.ConfirmNewPassword is null) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmNewPasswordIsNull);
         if (request.NewPassword != request.ConfirmNewPassword) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmPasswordNotValid);
     }
-
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
 }

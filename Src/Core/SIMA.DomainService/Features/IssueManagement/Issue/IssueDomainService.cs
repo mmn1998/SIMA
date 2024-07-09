@@ -1,9 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
-using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Interfaces;
-using SIMA.Persistance.Persistence;
+﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues;
-using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
 
 namespace SIMA.DomainService.Features.IssueManagement.Issue
 {

@@ -7,6 +7,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
 
@@ -74,8 +75,10 @@ public class DocumentExtension : Entity
     public long? ModifiedBy { get; private set; }
     public virtual ICollection<Document> Documents { get; set; }
     public virtual ICollection<WorkflowDocumentExtension> WorkflowDocumentExtensions { get; set; }
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

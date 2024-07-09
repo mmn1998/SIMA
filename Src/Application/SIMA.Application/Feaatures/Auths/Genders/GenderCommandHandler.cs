@@ -43,7 +43,7 @@ public class GenderCommandHandler : ICommandHandler<CreateGenderCommand, Result<
         var entity = await Gender.Create(arg, _service);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(entity.Id.Value);
     }
     public async Task<Result<long>> Handle(ModifyGenderCommand request, CancellationToken cancellationToken)
@@ -53,15 +53,15 @@ public class GenderCommandHandler : ICommandHandler<CreateGenderCommand, Result<
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(entity.Id.Value);
     }
     public async Task<Result<long>> Handle(DeleteGenderCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
-        DeleteCachedData();
+        //DeleteCachedData();
         return Result.Ok(entity.Id.Value);
     }
     /// <summary>

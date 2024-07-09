@@ -34,7 +34,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     public async Task<Result<long>> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -82,7 +82,7 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
     public async Task<Result<long>> Handle(DeleteRolePermissionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.RoleId);
-        entity.DeleteRolePermission(request.RolePermissionId);
+        entity.DeleteRolePermission(request.RolePermissionId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

@@ -32,6 +32,7 @@
     <Compile Include="Controllers\Features\Auths\Groups\V1\GroupsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Helpers\V1\CaptchaController.cs" />
     <Compile Include="Controllers\Features\Auths\Helpers\V1\HelperController.cs" />
+    <Compile Include="Controllers\Features\Auths\Helpers\V1\SystemConfigsController.cs" />
     <Compile Include="Controllers\Features\Auths\Loactions\V1\LocationsController.cs" />
     <Compile Include="Controllers\Features\Auths\Loactions\V1\LocationsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\LoactionTypes\V1\LocationTypesController.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentExtentions\V1\WorkFlowDocumentExtentionsQueryController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesController.cs" />
     <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\Cartables\LogisticCartableQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsCategories\V1\GoodsCategoriesController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsCategories\V1\GoodsCategoriesQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\Goods\V1\GoodsesController.cs" />
@@ -92,6 +94,8 @@
     <Compile Include="Controllers\Features\Logistics\GoodsQuorumPrices\V1\GoodsQuorumPricesQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\LogisticsRequest\LogisticsRequestController.cs" />
+    <Compile Include="Controllers\Features\Logistics\LogisticsRequest\LogisticsRequestQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\Suppliers\V1\SuppliersController.cs" />
     <Compile Include="Controllers\Features\Logistics\Suppliers\V1\SuppliersQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\SupplierRanks\V1\SupplierRanksController.cs" />
@@ -181,7 +185,7 @@
     <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SIMA.Framework.Common" Version="1.9.6" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.0.3" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
     <PackageReference Include="SIMA.Framework.WebApi" Version="1.1.7" />

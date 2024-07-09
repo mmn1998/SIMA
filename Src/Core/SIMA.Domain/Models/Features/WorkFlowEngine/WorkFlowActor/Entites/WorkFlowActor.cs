@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
@@ -9,6 +10,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 
@@ -51,23 +53,27 @@ public class WorkFlowActor : Entity
         IsDirectManagerOfIssueCreator = arg.IsDirectManagerOfIssueCreator;
     }
 
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
         #region DeleteRtelatedEntities
         foreach (var workflowActorStep in _workFlowActorSteps)
         {
-            workflowActorStep.Delete();
+            workflowActorStep.Delete(userId);
         }
         #endregion
     }
-    public void Activate()
+    public void Activate(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
         #region ActivateRtelatedEntities
         foreach (var workflowActorStep in _workFlowActorSteps)
         {
-            workflowActorStep.Activate();
+            workflowActorStep.Activate(userId);
         }
         #endregion
     }
@@ -160,12 +166,12 @@ public class WorkFlowActor : Entity
         }
     }
 
-    public bool DeleteRole(long roleId)
+    public bool DeleteRole(long roleId, long userId)
     {
         var result = _workFlowActorRoles.Where(x => x.Id == new WorkFlowActorRoleId(roleId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(userId);
             return true;
         }
         else
@@ -173,12 +179,12 @@ public class WorkFlowActor : Entity
 
     }
 
-    public bool DeleteGroup(long groupId)
+    public bool DeleteGroup(long groupId, long loginUserId)
     {
         var result = _workFlowActorGroups.Where(x => x.Id == new WorkFlowActorGroupId(groupId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(loginUserId);
             return true;
         }
         else
@@ -186,12 +192,12 @@ public class WorkFlowActor : Entity
 
     }
 
-    public bool DeleteUser(long userId)
+    public bool DeleteUser(long userId, long loginUserId)
     {
         var result = _workFlowActorUsers.Where(x => x.Id == new WorkFlowActorUserId(userId)).FirstOrDefault();
         if (result is not null)
         {
-            result.Delete();
+            result.Delete(loginUserId);
             return true;
         }
         else

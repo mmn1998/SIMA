@@ -11,6 +11,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Dapper;
+using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
 
 namespace SIMA.DomainService.Features.WorkFlowEngine.WorkFlows
 {
@@ -18,13 +19,14 @@ namespace SIMA.DomainService.Features.WorkFlowEngine.WorkFlows
     {
         private readonly SIMADBContext _context;
         private readonly ISimaIdentity _simaIdentity;
-
+        private readonly IWorkFlowQueryRepository _workFlowQueryRepository;
         private readonly string _connectionString;
 
-        public WorkFlowDomainService(IConfiguration configuration, SIMADBContext context, ISimaIdentity simaIdentity)
+        public WorkFlowDomainService(IConfiguration configuration, SIMADBContext context, ISimaIdentity simaIdentity , IWorkFlowQueryRepository workFlowQueryRepository)
         {
             _context = context;
             _simaIdentity = simaIdentity;
+            _workFlowQueryRepository = workFlowQueryRepository;
             _connectionString = configuration.GetConnectionString();
         }
 
@@ -80,6 +82,12 @@ namespace SIMA.DomainService.Features.WorkFlowEngine.WorkFlows
                 var result = await connection.QueryFirstOrDefaultAsync<int>(queryString, new { workflowId, userid, roles, groups });
                 return result != 0;
             }
+        }
+
+        public async Task<bool> AllowAddApprovalForStep(long stepId)
+        {
+            var check = await _workFlowQueryRepository.AllowAddApprovalForStep(stepId);
+            return check;
         }
     }
 }

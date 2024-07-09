@@ -6,6 +6,8 @@ using SIMA.Domain.Models.Features.Auths.Profiles.Args;
 using SIMA.Domain.Models.Features.Auths.Profiles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Framework.Common.Helper;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 
@@ -53,7 +55,6 @@ public class AddressBook
     public LocationId? LocationId { get; private set; }
 
     public string? Address { get; private set; }
-
     public string? PostalCode { get; private set; }
 
     public long ActiveStatusId { get; private set; }
@@ -71,8 +72,10 @@ public class AddressBook
     public virtual Location? Location { get; private set; }
 
     public virtual Profile? Profile { get; private set; }
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

@@ -26,6 +26,8 @@ public class ProgressStoreProcedureParamConfiguration : IEntityTypeConfiguration
             .IsRowVersion()
             .IsConcurrencyToken();
         entity.Property(e => e.IsRequired).HasMaxLength(1);
+        entity.Property(e => e.IsSystemParam).HasMaxLength(1).HasColumnType("char");
+        entity.Property(e => e.SystemParamName).HasColumnType("varchar");
         entity.Property(e => e.Name).HasMaxLength(200);
 
         entity.Property(x => x.ProgressStoreProcedureId)

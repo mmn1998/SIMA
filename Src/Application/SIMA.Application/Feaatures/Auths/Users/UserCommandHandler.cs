@@ -70,7 +70,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public async Task<Result<long>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById((int)request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId; entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -187,7 +187,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public async Task<Result<long>> Handle(DeleteUserDomainCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
-        entity.DeleteUserDomainAccess(request.UserDomainAccessId);
+        entity.DeleteUserDomainAccess(request.UserDomainAccessId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -195,7 +195,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public async Task<Result<long>> Handle(DeleteUserLocationCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
-        entity.DeleteUserLocationAccess(request.UserLocationAccessId);
+        entity.DeleteUserLocationAccess(request.UserLocationAccessId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -203,7 +203,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public async Task<Result<long>> Handle(DeleteUserPermissionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
-        entity.DeleteUserPermission(request.UserPermissionId);
+        entity.DeleteUserPermission(request.UserPermissionId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -211,7 +211,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public async Task<Result<long>> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
-        entity.DeleteUserRole(request.UserRoleId);
+        entity.DeleteUserRole(request.UserRoleId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
@@ -260,7 +260,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         var user = await _repository.GetUserForChangePassword(_simaIdentity.UserId, request.CurrentPassword);
         var arg = _mapper.Map<ChangePasswordArg>(request);
         await user.ChangePassword(arg);
-        _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
 
         return user.Id.Value;
 

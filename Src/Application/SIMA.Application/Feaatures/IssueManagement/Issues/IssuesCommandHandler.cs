@@ -4,18 +4,19 @@ using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Interface;
 using SIMA.Framework.Common.Exceptions;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
-using SIMA.Resources;
 using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
-using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Interface;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues;
 
@@ -33,6 +34,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     private readonly ISimaIdentity _simaIdentity;
     private readonly IWorkFlowRepository _workFlowRepository;
     private readonly IWorkFlowActorRepository _workFlowActorRepository;
+    private readonly IIssueQueryRepository _issueQueryRepository;
     private readonly IWorkFlowQueryRepository _workFlowQueryRepository;
     private readonly IIssueWeightCategoryQueryRepository _issueWeightCategoryRepository;
     private readonly IProjectRepository _projectRepository;
@@ -40,7 +42,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     public IssueCommandHandler(IIssueRepository repository, IUnitOfWork unitOfWork,
         IMapper mapper, IIssueDomainService service,
       IWorkFlowRepository workFlowRepository, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository,
-      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity, IWorkFlowQueryRepository workFlowQueryRepository , IWorkFlowActorRepository workFlowActorRepository)
+      IProjectRepository projectRepository, IWorkFlowDomainService workFlowDomainService, ISimaIdentity simaIdentity, IWorkFlowQueryRepository workFlowQueryRepository, IWorkFlowActorRepository workFlowActorRepository, IIssueQueryRepository issueQueryRepository)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
@@ -53,6 +55,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         _simaIdentity = simaIdentity;
         _workFlowQueryRepository = workFlowQueryRepository;
         _workFlowActorRepository = workFlowActorRepository;
+        _issueQueryRepository = issueQueryRepository;
     }
     public async Task<Result<long>> Handle(CreateIssueCommand request, CancellationToken cancellationToken)
     {
@@ -90,9 +93,11 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
             historyArg.CreatedBy = _simaIdentity.UserId;
             var entity = await Issue.Create(arg, _service);
-            entity.AddIssueLink(arg.IssueLinks);
-            entity.AddIssueDocument(arg.IssueDocument);
+            await entity.AddIssueLink(arg.IssueLinks);
+            await entity.AddIssueDocument(arg.IssueDocument);
+            #region UpdateDocuments
 
+            #endregion
             #region IssueHistory
             var history = _mapper.Map<CreateIssueHistoryArg>(request);
             history.CreatedBy = _simaIdentity.UserId;
@@ -133,22 +138,48 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-
     public async Task<Result<long>> Handle(IssueRunActionCommand request, CancellationToken cancellationToken)
     {
-        ///
-        ///  TODO : new changes in run action
-        ///
-        ///if ((string.Equals(request.RunActionType, RunActionType.Sp.ToString(), StringComparison.InvariantCultureIgnoreCase) ||
-        ///    string.Equals(request.RunActionType, RunActionType.Both.ToString(), StringComparison.InvariantCultureIgnoreCase))
-        ///    && request.SpName is not null)
-        ///{
-        ///    await _repository.ExcecuteStoreProcedure(request.SpName);
-        ///}
 
         var issue = await _repository.GetById(request.IssueId);
+
+
+        //var checkDoc = await _workFlowRepository.CheckDocumentForStep(issue.CurrenStepId.Value);
+        //if (checkDoc)
+        //{
+        //    var doc = _mapper.Map<List<AddDocumentToSPQuery>>(request.InputDocuments);
+        //    foreach (var item in doc)
+        //    {
+        //        item.SourceId = issue.SourceId.ToString();
+        //        item.CreatedBy = _simaIdentity.UserId.ToString();
+        //        //item.MainAggregateId = issue.MainAggregateId.Value.ToString();
+        //    }
+        //   await _issueQueryRepository.AddDocToSp(doc);
+        //}
+
+        var doc = _mapper.Map<List<AddDocumentToSPQuery>>(request.InputDocuments);
+        foreach (var item in doc)
+        {
+            item.SourceId = issue.SourceId.ToString();
+            item.CreatedBy = _simaIdentity.UserId.ToString();
+        }
         var nextStepModel = _mapper.Map<GetNextStepQuery>(request);
+        nextStepModel.SystemParams.Add(new InputModel { Key = "IssueId", Value = request.IssueId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "UserId", Value = _simaIdentity.UserId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "CreatedBy", Value = _simaIdentity.UserId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "CompanyId", Value = _simaIdentity.CompanyId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "SourceId", Value = issue.SourceId.ToString() });
+
+        var inputParam = request.InputParams.Select(it => new InputParamQueryModel
+        {
+            Id = it.Id,
+            ParamName = it.ParamName,
+            ParamValue = it.ParamValue
+        }).ToList();
+        var mainAggregateName = Enum.GetName(typeof(MainAggregateEnums),issue.MainAggregateId.Value);
+        await _workFlowQueryRepository.ExecuteSP(request.ProgressId,mainAggregateName ,nextStepModel.SystemParams, inputParam, doc);
         var nextStep = await _workFlowQueryRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel);
+
 
         var arg = _mapper.Map<IssueRunActionArg>(request);
         arg.ModifiedBy = _simaIdentity.UserId;
@@ -163,7 +194,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
 
         #region Approval
 
-        if(request.StepApprovalOptionId is not null  && request.StepApprovalOptionId > 0)
+        if (request.StepApprovalOptionId is not null && request.StepApprovalOptionId > 0)
         {
             var approvalArg = _mapper.Map<CreateIssueApprovalArg>(request);
             approvalArg.ApprovedBy = _simaIdentity.UserId;
@@ -171,7 +202,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             var workFlowActor = await _workFlowActorRepository.GetWorkFlowActorByUser(issue.CurrentWorkflowId.Value);
             approvalArg.WorkflowActorId = workFlowActor.Id.Value;
             await issue.AddIssueApproval(approvalArg);
-             
+
         }
 
         #endregion
@@ -192,11 +223,10 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.IssueId);
     }
-
     public async Task<Result<long>> Handle(DeleteIssueCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -209,11 +239,10 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.IssueId);
     }
-
     public async Task<Result<long>> Handle(DeleteIssueCommentCommand request, CancellationToken cancellationToken)
     {
         var issue = await _repository.GetById(request.IssueId);
-        issue.DeleteComment(new(request.Id));
+        issue.DeleteComment(new(request.Id), _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.IssueId);
     }

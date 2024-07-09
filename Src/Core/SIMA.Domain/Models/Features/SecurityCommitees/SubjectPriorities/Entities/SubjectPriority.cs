@@ -7,6 +7,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Domain;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 
@@ -86,8 +87,10 @@ public class SubjectPriority : Entity
     public long? ModifiedBy { get; private set; }
     private List<SubjectMeeting> _subjectMeetings => new();
     public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 }

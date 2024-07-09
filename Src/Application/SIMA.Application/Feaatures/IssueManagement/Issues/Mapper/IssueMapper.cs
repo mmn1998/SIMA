@@ -3,6 +3,7 @@ using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Events;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Events;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
@@ -55,7 +56,7 @@ public class IssueMapper : Profile
            .ForMember(x => x.CreatedAt, act => act.MapFrom(src => DateTime.Now))
            .ForMember(x => x.Description, act => act.MapFrom(src => src.Description))
            .ForMember(x => x.Name, act => act.MapFrom(src => src.Summery));
-        CreateMap<InputParamModel, FormModel>();
+        CreateMap<InputParamModel, InputModel>();
         CreateMap<IssueRunActionCommand, GetNextStepQuery>();
 
 
@@ -104,11 +105,39 @@ public class IssueMapper : Profile
            .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.MainAggregateType))
            ;
 
+        CreateMap<CreateLogisticsRequestEvent, CreateIssueArg>()
+           .ForMember(x => x.Id, act => act.MapFrom(src => src.issueId))
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+           //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+           .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
+           .ForMember(dest => dest.IssueDate, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.Summery, act => act.MapFrom(source => source.Name))
+           .ForMember(dest => dest.Description, act => act.MapFrom(source => source.Name))
+           .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.MainAggregateType))
+           ;
+
+        CreateMap<ModifyLogisticsRequestEvent, ModifyIssueArg>()
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.Summery, act => act.MapFrom(source => source.summery))
+           .ForMember(dest => dest.Description, act => act.MapFrom(source => source.summery))
+           .ForMember(dest => dest.IssuePriorityId, act => act.MapFrom(source => source.issuePriority))
+           .ForMember(dest => dest.Weight, act => act.MapFrom(source => source.weight))
+           .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
+           ;
+
         CreateMap<IssueRunActionCommand, CreateIssueApprovalArg>()
           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
           .ForMember(dest => dest.Description, act => act.MapFrom(source=>source.ApprovalDescription))
           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source=>DateTime.Now))
           ;
+
+        CreateMap<InputDocument, AddDocumentToSPQuery>()
+         .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId().ToString()))
+         .ForMember(dest => dest.DocumentId, act => act.MapFrom(source => source.DocumentId.ToString()))
+         .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now.ToString()))
+         .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => ((long)ActiveStatusEnum.Active).ToString()))
+         ;
 
     }
 

@@ -43,13 +43,16 @@ public class LocationQueryRepository : ILocationQueryRepository
                 LT.Name as LocationTypeName,
                 PLT.Name as  ParentLocationTypeName
                 ,a.ID ActiveStatusId
+                ,PL.Name ParentName
+                ,PL.Id ParentId 
                 ,a.Name ActiveStatus
-                  FROM [Basic].[Location] L
-                       join Basic.ActiveStatus a
-                       on L.ActiveStatusId = a.ID
-                       INNER JOIN [Basic].[LocationType] LT on L.LocationTypeID = LT.ID
-                       left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
-                       WHERE L.[ActiveStatusID] <> 3 AND L.Id = @Id
+                    FROM [Basic].[Location] L
+                        join Basic.ActiveStatus a
+                        on L.ActiveStatusId = a.ID
+                        INNER JOIN [Basic].[LocationType] LT on L.LocationTypeID = LT.ID
+                        left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
+                        left join [Basic].[Location] PL on PL.Id = L.ParentId
+                        WHERE L.[ActiveStatusID] <> 3 AND L.Id = @Id
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetLocationQueryResult>(query, new { Id = id });
             if (result is null) throw new SimaResultException("10060", Messages.LocationNotFoundError);
@@ -71,12 +74,16 @@ public class LocationQueryRepository : ILocationQueryRepository
 		                         LT.Name as LocationTypeName,
 		                         PLT.Name as  ParentLocationTypeName
 		                         ,a.ID ActiveStatusId
-		                         ,a.Name ActiveStatus Result
+		                         ,a.Name ActiveStatus
+                                 ,PL.Name ParentName
+                                 ,PL.Id ParentId 
+                                 ,L.CreatedAt
                             FROM [Basic].[Location] L
                             join Basic.ActiveStatus a
                             on L.ActiveStatusId = a.ID
                             INNER JOIN [Basic].[LocationType] LT on L.LocationTypeID = LT.ID
                             left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
+                            left join [Basic].[Location] PL on PL.Id = L.ParentId
                             WHERE  L.ActiveStatusId != 3
 							)
 								SELECT Count(*) FROM Query
@@ -93,11 +100,15 @@ public class LocationQueryRepository : ILocationQueryRepository
 							        PLT.Name as  ParentLocationTypeName
 							        ,a.ID ActiveStatusId
 							        ,a.Name ActiveStatus
+                                    ,L.CreatedAt
+                                    ,PL.Name ParentName
+                                    ,PL.Id ParentId 
 							FROM [Basic].[Location] L
 							join Basic.ActiveStatus a
 							on L.ActiveStatusId = a.ID
 							INNER JOIN [Basic].[LocationType] LT on L.LocationTypeID = LT.ID
 							left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
+                            left join [Basic].[Location] PL on PL.Id = L.ParentId
 							WHERE  L.ActiveStatusId != 3)
 								SELECT * FROM Query
 								 /**where**/

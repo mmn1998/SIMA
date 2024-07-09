@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 
@@ -65,12 +66,14 @@ public class Risk : Entity
         var riskRelated = RiskRelatedIssue.Create(arg);
         _riskRelatedIssues.Add(riskRelated);
 
-        AddDomainEvent(new RiskCreateEvents(arg.IssueId, MainAggregateEnums.CatalogService, Name, Id.Value));
+        AddDomainEvent(new RiskCreateEvents(arg.IssueId, MainAggregateEnums.RiskManagment, Name, Id.Value));
     }
 
-    public void Delete()
+    public void Delete(long userId)
     {
-        ActiveStatusId = (int)ActiveStatusEnum.Delete;
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public RiskId Id { get; private set; }
     public string Name { get; private set; }

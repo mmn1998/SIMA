@@ -52,7 +52,7 @@ public class ConsequenceCommandHandler : ICommandHandler<CreateConsequenceComman
     public async Task<Result<long>> Handle(DeleteConsequenceCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new ConsequenceId(request.Id));
-        entity.Delete();
+        long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

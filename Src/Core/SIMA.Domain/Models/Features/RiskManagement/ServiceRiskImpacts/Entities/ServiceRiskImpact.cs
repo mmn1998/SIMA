@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities
 {
@@ -34,9 +35,11 @@ namespace SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities
             ModifiedBy = arg.ModifiedBy;
             ActiveStatusId = arg.ActiveStatusId;
         }
-        public void Delete()
+        public void Delete(long userId)
         {
-            ActiveStatusId = (int)ActiveStatusEnum.Delete;
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
 
         public ServiceRiskImpactId Id { get; set; }

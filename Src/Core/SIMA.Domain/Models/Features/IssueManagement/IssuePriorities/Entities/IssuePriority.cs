@@ -6,6 +6,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 
@@ -76,8 +77,10 @@ public class IssuePriority : Entity
     public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
     private List<Issue> _issues = new();
     public ICollection<Issue> Issues => _issues;
-    public void Delete()
+    public void Delete(long userId)
     {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
     public void Deactive()
