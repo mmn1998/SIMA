@@ -241,6 +241,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to عملیات ثبت یا به روزرسانی در فرایند شما با خطا مواجه شده است..
+        /// </summary>
+        public static string ExecStoreProcedureError {
+            get {
+                return ResourceManager.GetString("ExecStoreProcedureError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to تاریخ انتقضاء رو به اتمام است.
         /// </summary>
         public static string ExpireDateIsCloseWarning {
@@ -475,6 +484,24 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to مقدار حداقل وارد شده از مقدار حداکثر وارد شده بیشتر میباشد..
+        /// </summary>
+        public static string MinNumberBiggerThanMaxNumber {
+            get {
+                return ResourceManager.GetString("MinNumberBiggerThanMaxNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to فرمت شماره همراه وارد شده اشتباه است..
+        /// </summary>
+        public static string MobileNumberRegexError {
+            get {
+                return ResourceManager.GetString("MobileNumberRegexError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کد ملی نا معتبر است ..
         /// </summary>
         public static string NationalCodeIsInvalidError {
@@ -601,6 +628,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فرمت شماره تلفن وارد شده اشتباه است..
+        /// </summary>
+        public static string PhoneNumberRegexError {
+            get {
+                return ResourceManager.GetString("PhoneNumberRegexError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ظرفیت سمت مورد نظر در سازمان تکمیل شده است..
         /// </summary>
         public static string PositionAlreadyTakenError {
@@ -633,6 +669,15 @@ namespace SIMA.Resources {
         public static string PositionNotFoundError {
             get {
                 return ResourceManager.GetString("PositionNotFoundError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to فرمت کد پستی وارد شده اشتباه است..
+        /// </summary>
+        public static string PostalCodeRegexError {
+            get {
+                return ResourceManager.GetString("PostalCodeRegexError", resourceCulture);
             }
         }
         
@@ -781,6 +826,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to برای این گام امکان افزودن گزینه پذیرش وجود ندارد.
+        /// </summary>
+        public static string StepNotAllowedAddApproval {
+            get {
+                return ResourceManager.GetString("StepNotAllowedAddApproval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to زمان اقدام به پایان رسید است..
         /// </summary>
         public static string TimeIsOverError {
@@ -822,6 +876,15 @@ namespace SIMA.Resources {
         public static string UniqueCodeError {
             get {
                 return ResourceManager.GetString("UniqueCodeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مقدار رتبه بندی تکراری می باشد.
+        /// </summary>
+        public static string UniqueOrderingError {
+            get {
+                return ResourceManager.GetString("UniqueOrderingError", resourceCulture);
             }
         }
         

@@ -86,5 +86,32 @@ namespace SIMA.Resources {
                 return ResourceManager.GetString("500Code", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (0|\+98)?([ ]|-|[()]){0,2}9[1|2|3|4]([ ]|-|[()]){0,2}(?:[0-9]([ ]|-|[()]){0,2}){8}.
+        /// </summary>
+        public static string MobileRegex {
+            get {
+                return ResourceManager.GetString("MobileRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ^(0|\+98)[1-9]{2}[0-9]{8}$.
+        /// </summary>
+        public static string PhoneRegex {
+            get {
+                return ResourceManager.GetString("PhoneRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to \b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b.
+        /// </summary>
+        public static string PostalCodeRegex {
+            get {
+                return ResourceManager.GetString("PostalCodeRegex", resourceCulture);
+            }
+        }
     }
 }

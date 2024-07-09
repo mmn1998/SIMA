@@ -187,6 +187,9 @@
     <value>دپارتمان مورد نظر یافت نشد.</value>
     <comment>10053</comment>
   </data>
+  <data name="ExecStoreProcedureError" xml:space="preserve">
+    <value>عملیات ثبت یا به روزرسانی در فرایند شما با خطا مواجه شده است.</value>
+  </data>
   <data name="ExpireDateIsCloseWarning" xml:space="preserve">
     <value>تاریخ انتقضاء رو به اتمام است</value>
     <comment>20001</comment>
@@ -282,6 +285,14 @@
     <value>نوع منطقه جغرافیایی مورد نظر یافت نشد.</value>
     <comment>10059</comment>
   </data>
+  <data name="MinNumberBiggerThanMaxNumber" xml:space="preserve">
+    <value>مقدار حداقل وارد شده از مقدار حداکثر وارد شده بیشتر میباشد.</value>
+    <comment>400</comment>
+  </data>
+  <data name="MobileNumberRegexError" xml:space="preserve">
+    <value>فرمت شماره همراه وارد شده اشتباه است.</value>
+    <comment>400</comment>
+  </data>
   <data name="NationalCodeIsInvalidError" xml:space="preserve">
     <value>کد ملی نا معتبر است .</value>
     <comment>10007</comment>
@@ -331,6 +342,10 @@
     <value>شخص مورد نظر دارای یک سمت در دپارتمان انتخاب شده است.</value>
     <comment>10011</comment>
   </data>
+  <data name="PhoneNumberRegexError" xml:space="preserve">
+    <value>فرمت شماره تلفن وارد شده اشتباه است.</value>
+    <comment>400</comment>
+  </data>
   <data name="PositionAlreadyTakenError" xml:space="preserve">
     <value>ظرفیت سمت مورد نظر در سازمان تکمیل شده است.</value>
     <comment>10036</comment>
@@ -346,6 +361,10 @@
   <data name="PositionNotFoundError" xml:space="preserve">
     <value>سمت مورد نظر یافت نشد.</value>
     <comment>10054</comment>
+  </data>
+  <data name="PostalCodeRegexError" xml:space="preserve">
+    <value>فرمت کد پستی وارد شده اشتباه است.</value>
+    <comment>400</comment>
   </data>
   <data name="ProfileNotFoundError" xml:space="preserve">
     <value>پروفایل مورد نظر یافت نشد.</value>
@@ -406,6 +425,9 @@
     <value>وضعیت مورد نظر یافت نشد.</value>
     <comment>10058</comment>
   </data>
+  <data name="StepNotAllowedAddApproval" xml:space="preserve">
+    <value>برای این گام امکان افزودن گزینه پذیرش وجود ندارد</value>
+  </data>
   <data name="TimeIsOverError" xml:space="preserve">
     <value>زمان اقدام به پایان رسید است.</value>
     <comment>10019</comment>
@@ -424,6 +446,9 @@
   <data name="UniqueCodeError" xml:space="preserve">
     <value>کد انتخاب شده تکراری است</value>
     <comment>10005</comment>
+  </data>
+  <data name="UniqueOrderingError" xml:space="preserve">
+    <value>مقدار رتبه بندی تکراری می باشد</value>
   </data>
   <data name="UserActorDuplicateError" xml:space="preserve">
     <value>کاربر مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است.</value>
