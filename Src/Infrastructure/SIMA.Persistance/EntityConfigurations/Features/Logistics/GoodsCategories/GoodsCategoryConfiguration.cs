@@ -88,7 +88,7 @@ public class GoodsConfiguration : IEntityTypeConfiguration<Goods>
         entity.HasOne(x => x.UnitMeasurement)
             .WithMany(x => x.Goods)
             .HasForeignKey(x => x.UnitMeasurementId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.GoodsCategoryId)
             .HasConversion(x => x.Value, x => new GoodsCategoryId(x));
         entity.HasOne(x => x.GoodsCategory)
@@ -174,7 +174,7 @@ public class CandidatedSupplierConfiguration : IEntityTypeConfiguration<Candidat
         entity.HasOne(x => x.Supplier)
             .WithMany(x => x.CandidatedSuppliers)
             .HasForeignKey(x => x.SupplierId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -205,7 +205,7 @@ public class SupplierBlackListHistoryConfiguration : IEntityTypeConfiguration<Su
         entity.HasOne(x => x.Supplier)
             .WithMany(x => x.SupplierBlackListHistories)
             .HasForeignKey(x => x.SupplierId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -255,7 +255,7 @@ public class PaymentCommandConfiguration : IEntityTypeConfiguration<PaymentComma
                     .IsRowVersion()
                     .IsConcurrencyToken();
         entity.Property(x => x.IsPrePayment).HasMaxLength(1);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -280,7 +280,9 @@ public class PriceEstimationConfiguration : IEntityTypeConfiguration<PriceEstima
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
-        
+        entity.Property(e => e.EstimationPrice)
+                    .HasColumnType("numeric(18,2)");
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -314,7 +316,7 @@ public class GoodsCodingConfiguration : IEntityTypeConfiguration<GoodsCoding>
         entity.HasOne(x => x.Goods)
             .WithMany(x => x.GoodsCodings)
             .HasForeignKey(x => x.GoodsId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -345,7 +347,7 @@ public class DeliveryOrderConfiguration : IEntityTypeConfiguration<DeliveryOrder
         entity.HasOne(x => x.ReceiptDocument)
             .WithMany(x => x.DeliveryOrders)
             .HasForeignKey(x => x.ReceiptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -376,7 +378,7 @@ public class LogisticsRequestDocumentConfiguration : IEntityTypeConfiguration<Lo
         entity.HasOne(x => x.Document)
             .WithMany(x => x.LogisticsRequestDocuments)
             .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -409,7 +411,7 @@ public class OrderingConfiguration : IEntityTypeConfiguration<Ordering>
         entity.HasOne(x => x.ReceiptDocument)
             .WithMany(x => x.Orderings)
             .HasForeignKey(x => x.ReceiptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -440,7 +442,7 @@ public class ReceiveOrderConfiguration : IEntityTypeConfiguration<ReceiveOrder>
         entity.HasOne(x => x.ReceiptDocument)
             .WithMany(x => x.ReceiveOrders)
             .HasForeignKey(x => x.ReceiptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -471,7 +473,7 @@ public class ReturnOrderConfiguration : IEntityTypeConfiguration<ReturnOrder>
         entity.HasOne(x => x.ReceiptDocument)
             .WithMany(x => x.ReturnOrders)
             .HasForeignKey(x => x.ReceiptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -497,18 +499,25 @@ public class RequestInquiryConfiguration : IEntityTypeConfiguration<RequestInqui
                     .IsRowVersion()
                     .IsConcurrencyToken();
         entity.Property(e => e.IsWrittenInquiry).HasMaxLength(1);
-
+        entity.Property(e => e.InquieredPrice)
+                 .HasColumnType("numeric(18,2)");
         entity.Property(x => x.InvoiceDocumentId)
             .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
         entity.HasOne(x => x.InvoiceDocument)
             .WithMany(x => x.RequestInquiries)
             .HasForeignKey(x => x.InvoiceDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
             .WithMany(x => x.RequestInquiries)
             .HasForeignKey(x => x.LogisticsRequestId).OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.CandidatedSupplierId)
+           .HasConversion(x => x.Value, x => new CandidatedSupplierId(x));
+        entity.HasOne(x => x.CandidatedSupplier)
+            .WithMany(x => x.RequestInquiries)
+            .HasForeignKey(x => x.CandidatedSupplierId).OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
 public class SupplierContractConfiguration : IEntityTypeConfiguration<SupplierContract>
@@ -534,7 +543,7 @@ public class SupplierContractConfiguration : IEntityTypeConfiguration<SupplierCo
         entity.HasOne(x => x.ContractDocument)
             .WithMany(x => x.SupplierContracts)
             .HasForeignKey(x => x.ContractDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -565,7 +574,7 @@ public class TenderResultConfiguration : IEntityTypeConfiguration<TenderResult>
         entity.HasOne(x => x.TenderDocument)
             .WithMany(x => x.TenderResults)
             .HasForeignKey(x => x.TenderDocumentId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
@@ -597,19 +606,19 @@ public class PaymentHistoryConfiguration : IEntityTypeConfiguration<PaymentHisto
         entity.HasOne(x => x.PaymentType)
             .WithMany(x => x.PaymentHistories)
             .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)
             .WithMany(x => x.PaymentHistories)
             .HasForeignKey(x => x.LogisticsRequestId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.PaymentCommandId)
             .HasConversion(x => x.Value, x => new PaymentCommandId(x));
         entity.HasOne(x => x.PaymentType)
             .WithMany(x => x.PaymentHistories)
             .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.PaymentDocumentId)
             .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
         entity.HasOne(x => x.PaymentDocument)
@@ -640,7 +649,7 @@ public class LogisticsRequestGoodsConfiguration : IEntityTypeConfiguration<Logis
         entity.HasOne(x => x.Goods)
             .WithMany(x => x.LogisticsRequestGoods)
             .HasForeignKey(x => x.GoodsId).OnDelete(DeleteBehavior.ClientSetNull);
-        
+
         entity.Property(x => x.LogisticsRequestId)
             .HasConversion(x => x.Value, x => new LogisticsRequestId(x));
         entity.HasOne(x => x.LogisticsRequest)

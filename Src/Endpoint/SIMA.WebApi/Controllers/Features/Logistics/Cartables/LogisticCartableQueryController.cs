@@ -24,7 +24,7 @@ public class LogisticCartableQueryController : ControllerBase
     }
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.LogisticCartableGetAll)]
-    public async Task<Result> Get(LogisticCartableGetAllQuery request)
+    public async Task<Result> GetAll(LogisticCartableGetAllQuery request)
     {
         return await _mediator.Send(request);
     }
@@ -48,5 +48,32 @@ public class LogisticCartableQueryController : ControllerBase
             document.DocumentContentType = document.DocumentExtensionName.GetContentType();
         }
         return result;
+    }
+    [HttpGet("GetMy/{id}/{issueId}")]
+    [SimaAuthorize(Permissions.GoodsCategoriesGet)]
+    public async Task<Result> GetMy([FromRoute] long id, [FromRoute] long issueId)
+    {
+        var query = new GetMyLogisticCartableGetQuery { Id = id, IssueId = issueId };
+        var result = await _mediator.Send(query);
+        foreach (var document in result.Data.DocumentList)
+        {
+            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
+        }
+        foreach (var document in result.Data.InvoiceDocumentList)
+        {
+            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
+        }
+        foreach (var document in result.Data.ReceiptDocumentList)
+        {
+            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
+        }
+        return result;
+    }
+
+    [HttpPost("MyLogisticsRequestList")]
+    [SimaAuthorize(Permissions.LogisticsRequestsGetAll)]
+    public async Task<Result> MyLogisticsRequestList(GetAllLogisticsRequestsQuery query)
+    {
+        return await _mediator.Send(query);
     }
 }

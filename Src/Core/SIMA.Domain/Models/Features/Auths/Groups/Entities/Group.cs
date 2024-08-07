@@ -3,6 +3,9 @@ using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Args;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
@@ -45,42 +48,104 @@ public class Group : Entity
         ActiveStatusId = arg.ActiveStatusId;
     }
     #region AddMethods
+    public async Task AddGroupPermission(List<CreateGroupPermissionArg> request, long groupId)
+    {
+        groupId.NullCheck();
 
-    public async Task AddGroupUser(CreateUserGroupArg arg)
-    {
-        arg.UserId.NullCheck();
-        arg.GroupId.NullCheck();
-        if (_userGroups.Any(ur => ur.GroupId == new GroupId(arg.GroupId.Value) && ur.UserId == new UserId(arg.UserId.Value)))
+        var previousGroups = _groupPermissions.Where(x => x.GroupId == new GroupId(groupId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addPermission = request.Where(x => !previousGroups.Any(c => c.PermissionId.Value == x.PermissionId)).ToList();
+        var deleteMember = previousGroups.Where(x => !request.Any(c => c.PermissionId == x.PermissionId.Value)).ToList();
+
+
+        foreach (var permission in addPermission)
         {
-            throw new SimaResultException("10018",Messages.UserGroupDuplicateError);
+            var entity = _groupPermissions.Where(x => (x.PermissionId == new PermissionId(permission.PermissionId) && x.GroupId == new GroupId(groupId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await GroupPermission.Create(permission);
+                _groupPermissions.Add(entity);
+            }
         }
-        var entity = await UserGroup.Create(arg);
-        _userGroups.Add(entity);
-    }
-    public async Task AddGroupPermission(CreateGroupPermissionArg arg)
-    {
-        if (_groupPermissions.Any(ur => ur.GroupId == new GroupId(arg.GroupId) && ur.PermissionId == new PermissionId(arg.PermissionId)))
+
+        foreach (var permission in deleteMember)
         {
-            throw new SimaResultException("10018",Messages.GroupPermoissionDuplicateError);
-        }
-        var entity = await GroupPermission.Create(arg);
-        _groupPermissions.Add(entity);
-    }
-    public async Task AddGroupUsers(List<CreateUserGroupArg> args)
-    {
-        foreach (var arg in args)
-        {
-            await AddGroupUser(arg);
+            permission.Delete((long)request[0].CreatedBy);
         }
     }
-    public async Task AddGroupPermissions(List<CreateGroupPermissionArg> args)
+    public async Task AddUserGroup(List<CreateUserGroupArg> request, long userId)
     {
-        foreach (var arg in args)
+        userId.NullCheck();
+
+        var previousGroups = _userGroups.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addGroup = request.Where(x => !previousGroups.Any(c => c.GroupId.Value == x.GroupId)).ToList();
+        var deleteMember = previousGroups.Where(x => !request.Any(c => c.GroupId == x.GroupId.Value)).ToList();
+
+
+        foreach (var group in addGroup)
         {
-            await AddGroupPermission(arg);
+            var entity = _userGroups.Where(x => (x.GroupId == new GroupId((long)group.GroupId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await UserGroup.Create(group);
+                _userGroups.Add(entity);
+            }
+        }
+
+        foreach (var group in deleteMember)
+        {
+            group.Delete((long)request[0].CreatedBy);
         }
     }
+
+    #region old 
+    //public async Task AddGroupUser(CreateUserGroupArg arg)
+    //{
+    //    arg.UserId.NullCheck();
+    //    arg.GroupId.NullCheck();
+    //    if (_userGroups.Any(ur => ur.GroupId == new GroupId(arg.GroupId.Value) && ur.UserId == new UserId(arg.UserId.Value)))
+    //    {
+    //        throw new SimaResultException(CodeMessges._100018Code, Messages.UserGroupDuplicateError);
+    //    }
+    //    var entity = await UserGroup.Create(arg);
+    //    _userGroups.Add(entity);
+    //}
+    //public async Task AddGroupPermission(CreateGroupPermissionArg arg)
+    //{
+    //    if (_groupPermissions.Any(ur => ur.GroupId == new GroupId(arg.GroupId) && ur.PermissionId == new PermissionId(arg.PermissionId)))
+    //    {
+    //        throw new SimaResultException(CodeMessges._100018Code, Messages.GroupPermoissionDuplicateError);
+    //    }
+    //    var entity = await GroupPermission.Create(arg);
+    //    _groupPermissions.Add(entity);
+    //}
+    //public async Task AddGroupUsers(List<CreateUserGroupArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddGroupUser(arg);
+    //    }
+    //}
+    //public async Task AddGroupPermissions(List<CreateGroupPermissionArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddGroupPermission(arg);
+    //    }
+    //}
     #endregion
+
+    #endregion
+
     #region ModifyMethods
 
 
@@ -89,7 +154,7 @@ public class Group : Entity
         arg.UserId.NullCheck();
         if (_userGroups.Any(ur => ur.GroupId == new GroupId(arg.GroupId) && ur.UserId == new UserId(arg.UserId.Value)))
         {
-            throw new SimaResultException("10018",Messages.UserGroupDuplicateError);
+            throw new SimaResultException(CodeMessges._100018Code, Messages.UserGroupDuplicateError);
         }
         var entity = _userGroups.FirstOrDefault(ug => ug.Id == new UserGroupId(arg.Id));
         entity.NullCheck();
@@ -102,6 +167,7 @@ public class Group : Entity
         entity.Modify(arg);
     }
     #endregion
+
     #region DeleteMethods
     public void DeleteUserGroup(long userGroupId, long loginUserId)
     {
@@ -116,6 +182,7 @@ public class Group : Entity
         entity?.Delete(loginUserId);
     }
     #endregion
+
     #region Guards
     private static async Task CreateGuards(CreateGroupArg arg, IGroupService service)
     {
@@ -124,7 +191,7 @@ public class Group : Entity
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyGroupArg arg, IGroupService service)
     {
@@ -132,7 +199,7 @@ public class Group : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
 

@@ -1,9 +1,12 @@
-﻿using Dapper;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
+using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Departments;
 using SIMA.Application.Query.Contract.Features.Auths.Domains;
 using SIMA.Framework.Common.Exceptions;
+using SIMA.Framework.Common.Response;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Domains;
@@ -31,16 +34,27 @@ public class DomainQueryRepository : IDomainQueryRepository
             return result ?? throw SimaResultException.NotFound;
         }
     }
-
+    //ForDropDown
     public async Task<List<GetDomainQueryResult>> GetAll()
     {
-        /// TODO : Should chage to dapper
-        return await _readContext.Domains.Select(d => new GetDomainQueryResult
+
+        string query = $@" 
+             SELECT DISTINCT  
+			 D.[ID] as Id
+			,D.[Name]
+			,D.[Code]
+			,a.ID ActiveStatusId
+			,a.Name ActiveStatus
+			,d.[CreatedAt]
+			FROM [Authentication].Domain D
+			join Basic.ActiveStatus a on D.ActiveStatusId = a.ID
+			WHERE  D.[ActiveStatusID] <> 3";
+        using (var connection = new SqlConnection(_connectionString))
         {
-            Id = d.Id.Value,
-            ActiveStatusId = d.ActiveStatusId,
-            Code = d.Code,
-            Name = d.Name
-        }).ToListAsync();
+            await connection.OpenAsync();
+            var result = await connection.QueryAsync<GetDomainQueryResult>(query);
+            return result.ToList() ?? throw SimaResultException.NotFound;
+        }
+
     }
 }

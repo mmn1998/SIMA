@@ -41,7 +41,7 @@ public class IssueQueryRepository : IIssueQueryRepository
             await connection.OpenAsync();
 
             var queryCount = @"   WITH Query as(
-						   SELECT  
+						   SELECT distinct 
         I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
        ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
        ,I.issuePriorityId,IPP.Name issuePriorityName
@@ -78,7 +78,7 @@ public class IssueQueryRepository : IIssueQueryRepository
 								 ; ";
             string query = $@"
                              WITH Query as(
-							 SELECT  
+							 SELECT  distinct
         I.Id,I.Code,I.[CurrentWorkflowId] WorkflowId
        ,W.Name workflowname,I.mainAggregateId,I.issueTypeId,IT.Name issueTypeName
        ,I.issuePriorityId,IPP.Name issuePriorityName
@@ -275,6 +275,7 @@ public class IssueQueryRepository : IIssueQueryRepository
                             ,A.Name ActiveStatus    
                             ,I.ActiveStatusId
                             ,S.HasDocument
+                            ,S.DisplayName as StepDisplayName
                         FROM  [IssueManagement].[Issue] I
                         JOIN [Basic].[ActiveStatus] A on A.Id = I.ActiveStatusId
                         JOIN  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
@@ -316,6 +317,7 @@ public class IssueQueryRepository : IIssueQueryRepository
                     	   select 
                     	   ID.[DocumentId]
                     	  ,D.[FileAddress] as  documentPath
+                          ,D.[Name] as  Name
                     	  ,DE.[Name] as documentExtentionName
                     	  FROM  [IssueManagement].[Issue] I
                     	    left join  [IssueManagement].[IssueDocument] ID on I.Id = ID.IssueId
@@ -337,31 +339,57 @@ public class IssueQueryRepository : IIssueQueryRepository
                          Where I.ActiveStatusId != 3 and I.Id = @Id
                          order by IC.CreatedAt desc
 
-                         --Progress
-                            Select distinct
-                               FStep.Id ProgressId
-                               ,s.id 
-                               ,s.Name
-                               ,P.HasStoreProcedure HasStoredProcedure
-                               ,FStep.Name TargetName
-                               ,psp.Id ProgressStoredProcedureId
-                               ,case when p.HasStoreProcedure = '1' then Convert(varchar, PSPP.Id) + ':' + PSPP.Name + ':' + IsNull(PSPP.IsSystemParam, ' ')  + ':' + IsNull(PSPP.SystemParamName, ' ') + ':' +IsNull(PSPP.DisplayName, ' ') else null end as ProcedureInfo
-                               ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId
-                               From  [IssueManagement].[Issue] I
-                               inner join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
-                               inner   join  [Project].[Step] S on I.CurrenStepId = S.Id
-                               join Project.WorkFlowActorStep WS on S.Id = WS.StepID
-	                           join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
-	                           left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
-	                           left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
-	                           left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
-                               inner  join  [Project].[Progress] P on S.Id = P.SourceId
-                               left join [Project].ProgressStoreProcedure PSP on PSP.ProgressId = P.Id
-                               left join Project.ProgressStoreProcedureParam PSPP on PSP.Id = pspp.ProgressStoreProcedureId
-                               inner   join  [Project].[Step] ST on P.TargetId = ST.Id
-                               CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
-                               Where    I.Id = @Id and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
-                               I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3
+                        -------- Progress
+                Select distinct
+                    P.Id CurrentProgressId
+                    ,FStep.Id ProgressId
+                    ,s.id 
+                    ,s.Name
+                    ,P.HasStoreProcedure HasStoredProcedure
+                    ,FStep.Name TargetName
+                    ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId
+                    From  [IssueManagement].[Issue] I
+                    inner join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
+                    inner   join  [Project].[Step] S on I.CurrenStepId = S.Id
+                    join Project.WorkFlowActorStep WS on S.Id = WS.StepID
+                    join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
+                    left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
+                    left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
+                    left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
+                    inner  join  [Project].[Progress] P on S.Id = P.SourceId
+                    inner   join  [Project].[Step] ST on P.TargetId = ST.Id
+                    CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
+                 Where    I.Id = @Id  and  (WA.IsEveryOne = 1 or WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds)
+                    and I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3
+
+                ----ProgressStoredProcedureParam
+                
+                select
+                PSP.ProgressId
+                ,PSPP.Id ProgressStoredProcedureParamId
+                ,PSPP.Name 
+                ,PSPP.DisplayName
+                ,PSPP.JsonFormat
+                ,PSPP.BoundFormat
+                ,UI.IsMultiSelect
+                ,UI.IsSingleSelect
+                ,UI.HasInputInEachRecord
+                ,UI.Name UiInputElementName
+                ,UI.Id UiInputElementId
+                ,PSPP.ApiNameForDataBounding
+                ,PSPP.StoredProcedureForDataBounding
+                From  
+                        [Project].ProgressStoreProcedure PSP 
+                        left join Project.ProgressStoreProcedureParam PSPP on PSP.Id = pspp.ProgressStoreProcedureId
+                        left join Basic.UIInputElement  UI on UI.Id = pspp.UiInputElementId 
+                		where Psp.ProgressId In
+                		(
+                		Select FStep.Id	From  [IssueManagement].[Issue] I
+                        inner join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
+                        inner   join  [Project].[Step] S on I.CurrenStepId = S.Id
+                        CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
+                        Where  I.Id = @Id
+                		)
                               
                                --ApprovalOption
 
@@ -376,51 +404,61 @@ public class IssueQueryRepository : IIssueQueryRepository
                 response.RequiredDocuments = multi.ReadAsync<GetStepRequiredDocumentQueryResult>().GetAwaiter().GetResult().ToList();
                 response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
                 response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();
-                response.RelatedProgresses = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
+                response.RelatedProgressList = multi.ReadAsync<GetRelatedProgressQueryResult>().GetAwaiter().GetResult().ToList();
+                var storeProcedureParams = multi.ReadAsync<StoreProcedureParams>().GetAwaiter().GetResult()?.ToList();
                 response.ApprovalOptions = multi.ReadAsync<GetApprovalOptionQueryResult>().GetAwaiter().GetResult().ToList();
-            }
-            var paramList = new List<StoreProcedureParams>();
-            var groupedResults = response.RelatedProgresses.GroupBy(x => new { x.ProgressId/*, x.ProgressStoreProcedureId */})
-                .Select(g => new
+
+                if (response.RelatedProgressList is not null)
                 {
-                    ProgressId = g.Key.ProgressId,
-                    // ProgressStoreProcedureId = g.Key.ProgressStoreProcedureId
-                    Items = g.ToList()
-                });
-            foreach (var progress in response.RelatedProgresses)
-            {
-                if (progress.HasStoredProcedure == "1" && !string.IsNullOrEmpty(progress.ProcedureInfo) && progress.ProcedureInfo.Contains(":"))
-                {
-                    var obj = new StoreProcedureParams();
-                    /// <summary>
-                    /// splitedinfo[0] is ProgressStoreProcedureId, splitedinfo[1] is Name, splitedinfo[2] is IsSystemParam, splitedinfo[3] is SystemParam and splitedinfo[4] is DisplayName
-                    /// </summary>
-                    var splitedinfo = progress.ProcedureInfo.Split(":");
-                    obj.ProgressStoredProcedureParamId = Convert.ToInt64(splitedinfo[0].ToString());
-                    obj.Name = splitedinfo[1];
-                    obj.DisplayName = splitedinfo[4];
-                    if (splitedinfo[2] == "0")
+                    foreach (var item in response.RelatedProgressList)
                     {
-                        paramList.Add(obj);
+                        item.Params = storeProcedureParams.Where(x => x.ProgressId == item.ProgressId).ToList();
+
                     }
                 }
             }
-            response.RelatedProgresses.ToList().Clear();
-            response.RelatedProgresses = new();
-            foreach (var item in groupedResults)
-            {
-                var obj = new GetRelatedProgressQueryResult
-                {
-                    Params = paramList,
-                    Id = item.Items[0].Id,
-                    Name = item.Items[0].Name,
-                    ProgressId = item.ProgressId,
-                    TargetId = item.Items[0].TargetId,
-                    TargetName = item.Items[0].TargetName,
-                    //ProgressStoreProcedureId = item.ProgressStoreProcedureId,
-                };
-                response.RelatedProgresses.Add(obj);
-            }
+            //var paramList = new List<StoreProcedureParams>();
+            //var groupedResults = response.RelatedProgresses.GroupBy(x => new { x.ProgressId/*, x.ProgressStoreProcedureId */})
+            //    .Select(g => new
+            //    {
+            //        ProgressId = g.Key.ProgressId,
+            //        // ProgressStoreProcedureId = g.Key.ProgressStoreProcedureId
+            //        Items = g.ToList()
+            //    });
+            //foreach (var progress in response.RelatedProgresses)
+            //{
+            //    if (progress.HasStoredProcedure == "1" && !string.IsNullOrEmpty(progress.ProcedureInfo) && progress.ProcedureInfo.Contains(":"))
+            //    {
+            //        var obj = new StoreProcedureParams();
+            //        /// <summary>
+            //        /// splitedinfo[0] is ProgressStoreProcedureId, splitedinfo[1] is Name, splitedinfo[2] is IsSystemParam, splitedinfo[3] is SystemParam and splitedinfo[4] is DisplayName
+            //        /// </summary>
+            //        var splitedinfo = progress.ProcedureInfo.Split(":");
+            //        obj.ProgressStoredProcedureParamId = Convert.ToInt64(splitedinfo[0].ToString());
+            //        obj.Name = splitedinfo[1];
+            //        obj.DisplayName = splitedinfo[4];
+            //        if (splitedinfo[2] == "0")
+            //        {
+            //            paramList.Add(obj);
+            //        }
+            //    }
+            //}
+            //response.RelatedProgresses.ToList().Clear();
+            //response.RelatedProgresses = new();
+            //foreach (var item in groupedResults)
+            //{
+            //    var obj = new GetRelatedProgressQueryResult
+            //    {
+            //        Params = paramList,
+            //        Id = item.Items[0].Id,
+            //        Name = item.Items[0].Name,
+            //        ProgressId = item.ProgressId,
+            //        TargetId = item.Items[0].TargetId,
+            //        TargetName = item.Items[0].TargetName,
+            //        //ProgressStoreProcedureId = item.ProgressStoreProcedureId,
+            //    };
+            //    response.RelatedProgresses.Add(obj);
+            //}
             response.NullCheck();
             return response;
         }

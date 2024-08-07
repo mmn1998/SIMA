@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
+	<InformationalVersion>2.1.3</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,8 @@
     <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesController.cs" />
     <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ApiMethodActions\V1\ApiMethodActionsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\DataTypes\V1\DataTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsController.cs" />
     <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Domains\V1\DomainsQueryController.cs" />
@@ -88,6 +91,9 @@
     <Compile Include="Controllers\Features\Logistics\Cartables\LogisticCartableQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsCategories\V1\GoodsCategoriesController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsCategories\V1\GoodsCategoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\UIInputElements\V1\UIInputElementsController.cs" />
+    <Compile Include="Controllers\Features\Auths\UIInputElements\V1\UIInputElementsQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\CandidatedSuppliers\V1\CandidatedSuppliersQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\Goods\V1\GoodsesController.cs" />
     <Compile Include="Controllers\Features\Logistics\Goods\V1\GoodsesQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\GoodsQuorumPrices\V1\GoodsQuorumPricesController.cs" />
@@ -185,10 +191,10 @@
     <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SIMA.Framework.Common" Version="2.0.3" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.0.9" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
-    <PackageReference Include="SIMA.Framework.WebApi" Version="1.1.7" />
+    <PackageReference Include="SIMA.Framework.WebApi" Version="1.1.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 

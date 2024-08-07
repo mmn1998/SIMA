@@ -21,7 +21,7 @@ public class SupplierRankDomainService : ISupplierRankDomainService
         return result;
     }
 
-    public async Task<bool> IsOrderingUnique(string ordering, SupplierRankId? id = null)
+    public async Task<bool> IsOrderingUnique(float ordering, SupplierRankId? id = null)
     {
         bool result = false;
         if (id == null) result = !await _context.SupplierRanks.AnyAsync(x => x.Ordering == ordering);

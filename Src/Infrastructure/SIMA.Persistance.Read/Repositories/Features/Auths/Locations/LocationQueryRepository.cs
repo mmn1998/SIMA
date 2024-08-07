@@ -38,10 +38,12 @@ public class LocationQueryRepository : ILocationQueryRepository
             await connection.OpenAsync();
             string query = $@"
                 SELECT DISTINCT L.ID as Id,
-                L.Name as LocationName,
-                L.Code  as LocationCode,
+                L.Name as Name,
+                L.Code  as Code,
                 LT.Name as LocationTypeName,
+                LT.Id as LocationTypeId,
                 PLT.Name as  ParentLocationTypeName
+,PLT.Id as ParentLocationTypeId
                 ,a.ID ActiveStatusId
                 ,PL.Name ParentName
                 ,PL.Id ParentId 
@@ -55,7 +57,7 @@ public class LocationQueryRepository : ILocationQueryRepository
                         WHERE L.[ActiveStatusID] <> 3 AND L.Id = @Id
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetLocationQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10060", Messages.LocationNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100060Code, Messages.LocationNotFoundError);
             return result;
         }
     }
@@ -69,10 +71,12 @@ public class LocationQueryRepository : ILocationQueryRepository
             string queryCount = @"
                             WITH Query as(
 						    SELECT DISTINCT L.ID as Id,
-		                         L.Name as LocationName,
-		                         L.Code  as LocationCode,
+		                         L.Name as Name,
+		                         L.Code  as Code,
 		                         LT.Name as LocationTypeName,
+                                 LT.Id as LocationTypeId,
 		                         PLT.Name as  ParentLocationTypeName
+                                 ,PLT.Id as ParentLocationTypeId
 		                         ,a.ID ActiveStatusId
 		                         ,a.Name ActiveStatus
                                  ,PL.Name ParentName
@@ -94,10 +98,12 @@ public class LocationQueryRepository : ILocationQueryRepository
 
             string query = $@"
                             WITH Query as(SELECT DISTINCT L.ID as Id,
-							        L.Name as LocationName,
-							        L.Code  as LocationCode,
+							        L.Name as Name,
+							        L.Code  as Code,
 							        LT.Name as LocationTypeName,
+                                    LT.Id as LocationTypeId,
 							        PLT.Name as  ParentLocationTypeName
+,PLT.Id as ParentLocationTypeId
 							        ,a.ID ActiveStatusId
 							        ,a.Name ActiveStatus
                                     ,L.CreatedAt

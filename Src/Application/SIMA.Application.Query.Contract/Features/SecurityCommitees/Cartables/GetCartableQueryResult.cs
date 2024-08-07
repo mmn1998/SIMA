@@ -36,7 +36,7 @@ public class GetCartableQueryResult : IQuery<Result<GetCartableQuery>>
     public string? WorkFlowFileContent { get; set; }
     [JsonIgnore]
     public string? BpmnId { get; set; }
-    public string PersianDueDate => DateHelper.ToPersianDate(DueDate);
+    public string DueDatePersian => DateHelper.ToPersianDateTime(DueDate);
     public List<GetIssueLinkQueryResult> IssueLinks { get; set; }
     public List<GetIssueDocumentQueryResult> IssueDocuments { get; set; }
     public List<GetIssueCommentQueryResult> IssueComments { get; set; }

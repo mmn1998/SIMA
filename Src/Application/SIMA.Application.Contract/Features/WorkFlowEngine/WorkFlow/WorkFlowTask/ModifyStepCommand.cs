@@ -11,8 +11,10 @@ namespace SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTas
         public List<AddStepApprovalOption>? ApprovalOptions { get; set; }
         public string? Name { get; set; }
         public long? WorkFlowId { get; set; }
+        public string? DisplayName { get; set; }
         public long? FormId { get; set; }
         public string HasDocument { get; set; }
+        public string? UIPropertyBoxTitle { get; set; }
         public List<RequiredDocument>? RequiredDocuments { get; set; }
     }
 

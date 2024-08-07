@@ -4,5 +4,6 @@ public class GetDocumentResult
 {
     public long Id { get; set; }
     public string FileAddress { get; set; } = "";
+    public string Name { get; set; } = "";
     public string Extension { get; set; } = "";
 }

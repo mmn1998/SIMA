@@ -1,0 +1,1 @@
+﻿public record ConfigurationItemAccessInfoId(long Value);

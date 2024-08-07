@@ -6,14 +6,9 @@ namespace SIMA.Application.Contract.Features.Auths.Profiles;
 public class CreateProfileCommand : ICommand<Result<long>>
 {
     public string? FirstName { get; set; }
-
     public string? LastName { get; set; }
-
     public string? FatherName { get; set; }
-
     public long? GenderId { get; set; }
-
-    public string? NationalId { get; set; }
-
-    public DateOnly? Brithday { get; set; }
+    public string? NationalCode { get; set; }
+    public string BirthDatePersian { get; set; } = string.Empty;
 }

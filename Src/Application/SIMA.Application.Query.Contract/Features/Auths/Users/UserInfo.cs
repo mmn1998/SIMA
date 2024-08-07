@@ -9,6 +9,7 @@ public class UserInfo
     public string? Gender { get; set; }
     public string? GenderCode { get; set; }
     public string? Username { get; set; }
+    public long? CompanyId { get; set; }
     public string? Company { get; set; }
     public string? CompanyCode { get; set; }
     public string? NationalId { get; set; }

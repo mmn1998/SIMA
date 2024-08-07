@@ -11,5 +11,5 @@ public class UpdateUserRoleCommand : ICommand<Result<long>>
     public string? IsActive { get; set; }
     public long? ModifiedBy { get; set; }
     public long ActiveStatusId { get; set; }
-
+   
 }

@@ -16,8 +16,8 @@ public class IssueLink : Entity
     {
         Id = new IssueLinkId(IdHelper.GenerateUniqueId());
         IssueId = new IssueId(arg.IssueId);
-        IssueIdLinkedTo = new(arg.IssueIdLinkedTo);
-        IssueIdLinkReasonTo = new(arg.IssueLinkReasonTo);
+        if (arg.IssueIdLinkedTo.HasValue) IssueIdLinkedTo = new(arg.IssueIdLinkedTo.Value);
+        if (arg.IssueLinkReasonTo.HasValue) IssueIdLinkReasonTo = new(arg.IssueLinkReasonTo.Value);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;

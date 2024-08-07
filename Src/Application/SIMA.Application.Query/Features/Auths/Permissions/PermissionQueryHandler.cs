@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Query.Contract.Features.Auths.Permission;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Permissions;
+using SIMA.Resources;
 
 namespace SIMA.Application.Query.Features.Auths.Permissions;
 
@@ -29,7 +31,7 @@ public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<G
         var result = new Result<IEnumerable<GetPermissionQueryResult>>();
 
         if (request.DomainId is not null && request.DomainId != 0) result = await _repository.GetAll(request,  request.DomainId.Value);
-        else result = await _repository.GetAll(request);
+        else throw new SimaResultException(CodeMessges._400Code , Messages.DomainIsNotNull);
         return result;
     }
 }

@@ -51,12 +51,12 @@ public class IssueWeightCategory : Entity
 
         arg.MinRange.NullCheck();
         arg.MaxRange.NullCheck();
-        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw new SimaResultException("10047",Messages.RangeNotValidError);
-        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, 0)) throw new SimaResultException("10048",Messages.RangeAlreadyAllocatedError);
+        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw new SimaResultException(CodeMessges._100047Code, Messages.RangeNotValidError);
+        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, 0)) throw new SimaResultException(CodeMessges._100048Code, Messages.RangeAlreadyAllocatedError);
 
-        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyIssueWeightCategoryArg arg, IIssueWeightCategoryDomainService service)
     {
@@ -66,12 +66,13 @@ public class IssueWeightCategory : Entity
 
         arg.MinRange.NullCheck();
         arg.MaxRange.NullCheck();
-        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw new SimaResultException("10047",Messages.RangeNotValidError);
-        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, arg.Id)) throw new SimaResultException("10048",Messages.RangeAlreadyAllocatedError);
+        if (!service.IsRangeVilid(arg.MinRange, arg.MaxRange)) throw new SimaResultException(CodeMessges._100047Code, Messages.RangeNotValidError);
+        if (await service.IsRangeExist(arg.MinRange, arg.MaxRange, arg.Id)) throw new SimaResultException(CodeMessges._100048Code
+            , Messages.RangeAlreadyAllocatedError);
 
-        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public IssueWeightCategoryId Id { get; private set; }

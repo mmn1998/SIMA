@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Logistics.Suppliers;
 using SIMA.Framework.Common.Exceptions;
+using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -63,6 +64,50 @@ public class SupplierQueryRepository : ISupplierQueryRepository
                 return Result.Ok(response, request, count);
             }
 
+        }
+    }
+
+    public async Task<Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>> GetAllOrderedNotInBlackList(GetAllOrderedNotInBlackListSuppliersQuery request)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            request.Sorts = new List<SortModel>
+            {
+               new SortModel{Key="Ordering",Type="asc"}
+            };
+
+            string mainQuery = @"select
+            s.Id 
+            ,s.Id SupplierId
+            ,sr.Id SupplierRankId
+            ,s.Name SupplierName
+            ,sr.Name SupplierRankName
+,sr.Ordering
+,s.CreatedAt
+            from Logistics.Supplier s
+            inner join Logistics.SupplierRank sr on sr.Id = s.SupplierRankId
+        where s.IsInBlackList <> '1'
+        ";
+            string queryCount = $@"
+WITH Query as(	{mainQuery}	)
+								SELECT Count(*) FROM Query
+								 /**where**/
+;";
+            string query = $@"WITH Query as(
+							 {mainQuery}
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only;";
+            var dynaimcParameters = (queryCount + query).GenerateQuery(request);
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
+            {
+                var count = await multi.ReadFirstAsync<int>();
+                var response = await multi.ReadAsync<GetAllOrderedNotInBlackListSuppliersQueryResult>();
+                return Result.Ok(response, request, count);
+            }
         }
     }
 

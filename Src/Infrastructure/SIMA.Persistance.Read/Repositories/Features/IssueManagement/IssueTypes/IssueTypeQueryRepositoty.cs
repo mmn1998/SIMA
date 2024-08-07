@@ -1,13 +1,9 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.IssueManagement.IssueTypes;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Resources;
 using System.Data.SqlClient;
@@ -91,8 +87,8 @@ public class IssueTypeQueryRepositoty : IIssueTypeQueryRepositoty
                   WHERE P.Id = @Id and P.ActiveStatusId != 3";
             var result = await connection.QueryFirstOrDefaultAsync<GetIssueTypesQueryResult>(query, new { Id = id });
             result.NullCheck();
-            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException("10040", Messages.IssueTypeDeactiveError);
-            if (result.ActiveStatusId == 3) throw new SimaResultException("10041", Messages.IssueTypeDeleteError);
+            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100040Code, Messages.IssueTypeDeactiveError);
+            if (result.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100041Code, Messages.IssueTypeDeleteError);
             return result;
         }
     }

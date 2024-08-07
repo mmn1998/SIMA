@@ -1,4 +1,8 @@
-﻿using SIMA.Domain.Models.Features.Auths.AdminLocationAccesses.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.Auths.AdminLocationAccesses.Entities;
+using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities;
+using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.Args;
 using SIMA.Domain.Models.Features.Auths.Locations.Interfaces;
@@ -106,6 +110,13 @@ public class Location : Entity
     private List<Branch> _branches = new();
 
     public ICollection<Branch> Branches => _branches;
+    private List<CompanyBuildingLocation> _companyBuildingLocations = new();
+
+    public ICollection<CompanyBuildingLocation> CompanyBuildingLocations => _companyBuildingLocations;
 
     public virtual LocationType? LocationType { get; private set; }
+    private List<Asset> _assets = new();
+    public ICollection<Asset> Assets => _assets;
+    private List<ConfigurationItem> _configurationItems = new();
+    public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
 }

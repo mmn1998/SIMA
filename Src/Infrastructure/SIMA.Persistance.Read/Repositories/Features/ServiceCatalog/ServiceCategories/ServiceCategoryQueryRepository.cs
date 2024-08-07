@@ -78,4 +78,22 @@ WHERE ST.ActiveStatusId <> 3";
             return result ?? throw SimaResultException.NotFound;
         }
     }
+
+    public async Task<Result<IEnumerable<GetServiceCategoryQueryResult>>> GetByServiceTypeId(long serviceTypeId)
+    {
+        var query = @"
+          SELECT ST.[Id]
+              ,ST.[Name]
+              ,ST.[Code]
+              ,ST.[ServiceTypeId]
+          FROM [ServiceCatalog].[ServiceCategory] ST
+          WHERE ST.[ServiceTypeId] = @ServiceTypeId AND ST.ActiveStatusId <> 3";
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var result = await connection.QueryAsync<GetServiceCategoryQueryResult>(query, new { ServiceTypeId = serviceTypeId });
+            result.NullCheck();
+            return Result.Ok(result ?? throw SimaResultException.NotFound);
+        }
+    }
 }

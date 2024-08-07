@@ -48,7 +48,7 @@ public class LocationTypeCommandHandler : ICommandHandler<CreateLocationTypeComm
     }
     public async Task<Result<long>> Handle(ModifyLocationTypeCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById((int)request.Id);
+        var entity = await _repository.GetById((long)request.Id);
         var arg = _mapper.Map<ModifyLocationTypeArg>(request);
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
@@ -58,7 +58,7 @@ public class LocationTypeCommandHandler : ICommandHandler<CreateLocationTypeComm
     }
     public async Task<Result<long>> Handle(DeleteLocationTypeCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById((int)request.Id);
+        var entity = await _repository.GetById((long)request.Id);
         long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         //DeleteCachedData();

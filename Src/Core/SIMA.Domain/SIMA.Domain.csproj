@@ -7,13 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\**" />
     <Compile Remove="Temp\**" />
+    <EmbeddedResource Remove="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\**" />
     <EmbeddedResource Remove="Temp\**" />
+    <None Remove="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\**" />
     <None Remove="Temp\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="2.0.3" />
+    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Args\CreateConfigurationItemRelationshipTypeArg.cs" />
+    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Args\ModifyConfigurationItemRelationshipTypeArg.cs" />
+    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Contracts\IConfigurationItemRelationshipTypeDomainService.cs" />
+    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Entities\ConfigurationItemRelationshipType.cs" />
+    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\ValueObjects\ConfigurationItemRelationshipTypeId.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SIMA.Framework.Common" Version="2.0.9" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>

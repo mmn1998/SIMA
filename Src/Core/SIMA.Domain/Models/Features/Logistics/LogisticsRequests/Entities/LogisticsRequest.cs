@@ -15,8 +15,10 @@ using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 using System.Xml.Linq;
 
@@ -34,7 +36,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        AddDomainEvent(new CreateLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, Description, Id.Value , arg.IssuePreorityId , arg.Weight, arg.DueDate));
+        AddDomainEvent(new CreateLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, Description, Id.Value, arg.IssuePreorityId, arg.Weight, arg.DueDate));
     }
     public static async Task<LogisticsRequest> Create(CreateLogisticsRequestArg arg, ILogisticsRequestDomainService service)
     {
@@ -50,12 +52,22 @@ public class LogisticsRequest : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
-        AddDomainEvent(new ModifyLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, arg.IssuePreorityId, arg.DueDate,arg.Weight , arg.Description ));
+        AddDomainEvent(new ModifyLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, arg.IssuePreorityId, arg.DueDate, arg.Weight, arg.Description));
     }
 
-    public async Task AddRequestGoods(List<CreateLogisticsRequestGoodsArg> args, long LogisticsRequestId)
+    public async Task AddRequestGoods(List<CreateLogisticsRequestGoodsArg> args, long LogisticsRequestId, long userId, ILogisticsRequestDomainService service)
     {
+        #region Guard For Goods
+        //سیستم نمی تواند درخواستی را ثبت نماید که کالاهای آن به لحاظ ویژگی و تنظیمات  با یکدیگر متفاوت باشند.
+        var goodsId = args.Select(it => it.GoodsId).ToList();
+        bool isTechnological = await service.IsTechnological(goodsId);
+        if (!isTechnological) { throw new SimaResultException(CodeMessges._400Code, Messages.GoodsConfigMustBeTheSame); }
+        bool isGoods = await service.IsGoods(goodsId);
+        if (!isGoods) { throw new SimaResultException(CodeMessges._400Code, Messages.GoodsConfigMustBeTheSame); }
+        bool isHardware = await service.IsHardware(goodsId);
+        if (!isHardware) { throw new SimaResultException(CodeMessges._400Code, Messages.GoodsConfigMustBeTheSame); }
 
+        #endregion 
         var previousLogisticsRequestGoods = _logisticsRequestGoods.Where(x => x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
         var addGoods = args.Where(x => !previousLogisticsRequestGoods.Any(c => c.GoodsId.Value == x.GoodsId)).ToList();
@@ -78,10 +90,10 @@ public class LogisticsRequest : Entity, IAggregateRoot
 
         foreach (var goods in deleteGoods)
         {
-            goods.Delete(args.First().CreatedBy.Value);
+            goods.Delete(userId);
         }
     }
-    public async Task AddLogisticsRequestDocument(List<CreateLogisticsRequestDocumentArg> args, long LogisticsRequestId)
+    public async Task AddLogisticsRequestDocument(List<CreateLogisticsRequestDocumentArg> args, long LogisticsRequestId, long userId)
     {
         var previousLogisticsRequestDocumentGoods = _logisticsRequestDocuments.Where(x => x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
@@ -105,7 +117,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
 
         foreach (var document in deleteDocument)
         {
-            document.Delete(args.First().CreatedBy.Value);
+            document.Delete(userId);
         }
     }
 

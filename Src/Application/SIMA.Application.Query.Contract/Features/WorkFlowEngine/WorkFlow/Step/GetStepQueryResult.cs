@@ -17,6 +17,7 @@ public class GetStepQueryResult
     public string? BpmnId { get; set; }
     public long FormId { get; set; }
     public string FormName { get; set; }
+    public string? DisplayName { get; set; }
 
     public List<RequiredDocumentQueryResult>? RequiredDocuments { get; set; }
     public List<StepApprovalOptionQueryResult>? ApprovalOptions { get; set; }

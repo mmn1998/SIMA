@@ -8,4 +8,5 @@ public interface IServiceCategoryQueryRepository : IQueryRepository
 {
     Task<GetServiceCategoryQueryResult> GetById(GetServiceCategoryQuery request);
     Task<Result<IEnumerable<GetServiceCategoryQueryResult>>> GetAll(GetAllServiceCategoriesQuery request);
+    Task<Result<IEnumerable<GetServiceCategoryQueryResult>>> GetByServiceTypeId(long serviceTypeId);
 }

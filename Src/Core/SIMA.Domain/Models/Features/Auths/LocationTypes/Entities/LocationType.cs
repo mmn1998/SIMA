@@ -29,6 +29,7 @@ public class LocationType : Entity
         await ModifyGuards(arg, service);
         Name = arg.Name;
         Code = arg.Code;
+        ParentId = new LocationTypeId(arg.ParentId.Value);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;

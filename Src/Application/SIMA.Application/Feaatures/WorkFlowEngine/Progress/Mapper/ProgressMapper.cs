@@ -13,12 +13,16 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.Progress.Mapper
         public ProgressMapper(ISimaIdentity simaIdentity)
         {
             CreateMap<ProgressStoreProcedureCommand, ProgressStoreProcedureArg>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
+                .ForMember(x => x.StoreProcedureName, opt => opt.MapFrom(src => src.StoreProcedureName.Trim()))
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.HasValue ? src.Id.Value : IdHelper.GenerateUniqueId()))
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                  .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active))
                  .ForMember(x => x.ProgressStoreProcedureParams, opt => opt.MapFrom(src => src.Params));
             CreateMap<ProgressStoreProcedureParamCommand, ProgressStoreProcedureParamArg>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.HasValue ? src.Id.Value : IdHelper.GenerateUniqueId()))
+                .ForMember(x => x.Name, opt => opt.MapFrom(src => src.Name.Trim()))
+                .ForMember(x => x.SystemParamName, opt => opt.MapFrom(src => src.SystemParamName.Trim()))
+                .ForMember(x => x.JsonFormat, opt => opt.MapFrom(src => src.JsonFormat.Trim()))
                // .ForMember(x => x.ProgressStoreProcedureId, opt => opt.MapFrom(src => src.ProgressStoreProcedureId))
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                  .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active))

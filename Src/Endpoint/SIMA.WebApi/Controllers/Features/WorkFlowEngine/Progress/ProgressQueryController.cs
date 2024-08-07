@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Progress;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.Progress
 {
@@ -19,7 +20,7 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.Progress
         }
 
         [HttpGet("{id}")]
-        //[SimaAuthorize(Permissions.ProjectGet)]
+        [SimaAuthorize(Permissions.ProgressGet)]
         public async Task<Result> Get(long id)
         {
             var query = new GetProgressQuery { Id = id };
@@ -28,7 +29,7 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.Progress
         }
 
         [HttpPost("GetAll")]
-        //[SimaAuthorize(Permissions.ProjectGetAll)]
+        [SimaAuthorize(Permissions.ProgressGetAll)]
         public async Task<Result> Get(GetAllProgressQuery query)
         {
             var result = await _mediator.Send(query);

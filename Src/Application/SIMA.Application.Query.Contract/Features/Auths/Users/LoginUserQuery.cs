@@ -13,6 +13,7 @@ public class LoginUserQuery : IQuery<Result<LoginUserQueryResult>>
 public class LoginUserModel
 {
     public string Username { get; set; }
+    public string CompanyName { get; set; }
     public long CompanyId { get; set; }
     public long UserId { get; set; }
     public IEnumerable<long> GroupIds { get; set; }

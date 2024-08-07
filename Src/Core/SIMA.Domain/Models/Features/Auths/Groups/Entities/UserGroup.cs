@@ -36,6 +36,11 @@ public class UserGroup
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
     public UserGroupId Id { get; private set; }
 
     public UserId? UserId { get; private set; }

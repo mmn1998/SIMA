@@ -23,6 +23,8 @@ public interface IWorkFlowQueryRepository : IQueryRepository
     Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query);
     Task<bool> AllowAddApprovalForStep(long stepId);
     Task ExecuteSP(long ProgressId, string mainAggregateName, List<InputModel> SystemParams, List<InputParamQueryModel> InputParam, List<AddDocumentToSPQuery> docs);
+
+    Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoByIdAsync(long workFlowId);
 }
 public class InputDocumentQuery
 {

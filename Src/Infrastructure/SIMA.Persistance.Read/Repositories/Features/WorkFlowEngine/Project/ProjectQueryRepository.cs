@@ -1,12 +1,7 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
-using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Progress;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Project;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -32,7 +27,7 @@ public class ProjectQueryRepository : IProjectQueryRepository
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                                            string query = $@"
+                string query = $@"
                            SELECT DISTINCT 
                                   P.[Id]
                                     ,P.[DomainID]
@@ -78,7 +73,7 @@ public class ProjectQueryRepository : IProjectQueryRepository
                             WHERE P.[ActiveStatusID] <> 3 and  PG.[ActiveStatusID] <> 3 and P.Id = @Id";
                 using (var multi = await connection.QueryMultipleAsync(query, new { Id = id }))
                 {
-                    response = multi.ReadAsync<GetProjectQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException("10057",Messages.ProjectNotFoundError);
+                    response = multi.ReadAsync<GetProjectQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._100057Code, Messages.ProjectNotFoundError);
                     response.ProjectMembers = multi.ReadAsync<GetProjectMemberResult>().GetAwaiter().GetResult().ToList();
                     response.ProjectGroups = multi.ReadAsync<GetProjectGroupResult>().GetAwaiter().GetResult().ToList();
                 }
@@ -87,22 +82,22 @@ public class ProjectQueryRepository : IProjectQueryRepository
             }
             return response;
         }
-        catch   (Exception ex)
+        catch (Exception ex)
         {
             throw;
         }
-        
+
     }
 
     public async Task<Result<IEnumerable<GetProjectQueryResult>>> GetAll(GetAllProjectsQuery request)
     {
-        
+
 
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-           
-                string queryCount = @"  WITH Query as(
+
+            string queryCount = @"  WITH Query as(
 						          SELECT DISTINCT 
       	    P.[Id]
           ,P.[DomainID]
@@ -123,7 +118,7 @@ public class ProjectQueryRepository : IProjectQueryRepository
 								 
 								 ; ";
 
-                string query = $@" WITH Query as(
+            string query = $@" WITH Query as(
 							 SELECT DISTINCT 
       	    P.[Id]
           ,P.[DomainID]
@@ -151,7 +146,7 @@ public class ProjectQueryRepository : IProjectQueryRepository
                 var response = await multi.ReadAsync<GetProjectQueryResult>();
                 return Result.Ok(response, request, count);
             }
-            
+
         }
     }
 
@@ -176,7 +171,7 @@ public class ProjectQueryRepository : IProjectQueryRepository
   INNER JOIN [Basic].[ActiveStatus] A on A.ID = P.ActiveStatusID
               WHERE P.[ActiveStatusID] <> 3 and P.[DomainId] = @DomainId";
             var result = await connection.QueryAsync<GetProjectQueryResult>(query, new { DomainId = domainId });
-            if (result is null) throw new SimaResultException("10056",Messages.ProjectNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100056Code, Messages.ProjectNotFoundError);
             response = result.ToList();
         }
         return response;

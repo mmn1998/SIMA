@@ -22,14 +22,16 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly ISimaIdentity _simaIdentity;
+    private readonly IWorkFlowActorDomainService _workFlowActorDomainService;
 
     public WorkFlowActorCommandHandler(IWorkFlowActorRepository repository, IUnitOfWork unitOfWork,
-        IMapper mapper, ISimaIdentity simaIdentity)
+        IMapper mapper, ISimaIdentity simaIdentity , IWorkFlowActorDomainService workFlowActorDomainService)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _simaIdentity = simaIdentity;
+        _workFlowActorDomainService = workFlowActorDomainService;
     }
     public async Task<Result<long>> Handle(CreateWorkFlowActorCommand request, CancellationToken cancellationToken)
     {
@@ -74,7 +76,7 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
             var entity = await _repository.GetById(request.Id);
             var arg = _mapper.Map<ModifyWorkFlowActorArg>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
-            entity.Modify(arg);
+            await entity.Modify(arg , _workFlowActorDomainService);
 
             if(request.RoleId is not null && request.RoleId.Count > 0) 
             {

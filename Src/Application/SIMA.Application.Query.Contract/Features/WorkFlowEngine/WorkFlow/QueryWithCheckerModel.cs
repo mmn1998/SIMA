@@ -5,5 +5,6 @@ public class QueryWithCheckerModel
     public string Query { get; set; }
     public string Checker { get; set; }
     public string ValueToCheck { get; set; }
+    public string Combiner { get; set; }
     public bool IsLong => long.TryParse(ValueToCheck, out var item);
 }

@@ -2,10 +2,8 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.Auths.Profiles;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Resources;
@@ -27,18 +25,22 @@ public class ProfileQueryRepository : IProfileQueryRepository
         {
             await connection.OpenAsync();
             string query = $@"
-                SELECT DISTINCT P.[ID] as Id
-                  ,P.FirstName
-	              ,P.LastName
-	              ,P.FatherName
-	              ,P.NationalID as NationalCode
-                  ,P.[ActiveStatusID]
-                  ,A.[Name] as ActiveStatus 
-              FROM [Authentication].[Profile] P
-              join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID    
+                  SELECT DISTINCT P.[ID] as Id
+                    ,P.FirstName
+                    ,P.LastName
+                    ,P.FatherName
+                    ,P.NationalID as NationalCode
+                    ,P.[ActiveStatusID]
+                    ,A.[Name] as ActiveStatus 
+	                ,G.Id GenderId
+	                ,G.Name GenderName
+	                ,P.Brithday BirthDate
+                FROM [Authentication].[Profile] P
+                join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
+                join Basic.Gender G on g.Id = p.GenderId and g.ActiveStatusId <> 3   
               WHERE P.[ActiveStatusID] <> 3 AND P.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetProfileQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10055", Messages.ProfileNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100055Code, Messages.ProfileNotFoundError);
             return result;
         }
     }
@@ -130,8 +132,8 @@ WHERE p.ActiveStatusId != 3 and p.ID = @Id
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            
-                var queryCount = @" WITH Query as(
+
+            var queryCount = @" WITH Query as(
 						  SELECT DISTINCT 
                                      P.[ID] as Id
                                     ,P.FirstName
@@ -149,7 +151,7 @@ WHERE p.ActiveStatusId != 3 and p.ID = @Id
 								 /**where**/
 								 
 								 ; ";
-                string query = $@" WITH Query as(
+            string query = $@" WITH Query as(
 							SELECT DISTINCT 
                                      P.[ID] as Id
                                     ,P.FirstName
@@ -175,7 +177,7 @@ WHERE p.ActiveStatusId != 3 and p.ID = @Id
                 var response = await multi.ReadAsync<GetProfileQueryResult>();
                 return Result.Ok(response, request, count);
             }
-            
+
         }
     }
 
@@ -185,8 +187,8 @@ WHERE p.ActiveStatusId != 3 and p.ID = @Id
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            
-                var queryCount = @" WITH Query as(
+
+            var queryCount = @" WITH Query as(
 						  SELECT DISTINCT PB.ID as Id,
 PB.PhoneNumber,
 PT.Name as PhoneTypeName
@@ -203,7 +205,7 @@ WHERE P.[ActiveStatusID] <> 3
 								 /**where**/
 								 
 								 ; ";
-                string query = $@"WITH Query as(
+            string query = $@"WITH Query as(
 							SELECT DISTINCT PB.ID as Id,
 PB.PhoneNumber,
 PT.Name as PhoneTypeName
@@ -228,7 +230,7 @@ WHERE  P.[ActiveStatusID] <> 3
                 var response = await multi.ReadAsync<GetPhoneBookQueryResult>();
                 return Result.Ok(response, request, count);
             }
-            
+
         }
     }
 

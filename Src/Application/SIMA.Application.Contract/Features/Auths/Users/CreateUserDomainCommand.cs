@@ -7,5 +7,5 @@ public class CreateUserDomainCommand : ICommand<Result<long>>
 {
     public long DomainId { get; set; }
 
-    public long UserId { get; set; }
+    //public long UserId { get; set; }
 }

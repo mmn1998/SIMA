@@ -40,9 +40,9 @@ public class PositionQueryRepository : IPositionQueryRepository
               WHERE P.[ActiveStatusID] <> 3 AND D.[ActiveStatusID] <> 3 AND C.[ActiveStatusID] <> 3 AND P.Id = @Id
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetPositionQueryResult>(query, new { Id });
-            if (result is null) throw new SimaResultException("10054",Messages.PositionNotFoundError);
-            if (result.IsDeleted) throw new SimaResultException("10035",Messages.PositionDeleteError);
-            if (result.IsDeactivated) throw new SimaResultException("10035",Messages.PositionDeleteError);
+            if (result is null) throw new SimaResultException(CodeMessges._100054Code, Messages.PositionNotFoundError);
+            if (result.IsDeleted) throw new SimaResultException(CodeMessges._100035Code, Messages.PositionDeleteError);
+            if (result.IsDeactivated) throw new SimaResultException(CodeMessges._100035Code, Messages.PositionDeleteError);
             return result;
         }
     }

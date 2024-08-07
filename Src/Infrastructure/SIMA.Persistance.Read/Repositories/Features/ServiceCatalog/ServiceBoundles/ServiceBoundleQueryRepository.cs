@@ -66,9 +66,11 @@ public class ServiceBoundleQueryRepository : IServiceBoundleQueryRepository
               ,ST.[Name]
               ,ST.[Code]
               ,ST.[ServiceCategoryId]
+              ,SC.[ServiceTypeId]
 	          ,A.[Name] ActiveStatus
           FROM [ServiceCatalog].[ServiceBoundle] ST
           INNER JOIN [Basic].[ActiveStatus] A ON ST.ActiveStatusId = A.ID
+          INNER JOIN [ServiceCatalog].[ServiceCategory] SC on SC.Id = ST.ServiceCategoryId
           WHERE ST.[Id] = @Id AND ST.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {

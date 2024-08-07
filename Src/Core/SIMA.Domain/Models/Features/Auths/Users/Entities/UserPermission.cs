@@ -29,6 +29,12 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities
         {
             return new UserPermission(arg);
         }
+
+        public async Task ChangeStatus(ActiveStatusEnum status)
+        {
+            ActiveStatusId = (long)status;
+        }
+
         public UserPermissionId Id { get; private set; }
 
         public UserId? UserId { get; private set; }

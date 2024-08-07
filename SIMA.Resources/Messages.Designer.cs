@@ -61,6 +61,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string _string {
+            get {
+                return ResourceManager.GetString("string", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شما مجاز به دسترسی به این بخش نمی باشید.
         /// </summary>
         public static string AccessDeny {
@@ -241,6 +250,33 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to مقدار زیر سامانه نمیتواند خالی باشد.
+        /// </summary>
+        public static string DomainIsNotNull {
+            get {
+                return ResourceManager.GetString("DomainIsNotNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to دانلود با خطا مواجه شد، فایل مورد نظر یافت نشد..
+        /// </summary>
+        public static string DownloadError {
+            get {
+                return ResourceManager.GetString("DownloadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تاریخ وارد شده باید بیشتر از تاریخ امروز باشد.
+        /// </summary>
+        public static string DueDateError {
+            get {
+                return ResourceManager.GetString("DueDateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to عملیات ثبت یا به روزرسانی در فرایند شما با خطا مواجه شده است..
         /// </summary>
         public static string ExecStoreProcedureError {
@@ -327,6 +363,24 @@ namespace SIMA.Resources {
         public static string FileUploadException {
             get {
                 return ResourceManager.GetString("FileUploadException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کالاها باید از نظر ویژگی و تنظیمات یکسان باشند..
+        /// </summary>
+        public static string GoodsConfigMustBeTheSame {
+            get {
+                return ResourceManager.GetString("GoodsConfigMustBeTheSame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to محصولی یافت نشد.
+        /// </summary>
+        public static string GoodsIsNull {
+            get {
+                return ResourceManager.GetString("GoodsIsNull", resourceCulture);
             }
         }
         
@@ -511,11 +565,38 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to کد ملی مورد نظر نا معتبر است..
+        /// </summary>
+        public static string NationalCodeIsNotUniqueError {
+            get {
+                return ResourceManager.GetString("NationalCodeIsNotUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to لطفا کلمه عبور جدید را وارد نمایید.
         /// </summary>
         public static string NewPasswordIsNull {
             get {
                 return ResourceManager.GetString("NewPasswordIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to عدم انطباق داده های فرایند..
+        /// </summary>
+        public static string NoConditionWasCorrect {
+            get {
+                return ResourceManager.GetString("NoConditionWasCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to وزن وارد شده در بازه های موجود یافت نشد..
+        /// </summary>
+        public static string NoMiddleIssueWeightFound {
+            get {
+                return ResourceManager.GetString("NoMiddleIssueWeightFound", resourceCulture);
             }
         }
         
@@ -1002,6 +1083,15 @@ namespace SIMA.Resources {
         public static string UserRoleDuplicateError {
             get {
                 return ResourceManager.GetString("UserRoleDuplicateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to بازیگر موردنظر اجازه دسترسی به همه کاربران را ندارد.
+        /// </summary>
+        public static string WorkFlowActorNotAccessForIsEveryOne {
+            get {
+                return ResourceManager.GetString("WorkFlowActorNotAccessForIsEveryOne", resourceCulture);
             }
         }
         

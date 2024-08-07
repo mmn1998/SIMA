@@ -247,7 +247,7 @@ Where M.ActiveStatusId != 3 and I.ActiveStatusId != 3 and W.ActiveStatusId != 3 
                 new { Id = request.MeetingId, IssueId = request.IssueId, userId = _simaIdentity.UserId,
                     RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
             {
-                response = multi.ReadAsync<GetCartableQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
+                response = multi.ReadAsync<GetCartableQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
                 response.IssueLinks = multi.ReadAsync<GetIssueLinkQueryResult>().GetAwaiter().GetResult().ToList();
                 response.IssueDocuments = multi.ReadAsync<GetIssueDocumentQueryResult>().GetAwaiter().GetResult().ToList();
                 response.IssueComments = multi.ReadAsync<GetIssueCommentQueryResult>().GetAwaiter().GetResult().ToList();

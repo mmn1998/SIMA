@@ -18,6 +18,7 @@ using SIMA.Application.Feaatures.Auths.Profiles.Mappers;
 using SIMA.Application.Feaatures.Auths.Roles.Mappers;
 using SIMA.Application.Feaatures.Auths.Staffs.Mappers;
 using SIMA.Application.Feaatures.Auths.SysConfigs.Mappers;
+using SIMA.Application.Feaatures.Auths.UIInputElements.Mappers;
 using SIMA.Application.Feaatures.Auths.Users.Mappers;
 using SIMA.Application.Feaatures.BCP.Consequences.Mappers;
 using SIMA.Application.Feaatures.BCP.HappeningPossiblities.Mappers;
@@ -110,6 +111,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new SysConfigMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new UserMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new FormMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new UIInputElementMapper());
                 #endregion
 
                 #region WorkFlows

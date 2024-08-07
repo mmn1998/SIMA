@@ -12,6 +12,17 @@ namespace SIMA.DomainService.Features.IssueManagement.Issue
             _issueRepository = issueRepository;
         }
 
+        public async Task<bool> CheckDueDate(DateTime dueDate)
+        {
+            bool result = true;
+
+            if (DateTime.Now >= dueDate)
+                result = false;
+
+            return result;
+
+        }
+
         public async Task<bool> IsCodeUnique(string code, long id)
         {
             return await _issueRepository.IsCodeUnique(code, id);

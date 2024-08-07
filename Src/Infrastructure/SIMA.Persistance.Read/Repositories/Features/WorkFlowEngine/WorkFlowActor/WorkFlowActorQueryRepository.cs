@@ -1,10 +1,8 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.WorkFlowEngine.Progress;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlowActor;
-using SIMA.Framework.Common.Helper;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -33,6 +31,7 @@ public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
           ,C.[Code]
           ,C.[WorkFlowId]
           ,C.[IsDirectManagerOfIssueCreator]
+          ,C.[IsEveryOne]
           ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
 		  ,A.[Name] ActiveStatus
@@ -112,6 +111,7 @@ Order By c.[CreatedAt] desc  ";
           ,C.[Code]
           ,C.[WorkFlowId]
           ,C.[IsDirectManagerOfIssueCreator]
+          ,C.[IsEveryOne]
           ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
       		  ,A.[Name] ActiveStatus
@@ -140,6 +140,7 @@ Order By c.[CreatedAt] desc  ";
           ,C.[Code]
           ,C.[WorkFlowId]
           ,C.[IsDirectManagerOfIssueCreator]
+          ,C.[IsEveryOne]
           ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
       		  ,A.[Name] ActiveStatus
@@ -173,4 +174,34 @@ Order By c.[CreatedAt] desc  ";
             }
         }
     }
+
+    public async Task<bool> CheckAccessToIsEveryOne(long workFlowActorId)
+    {
+        var result = false;
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+
+            var query = @" 
+						select WA.* from Project.WorkFlowActor WA 
+                        join Project.WorkFlowActorStep WAS on WA.Id = WAS.WorkFlowActorID 
+                        join Project.Step S on S.Id = WAS.StepID
+                        Join Project.Progress PS on PS.SourceId = WAS.StepID
+                        join  Project.WorkFlowActorStep WAST on WAST.StepID = PS.TargetId
+                        where WA.Id = @workFlowActorId and S.ActionTypeId = 9  and WA.ActiveStatusId != 3
+						; "
+            ;
+            using (var multi = await connection.QueryMultipleAsync(query , new { workFlowActorId = workFlowActorId }))
+            {
+
+                var response = await multi.ReadAsync<GetWorkFlowActorQueryResult>();
+                if(response  is not null) result = true;
+            }
+
+            return result;
+        }
+    }
+
 }
+
+

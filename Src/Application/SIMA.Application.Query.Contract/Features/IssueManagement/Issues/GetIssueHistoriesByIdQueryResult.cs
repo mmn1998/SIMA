@@ -1,4 +1,6 @@
-﻿namespace SIMA.Application.Query.Contract.Features.IssueManagement.Issues
+﻿using SIMA.Framework.Common.Helper;
+
+namespace SIMA.Application.Query.Contract.Features.IssueManagement.Issues
 {
     public class GetIssueHistoriesByIdQueryResult
     {
@@ -12,6 +14,7 @@
         public long PerformerUserId { get; set; }
         public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string? CreatedAtPersian => DateHelper.ToPersianDateTime(CreatedAt);
         public string CreatedBy { get; set; }
     }
 }

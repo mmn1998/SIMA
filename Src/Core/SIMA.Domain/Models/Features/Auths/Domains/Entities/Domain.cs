@@ -6,11 +6,12 @@ using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.Domains.Entities;
 
-public class Domain
+public class Domain : Entity
 {
     private Domain() { }
     private Domain(CreateDomainArg arg)

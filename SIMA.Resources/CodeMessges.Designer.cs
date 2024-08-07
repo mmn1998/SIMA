@@ -61,6 +61,357 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 100002.
+        /// </summary>
+        public static string _100002Code {
+            get {
+                return ResourceManager.GetString("100002Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100003.
+        /// </summary>
+        public static string _100003Code {
+            get {
+                return ResourceManager.GetString("100003Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100007.
+        /// </summary>
+        public static string _100007Code {
+            get {
+                return ResourceManager.GetString("100007Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100008.
+        /// </summary>
+        public static string _100008Code {
+            get {
+                return ResourceManager.GetString("100008Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100009.
+        /// </summary>
+        public static string _100009Code {
+            get {
+                return ResourceManager.GetString("100009Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100011.
+        /// </summary>
+        public static string _100011Code {
+            get {
+                return ResourceManager.GetString("100011Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100015.
+        /// </summary>
+        public static string _100015Code {
+            get {
+                return ResourceManager.GetString("100015Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100016.
+        /// </summary>
+        public static string _100016Code {
+            get {
+                return ResourceManager.GetString("100016Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100017.
+        /// </summary>
+        public static string _100017Code {
+            get {
+                return ResourceManager.GetString("100017Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100018.
+        /// </summary>
+        public static string _100018Code {
+            get {
+                return ResourceManager.GetString("100018Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100022.
+        /// </summary>
+        public static string _100022Code {
+            get {
+                return ResourceManager.GetString("100022Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100027.
+        /// </summary>
+        public static string _100027Code {
+            get {
+                return ResourceManager.GetString("100027Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100028.
+        /// </summary>
+        public static string _100028Code {
+            get {
+                return ResourceManager.GetString("100028Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100031.
+        /// </summary>
+        public static string _100031Code {
+            get {
+                return ResourceManager.GetString("100031Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100033.
+        /// </summary>
+        public static string _100033Code {
+            get {
+                return ResourceManager.GetString("100033Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100035.
+        /// </summary>
+        public static string _100035Code {
+            get {
+                return ResourceManager.GetString("100035Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100039.
+        /// </summary>
+        public static string _100039Code {
+            get {
+                return ResourceManager.GetString("100039Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100040.
+        /// </summary>
+        public static string _100040Code {
+            get {
+                return ResourceManager.GetString("100040Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100041.
+        /// </summary>
+        public static string _100041Code {
+            get {
+                return ResourceManager.GetString("100041Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100042.
+        /// </summary>
+        public static string _100042Code {
+            get {
+                return ResourceManager.GetString("100042Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100047.
+        /// </summary>
+        public static string _100047Code {
+            get {
+                return ResourceManager.GetString("100047Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100048.
+        /// </summary>
+        public static string _100048Code {
+            get {
+                return ResourceManager.GetString("100048Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100051.
+        /// </summary>
+        public static string _100051Code {
+            get {
+                return ResourceManager.GetString("100051Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100052.
+        /// </summary>
+        public static string _100052Code {
+            get {
+                return ResourceManager.GetString("100052Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100053.
+        /// </summary>
+        public static string _100053Code {
+            get {
+                return ResourceManager.GetString("100053Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100054.
+        /// </summary>
+        public static string _100054Code {
+            get {
+                return ResourceManager.GetString("100054Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100055.
+        /// </summary>
+        public static string _100055Code {
+            get {
+                return ResourceManager.GetString("100055Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100056.
+        /// </summary>
+        public static string _100056Code {
+            get {
+                return ResourceManager.GetString("100056Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100057.
+        /// </summary>
+        public static string _100057Code {
+            get {
+                return ResourceManager.GetString("100057Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100058.
+        /// </summary>
+        public static string _100058Code {
+            get {
+                return ResourceManager.GetString("100058Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100059.
+        /// </summary>
+        public static string _100059Code {
+            get {
+                return ResourceManager.GetString("100059Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100060.
+        /// </summary>
+        public static string _100060Code {
+            get {
+                return ResourceManager.GetString("100060Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100061.
+        /// </summary>
+        public static string _100061Code {
+            get {
+                return ResourceManager.GetString("100061Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100062.
+        /// </summary>
+        public static string _100062Code {
+            get {
+                return ResourceManager.GetString("100062Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100063.
+        /// </summary>
+        public static string _100063Code {
+            get {
+                return ResourceManager.GetString("100063Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100064.
+        /// </summary>
+        public static string _100064Code {
+            get {
+                return ResourceManager.GetString("100064Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100065.
+        /// </summary>
+        public static string _100065Code {
+            get {
+                return ResourceManager.GetString("100065Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100066.
+        /// </summary>
+        public static string _100066Code {
+            get {
+                return ResourceManager.GetString("100066Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100067.
+        /// </summary>
+        public static string _100067Code {
+            get {
+                return ResourceManager.GetString("100067Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 200.
         /// </summary>
         public static string _200Code {
@@ -75,6 +426,15 @@ namespace SIMA.Resources {
         public static string _400Code {
             get {
                 return ResourceManager.GetString("400Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 404.
+        /// </summary>
+        public static string _404Code {
+            get {
+                return ResourceManager.GetString("404Code", resourceCulture);
             }
         }
         

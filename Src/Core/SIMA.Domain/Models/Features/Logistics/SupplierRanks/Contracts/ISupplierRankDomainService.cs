@@ -6,5 +6,5 @@ namespace SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Contracts;
 public interface ISupplierRankDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, SupplierRankId? id = null);
-    Task<bool> IsOrderingUnique(string ordering, SupplierRankId? id = null);
+    Task<bool> IsOrderingUnique(float ordering, SupplierRankId? id = null);
 }

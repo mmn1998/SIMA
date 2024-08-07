@@ -61,9 +61,10 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     {
         try
         {
-            if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId)) throw new SimaResultException(CodeMessges._400Code, Messages.CreateIssueWithChechActorException);
+            if (!await _workFlowDomainService.CheckCreateIssueWithActor(request.CurrentWorkflowId))
+                throw new SimaResultException(CodeMessges._400Code, Messages.CreateIssueWithChechActorException);
 
-            var workflow = await _workFlowRepository.GetWorkflowInfoById(request.CurrentWorkflowId);
+            var workflow = await _workFlowQueryRepository.GetWorkflowInfoByIdAsync(request.CurrentWorkflowId);
             request.MainAggregateId = workflow.MainAggregateId;
             var arg = _mapper.Map<CreateIssueArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
@@ -93,11 +94,21 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
             historyArg.CreatedBy = _simaIdentity.UserId;
             var entity = await Issue.Create(arg, _service);
+            foreach (var issueLink in arg.IssueLinks)
+            {
+                issueLink.CreatedBy = _simaIdentity.UserId;
+            }
             await entity.AddIssueLink(arg.IssueLinks);
+            foreach (var issueDocument in arg.IssueDocument)
+            {
+                issueDocument.CreatedBy = _simaIdentity.UserId;
+            }
             await entity.AddIssueDocument(arg.IssueDocument);
+
             #region UpdateDocuments
 
             #endregion
+
             #region IssueHistory
             var history = _mapper.Map<CreateIssueHistoryArg>(request);
             history.CreatedBy = _simaIdentity.UserId;
@@ -107,6 +118,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             history.TargetStepId = workflow.TargetStepId;
             entity.AddHistory(history);
             #endregion
+
             entity.AddIssueChangeHistory(historyArg);
             await _repository.Add(entity);
             await _unitOfWork.SaveChangesAsync();
@@ -170,7 +182,7 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         nextStepModel.SystemParams.Add(new InputModel { Key = "CompanyId", Value = _simaIdentity.CompanyId.ToString() });
         nextStepModel.SystemParams.Add(new InputModel { Key = "SourceId", Value = issue.SourceId.ToString() });
 
-        var inputParam = request.InputParams.Select(it => new InputParamQueryModel
+        var inputParam = request.InputParams?.Select(it => new InputParamQueryModel
         {
             Id = it.Id,
             ParamName = it.ParamName,

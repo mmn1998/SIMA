@@ -48,24 +48,25 @@ public class SupplierRank : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
-        if (!await service.IsOrderingUnique(arg.Ordering)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
+        if (arg.Ordering.HasValue) if (!await service.IsOrderingUnique(arg.Ordering.Value)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
     }
     private async Task ModifyGuards(ModifySupplierRankArg arg, ISupplierRankDomainService service)
     {
         arg.NullCheck();
         arg.Name.NullCheck();
         arg.Code.NullCheck();
-
+        
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
-        if (!await service.IsOrderingUnique(arg.Ordering)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
+
+        if (arg.Ordering.HasValue) if (!await service.IsOrderingUnique(arg.Ordering.Value)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
     }
     #endregion
     public SupplierRankId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
-    public string? Ordering { get; private set; }
+    public float? Ordering { get; private set; }
     public string? IsRequireItConfirmation { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

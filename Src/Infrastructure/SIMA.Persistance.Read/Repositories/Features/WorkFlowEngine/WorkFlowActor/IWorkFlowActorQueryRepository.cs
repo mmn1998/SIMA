@@ -8,4 +8,5 @@ public interface IWorkFlowActorQueryRepository : IQueryRepository
 {
     Task<GetWorkFlowActorQueryResult> FindById(long id);
     Task<Result<IEnumerable<GetWorkFlowActorQueryResult>>> GetAll(GetAllWorkFlowActorsQuery request);
+    Task<bool> CheckAccessToIsEveryOne(long workFlowActorId);
 }

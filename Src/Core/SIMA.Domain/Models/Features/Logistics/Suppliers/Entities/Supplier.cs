@@ -1,5 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
-using SIMA.Domain.Models.Features.Logistics.Goodses.Args;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.Logistics.SupplierRanks.Entities;
 using SIMA.Domain.Models.Features.Logistics.SupplierRanks.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.Args;
@@ -9,7 +9,6 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
@@ -32,7 +31,7 @@ public class Supplier : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        
+
     }
     public static async Task<Supplier> Create(CreateSupplierArg arg, ISupplierDomainService service)
     {
@@ -103,4 +102,10 @@ public class Supplier : Entity, IAggregateRoot
     public ICollection<SupplierBlackListHistory> SupplierBlackListHistories => _supplierBlackListHistories;
     private List<CandidatedSupplier> _candidatedSuppliers = new();
     public ICollection<CandidatedSupplier> CandidatedSuppliers => _candidatedSuppliers;
+    private List<Asset> _assets = new();
+    public ICollection<Asset> Assets => _assets;
+    private List<ConfigurationItem> _configurationItems = new();
+    public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
+    private List<ConfigurationItem> _licensedConfigurationItems = new();
+    public ICollection<ConfigurationItem> LicensedConfigurationItems => _licensedConfigurationItems;
 }

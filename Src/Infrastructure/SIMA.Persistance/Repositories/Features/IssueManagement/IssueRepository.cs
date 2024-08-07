@@ -6,9 +6,11 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SIMA.Persistance.Repositories.Features.IssueManagement
@@ -55,7 +57,7 @@ namespace SIMA.Persistance.Repositories.Features.IssueManagement
             int count = orderedQuery.Count();
             if (count == 0)
             {
-                throw new InvalidOperationException("Sequence contains no elements.");
+                throw new SimaResultException(CodeMessges._100065Code, Messages.NoMiddleIssueWeightFound);
             }
 
             int middleIndex = count / 2;

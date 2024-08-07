@@ -7,7 +7,6 @@
         public string ActiveStatus { get; set; }
         public string DegreeName { get; set; }
         public string DegreeCode { get; set; }
-        public float Degree { get; set; }
         public string ImpactName { get; set; }
         public string ImpactCode { get; set; }
         public float Impact { get; set; }

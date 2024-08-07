@@ -4,6 +4,7 @@ using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.DMS.Documents;
+using SIMA.Resources;
 
 namespace SIMA.Application.Query.Features.DMS.Documents;
 
@@ -24,10 +25,11 @@ public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, Get
         var fileContent = await _fileService.Download(documentResult.FileAddress);
         if (fileContent == null)
         {
-            throw new SimaResultException("404", "file not found");
+            throw new SimaResultException(CodeMessges._404Code, Messages.DownloadError);
         }
         response.FileContent = fileContent;
         response.Extension = documentResult.Extension;
+        response.Name = documentResult.Name;
         return response;
     }
 

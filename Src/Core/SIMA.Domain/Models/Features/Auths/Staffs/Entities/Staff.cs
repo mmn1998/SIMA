@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.Positions.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
@@ -77,7 +79,7 @@ public class Staff : Entity
 
         if (arg.PositionId.HasValue && arg.ProfileId.HasValue)
         {
-            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw new SimaResultException("10011",Messages.PersonHasDuplicatePositionError);
+            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw new SimaResultException(CodeMessges._100011Code, Messages.PersonHasDuplicatePositionError);
             if (!await service.IsStaffSatisfied(arg.ProfileId.Value, arg.PositionId.Value)) throw StaffExceptions.StaffNotSatisfiedException;
         }
     }
@@ -90,7 +92,7 @@ public class Staff : Entity
 
         if (arg.PositionId.HasValue && arg.ProfileId.HasValue)
         {
-            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw new SimaResultException("10011",Messages.PersonHasDuplicatePositionError);
+            if (!await service.IsPositionDuplicated(arg.PositionId.Value, arg.ProfileId.Value)) throw new SimaResultException(CodeMessges._100011Code, Messages.PersonHasDuplicatePositionError);
             if (!await service.IsStaffSatisfied(arg.ProfileId.Value, arg.PositionId.Value)) throw StaffExceptions.StaffNotSatisfiedException;
         }
     }
@@ -139,21 +141,21 @@ public class Staff : Entity
 
     private List<CriticalActivity> _criticalActivityTechnicalSupervisors => new();
     public ICollection<CriticalActivity> CriticalActivityTechnicalSupervisors => _criticalActivityTechnicalSupervisors;
-    
+
     private List<CriticalActivityAssignStaff> _criticalActivityAssignStaffs => new();
     public ICollection<CriticalActivityAssignStaff> CriticalActivityAssignStaffs => _criticalActivityAssignStaffs;
 
     private List<ServiceAssignStaff> _serviceAssignStaffes = new();
     public ICollection<ServiceAssignStaff> ServiceAssignStaffes => _serviceAssignStaffes;
-    
-    
-    
+
+
+
     private List<Service> _serviceTechnicalResponsibles = new();
     public ICollection<Service> ServiceTechnicalResponsibles => _serviceTechnicalResponsibles;
     private List<Service> _serviceBusinessResponsibles = new();
-    public ICollection<Service> ServiceTBusinessResponsibles => _serviceBusinessResponsibles;  
+    public ICollection<Service> ServiceTBusinessResponsibles => _serviceBusinessResponsibles;
     private List<Service> _serviceTechnicalSupports = new();
-    public ICollection<Service> ServiceTechnicalSupports => _serviceTechnicalSupports;  
+    public ICollection<Service> ServiceTechnicalSupports => _serviceTechnicalSupports;
     private List<Service> _serviceTechnicalSupervisors = new();
     public ICollection<Service> ServiceTechnicalSupervisors => _serviceTechnicalSupervisors;
     private List<Api> _apis = new();
@@ -162,7 +164,7 @@ public class Staff : Entity
     public ICollection<ApiSupportTeam> ApiSupportTeams => _apiSupportTeams;
     private List<BusinessImpactAnalysisAnnouncement> _businessImpactAnalysisAnnouncements => new();
     public ICollection<BusinessImpactAnalysisAnnouncement> BusinessImpactAnalysisAnnouncements => _businessImpactAnalysisAnnouncements;
-    
+
     private List<BusinessContinuityPlan> _businessContinuityPlanOwners => new();
     public ICollection<BusinessContinuityPlan> BusinessContinuityPlanOwners => _businessContinuityPlanOwners;
     private List<BusinessContinuityPlan> _businessContinuityPlanExecutiveResponsibles => new();
@@ -177,6 +179,18 @@ public class Staff : Entity
     public ICollection<BusinessContinuityStrategyStaff> BusinessContinuityStrategyStaff => _businessContinuityStrategyStaff;
     private List<BusinessImpactAnalysisStaff> _businessImpactAnalysisStaff => new();
     public ICollection<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaff => _businessImpactAnalysisStaff;
+    private List<Asset> _assetOwners => new();
+    public ICollection<Asset> AssetOwners => _assetOwners;
+    private List<ConfigurationItem> _configurationItemOwners => new();
+    public ICollection<ConfigurationItem> ConfigurationItemOwners => _configurationItemOwners;
+    private List<AssetChangeOwnerHistory> _fromAssetChangeOwnerHistories => new();
+    public ICollection<AssetChangeOwnerHistory> FromAssetChangeOwnerHistories => _fromAssetChangeOwnerHistories;
+    private List<AssetChangeOwnerHistory> _toAssetChangeOwnerHistories => new();
+    public ICollection<AssetChangeOwnerHistory> ToAssetChangeOwnerHistories => _toAssetChangeOwnerHistories;
+    private List<ConfigurationItemChangeOwnerHistory> _toConfigurationItemChangeOwnerHistories => new();
+    public ICollection<ConfigurationItemChangeOwnerHistory> ToConfigurationItemChangeOwnerHistories => _toConfigurationItemChangeOwnerHistories;
+    private List<ConfigurationItemChangeOwnerHistory> _fromConfigurationItemChangeOwnerHistories => new();
+    public ICollection<ConfigurationItemChangeOwnerHistory> FromConfigurationItemChangeOwnerHistories => _fromConfigurationItemChangeOwnerHistories;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

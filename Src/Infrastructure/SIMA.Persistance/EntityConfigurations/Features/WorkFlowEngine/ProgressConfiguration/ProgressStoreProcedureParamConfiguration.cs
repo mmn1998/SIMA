@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.DataTypes.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
@@ -27,7 +28,8 @@ public class ProgressStoreProcedureParamConfiguration : IEntityTypeConfiguration
             .IsConcurrencyToken();
         entity.Property(e => e.IsRequired).HasMaxLength(1);
         entity.Property(e => e.IsSystemParam).HasMaxLength(1).HasColumnType("char");
-        entity.Property(e => e.SystemParamName).HasColumnType("varchar");
+        entity.Property(e => e.SystemParamName).HasColumnType("varchar(MAX)");
+        entity.Property(e => e.JsonFormat).HasColumnType("varchar(MAX)");
         entity.Property(e => e.Name).HasMaxLength(200);
 
         entity.Property(x => x.ProgressStoreProcedureId)
@@ -46,6 +48,17 @@ public class ProgressStoreProcedureParamConfiguration : IEntityTypeConfiguration
         ;
         entity.HasOne(d => d.DataType).WithMany(p => p.ProgressStoreProcedureParams)
                 .HasForeignKey(d => d.DataTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        entity.HasOne(d => d.UiInputElement).WithMany(p => p.ProgressStoreProcedureParams)
+                .HasForeignKey(d => d.UiInputElementId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.ApiMethodActionId)
+           .HasConversion(
+           v => v.Value,
+           v => new ApiMethodActionId(v));
+        entity.HasOne(d => d.ApiMethodAction).WithMany(p => p.ProgressStoreProcedureParams)
+                .HasForeignKey(d => d.ApiMethodActionId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

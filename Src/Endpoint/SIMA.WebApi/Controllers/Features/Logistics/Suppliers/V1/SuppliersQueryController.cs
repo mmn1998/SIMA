@@ -26,6 +26,12 @@ public class SuppliersQueryController : ControllerBase
         var query = new GetSupplierQuery { Id = id };
         return await _mediator.Send(query);
     }
+    [HttpPost("GetAllOrderedNotInBlack")]
+    [SimaAuthorize(Permissions.SuppliersGetAll)]
+    public async Task<Result> Get([FromBody] GetAllOrderedNotInBlackListSuppliersQuery query)
+    {
+        return await _mediator.Send(query);
+    }
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.SuppliersGetAll)]
     public async Task<Result> Get([FromBody] GetAllSuppliersQuery query)

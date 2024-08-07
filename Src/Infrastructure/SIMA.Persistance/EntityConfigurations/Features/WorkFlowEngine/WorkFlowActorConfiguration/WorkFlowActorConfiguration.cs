@@ -38,7 +38,8 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                .WithMany(x => x.WorkFlowActors)
                .HasForeignKey(x => x.WorkFlowId);
             entity.Property(e => e.IsDirectManagerOfIssueCreator)
-               .HasMaxLength(1);
+               .HasColumnType("char(1)");
+            entity.Property(e => e.IsEveryOne).HasColumnType("char(1)");
 
         }
     }
@@ -63,6 +64,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                 .HasConversion(
                 x=>x.Value,
                 x=> new GroupId(x));
+
             entity.Property(e => e.ModifiedAt)
                 .IsRowVersion()
                 .IsConcurrencyToken();

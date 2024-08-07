@@ -6,6 +6,7 @@
         public long Id { get; set; }
         public string? Name { get; set; }
         public string? CompleteName { get; set; }
+        public string? DisplayName { get; set; }
         public long? WorkFlowId { get; set; }
         public long FormId { get; set; }
         public byte[]? ModifiedAt { get; set; }

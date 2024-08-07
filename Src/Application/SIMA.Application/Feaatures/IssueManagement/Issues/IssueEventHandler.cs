@@ -6,14 +6,13 @@ using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Events;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Events;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Events;
-using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Interfaces;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
-using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Security;
-using SIMA.Persistance;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.IssueWeightCategories;
+using SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues
 {
@@ -30,13 +29,17 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
         private readonly IMapper _mapper;
         private readonly IIssueDomainService _service;
         private readonly IWorkFlowRepository _workFlowRepository;
+        private readonly IWorkFlowQueryRepository _workFlowQueryRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly ISimaIdentity _simaIdentity;
         private readonly IIssueWeightCategoryQueryRepository _issueWeightCategoryRepository;
+        private readonly IWorkFlowDomainService _workFlowDomainService;
 
         public IssueEventHandler(IIssueRepository repository,
           IMapper mapper, IIssueDomainService service,
-          IWorkFlowRepository workFlowRepository, IProjectRepository projectRepository, ISimaIdentity simaIdentity, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository)
+          IWorkFlowRepository workFlowRepository, IProjectRepository projectRepository,
+          ISimaIdentity simaIdentity, IIssueWeightCategoryQueryRepository issueWeightCategoryRepository ,
+          IWorkFlowQueryRepository workFlowQueryRepository, IWorkFlowDomainService workFlowDomainService)
         {
             _repository = repository;
             _mapper = mapper;
@@ -45,6 +48,8 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
             _projectRepository = projectRepository;
             _simaIdentity = simaIdentity;
             _issueWeightCategoryRepository = issueWeightCategoryRepository;
+            _workFlowQueryRepository = workFlowQueryRepository;
+            _workFlowDomainService = workFlowDomainService;
         }
 
         public async Task Handle(MeetingCreatedEvent notification, CancellationToken cancellationToken)
@@ -68,7 +73,7 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
                 arg.IssueTypeId = issueTypeId.Result;// 4131511500;
                 arg.IssueWeightCategoryd = issueweight.Result.Item1;
                 arg.Weight = issueweight.Result.Item2;
-                arg.DueDate = DateTime.Now.AddDays(30);
+                //arg.DueDate = DateTime.Now.AddDays(30);
                 #region GenerateCode
 
                 var project = await _projectRepository.GetById(workflow.ProjectId);
@@ -132,7 +137,7 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
                 arg.IssueTypeId = issueTypeId.Result;// 4131511500;
                 arg.IssueWeightCategoryd = issueweight.Result.Item1;
                 arg.Weight = issueweight.Result.Item2;
-                arg.DueDate = DateTime.Now.AddDays(30);
+                //arg.DueDate = DateTime.Now.AddDays(30);
                 #region GenerateCode
 
                 var project = await _projectRepository.GetById(workflow.ProjectId);
@@ -180,9 +185,10 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues
             {
                 var workFlowEnity = await _workFlowRepository.GetWorkFlowByAggregateId(notification.MainAggregateType);
 
-                //if (!await _workFlowDomainService.CheckCreateIssueWithActor(workFlowEnity.Id.Value)) throw IssueExceptions.CreateIssueWithChechActorException;
+                if (!await _workFlowDomainService.CheckCreateIssueWithActor(workFlowEnity.Id.Value)) 
+                    throw new SimaResultException(CodeMessges._400Code , Messages.CreateIssueWithChechActorException);
 
-                var workflow = await _workFlowRepository.GetWorkflowInfoById(workFlowEnity.Id.Value);
+                var workflow = await _workFlowQueryRepository.GetWorkflowInfoByIdAsync(workFlowEnity.Id.Value);
                 var issuePriorityId = await _repository.GetHighestPriority();
                 var issueTypeId = await _repository.GetIssueTypeRequest();
                 var issueweight = await _repository.GetIssueMiddleWeight();

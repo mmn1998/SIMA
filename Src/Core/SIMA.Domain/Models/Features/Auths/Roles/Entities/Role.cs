@@ -5,6 +5,10 @@ using SIMA.Domain.Models.Features.Auths.Roles.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Roles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
+using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
@@ -12,6 +16,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using static Dapper.SqlMapper;
 
 namespace SIMA.Domain.Models.Features.Auths.Roles.Entities;
 
@@ -58,27 +63,57 @@ public class Role : Entity
         if (await service.IsRoleSatisfied(arg.Code, arg.EnglishKey, arg.Id)) throw RoleExceptions.RoleNotSatisfiedException;
     }
     #endregion
-    public async Task AddRolePermission(CreateRolePermissionArg arg)
+    //public async Task AddRolePermission(CreateRolePermissionArg arg)
+    //{
+    //    if (_rolePermissions.Any(rp => rp.PermissionId == new PermissionId(arg.PermissionId) && rp.RoleId == new RoleId(arg.RoleId)))
+    //    {
+    //        throw new SimaResultException(CodeMessges._100027Code, Messages.RolePermoissionDuplicateError);
+    //    }
+    //    var entity = await RolePermission.Create(arg);
+    //    _rolePermissions.Add(entity);
+    //}
+    //public async Task AddRolePermissions(List<CreateRolePermissionArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddRolePermission(arg);
+    //    }
+    //}
+
+    public async Task AddRolePermission(List<CreateRolePermissionArg> request, long roleId)
     {
-        if (_rolePermissions.Any(rp => rp.PermissionId == new PermissionId(arg.PermissionId) && rp.RoleId == new RoleId(arg.RoleId)))
+        var previousRoles = _rolePermissions.Where(x => x.RoleId == new RoleId(roleId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addPermission = request.Where(x => !previousRoles.Any(c => c.PermissionId.Value == x.PermissionId)).ToList();
+        var deleteMember = previousRoles.Where(x => !request.Any(c => c.PermissionId == x.PermissionId.Value)).ToList();
+
+
+        foreach (var permission in addPermission)
         {
-            throw new SimaResultException("10027",Messages.RolePermoissionDuplicateError);
+            var entity = _rolePermissions.Where(x => (x.PermissionId == new PermissionId(permission.PermissionId) && x.RoleId == new RoleId(roleId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await RolePermission.Create(permission);
+                _rolePermissions.Add(entity);
+            }
         }
-        var entity = await RolePermission.Create(arg);
-        _rolePermissions.Add(entity);
-    }
-    public async Task AddRolePermissions(List<CreateRolePermissionArg> args)
-    {
-        foreach (var arg in args)
+
+        foreach (var permission in deleteMember)
         {
-            await AddRolePermission(arg);
+            permission.Delete((long)request[0].CreatedBy);
         }
     }
+
+
     public async Task ModifyRolePermission(ModifyRolePermissionArg arg)
     {
         if (_rolePermissions.Any(rp => rp.PermissionId == new PermissionId(arg.PermissionId) && rp.RoleId == new RoleId(arg.RoleId)))
         {
-            throw new SimaResultException("10027",Messages.RolePermoissionDuplicateError);
+            throw new SimaResultException(CodeMessges._100027Code, Messages.RolePermoissionDuplicateError);
         }
         var rolePermission = _rolePermissions.FirstOrDefault(rp => rp.Id == new RolePermissionId(arg.Id));
         rolePermission.NullCheck();

@@ -7,9 +7,12 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Modify;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
@@ -44,12 +47,15 @@ public class WorkFlowActor : Entity
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedBy = arg.UserId;
     }
-    public void Modify(ModifyWorkFlowActorArg arg)
+    public async Task Modify(ModifyWorkFlowActorArg arg , IWorkFlowActorDomainService service )
     {
+        await ModifyGurd(arg, service);
+
         Code = arg.Code;
         Name = arg.Name;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        IsEveryOne = arg.IsEveryOne;
         IsDirectManagerOfIssueCreator = arg.IsDirectManagerOfIssueCreator;
     }
 
@@ -214,6 +220,7 @@ public class WorkFlowActor : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public string? IsDirectManagerOfIssueCreator { get; private set; }
+    public string? IsEveryOne { get; private set; }
     public string BpmnId { get; private set; }
     public long? ModifiedBy { get; set; }
     public WorkFlow.Entities.WorkFlow WorkFlow { get; private set; }
@@ -229,5 +236,16 @@ public class WorkFlowActor : Entity
 
     private List<IssueApproval> _issueApprovals = new();
     public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
+
+
+    private async Task ModifyGurd(ModifyWorkFlowActorArg arg, IWorkFlowActorDomainService service)
+    {
+        if(arg.IsEveryOne == "1")
+        {
+            var check = await service.IsAccessToEveryOne(arg.Id);
+            if (!check) throw new SimaResultException(CodeMessges._400Code, Messages.WorkFlowActorNotAccessForIsEveryOne);
+        }
+        
+    }
 
 }

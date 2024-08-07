@@ -1,4 +1,5 @@
-﻿using SIMA.Application.Query.Contract.Features.Logistics.LogisticsRequests;
+﻿using SIMA.Application.Query.Contract.Features.Logistics.Cartables;
+using SIMA.Application.Query.Contract.Features.Logistics.LogisticsRequests;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.Logistics.LogisticsRequest;
@@ -6,7 +7,9 @@ using SIMA.Persistance.Read.Repositories.Features.Logistics.LogisticsRequest;
 namespace SIMA.Application.Query.Features.Logistics.LogisticsRequests
 {
     public class LogisticsRequestsQueryHandler : IQueryHandler<GetLogisticRequestsQuery, Result<GetLogisticRequestsQueryResult>>,
-    IQueryHandler<GetAllLogisticsRequestsQuery, Result<IEnumerable<GetLogisticRequestsQueryResult>>>
+        IQueryHandler<GetLogesticRequestGoodsQuery, Result<IEnumerable<GetLogesticRequestGoodsQueryResult>>>
+
+
     {
         private readonly ILogisticRequestQueryRepository _repository;
 
@@ -20,9 +23,10 @@ namespace SIMA.Application.Query.Features.Logistics.LogisticsRequests
             return Result.Ok(result);
         }
 
-        public async Task<Result<IEnumerable<GetLogisticRequestsQueryResult>>> Handle(GetAllLogisticsRequestsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetLogesticRequestGoodsQueryResult>>> Handle(GetLogesticRequestGoodsQuery request, CancellationToken cancellationToken)
         {
-            return await _repository.GetAll(request);
+            var result = await _repository.GetLogesticRequestGoods(request.Id);
+            return result;
         }
     }
 }

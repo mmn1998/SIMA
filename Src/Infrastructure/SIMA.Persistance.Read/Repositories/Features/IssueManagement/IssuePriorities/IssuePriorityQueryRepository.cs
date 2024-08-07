@@ -24,36 +24,38 @@ public class IssuePriorityQueryRepository : IIssuePriorityQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-           
+            request.Sorts = new List<SortModel>
+         {
+            new SortModel{Key="Ordering",Type="asc"}
+         };
                 string queryCount = @"   WITH Query as(
 						   SELECT DISTINCT P.[Id]
-       ,P.[Name]
-       ,P.[Code]
-       ,P.[Ordering]
-       ,P.[ActiveStatusId]
-       , S.[Name] as ActiveStatus
-       ,p.[CreatedAt]
-   FROM [IssueManagement].[IssuePriority] P
-   INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-   WHERE P.ActiveStatusId <> 3  
+                               ,P.[Name]
+                               ,P.[Code]
+                               ,P.[Ordering]
+                               ,P.[ActiveStatusId]
+                               ,S.[Name] as ActiveStatus
+                               ,p.[CreatedAt]
+                           FROM [IssueManagement].[IssuePriority] P
+                           INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                           WHERE P.ActiveStatusId <> 3  
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
-								 
 								 ; ";
 
                 string query = $@" WITH Query as(
 							SELECT DISTINCT P.[Id]
-       ,P.[Name]
-       ,P.[Code]
-       ,P.[Ordering]
-       ,P.[ActiveStatusId]
-       , S.[Name] as ActiveStatus
-       ,p.[CreatedAt]
-   FROM [IssueManagement].[IssuePriority] P
-   INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
-   WHERE P.ActiveStatusId <> 3  
-							)
+                               ,P.[Name]
+                               ,P.[Code]
+                               ,P.[Ordering]
+                               ,P.[ActiveStatusId]
+                               , S.[Name] as ActiveStatus
+                               ,p.[CreatedAt]
+                           FROM [IssueManagement].[IssuePriority] P
+                           INNER JOIN [Basic].[ActiveStatus] S on S.ID = P.ActiveStatusId
+                           WHERE P.ActiveStatusId <> 3  
+							                        )
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/

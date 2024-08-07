@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Args;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;

@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
+﻿using SIMA.Domain.Models.Features.Logistics.LogisticsRequestGoodss.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
 using SIMA.Framework.Core.Entities;
@@ -19,4 +20,8 @@ public class CandidatedSupplier : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+    private List<RequestInquiry> _requestInquiries = new();
+    public ICollection<RequestInquiry> RequestInquiries => _requestInquiries;
+
 }

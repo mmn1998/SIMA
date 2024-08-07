@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
@@ -196,7 +198,7 @@ public class Issue : Entity
     public int Weight { get; private set; }
     public DateTime IssueDate { get; private set; }
     public string? Description { get; private set; }
-    public DateTime DueDate { get; private set; }
+    public DateTime? DueDate { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -257,6 +259,10 @@ public class Issue : Entity
 
     private List<IssueApproval> _issueApprovals = new();
     public ICollection<IssueApproval> IssueApprovals => _issueApprovals;
+    private List<AssetIssue> _assetIssues = new();
+    public ICollection<AssetIssue> AssetIssues => _assetIssues;
+    private List<ConfigurationItemIssue> _configurationItemIssues = new();
+    public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;
 
 
     #region Gaurds
@@ -266,6 +272,12 @@ public class Issue : Entity
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+
+        if (arg.DueDate != null)
+        {
+            var checkDuDate = await service.CheckDueDate(arg.DueDate);
+            if (!checkDuDate) throw new SimaResultException(CodeMessges._400Code, Messages.DueDateError);
+        }
 
     }
     private async Task ModifyGuards(ModifyIssueArg arg, IIssueDomainService service)

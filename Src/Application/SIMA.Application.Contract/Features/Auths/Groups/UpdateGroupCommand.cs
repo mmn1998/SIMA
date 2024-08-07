@@ -9,4 +9,6 @@ public class UpdateGroupCommand : ICommand<Result<long>>
     public string Name { get; set; }
     public long ActiveStatusId { get; set; }
     public string Code { get; set; }
+    public List<CreateGroupUserCommand>? UserGroups { get; set; }
+    public List<CreateGroupPermissionCommand>? GroupPermissions { get; set; }
 }

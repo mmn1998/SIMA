@@ -75,7 +75,7 @@ public class BpmsMapper : Profile
             {
                 foreach (TLane lane in laneSet.Children)
                 {
-                    if (lane.ChildLaneSet is not null)
+                    if (lane.ChildLaneSet is not null && lane.ChildLaneSet.Lane.Count != 0)
                     {
                         foreach (var item in lane.ChildLaneSet.Lane)
                         {
@@ -94,7 +94,7 @@ public class BpmsMapper : Profile
                                     foreach (var flowId in child.FlowNodeRef)
                                     {
                                         var step = steps.GetValueOrDefault(flowId);
-                                        var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id , actor.BpmnId);
+                                        var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id, actor.BpmnId);
                                         if (existActor != null)
                                         {
                                             var existActorStep = existActor.WorkFlowActorSteps.FirstOrDefault(x => x.BpmnId == flowId);
@@ -120,7 +120,7 @@ public class BpmsMapper : Profile
                                 foreach (var flowId in item.FlowNodeRef)
                                 {
                                     var step = steps.GetValueOrDefault(flowId);
-                                    var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id , actor.BpmnId);
+                                    var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id, actor.BpmnId);
                                     if (existActor != null)
                                     {
                                         var existActorStep = existActor.WorkFlowActorSteps.FirstOrDefault(x => x.BpmnId == flowId);
@@ -224,7 +224,7 @@ public class BpmsMapper : Profile
             {
                 foreach (TLane lane in laneSet.Children)
                 {
-                    if (lane.ChildLaneSet is not null)
+                    if (lane.ChildLaneSet is not null && lane.ChildLaneSet.Lane.Count != 0)
                     {
                         foreach (var item in lane.ChildLaneSet.Lane)
                         {
@@ -242,7 +242,7 @@ public class BpmsMapper : Profile
                                             step.CompleteName = child.Name + " - " + step.Name + " - " + counter;
                                             counter++;
                                         }
-                                        var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id , actor.BpmnId);
+                                        var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id, actor.BpmnId);
                                         step.ActorStepArgs.Add(workflowStepArg);
                                     }
                                 }
@@ -259,7 +259,7 @@ public class BpmsMapper : Profile
                                         step.CompleteName = item.Name + " - " + step.Name + " - " + counter;
                                         counter++;
                                     }
-                                    var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id , actor.BpmnId);
+                                    var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id, actor.BpmnId);
                                     step.ActorStepArgs.Add(workflowStepArg);
                                 }
                             }
@@ -279,7 +279,7 @@ public class BpmsMapper : Profile
                                 step.CompleteName = lane.Name + " - " + step.Name + " - " + counter;
                                 counter++;
                             }
-                            var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id , actor.BpmnId);
+                            var workflowStepArg = AddActorStep(flowId, step.Id, actor.Id, actor.BpmnId);
                             step.ActorStepArgs.Add(workflowStepArg);
                         }
                     }
@@ -425,8 +425,10 @@ public class BpmsMapper : Profile
             progressArg.CreatedAt = DateTime.Now;
             progressArg.Description = sequence.Name;
 
-            if (step.ActionTypeId != 6 && string.IsNullOrEmpty(sequence.Name))
+            if (string.IsNullOrEmpty(sequence.Name))
                 progressArg.Name = "تایید";
+
+            
 
             progressArg.BpmnId = sequence.Id;
             progressArg.ActiveStatusId = (long)ActiveStatusEnum.Active;
@@ -553,7 +555,7 @@ public class BpmsMapper : Profile
         return result;
     }
 
-    private static CreateWorkFlowActorStepArg AddActorStep(string flowId, long stepId, long actorId , string actorBpmnId)
+    private static CreateWorkFlowActorStepArg AddActorStep(string flowId, long stepId, long actorId, string actorBpmnId)
     {
         var workflowStepArg = new CreateWorkFlowActorStepArg
         {

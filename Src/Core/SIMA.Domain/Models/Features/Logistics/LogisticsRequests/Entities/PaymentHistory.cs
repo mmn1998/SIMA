@@ -19,6 +19,7 @@ public class PaymentHistory : Entity
     public virtual PaymentCommand PaymentCommand { get; private set; }
     public PaymentTypeId PaymentTypeId { get; private set; }
     public virtual PaymentType PaymentType { get; private set; }
+    public double? PaymentValue { get;  private set; }
     public string? PaymentNumber { get; private set; }
     public string? IsPrePayment { get; private set; }
     public string? Description { get; private set; }

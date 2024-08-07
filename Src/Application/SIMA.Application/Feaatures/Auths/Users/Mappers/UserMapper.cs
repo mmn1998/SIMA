@@ -20,6 +20,7 @@ public class UserMapper : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
             .ForMember(x => x.IsFirstLogin, opt => opt.MapFrom(src => "1"))
+            .ForMember(x => x.IsLocked, opt => opt.MapFrom(src => "0"))
             ////.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
 

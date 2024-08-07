@@ -21,7 +21,7 @@ public class PositionRepository : Repository<Position>, IPositionRepository
     public async Task<Position> GetById(long id)
     {
         var entity = await _context.Positions.FirstOrDefaultAsync(x => x.Id == new PositionId(id));
-        if (entity is null) throw new SimaResultException("10054",Messages.PositionNotFoundError);
+        if (entity is null) throw new SimaResultException(CodeMessges._100054Code, Messages.PositionNotFoundError);
         return entity;
     }
 }

@@ -36,7 +36,7 @@ public class LocationTypeQueryRepository : ILocationTypeQueryRepository
                   join [Basic].[ActiveStatus] A on A.Id = LT.ActiveStatusID
                   WHERE LT.[ActiveStatusID] <> 3 AND LT.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetLocationTypeQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10059", Messages.LocationTypeNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100059Code, Messages.LocationTypeNotFoundError);
             return result;
         }
     }

@@ -187,6 +187,15 @@
     <value>دپارتمان مورد نظر یافت نشد.</value>
     <comment>10053</comment>
   </data>
+  <data name="DomainIsNotNull" xml:space="preserve">
+    <value>مقدار زیر سامانه نمیتواند خالی باشد</value>
+  </data>
+  <data name="DownloadError" xml:space="preserve">
+    <value>دانلود با خطا مواجه شد، فایل مورد نظر یافت نشد.</value>
+  </data>
+  <data name="DueDateError" xml:space="preserve">
+    <value>تاریخ وارد شده باید بیشتر از تاریخ امروز باشد</value>
+  </data>
   <data name="ExecStoreProcedureError" xml:space="preserve">
     <value>عملیات ثبت یا به روزرسانی در فرایند شما با خطا مواجه شده است.</value>
   </data>
@@ -223,6 +232,12 @@
   <data name="FileUploadException" xml:space="preserve">
     <value>بارگذاری فایل با خطا مواجه شد.لطفا دوباره سعی کنید</value>
     <comment>500</comment>
+  </data>
+  <data name="GoodsConfigMustBeTheSame" xml:space="preserve">
+    <value>کالاها باید از نظر ویژگی و تنظیمات یکسان باشند.</value>
+  </data>
+  <data name="GoodsIsNull" xml:space="preserve">
+    <value>محصولی یافت نشد</value>
   </data>
   <data name="GroupActorDuplicateError" xml:space="preserve">
     <value>گروه مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است.</value>
@@ -297,8 +312,18 @@
     <value>کد ملی نا معتبر است .</value>
     <comment>10007</comment>
   </data>
+  <data name="NationalCodeIsNotUniqueError" xml:space="preserve">
+    <value>کد ملی مورد نظر نا معتبر است.</value>
+    <comment>100067</comment>
+  </data>
   <data name="NewPasswordIsNull" xml:space="preserve">
     <value>لطفا کلمه عبور جدید را وارد نمایید</value>
+  </data>
+  <data name="NoConditionWasCorrect" xml:space="preserve">
+    <value>عدم انطباق داده های فرایند.</value>
+  </data>
+  <data name="NoMiddleIssueWeightFound" xml:space="preserve">
+    <value>وزن وارد شده در بازه های موجود یافت نشد.</value>
   </data>
   <data name="NotAllowtoChangePassword" xml:space="preserve">
     <value>در این بازه زمانی شما اجازه تغییر کلمه عبور را ندارید</value>
@@ -428,6 +453,9 @@
   <data name="StepNotAllowedAddApproval" xml:space="preserve">
     <value>برای این گام امکان افزودن گزینه پذیرش وجود ندارد</value>
   </data>
+  <data name="string" xml:space="preserve">
+    <value />
+  </data>
   <data name="TimeIsOverError" xml:space="preserve">
     <value>زمان اقدام به پایان رسید است.</value>
     <comment>10019</comment>
@@ -498,6 +526,9 @@
   <data name="UserRoleDuplicateError" xml:space="preserve">
     <value>کاربر از پیش دارای این نقش می باشد</value>
     <comment>10017</comment>
+  </data>
+  <data name="WorkFlowActorNotAccessForIsEveryOne" xml:space="preserve">
+    <value>بازیگر موردنظر اجازه دسترسی به همه کاربران را ندارد</value>
   </data>
   <data name="WorkFlowBpmnIsChangedError" xml:space="preserve">
     <value>نمودار جدید جریان کاری با ساختار نمودار قبلی همخوانی ندارد.</value>

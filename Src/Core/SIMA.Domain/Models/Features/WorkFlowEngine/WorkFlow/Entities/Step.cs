@@ -1,16 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Users.Entities;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.ValueObjects;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -54,6 +48,7 @@ public class Step : Entity
         //{
         //    StateId = new StateId((long)arg.StateId);
         //}
+        UIPropertyBoxTitle = arg.UIPropertyBoxTitle;
         ModifiedBy = arg.UserId;
         var allBmpnIds = arg.ActorStepArgs.Select(x => x.BpmnId);
 
@@ -81,6 +76,7 @@ public class Step : Entity
         HasDocument = arg.HasDocument;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        DisplayName =arg.DisplayName;
         FormId = new FormId(arg.FormId).Value != 0 ? new FormId(arg.FormId) : null;
     }
     public static Step New(StepArg arg)
@@ -170,6 +166,8 @@ public class Step : Entity
     public string? Name { get; private set; }
     public string? CompleteName { get; private set; }
     public string? HasDocument { get; private set; }
+    public string? DisplayName { get; private set; }
+    public string? UIPropertyBoxTitle { get; private set; }
     public WorkFlowId? WorkFlowId { get; private set; }
     public ActionTypeId? ActionTypeId { get; private set; }
     public FormId? FormId { get; private set; }

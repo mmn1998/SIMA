@@ -74,6 +74,7 @@ SELECT DISTINCT
 		D.[Id]
       ,D.[FileAddress]
 	  ,DE.[Name] Extension
+,D.[Name] as  Name
   FROM [DMS].[Documents] D
   INNER JOIN [DMS].[DocumentExtension] DE on D.FileExtensionId = DE.Id
   WHERE D.Id = @Id AND D.ActiveStatusId <> 3

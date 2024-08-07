@@ -77,7 +77,7 @@ public class IssueType : Entity
         arg.Code.NullCheck();
 
         if (!string.IsNullOrEmpty(arg.ColorHex))
-            if (!service.IsHexCodeValid(arg.ColorHex)) throw new SimaResultException("10039" , Messages.ColorHexCodeIsInorrectError);
+            if (!service.IsHexCodeValid(arg.ColorHex)) throw new SimaResultException(CodeMessges._100039Code , Messages.ColorHexCodeIsInorrectError);
 
         if (arg.Name.Length > 200) throw  new SimaResultException(CodeMessges._400Code , Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
@@ -91,7 +91,7 @@ public class IssueType : Entity
         arg.Code.NullCheck();
 
         if (!string.IsNullOrEmpty(arg.ColorHex))
-            if (!service.IsHexCodeValid(arg.ColorHex)) throw new SimaResultException("10039", Messages.ColorHexCodeIsInorrectError);
+            if (!service.IsHexCodeValid(arg.ColorHex)) throw new SimaResultException(CodeMessges._100039Code, Messages.ColorHexCodeIsInorrectError);
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);

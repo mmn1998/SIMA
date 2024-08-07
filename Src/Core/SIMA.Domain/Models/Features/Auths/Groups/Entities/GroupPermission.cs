@@ -34,6 +34,12 @@ public class GroupPermission
         ModifiedAt = arg.ModifiedAt;
         ActiveStatusId = arg.ActiveStatusId;
     }
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
+
     public GroupPermissionId Id { get; private set; }
 
     public GroupId? GroupId { get; private set; }

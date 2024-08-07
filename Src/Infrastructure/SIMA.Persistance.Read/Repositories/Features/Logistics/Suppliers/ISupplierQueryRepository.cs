@@ -8,4 +8,5 @@ public interface ISupplierQueryRepository : IQueryRepository
 {
     Task<GetSupplierQueryResult> GetById(GetSupplierQuery request);
     Task<Result<IEnumerable<GetSupplierQueryResult>>> GetAll(GetAllSuppliersQuery request);
+    Task<Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>> GetAllOrderedNotInBlackList(GetAllOrderedNotInBlackListSuppliersQuery request);
 }

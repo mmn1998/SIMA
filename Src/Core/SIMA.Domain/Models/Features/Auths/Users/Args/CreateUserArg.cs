@@ -15,5 +15,6 @@ public class CreateUserArg
     public long? CreatedBy { get; set; }
     public long ActiveStatusId { get; set; }
     public string IsFirstLogin { get; set; }
+    public string IsLocked { get; set; }
 
 }

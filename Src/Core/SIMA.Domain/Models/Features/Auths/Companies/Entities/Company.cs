@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Companies.Args;
 using SIMA.Domain.Models.Features.Auths.Companies.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
@@ -56,10 +57,10 @@ public class Company : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
-        if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException("10022",Messages.ParentCompaniesCannotDefinedAsChildError);
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException(CodeMessges._100022Code, Messages.ParentCompaniesCannotDefinedAsChildError);
     }
     private async Task ModifyGuards(ModifyCompanyArg arg, ICompanyService service)
     {
@@ -67,10 +68,10 @@ public class Company : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code,Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
-        if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException("10022",Messages.ParentCompaniesCannotDefinedAsChildError);
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException(CodeMessges._100022Code, Messages.ParentCompaniesCannotDefinedAsChildError);
     }
     #endregion
     public void Delete(long userId)
@@ -121,5 +122,7 @@ public class Company : Entity
 
     private List<ServiceProvider> _serviceProviders = new();
     public ICollection<ServiceProvider> ServiceProviders => _serviceProviders;
+    private List<CompanyBuildingLocation> _companyBuildingLocations = new();
 
+    public ICollection<CompanyBuildingLocation> CompanyBuildingLocations => _companyBuildingLocations;
 }

@@ -74,7 +74,7 @@ namespace SIMA.DomainService.Features.WorkFlowEngine.WorkFlows
                                 left join Project.WorkFlowActorUser u on u.WorkFlowActorId=a.Id
                                 left join Project.WorkFlowActorRole r on r.WorkFlowActorID = a.Id
                                 left join Project.WorkFlowActorGroup g on g.WorkFlowActorID = a.Id
-                                where w.Id=@workflowId and s.ActionTypeId=9 and (u.UserID = @userid or r.RoleID in @roles or g.GroupID in @groups);"
+                                where w.Id=@workflowId and s.ActionTypeId=9 and (a.IsEveryOne = 1 or u.UserID = @userid or r.RoleID in @roles or g.GroupID in @groups);"
             ;
             using (var connection = new SqlConnection(_connectionString))
             {

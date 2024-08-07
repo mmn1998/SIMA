@@ -75,7 +75,7 @@ public class RiskDegree : Entity
         arg.Code.NullCheck();
 
         if (!string.IsNullOrEmpty(arg.Color))
-            if (!service.IsHexCodeValid(arg.Color)) throw new SimaResultException("10039", Messages.ColorHexCodeIsInorrectError);
+            if (!service.IsHexCodeValid(arg.Color)) throw new SimaResultException(CodeMessges._100039Code, Messages.ColorHexCodeIsInorrectError);
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
@@ -89,7 +89,7 @@ public class RiskDegree : Entity
         arg.Code.NullCheck();
 
         if (!string.IsNullOrEmpty(arg.Color))
-            if (!service.IsHexCodeValid(arg.Color)) throw new SimaResultException("10039", Messages.ColorHexCodeIsInorrectError);
+            if (!service.IsHexCodeValid(arg.Color)) throw new SimaResultException(CodeMessges._100039Code, Messages.ColorHexCodeIsInorrectError);
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);

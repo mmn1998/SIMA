@@ -41,9 +41,9 @@ public class DepartmentQueryRepository : IDepartmentQueryRepository
 
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetDepartmentQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10053", Messages.DepartmentNotFoundError);
-            if (result.ActiveStatusId == 3) throw new SimaResultException("10033", Messages.DepartmentDeleteError);
-            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException("10033", Messages.DepartmentDeleteError);
+            if (result is null) throw new SimaResultException(CodeMessges._100053Code, Messages.DepartmentNotFoundError);
+            if (result.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100033Code, Messages.DepartmentDeleteError);
+            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100033Code, Messages.DepartmentDeleteError);
             return result;
         }
     }

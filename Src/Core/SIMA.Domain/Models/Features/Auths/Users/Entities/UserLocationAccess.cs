@@ -23,6 +23,12 @@ public class UserLocationAccess
     {
         return new UserLocationAccess(arg);
     }
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
+
     public async Task Modify(ModifyUserLocationArg arg)
     {
         UserId = new UserId(arg.Id);

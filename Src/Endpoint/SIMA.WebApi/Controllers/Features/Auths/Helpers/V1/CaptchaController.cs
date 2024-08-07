@@ -56,8 +56,8 @@ public class CaptchaController : ControllerBase
             Image = captchaResult.Image,
         });
     }
-    [HttpGet("[action]")]
-    public async Task<Result> VerifyCaptcha([FromQuery] VerifyCaptchaRequest request)
+    [HttpPost("[action]")]
+    public async Task<Result> VerifyCaptcha([FromBody] VerifyCaptchaRequest request)
     {
         bool result = false;
         string appName = _configuration.GetValue<string>("AppName") ?? "";
@@ -77,8 +77,8 @@ public class CaptchaController : ControllerBase
             result = _captchaService.ValidateCaptcha(captchaValidRequest);
 
         }
-        else throw new SimaResultException("10003", Messages.CaptchaError);
-        if (!result) throw new SimaResultException("10003", Messages.CaptchaError);
+        else throw new SimaResultException(CodeMessges._100039Code, Messages.CaptchaError);
+        if (!result) throw new SimaResultException(CodeMessges._100003Code, Messages.CaptchaError);
         return Result.Ok(result);
     }
 }

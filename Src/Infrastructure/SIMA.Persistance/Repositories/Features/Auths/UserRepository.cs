@@ -35,7 +35,7 @@ public class UserRepository : Repository<User>, IUserRepository
         .Include(u => u.AdminLocationAccesses)
         .Include(u => u.UserDomainAccesses)
             .FirstOrDefaultAsync(u => u.Id == new UserId(id));
-        if (entity is null) throw new SimaResultException("10051", Messages.UserNotFoundError);
+        if (entity is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
         return entity;
     }
 
@@ -66,7 +66,7 @@ public class UserRepository : Repository<User>, IUserRepository
             if (!string.IsNullOrEmpty(password))
             {
                 var checkPassword = user.Password.Verify(password);
-                if (!checkPassword) throw new SimaResultException("10002", Messages.InvalidUsernameOrPasswordError);
+                if (!checkPassword) throw new SimaResultException(CodeMessges._100002Code, Messages.InvalidUsernameOrPasswordError);
 
                 if (_simaIdentity.RoleIds is not null && _simaIdentity.RoleIds.Contains(2))
                 {
@@ -76,13 +76,13 @@ public class UserRepository : Repository<User>, IUserRepository
                         var difference = (DateTime)user.ChangePasswordDate - changeDate;
                         if (difference.TotalDays <= 30)
                         {
-                            throw new SimaResultException(CodeMessges._400Code, Messages.NotAllowtoChangePassword);
+                            throw new SimaResultException(CodeMessges._100064Code, Messages.NotAllowtoChangePassword);
                         }
                     }
                 }
             }
             else
-                throw new SimaResultException("10051", Messages.PasswordNotValidException);
+                throw new SimaResultException(CodeMessges._100051Code, Messages.PasswordNotValidException);
 
             return user;
         }
@@ -168,7 +168,7 @@ public class UserRepository : Repository<User>, IUserRepository
     {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == new UserId(userId));
         user.NullCheck();
-        if(user.ConfirmCode == code)
+        if (user.ConfirmCode == code)
             return user;
         else
             throw new SimaResultException(CodeMessges._400Code, Messages.CodeNotValid);

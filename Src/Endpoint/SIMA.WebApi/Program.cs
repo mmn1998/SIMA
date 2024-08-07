@@ -1,4 +1,7 @@
-﻿using Serilog;
+﻿using AspNetCoreRateLimit;
+using Serilog;
+using Serilog.Exceptions;
+using Serilog.Exceptions.Core;
 using Serilog.Sinks.Elasticsearch;
 using SIMA.Application.ConfigurationExtensions;
 using SIMA.Application.Query.ConfigurationExtensions;
@@ -12,15 +15,12 @@ using SIMA.Framework.WebApi.ConfigurationExtention;
 using SIMA.Framework.WebApi.Services;
 using SIMA.Persistance.ConfigurationExtentions;
 using SIMA.Persistance.Read.ConfigurationExtensions;
-using SIMA.WebApi.Extensions;
-using Serilog.Exceptions;
-using Serilog.Exceptions.Core;
-using SIMA.WebApi.Middlwares;
-using System.Globalization;
 using SIMA.WebApi.Dtos;
+using SIMA.WebApi.Extensions;
+using SIMA.WebApi.Middlwares;
 using SIMA.WebApi.Settings;
-using AspNetCoreRateLimit;
-using Microsoft.Extensions.Configuration;
+using System.Globalization;
+using System.Reflection;
 
 #region AddConfigurationFiles
 var configuration = new ConfigurationBuilder()
@@ -56,6 +56,8 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
+    var appVersion = typeof(Program).Assembly
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0];
     Log.Error("Starting web application");
 
     var builder = WebApplication.CreateBuilder(args);
@@ -114,7 +116,7 @@ try
                     .RegisterUnitOfWork()
                     .AddEndpointsApiExplorer()
                     .RegisterQueryHandlerService()
-                    .AddSimaSwagger()
+                    .AddSimaSwagger(appVersion)
                     .RegisterDomainServices()
                     .RegisterQueryMappers()
                     .RegisterCommandMappers()
@@ -143,7 +145,7 @@ try
     app.MapControllers();
     app.UseSwagger();
     app.UseSwaggerUI();
-	//app.UseMiddleware<LicenseCheckerMiddleware>();
+    //app.UseMiddleware<LicenseCheckerMiddleware>();
     app.UseDisAllowDirectDownloadMiddleware();
     //app.UseStaticFiles();
     app.UseCors(AllowEveryThingPolicy);

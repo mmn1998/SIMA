@@ -21,7 +21,7 @@ public class DepartmentRepository : Repository<Department>, IDepartmentRepositor
     public async Task<Department> GetById(long id)
     {
         var entity = await _context.Departments.FirstOrDefaultAsync(x => x.Id == new DepartmentId(id));
-        if (entity is null) throw new SimaResultException("10053",Messages.DepartmentNotFoundError);
+        if (entity is null) throw new SimaResultException(CodeMessges._100053Code, Messages.DepartmentNotFoundError);
         return entity;
     }
 }

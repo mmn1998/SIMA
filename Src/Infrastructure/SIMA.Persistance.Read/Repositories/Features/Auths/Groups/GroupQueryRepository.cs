@@ -151,8 +151,8 @@ public class GroupQueryRepository : IGroupQueryRepository
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetGroupPermissionQueryResult>(query, new { Id = groupPermissionId });
             result.NullCheck();
-            if (result.ActiveStatusId == 3) throw new SimaResultException("10015", Messages.GroupMemberShipIsExpiredError);
-            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException("10016", Messages.GroupMemberShipIsDeactiveError);
+            if (result.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100015Code, Messages.GroupMemberShipIsExpiredError);
+            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100016Code, Messages.GroupMemberShipIsDeactiveError);
             return result;
         }
     }

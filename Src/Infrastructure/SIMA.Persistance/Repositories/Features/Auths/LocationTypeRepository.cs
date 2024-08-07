@@ -20,7 +20,7 @@ public class LocationTypeRepository : Repository<LocationType>, ILocationTypeRep
     public async Task<LocationType> GetById(long id)
     {
         var entity = await _context.LocationTypes.FirstOrDefaultAsync(x => x.Id == new LocationTypeId(id));
-        if (entity is null) throw new SimaResultException("10059",Messages.LocationTypeNotFoundError);
+        if (entity is null) throw new SimaResultException(CodeMessges._100059Code, Messages.LocationTypeNotFoundError);
         return entity;
     }
 }

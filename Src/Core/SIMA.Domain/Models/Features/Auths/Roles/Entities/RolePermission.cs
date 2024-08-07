@@ -29,6 +29,11 @@ public class RolePermission
 
         return new RolePermission(arg);
     }
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
     public async Task Modify(ModifyRolePermissionArg arg)
     {
         RoleId = new RoleId(arg.RoleId);

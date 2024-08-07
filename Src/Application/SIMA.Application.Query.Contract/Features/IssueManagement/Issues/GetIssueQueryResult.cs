@@ -29,20 +29,21 @@ public class GetIssueQueryResult
     public string Summery { get; set; }
     public string Code { get; set; }
     public string Description { get; set; }
+    public string StepDisplayName { get; set; }
     public string? ActiveStatus { get; set; }
     public string? HasDocument { get; set; }
     public long ActiveStatusId { get; set; }
     [JsonIgnore]
     public DateTime DueDate { get; set; }
+    public string? DueDatePersian => DateHelper.ToPersianDateTime(DueDate);
     public string? WorkFlowFileContent { get; set; }
     [JsonIgnore]
     public string? BpmnId { get; set; }
-    public string PersianDueDate => DateHelper.ToPersianDate(DueDate);
     public IEnumerable<GetIssueLinkQueryResult> IssueLinks { get; set; }
     public IEnumerable<GetStepRequiredDocumentQueryResult> RequiredDocuments { get; set; }
     public IEnumerable<GetIssueDocumentQueryResult> IssueDocuments { get; set; }
     public IEnumerable<GetIssueCommentQueryResult> IssueComments { get; set; }
-    public List<GetRelatedProgressQueryResult> RelatedProgresses { get; set; }
+    public List<GetRelatedProgressQueryResult> RelatedProgressList { get; set; }
     public IEnumerable<GetApprovalOptionQueryResult> ApprovalOptions { get; set; }
    
 }

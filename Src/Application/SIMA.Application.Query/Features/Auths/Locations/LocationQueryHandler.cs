@@ -40,10 +40,10 @@ public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLo
             if (!redisResult) throw new Exception();
             if (request.Filters != null && request.Filters.Count != 0)
             {
-                if (request.Filters.Any(x => x.Key == nameof(GetLocationQueryResult.LocationName)))
+                if (request.Filters.Any(x => x.Key == nameof(GetLocationQueryResult.Name)))
                 {
-                    var name = request.Filters.First(x => x.Key == nameof(GetLocationQueryResult.LocationName)).Value;
-                    values = values.Where(x => x.LocationName.Contains(name)).ToList();
+                    var name = request.Filters.First(x => x.Key == nameof(GetLocationQueryResult.Name)).Value;
+                    values = values.Where(x => x.Name.Contains(name)).ToList();
                 }
                 if (request.Filters.Any(x => x.Key == nameof(GetLocationQueryResult.LocationTypeName)))
                 {

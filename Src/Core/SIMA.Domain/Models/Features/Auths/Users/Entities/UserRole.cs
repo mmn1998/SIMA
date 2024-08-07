@@ -36,6 +36,13 @@ public class UserRole
     {
         return new UserRole(arg);
     }
+
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
+
     public UserRoleId Id { get; private set; }
 
     public UserId? UserId { get; private set; }

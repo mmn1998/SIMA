@@ -84,7 +84,7 @@ public class UserQueryRepository : IUserQueryRepository
 
             var user = await _readContext.Users
                         .FirstOrDefaultAsync(u => u.Username == username);
-            if (user is null) throw new SimaResultException("10002", Messages.InvalidUsernameOrPasswordError);
+            if (user is null) throw new SimaResultException(CodeMessges._100002Code, Messages.InvalidUsernameOrPasswordError);
             var checkPassword = user.Password.Verify(password);
             if (!checkPassword)
             {
@@ -95,7 +95,7 @@ public class UserQueryRepository : IUserQueryRepository
 
                 if (user.AccessFailedCount < 4)
                     userInfo.IsLocked = "0";
-                else 
+                else
                     userInfo.IsLocked = "1";
                 response.UserInfoLogin = userInfo;
                 await user.AccessFaild(userInfo);
@@ -107,7 +107,7 @@ public class UserQueryRepository : IUserQueryRepository
                         select distinct
                         u.Id UserId, u.CompanyId,u.Username, u.IsFirstLogin , u.IsLocked , u.AccessFailedOverallCount , u.AccessFailedDate
                         from Authentication.Users u
-                        where U.Id=@UserId  
+                        where U.Id=@UserId  and U.ActiveStatusId<>3
 
                         --Roles
                         select distinct r.id RoleId
@@ -116,7 +116,7 @@ public class UserQueryRepository : IUserQueryRepository
 
                         inner join Authentication.UserRole ur on u.Id = ur.UserId
                         inner join Authentication.Role r on r.Id = ur.RoleId
-                        where U.Id=@UserId  
+                        where U.Id=@UserId  and U.ActiveStatusId<>3
 
                         --groups
                         select distinct g.id GroupId
@@ -125,7 +125,7 @@ public class UserQueryRepository : IUserQueryRepository
 
                         inner  join Authentication.UserGroup ug on u.Id = ug.UserId
                         inner join Authentication.Groups g on g.Id = ug.GroupId
-                        where U.Id=@UserId  
+                        where U.Id=@UserId  and U.ActiveStatusId<>3
 
                         --permission
                         select distinct p1.Code Code
@@ -133,7 +133,7 @@ public class UserQueryRepository : IUserQueryRepository
                         from Authentication.Users u
                         inner  join Authentication.UserPermission up on u.Id = up.UserId
                         inner join [Authentication].[Permission] P1 on P1.Id=up.PermissionId
-                        where U.Id=@UserId  
+                        where U.Id=@UserId  and U.ActiveStatusId<>3 and up.ActiveStatusId != 3
 
                         union 
 
@@ -144,7 +144,7 @@ public class UserQueryRepository : IUserQueryRepository
                         inner join Authentication.Role r on r.Id = ur.RoleId
                         inner join Authentication.RolePermission rp on r.Id = rp.RoleId
                         inner join [Authentication].[Permission] P2 on P2.Id=rp.PermissionId
-                        where U.Id=@UserId
+                        where U.Id=@UserId and U.ActiveStatusId<>3
 
                         union 
 
@@ -155,7 +155,7 @@ public class UserQueryRepository : IUserQueryRepository
                         inner join Authentication.Groups g on g.Id = ug.GroupId
                         inner join Authentication.GroupPermission gp on g.Id = gp.GroupId
                         inner join [Authentication].[Permission] P3 on P3.Id=gp.PermissionId
-                        where U.Id=@UserId  
+                        where U.Id=@UserId  and u.ActiveStatusId<>3
 
                         --Menus
 
@@ -165,8 +165,8 @@ public class UserQueryRepository : IUserQueryRepository
                          FROM  [Authentication].[UserDomainAccess] UDA
                          inner join [Authentication].[Users] U on U.Id=UDA.UserId
                          inner join Authentication.Domain D on D.Id=UDA.DomainId
-                         where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1
-                         and cast(getdate() as char(12))  between  UDA.[ActiveFrom] and  UDA.[ActiveTo]
+                         where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1 
+                         and cast(getdate() as char(12))  between  UDA.[ActiveFrom] and  UDA.[ActiveTo]  and U.ActiveStatusId<>3
 
                         union 
 
@@ -177,7 +177,7 @@ public class UserQueryRepository : IUserQueryRepository
                         inner join Authentication.Domain D on D.Id=UDA.DomainId
                         inner join  Authentication.FormUser fu on fu.UserId = u.Id
                         inner join Authentication.Form f on F.Id=Fu.FormId and f.DomainId=D.Id
-                        where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1
+                        where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1 and U.ActiveStatusId<>3  and f.ActiveStatusId != 3 and fu.ActiveStatusId != 3
                             and cast(getdate() as char(12))  between  UDA.[ActiveFrom] and  UDA.[ActiveTo]
 
                         union 
@@ -191,7 +191,7 @@ public class UserQueryRepository : IUserQueryRepository
                         inner join Authentication.Role r on r.Id = ur.RoleId
                         inner join  Authentication.FormRole fr on fr.RoleId = r.Id
                         inner join Authentication.Form f on F.Id=fr.FormId and f.DomainId=D.Id
-                        where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1
+                        where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1  and U.ActiveStatusId<>3
                          and cast(getdate() as char(12))  between  UDA.[ActiveFrom] and  UDA.[ActiveTo]
 
                         union 
@@ -205,7 +205,7 @@ public class UserQueryRepository : IUserQueryRepository
                         inner join Authentication.Groups g on g.Id = ug.GroupId
                         inner join  Authentication.FormGroup fg on fg.GroupId= g.Id
                         inner join Authentication.Form f on F.Id=fg.FormId  and f.DomainId=D.Id
-                        where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1
+                        where UDA.[UserId]=@UserId and   UDA.[ActiveStatusId]=1  and U.ActiveStatusId<>3
                          and cast(getdate() as char(12))  between  UDA.[ActiveFrom] and  UDA.[ActiveTo]
                     ";
             using (var connection = new SqlConnection(_connectionString))
@@ -220,7 +220,7 @@ public class UserQueryRepository : IUserQueryRepository
                 }
             }
             response.Menue = new List<Menue>();
-            if ( response.UserInfoLogin.IsFirstLogin != "0")
+            if (response.UserInfoLogin.IsFirstLogin != "0")
             {
                 response.Permissions = response.Permissions.Where(x => x == 1001);
                 response.RoleIds = null;
@@ -229,7 +229,7 @@ public class UserQueryRepository : IUserQueryRepository
             }
             else
             {
-                if(response.UserInfoLogin.IsLocked == "0")
+                if (response.UserInfoLogin.IsLocked == "0")
                 {
                     response.UserInfoLogin.AccessFailedCount = 0;
                     await user.AccessFaild(response.UserInfoLogin);
@@ -277,14 +277,17 @@ public class UserQueryRepository : IUserQueryRepository
 
             var query = $@" SELECT    distinct  
                           u.ID AS UserId,U.[Username] Username
-                          , profile.FirstName, profile.LastName, profile.FatherName
-                          , profile.GenderID  AS Gender, gender.Code AS GenderCode
-                          , profile.NationalID, [Basic].[Miladi_To_Persian](profile.Brithday)Brithday
-                          FROM            Authentication.Users AS u
-                          INNER JOIN      Authentication.Profile AS profile ON u.ProfileID = profile.ID
-                          INNER JOIN      Basic.Gender AS gender ON gender.ID = profile.GenderID
+                          ,profile.FirstName, profile.LastName, profile.FatherName
+                          ,profile.GenderID  AS Gender, gender.Code AS GenderCode
+                          ,profile.NationalID, [Basic].[Miladi_To_Persian](profile.Brithday)Brithday
+						  ,U.CompanyId 
+						  ,C.Name Company
+						  ,C.Code CompanyCode
+                          FROM  Authentication.Users AS u
+                          INNER JOIN  Authentication.Profile AS profile ON u.ProfileID = profile.ID
+                          INNER JOIN  Basic.Gender AS gender ON gender.ID = profile.GenderID
+						  Inner Join Organization.Company C On C.Id = U.CompanyId
                           WHERE        (u.ID = @UserID) and u.[ActiveStatusID] = 1
-
                           --Phones
 
                           select
@@ -427,7 +430,7 @@ public class UserQueryRepository : IUserQueryRepository
     {
         var user = await _readContext.Users.FirstOrDefaultAsync(u => u.Id == new UserId(userId));
         user.NullCheck();
-        return user?.ProfileId?.Value ?? throw new SimaResultException("10055", Messages.ProfileNotFoundError);
+        return user?.ProfileId?.Value ?? throw new SimaResultException(CodeMessges._100055Code, Messages.ProfileNotFoundError);
     }
 
     public async Task<GetUserQueryResult> FindByIdQuery(long id)
@@ -448,9 +451,9 @@ public class UserQueryRepository : IUserQueryRepository
                       join [Basic].[ActiveStatus] A on A.Id = U.ActiveStatusID
               WHERE U.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetUserQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10051", Messages.UserNotFoundError);
-            if (result.IsDeleted) throw new SimaResultException("10008", Messages.UserIsDeletedError);
-            if (result.IsDeactivated) throw new SimaResultException("10009", Messages.UserIsDeactiveError);
+            if (result is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
+            if (result.IsDeleted) throw new SimaResultException(CodeMessges._100008Code, Messages.UserIsDeletedError);
+            if (result.IsDeactivated) throw new SimaResultException(CodeMessges._100009Code, Messages.UserIsDeactiveError);
             return result;
         }
 
@@ -461,8 +464,8 @@ public class UserQueryRepository : IUserQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            
-                string queryCount = @" WITH Query as(
+
+            string queryCount = @" WITH Query as(
 						  SELECT DISTINCT U.ID as Id,
       		C.Name as CompanyName,
       		(P.FirstName + ' ' + P.LastName) as FullName,
@@ -480,7 +483,7 @@ WHERE U.ActiveStatusId != 3
 								 /**where**/
 								 
 								 ; ";
-                string query = $@" WITH Query as(
+            string query = $@" WITH Query as(
 							SELECT DISTINCT U.ID as Id,
       		C.Name as CompanyName,
       		(P.FirstName + ' ' + P.LastName) as FullName,

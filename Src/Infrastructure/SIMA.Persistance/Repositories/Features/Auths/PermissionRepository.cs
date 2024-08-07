@@ -24,9 +24,9 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
     public async Task<bool> AddAllPermissionsFromAUserToAnotherUser(long ownUserId, long targetUserId)
     {
         var targetUser = await _context.Users.Include(u => u.UserPermissions).FirstOrDefaultAsync(u => u.Id == new UserId(targetUserId));
-        if (targetUser is null) throw new SimaResultException("10051",Messages.UserNotFoundError);
-        if (targetUser.ActiveStatusId == 2 || targetUser.ActiveStatusId == 4) throw new SimaResultException("10009",Messages.UserIsDeactiveError);
-        if (targetUser.ActiveStatusId == 3) throw new SimaResultException("10008",Messages.UserIsDeletedError);
+        if (targetUser is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
+        if (targetUser.ActiveStatusId == 2 || targetUser.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100009Code, Messages.UserIsDeactiveError);
+        if (targetUser.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100008Code, Messages.UserIsDeletedError);
         var allPermissions = await _context.UserPermissions.Where(up => up.UserId == new UserId(ownUserId)).ToListAsync();
         var TargetUserPermissions = await _context.UserPermissions.Where(up => up.UserId == new UserId(targetUserId)).ToListAsync();
         foreach (var item in TargetUserPermissions)
@@ -38,16 +38,16 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
             UserId = targetUserId,
             PermissionId = i.Id.Value
         }).ToList();
-        await targetUser.AddUserPermissions(createUserPermissionArgs);
+        await targetUser.AddUserPermission(createUserPermissionArgs, targetUserId);
         return true;
     }
 
     public async Task<bool> AddAllPermissionsToAUser(long userId)
     {
         var user = await _context.Users.Include(u => u.UserPermissions).FirstOrDefaultAsync(u => u.Id == new UserId(userId));
-        if (user is null) throw new SimaResultException("10051",Messages.UserNotFoundError);
-        if (user.ActiveStatusId == 2 || user.ActiveStatusId == 4) throw new SimaResultException("10007",Messages.UserIsDeactiveError);
-        if (user.ActiveStatusId == 3) throw new SimaResultException("10008",Messages.UserIsDeletedError);
+        if (user is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
+        if (user.ActiveStatusId == 2 || user.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100007Code, Messages.UserIsDeactiveError);
+        if (user.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100008Code, Messages.UserIsDeletedError);
         var allPermissions = await _context.Permissions/*.Where(p => p.Id != new PermissionId(32767))*/.ToListAsync();
         var thisUserPermissions = await _context.UserPermissions.Where(up => up.UserId == new UserId(userId)).ToListAsync();
         foreach (var item in thisUserPermissions)
@@ -61,7 +61,7 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
             ActiveStatusId = 1
         }).ToList();
 
-        await user.AddUserPermissions(createUserPermissionArgs);
+        await user.AddUserPermission(createUserPermissionArgs, userId);
         await _context.SaveChangesAsync();
         return true;
     }

@@ -6,7 +6,8 @@ using SIMA.Persistance.Read.Repositories.Features.Logistics.Suppliers;
 namespace SIMA.Application.Query.Features.Logistics.Suppliers;
 
 public class SupplierQueryHandler : IQueryHandler<GetSupplierQuery, Result<GetSupplierQueryResult>>,
-    IQueryHandler<GetAllSuppliersQuery, Result<IEnumerable<GetSupplierQueryResult>>>
+    IQueryHandler<GetAllSuppliersQuery, Result<IEnumerable<GetSupplierQueryResult>>>,
+    IQueryHandler<GetAllOrderedNotInBlackListSuppliersQuery, Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>>
 {
     private readonly ISupplierQueryRepository _repository;
 
@@ -23,5 +24,10 @@ public class SupplierQueryHandler : IQueryHandler<GetSupplierQuery, Result<GetSu
     public async Task<Result<IEnumerable<GetSupplierQueryResult>>> Handle(GetAllSuppliersQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
+    }
+
+    public async Task<Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>> Handle(GetAllOrderedNotInBlackListSuppliersQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetAllOrderedNotInBlackList(request);        
     }
 }

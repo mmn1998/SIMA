@@ -10,7 +10,7 @@ public class GetAllCartableQueryResult
     public string CreatedBy { get; set; }
     public string CreateFullName => $"{FirstName} {LastName}";
     public DateTime CreatedAt { get; set; }
-    public string PersianCreatedAt => DateHelper.ToPersianDate(CreatedAt);
+    public string PersianCreatedAt => DateHelper.ToPersianDateTime(CreatedAt);
 
     //---------- Issue
     public long IssueId { get; set; }

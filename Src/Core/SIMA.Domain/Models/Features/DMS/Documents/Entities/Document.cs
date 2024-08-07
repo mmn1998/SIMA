@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
@@ -123,6 +125,10 @@ public class Document : Entity
 
     public ICollection<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
     public ICollection<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments { get; set; }
+    private List<AssetDocument> _assetDocuments = new();
+    public ICollection<AssetDocument> AssetDocuments => _assetDocuments;
+    private List<ConfigurationItemDocument> _configurationItemDocuments = new();
+    public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

@@ -52,6 +52,8 @@ public class ProgressConfiguration : IEntityTypeConfiguration<Progress>
         entity.HasOne(d => d.State).WithMany(p => p.Progresses)
                 .HasForeignKey(d => d.StateId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+        
     }
     //public static ValueConverter<bool?, string> dbVarCharNullableToBoolNullableConverter = new ValueConverter<bool?, string>(
     //v => v == true ? "1" : v == false ? "0" : null,

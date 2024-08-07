@@ -11,7 +11,7 @@ public class IssueRunActionCommand : ICommand<Result<long>>
     public string? Comment { get; set; }
     public long? StepApprovalOptionId { get; set; }
     public string? ApprovalDescription { get; set; }
-    public List<InputParamModel> InputParams { get; set; }
+    public List<InputParamModel>? InputParams { get; set; }
     public List<InputDocument>? InputDocuments { get; set; }
 }
 

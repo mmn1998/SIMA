@@ -32,6 +32,11 @@ public class UserDomainAccess
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
+
+    public async Task ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
     public UserDomainAccessId Id { get; private set; }
 
     public DomainId? DomainId { get; private set; }

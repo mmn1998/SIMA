@@ -21,7 +21,7 @@ namespace SIMA.Persistance.Repositories.Features.Auths
         public async Task<Company> GetById(long id)
         {
             var entity = await _context.Companies.FirstOrDefaultAsync(c => c.Id == new CompanyId(id));
-            if (entity is null) throw new SimaResultException("10052",Messages.CompanyNotFoundError);
+            if (entity is null) throw new SimaResultException(CodeMessges._100052Code, Messages.CompanyNotFoundError);
             return entity;
         }
     }

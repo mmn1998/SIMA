@@ -22,26 +22,25 @@ namespace SIMA.Persistance.Read.Repositories.Features.RiskManagement.RiskCriteri
             _connectionString = configuration.GetConnectionString();
             _mainQuery = @"
 
-                   SELECT DISTINCT R.[Id]
-                      ,R.[Code]
-                      ,R.[ActiveStatusId]
-	                  ,S.[Name] as ActiveStatus,
-					  RL.Name DegreeName,
-					  RL.Code DegreeCode,
-					  RL.Degree,
-					  RI.Code ImpactCode , 
-					  RI.Name ImpactName,
-					  RI.Impact,
-					  RP.Code PossibilityCode,
-					  RP.Name PossibilityName,
-					  RP.Possibility,
-                      R.CreatedAt
-                  FROM [RiskManagement].[RiskCriteria] R
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = R.ActiveStatusId
-				  Left Join RiskManagement.RiskLevel RL on R.RiskLevelId = RL.Id
-				  Left Join RiskManagement.RiskImpact RI on R.RiskImpactId = RI.Id
-				  Left Join RiskManagement.RiskPossibility RP on R.RiskPossibilityId = RP.Id
-                  WHERE R.ActiveStatusId != 3
+              SELECT DISTINCT R.[Id]
+                    ,R.[Code]
+                    ,R.[ActiveStatusId]
+                    ,S.[Name] as ActiveStatus,
+                	 RD.Name DegreeName,
+                     RD.Code DegreeCode,
+                     RI.Code ImpactCode , 
+                     RI.Name ImpactName,
+                     RI.Impact,
+                     RP.Code PossibilityCode,
+                     RP.Name PossibilityName,
+                     RP.Possibility,
+                     R.CreatedAt
+                FROM [RiskManagement].[RiskCriteria] R
+                INNER JOIN [Basic].[ActiveStatus] S on S.ID = R.ActiveStatusId
+                left Join RiskManagement.RiskDegree RD on RD.Id = R.RiskDegreeId
+                Left Join RiskManagement.RiskImpact RI on R.RiskImpactId = RI.Id
+                Left Join RiskManagement.RiskPossibility RP on R.RiskPossibilityId = RP.Id
+                WHERE R.ActiveStatusId != 3
 
 ";
         }

@@ -38,9 +38,9 @@ public class CompanyQueryRepository : ICompanyQueryRepository
               WHERE C.Id = @Id
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetCompanyQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10052", Messages.CompanyNotFoundError);
-            if (result.ActiveStatusId == 3) throw new SimaResultException("10031", Messages.ComapnyDeleteError);
-            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException("10031", Messages.ComapnyDeleteError);
+            if (result is null) throw new SimaResultException(CodeMessges._100052Code, Messages.CompanyNotFoundError);
+            if (result.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100031Code, Messages.ComapnyDeleteError);
+            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100031Code, Messages.ComapnyDeleteError);
             return result;
         }
     }

@@ -17,7 +17,9 @@ namespace SIMA.Persistance.Repositories.Features.WorkFlowEngine.ProgressRepositp
 
         public async Task<Progress> GetById(long id)
         {
-            var entity = await _context.Progresses.FirstOrDefaultAsync(x => x.Id == new ProgressId(id));
+            var entity = await _context.Progresses
+                .Include(x => x.ProgressStoreProcedures)
+                .ThenInclude(x => x.ProgressStoreProcedureParams).FirstOrDefaultAsync(x => x.Id == new ProgressId(id));
             return entity;
         }
     }

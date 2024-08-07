@@ -24,7 +24,7 @@ namespace SIMA.WebApi.Controllers.Features.WorkFlowEngine.Progress
 
 
         [HttpPut]
-        [SimaAuthorize(Permissions.ProjectsPost)]
+        [SimaAuthorize(Permissions.ProgressPut)]
         public async Task<Result> ChangeStatus([FromBody] ModifyProgressCommand command)
         {
             var result = await _mediator.Send(command);

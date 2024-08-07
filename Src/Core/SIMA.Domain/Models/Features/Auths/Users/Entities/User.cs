@@ -2,16 +2,17 @@
 using SIMA.Domain.Models.Features.Auths.AdminLocationAccesses.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Args;
-using SIMA.Domain.Models.Features.Auths.Users.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
@@ -46,74 +47,198 @@ public class User : Entity, IAggregateRoot
         CreatedBy = arg.CreatedBy;
         CreatedAt = arg.CreatedAt;
         IsFirstLogin = arg.IsFirstLogin;
+        IsLocked = arg.IsLocked;
     }
     #region AddMethods
-    public async Task AddUserRole(CreateUserRoleArg arg)
-    {
-        if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
-        {
-            throw new SimaResultException("10017", Messages.UserRoleDuplicateError);
-        }
-        var entity = await UserRole.Create(arg);
-        _userRoles.Add(entity);
 
-    }
-    public async Task AddUserPermission(CreateUserPermissionArg arg)
+    #region old Method
+
+    //public async Task AddUserRole(CreateUserRoleArg arg)
+    //{
+    //    if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
+    //    {
+    //        throw new SimaResultException(CodeMessges._100017Code, Messages.UserRoleDuplicateError);
+    //    }
+    //    var entity = await UserRole.Create(arg);
+    //    _userRoles.Add(entity);
+
+    //}
+    //public async Task AddUserPermission(CreateUserPermissionArg arg)
+    //{
+    //    arg.UserId.NullCheck();
+    //    if (_userPermission.Any(ur => ur.PermissionId == new PermissionId(arg.PermissionId) && ur.UserId == new UserId(arg.UserId.Value)))
+    //    {
+    //        throw new SimaResultException(CodeMessges._100028Code, Messages.UserPermoissionDuplicateError);
+    //    }
+    //    var entity = await UserPermission.Create(arg);
+    //    _userPermission.Add(entity);
+    //}
+    //public async Task AddUserDomain(CreateUserDomainArg arg)
+    //{
+    //    var entity = await UserDomainAccess.Create(arg);
+    //    if (_userDomainAccesses.Contains(entity))
+    //    {
+    //        //throw new SimaResultException(CodeMessges._400Code,Messages.
+    //    }
+    //    else
+    //    {
+    //        _userDomainAccesses.Add(entity);
+    //    }
+    //}
+
+    //public async Task AddUserLocation(CreateUserLocationAccessArg arg)
+    //{
+    //    var entity = await UserLocationAccess.Create(arg);
+    //    _userLocationAccesses.Add(entity);
+    //}
+    //public async Task AddUserLocations(List<CreateUserLocationAccessArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddUserLocation(arg);
+    //    }
+    //}
+    //public async Task AddUserDomains(List<CreateUserDomainArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddUserDomain(arg);
+    //    }
+    //}
+    //public async Task AddUserPermissions(List<CreateUserPermissionArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddUserPermission(arg);
+    //    }
+    //}
+    //public async Task AddUserRoles(List<CreateUserRoleArg> args)
+    //{
+    //    foreach (var arg in args)
+    //    {
+    //        await AddUserRole(arg);
+    //    }
+    //}
+
+    #endregion
+
+    public async Task AddUserPermission(List<CreateUserPermissionArg> request, long userId)
     {
-        arg.UserId.NullCheck();
-        if (_userPermission.Any(ur => ur.PermissionId == new PermissionId(arg.PermissionId) && ur.UserId == new UserId(arg.UserId.Value)))
+        userId.NullCheck();
+
+        var previousUsers = _userPermission.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addPermission = request.Where(x => !previousUsers.Any(c => c.PermissionId.Value == x.PermissionId)).ToList();
+        var deleteMember = previousUsers.Where(x => !request.Any(c => c.PermissionId == x.PermissionId.Value)).ToList();
+
+
+        foreach (var permission in addPermission)
         {
-            throw new SimaResultException("10028", Messages.UserPermoissionDuplicateError);
-        }
-        var entity = await UserPermission.Create(arg);
-        _userPermission.Add(entity);
-    }
-    public async Task AddUserDomain(CreateUserDomainArg arg)
-    {
-        var entity = await UserDomainAccess.Create(arg);
-        if (_userDomainAccesses.Contains(entity))
-        {
-            //throw new SimaResultException(CodeMessges._400Code,Messages.
-        }
-        else
-        {
-            _userDomainAccesses.Add(entity);
+            var entity = _userPermission.Where(x => (x.PermissionId == new PermissionId(permission.PermissionId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await UserPermission.Create(permission);
+                _userPermission.Add(entity);
+            }
         }
 
-    }
-    public async Task AddUserLocation(CreateUserLocationAccessArg arg)
-    {
-        var entity = await UserLocationAccess.Create(arg);
-        _userLocationAccesses.Add(entity);
-    }
-    public async Task AddUserLocations(List<CreateUserLocationAccessArg> args)
-    {
-        foreach (var arg in args)
+        foreach (var permission in deleteMember)
         {
-            await AddUserLocation(arg);
+            permission.Delete((long)request[0].CreatedBy);
         }
     }
-    public async Task AddUserDomains(List<CreateUserDomainArg> args)
+    public async Task AddUserRole(List<CreateUserRoleArg> request, long userId)
     {
-        foreach (var arg in args)
+        userId.NullCheck();
+
+        var previousRoles = _userRoles.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addRole = request.Where(x => !previousRoles.Any(c => c.RoleId.Value == x.RoleId)).ToList();
+        var deleteMember = previousRoles.Where(x => !request.Any(c => c.RoleId == x.RoleId.Value)).ToList();
+
+
+        foreach (var role in addRole)
         {
-            await AddUserDomain(arg);
+            var entity = _userRoles.Where(x => (x.RoleId == new RoleId(role.RoleId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await UserRole.Create(role);
+                _userRoles.Add(entity);
+            }
+        }
+
+        foreach (var role in deleteMember)
+        {
+            role.Delete((long)request[0].CreatedBy);
         }
     }
-    public async Task AddUserPermissions(List<CreateUserPermissionArg> args)
+    public async Task AddUserDomain(List<CreateUserDomainArg> request, long userId)
     {
-        foreach (var arg in args)
+        userId.NullCheck();
+
+        var previousDomains = _userDomainAccesses.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addDomain = request.Where(x => !previousDomains.Any(c => c.DomainId.Value == x.DomainId)).ToList();
+        var deleteDomain = previousDomains.Where(x => !request.Any(c => c.DomainId == x.DomainId.Value)).ToList();
+
+
+        foreach (var domain in addDomain)
         {
-            await AddUserPermission(arg);
+            var entity = _userDomainAccesses.Where(x => (x.DomainId == new DomainId((long)domain.DomainId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await UserDomainAccess.Create(domain);
+                _userDomainAccesses.Add(entity);
+            }
+        }
+
+        foreach (var domain in deleteDomain)
+        {
+            domain.Delete((long)request[0].CreatedBy);
         }
     }
-    public async Task AddUserRoles(List<CreateUserRoleArg> args)
+    public async Task AddUserLocation(List<CreateUserLocationAccessArg> request, long userId)
     {
-        foreach (var arg in args)
+        userId.NullCheck();
+
+        var previousLocations = _userLocationAccesses.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addLocation = request.Where(x => !previousLocations.Any(c => c.LocationId.Value == x.LocationId)).ToList();
+        var deleteLocation = previousLocations.Where(x => !request.Any(c => c.LocationId == x.LocationId.Value)).ToList();
+
+
+        foreach (var domain in addLocation)
         {
-            await AddUserRole(arg);
+            var entity = _userLocationAccesses.Where(x => (x.LocationId == new LocationId((long)domain.LocationId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await UserLocationAccess.Create(domain);
+                _userLocationAccesses.Add(entity);
+            }
+        }
+
+        foreach (var domain in deleteLocation)
+        {
+            domain.Delete((long)request[0].CreatedBy);
         }
     }
+    
     #endregion
 
     public void Delete()
@@ -208,7 +333,7 @@ public class User : Entity, IAggregateRoot
     {
         if (_userRoles.Any(ur => ur.RoleId == new RoleId(arg.RoleId) && ur.UserId == new UserId(arg.UserId)))
         {
-            throw new SimaResultException("10017", Messages.UserRoleDuplicateError);
+            throw new SimaResultException(CodeMessges._100017Code, Messages.UserRoleDuplicateError);
         }
         var entity = _userRoles.FirstOrDefault(ur => ur.Id == new UserRoleId(arg.Id));
         entity.NullCheck();
@@ -218,7 +343,7 @@ public class User : Entity, IAggregateRoot
     {
         if (_userPermission.Any(ur => ur.PermissionId == new PermissionId(arg.PermissionId) && ur.UserId == new UserId(arg.UserId.Value)))
         {
-            throw new SimaResultException("10028", Messages.UserPermoissionDuplicateError);
+            throw new SimaResultException(CodeMessges._100028Code, Messages.UserPermoissionDuplicateError);
         }
         var entity = _userPermission.FirstOrDefault(up => up.Id == new UserPermissionId(arg.Id));
         entity.NullCheck();

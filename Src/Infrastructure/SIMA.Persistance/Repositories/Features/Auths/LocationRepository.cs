@@ -22,7 +22,7 @@ public class LocationRepository : Repository<Location>, ILocationRepository
     {
         var entity = await _context.Locations
         .FirstOrDefaultAsync(x => x.Id == new LocationId(id));
-        if (entity is null) throw new SimaResultException("10060",Messages.LocationNotFoundError);
+        if (entity is null) throw new SimaResultException(CodeMessges._100060Code, Messages.LocationNotFoundError);
         return entity;
     }
 }

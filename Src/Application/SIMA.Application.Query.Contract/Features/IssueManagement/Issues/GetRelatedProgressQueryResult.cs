@@ -3,6 +3,7 @@
 public class GetRelatedProgressQueryResult
 {
     public long Id { get; set; }
+    public long CurrentProgressId { get; set; }
     public long ProgressId { get; set; }
     public string Name { get; set; }
     public string? HasStoredProcedure { get; set; }

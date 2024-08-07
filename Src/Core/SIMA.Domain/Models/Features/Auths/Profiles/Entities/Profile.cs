@@ -42,7 +42,8 @@ public class Profile : Entity
     private static async Task CreateGuards(CreateProfileArg arg, IProfileService service)
     {
         arg.NullCheck();
-        if (!service.IsValidNationalCode(arg.NationalId)) throw new SimaResultException("10007",Messages.NationalCodeIsInvalidError);
+        if (!service.IsValidNationalCode(arg.NationalId)) throw new SimaResultException(CodeMessges._100007Code, Messages.NationalCodeIsInvalidError);
+        if (!await service.IsNationalCodeUnique(arg.NationalId)) throw new SimaResultException(CodeMessges._100067Code, Messages.NationalCodeIsNotUniqueError);
     }
     //private async Task ModifyGuards(CreateProfileArg arg, IProfileService service)
     //{

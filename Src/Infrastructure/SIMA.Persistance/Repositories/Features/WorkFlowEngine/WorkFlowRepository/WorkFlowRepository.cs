@@ -3,9 +3,7 @@ using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.ValueObjects;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -15,7 +13,6 @@ using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 using SIMA.Resources;
-using System.ComponentModel.DataAnnotations;
 
 namespace SIMA.Persistance.Repositories.Features.WorkFlowEngine.WorkFlowRepository;
 
@@ -37,7 +34,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             var workFlowId = new WorkFlowId(Value: id);
             var workFlow = await _context.WorkFlows
                 .Include(x => x.Steps)
-                .ThenInclude(x=>x.StepRequiredDocuments)
+                .ThenInclude(x => x.StepRequiredDocuments)
                  .Include(x => x.Steps)
                 .ThenInclude(x => x.StepApprovalOptions)
                 .Include(x => x.States)
@@ -49,7 +46,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
                     .ThenInclude(x => x.WorkFlowActorSteps)
                 .FirstOrDefaultAsync(x => x.Id == workFlowId);
 
-            return workFlow ?? throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
+            return workFlow ?? throw new SimaResultException(CodeMessges._100057Code, Messages.WorkflowNotFoundError);
         }
         catch (Exception ex)
         {
@@ -99,21 +96,23 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
                 {
                     var actorStep = actor.WorkFlowActorSteps.Select(x => x.StepId);
                     var step = workFlow.Steps.Where(s => actorStep.Contains(s.Id) && s.ActionTypeId == startEventActionTypeId).FirstOrDefault();
-                    var progress = step.SourceProgresses.Where(x => x.SourceId == step.Id).FirstOrDefault();
-                    var nextStep = workFlow.Steps.Where(x => x.Id == progress.TargetId).FirstOrDefault();
+                    if (step is not null)
+                    {
+                        var progress = step.SourceProgresses.Where(x => x.SourceId == step.Id).FirstOrDefault();
+                        var nextStep = workFlow.Steps.Where(x => x.Id == progress.TargetId).FirstOrDefault();
 
-                    if (progress.StateId is not null)
-                        result.TargetStateId = progress.StateId.Value;
+                        if (progress.StateId is not null)
+                            result.TargetStateId = progress.StateId.Value;
+                        result.SourceStateId = null;
 
-                    //if (step.StateId is not null)
-                    result.SourceStateId = null;
+                        result.TargetStepId = progress.TargetId.Value;
+                        result.SourceStepId = step.Id.Value;
+                        result.Id = workFlowId;
+                        result.ProjectId = workFlow.ProjectId.Value;
+                        result.MainAggregateId = workFlow.MainAggregateId.Value;
+                        return result;
+                    }
 
-                    result.TargetStepId = progress.TargetId.Value;
-                    result.SourceStepId = step.Id.Value;
-                    result.Id = workFlowId;
-                    result.ProjectId = workFlow.ProjectId.Value;
-                    result.MainAggregateId = workFlow.MainAggregateId.Value;
-                    return result;
 
                 }
             }
@@ -141,7 +140,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
             }
             else
             {
-                throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
+                throw new SimaResultException(CodeMessges._400Code, Messages.WorkflowNotFoundError);
             }
         }
         return result;

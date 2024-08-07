@@ -1,6 +1,8 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
@@ -9,14 +11,8 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
-using SIMA.Persistance.Migrations;
 using SIMA.Resources;
 using System.Data.SqlClient;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using SIMA.Application.Contract.Features.IssueManagement.Issues;
-using Newtonsoft.Json;
-using System.Linq;
 using static Dapper.SqlMapper;
 
 namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
@@ -136,7 +132,7 @@ WHERE C.[ActiveStatusID] <> 3
                     INNER JOIN [Authentication].[MainAggregate] M on C.MainAggregateId  = M.Id
               WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetWorkFlowQueryResult>(query, new { Id = id });
-            if (result is null) throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100057Code, Messages.WorkflowNotFoundError);
             response = result;
         }
         return response;
@@ -271,6 +267,7 @@ WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
                              ,C.[CompleteName]
                              ,C.[workFlowId]
                              ,C.[BpmnId]
+                             ,C.[DisplayName]
                              ,C.[ActionTypeId]
                              ,W.[Name] as WorkFlowName
                              ,A.[Name] ActiveStatus
@@ -414,7 +411,7 @@ WHERE  C.ActiveStatusId != 3
                     WHERE C.[ActiveStatusID] <> 3  and W.Id = @workFlowId 
 Order By c.[CreatedAt] desc";
             var result = await connection.QueryAsync<GetStateQueryResult>(query, new { workFlowId = id });
-            if (result is null) throw new SimaResultException("10058", Messages.StateNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100058Code, Messages.StateNotFoundError);
             response = result.ToList();
         }
         return response;
@@ -443,7 +440,7 @@ Order By c.[CreatedAt] desc";
                  join Basic.ActiveStatus A on A.Id = c.ActiveStatusID
                  WHERE C.[ActiveStatusID] <> 3 and C.Id = @Id";
             var result = await connection.QueryFirstOrDefaultAsync<GetStateQueryResult>(query, new { Id = stateId });
-            if (result is null) throw new SimaResultException("10058", Messages.StateNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100058Code, Messages.StateNotFoundError);
             response = result;
         }
         return response;
@@ -473,7 +470,7 @@ Order By c.[CreatedAt] desc";
 Order By c.[CreatedAt] desc
 ";
             var result = await connection.QueryAsync<GetWorkFlowQueryResult>(query, new { ProjectId = projectId });
-            if (result is null) throw new SimaResultException("10057", Messages.WorkflowNotFoundError);
+            if (result is null) throw new SimaResultException(CodeMessges._100057Code, Messages.WorkflowNotFoundError);
             response = result.ToList();
         }
         return response;
@@ -529,7 +526,7 @@ Order By c.[CreatedAt] desc
     }
     public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query)
     {
-        var model = new Dictionary<long, NextProgressInfo>();
+        var model = new Dictionary<long, Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo>();
         // var spParams = new Dictionary<long, StoreProcedureParams>();
 
         var getNextStepQuery = @"select distinct wp.StateId CurrentProgressStateId, 
@@ -541,7 +538,8 @@ Order By c.[CreatedAt] desc
 								 p.ConditionExpression, 
 								 p.HasStoreProcedure, 
 								 p.StateId NextStateId, 
-								 p.Extension
+								 p.Extension,
+                                 p.Id ProgressId
 								 from project.Step s
                                   inner join project.WorkFlow w on w.Id = s.WorkFlowID
                                   left join Project.Progress p on p.SourceId = s.Id
@@ -553,12 +551,12 @@ Order By c.[CreatedAt] desc
             var queryResult = await connection.QueryAsync<dynamic>(getNextStepQuery, new { WorkflowId = workflowId, NextStepId = query.NextStepId, ProgressId = query.ProgressId });
             foreach (var current in queryResult)
             {
-                NextProgressInfo item;
+                Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo item;
                 if (current.TargetId != null)
                 {
                     if (!model.TryGetValue(current.TargetId, out item))
                     {
-                        item = new NextProgressInfo { ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId, SpName = current.SpName };
+                        item = new Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo { WorkflowId = workflowId, ProgressId = current.ProgressId, ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId, SpName = current.SpName };
                         model.Add(current.TargetId, item);
                     }
                 }
@@ -589,6 +587,151 @@ Order By c.[CreatedAt] desc
 
         }
     }
+
+    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoByIdAsync(long workFlowId)
+    {
+        var result = new GetWorkflowInfoByIdResponseQueryResult();
+
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            // Load workflow with related entities
+            var sql = @"
+           SELECT * FROM Project.WorkFlow W WHERE W.Id = @WorkFlowId AND W.ActiveStatusId <> 3 ;
+            SELECT * FROM Project.State ST WHERE ST.WorkFlowId = @WorkFlowId;
+            SELECT * FROM Project.Step S WHERE S.WorkFlowId = @WorkFlowId;
+            SELECT * FROM Project.Progress P WHERE P.SourceId IN (SELECT Id FROM Project.Step SS WHERE  SS.WorkFlowId = @WorkFlowId);
+            SELECT * FROM Project.WorkFlowActor A WHERE A.WorkFlowId = @WorkFlowId;
+            SELECT * FROM Project.WorkFlowActorStep WAS WHERE WAS.WorkFlowActorId IN (SELECT Id FROM Project.WorkFlowActor WHERE WorkFlowId = @WorkFlowId);
+            SELECT * FROM Project.WorkFlowActorUser WAU WHERE WorkFlowActorId IN (SELECT Id FROM Project.WorkFlowActor WHERE WorkFlowId = @WorkFlowId);
+        ";
+
+            var workFlow = new WorkflowInfoQueryResult();
+            using (var multi = await connection.QueryMultipleAsync(sql, new { WorkFlowId = workFlowId }))
+            {
+                workFlow = multi.Read<WorkflowInfoQueryResult>().SingleOrDefault();
+                if (workFlow == null) throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+
+                workFlow.States = multi.Read<StateInfo>().ToList();
+                workFlow.Steps = multi.Read<StepInfo>().ToList();
+                var sourceProgresses = multi.Read<SourceProgressInfo>().ToList();
+                workFlow.WorkFlowActors = multi.Read<WorkFlowActorInfo>().ToList();
+                var actorSteps = multi.Read<WorkFlowActorStepInfo>().ToList();
+                var actorUsers = multi.Read<WorkFlowActorUserInfo>().ToList();
+
+                foreach (var step in workFlow.Steps)
+                {
+                    step.SourceProgresses = sourceProgresses.Where(x => x.SourceId == step.Id).ToList();
+                }
+
+                foreach (var actor in workFlow.WorkFlowActors)
+                {
+                    actor.WorkFlowActorSteps = actorSteps.Where(x => x.WorkFlowActorId == actor.Id).ToList();
+                    actor.WorkFlowActorUsers = actorUsers.Where(x => x.WorkFlowActorId == actor.Id).ToList();
+                }
+            }
+
+            var startEventActionTypeId = (long)ActionTypeEnum.startEvent;
+            var steps = workFlow.Steps.Where(x => x.ActionTypeId == startEventActionTypeId).ToList();
+
+            if (steps.Count > 1)
+            {
+                var checkIsEveryOne = new GetWorkflowInfoByIdResponseQueryResult();
+                var checkActorAccess = new GetWorkflowInfoByIdResponseQueryResult();
+                foreach (var actor in workFlow.WorkFlowActors)
+                {
+                    var checkUserInActor = workFlow.WorkFlowActors.Select(x => x.WorkFlowActorUsers.Select(c => c.UserId).Contains(_simaIdentity.UserId));
+
+                    var actorUsers = actor.WorkFlowActorUsers.FirstOrDefault(x => x.UserId == _simaIdentity.UserId && x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+                    if (actorUsers != null)
+                    {
+                        var actorStepIds = actor.WorkFlowActorSteps.Select(x => x.StepId);
+                        var step = workFlow.Steps.FirstOrDefault(s => actorStepIds.Contains(s.Id) && s.ActionTypeId == startEventActionTypeId);
+                        if (step != null)
+                        {
+                            var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
+                            if (progress != null)
+                            {
+                                var currentStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+                                var currentProgress = currentStep.SourceProgresses.FirstOrDefault(x => x.SourceId == currentStep.Id);
+                                var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                if (nextStep.ActionTypeId == (long)ActionTypeEnum.exclusiveGateway)
+                                {
+                                    var x = nextStep.SourceProgresses[0];
+                                    nextStep = workFlow.Steps.FirstOrDefault(i => i.Id == x.TargetId);
+                                }
+
+                                checkActorAccess.TargetStateId = nextStep.SourceProgresses[0].StateId;
+                                checkActorAccess.SourceStateId = null;
+                                checkActorAccess.TargetStepId = nextStep.SourceProgresses[0].SourceId;
+                                checkActorAccess.SourceStepId = step.Id;
+                                checkActorAccess.Id = workFlowId;
+                                checkActorAccess.ProjectId = workFlow.ProjectId;
+                                checkActorAccess.MainAggregateId = workFlow.MainAggregateId;
+                                //checkActorAccess = result;
+                            }
+                        }
+                    }
+                    else if (actor.IsEveryOne == "1")
+                    {
+                        var actorStepIds = actor.WorkFlowActorSteps.Select(x => x.StepId);
+                        var step = workFlow.Steps.FirstOrDefault(s => actorStepIds.Contains(s.Id) && s.ActionTypeId == startEventActionTypeId);
+                        if (step != null)
+                        {
+                            var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
+                            if (progress != null)
+                            {
+                                var currentStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+                                var currentProgress = currentStep.SourceProgresses.FirstOrDefault(x => x.SourceId == currentStep.Id);
+                                var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                if (nextStep.ActionTypeId == (long)ActionTypeEnum.exclusiveGateway)
+                                {
+                                    var x = nextStep.SourceProgresses[0];
+                                    nextStep = workFlow.Steps.FirstOrDefault(i => i.Id == x.TargetId);
+                                }
+
+                                checkIsEveryOne.TargetStateId = nextStep.SourceProgresses[0].StateId;
+                                checkIsEveryOne.SourceStateId = null;
+                                checkIsEveryOne.TargetStepId = nextStep.SourceProgresses[0].SourceId;
+                                checkIsEveryOne.SourceStepId = step.Id;
+                                checkIsEveryOne.Id = workFlowId;
+                                checkIsEveryOne.ProjectId = workFlow.ProjectId;
+                                checkIsEveryOne.MainAggregateId = workFlow.MainAggregateId;
+                                //checkIsEveryOne = result;
+                            }
+                        }
+                    }
+                }
+
+                if (checkActorAccess.Id != 0) return checkActorAccess;
+                else if (checkIsEveryOne.Id != 0) return checkIsEveryOne;
+                else throw new SimaResultException(CodeMessges._100063Code, Messages.CreateIssueWithChechActorException);
+
+            }
+            else
+            {
+                var step = workFlow.Steps.FirstOrDefault(s => s.ActionTypeId == startEventActionTypeId);
+                if (step != null)
+                {
+                    var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
+                    if (progress != null)
+                    {
+                        var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+
+                        result.TargetStateId = progress.StateId;
+                        result.SourceStateId = null;
+                        result.TargetStepId = progress.TargetId;
+                        result.SourceStepId = step.Id;
+                        result.Id = workFlowId;
+                        result.ProjectId = workFlow.ProjectId;
+                        result.MainAggregateId = workFlow.MainAggregateId;
+                        return result;
+                    }
+                }
+            }
+
+            throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
+        }
+    }
     public static string ContainsComparisonOperator(string text)
     {
         // Array of comparison operators to check for
@@ -597,11 +740,20 @@ Order By c.[CreatedAt] desc
         // Use Any method for efficient check
         return operators.FirstOrDefault(op => text.Contains(op));
     }
-    private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<NextProgressInfo> progresses, string ConditionValue, List<InputModel> inputs)
+
+
+
+    private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo> progresses, string conditionValue, List<InputModel> inputs)
     {
 
         foreach (var item in progresses)
         {
+            if (string.IsNullOrEmpty(item.ConditionExpression))
+            {
+                var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = item.ProgressId, SystemParams = inputs, NextStepId = item.TargetId.Value, ConditionValue = conditionValue };
+                return await GetNextStepById(item.WorkflowId, query);
+
+            }
             var condition = item.ConditionExpression;
             var extension = item.Extension;
 
@@ -614,7 +766,18 @@ Order By c.[CreatedAt] desc
                 var conditionResult = await EvaluateViewCondition(allQueries);
                 if (conditionResult)
                 {
-                    return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = item.TargetId.Value, SourceStateId = item.NextStateId };
+                    var sourceStepId = item.TargetId.Value;
+                    var nextProgress = await GetNextProgress(item.WorkflowId, sourceStepId);
+                    if (nextProgress.ActionTypeId == 6)
+                    {
+                        var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = nextProgress.ProgressId, SystemParams = inputs, NextStepId = nextProgress.TargetId, ConditionValue = conditionValue };
+                        return await GetNextStepById(item.WorkflowId, query);
+
+                        //var forFindTargetQuery = @"select p.TargetId from Project.Progress p where p.SourceId=@Id";
+                        //sourceStepId = await connection.QueryFirstOrDefaultAsync<long>(forFindTargetQuery, new { Id = sourceStepId });
+                    }
+
+                    return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = sourceStepId, SourceStateId = item.NextStateId };
                 }
             }
             else
@@ -627,8 +790,20 @@ Order By c.[CreatedAt] desc
             }
 
         }
-        throw new Exception("No Condition Was Correct");
+        throw new SimaResultException(CodeMessges._100061Code, Messages.NoConditionWasCorrect);
     }
+
+    private async Task<NextProgressDetails> GetNextProgress(long workflowId, long sourceStepId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var targetStepQuery = @"SELECT S.ActionTypeId, FStep.Id ProgressId, FStep.TargetId FROM Project.Step S
+                                                CROSS APPLY [Project].[ReturnNextStepN]   (s.id,@WorkflowId) FStep WHERE S.Id = @TargetId AND S.ActiveStatusId <> 3 ;";
+            return await connection.QueryFirstOrDefaultAsync<NextProgressDetails>(targetStepQuery, new { TargetId = sourceStepId, WorkflowId = workflowId });
+        }
+    }
+
     private string EvaluateConditionExtension(string condition, Dictionary<string, string> evalueatedExtension)
     {
         if (!condition.Contains("*"))
@@ -780,8 +955,18 @@ Order By c.[CreatedAt] desc
     private async Task<bool> EvaluateViewCondition(List<QueryWithCheckerModel> queries)
     {
         var result = false;
+        var skip = false;
         foreach (var query in queries)
         {
+            if (skip)
+            {
+               if (query.Combiner.Contains("||"))
+                {
+                    continue;
+                }
+                skip = false;
+                continue;
+            }
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
@@ -792,7 +977,7 @@ Order By c.[CreatedAt] desc
 
                         var stringChecker = await connection.QuerySingleOrDefaultAsync<string>(query.Query);
                         result = CheckStringCondition(stringChecker, query.Checker, query.ValueToCheck);
-                        if (!result)
+                        if (!result && query.Combiner.Contains("&&"))
                         {
                             break;
                         }
@@ -803,10 +988,14 @@ Order By c.[CreatedAt] desc
                     {
                         var longChecker = await connection.QueryFirstOrDefaultAsync<long>(query.Query);
                         result = CheckLongCondition(longChecker, query.Checker, Convert.ToInt64(query.ValueToCheck));
-                        if (!result)
+                        if (!result && query.Combiner.Contains("&&"))
                         {
                             break;
                         }
+                    }
+                    if (result && query.Combiner.Contains("||"))
+                    {
+                        skip = true;
                     }
                 }
                 catch
@@ -846,17 +1035,53 @@ Order By c.[CreatedAt] desc
     {
         //string pattern = @"(?=(" + string.Join("|", splitWords) + @"))";
         var aqlQuery = GetQueryConditions(condition, inputModels);
-
-        string[] allQueries = aqlQuery.Split('@', StringSplitOptions.RemoveEmptyEntries);
+        var allQueriesWithExpression = ExtractStringsAndConditions(aqlQuery);
 
         //allQueries = Array.FindAll(allQueries, s => !string.IsNullOrWhiteSpace(s));
         var queries = new List<QueryWithCheckerModel>();
-        foreach (var item in allQueries)
+        foreach (var item in allQueriesWithExpression)
         {
-            var query = GetQuery(item);
+            var query = GetQuery(item.Key);
+            query.Combiner = item.Value;
             queries.Add(query);
         }
         return queries;
+    }
+    private static Dictionary<string, string> ExtractStringsAndConditions(string expression)
+    {
+        var results = new Dictionary<string, string>();
+        string[] delimiters = { " || ", " && " };
+
+        foreach (var delimiter in delimiters)
+        {
+            if (!expression.Contains(delimiter))
+            {
+                continue;
+            }
+            var parts = expression.Split(new[] { delimiter }, StringSplitOptions.None);
+
+            string part = parts[0].Trim();
+            string stringPart = part.Substring(1).Trim();
+            results.TryAdd(stringPart, delimiter.Trim());
+            var subLenght = part.Length + delimiter.Length;
+            if (subLenght < expression.Length)
+            {
+                expression = expression.Substring(subLenght).Trim();
+                var newDic = ExtractStringsAndConditions(expression);
+                foreach (var item in newDic)
+                {
+                    results.TryAdd(item.Key, item.Value);
+                }
+
+            }
+        }
+        if (!results.Any())
+        {
+            string stringPart = expression.Substring(1).Trim();
+            results.TryAdd(stringPart, string.Empty);
+        }
+
+        return results;
     }
     private string[] splitWords = new string[] { "(!=)", "(==)", "(<=)", "(>=)", "(>)", "(<)" };
     private QueryWithCheckerModel GetQuery(string aqlQuery)
@@ -937,6 +1162,7 @@ Order By c.[CreatedAt] desc
     {
         using (var connection = new SqlConnection(_connectionString))
         {
+            var issueId = SystemParams.First(x => x.Key == "IssueId").Value;
             #region -- exe Sp --
             var SpQury = @"select 
                   p.Id ProgressId,
@@ -952,18 +1178,40 @@ Order By c.[CreatedAt] desc
                   Project.Progress p join 
                   Project.ProgressStoreProcedure ps on p.Id = ps.ProgressId 
                   left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id
-                  
                   where p.Id= @ProgressId
+
+				  union
+
+                  select 
+                  p.Id ProgressId,
+                  ps.StoreProcedureName StoreProcedureName,
+                  ps.Id ProgressStoreProcedureId,
+                  psp.Id ParamId,
+                  psp.Name ParamName,
+                  psp.IsSystemParam IsSystemParam,
+                  psp.SystemParamName SystemParamName,
+                  psp.DataTypeId,
+                  ps.ExecutionOrdering
+                  from
+                 Project.Progress p
+				 join Project.Step S on S.Id = P.SourceId 
+				 join Project.Progress PT on PT.TargetId = S.Id
+				 join IssueManagement.Issue I On I.CurrenStepId = PT.SourceId
+				 join  Project.ProgressStoreProcedure ps on PT.Id = ps.ProgressId 
+                 left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id
+                 where p.Id= @ProgressId and I.Id =@issueId
                   ";
-            var spQuery = await connection.QueryAsync<StoreProcedureInfo>(SpQury, new { ProgressId });
+            var spQuery = await connection.QueryAsync<StoreProcedureInfo>(SpQury, new { ProgressId, issueId });
             var spGroup = spQuery.OrderBy(x => x.ExecutionOrdering).GroupBy(x => x.StoreProcedureName);
             foreach (var item in spGroup)
             {
                 string sp = string.Empty;
-                if (item.Key.Contains(mainAggregateName + "Document"))
+                //if (item.Key.Contains(mainAggregateName + "Document"))
+                //{
+                if (item.Key.Trim() == "SP_Logisticses_RegisterUploadedFile")
                 {
                     var json = JsonConvert.SerializeObject(docs);
-                    sp = $"{item.Key} N'{json}'";
+                    sp = $"{item.Key} @UserId ={SystemParams.First(x => x.Key == "UserId").Value},@DocumentIdList= N'{json}'";
                 }
                 else
                 {
@@ -1002,6 +1250,11 @@ Order By c.[CreatedAt] desc
                     {
                         if (i.DataTypeId == 2)
                             sp += $"@{i.ParamName} = N'{i.Value}' ,";
+                        else if (i.DataTypeId == 6)
+                        {
+                            var date = i.Value.ToMiladiDate().ToString();
+                            sp += $"@{i.ParamName} = N'{date}' ,";
+                        }
                         else
                             sp += $"@{i.ParamName} = {i.Value} ,";
                     }
@@ -1011,9 +1264,9 @@ Order By c.[CreatedAt] desc
                 {
                     await connection.ExecuteAsync(sp);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw new SimaResultException(CodeMessges._400Code, Messages.ExecStoreProcedureError);
+                    throw new SimaResultException(CodeMessges._100062Code, Messages.ExecStoreProcedureError);
                 }
             }
             #endregion

@@ -28,5 +28,5 @@ public class GetAllIssueQueryResult
     public string CreatedBy { get; set; }
     public string CreateFullName => $"{FirstName} {LastName}";
     public DateTime CreatedAt { get; set; }
-    public string PersianCreatedAt => DateHelper.ToPersianDate(CreatedAt);
+    public string? CreatedAtPersian => DateHelper.ToPersianDateTime(CreatedAt);
 }

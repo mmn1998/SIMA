@@ -10,12 +10,4 @@ public class GetPhoneTypeQueryResult
 
     public long ActiveStatusId { get; set; }
     public string ActiveStatus { get; set; }
-
-    public byte[]? CreateDate { get; set; }
-
-    public int? CreateBy { get; set; }
-
-    public DateTime? ModifyDate { get; set; }
-
-    public int? ModifyBy { get; set; }
 }
