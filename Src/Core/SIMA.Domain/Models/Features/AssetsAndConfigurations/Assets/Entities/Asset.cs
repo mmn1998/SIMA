@@ -154,6 +154,8 @@ public class Asset : Entity
     public ICollection<AssetWarehouseHistory> AssetWarehouseHistories => _assetWarehouseHistories;
     private List<AssetChangeOwnerHistory> _assetChangeOwnerHistories = new();
     public ICollection<AssetChangeOwnerHistory> AssetChangeOwnerHistories => _assetChangeOwnerHistories;
+    private List<ConfigurationItemAsset> _configurationItemAssets = new();
+    public ICollection<ConfigurationItemAsset> ConfigurationItemAssets => _configurationItemAssets;
     private List<ConfigurationItemAssetHistory> _configurationItemAssetHistories = new();
     public ICollection<ConfigurationItemAssetHistory> ConfigurationItemAssetHistories => _configurationItemAssetHistories;
 }

@@ -64,4 +64,6 @@ public class ConfigurationItemStatus : Entity
     public ICollection<ConfigurationItemChangeStatusHistory> FromConfigurationItemChangeStatusHistories => _fromConfigurationItemChangeStatusHistories;
     private List<ConfigurationItemChangeStatusHistory> _toConfigurationItemChangeStatusHistories = new();
     public ICollection<ConfigurationItemChangeStatusHistory> ToConfigurationItemChangeStatusHistories => _toConfigurationItemChangeStatusHistories;
+    private List<ConfigurationItem> _configurationItems = new();
+    public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
 }

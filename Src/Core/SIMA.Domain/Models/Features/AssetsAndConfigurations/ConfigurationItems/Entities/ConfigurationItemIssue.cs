@@ -23,7 +23,7 @@ public class ConfigurationItemIssue : Entity
     {
         return new ConfigurationItemIssue(arg);
     }
-    public ConfigurationItemRelationshipId Id { get; private set; }
+    public ConfigurationItemIssueId Id { get; private set; }
     public IssueId IssueId { get; private set; }
     public virtual Issue Issue { get; private set; }
     public ConfigurationItemVersioningId ConfigurationItemVersioningId { get; private set; }

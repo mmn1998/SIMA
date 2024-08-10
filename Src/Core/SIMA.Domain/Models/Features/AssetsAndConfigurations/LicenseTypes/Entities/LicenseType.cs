@@ -4,7 +4,7 @@ using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities;
 
-public class LicenseType : Entity
+public class LicenseType : Entity, IAggregateRoot
 {
     private LicenseType() { }
     private LicenseType(CreateLicenseTypeArg arg)

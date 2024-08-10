@@ -23,7 +23,7 @@ public class ConfigurationItemChangeOwnerHistory : Entity
     {
         return new ConfigurationItemChangeOwnerHistory(arg);
     }
-    public AssetChangeOwnerHistoryId Id { get; private set; }
+    public ConfigurationItemChangeOwnerHistoryId Id { get; private set; }
     public ConfigurationItemId ConfigurationItemId { get; private set; }
     public virtual ConfigurationItem ConfigurationItem { get; private set; }
     public StaffId FromOwnerId { get; private set; }

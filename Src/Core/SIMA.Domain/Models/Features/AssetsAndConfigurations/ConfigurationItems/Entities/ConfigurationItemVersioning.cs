@@ -58,5 +58,9 @@ public class ConfigurationItemVersioning : Entity
     public ICollection<ConfigurationItemRelationship> RelatedConfigurationItemRelationships => _relatedConfigurationItemRelationships;
     private List<ConfigurationItemIssue> _configurationItemIssues;
     public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;
+    private List<ConfigurationItemDocument> _configurationItemDocuments;
+    public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
+    private List<ConfigurationItemAssetHistory> _configurationItemAssetHistories;
+    public ICollection<ConfigurationItemAssetHistory> ConfigurationItemAssetHistories => _configurationItemAssetHistories;
 }
 

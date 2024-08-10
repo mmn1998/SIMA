@@ -1,21 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities;
-using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.ValueObjects;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetPhysicalStatusConfiguration
+public class ConfigurationItemTypeConfiguration
 {
-    public void Configure(EntityTypeBuilder<AssetPhysicalStatus> entity)
+    public void Configure(EntityTypeBuilder<ConfigurationItemType> entity)
     {
-        entity.ToTable("AssetPhysicalStatus", "AssetAndConfiguration");
+        entity.ToTable("ConfigurationItemType", "AssetAndConfiguration");
 
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new AssetPhysicalStatusId(v)).ValueGeneratedNever();
+             v => new ConfigurationItemTypeId(v)).ValueGeneratedNever();
+        entity.Property(x => x.ParentId)
+            .HasConversion(
+             v => v.Value,
+             v => new ConfigurationItemTypeId(v));
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(50);
         entity.Property(e => e.CreatedAt)
