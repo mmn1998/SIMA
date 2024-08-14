@@ -19,9 +19,14 @@ public class ApiMethodActionsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAll")]
-    public async Task<Result> Get()
+    public async Task<Result> Get([FromBody] GetAllApiMethodActionsQuery query)
     {
-        var query = new GetAllApiMethodActionsQuery();
+        return await _mediator.Send(query);
+    }
+    [HttpGet("{id}")]
+    public async Task<Result> Get([FromRoute] long id)
+    {
+        var query = new GetApiMethodActionQuery { Id = id };
         return await _mediator.Send(query);
     }
 }

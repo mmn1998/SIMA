@@ -89,6 +89,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowConfiguration;
 using SIMA.Domain.Models.Features.Auths.UIInputElements.Entities;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
 
 namespace SIMA.Persistance.Persistence
 {
@@ -179,6 +180,7 @@ namespace SIMA.Persistance.Persistence
         public virtual DbSet<ViewField> ViewFields { get; set; }
         public virtual DbSet<ViewList> ViewLists { get; set; }
         public virtual DbSet<UIInputElement> UIInputElements { get; set; }
+        public virtual DbSet<ApiMethodAction> ApiMethodActions { get; set; }
 
         #endregion
 
@@ -274,6 +276,8 @@ namespace SIMA.Persistance.Persistence
         public DbSet<SupplierRank> SupplierRanks { get; set; }
         public DbSet<LogisticsRequest> LogisticsRequests { get; set; }
         #endregion
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { 
         }
 

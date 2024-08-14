@@ -18,6 +18,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesController.cs" />
     <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ApiMethodActions\V1\ApiMethodActionsController.cs" />
     <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesController.cs" />
     <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesController.cs" />

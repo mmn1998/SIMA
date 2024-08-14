@@ -5,7 +5,8 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.ApiMethodActions;
 
 namespace SIMA.Application.Query.Features.Auths.ApiMethodActions;
 
-public class ApiMethodActionQueryHandler : IQueryHandler<GetAllApiMethodActionsQuery, Result<IEnumerable<GetApiMethodActionQueryResult>>>
+public class ApiMethodActionQueryHandler : IQueryHandler<GetAllApiMethodActionsQuery, Result<IEnumerable<GetApiMethodActionQueryResult>>>,
+    IQueryHandler<GetApiMethodActionQuery, Result<GetApiMethodActionQueryResult>>
 {
     private readonly IApiMethodActionQueryRepository _repository;
 
@@ -13,9 +14,15 @@ public class ApiMethodActionQueryHandler : IQueryHandler<GetAllApiMethodActionsQ
     {
         _repository = repository;
     }
+
+    public async Task<Result<GetApiMethodActionQueryResult>> Handle(GetApiMethodActionQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetById(request);
+        return Result.Ok(result);
+    }
+
     public async Task<Result<IEnumerable<GetApiMethodActionQueryResult>>> Handle(GetAllApiMethodActionsQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetAll(request);
-        return Result.Ok(result);
+        return await _repository.GetAll(request);
     }
 }

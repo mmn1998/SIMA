@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using SIMA.Application.Feaatures.Auths.AddressTypes.Mappers;
+using SIMA.Application.Feaatures.Auths.ApiMethodActions.Mappers;
 using SIMA.Application.Feaatures.Auths.Companies;
 using SIMA.Application.Feaatures.Auths.Companies.Mappers;
 using SIMA.Application.Feaatures.Auths.ConfigurationAttributes.Mappers;
@@ -112,6 +113,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new UserMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new FormMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new UIInputElementMapper());
+                conf.AddProfile(new ApiMethodActionMapper());
                 #endregion
 
                 #region WorkFlows
