@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceRelatedIssueConfiguration : IEntityTypeConfiguration<ServiceRelatedIssue>
+public class ServiceRelatedIssueConfiguration : IEntityTypeConfiguration<ServiceRelatedIssue>
 {
     public void Configure(EntityTypeBuilder<ServiceRelatedIssue> entity)
     {

@@ -1,6 +1,8 @@
-﻿using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
+﻿using SIMA.Application.Query.Contract.Features.Auths.ResponsibleTypes;
+using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.Auths.ResponsibleTypes;
 using SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsTypes;
 
 namespace SIMA.Application.Query.Features.Logistics.GoodsTypes;

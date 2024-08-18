@@ -1,8 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Forms.Entities;
 using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Domain.Models.Features.Auths.Permissions.Args;
 using SIMA.Domain.Models.Features.Auths.Permissions.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes;
 using SIMA.Domain.Models.Features.Auths.Roles.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Framework.Common.Exceptions;
@@ -31,6 +33,7 @@ public class Permission : Entity
         CreatedBy = arg.CreatedBy;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        Description = arg.Description;
     }
     public static async Task<Permission> Create(CreatePermissionArg arg, IPermissionService service)
     {
@@ -54,6 +57,7 @@ public class Permission : Entity
     public DomainId DomainId { get; private set; }
 
     public string? Name { get; private set; }
+    public string? Description { get; private set; }
 
     public string? EnglishKey { get; private set; }
 
@@ -79,6 +83,8 @@ public class Permission : Entity
 
     private List<UserPermission> _userPermision = new();
     public ICollection<UserPermission> UserPermissions => _userPermision;
+    private List<FormPermission> _formPermissions = new();
+    public ICollection<FormPermission> FormPermissions => _formPermissions;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

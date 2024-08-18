@@ -2,7 +2,10 @@
 
 public class GetUserAggregateQueryResult
 {
-    public GetUserQueryForAggregate User { get; set; }
+    public long Id { get; set; }
+    public long? ProfileId { get; set; }
+    public long? CompanyId { get; set; }
+    public string Username { get; set; }
     public List<GetUserDomainQueryForAggregate> UserDomains { get; set; }
     public List<GetUserRoleQueryForAggregate> UserRoles { get; set; }
     public List<GetUserPermissionQueryForAggregate> UserPermissions { get; set; }

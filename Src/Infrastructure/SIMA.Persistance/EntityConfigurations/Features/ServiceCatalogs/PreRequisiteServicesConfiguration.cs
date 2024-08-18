@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class PreRequisiteServicesConfiguration : IEntityTypeConfiguration<PreRequisiteServices>
+public class PreRequisiteServicesConfiguration : IEntityTypeConfiguration<PreRequisiteServices>
 {
     public void Configure(EntityTypeBuilder<PreRequisiteServices> entity)
     {

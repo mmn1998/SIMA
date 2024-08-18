@@ -6,7 +6,7 @@ public class CreateServiceCategoryArg
     public long ServiceTypeId { get; set; }
     public string Name { get; set; }
     public string Code { get; set; }
-    public long? ActiveStatusId { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public long? CreatedBy { get; set; }
+    public long ActiveStatusId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public long CreatedBy { get; set; }
 }

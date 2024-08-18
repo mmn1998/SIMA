@@ -18,6 +18,7 @@ public class BusinessImpactAnalysisDisasterOriginConfiguration : IEntityTypeConf
              v => v.Value,
              v => new BusinessImpactAnalysisDisasterOriginId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
+        entity.Property(i => i.Description).HasColumnType("nvarchar(MAX)").IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");

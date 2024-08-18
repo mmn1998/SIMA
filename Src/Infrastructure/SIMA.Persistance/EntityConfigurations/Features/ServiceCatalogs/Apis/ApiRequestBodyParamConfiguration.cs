@@ -29,10 +29,10 @@ public class ApiRequestBodyParamConfiguration : IEntityTypeConfiguration<ApiRequ
         entity.Property(x => x.ParentId)
             .HasConversion(x => x.Value, x => new ApiRequestBodyParamId(x));
         
-        entity.Property(x => x.ApiId)
-            .HasConversion(x => x.Value, x => new ApiId(x));
-        entity.HasOne(x=>x.Api)
+        entity.Property(x => x.ApiVersionId)
+            .HasConversion(x => x.Value, x => new ApiVersionId(x));
+        entity.HasOne(x=>x.ApiVersion)
             .WithMany(x=>x.ApiRequestBodyParams)
-            .HasForeignKey(x=>x.ApiId);
+            .HasForeignKey(x=>x.ApiVersionId);
     }
 }

@@ -95,4 +95,6 @@ public class Form : Entity
     }
     private List<FormField> _formFields = new();
     public List<FormField> FormFields => _formFields;
+    private List<FormPermission> _formPermissions = new();
+    public List<FormPermission> FormPermissions => _formPermissions;
 }

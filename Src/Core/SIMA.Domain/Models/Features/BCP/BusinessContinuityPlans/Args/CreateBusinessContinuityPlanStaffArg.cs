@@ -1,8 +1,8 @@
 ﻿namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 
-public class CreateBusinessContinuityPlanStaffArg
+public class CreateBusinessContinuityPlanRelatedStaffArg
 {
-    public long BusinessContinuityPlanId { get; set; }
+    public long BusinessContinuityPlanVersioningId { get; set; }
     public long StaffId { get; set; }
     public long ActiveStatusId { get; set; }
 

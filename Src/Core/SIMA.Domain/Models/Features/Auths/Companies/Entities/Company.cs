@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.Companies.Args;
+﻿using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Args;
+using SIMA.Domain.Models.Features.Auths.Companies.Args;
 using SIMA.Domain.Models.Features.Auths.Companies.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities;
@@ -6,6 +7,7 @@ using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Framework.Common.Exceptions;
@@ -125,4 +127,7 @@ public class Company : Entity
     private List<CompanyBuildingLocation> _companyBuildingLocations = new();
 
     public ICollection<CompanyBuildingLocation> CompanyBuildingLocations => _companyBuildingLocations;
+
+    private List<Product> _products = new();
+    public ICollection<Product> Products => _products;
 }

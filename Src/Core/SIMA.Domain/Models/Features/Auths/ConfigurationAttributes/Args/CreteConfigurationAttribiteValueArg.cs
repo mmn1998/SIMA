@@ -7,6 +7,7 @@ public class CreteConfigurationAttribiteValueArg
     public long ConfigurationAttributeId { get; set; }
 
     public string? Value { get; set; }
+    public string? AttributeKey { get; set; }
 
     public string? IsUserConfige { get; set; }
 

@@ -107,14 +107,14 @@ public class GroupQueryRepository : IGroupQueryRepository
                             join Basic.ActiveStatus a
                             on G.ActiveStatusId = a.ID
                             WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3
-                            GROUP BY G.ID,G.Name,G.Code,a.ID ,a.Name 
+                            GROUP BY G.ID,G.Name,G.Code,a.ID ,a.Name; 
 
                             SELECT DISTINCT D.Name as DomainName, D.ID as DomainId, P.Name as PermissionName, P.ID as PermissionId
                             FROM [Authentication].[Groups] G
                             INNER JOIN [Authentication].[GroupPermission] GP on GP.GroupID = G.ID
                             INNER JOIN [Authentication].[Permission] P on P.ID = GP.PermissionID
                             INNER JOIN [Authentication].[Domain] D on D.ID = P.DomainID
-                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3
+                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3 and GP.[ActiveStatusID] <> 3
                             GROUP BY D.Name, D.ID, P.Name, P.ID;
 
                             SELECT DISTINCT U.ID as UserId, (P.FirstName + ' ' + p.LastName) as FullName, P.NationalID as NationalCode
@@ -122,10 +122,10 @@ public class GroupQueryRepository : IGroupQueryRepository
                             INNER JOIN [Authentication].[UserGroup] UG on UG.GroupID = G.ID
                             INNER JOIN [Authentication].[Users] U on U.ID = UG.UserID
                             INNER JOIN [Authentication].[Profile] P on P.ID = U.ProfileID
-                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3";
+                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3 and UG.[ActiveStatusID] <> 3";
             using (var multi = await connection.QueryMultipleAsync(query, new { GroupId = groupId }))
             {
-                response.Group = multi.ReadAsync<GetGroupResultForAggregate>().GetAwaiter().GetResult().Single();
+                response = multi.ReadAsync<GetGroupAggregateResult>().GetAwaiter().GetResult().Single();
                 response.GroupPermissions = multi.ReadAsync<GetGroupPermissionResultForAggregate>().GetAwaiter().GetResult().ToList();
                 response.UsrGroups = multi.ReadAsync<GetUserGroupResultForAggregate>().GetAwaiter().GetResult().ToList();
             }

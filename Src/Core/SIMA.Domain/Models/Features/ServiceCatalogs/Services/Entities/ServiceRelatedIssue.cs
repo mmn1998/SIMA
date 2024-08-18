@@ -28,9 +28,9 @@ public class ServiceRelatedIssue : Entity
     public ServiceId ServiceId { get; private set; }
     public virtual Issue Issue { get; private set; }
     public IssueId IssueId { get; private set; }
-    public long? ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public long ActiveStatusId { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
 }

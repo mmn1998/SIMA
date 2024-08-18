@@ -9,8 +9,9 @@ public class CreateCriticalActivityExecutionPlanArg : Entity
     public int WeekyDay { get;  set; }
     public TimeOnly ServiceAvalibilityStartTime { get;  set; }
     public TimeOnly ServiceAvalibilityEndTime { get;  set; }
-    public long? ActiveStatusId { get;  set; }
-    public DateTime? CreatedAt { get;  set; }
-    public long? CreatedBy { get;  set; }
+    public long ActiveStatusId { get;  set; }
+    public DateTime CreatedAt { get;  set; }
+    public long CreatedBy { get;  set; }
+
 
 }

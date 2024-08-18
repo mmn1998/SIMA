@@ -7,24 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\**" />
-    <Compile Remove="Temp\**" />
-    <EmbeddedResource Remove="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\**" />
-    <EmbeddedResource Remove="Temp\**" />
-    <None Remove="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\**" />
-    <None Remove="Temp\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+    <None Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
+    <None Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
+    <None Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
   </ItemGroup>
 
+  
   <ItemGroup>
-    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Args\CreateConfigurationItemRelationshipTypeArg.cs" />
-    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Args\ModifyConfigurationItemRelationshipTypeArg.cs" />
-    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Contracts\IConfigurationItemRelationshipTypeDomainService.cs" />
-    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\Entities\ConfigurationItemRelationshipType.cs" />
-    <Compile Include="Models\Features\AssetsAndConfigurations\ConfigurationItemRelationshipTypes\ValueObjects\ConfigurationItemRelationshipTypeId.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="2.0.9" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.1.2" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
     <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>
@@ -35,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Features\Auths\ResponsibleTypes\Exceptions\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />
@@ -45,16 +42,14 @@
     <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServiceCustomerTypes\Exceptions\" />
+    <Folder Include="Models\Features\Auths\CustomerTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Interfaces\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceTypes\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServiceUserTypes\Exceptions\" />
+    <Folder Include="Models\Features\Auths\UserTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceBoundles\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\Services\Interfaces\" />
-    <Folder Include="Models\Features\ServiceCatalogs\Services\Exceptions\" />
   </ItemGroup>
 
 </Project>

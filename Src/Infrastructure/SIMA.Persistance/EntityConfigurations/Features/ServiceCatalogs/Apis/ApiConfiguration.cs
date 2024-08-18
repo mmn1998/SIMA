@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.NetworkProtocols.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.ValueObjects;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ApiMethodCalls.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.ValueObjects;
@@ -41,24 +41,18 @@ public class ApiConfiguration : IEntityTypeConfiguration<Api>
             .WithMany(x=>x.Apis)
             .HasForeignKey(x=>x.ApiTypeId);
 
-        entity.Property(x => x.ApiAuthentoicationMethodId)
-            .HasConversion(x => x.Value, x => new ApiAuthentoicationMethodId(x));
-        entity.HasOne(x=>x.ApiAuthentoicationMethod)
+        entity.Property(x => x.ApiAuthenticationMethodId)
+            .HasConversion(x => x.Value, x => new ApiAuthenticationMethodId(x));
+        entity.HasOne(x=>x.ApiAuthenticationMethod)
             .WithMany(x=>x.Apis)
-            .HasForeignKey(x=>x.ApiAuthentoicationMethodId);
+            .HasForeignKey(x=>x.ApiAuthenticationMethodId);
 
         entity.Property(x => x.NetworkProtocolId)
             .HasConversion(x => x.Value, x => new NetworkProtocolId(x));
         entity.HasOne(x=>x.NetworkProtocol)
             .WithMany(x=>x.Apis)
             .HasForeignKey(x=>x.NetworkProtocolId);
-
-        entity.Property(x => x.ApiMethodCallId)
-            .HasConversion(x => x.Value, x => new ApiMethodCallId(x));
-        entity.HasOne(x=>x.ApiMethodCall)
-            .WithMany(x=>x.Apis)
-            .HasForeignKey(x=>x.ApiMethodCallId);
-        
+       
         entity.Property(x => x.OwnerDepartmentId)
             .HasConversion(x => x.Value, x => new DepartmentId(x));
         entity.HasOne(x=>x.OwnerDepartment)
@@ -70,5 +64,11 @@ public class ApiConfiguration : IEntityTypeConfiguration<Api>
         entity.HasOne(x=>x.OwnerResponsible)
             .WithMany(x=>x.ResponsibleApis)
             .HasForeignKey(x=>x.OwnerResponsibleId);
+        
+        entity.Property(x => x.ApiMethodActionId)
+            .HasConversion(x => x.Value, x => new ApiMethodActionId(x));
+        entity.HasOne(x=>x.ApiMethodAction)
+            .WithMany(x=>x.Apis)
+            .HasForeignKey(x=>x.ApiMethodActionId);
     }
 }

@@ -30,9 +30,9 @@ public class ServiceDocument : Entity
     public ServiceId ServiceId { get; private set; }
     public virtual Document Document { get; private set; }
     public DocumentId DocumentId { get; private set; }
-    public long? ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public long ActiveStatusId { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
 }

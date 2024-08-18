@@ -430,6 +430,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 401.
+        /// </summary>
+        public static string _401Code {
+            get {
+                return ResourceManager.GetString("401Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 404.
         /// </summary>
         public static string _404Code {

@@ -61,7 +61,7 @@ public class BusinessImpactAnalysisDisasterOrigin : Entity, IAggregateRoot
     public virtual Consequence Consequence { get; private set; }
     public RecoveryPointObjectiveId RecoveryPointObjectiveId { get; private set; }
     public virtual RecoveryPointObjective RecoveryPointObjective { get; private set; }
-    public string? Description { get; private set; }
+    public string Description { get; private set; }
     public float? RTO { get; private set; }
     public float? RPO { get; private set; }
     public float? WRT { get; private set; }

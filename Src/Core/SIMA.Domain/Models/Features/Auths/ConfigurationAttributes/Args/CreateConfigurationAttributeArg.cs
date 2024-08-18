@@ -3,12 +3,11 @@
 public class CreateConfigurationAttributeArg
 {
     public long Id { get; set; }
+    public long ConfigurationTypeId { get; set; }
 
     public string? EnglishKey { get; set; }
 
     public string? Name { get; set; }
-
-    public string? DataType { get; set; }
 
     public string? IsUserConfige { get; set; }
 

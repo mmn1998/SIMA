@@ -38,7 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{D3
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.LicenseKeyGenerator", "SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIMA.Resources", "SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Resources", "SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

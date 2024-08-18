@@ -9,20 +9,23 @@ public class CriticalActivityExecutionPlanConfiguration : IEntityTypeConfigurati
     public void Configure(EntityTypeBuilder<CriticalActivityExecutionPlan> entity)
     {
         entity.ToTable("CriticalActivityExecutionPlan", "ServiceCatalog");
+        
         entity.Property(x => x.Id)
-    .HasColumnName("Id")
-    .HasConversion(
-        v => v.Value,
-        v => new CriticalActivityExecutionPlanId(v))
-    .ValueGeneratedNever();
+                .HasColumnName("Id")
+                .HasConversion(
+                    v => v.Value,
+                    v => new CriticalActivityExecutionPlanId(v))
+                .ValueGeneratedNever();
+       
         entity.HasKey(e => e.Id);
+       
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");
+       
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
-
 
         entity.Property(x => x.CriticalActivityId)
             .HasConversion(x => x.Value, x => new CriticalActivityId(x));

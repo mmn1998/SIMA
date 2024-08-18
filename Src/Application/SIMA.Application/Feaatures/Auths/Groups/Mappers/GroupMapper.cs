@@ -18,7 +18,12 @@ public class GroupMapper : Profile
     .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active))
     //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
     .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()));
-        ;
+
+
+        CreateMap<CreateGroupAggregate, CreateGroupArg>()
+             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active))
+             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()));
 
 
         CreateMap<UpdateGroupCommand, ModifyGroupArg>()

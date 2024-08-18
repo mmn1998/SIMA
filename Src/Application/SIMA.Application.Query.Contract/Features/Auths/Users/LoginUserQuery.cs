@@ -1,4 +1,5 @@
-﻿using SIMA.Framework.Common.Response;
+﻿using Microsoft.Win32;
+using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using System.Diagnostics;
@@ -24,8 +25,8 @@ public class LoginUserModel
 public class LoginUserQueryResult
 {
     public string Token { get; set; }
+    public string RefreshToken { get; set; }
     public UserInfoLogin UserInfoLogin { get; set; }
-    //public List<Permissions> Permission{ get; set; }
     public IEnumerable<int> Permissions { get; set; }
     public IEnumerable<Menue> TempMenues { get; set; }
     public List<Menue> Menue { get; set; }
@@ -55,4 +56,10 @@ public class SubMenue
     public long DomainId { get; set; }
     public string Name { get; set; }
     public string Code { get; set; }
+}
+
+public class TokenModelResult
+{
+    public string AccessToken { get; set; }
+    public string RefreshToken { get; set; }
 }

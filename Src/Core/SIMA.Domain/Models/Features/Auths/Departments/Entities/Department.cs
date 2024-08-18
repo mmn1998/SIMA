@@ -11,6 +11,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -59,14 +60,14 @@ public class Department : Entity
         arg.NullCheck();
         arg.Code.NullCheck();
         arg.Name.NullCheck();
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyDepartmentArg arg, IDepartmentService service)
     {
         arg.NullCheck();
         arg.Code.NullCheck();
         arg.Name.NullCheck();
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public DepartmentId Id { get; private set; }
@@ -98,26 +99,22 @@ public class Department : Entity
 
     public virtual Location? Location { get; private set; }
 
-
     public virtual Department? Parent { get; private set; }
     private List<Position> _positions = new();
     public ICollection<Position> Positions => _positions;
     private List<Branch> _branches = new();
     public ICollection<Branch> Branches => _branches;
-    private List<Approval> _responsibleApprovals => new();
+    private List<Approval> _responsibleApprovals = new();
     public ICollection<Approval> ResponsibleApprovals => _responsibleApprovals;
-    private List<Approval> _supervisorApprovals => new();
+    private List<Approval> _supervisorApprovals = new();
     public ICollection<Approval> SupervisorApprovals => _supervisorApprovals;
-    private List<Invitees> _invitees => new();
+    private List<Invitees> _invitees = new();
     public ICollection<Invitees> Invitees => _invitees;
 
-    private List<Service> _ownerServices => new();
-    public ICollection<Service> OwnerService => _ownerServices;
-    
-    private List<Service> _technicalSupervisorServices => new();
+    private List<Service> _technicalSupervisorServices = new();
     public ICollection<Service> TechnicalSupervisorServices => _technicalSupervisorServices;
 
-    private List<CriticalActivity> _criticalActivities=> new();
+    private List<CriticalActivity> _criticalActivities = new();
     public ICollection<CriticalActivity> CriticalActivities => _criticalActivities;
     private List<Api> _apis = new();
     public ICollection<Api> OwnerApis => _apis;

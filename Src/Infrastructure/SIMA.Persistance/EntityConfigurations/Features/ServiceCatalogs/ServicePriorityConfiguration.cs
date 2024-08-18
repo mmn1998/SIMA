@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServicePriorityConfiguration : IEntityTypeConfiguration<ServicePriority>
+    public  class ServicePriorityConfiguration : IEntityTypeConfiguration<ServicePriority>
 {
 
     public void Configure(EntityTypeBuilder<ServicePriority> entity)

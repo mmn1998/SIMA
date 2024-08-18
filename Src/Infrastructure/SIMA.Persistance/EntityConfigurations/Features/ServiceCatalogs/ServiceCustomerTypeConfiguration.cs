@@ -1,20 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceCustomerTypeConfiguration : IEntityTypeConfiguration<ServiceCustomerType>
+public class ServiceCustomerTypeConfiguration : IEntityTypeConfiguration<CustomerType>
 {
-    public void Configure(EntityTypeBuilder<ServiceCustomerType> entity)
+    public void Configure(EntityTypeBuilder<CustomerType> entity)
     {
-        entity.ToTable("ServiceCustomerType", "ServiceCatalog");
+        entity.ToTable("CustomerType", "Basic");
         entity.HasKey(e => e.Id);
         entity.Property(x => x.Id)
-    .HasConversion(v => v.Value, v => new ServiceCustomerTypeId(v))
+    .HasConversion(v => v.Value, v => new CustomerTypeId(v))
     .ValueGeneratedNever();
-        entity.Property(x => x.ParentId)
-    .HasConversion(v => v.Value, v => new ServiceCustomerTypeId(v));
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");

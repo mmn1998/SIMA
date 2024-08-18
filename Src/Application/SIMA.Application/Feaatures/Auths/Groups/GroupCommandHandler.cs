@@ -141,7 +141,7 @@ public class GroupCommandHandler : ICommandHandler<CreateGroupCommand, Result<lo
 
     public async Task<Result<long>> Handle(CreateGroupAggregate request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateGroupArg>(request.Group);
+        var arg = _mapper.Map<CreateGroupArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
         var entity = await Group.Create(arg, _service);
         await _repository.Add(entity);

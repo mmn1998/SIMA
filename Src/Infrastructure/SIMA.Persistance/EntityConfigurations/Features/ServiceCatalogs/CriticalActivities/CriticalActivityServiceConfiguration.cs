@@ -4,33 +4,36 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs.CriticalActivities;
 
-public class CriticalActivityServiceConfiguration : IEntityTypeConfiguration<CriticalActivityService>
+public class CriticalActivityServiceConfiguration : IEntityTypeConfiguration<CriticalActivityServices>
 {
-    public void Configure(EntityTypeBuilder<CriticalActivityService> entity)
+    public void Configure(EntityTypeBuilder<CriticalActivityServices> entity)
     {
         entity.ToTable("CriticalActivityService", "ServiceCatalog");
+        
         entity.Property(x => x.Id)
-    .HasColumnName("Id")
-    .HasConversion(
-        v => v.Value,
-        v => new CriticalActivityServiceId(v))
-    .ValueGeneratedNever();
+            .HasColumnName("Id")
+            .HasConversion(
+                v => v.Value,
+                v => new CriticalActivityServiceId(v))
+            .ValueGeneratedNever();
+
         entity.HasKey(e => e.Id);
+
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");
+
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
 
-
         entity.Property(x => x.CriticalActivityId)
-            .HasConversion(x => x.Value, x => new CriticalActivityId(x));
+             .HasConversion(x => x.Value, x => new CriticalActivityId(x));
 
         entity.HasOne(x => x.CriticalActivity)
             .WithMany(x => x.CriticalActivityServices)
             .HasForeignKey(x => x.CriticalActivityId);
-        
+
         entity.Property(x => x.ServiceId)
             .HasConversion(x => x.Value, x => new ServiceId(x));
 

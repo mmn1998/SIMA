@@ -5,10 +5,6 @@ using SIMA.Domain.Models.Features.Auths.Roles.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Roles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
@@ -16,7 +12,6 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
-using static Dapper.SqlMapper;
 
 namespace SIMA.Domain.Models.Features.Auths.Roles.Entities;
 
@@ -50,7 +45,7 @@ public class Role : Entity
         arg.EnglishKey.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
-        if (!await service.IsRoleSatisfied(arg.Code, arg.EnglishKey, 0)) throw RoleExceptions.RoleNotSatisfiedException;
+        if (await service.IsRoleSatisfied(arg.Code, arg.EnglishKey, 0)) throw RoleExceptions.RoleNotSatisfiedException;
     }
     private async Task ModifyGuards(ModifyRoleArg arg, IRoleService service)
     {
@@ -117,7 +112,7 @@ public class Role : Entity
         }
         var rolePermission = _rolePermissions.FirstOrDefault(rp => rp.Id == new RolePermissionId(arg.Id));
         rolePermission.NullCheck();
-        rolePermission.Modify(arg);
+        await rolePermission.Modify(arg);
     }
     public async Task Modify(ModifyRoleArg arg, IRoleService service)
     {

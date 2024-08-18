@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.Departments.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.NetworkProtocols.Entities;
 using SIMA.Domain.Models.Features.Auths.NetworkProtocols.ValueObjects;
@@ -6,8 +8,6 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.ValueObjects;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ApiMethodCalls.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ApiMethodCalls.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Contracts;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.ValueObjects;
@@ -38,8 +38,8 @@ public class Api : Entity, IAggregateRoot
         AuthenticationWorkflow = arg.AuthenticationWorkflow;
         RulesAndConditions = arg.RulesAndConditions;
         if (arg.ApiTypeId.HasValue) ApiTypeId = new(arg.ApiTypeId.Value);
-        if (arg.ApiMethodCallId.HasValue) ApiMethodCallId = new(arg.ApiMethodCallId.Value);
-        if (arg.ApiAuthentoicationMethodId.HasValue) ApiAuthentoicationMethodId = new(arg.ApiAuthentoicationMethodId.Value);
+
+        if (arg.ApiAuthenticationMethodId.HasValue) ApiAuthenticationMethodId = new(arg.ApiAuthenticationMethodId.Value);
         if (arg.NetworkProtocolId.HasValue) NetworkProtocolId = new(arg.NetworkProtocolId.Value);
         if (arg.OwnerResponsibleId.HasValue) OwnerResponsibleId = new(arg.OwnerResponsibleId.Value);
         if (arg.OwnerDepartmentId.HasValue) OwnerDepartmentId = new(arg.OwnerDepartmentId.Value);
@@ -68,8 +68,7 @@ public class Api : Entity, IAggregateRoot
         AuthenticationWorkflow = arg.AuthenticationWorkflow;
         RulesAndConditions = arg.RulesAndConditions;
         if (arg.ApiTypeId.HasValue) ApiTypeId = new(arg.ApiTypeId.Value);
-        if (arg.ApiMethodCallId.HasValue) ApiMethodCallId = new(arg.ApiMethodCallId.Value);
-        if (arg.ApiAuthentoicationMethodId.HasValue) ApiAuthentoicationMethodId = new(arg.ApiAuthentoicationMethodId.Value);
+        if (arg.ApiAuthenticationMethodId.HasValue) ApiAuthenticationMethodId = new(arg.ApiAuthenticationMethodId.Value);
         if (arg.NetworkProtocolId.HasValue) NetworkProtocolId = new(arg.NetworkProtocolId.Value);
         if (arg.OwnerResponsibleId.HasValue) OwnerResponsibleId = new(arg.OwnerResponsibleId.Value);
         if (arg.OwnerDepartmentId.HasValue) OwnerDepartmentId = new(arg.OwnerDepartmentId.Value);
@@ -86,8 +85,8 @@ public class Api : Entity, IAggregateRoot
     }
     #endregion
     public ApiId Id { get; private set; }
-    public string? Name { get; private set; }
-    public string? Code { get; private set; }
+    public string Name { get; private set; }
+    public string Code { get; private set; }
     public string? Description { get; private set; }
     public string? Prerequisites { get; private set; }
     public string? BaseUrl { get; private set; }
@@ -98,10 +97,10 @@ public class Api : Entity, IAggregateRoot
     public int? RateLimitingMax { get; private set; }
     public ApiTypeId? ApiTypeId { get; private set; }
     public virtual ApiType? ApiType { get; private set; }
-    public ApiMethodCallId? ApiMethodCallId { get; private set; }
-    public virtual ApiMethodCall? ApiMethodCall { get; private set; }
-    public ApiAuthentoicationMethodId? ApiAuthentoicationMethodId { get; private set; }
-    public virtual ApiAuthentoicationMethod? ApiAuthentoicationMethod { get; private set; }
+    public ApiMethodActionId? ApiMethodActionId { get; private set; }
+    public virtual ApiMethodAction? ApiMethodAction { get; private set; }
+    public ApiAuthenticationMethodId? ApiAuthenticationMethodId { get; private set; }
+    public virtual ApiAuthenticationMethod? ApiAuthenticationMethod { get; private set; }
     public NetworkProtocolId? NetworkProtocolId { get; private set; }
     public virtual NetworkProtocol? NetworkProtocol { get; private set; }
     public string? AuthenticationWorkflow { get; private set; }
@@ -127,8 +126,7 @@ public class Api : Entity, IAggregateRoot
     public ICollection<ApiSupportTeam> ApiSupportTeams => _apiSupportTeams;
     private List<ApiDocument> _apiDocuments = new();
     public ICollection<ApiDocument> ApiDocuments => _apiDocuments;
-    private List<ApiRequestHeaderParam> _apiRequestHeaderParams = new();
-    public ICollection<ApiRequestHeaderParam> ApiRequestHeaderParams => _apiRequestHeaderParams;
+   
     private List<ApiVersion> _apiVersions = new();
     public ICollection<ApiVersion> ApiVersions => _apiVersions;
     private List<ApiRequestBodyParam> _apiRequestBodyParams = new();

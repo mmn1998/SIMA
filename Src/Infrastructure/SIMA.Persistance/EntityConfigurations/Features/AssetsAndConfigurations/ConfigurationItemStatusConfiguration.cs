@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatu
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class ConfigurationItemStatusConfiguration
+public class ConfigurationItemStatusConfiguration : IEntityTypeConfiguration<ConfigurationItemStatus>
 {
     public void Configure(EntityTypeBuilder<ConfigurationItemStatus> entity)
     {

@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.AdminLocationAccesses.Entities;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
@@ -15,16 +16,37 @@ using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.Roles.Entities;
+using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.SysConfigs.Entities;
+using SIMA.Domain.Models.Features.Auths.UIInputElements.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ViewLists.Entities;
+using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
 using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
+using SIMA.Domain.Models.Features.BCP.NewFolder.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
+using SIMA.Domain.Models.Features.BCP.RecoveryOptionPriorities.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
+using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities;
+using SIMA.Domain.Models.Features.BCP.ScenarioRecoveryCriterias.Entities;
+using SIMA.Domain.Models.Features.BCP.ScenarioRecoveryOptions.Entities;
+using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities;
+using SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Entities;
@@ -46,9 +68,9 @@ using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Entities;
 using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.SupplierRanks.Entities;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
@@ -71,15 +93,21 @@ using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entit
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
+using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
@@ -88,8 +116,6 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowConfiguration;
-using SIMA.Domain.Models.Features.Auths.UIInputElements.Entities;
-using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
 
 namespace SIMA.Persistance.Persistence
 {
@@ -143,6 +169,7 @@ namespace SIMA.Persistance.Persistence
         #region AuthDbSets
 
         public virtual DbSet<Form> Forms { get; set; }
+        public DbSet<UserType> UserTypes { get; set; }
         public virtual DbSet<FormRole> FormRoles { get; set; }
         public virtual DbSet<FormGroup> FormGroups { get; set; }
         public virtual DbSet<FormUser> FormUsers { get; set; }
@@ -165,6 +192,7 @@ namespace SIMA.Persistance.Persistence
         public virtual DbSet<PhoneType> PhoneTypes { get; set; }
         public virtual DbSet<PhoneBook> PhoneBooks { get; set; }
         public virtual DbSet<Position> Positions { get; set; }
+        public virtual DbSet<ResponsibleType> ResponsibleTypes { get; set; }
         public virtual DbSet<Profile> Profiles { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RolePermission> RolePermissions { get; set; }
@@ -253,9 +281,14 @@ namespace SIMA.Persistance.Persistence
         public DbSet<ServiceType> ServiceTypes { get; set; }
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<ServiceBoundle> ServiceBoundles { get; set; }
-        public DbSet<ServiceCustomerType> ServiceCustomerTypes { get; set; }
-        public DbSet<ServiceUserType> ServiceUserTypes { get; set; }
+        public DbSet<CustomerType> ServiceCustomerTypes { get; set; }
         public DbSet<ChannelType> ChannelTypes { get; set; }
+        public DbSet<CriticalActivity> CriticalActivity { get; set; }
+        public DbSet<ServiceStatus> ServiceStatuses { get; set; }
+        public DbSet<ApiAuthenticationMethod> ApiAuthenticationMethods { get; set; }
+        public DbSet<ApiType> ApiTypes { get; set; }
+        public DbSet<Channel> Channels { get; set; }
+        public DbSet<Service> Services { get; set; }
         #endregion
 
         #region BCP
@@ -264,6 +297,37 @@ namespace SIMA.Persistance.Persistence
         public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
         public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
         public DbSet<Consequence> Consequences { get; set; }
+        public DbSet<PlanResponsibility> PlanResponsibilities { get; set; }
+        public DbSet<RecoveryOptionPriority> RecoveryOptionPriorities { get; set; }
+        public DbSet<StrategyType> StrategyTypes { get; set; }
+        public DbSet<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles { get; set; }
+        public DbSet<ServicePriority> ServicePriorities { get; set; }
+        public DbSet<BackupPeriod> BackupPeriods { get; set; }
+        public DbSet<BusinessContinuityPlan> BusinessContinuityPlans { get; set; }
+        public DbSet<Scenario> Scenarios { get; set; }
+        public DbSet<BusinessContinuityPlanPossibleAction> BusinessContinuityPlanPossibleActions { get; set; }
+        public DbSet<ScenarioRecoveryOption> ScenarioRecoveryOptions { get; set; }
+        public DbSet<ScenarioRecoveryCriteria> ScenarioRecoveryCriterias { get; set; }
+        public DbSet<ScenarioBusinessContinuityPlanAssumption> ScenarioBusinessContinuityPlanAssumptions { get; set; }
+        public DbSet<BusinessContinuityPlanVersioning> BusinessContinuityPlanVersionings { get; set; }
+        public DbSet<BusinessContinuityStrategy> BusinessContinuityStrategies { get; set; }
+        public DbSet<BusinessImpactAnalysis> BusinessImpactAnalysis { get; set; }
+        public DbSet<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins { get; set; }
+        public DbSet<BusinessContinuityStrategyDocument> BusinessContinuityStrategyDocuments { get; set; }
+        public DbSet<BusinessImpactAnalysisDocument> BusinessImpactAnalysisDocuments { get; set; }
+        public DbSet<BusinessImpactAnalysisAsset> BusinessImpactAnalysisAssets { get; set; }
+        public DbSet<BusinessImpactAnalysisCriticalActivity> BusinessImpactAnalysisCriticalActivities { get; set; }
+        public DbSet<BusinessContinuityPlanCriticalActivity> BusinessContinuityPlanCriticalActivities { get; set; }
+        public DbSet<BusinessContinuityStratgySolution> BusinessContinuityStratgySolutions { get; set; }
+        public DbSet<BusinessContinuityStrategyObjective> BusinessContinuityStrategyObjectives { get; set; }
+        public DbSet<BusinessContinuityPlanStratgy> BusinessContinuityPlanStratgies { get; set; }
+        public DbSet<BusinessContinuityPlanService> BusinessContinuityPlanServices { get; set; }
+        public DbSet<BusinessContinuityPlanRisk> BusinessContinuityPlanRisks { get; set; }
+        public DbSet<BusinessContinuityPlanAssumption> BusinessContinuityPlanAssumptions { get; set; }
+        public DbSet<ScenarioBusinessContinuityPlanVersioning> ScenarioBusinessContinuityPlanVersionings { get; set; }
+        public DbSet<BusinessContinuityPlanRelatedStaff> BusinessContinuityPlanRelatedStaffs { get; set; }
+        public DbSet<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles { get; set; }
+        public DbSet<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaffs { get; set; }
         #endregion
 
         #region Logistics
@@ -276,7 +340,6 @@ namespace SIMA.Persistance.Persistence
         public DbSet<SupplierRank> SupplierRanks { get; set; }
         public DbSet<LogisticsRequest> LogisticsRequests { get; set; }
         #endregion
-
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { 
         }

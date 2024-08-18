@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceProviderConfiguration : IEntityTypeConfiguration<ServiceProvider>
+public class ServiceProviderConfiguration : IEntityTypeConfiguration<ServiceProvider>
 {
     public void Configure(EntityTypeBuilder<ServiceProvider> entity)
     {

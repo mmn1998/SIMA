@@ -40,5 +40,8 @@ internal class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         entity.HasOne(d => d.Parent).WithMany(p => p.InverseParent)
             .HasForeignKey(d => d.ParentId)
             .HasConstraintName("FK_Department_Department_parent");
+        entity.HasMany(x => x.CriticalActivities)
+            .WithOne(x => x.TechnicalSupervisorDepartment)
+            .HasForeignKey(x => x.TechnicalSupervisorDepartmentId);
     }
 }

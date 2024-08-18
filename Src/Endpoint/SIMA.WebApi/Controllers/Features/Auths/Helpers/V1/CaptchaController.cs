@@ -2,6 +2,7 @@
 using SIMA.Framework.Common.Cachings;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Cachings;
 using SIMA.Framework.WebApi.Services;
 using SIMA.Framework.WebApi.Services.Models;

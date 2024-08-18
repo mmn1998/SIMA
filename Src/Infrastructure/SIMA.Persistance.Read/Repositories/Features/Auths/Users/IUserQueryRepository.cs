@@ -9,7 +9,7 @@ public interface IUserQueryRepository : IQueryRepository
 {
     Task<GetUserQueryResult> FindByIdQuery(long id);
     Task<Result<IEnumerable<GetUserQueryResult>>> GetAll(GetAllUserQuery? request = null);
-    Task<bool> IsUsernameUnique(string username);
+    Task<bool> IsUsernameUnique(string username, long userId);
     Task<bool> IsUsrConfigSatisfied(long configurationId, long userId);
     Task<LoginUserQueryResult> GetByUsernameAndPassword(string username, string password);
     Task<GetUserQueryResult> FindById(long id);

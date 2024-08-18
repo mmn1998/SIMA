@@ -32,7 +32,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                 .IsRowVersion()
                 .IsConcurrencyToken();
             entity.Property(e => e.Name)
-                .HasMaxLength(50)
+                .HasMaxLength(200)
                 .IsUnicode();
             entity.HasOne(x => x.WorkFlow)
                .WithMany(x => x.WorkFlowActors)

@@ -11,12 +11,11 @@ public class ApiResponseHeaderParam : Entity
     private ApiResponseHeaderParam() { }
     private ApiResponseHeaderParam(CreateApiResponseHeaderParamArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
-        ApiId = new(arg.ApiId);
+        Id = new ApiResponseHeaderParamId(arg.Id);
+        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
-        IsMandatory = arg.IsMandatory;
         Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -28,28 +27,26 @@ public class ApiResponseHeaderParam : Entity
     }
     public void Modify(ModifyApiResponseHeaderParamArg arg)
     {
-        ApiId = new(arg.ApiId);
+        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
-        IsMandatory = arg.IsMandatory;
         Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
     public ApiResponseHeaderParamId Id { get; private set; }
-    public ApiId ApiId { get; private set; }
-    public virtual Api Api { get; private set; }
-    public string? Name { get; private set; }
-    public string? DataType { get; private set; }
-    public string? IsMandatory { get; private set; }
+    public ApiVersionId ApiVersionId { get; private set; }
+    public virtual ApiVersion ApiVersion { get; private set; }
+    public string Name { get; private set; }
+    public string DataType { get; private set; }
     public string? Description { get; private set; }
     public ApiResponseHeaderParamId? ParentId { get; private set; }
     public virtual ApiResponseHeaderParam? Parent { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

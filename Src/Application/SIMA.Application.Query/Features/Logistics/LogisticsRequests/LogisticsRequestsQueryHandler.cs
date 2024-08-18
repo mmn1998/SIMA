@@ -25,7 +25,7 @@ namespace SIMA.Application.Query.Features.Logistics.LogisticsRequests
 
         public async Task<Result<IEnumerable<GetLogesticRequestGoodsQueryResult>>> Handle(GetLogesticRequestGoodsQuery request, CancellationToken cancellationToken)
         {
-            var result = await _repository.GetLogesticRequestGoods(request.Id);
+            var result = await _repository.GetLogesticRequestGoods(request);
             return result;
         }
     }

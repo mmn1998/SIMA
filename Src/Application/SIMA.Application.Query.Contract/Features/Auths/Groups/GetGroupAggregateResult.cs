@@ -2,7 +2,11 @@
 
 public class GetGroupAggregateResult
 {
-    public GetGroupResultForAggregate Group { get; set; }
+    public long Id { get; set; }
+    public string? Name { get; set; }
+    public string? Code { get; set; }
+    public long ActiveStatusId { get; set; }
+    public string ActiveStatus { get; set; }
     public List<GetGroupPermissionResultForAggregate> GroupPermissions { get; set; }
     public List<GetUserGroupResultForAggregate> UsrGroups { get; set; }
 }

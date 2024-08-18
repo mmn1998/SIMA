@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Val
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class ConfigurationItemChangeStatusHistoryConfiguration
+public class ConfigurationItemChangeStatusHistoryConfiguration : IEntityTypeConfiguration<ConfigurationItemChangeStatusHistory>
 {
     public void Configure(EntityTypeBuilder<ConfigurationItemChangeStatusHistory> entity)
     {
@@ -28,7 +28,7 @@ public class ConfigurationItemChangeStatusHistoryConfiguration
 
         entity.HasOne(d => d.ConfigurationItem)
             .WithMany(d => d.ConfigurationItemChangeStatusHistories)
-            .HasForeignKey(d => d.ConfigurationItem)
+            .HasForeignKey(d => d.ConfigurationItemId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.ToConfigurationItemStatusId)

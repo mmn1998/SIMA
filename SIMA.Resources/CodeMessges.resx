@@ -240,6 +240,9 @@
   <data name="400Code" xml:space="preserve">
     <value>400</value>
   </data>
+  <data name="401Code" xml:space="preserve">
+    <value>401</value>
+  </data>
   <data name="404Code" xml:space="preserve">
     <value>404</value>
   </data>

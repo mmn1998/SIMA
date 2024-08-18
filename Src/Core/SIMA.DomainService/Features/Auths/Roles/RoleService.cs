@@ -18,9 +18,9 @@ public class RoleService : IRoleService
     {
         bool result = false;
         if (id > 0)
-            result = !await _context.Roles.AnyAsync(b => b.Code == code && b.EnglishKey == englishKey && b.Id != new RoleId(id));
+            result = await _context.Roles.AnyAsync(b => b.Code == code && b.EnglishKey == englishKey && b.Id != new RoleId(id));
         else
-            result = !await _context.Roles.AnyAsync(b => b.Code == code && b.EnglishKey == englishKey);
+            result = await _context.Roles.AnyAsync(b => b.Code == code && b.EnglishKey == englishKey);
         return result;
     }
 }

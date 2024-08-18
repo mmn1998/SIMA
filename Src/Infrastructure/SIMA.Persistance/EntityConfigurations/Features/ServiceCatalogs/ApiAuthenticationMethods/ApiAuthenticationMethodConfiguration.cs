@@ -5,16 +5,16 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Value
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs.ApiAuthenticationMethods;
 
-public class ApiAuthenticationMethodConfiguration : IEntityTypeConfiguration<ApiAuthentoicationMethod>
+public class ApiAuthenticationMethodConfiguration : IEntityTypeConfiguration<ApiAuthenticationMethod>
 {
-    public void Configure(EntityTypeBuilder<ApiAuthentoicationMethod> entity)
+    public void Configure(EntityTypeBuilder<ApiAuthenticationMethod> entity)
     {
         entity.ToTable("ApiAuthentoicationMethod", "ServiceCatalog");
         entity.Property(x => x.Id)
     .HasColumnName("Id")
     .HasConversion(
         v => v.Value,
-        v => new ApiAuthentoicationMethodId(v))
+        v => new ApiAuthenticationMethodId(v))
     .ValueGeneratedNever();
         entity.HasKey(e => e.Id);
         entity.Property(e => e.CreatedAt)

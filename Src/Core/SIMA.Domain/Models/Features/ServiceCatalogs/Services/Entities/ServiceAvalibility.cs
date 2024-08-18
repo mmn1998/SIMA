@@ -32,9 +32,9 @@ public class ServiceAvalibility : Entity
     public int WeekDay { get; private set; }
     public TimeOnly ServiceAvalibilityStartTime { get; private set; }
     public TimeOnly ServiceAvalibilityEndTime { get; private set; }
-    public long? ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public long ActiveStatusId { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
 }

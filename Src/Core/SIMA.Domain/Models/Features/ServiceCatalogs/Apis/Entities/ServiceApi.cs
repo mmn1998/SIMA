@@ -12,9 +12,9 @@ public class ServiceApi : Entity
     private ServiceApi() { }
     private ServiceApi(CreateServiceApiArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
-        ApiId = new(arg.ApiId);
-        ServiceId = new(arg.ServiceId);
+        Id = new ServiceApiId(arg.Id);
+        ApiId = new ApiId(arg.ApiId);
+        ServiceId = new ServiceId(arg.ServiceId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -37,8 +37,8 @@ public class ServiceApi : Entity
     public ServiceId ServiceId { get; private set; }
     public virtual Service Service { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

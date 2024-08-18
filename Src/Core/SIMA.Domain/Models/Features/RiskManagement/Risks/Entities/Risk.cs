@@ -4,6 +4,8 @@ using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Events;
 using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -106,5 +108,11 @@ public class Risk : Entity
     public ICollection<BusinessContinuityStrategyRisk> BusinessContinuityStrategyRisks => _businessContinuityStrategyRisks;
     private List<BusinessContinuityPlanRisk> _businessContinuityPlanRisks = new();
     public ICollection<BusinessContinuityPlanRisk> BusinessContinuityPlanRisks => _businessContinuityPlanRisks;
+    private List<CriticalActivityRisk> _criticalActivityRisks = new();
+    public ICollection<CriticalActivityRisk> CriticalActivityRisks => _criticalActivityRisks;
+
+    
+    private List<ServiceRisk> _serviceRisks = new();
+    public ICollection<ServiceRisk> ServiceRisks => _serviceRisks;
 
 }

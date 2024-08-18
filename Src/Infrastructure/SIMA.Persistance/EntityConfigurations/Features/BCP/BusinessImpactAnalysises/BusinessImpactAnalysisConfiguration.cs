@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.ValueObjects;
 
@@ -19,9 +18,6 @@ public class BusinessImpactAnalysisConfiguration : IEntityTypeConfiguration<Busi
              v => v.Value,
              v => new BusinessImpactAnalysisId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
-        entity.HasIndex(e => e.Code).IsUnique();
-        entity.Property(e => e.Code).HasMaxLength(50);
-        entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");

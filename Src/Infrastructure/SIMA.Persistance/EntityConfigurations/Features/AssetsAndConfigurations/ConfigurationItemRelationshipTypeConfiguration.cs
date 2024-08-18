@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelat
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class ConfigurationItemRelationshipTypeConfiguration
+public class ConfigurationItemRelationshipTypeConfiguration : IEntityTypeConfiguration<ConfigurationItemRelationshipType>
 {
     public void Configure(EntityTypeBuilder<ConfigurationItemRelationshipType> entity)
     {

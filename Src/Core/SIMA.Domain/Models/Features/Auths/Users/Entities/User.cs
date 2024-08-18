@@ -261,8 +261,8 @@ public class User : Entity, IAggregateRoot
     {
         await ModifyGuards(userService, arg);
         if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
+        if (arg.CompanyId.HasValue) CompanyId = new CompanyId(arg.CompanyId.Value);
         Username = arg.Username;
-        Password = PasswordValueObject.New(arg.Password);
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
         ActiveStatusId = arg.ActiveStatusId;
@@ -440,14 +440,13 @@ public class User : Entity, IAggregateRoot
         arg.Password.NullCheck();
         arg.Username.NullCheck();
         if (!userService.IsUsernameValidRegex(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotValidException);
-        if (!await userService.IsUsernameUnique(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
+        if (!await userService.IsUsernameUnique(arg.Username , 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
     }
     private async Task ModifyGuards(IUserService userService, ModifyUserArg arg)
     {
-        arg.Password.NullCheck();
         arg.Username.NullCheck();
         if (!userService.IsUsernameValidRegex(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotValidException);
-        if (!await userService.IsUsernameUnique(arg.Username)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
+        if (!await userService.IsUsernameUnique(arg.Username , arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UsernameNotUniqueException);
     }
 
     private async Task ChangePasswordGuards(ChangePasswordArg request)

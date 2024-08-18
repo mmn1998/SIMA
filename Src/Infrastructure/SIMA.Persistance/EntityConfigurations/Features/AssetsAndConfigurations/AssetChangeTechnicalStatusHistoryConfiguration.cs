@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetChangeTechnicalStatusHistoryConfiguration
+public class AssetChangeTechnicalStatusHistoryConfiguration : IEntityTypeConfiguration<AssetChangeTechnicalStatusHistory>
 {
     public void Configure(EntityTypeBuilder<AssetChangeTechnicalStatusHistory> entity)
     {

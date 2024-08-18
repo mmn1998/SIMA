@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Auths.Companies;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Args;
 using SIMA.Domain.Models.Features.Auths.Companies;
 using SIMA.Domain.Models.Features.Auths.Companies.Args;
 using SIMA.Domain.Models.Features.Auths.Companies.Entities;

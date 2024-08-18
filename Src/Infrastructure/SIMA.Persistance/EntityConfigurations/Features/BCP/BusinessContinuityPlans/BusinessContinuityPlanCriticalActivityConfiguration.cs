@@ -23,13 +23,22 @@ public class BusinessContinuityPlanCriticalActivityConfiguration : IEntityTypeCo
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.BusinessContinuityPlanId)
+        entity.Property(x => x.BusinessContinuityPlanVersioningId)
             .HasConversion(
             x => x.Value,
-            x => new BusinessContinuityPlanId(x)
+            x => new BusinessContinuityPlanVersioningId(x)
             );
-        entity.HasOne(x => x.BusinessContinuityPlan)
+        entity.HasOne(x => x.BusinessContinuityPlanVersioning)
             .WithMany(x => x.BusinessContinuityPlanCriticalActivities)
-            .HasForeignKey(x => x.BusinessContinuityPlanId);
+            .HasForeignKey(x => x.BusinessContinuityPlanVersioningId);
+
+        entity.Property(x => x.CriticalActivityId)
+            .HasConversion(
+            x => x.Value,
+            x => new CriticalActivityId(x)
+            );
+        entity.HasOne(x => x.CriticalActivity)
+            .WithMany(x => x.BusinessContinuityPlanCriticalActivities)
+            .HasForeignKey(x => x.CriticalActivityId);
     }
 }

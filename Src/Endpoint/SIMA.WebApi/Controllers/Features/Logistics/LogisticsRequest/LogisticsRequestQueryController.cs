@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SIMA.Application.Query.Contract.Features.Logistics.Goods;
 using SIMA.Application.Query.Contract.Features.Logistics.LogisticsRequests;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
@@ -20,6 +21,7 @@ public class LogisticsRequestQueryController : ControllerBase
     {
         _mediator = mediator;
     }
+
     [HttpGet("{id}")]
     [SimaAuthorize(Permissions.LogisticsRequestsGet)]
     public async Task<Result> Get([FromRoute] long id)
@@ -29,10 +31,11 @@ public class LogisticsRequestQueryController : ControllerBase
     }
 
     [HttpPost("GetGoodsForCoding/{Id}")]
-    public async Task<Result> GetLogesticRequestGoods([FromRoute] long Id)
+    public async Task<Result> GetLogesticRequestGoods([FromRoute] long Id ,  [FromBody] GetLogesticRequestGoodsQuery query)
     {
-        var query = new GetLogesticRequestGoodsQuery { Id = Id };
-        return await _mediator.Send(query);
+        var result = new GetLogesticRequestGoodsQuery { Id = Id };
+        return await _mediator.Send(result);
     }
 
 }
+

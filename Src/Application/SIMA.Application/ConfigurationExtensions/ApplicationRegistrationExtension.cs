@@ -6,6 +6,7 @@ using SIMA.Application.Feaatures.Auths.ApiMethodActions.Mappers;
 using SIMA.Application.Feaatures.Auths.Companies;
 using SIMA.Application.Feaatures.Auths.Companies.Mappers;
 using SIMA.Application.Feaatures.Auths.ConfigurationAttributes.Mappers;
+using SIMA.Application.Feaatures.Auths.CustomerTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Departments.Mappers;
 using SIMA.Application.Feaatures.Auths.Forms.Mappers;
 using SIMA.Application.Feaatures.Auths.Genders.Mappers;
@@ -16,6 +17,7 @@ using SIMA.Application.Feaatures.Auths.Permision.Mappers;
 using SIMA.Application.Feaatures.Auths.PhoneTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Positions.Mappers;
 using SIMA.Application.Feaatures.Auths.Profiles.Mappers;
+using SIMA.Application.Feaatures.Auths.ResponsibleTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Roles.Mappers;
 using SIMA.Application.Feaatures.Auths.Staffs.Mappers;
 using SIMA.Application.Feaatures.Auths.SysConfigs.Mappers;
@@ -64,10 +66,13 @@ using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingReasons.Mappers
 using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingStatus.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.SubjectPriorities.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.Channels.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.ApiAuthenticationMethods.Mapper;
+using SIMA.Application.Feaatures.ServiceCatalog.ApiTypes.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ChannelTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceBoundles.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
-using SIMA.Application.Feaatures.ServiceCatalog.ServiceCustomerTypes.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.ServiceStatuses.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceUserTypes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.ApprovalOptions.Mapper;
@@ -80,6 +85,7 @@ using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany.Mapper;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Application.Feaatures.ServiceCatalog.Services.Mappers;
 
 namespace SIMA.Application.ConfigurationExtensions;
 
@@ -114,6 +120,8 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new FormMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 conf.AddProfile(new UIInputElementMapper());
                 conf.AddProfile(new ApiMethodActionMapper());
+                conf.AddProfile(new CustomerTypeMapper());
+                conf.AddProfile(new ResponsibleTypeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
                 #endregion
 
                 #region WorkFlows
@@ -182,11 +190,15 @@ public static class ApplicationRegistrationExtension
 
                 #region ServiceCatalog
                 conf.AddProfile(new ServiceTypeMapper());
-                conf.AddProfile(new ServiceCustomerTypeMapper());
                 conf.AddProfile(new ServiceCategoryMapper());
                 conf.AddProfile(new ServiceBoundleMapper());
-                conf.AddProfile(new ServiceUserTypeMapper());
+                conf.AddProfile(new UserTypeMapper());
                 conf.AddProfile(new ChannelTypeMapper());
+                conf.AddProfile(new ApiAuthenticationMethodMapper());
+                conf.AddProfile(new ServiceStatusMapper());
+                conf.AddProfile(new ApiTypeMapper());
+                conf.AddProfile(new ChannelMapper());
+                conf.AddProfile(new ServiceMapper());
                 #endregion
 
                 #region BCP

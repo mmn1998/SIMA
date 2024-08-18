@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.Repositories;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;

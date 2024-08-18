@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetTypeConfiguration
+public class AssetTypeConfiguration : IEntityTypeConfiguration<AssetType>
 {
     public void Configure(EntityTypeBuilder<AssetType> entity)
     {

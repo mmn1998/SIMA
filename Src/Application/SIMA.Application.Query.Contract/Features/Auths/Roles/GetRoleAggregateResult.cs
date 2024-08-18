@@ -2,6 +2,11 @@
 
 public class GetRoleAggregateResult
 {
-    public GetRoleQueryResultForAggregate Role { get; set; }
+    public long Id { get; set; }
+    public string? Name { get; set; }
+    public string? Code { get; set; }
+    public string EnglishKey { get; set; }
+    public long ActiveStatusId { get; set; }
+    public string ActiveStatus { get; set; }
     public List<GetRolePermissionQueryResultForAggregate> RolePermissions { get; set; }
 }

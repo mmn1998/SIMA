@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Auths.Positions.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Interfaces;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.Auths.Positions;

@@ -5,6 +5,8 @@ namespace SIMA.Application.Contract.Features.Auths.Roles;
 
 public class CreateRoleAggregate : ICommand<Result<long>>
 {
-    public CreateRoleCommand Role { get; set; }
+    public string Name { get; set; }
+    public string? EnglishKey { get; set; }
+    public string? Code { get; set; }
     public List<CreateRolePermissionCommand>? RolePermissions { get; set; }
 }

@@ -28,11 +28,11 @@ public class ApiRequestUrlParamConfiguration : IEntityTypeConfiguration<ApiReque
 
         entity.Property(x => x.ParentId)
             .HasConversion(x => x.Value, x => new ApiRequestUrlParamId(x));
-        
-        entity.Property(x => x.ApiId)
-            .HasConversion(x => x.Value, x => new ApiId(x));
-        entity.HasOne(x=>x.Api)
-            .WithMany(x=>x.ApiRequestUrlParams)
-            .HasForeignKey(x=>x.ApiId);
+
+        entity.Property(x => x.ApiVersionId)
+            .HasConversion(x => x.Value, x => new ApiVersionId(x));
+        entity.HasOne(x => x.ApiVersion)
+            .WithMany(x => x.ApiRequestUrlParams)
+            .HasForeignKey(x => x.ApiVersionId);
     }
 }

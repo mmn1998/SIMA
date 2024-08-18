@@ -12,7 +12,7 @@ public class ApiRequestHeaderParam : Entity
     private ApiRequestHeaderParam(CreateApiRequestHeaderParamArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        ApiId = new(arg.ApiId);
+        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
@@ -28,8 +28,8 @@ public class ApiRequestHeaderParam : Entity
     }
     public void Modify(ModifyApiRequestHeaderParamArg arg)
     {
-        ApiId = new(arg.ApiId);
-        if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
+        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
+        if (arg.ParentId.HasValue) ParentId = new ApiRequestHeaderParamId(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
         IsMandatory = arg.IsMandatory;
@@ -39,17 +39,18 @@ public class ApiRequestHeaderParam : Entity
         ModifiedBy = arg.ModifiedBy;
     }
     public ApiRequestHeaderParamId Id { get; private set; }
-    public ApiId ApiId { get; private set; }
-    public virtual Api Api { get; private set; }
-    public string? Name { get; private set; }
-    public string? DataType { get; private set; }
+
+    public ApiVersionId ApiVersionId { get; private set; }
+    public virtual ApiVersion ApiVersion  { get; private set; }
+    public string Name { get; private set; }
+    public string DataType { get; private set; }
     public string? IsMandatory { get; private set; }
     public string? Description { get; private set; }
     public ApiRequestHeaderParamId? ParentId { get; private set; }
     public virtual ApiRequestHeaderParam? Parent { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

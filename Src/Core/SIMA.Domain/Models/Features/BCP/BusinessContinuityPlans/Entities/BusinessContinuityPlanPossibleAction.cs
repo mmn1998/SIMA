@@ -36,8 +36,8 @@ public class BusinessContinuityPlanPossibleAction : Entity
     public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
     public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
     
-    public string? Title { get; private set; }
-    public string? Code { get; private set; }
+    public string Title { get; private set; }
+    public string Code { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

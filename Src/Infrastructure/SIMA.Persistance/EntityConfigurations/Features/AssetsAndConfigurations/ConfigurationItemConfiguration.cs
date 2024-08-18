@@ -2,13 +2,14 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.ValueObjects;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class ConfigurationItemConfiguration
+public class ConfigurationItemConfiguration : IEntityTypeConfiguration<ConfigurationItem>
 {
     public void Configure(EntityTypeBuilder<ConfigurationItem> entity)
     {
@@ -36,6 +37,16 @@ public class ConfigurationItemConfiguration
         entity.HasOne(d => d.CompanyBuildingLocation)
             .WithMany(d => d.ConfigurationItems)
             .HasForeignKey(d => d.CompanyBuildingLocationId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.LicenseTypeId)
+          .HasConversion(
+           v => v.Value,
+           v => new LicenseTypeId(v));
+
+        entity.HasOne(d => d.LicenseType)
+            .WithMany(d => d.ConfigurationItems)
+            .HasForeignKey(d => d.LicenseTypeId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.ConfigurationItemStatusId)

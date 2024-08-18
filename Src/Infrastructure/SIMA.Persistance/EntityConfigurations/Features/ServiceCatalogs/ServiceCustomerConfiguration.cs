@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceCustomerConfiguration : IEntityTypeConfiguration<ServiceCustomer>
+public class ServiceCustomerConfiguration : IEntityTypeConfiguration<ServiceCustomer>
 {
     public void Configure(EntityTypeBuilder<ServiceCustomer> entity)
     {
@@ -31,7 +31,7 @@ internal class ServiceCustomerConfiguration : IEntityTypeConfiguration<ServiceCu
 
 
         entity.Property(x => x.ServiceCustomerTypeId)
-         .HasConversion(v => v.Value, v => new ServiceCustomerTypeId(v));
+         .HasConversion(v => v.Value, v => new CustomerTypeId(v));
 
         entity.HasOne(d => d.ServiceCustomerType).WithMany(p => p.ServiceCustomers)
                 .HasForeignKey(d => d.ServiceCustomerTypeId)

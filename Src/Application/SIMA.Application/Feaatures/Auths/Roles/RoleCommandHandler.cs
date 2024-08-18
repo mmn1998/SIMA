@@ -103,8 +103,9 @@ public class RoleCommandHandler : ICommandHandler<DeleteRoleCommand, Result<long
 
     public async Task<Result<long>> Handle(CreateRoleAggregate request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateRoleArg>(request.Role);
+        var arg = _mapper.Map<CreateRoleArg>(request);
         var entity = await Role.Create(_roleService, arg);
+        arg.CreatedBy = _simaIdentity.UserId;
         await _repository.Add(entity);
         if (request.RolePermissions != null && request.RolePermissions.Count != 0)
         {

@@ -31,5 +31,14 @@ public class BusinessImpactAnalysisAssetConfiguration : IEntityTypeConfiguration
         entity.HasOne(x => x.BusinessImpactAnalysis)
             .WithMany(x => x.BusinessImpactAnalysisAssets)
             .HasForeignKey(x => x.BusinessImpactAnalysisId);
+
+        entity.Property(x => x.AssetId)
+            .HasConversion(
+            x => x.Value,
+            x => new AssetId(x)
+            );
+        entity.HasOne(x => x.Asset)
+            .WithMany(x => x.BusinessImpactAnalysisAssets)
+            .HasForeignKey(x => x.AssetId);
     }
 }

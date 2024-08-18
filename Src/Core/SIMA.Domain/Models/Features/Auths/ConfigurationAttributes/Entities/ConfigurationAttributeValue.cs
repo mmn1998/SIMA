@@ -12,6 +12,7 @@ public class ConfigurationAttributeValue
         Id = new ConfigurationAttributeValueId(IdHelper.GenerateUniqueId());
         ConfigurationAttributeId = new ConfigurationAttributeId(arg.ConfigurationAttributeId);
         Value = arg.Value;
+        AttributeKey = arg.AttributeKey;
         IsUserConfige = arg.IsUserConfige;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -27,6 +28,7 @@ public class ConfigurationAttributeValue
 
     public ConfigurationAttributeId ConfigurationAttributeId { get; private set; }
 
+    public string? AttributeKey { get; private set; }
     public string? Value { get; private set; }
 
     public string? IsUserConfige { get; private set; }

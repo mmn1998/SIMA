@@ -16,7 +16,8 @@ public class HappeningPossibilityConfiguration : IEntityTypeConfiguration<Happen
              v => v.Value,
              v => new HappeningPossibilityId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
-        entity.Property(e => e.Code).HasMaxLength(50);
+        entity.Property(e => e.Code).HasMaxLength(20);
+        entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
@@ -24,6 +25,5 @@ public class HappeningPossibilityConfiguration : IEntityTypeConfiguration<Happen
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-        entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
     }
 }

@@ -5,5 +5,5 @@ public class GetGroupPermissionResultForAggregate
     public long? PermissionId { get; set; }
     public long? DomainId { get; set; }
     public string? PermissionName { get; set; }
-    public string? DomaiName { get; set; }
+    public string? DomainName { get; set; }
 }

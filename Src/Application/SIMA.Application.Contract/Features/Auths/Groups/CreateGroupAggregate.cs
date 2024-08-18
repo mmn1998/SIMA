@@ -5,7 +5,8 @@ namespace SIMA.Application.Contract.Features.Auths.Groups;
 
 public class CreateGroupAggregate : ICommand<Result<long>>
 {
-    public CreateGroupCommand Group { get; set; }
+    public string Name { get; set; }
+    public string Code { get; set; }
     public List<CreateGroupUserCommand>? UserGroups { get; set; }
     public List<CreateGroupPermissionCommand>? GroupPermissions { get; set; }
 }

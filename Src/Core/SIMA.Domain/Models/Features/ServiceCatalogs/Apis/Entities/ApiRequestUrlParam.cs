@@ -11,9 +11,8 @@ public class ApiRequestUrlParam : Entity
     private ApiRequestUrlParam() { }
     private ApiRequestUrlParam(CreateApiRequestUrlParamArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
-        ApiId = new(arg.ApiId);
-        if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
+        Id = new ApiRequestUrlParamId(arg.Id);
+        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
         Name = arg.Name;
         DataType = arg.DataType;
         IsMandatory = arg.IsMandatory;
@@ -28,8 +27,7 @@ public class ApiRequestUrlParam : Entity
     }
     public void Modify(ModifyApiRequestUrlParamArg arg)
     {
-        ApiId = new(arg.ApiId);
-        if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
+        ApiVersionId = new ApiVersionId (arg.ApiVersionId);
         Name = arg.Name;
         DataType = arg.DataType;
         IsMandatory = arg.IsMandatory;
@@ -39,17 +37,17 @@ public class ApiRequestUrlParam : Entity
         ModifiedBy = arg.ModifiedBy;
     }
     public ApiRequestUrlParamId Id { get; private set; }
-    public ApiId ApiId { get; private set; }
-    public virtual Api Api { get; private set; }
-    public string? Name { get; private set; }
-    public string? DataType { get; private set; }
-    public string? IsMandatory { get; private set; }
+    public ApiVersionId ApiVersionId { get; private set; }
+    public virtual ApiVersion ApiVersion { get; private set; }
+    public string Name { get; private set; }
+    public string DataType { get; private set; }
+    public string IsMandatory { get; private set; }
     public string? Description { get; private set; }
     public ApiRequestUrlParamId? ParentId { get; private set; }
     public virtual ApiRequestUrlParam? Parent { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

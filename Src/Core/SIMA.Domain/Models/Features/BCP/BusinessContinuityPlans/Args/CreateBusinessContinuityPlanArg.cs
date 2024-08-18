@@ -2,12 +2,7 @@
 
 public class CreateBusinessContinuityPlanArg
 {
-    public long BusinessContinuityStrategyId { get; set; }
-    public long? PlanOwnerId { get; set; }
-    public long? ExecutiveResponsibleId { get; set; }
-    public long? RecoveryManagerId { get; set; }
-    public long? RecoveryDeputyId { get; set; }
-    public DateTime OfferDate { get; set; }
+    public long Id { get; set; }
     public string? Scope { get; set; }
     public string? Code { get; set; }
     public string? Title { get; set; }

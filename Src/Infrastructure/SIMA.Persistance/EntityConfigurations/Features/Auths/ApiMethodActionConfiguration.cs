@@ -14,8 +14,15 @@ public class ApiMethodActionConfiguration : IEntityTypeConfiguration<ApiMethodAc
             .HasConversion(v => v.Value,
             v => new ApiMethodActionId(v))
             .ValueGeneratedNever();
+        entity.HasKey(i => i.Id);
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(e => e.Name).HasMaxLength(200);
         entity.Property(e => e.Code).HasMaxLength(20);
+        entity.Property(e => e.CreatedAt)
+            .HasDefaultValueSql("(getdate())")
+            .HasColumnType("datetime");
+        entity.Property(e => e.ModifiedAt)
+            .IsRowVersion()
+            .IsConcurrencyToken();
     }
 }

@@ -130,32 +130,32 @@ WHERE [ActiveStatusID] <> 3
                           ,R.[Name]
                           ,R.[Code]
                           ,R.[ActiveStatusID]
+                          ,R.[EnglishKey]
                           ,A.[Name] as ActiveStatus
                           FROM [Authentication].[Role] R
                           join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
                           WHERE R.ID = @RoleId and R.[ActiveStatusID] <> 3
-                          GROUP BY R.ID,R.Name,R.Code,R.ActiveStatusID,A.Name;
+                          GROUP BY R.ID,R.Name,R.Code,R.ActiveStatusID,A.Name,R.EnglishKey;
 
-
-                          SELECT DISTINCT
+                         SELECT DISTINCT
                           D.Name as DomainName
                           ,D.ID as DomainId
                           ,P.Name as PermissionName
                           ,P.ID as PermissionId
                           ,R.[ActiveStatusID]
                           ,A.[Name] as ActiveStatus
-,rp.[CreatedAt]
-                          FROM [Authentication].[Role] R
-                          INNER JOIN [Authentication].[RolePermission] RP on RP.RoleID = R.ID
-                          INNER JOIN [Authentication].[Permission] P on P.ID = RP.PermissionID
-                          INNER JOIN [Authentication].[Domain] D on D.ID = P.DomainID
-                          join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
-                          WHERE R.ID = @RoleId and R.[ActiveStatusID] <> 3
-                          GROUP BY D.Name, D.ID, P.Name, P.ID ,R.ActiveStatusID,A.Name 
-Order By rp.[CreatedAt] desc  ";
+                          ,rp.[CreatedAt]
+                         FROM [Authentication].[Role] R
+                         INNER JOIN [Authentication].[RolePermission] RP on RP.RoleID = R.ID
+                         INNER JOIN [Authentication].[Permission] P on P.ID = RP.PermissionID
+                         INNER JOIN [Authentication].[Domain] D on D.ID = P.DomainID
+                         join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
+                         WHERE R.ID = @RoleId and R.[ActiveStatusID] <> 3 and RP.[ActiveStatusID] <> 3
+                         GROUP BY D.Name, D.ID, P.Name, P.ID ,R.ActiveStatusID,A.Name ,rp.[CreatedAt]
+                         Order By rp.[CreatedAt] desc  ";
             using (var multi = await connection.QueryMultipleAsync(query, new { RoleId = roleId }))
             {
-                response.Role = multi.ReadAsync<GetRoleQueryResultForAggregate>().GetAwaiter().GetResult().Single();
+                response = multi.ReadAsync<GetRoleAggregateResult>().GetAwaiter().GetResult().Single();
                 response.RolePermissions = multi.ReadAsync<GetRolePermissionQueryResultForAggregate>().GetAwaiter().GetResult().ToList();
             }
         }

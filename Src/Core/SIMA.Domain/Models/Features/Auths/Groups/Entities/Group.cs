@@ -3,9 +3,6 @@ using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Users.Args;
-using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
@@ -77,19 +74,19 @@ public class Group : Entity
             permission.Delete((long)request[0].CreatedBy);
         }
     }
-    public async Task AddUserGroup(List<CreateUserGroupArg> request, long userId)
+    public async Task AddUserGroup(List<CreateUserGroupArg> request, long groupId)
     {
-        userId.NullCheck();
+        groupId.NullCheck();
 
-        var previousGroups = _userGroups.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        var previousGroups = _userGroups.Where(x => x.GroupId == new GroupId(groupId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
-        var addGroup = request.Where(x => !previousGroups.Any(c => c.GroupId.Value == x.GroupId)).ToList();
-        var deleteMember = previousGroups.Where(x => !request.Any(c => c.GroupId == x.GroupId.Value)).ToList();
+        var addGroup = request.Where(x => !previousGroups.Any(c => c.UserId.Value == x.UserId)).ToList();
+        var deleteMember = previousGroups.Where(x => !request.Any(c => c.UserId == x.UserId.Value)).ToList();
 
 
         foreach (var group in addGroup)
         {
-            var entity = _userGroups.Where(x => (x.GroupId == new GroupId((long)group.GroupId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            var entity = _userGroups.Where(x => (x.GroupId == new GroupId(groupId) && x.UserId == new UserId((long)group.UserId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
                 await entity.ChangeStatus(ActiveStatusEnum.Active);

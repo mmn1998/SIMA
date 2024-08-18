@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.PositionTypes.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Auths;
 
@@ -31,5 +33,35 @@ internal class PositionConfiguration : IEntityTypeConfiguration<Position>
         entity.HasOne(d => d.Department).WithMany(p => p.Positions)
             .HasForeignKey(d => d.DepartmentId)
             .HasConstraintName("FK_Position_Department");
+        
+        entity.Property(x => x.BranchId)
+         .HasConversion(
+          v => v.Value,
+          v => new BranchId(v));
+
+        entity.HasOne(d => d.Branch)
+            .WithMany(d => d.Positions)
+            .HasForeignKey(d => d.BranchId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.PositionLevelId)
+         .HasConversion(
+          v => v.Value,
+          v => new PositionLevelId(v));
+
+        entity.HasOne(d => d.PositionLevel)
+            .WithMany(d => d.Positions)
+            .HasForeignKey(d => d.PositionLevelId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.PositionTypeId)
+         .HasConversion(
+          v => v.Value,
+          v => new PositionTypeId(v));
+
+        entity.HasOne(d => d.PositionType)
+            .WithMany(d => d.Positions)
+            .HasForeignKey(d => d.PositionTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

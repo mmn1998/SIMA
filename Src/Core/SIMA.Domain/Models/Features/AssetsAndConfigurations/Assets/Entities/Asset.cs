@@ -14,10 +14,12 @@ using SIMA.Domain.Models.Features.Auths.OwnershipTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
-using SIMA.Domain.Models.Features.Auths.UserTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Warehouses.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
 using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -144,6 +146,8 @@ public class Asset : Entity
     }
     private List<AssetIssue> _assetIssues = new();
     public ICollection<AssetIssue> AssetIssues => _assetIssues;
+    private List<ServiceAsset> _serviceAssets = new();
+    public ICollection<ServiceAsset> ServiceAssets => _serviceAssets;
     private List<AssetChangeTechnicalStatusHistory> _assetChangeTechnicalStatusHistories = new();
     public ICollection<AssetChangeTechnicalStatusHistory> AssetChangeTechnicalStatusHistories => _assetChangeTechnicalStatusHistories;
     private List<AssetChangePhysicalStatusHistory> _assetChangePhysicalStatusHistories = new();
@@ -158,5 +162,11 @@ public class Asset : Entity
     public ICollection<ConfigurationItemAsset> ConfigurationItemAssets => _configurationItemAssets;
     private List<ConfigurationItemAssetHistory> _configurationItemAssetHistories = new();
     public ICollection<ConfigurationItemAssetHistory> ConfigurationItemAssetHistories => _configurationItemAssetHistories;
+
+    private List<BusinessImpactAnalysisAsset> _businessImpactAnalysisAsset = new();
+    public ICollection<BusinessImpactAnalysisAsset> BusinessImpactAnalysisAssets => _businessImpactAnalysisAsset;
+    private List<CriticalActivityAsset> _criticalActivityAssets = new();
+    public ICollection<CriticalActivityAsset> CriticalActivityAssets => _criticalActivityAssets;
+    
 }
 

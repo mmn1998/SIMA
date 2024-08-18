@@ -1,5 +1,4 @@
 ﻿using Sima.Framework.Core.Mediator;
-using SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;

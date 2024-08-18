@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceChannelConfiguration : IEntityTypeConfiguration<ServiceChannel>
+public class ServiceChannelConfiguration : IEntityTypeConfiguration<ServiceChannel>
 {
     public void Configure(EntityTypeBuilder<ServiceChannel> entity)
     {

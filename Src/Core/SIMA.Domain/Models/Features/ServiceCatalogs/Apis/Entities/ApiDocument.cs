@@ -13,7 +13,7 @@ public class ApiDocument : Entity
     private ApiDocument() { }
     private ApiDocument(CreateApiDocumentArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
+        Id = new ApiDocumentId(arg.Id);
         ApiId = new(arg.ApiId);
         DocumentId = new(arg.DocumentId);
         ActiveStatusId = arg.ActiveStatusId;
@@ -38,8 +38,8 @@ public class ApiDocument : Entity
     public DocumentId DocumentId { get; private set; }
     public virtual Document Document { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

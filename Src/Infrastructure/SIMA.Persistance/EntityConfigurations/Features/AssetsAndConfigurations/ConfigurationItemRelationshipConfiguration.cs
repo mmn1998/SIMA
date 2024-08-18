@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Val
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class ConfigurationItemRelationshipConfiguration
+public class ConfigurationItemRelationshipConfiguration : IEntityTypeConfiguration<ConfigurationItemRelationship>
 {
     public void Configure(EntityTypeBuilder<ConfigurationItemRelationship> entity)
     {
@@ -37,7 +37,7 @@ public class ConfigurationItemRelationshipConfiguration
            v => new ConfigurationItemVersioningId(v));
 
         entity.HasOne(d => d.ConfigurationItemVersioning)
-            .WithMany(d => d.RelatedConfigurationItemRelationships)
+            .WithMany(d => d.ConfigurationItemRelationships)
             .HasForeignKey(d => d.ConfigurationItemVersioningId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 

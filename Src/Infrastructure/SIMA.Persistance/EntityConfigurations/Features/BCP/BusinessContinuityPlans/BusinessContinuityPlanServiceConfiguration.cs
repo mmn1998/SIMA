@@ -23,14 +23,14 @@ public class BusinessContinuityPlanServiceConfiguration : IEntityTypeConfigurati
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.BusinessContinuityPlanId)
+        entity.Property(x => x.BusinessContinuityPlanVersioningId)
             .HasConversion(
             x => x.Value,
-            x => new BusinessContinuityPlanId(x)
+            x => new BusinessContinuityPlanVersioningId(x)
             );
-        entity.HasOne(x => x.BusinessContinuityPlan)
+        entity.HasOne(x => x.BusinessContinuityPlanVersioning)
             .WithMany(x => x.BusinessContinuityPlanServices)
-            .HasForeignKey(x => x.BusinessContinuityPlanId);
+            .HasForeignKey(x => x.BusinessContinuityPlanVersioningId);
         
         entity.Property(x => x.ServiceId)
             .HasConversion(

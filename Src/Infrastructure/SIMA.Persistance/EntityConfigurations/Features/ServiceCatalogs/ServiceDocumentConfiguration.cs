@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceDocumentConfiguration : IEntityTypeConfiguration<ServiceDocument>
+public class ServiceDocumentConfiguration : IEntityTypeConfiguration<ServiceDocument>
 {
     public void Configure(EntityTypeBuilder<ServiceDocument> entity)
     {

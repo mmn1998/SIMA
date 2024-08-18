@@ -1,7 +1,11 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Contracts;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
+using SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -14,6 +18,7 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     private BusinessContinuityStrategy(CreateBusinessContinuityStategyArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
+        StrategyTypeId = new(arg.StrategyTypeId);
         Title = arg.Title;
         Code = arg.Code;
         Description = arg.Description;
@@ -21,6 +26,7 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
         IsStableStrategy = arg.IsStableStrategy;
         ActiveStatusId = arg.ActiveStatusId;
         ExpireDate = arg.ExpireDate;
+        ReviewDate = arg.ReviewDate;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
@@ -34,11 +40,13 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
         await ModifyGuards(arg, service);
         Title = arg.Title;
         Code = arg.Code;
+        StrategyTypeId = new(arg.StrategyTypeId);
         Description = arg.Description;
         CordinatorId = arg.CordinatorId;
         IsStableStrategy = arg.IsStableStrategy;
         ActiveStatusId = arg.ActiveStatusId;
         ExpireDate = arg.ExpireDate;
+        ReviewDate = arg.ReviewDate;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
@@ -53,12 +61,15 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     }
     #endregion
     public BusinessContinuityStrategyId Id { get; private set; }
-    public long CordinatorId { get; private set; }
-    public string? Title { get; private set; }
+    public StrategyTypeId StrategyTypeId { get; private set; }
+    public virtual StrategyType StrategyType { get; private set; }
+    public string Code { get; private set; }
+    public string Title { get; private set; }
     public string? Description { get; private set; }
-    public string? Code { get; private set; }
-    public string? IsStableStrategy { get; private set; }
+    public string IsStableStrategy { get; private set; }
     public DateTime? ExpireDate { get; private set; }
+    public DateTime? ReviewDate { get; private set; }
+    public long CordinatorId { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -84,4 +95,16 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
 
     private List<BusinessContinuityPlan> _businessContinuityPlans = new();
     public ICollection<BusinessContinuityPlan> BusinessContinuityPlans => _businessContinuityPlans;
+
+    private List<BusinessContinuityStratgyResponsible> _businessContinuityStratgyResponsible = new();
+    public ICollection<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles => _businessContinuityStratgyResponsible;
+
+
+    private List<BusinessContinuityPlanStratgy> _businessContinuityPlanStratgy = new();
+    public ICollection<BusinessContinuityPlanStratgy> BusinessContinuityPlanStratgies => _businessContinuityPlanStratgy;
+
+
+    private List<BusinessContinuityStratgySolution> _businessContinuityStratgySolution = new();
+    public ICollection<BusinessContinuityStratgySolution> BusinessContinuityStratgySolutions => _businessContinuityStratgySolution;
+
 }

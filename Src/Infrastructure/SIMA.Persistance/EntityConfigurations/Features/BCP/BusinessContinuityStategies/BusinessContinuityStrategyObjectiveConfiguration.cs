@@ -16,8 +16,8 @@ public class BusinessContinuityStrategyObjectiveConfiguration : IEntityTypeConfi
              v => new BusinessContinuityStrategyObjectiveId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.HasIndex(x => x.Code).IsUnique();
-        entity.Property(x => x.Code).HasMaxLength(50).IsUnicode(false);
-        entity.Property(x => x.Title).HasMaxLength(200);
+        entity.Property(x => x.Code).HasMaxLength(20).IsUnicode(false);
+        entity.Property(x => x.Title).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");

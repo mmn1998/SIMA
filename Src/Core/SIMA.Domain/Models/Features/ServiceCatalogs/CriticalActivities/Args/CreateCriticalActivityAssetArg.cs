@@ -4,8 +4,9 @@ public class CreateCriticalActivityAssetArg
 {
     public long Id { get; set; }
     public long CriticalActivityId { get; set; }
-    //? asset
-    public long? ActiveStatusId { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public long? CreatedBy { get; set; }
+    public long AssetId { get; set; }
+    public long ActiveStatusId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public long CreatedBy { get; set; }
+
 }

@@ -9,13 +9,16 @@ public class CriticalActivityAssetConfiguration : IEntityTypeConfiguration<Criti
     public void Configure(EntityTypeBuilder<CriticalActivityAsset> entity)
     {
         entity.ToTable("CriticalActivityAsset", "ServiceCatalog");
+        
         entity.Property(x => x.Id)
-    .HasColumnName("Id")
-    .HasConversion(
-        v => v.Value,
-        v => new CriticalActivityAssetId(v))
-    .ValueGeneratedNever();
+            .HasColumnName("Id")
+            .HasConversion(
+                v => v.Value,
+                v => new CriticalActivityAssetId(v))
+            .ValueGeneratedNever();
+       
         entity.HasKey(e => e.Id);
+      
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");
@@ -23,12 +26,19 @@ public class CriticalActivityAssetConfiguration : IEntityTypeConfiguration<Criti
                     .IsRowVersion()
                     .IsConcurrencyToken();
 
-
         entity.Property(x => x.CriticalActivityId)
             .HasConversion(x => x.Value, x => new CriticalActivityId(x));
 
         entity.HasOne(x => x.CriticalActivity)
             .WithMany(x => x.CriticalActivityAssets)
             .HasForeignKey(x => x.CriticalActivityId);
+
+        entity.Property(x => x.AssetId)
+            .HasConversion(x => x.Value, x => new AssetId(x));
+
+        entity.HasOne(x => x.Asset)
+            .WithMany(x => x.CriticalActivityAssets)
+            .HasForeignKey(x => x.AssetId);
+
     }
 }

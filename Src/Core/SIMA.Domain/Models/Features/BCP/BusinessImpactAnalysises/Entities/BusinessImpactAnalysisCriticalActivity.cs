@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -14,7 +15,7 @@ public class BusinessImpactAnalysisCriticalActivity : Entity
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        //StaffId = new(arg.CriticalActivitytId);
+        CriticalActivityId = new(arg.CriticalActivitytId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -26,7 +27,7 @@ public class BusinessImpactAnalysisCriticalActivity : Entity
     public void Modify(ModifyBusinessImpactAnalysisCriticalActivityArg arg)
     {
         BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        //CriticalActivityId = new(arg.StaffId);
+        CriticalActivityId = new(arg.CriticalActivityId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;

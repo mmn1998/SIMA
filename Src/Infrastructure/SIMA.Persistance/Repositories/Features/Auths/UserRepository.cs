@@ -33,6 +33,7 @@ public class UserRepository : Repository<User>, IUserRepository
         .Include(u => u.UserPermissions)
         .Include(u => u.UserRoles)
         .Include(u => u.AdminLocationAccesses)
+        .Include(u => u.UserLocationAccesses)
         .Include(u => u.UserDomainAccesses)
             .FirstOrDefaultAsync(u => u.Id == new UserId(id));
         if (entity is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
@@ -47,6 +48,7 @@ public class UserRepository : Repository<User>, IUserRepository
         .Include(u => u.UserPermissions)
         .Include(u => u.UserRoles)
         .Include(u => u.AdminLocationAccesses)
+        .Include(u => u.UserLocationAccesses)
         .Include(u => u.UserDomainAccesses)
             .FirstOrDefaultAsync(u => u.Username == userName);
         entity.NullCheck();

@@ -1,19 +1,26 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Query.Contract.Features.Auths.Users;
 using SIMA.Application.Query.Features.Auths.Users.Mappers;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
+using SIMA.Framework.Common.Services;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Framework.Infrastructure.Cachings;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Users;
 using SIMA.Resources;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace SIMA.Application.Query.Features.Auths.Users;
-public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQueryResult>>,
-        IQueryHandler<GetUserByProfileIdQuery, Result<GetUserByProfileIdQueryResult>>,
+public class UserQueryHandler(IUserQueryRepository userQueryRepository, IOptions<TokenModel> securitySettings, IMapper mapper, IUnitOfWork unitOfWork, IDistributedRedisService redisService, ITokenService tokenService) : IQueryHandler<LoginUserQuery, Result<LoginUserQueryResult>>,
+
         IQueryHandler<GetInfoByUserIdQuery, Result<GetInfoByUserIdQueryResult>>,
         IQueryHandler<GetAllUserQuery, Result<IEnumerable<GetUserQueryResult>>>,
         IQueryHandler<GetUserQuery, Result<GetUserQueryResult>>
@@ -22,92 +29,91 @@ public class UserQueryHandler : IQueryHandler<LoginUserQuery, Result<LoginUserQu
         IQueryHandler<GetUserDomainQuery, Result<GetUserDomainQueryResult>>, IQueryHandler<GetUserRoleQuery, Result<GetUserRoleQueryResult>>
         , IQueryHandler<GetUserAggregateQuery, Result<GetUserAggregateQueryResult>>,
          IQueryHandler<GetProfileByProfileIdQuery, Result<GetProfileByProfileIdQueryResult>>
+         , IQueryHandler<RevokeQuery, Result<RevokeQueryResult>>
 {
-    private readonly IUserQueryRepository _repository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IMapper _mapper;
-    private readonly TokenModel _securitySettings;
+    private readonly IDistributedRedisService _redisService = redisService;
+    private readonly ITokenService _tokenService = tokenService;
 
-    public UserQueryHandler(IUserQueryRepository userQueryRepository, IOptions<TokenModel> securitySettings, IMapper mapper, IUnitOfWork unitOfWork)
-    {
-        _repository = userQueryRepository;
-        _mapper = mapper;
-        _securitySettings = securitySettings.Value;
-        _unitOfWork = unitOfWork;
-    }
     public async Task<Result<LoginUserQueryResult>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
     {
-        var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
+        var user = await userQueryRepository.GetByUsernameAndPassword(request.Username, request.Password);
 
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.SaveChangesAsync();
 
         if (user.UserInfoLogin.AccessFailedCount > 0)
             throw new SimaResultException(CodeMessges._400Code, Messages.InvalidUsernameOrPasswordError);
 
 
         if (user.UserInfoLogin.IsLocked == "1") throw new SimaResultException(CodeMessges._400Code, Messages.UserIsLocked);
-        var result = UserQueryMapper.MapToToken(user, _securitySettings);
+        var result = UserQueryMapper.MapToToken(user, _tokenService);
+        //insert refreshToken in Redis
+        await _redisService.InsertAsync(user.UserInfoLogin.Username, result.RefreshToken, TimeSpan.FromHours(securitySettings.Value.RefreshTokenLifeTime));
         return Result.Ok(result);
     }
     public async Task<Result<GetInfoByUserIdQueryResult>> Handle(GetInfoByUserIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetInfoByUserId(request.UserId);
+        var result = await userQueryRepository.GetInfoByUserId(request.UserId);
         return Result.Ok(result);
     }
     public async Task<Result<GetProfileByProfileIdQueryResult>> Handle(GetProfileByProfileIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetProfileByProfileId(request.ProfileId);
+        var result = await userQueryRepository.GetProfileByProfileId(request.ProfileId);
         return Result.Ok(result);
-    }
-
-    public async Task<Result<long>> Handle(GetUserByProfileIdQuery request, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<Result<IEnumerable<GetUserQueryResult>>> Handle(GetAllUserQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        return await userQueryRepository.GetAll(request);
     }
 
     public async Task<Result<GetUserQueryResult>> Handle(GetUserQuery request, CancellationToken cancellationToken)
     {
-        var data = await _repository.FindByIdQuery(request.Id);
+        var data = await userQueryRepository.FindByIdQuery(request.Id);
         return Result.Ok(data);
     }
 
     public async Task<Result<GetUserRoleQueryResult>> Handle(GetUserRoleQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetUserRole(request.UserRoleId);
+        var result = await userQueryRepository.GetUserRole(request.UserRoleId);
         return Result.Ok(result);
     }
 
     public async Task<Result<GetUserLocationQueryResult>> Handle(GetUserLocationQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetUserLocation(request.UserLocationId);
+        var result = await userQueryRepository.GetUserLocation(request.UserLocationId);
         return Result.Ok(result);
     }
 
     public async Task<Result<GetUserDomainQueryResult>> Handle(GetUserDomainQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetUserDomain(request.UserDomainId);
+        var result = await userQueryRepository.GetUserDomain(request.UserDomainId);
         return Result.Ok(result);
     }
 
     public async Task<Result<GetUserPermissionQueryResult>> Handle(GetUserPermissionQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetUserPermission(request.UserPermissionId);
+        var result = await userQueryRepository.GetUserPermission(request.UserPermissionId);
         return Result.Ok(result);
     }
 
     public async Task<Result<GetUserAggregateQueryResult>> Handle(GetUserAggregateQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetUserAggreagate(request.UserId);
+        var result = await userQueryRepository.GetUserAggreagate(request.UserId);
         return Result.Ok(result);
     }
 
-    Task<Result<GetUserByProfileIdQueryResult>> IRequestHandler<GetUserByProfileIdQuery, Result<GetUserByProfileIdQueryResult>>.Handle(GetUserByProfileIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<RevokeQueryResult>> Handle(RevokeQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
-    }
+        var response = new RevokeQueryResult();
+        var principal = _tokenService.GetPrincipalFromExpiredToken(request.ExpiredAccessToken);
+        string userName = principal.Claims.First(c => c.Type == ClaimTypes.Name).Value;
+        var realRefreshToken = await _redisService.GetAsync(userName);
+        if (!string.IsNullOrEmpty(realRefreshToken) && string.Equals(realRefreshToken, request.RefreshToken, StringComparison.InvariantCultureIgnoreCase))
+        {
+            var accessToken = _tokenService.GenerateNewAccessTokenFromExpiredToken(principal);
+            response.AccessToken = accessToken;
+        }
+        else throw SimaResultException.UnAuthorize;
+        return response;
+    }    
 }

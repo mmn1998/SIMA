@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Warehouses.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetWarehouseHistoryConfiguration
+public class AssetWarehouseHistoryConfiguration : IEntityTypeConfiguration<AssetWarehouseHistory>
 {
     public void Configure(EntityTypeBuilder<AssetWarehouseHistory> entity)
     {

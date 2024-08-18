@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class BusinessCriticalityConfiguration
+public class BusinessCriticalityConfiguration : IEntityTypeConfiguration<BusinessCriticality>
 {
     public void Configure(EntityTypeBuilder<BusinessCriticality> entity)
     {

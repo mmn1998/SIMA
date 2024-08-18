@@ -1,34 +1,51 @@
-﻿//using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
-//using SIMA.Framework.Core.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
+using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
+using System.Text;
 
-//namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
+namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
-//public class ServiceRisk : Entity
-//{
-//    private ServiceRisk()
-//    {
+public class ServiceRisk : Entity
+{
+    private ServiceRisk()
+    {
 
-//    }
-//    private ServiceRisk(CreateServiceRiskArg arg)
-//    {
-//        Id = new ServiceRiskId(arg.Id);
-//        ServiceId = new ServiceId(arg.ServiceId);
-//        ActiveStatusId = arg.ActiveStatusId;
-//        CreatedAt = arg.CreatedAt;
-//        CreatedBy = arg.CreatedBy;
-//    }
+    }
+    private ServiceRisk(CreateServiceRiskArg arg)
+    {
+        Id = new ServiceRiskId(arg.Id);
+        ServiceId = new ServiceId(arg.ServiceId);
+        RiskId = new RiskId(arg.RiskId);
+        ActiveStatusId = arg.ActiveStatusId;
+        CreatedAt = arg.CreatedAt;
+        CreatedBy = arg.CreatedBy;
+    }
 
-//    public static async Task<ServiceRisk> Create(CreateServiceRiskArg arg)
-//    {
-//        return new ServiceRisk(arg);
-//    }
-//    public ServiceRiskId Id { get; private set; }
-//    public virtual Service Service { get; private set; }
-//    public ServiceId ServiceId { get; private set; }
-//    //? risk
-//    public long? ActiveStatusId { get; private set; }
-//    public DateTime? CreatedAt { get; private set; }
-//    public long? CreatedBy { get; private set; }
-//    public byte[]? ModifiedAt { get; private set; }
-//    public long? ModifiedBy { get; private set; }
-//}
+    public static ServiceRisk Create(CreateServiceRiskArg arg)
+    {
+        return new ServiceRisk(arg);
+    }
+    public ServiceRiskId Id { get; private set; }
+    public virtual Service Service { get; private set; }
+    public ServiceId ServiceId { get; private set; }
+    public virtual Risk Risk { get; private set; }
+    public RiskId RiskId { get; private set; }
+    public long ActiveStatusId { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
+    public byte[]? ModifiedAt { get; private set; }
+    public long? ModifiedBy { get; private set; }
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
+}

@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
+﻿using SIMA.Domain.Models.Features.Auths.CustomeFields.Entities;
+using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Args;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
@@ -55,6 +56,8 @@ public class MainAggregate
     public ICollection<Issue> Issues => _issues;
     private List<WorkFlow> _workFlows = new();
     public ICollection<WorkFlow> WorkFlows => _workFlows;
+    private List<CustomeField> _customeFields = new();
+    public ICollection<CustomeField> CustomeFields => _customeFields;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

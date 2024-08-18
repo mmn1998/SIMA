@@ -43,7 +43,7 @@ public class RolesQueryController : ControllerBase
     }
     [HttpGet("GetRoleAggregate/{roleId}")]
     [SimaAuthorize(Permissions.GetRoleAggregate)]
-    public async Task<Result> Get([FromRoute] int roleId)
+    public async Task<Result> GetRoleAggregate([FromRoute] long roleId)
     {
         var query = new GetRoleAggregate { RoleId = roleId };
         return await _mediator.Send(query);

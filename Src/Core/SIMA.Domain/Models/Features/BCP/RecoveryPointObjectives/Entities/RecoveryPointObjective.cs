@@ -68,18 +68,12 @@ public class RecoveryPointObjective : Entity, IAggregateRoot
     public RecoveryPointObjectiveId Id { get; set; }
     public int RpoFrom { get; set; }
     public int RpoTo { get; set; }
-    public string? Name { get; private set; }
-
-    public string? Code { get; private set; }
-
+    public string Name { get; private set; }
+    public string Code { get; private set; }
     public long ActiveStatusId { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)
     {

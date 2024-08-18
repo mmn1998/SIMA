@@ -1,6 +1,7 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.ResponsibleTypes;
 using SIMA.Application.Query.Contract.Features.Logistics.GoodsTypes;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;

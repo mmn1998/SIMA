@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -13,7 +14,8 @@ public class BusinessContinuityPlanService : Entity
     private BusinessContinuityPlanService(CreateBusinessContinuityPlanServiceArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
+        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
+        ServiceId = new(arg.ServiceId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -24,14 +26,15 @@ public class BusinessContinuityPlanService : Entity
     }
     public void Modify(ModifyBusinessContinuityPlanServiceArg arg)
     {
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
+        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
+        ServiceId = new(arg.ServiceId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
     }
     public BusinessContinuityPlanServiceId Id { get; private set; }
-    public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
-    public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
+    public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
+    public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
     public ServiceId ServiceId { get; private set; }
     public virtual Service Service { get; private set; }
     public long ActiveStatusId { get; private set; }

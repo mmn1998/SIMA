@@ -10,12 +10,15 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -52,12 +55,6 @@ public class Staff : Entity
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    //public static async Task<Staff> New(IStaffService service, CreateStaffArg arg)
-    //{
-    //    var validator = new StaffValidator(service);
-    //    await validator.ValidateAndThrowAsync(arg);
-    //    return new Staff(arg);
-    //}
 
     public static async Task<Staff> Create(CreateStaffArg arg, IStaffService service)
     {
@@ -142,13 +139,10 @@ public class Staff : Entity
     private List<CriticalActivity> _criticalActivityTechnicalSupervisors => new();
     public ICollection<CriticalActivity> CriticalActivityTechnicalSupervisors => _criticalActivityTechnicalSupervisors;
 
-    private List<CriticalActivityAssignStaff> _criticalActivityAssignStaffs => new();
-    public ICollection<CriticalActivityAssignStaff> CriticalActivityAssignStaffs => _criticalActivityAssignStaffs;
+    private List<CriticalActivityAssignedStaff> _criticalActivityAssignStaffs => new();
+    public ICollection<CriticalActivityAssignedStaff> CriticalActivityAssignStaffs => _criticalActivityAssignStaffs;
 
-    private List<ServiceAssignStaff> _serviceAssignStaffes = new();
-    public ICollection<ServiceAssignStaff> ServiceAssignStaffes => _serviceAssignStaffes;
-
-
+ 
 
     private List<Service> _serviceTechnicalResponsibles = new();
     public ICollection<Service> ServiceTechnicalResponsibles => _serviceTechnicalResponsibles;
@@ -158,6 +152,10 @@ public class Staff : Entity
     public ICollection<Service> ServiceTechnicalSupports => _serviceTechnicalSupports;
     private List<Service> _serviceTechnicalSupervisors = new();
     public ICollection<Service> ServiceTechnicalSupervisors => _serviceTechnicalSupervisors;
+    private List<ServiceAssignedStaff> _serviceAssignStaffes = new();
+    public ICollection<ServiceAssignedStaff> ServiceAssignStaffes => _serviceAssignStaffes;
+
+   
     private List<Api> _apis = new();
     public ICollection<Api> ResponsibleApis => _apis;
     private List<ApiSupportTeam> _apiSupportTeams = new();
@@ -173,12 +171,14 @@ public class Staff : Entity
     public ICollection<BusinessContinuityPlan> BusinessContinuityPlanRecoveryManagers => _businessContinuityPlanRecoveryManagers;
     private List<BusinessContinuityPlan> _businessContinuityPlanRecoveryDeputy => new();
     public ICollection<BusinessContinuityPlan> BusinessContinuityPlanRecoveryDeputy => _businessContinuityPlanRecoveryDeputy;
-    private List<BusinessContinuityPlanStaff> _businessContinuityPlanStaff => new();
-    public ICollection<BusinessContinuityPlanStaff> BusinessContinuityPlanStaff => _businessContinuityPlanStaff;
+    private List<BusinessContinuityPlanRelatedStaff> _BusinessContinuityPlanRelatedStaff => new();
+    public ICollection<BusinessContinuityPlanRelatedStaff> BusinessContinuityPlanRelatedStaff => _BusinessContinuityPlanRelatedStaff;
     private List<BusinessContinuityStrategyStaff> _businessContinuityStrategyStaff => new();
     public ICollection<BusinessContinuityStrategyStaff> BusinessContinuityStrategyStaff => _businessContinuityStrategyStaff;
     private List<BusinessImpactAnalysisStaff> _businessImpactAnalysisStaff => new();
     public ICollection<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaff => _businessImpactAnalysisStaff;
+    private List<ProductResponsible> _productResponsibles => new();
+    public ICollection<ProductResponsible> ProductResponsibles => _productResponsibles;
     private List<Asset> _assetOwners => new();
     public ICollection<Asset> AssetOwners => _assetOwners;
     private List<ConfigurationItem> _configurationItemOwners => new();
@@ -191,6 +191,17 @@ public class Staff : Entity
     public ICollection<ConfigurationItemChangeOwnerHistory> ToConfigurationItemChangeOwnerHistories => _toConfigurationItemChangeOwnerHistories;
     private List<ConfigurationItemChangeOwnerHistory> _fromConfigurationItemChangeOwnerHistories => new();
     public ICollection<ConfigurationItemChangeOwnerHistory> FromConfigurationItemChangeOwnerHistories => _fromConfigurationItemChangeOwnerHistories;
+
+    private List<BusinessContinuityStratgyResponsible> _businessContinuityStratgyResponsible = new();
+    public ICollection<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles => _businessContinuityStratgyResponsible;
+
+
+    private List<BusinessContinuityPlanResponsible> _businessContinuityPlanResponsible = new();
+    public ICollection<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles => _businessContinuityPlanResponsible;
+
+    private List<ChannelResponsible> _channelResponsibles = new();
+    public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsibles;
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;

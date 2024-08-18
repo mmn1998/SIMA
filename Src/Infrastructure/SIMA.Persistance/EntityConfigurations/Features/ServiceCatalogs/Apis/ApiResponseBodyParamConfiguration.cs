@@ -18,7 +18,7 @@ public class ApiResponseBodyParamConfiguration : IEntityTypeConfiguration<ApiRes
         entity.HasKey(e => e.Id);
         entity.Property(x => x.Name).HasMaxLength(200);
         entity.Property(x => x.DataType).HasMaxLength(200);
-        entity.Property(x => x.IsMandatory).HasMaxLength(1).IsUnicode(false);
+   
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");
@@ -28,11 +28,11 @@ public class ApiResponseBodyParamConfiguration : IEntityTypeConfiguration<ApiRes
 
         entity.Property(x => x.ParentId)
             .HasConversion(x => x.Value, x => new ApiResponseBodyParamId(x));
-        
-        entity.Property(x => x.ApiId)
-            .HasConversion(x => x.Value, x => new ApiId(x));
-        entity.HasOne(x=>x.Api)
-            .WithMany(x=>x.ApiResponseBodyParams)
-            .HasForeignKey(x=>x.ApiId);
+
+        entity.Property(x => x.ApiVersionId)
+       .HasConversion(x => x.Value, x => new ApiVersionId(x));
+        entity.HasOne(x => x.ApiVersion)
+            .WithMany(x => x.ApiResponseBodyParams)
+            .HasForeignKey(x => x.ApiVersionId);
     }
 }

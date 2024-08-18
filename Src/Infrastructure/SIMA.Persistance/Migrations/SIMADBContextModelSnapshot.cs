@@ -22,6 +22,1175 @@ namespace SIMA.Persistance.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities.AssetPhysicalStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("AssetPhysicalStatus", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities.AssetTechnicalStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("AssetTechnicalStatusConfiguration", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities.AssetType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("AssetType", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("AssetPhysicalStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("AssetTechnicalStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("BusinessCriticalityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("ExpireDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("HasConfidentialInformation")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<DateOnly?>("InServiceDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly?>("ManufactureDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Manufacturer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Model")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("OwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateOnly?>("OwnershipDate")
+                        .HasColumnType("date");
+
+                    b.Property<decimal?>("OwnershipPaymentValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("OwnershipPrepaymentValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<long?>("OwnershipTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PhysicalLocationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateOnly?>("RetiredDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("SerialNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UserTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("WarehouseId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetPhysicalStatusId");
+
+                    b.HasIndex("AssetTechnicalStatusId");
+
+                    b.HasIndex("AssetTypeId");
+
+                    b.HasIndex("BusinessCriticalityId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("OwnershipTypeId");
+
+                    b.HasIndex("PhysicalLocationId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("UserTypeId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("Asset", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetChangeOwnerHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("FromOwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ToOwnerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("FromOwnerId");
+
+                    b.HasIndex("ToOwnerId");
+
+                    b.ToTable("AssetChangeOwnerHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetChangePhysicalStatusHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FromAssetPhysicalStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ToAssetPhysicalStatusId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("FromAssetPhysicalStatusId");
+
+                    b.HasIndex("ToAssetPhysicalStatusId");
+
+                    b.ToTable("AssetChangePhysicalStatusHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetChangeTechnicalStatusHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FromAssetTechnicalStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ToAssetTechnicalStatusId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("FromAssetTechnicalStatusId");
+
+                    b.HasIndex("ToAssetTechnicalStatusId");
+
+                    b.ToTable("AssetChangeTechnicalStatusHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("AssetDocument", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetIssue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IssueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("AssetIssue", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetWarehouseHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateOnly>("CheckDate")
+                        .HasColumnType("date");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsCheckIn")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("WarehouseId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("AssetWarehouseHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities.BusinessCriticality", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("BusinessCriticality", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelationshipTypes.Entities.ConfigurationItemRelationshipType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("ConfigurationItemRelationshipType", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities.ConfigurationItemStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("ConfigurationItemStatus", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities.ConfigurationItemType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long?>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("ConfigurationItemType", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("CompanyBuildingLocationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("LicenseSupplierId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("LicenseTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("OwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.HasIndex("CompanyBuildingLocationId");
+
+                    b.HasIndex("ConfigurationItemStatusId");
+
+                    b.HasIndex("ConfigurationItemTypeId");
+
+                    b.HasIndex("LicenseSupplierId");
+
+                    b.HasIndex("LicenseTypeId");
+
+                    b.HasIndex("OwnerId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("ConfigurationItem", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemAccessInfo", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ActiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ActiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IPAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Port")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemVersioningId");
+
+                    b.ToTable("ConfigurationItemAccessInfo", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemAsset", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("ConfigurationItemVersioningId");
+
+                    b.ToTable("ConfigurationItemAsset", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemAssetHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateOnly?>("AssignDate")
+                        .HasColumnType("date");
+
+                    b.Property<long>("ConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsAssigned")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
+
+                    b.HasIndex("ConfigurationItemVersioningId");
+
+                    b.ToTable("ConfigurationItemAssetHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemChangeOwnerHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FromOwnerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ToOwnerId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemId");
+
+                    b.HasIndex("FromOwnerId");
+
+                    b.HasIndex("ToOwnerId");
+
+                    b.ToTable("ConfigurationItemChangeOwnerHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemChangeStatusHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FromConfigurationItemStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ToConfigurationItemStatusId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemId");
+
+                    b.HasIndex("FromConfigurationItemStatusId");
+
+                    b.HasIndex("ToConfigurationItemStatusId");
+
+                    b.ToTable("ConfigurationItemChangeStatusHistory", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemDocument", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("DocumentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemVersioningId");
+
+                    b.HasIndex("DocumentId");
+
+                    b.ToTable("ConfigurationItemDocument", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemIssue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("IssueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemVersioningId");
+
+                    b.HasIndex("IssueId");
+
+                    b.ToTable("ConfigurationItemIssue", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemRelationship", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemRelationshipTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RelatedConfigurationItemVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemRelationshipTypeId");
+
+                    b.HasIndex("ConfigurationItemVersioningId");
+
+                    b.HasIndex("RelatedConfigurationItemVersioningId");
+
+                    b.ToTable("ConfigurationItemRelationship", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("VersionNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemId");
+
+                    b.ToTable("ConfigurationItemVersioning", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities.LicenseType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("LicenseType", "AssetAndConfiguration");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities.ActiveStatus", b =>
                 {
                     b.Property<long>("Id")
@@ -163,20 +1332,38 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Code")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
 
                     b.ToTable("ApiMethodAction", "Basic");
                 });
@@ -230,12 +1417,22 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("Company", "Organization");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttribute", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities.CompanyBuildingLocation", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -246,9 +1443,57 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("DataType")
+                    b.Property<string>("Fax")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("LocationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("CompanyBuildingLocation", "Authentication");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttribute", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("EnglishKey")
                         .HasMaxLength(200)
@@ -276,6 +1521,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id")
                         .HasName("PK_onfigurationAttribute");
 
+                    b.HasIndex("ConfigurationTypeId");
+
                     b.HasIndex(new[] { "EnglishKey" }, "index_Key")
                         .IsUnique()
                         .HasFilter("[EnglishKey] IS NOT NULL");
@@ -290,6 +1537,9 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("AttributeKey")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ConfigurationAttributeId")
                         .HasColumnType("bigint");
@@ -325,6 +1575,155 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("ConfigurationAttributeId");
 
                     b.ToTable("ConfigurationAttributeValue", "Basic");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationTypes.Entities.ConfigurationType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsList")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("ConfigurationType", "Basic");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.Entities.CustomeFieldType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsList")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<string>("IsMultiSelect")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("CustomeFieldType", "Basic");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CustomeFields.Entities.CustomeField", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CustomeFieldTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EnglishKey")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("IsMandatory")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<long>("MainAggregateId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomeFieldTypeId");
+
+                    b.HasIndex("MainAggregateId");
+
+                    b.ToTable("Configuration", "Basic");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.DataTypes.Entities.DataType", b =>
@@ -622,6 +2021,51 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("FormGroup", "Authentication");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ActiveFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("ActiveTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("FormId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PermissionId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FormId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("FormPermission", "Authentication");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormRole", b =>
@@ -1080,6 +2524,85 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("NetworkProtocol", "Basic");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.OwnershipType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OwnershipType", "Authentication");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.Warehouse", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<long>("CompanyBuildingLocationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyBuildingLocationId");
+
+                    b.ToTable("Warehouse", "Authentication");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Permissions.Entities.Permission", b =>
                 {
                     b.Property<long>("Id")
@@ -1099,6 +2622,9 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("DomainId")
                         .HasColumnType("bigint");
@@ -1173,12 +2699,107 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("PhonType", "Basic");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.PositionLevels.Entities.PositionLevel", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsList")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("PositionLevel", "Organization");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.PositionTypes.Entities.PositionType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsList")
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("PositionType", "Organization");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Positions.Entities.Position", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("BranchId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -1208,13 +2829,25 @@ namespace SIMA.Persistance.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<long?>("PositionLevelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("PositionTypeId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
 
                     b.HasIndex("Code")
                         .IsUnique()
                         .HasFilter("[Code] IS NOT NULL");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("PositionLevelId");
+
+                    b.HasIndex("PositionTypeId");
 
                     b.ToTable("Position", "Organization");
                 });
@@ -1375,6 +3008,49 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("Profile", "Authentication");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities.ResponsibleType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("ResponsibleType", "Basic");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Roles.Entities.Role", b =>
                 {
                     b.Property<long>("Id")
@@ -1468,6 +3144,48 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("RolePermission", "Authentication");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities.CustomerType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("CustomerType", "Basic");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", b =>
@@ -1622,6 +3340,45 @@ namespace SIMA.Persistance.Migrations
                         .HasFilter("[Code] IS NOT NULL");
 
                     b.ToTable("UIInputElement", "Basic");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.UserTypes.Entities.UserType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserType", "Basic");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Users.Entities.User", b =>
@@ -2041,6 +3798,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -2061,17 +3819,98 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("BackupPeriod", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities.BusinessContinuityPlanStratgy", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityStratgyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("BusinessContinuityStratgyId");
+
+                    b.ToTable("BusinessContinuityPlanStratgy", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VersionNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanId");
+
+                    b.ToTable("BusinessContinuityPlanVersioning", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
@@ -2082,12 +3921,13 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityStrategyId")
+                    b.Property<long?>("BusinessContinuityStrategyId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -2095,9 +3935,6 @@ namespace SIMA.Persistance.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ExecutiveResponsibleId")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -2108,25 +3945,25 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("OfferDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long?>("PlanOwnerId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("RecoveryDeputyId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("RecoveryManagerId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Scope")
-                        .IsUnicode(true)
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("StaffId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId2")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId3")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(200)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
@@ -2134,18 +3971,69 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("BusinessContinuityStrategyId");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
-                    b.HasIndex("ExecutiveResponsibleId");
+                    b.HasIndex("StaffId");
 
-                    b.HasIndex("PlanOwnerId");
+                    b.HasIndex("StaffId1");
 
-                    b.HasIndex("RecoveryDeputyId");
+                    b.HasIndex("StaffId2");
 
-                    b.HasIndex("RecoveryManagerId");
+                    b.HasIndex("StaffId3");
 
                     b.ToTable("BusinessContinuityPlan", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanAssumption", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("BusinessContinuityPlanId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanId");
+
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("BusinessContinuityPlanAssumption", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanCriticalActivity", b =>
@@ -2156,7 +4044,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanId")
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -2165,6 +4053,9 @@ namespace SIMA.Persistance.Migrations
                         .HasDefaultValueSql("(getdate())");
 
                     b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CriticalActivityId")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -2177,56 +4068,11 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanId");
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("CriticalActivityId");
 
                     b.ToTable("BusinessContinuityPlanCriticalActivity", "BCP");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanDetailPlanningAssumption", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessContinuityPlanId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(200)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessContinuityPlanId");
-
-                    b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
-
-                    b.ToTable("BusinessContinuityPlanDetailPlanningAssumption", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanPossibleAction", b =>
@@ -2241,8 +4087,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -2261,8 +4108,8 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(200)
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
@@ -2270,8 +4117,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("BusinessContinuityPlanPossibleAction", "BCP");
                 });
@@ -2370,7 +4216,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("BusinessContinuityPlanRecoveryOption", "BCP");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRisk", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRelatedStaff", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint");
@@ -2378,85 +4224,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RiskId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessContinuityPlanId");
-
-                    b.HasIndex("RiskId");
-
-                    b.ToTable("BusinessContinuityPlanRisk", "BCP");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanService", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessContinuityPlanId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ServiceId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessContinuityPlanId");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("BusinessContinuityPlanService", "BCP");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanStaff", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessContinuityPlanId")
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -2480,11 +4248,138 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanId");
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("BusinessContinuityPlanStaff", "BCP");
+                    b.ToTable("BusinessContinuityPlanRelatedStaff", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanResponsible", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsForBackup")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PlanResponsibilityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StaffId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("PlanResponsibilityId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("BusinessContinuityPlanResponsible", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRisk", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RiskId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("RiskId");
+
+                    b.ToTable("BusinessContinuityPlanRisk", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanService", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("BusinessContinuityPlanService", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", b =>
@@ -2496,8 +4391,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<long>("CordinatorId")
                         .HasColumnType("bigint");
@@ -2511,13 +4407,13 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
-                        .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ExpireDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IsStableStrategy")
+                        .IsRequired()
                         .HasMaxLength(1)
                         .HasColumnType("nvarchar(1)");
 
@@ -2529,7 +4425,14 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime?>("ReviewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("StrategyTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
@@ -2537,8 +4440,9 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
+
+                    b.HasIndex("StrategyTypeId");
 
                     b.ToTable("BusinessContinuityStrategy", "BCP");
                 });
@@ -2594,9 +4498,10 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
+                        .IsRequired()
+                        .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -2615,7 +4520,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(200)
+                        .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
@@ -2623,8 +4530,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("BusinessContinuityStategyId");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("BusinessContinuityStrategyObjective", "BCP");
                 });
@@ -2746,6 +4652,103 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("BusinessContinuityStrategyStaff", "BCP");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities.BusinessContinuityStratgyResponsible", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityStrategyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IsForBackup")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("PlanResponsibilityId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StaffId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityStrategyId");
+
+                    b.HasIndex("PlanResponsibilityId");
+
+                    b.HasIndex("StaffId");
+
+                    b.ToTable("BusinessContinuityStratgyResponsible", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities.BusinessContinuityStratgySolution", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityStratgyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityStratgyId");
+
+                    b.HasIndex("Code")
+                        .IsUnique()
+                        .HasFilter("[Code] IS NOT NULL");
+
+                    b.ToTable("BusinessContinuityStratgySolution", "BCP");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysis", b =>
                 {
                     b.Property<long>("Id")
@@ -2756,10 +4759,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long>("BackupPeriodId")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -2772,9 +4771,6 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ImportanceDegreeId")
                         .HasColumnType("bigint");
 
-                    b.Property<float?>("MTD")
-                        .HasColumnType("real");
-
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -2782,17 +4778,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(200)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<float?>("RPO")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("RTO")
-                        .HasColumnType("real");
 
                     b.Property<string>("RestartReason")
                         .HasColumnType("nvarchar(max)");
@@ -2803,16 +4788,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ServicePriorityId")
                         .HasColumnType("bigint");
 
-                    b.Property<float?>("WRT")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BackupPeriodId");
-
-                    b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
 
                     b.HasIndex("ImportanceDegreeId");
 
@@ -2870,6 +4848,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("BusinessImpactAnalysisId")
                         .HasColumnType("bigint");
 
@@ -2890,6 +4871,8 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AssetId");
 
                     b.HasIndex("BusinessImpactAnalysisId");
 
@@ -2958,7 +4941,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(MAX)");
 
                     b.Property<long>("HappeningPossibilityId")
                         .HasColumnType("bigint");
@@ -3086,8 +5071,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3106,6 +5092,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
@@ -3113,8 +5100,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Consequence", "BCP");
                 });
@@ -3128,8 +5114,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3148,6 +5135,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
@@ -3158,8 +5146,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("HappeningPossibility", "BCP");
                 });
@@ -3173,8 +5160,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3193,6 +5181,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
@@ -3203,10 +5192,140 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ImportanceDegree", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.NewFolder.Entities.ScenarioBusinessContinuityPlanVersioning", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanVersioningId");
+
+                    b.HasIndex("ScenarioId");
+
+                    b.ToTable(" ScenarioBusinessContinuityPlanVersioning", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities.PlanResponsibility", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("Ordering")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("PlanResponsibility", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.RecoveryOptionPriorities.Entities.RecoveryOptionPriority", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("Ordering")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("RecoveryOptionPriority", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities.RecoveryPointObjective", b =>
@@ -3218,8 +5337,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3238,23 +5358,200 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("RpoFrom")
+                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.Property<int>("RpoTo")
+                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("RecoveryPointObjective", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities.ScenarioBusinessContinuityPlanAssumption", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("BusinessContinuityPlanAssumptionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BusinessContinuityPlanAssumptionId");
+
+                    b.HasIndex("ScenarioId");
+
+                    b.ToTable("ScenarioBusinessContinuityPlanAssumption", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ScenarioRecoveryCriterias.Entities.ScenarioRecoveryCriteria", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ScenarioId");
+
+                    b.ToTable("ScenarioRecoveryCriteria", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ScenarioRecoveryOptions.Entities.ScenarioRecoveryOption", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ScenarioId");
+
+                    b.ToTable("ScenarioRecoveryOption", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(MAX)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Scenario", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities.OrganizationalServicePriority", b =>
@@ -3266,8 +5563,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -3286,6 +5584,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
@@ -3296,10 +5595,52 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ServicePriority", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities.StrategyType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("StrategyType", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities.BranchType", b =>
@@ -7287,7 +9628,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("SupervisorAnswerType", "SecurityCommitee");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities.ApiAuthentoicationMethod", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities.ApiAuthenticationMethod", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -7297,16 +9638,17 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -7318,14 +9660,14 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ApiAuthentoicationMethod", "ServiceCatalog");
                 });
@@ -7383,16 +9725,17 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -7404,14 +9747,14 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("ApiType", "ServiceCatalog");
                 });
@@ -7427,7 +9770,10 @@ namespace SIMA.Persistance.Migrations
                     b.Property<string>("ApiAddress")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("ApiAuthentoicationMethodId")
+                    b.Property<long?>("ApiAuthenticationMethodId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ApiMethodActionId")
                         .HasColumnType("bigint");
 
                     b.Property<long?>("ApiMethodCallId")
@@ -7443,6 +9789,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Code")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
@@ -7471,6 +9818,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
@@ -7502,15 +9850,16 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiAuthentoicationMethodId");
+                    b.HasIndex("ApiAuthenticationMethodId");
+
+                    b.HasIndex("ApiMethodActionId");
 
                     b.HasIndex("ApiMethodCallId");
 
                     b.HasIndex("ApiTypeId");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
+                        .IsUnique();
 
                     b.HasIndex("NetworkProtocolId");
 
@@ -7532,12 +9881,12 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DocumentId")
@@ -7568,25 +9917,31 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ApiId")
+                    b.Property<long?>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<long>("ApiVersionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataType")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IsMandatory")
+                        .IsRequired()
                         .HasMaxLength(1)
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)");
@@ -7600,6 +9955,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7609,6 +9965,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApiId");
+
+                    b.HasIndex("ApiVersionId");
 
                     b.HasIndex("ParentId");
 
@@ -7623,18 +9981,19 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ApiId")
+                    b.Property<long>("ApiVersionId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataType")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7655,6 +10014,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7663,7 +10023,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApiId");
+                    b.HasIndex("ApiVersionId");
 
                     b.HasIndex("ParentId");
 
@@ -7678,7 +10038,10 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ApiId")
+                    b.Property<long?>("ApiId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ApiVersionId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -7690,6 +10053,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataType")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7710,6 +10074,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7719,6 +10084,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApiId");
+
+                    b.HasIndex("ApiVersionId");
 
                     b.HasIndex("ParentId");
 
@@ -7733,18 +10100,22 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ApiId")
+                    b.Property<long?>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<long>("ApiVersionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataType")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7752,6 +10123,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IsMandatory")
+                        .IsRequired()
                         .HasMaxLength(1)
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)");
@@ -7765,6 +10137,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7774,6 +10147,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApiId");
+
+                    b.HasIndex("ApiVersionId");
 
                     b.HasIndex("ParentId");
 
@@ -7788,28 +10163,27 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ApiId")
+                    b.Property<long?>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<long>("ApiVersionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataType")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IsMandatory")
-                        .HasMaxLength(1)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(1)");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -7820,6 +10194,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7829,6 +10204,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApiId");
+
+                    b.HasIndex("ApiVersionId");
 
                     b.HasIndex("ParentId");
 
@@ -7843,28 +10220,27 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ApiId")
+                    b.Property<long?>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<long>("ApiVersionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("DataType")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("IsMandatory")
-                        .HasMaxLength(1)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(1)");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -7875,6 +10251,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -7884,6 +10261,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApiId");
+
+                    b.HasIndex("ApiVersionId");
 
                     b.HasIndex("ParentId");
 
@@ -7901,12 +10280,12 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -7940,15 +10319,16 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("IsCurrentVersion")
+                        .IsRequired()
                         .HasMaxLength(1)
                         .IsUnicode(false)
                         .HasColumnType("varchar(1)");
@@ -7965,6 +10345,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("VersionNumber")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
@@ -7986,12 +10367,12 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ApiId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8057,20 +10438,17 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ChannelType", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -8080,7 +10458,230 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("DepartmentId")
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("InServiceDate")
+                        .HasColumnType("date");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Scope")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ServiceStatusId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceStatusId");
+
+                    b.ToTable("Channel", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ChannelAccessPoint", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTime?>("ActivationDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ChannelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Port")
+                        .HasMaxLength(5)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
+
+                    b.ToTable("ChannelAccessPoint", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ChannelResponsible", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ChannelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ResponsibleId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ResponsibleTypeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
+
+                    b.HasIndex("ResponsibleId");
+
+                    b.HasIndex("ResponsibleTypeId");
+
+                    b.ToTable("ChannelResponsible", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ChannelUserType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ChannelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserTypeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
+
+                    b.HasIndex("UserTypeId");
+
+                    b.ToTable("ChannelUserType", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ProductChannel", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ChannelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChannelId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductChannel", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8097,10 +10698,13 @@ namespace SIMA.Persistance.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<long?>("TechnicalResponsibleId")
+                    b.Property<long?>("StaffId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("TechnicalSupervisorId")
+                    b.Property<long?>("StaffId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("TechnicalSupervisorDepartmentId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -8108,11 +10712,11 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("StaffId");
 
-                    b.HasIndex("TechnicalResponsibleId");
+                    b.HasIndex("StaffId1");
 
-                    b.HasIndex("TechnicalSupervisorId");
+                    b.HasIndex("TechnicalSupervisorDepartmentId");
 
                     b.ToTable("CriticalActivity", "ServiceCatalog");
                 });
@@ -8123,15 +10727,18 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<long>("AssetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CriticalActivityId")
@@ -8147,26 +10754,28 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssetId");
+
                     b.HasIndex("CriticalActivityId");
 
                     b.ToTable("CriticalActivityAsset", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityAssignStaff", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityAssignedStaff", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CriticalActivityId")
@@ -8198,15 +10807,15 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CriticalActivityId")
@@ -8242,15 +10851,15 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CriticalActivityId")
@@ -8264,6 +10873,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("RiskId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("ServiceId")
                         .HasColumnType("bigint");
 
@@ -8271,26 +10883,28 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasIndex("CriticalActivityId");
 
+                    b.HasIndex("RiskId");
+
                     b.HasIndex("ServiceId");
 
                     b.ToTable("CriticalActivityRisk", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityService", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityServices", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("CriticalActivityId")
@@ -8316,13 +10930,115 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("CriticalActivityService", "ServiceCatalog");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.Product", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("InServiceDate")
+                        .HasColumnType("date");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ProviderCompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Scope")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ServiceStatusId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderCompanyId");
+
+                    b.HasIndex("ServiceStatusId");
+
+                    b.ToTable("Product", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.ProductResponsible", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("ResponsibleTypeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ResponsilbeId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("ResponsibleTypeId");
+
+                    b.HasIndex("ResponsilbeId");
+
+                    b.ToTable("ProductResponsible", "ServiceCatalog");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities.ServiceBoundle", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -8331,12 +11047,12 @@ namespace SIMA.Persistance.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8370,7 +11086,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -8379,12 +11095,12 @@ namespace SIMA.Persistance.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8410,53 +11126,6 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("ServiceTypeId");
 
                     b.ToTable("ServiceCategory", "ServiceCatalog");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities.ServiceCustomerType", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("ServiceCustomerType", "ServiceCatalog");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities.ServicePriority", b =>
@@ -8533,7 +11202,7 @@ namespace SIMA.Persistance.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<long>("ModifiedBy")
+                    b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -8554,7 +11223,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -8563,12 +11232,12 @@ namespace SIMA.Persistance.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8591,69 +11260,21 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ServiceType", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities.ServiceUserType", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Id");
-
-                    b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("ParentId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique();
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("ServiceUserType", "ServiceCatalog");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.PreRequisiteServices", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8685,10 +11306,7 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessResponsibleId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -8700,12 +11318,12 @@ namespace SIMA.Persistance.Migrations
                     b.Property<string>("ContinuousImprovement")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Description")
@@ -8713,6 +11331,15 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<string>("FeedbackUrl")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("InServiceDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("IsCriticalService")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nchar(1)")
+                        .IsFixedLength();
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -8726,59 +11353,57 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("OwnerDepartmentId")
-                        .HasColumnType("bigint");
-
                     b.Property<long?>("ParentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ServiceBoundleId")
+                    b.Property<long>("ServiceBoundleId")
                         .HasColumnType("bigint");
 
                     b.Property<double?>("ServiceCost")
                         .HasColumnType("float");
 
-                    b.Property<long>("ServicePriorityId")
+                    b.Property<long?>("ServiceStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("ServiceWorkflowDescription")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long?>("StaffId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId2")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StaffId3")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Suggestion")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("TechnicalResponsibleId")
-                        .HasColumnType("bigint");
 
                     b.Property<long?>("TechnicalSupervisorDepartmentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("TechnicalSupervisorId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("TechnicalSupportId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BusinessResponsibleId");
 
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("OwnerDepartmentId");
-
                     b.HasIndex("ServiceBoundleId");
 
-                    b.HasIndex("ServicePriorityId");
+                    b.HasIndex("ServiceStatusId");
 
-                    b.HasIndex("TechnicalResponsibleId");
+                    b.HasIndex("StaffId");
+
+                    b.HasIndex("StaffId1");
+
+                    b.HasIndex("StaffId2");
+
+                    b.HasIndex("StaffId3");
 
                     b.HasIndex("TechnicalSupervisorDepartmentId");
-
-                    b.HasIndex("TechnicalSupervisorId");
-
-                    b.HasIndex("TechnicalSupportId");
 
                     b.ToTable("Service", "ServiceCatalog");
                 });
@@ -8790,6 +11415,9 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnName("Id");
 
                     b.Property<long?>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AssetId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -8813,26 +11441,28 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssetId");
+
                     b.HasIndex("ServiceId");
 
                     b.ToTable("ServiceAsset", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceAssignStaff", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceAssignedStaff", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8855,7 +11485,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("ServiceAssignStaff", "ServiceCatalog");
+                    b.ToTable("ServiceAssignedStaff", "ServiceCatalog");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceAvalibility", b =>
@@ -8864,15 +11494,15 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8902,59 +11532,24 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ServiceAvalibility", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceCantract", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint")
-                        .HasColumnName("Id");
-
-                    b.Property<long?>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ServiceId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServiceId");
-
-                    b.ToTable("ServiceCantract", "ServiceCatalog");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceChannel", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ChannelTypeId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -8977,7 +11572,7 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ServiceChanel", "ServiceCatalog");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceCustomer", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceConfigurationItem", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
@@ -8986,12 +11581,87 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<long>("ConfigurationItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceConfigurationItem", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceContract", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceCantract", "ServiceCatalog");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceCustomer", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -9023,15 +11693,15 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("DocumentId")
@@ -9074,15 +11744,16 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
+                        .IsRequired()
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("rowversion");
 
-                    b.Property<long?>("ModifiedBy")
+                    b.Property<long>("ModifiedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ServiceId")
@@ -9103,15 +11774,15 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<long>("IssueId")
@@ -9137,21 +11808,61 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ServiceRelatedIssue", "ServiceCatalog");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceRisk", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RiskId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ServiceId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RiskId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ServiceRisk", "ServiceCatalog");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceUser", b =>
                 {
                     b.Property<long>("Id")
                         .HasColumnType("bigint")
                         .HasColumnName("Id");
 
-                    b.Property<long?>("ActiveStatusId")
+                    b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getdate())");
 
-                    b.Property<long?>("CreatedBy")
+                    b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -10226,6 +12937,420 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("WorkFlowCompany", "Project");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities.AssetType", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities.AssetType", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities.AssetPhysicalStatus", "AssetPhysicalStatus")
+                        .WithMany("Assets")
+                        .HasForeignKey("AssetPhysicalStatusId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities.AssetTechnicalStatus", "AssetTechnicalStatus")
+                        .WithMany("Assets")
+                        .HasForeignKey("AssetTechnicalStatusId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities.AssetType", "AssetType")
+                        .WithMany("Assets")
+                        .HasForeignKey("AssetTypeId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities.BusinessCriticality", "BusinessCriticality")
+                        .WithMany("Assets")
+                        .HasForeignKey("BusinessCriticalityId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Owner")
+                        .WithMany("AssetOwners")
+                        .HasForeignKey("OwnerId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.OwnershipType", "OwnershipType")
+                        .WithMany("Assets")
+                        .HasForeignKey("OwnershipTypeId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Locations.Entities.Location", "PhysicalLocation")
+                        .WithMany("Assets")
+                        .HasForeignKey("PhysicalLocationId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Logistics.Suppliers.Entities.Supplier", "Supplier")
+                        .WithMany("Assets")
+                        .HasForeignKey("SupplierId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.UserTypes.Entities.UserType", "UserType")
+                        .WithMany("Assets")
+                        .HasForeignKey("UserTypeId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.Warehouse", "Warehouse")
+                        .WithMany("Assets")
+                        .HasForeignKey("WarehouseId");
+
+                    b.Navigation("AssetPhysicalStatus");
+
+                    b.Navigation("AssetTechnicalStatus");
+
+                    b.Navigation("AssetType");
+
+                    b.Navigation("BusinessCriticality");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("OwnershipType");
+
+                    b.Navigation("PhysicalLocation");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("UserType");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetChangeOwnerHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("AssetChangeOwnerHistories")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "FromOwner")
+                        .WithMany("FromAssetChangeOwnerHistories")
+                        .HasForeignKey("FromOwnerId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "ToOwner")
+                        .WithMany("ToAssetChangeOwnerHistories")
+                        .HasForeignKey("ToOwnerId");
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("FromOwner");
+
+                    b.Navigation("ToOwner");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetChangePhysicalStatusHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("AssetChangePhysicalStatusHistories")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities.AssetPhysicalStatus", "FromAssetPhysicalStatus")
+                        .WithMany("FromAssetChangePhysicalStatusHistories")
+                        .HasForeignKey("FromAssetPhysicalStatusId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities.AssetPhysicalStatus", "ToAssetPhysicalStatus")
+                        .WithMany("ToAssetChangePhysicalStatusHistories")
+                        .HasForeignKey("ToAssetPhysicalStatusId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("FromAssetPhysicalStatus");
+
+                    b.Navigation("ToAssetPhysicalStatus");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetChangeTechnicalStatusHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("AssetChangeTechnicalStatusHistories")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities.AssetTechnicalStatus", "FromTechnicalStatus")
+                        .WithMany("FromAssetChangeTechnicalStatusHistories")
+                        .HasForeignKey("FromAssetTechnicalStatusId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities.AssetTechnicalStatus", "ToTechnicalStatus")
+                        .WithMany("ToAssetChangeTechnicalStatusHistories")
+                        .HasForeignKey("ToAssetTechnicalStatusId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("FromTechnicalStatus");
+
+                    b.Navigation("ToTechnicalStatus");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetDocument", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("AssetDocuments")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", "Document")
+                        .WithMany("AssetDocuments")
+                        .HasForeignKey("DocumentId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetIssue", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("AssetIssues")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", "Issue")
+                        .WithMany("AssetIssues")
+                        .HasForeignKey("IssueId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Issue");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.AssetWarehouseHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("AssetWarehouseHistories")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.Warehouse", "Warehouse")
+                        .WithMany("AssetWarehouseHistories")
+                        .HasForeignKey("WarehouseId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities.ConfigurationItemType", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities.ConfigurationItemType", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Locations.Entities.Location", "CompanyBuildingLocation")
+                        .WithMany("ConfigurationItems")
+                        .HasForeignKey("CompanyBuildingLocationId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities.ConfigurationItemStatus", "ConfigurationItemStatus")
+                        .WithMany("ConfigurationItems")
+                        .HasForeignKey("ConfigurationItemStatusId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities.ConfigurationItemType", "ConfigurationItemType")
+                        .WithMany("ConfigurationItems")
+                        .HasForeignKey("ConfigurationItemTypeId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Logistics.Suppliers.Entities.Supplier", "LicenseSupplier")
+                        .WithMany("LicensedConfigurationItems")
+                        .HasForeignKey("LicenseSupplierId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities.LicenseType", "LicenseType")
+                        .WithMany("ConfigurationItems")
+                        .HasForeignKey("LicenseTypeId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Owner")
+                        .WithMany("ConfigurationItemOwners")
+                        .HasForeignKey("OwnerId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Logistics.Suppliers.Entities.Supplier", "Supplier")
+                        .WithMany("ConfigurationItems")
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("CompanyBuildingLocation");
+
+                    b.Navigation("ConfigurationItemStatus");
+
+                    b.Navigation("ConfigurationItemType");
+
+                    b.Navigation("LicenseSupplier");
+
+                    b.Navigation("LicenseType");
+
+                    b.Navigation("Owner");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemAccessInfo", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "ConfigurationItemVersioning")
+                        .WithMany("ConfigurationItemAccessInfos")
+                        .HasForeignKey("ConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItemVersioning");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemAsset", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("ConfigurationItemAssets")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "ConfigurationItemVersioning")
+                        .WithMany("ConfigurationItemAssets")
+                        .HasForeignKey("ConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("ConfigurationItemVersioning");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemAssetHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("ConfigurationItemAssetHistories")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "ConfigurationItemVersioning")
+                        .WithMany("ConfigurationItemAssetHistories")
+                        .HasForeignKey("ConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.Navigation("Asset");
+
+                    b.Navigation("ConfigurationItemVersioning");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemChangeOwnerHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", "ConfigurationItem")
+                        .WithMany("ConfigurationItemChangeOwnerHistories")
+                        .HasForeignKey("ConfigurationItemId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "FromOwner")
+                        .WithMany("FromConfigurationItemChangeOwnerHistories")
+                        .HasForeignKey("FromOwnerId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "ToOwner")
+                        .WithMany("ToConfigurationItemChangeOwnerHistories")
+                        .HasForeignKey("ToOwnerId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItem");
+
+                    b.Navigation("FromOwner");
+
+                    b.Navigation("ToOwner");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemChangeStatusHistory", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", "ConfigurationItem")
+                        .WithMany("ConfigurationItemChangeStatusHistories")
+                        .HasForeignKey("ConfigurationItemId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities.ConfigurationItemStatus", "FromConfigurationItemStatus")
+                        .WithMany("FromConfigurationItemChangeStatusHistories")
+                        .HasForeignKey("FromConfigurationItemStatusId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities.ConfigurationItemStatus", "ToConfigurationItemStatus")
+                        .WithMany("ToConfigurationItemChangeStatusHistories")
+                        .HasForeignKey("ToConfigurationItemStatusId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItem");
+
+                    b.Navigation("FromConfigurationItemStatus");
+
+                    b.Navigation("ToConfigurationItemStatus");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemDocument", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "ConfigurationItemVersioning")
+                        .WithMany("ConfigurationItemDocuments")
+                        .HasForeignKey("ConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.DMS.Documents.Entities.Document", "Document")
+                        .WithMany("ConfigurationItemDocuments")
+                        .HasForeignKey("DocumentId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItemVersioning");
+
+                    b.Navigation("Document");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemIssue", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "ConfigurationItemVersioning")
+                        .WithMany("ConfigurationItemIssues")
+                        .HasForeignKey("ConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", "Issue")
+                        .WithMany("ConfigurationItemIssues")
+                        .HasForeignKey("IssueId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItemVersioning");
+
+                    b.Navigation("Issue");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemRelationship", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelationshipTypes.Entities.ConfigurationItemRelationshipType", "ConfigurationItemRelationshipType")
+                        .WithMany("ConfigurationItemRelationships")
+                        .HasForeignKey("ConfigurationItemRelationshipTypeId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "ConfigurationItemVersioning")
+                        .WithMany("ConfigurationItemRelationships")
+                        .HasForeignKey("ConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", "RelatedConfigurationItemVersioning")
+                        .WithMany("RelatedConfigurationItemRelationships")
+                        .HasForeignKey("RelatedConfigurationItemVersioningId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItemRelationshipType");
+
+                    b.Navigation("ConfigurationItemVersioning");
+
+                    b.Navigation("RelatedConfigurationItemVersioning");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", "ConfigurationItem")
+                        .WithMany("ConfigurationItemVersionings")
+                        .HasForeignKey("ConfigurationItemId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItem");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.AdminLocationAccesses.Entities.AdminLocationAccess", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Locations.Entities.Location", "Location")
@@ -10252,6 +13377,33 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities.CompanyBuildingLocation", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Companies.Entities.Company", "Company")
+                        .WithMany("CompanyBuildingLocations")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Locations.Entities.Location", "Location")
+                        .WithMany("CompanyBuildingLocations")
+                        .HasForeignKey("LocationId")
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttribute", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.ConfigurationTypes.Entities.ConfigurationType", "ConfigurationType")
+                        .WithMany("ConfigurationAttributes")
+                        .HasForeignKey("ConfigurationTypeId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationType");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttributeValue", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttribute", "ConfigurationAttribute")
@@ -10261,6 +13413,23 @@ namespace SIMA.Persistance.Migrations
                         .HasConstraintName("FK_ConfigurationAttributeValue_A");
 
                     b.Navigation("ConfigurationAttribute");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CustomeFields.Entities.CustomeField", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.Entities.CustomeFieldType", "CustomeFieldType")
+                        .WithMany("CustomeFields")
+                        .HasForeignKey("CustomeFieldTypeId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.MainAggregates.Entities.MainAggregate", "MainAggregate")
+                        .WithMany("CustomeFields")
+                        .HasForeignKey("MainAggregateId")
+                        .IsRequired();
+
+                    b.Navigation("CustomeFieldType");
+
+                    b.Navigation("MainAggregate");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", b =>
@@ -10325,6 +13494,23 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Form");
 
                     b.Navigation("Group");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormPermission", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Forms.Entities.Form", "Form")
+                        .WithMany("FormPermissions")
+                        .HasForeignKey("FormId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Permissions.Entities.Permission", "Permission")
+                        .WithMany("FormPermissions")
+                        .HasForeignKey("PermissionId")
+                        .IsRequired();
+
+                    b.Navigation("Form");
+
+                    b.Navigation("Permission");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Forms.Entities.FormRole", b =>
@@ -10446,6 +13632,16 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Domain");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.Warehouse", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities.CompanyBuildingLocation", "CompanyBuildingLocation")
+                        .WithMany("Warehouses")
+                        .HasForeignKey("CompanyBuildingLocationId")
+                        .IsRequired();
+
+                    b.Navigation("CompanyBuildingLocation");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Permissions.Entities.Permission", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Domains.Entities.Domain", "Domain")
@@ -10459,12 +13655,30 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Positions.Entities.Position", b =>
                 {
+                    b.HasOne("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", "Branch")
+                        .WithMany("Positions")
+                        .HasForeignKey("BranchId");
+
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "Department")
                         .WithMany("Positions")
                         .HasForeignKey("DepartmentId")
                         .HasConstraintName("FK_Position_Department");
 
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.PositionLevels.Entities.PositionLevel", "PositionLevel")
+                        .WithMany("Positions")
+                        .HasForeignKey("PositionLevelId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.PositionTypes.Entities.PositionType", "PositionType")
+                        .WithMany("Positions")
+                        .HasForeignKey("PositionTypeId");
+
+                    b.Navigation("Branch");
+
                     b.Navigation("Department");
+
+                    b.Navigation("PositionLevel");
+
+                    b.Navigation("PositionType");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Profiles.Entities.AddressBook", b =>
@@ -10719,61 +13933,91 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ViewList");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities.BusinessContinuityPlanStratgy", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", "BusinessContinuityStrategy")
-                        .WithMany("BusinessContinuityPlans")
-                        .HasForeignKey("BusinessContinuityStrategyId")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                        .WithMany("BusinessContinuityPlanStratgies")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "ExecutiveResponsible")
-                        .WithMany("BusinessContinuityPlanExecutiveResponsibles")
-                        .HasForeignKey("ExecutiveResponsibleId");
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", "BusinessContinuityStrategy")
+                        .WithMany("BusinessContinuityPlanStratgies")
+                        .HasForeignKey("BusinessContinuityStratgyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "PlanOwner")
-                        .WithMany("BusinessContinuityPlanOwners")
-                        .HasForeignKey("PlanOwnerId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "RecoveryDeputy")
-                        .WithMany("BusinessContinuityPlanRecoveryDeputy")
-                        .HasForeignKey("RecoveryDeputyId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "RecoveryManager")
-                        .WithMany("BusinessContinuityPlanRecoveryManagers")
-                        .HasForeignKey("RecoveryManagerId");
+                    b.Navigation("BusinessContinuityPlanVersioning");
 
                     b.Navigation("BusinessContinuityStrategy");
+                });
 
-                    b.Navigation("ExecutiveResponsible");
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
+                        .WithMany("BusinessContinuityPlanVersionings")
+                        .HasForeignKey("BusinessContinuityPlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("PlanOwner");
+                    b.Navigation("BusinessContinuityPlan");
+                });
 
-                    b.Navigation("RecoveryDeputy");
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", null)
+                        .WithMany("BusinessContinuityPlans")
+                        .HasForeignKey("BusinessContinuityStrategyId");
 
-                    b.Navigation("RecoveryManager");
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("BusinessContinuityPlanExecutiveResponsibles")
+                        .HasForeignKey("StaffId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("BusinessContinuityPlanOwners")
+                        .HasForeignKey("StaffId1");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("BusinessContinuityPlanRecoveryDeputy")
+                        .HasForeignKey("StaffId2");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("BusinessContinuityPlanRecoveryManagers")
+                        .HasForeignKey("StaffId3");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanAssumption", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", null)
+                        .WithMany("BusinessContinuityPlanAssumptions")
+                        .HasForeignKey("BusinessContinuityPlanId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                        .WithMany("BusinessContinuityPlanAssumptions")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityPlanVersioning");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanCriticalActivity", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
                         .WithMany("BusinessContinuityPlanCriticalActivities")
-                        .HasForeignKey("BusinessContinuityPlanId")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlan");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanDetailPlanningAssumption", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
-                        .WithMany("BusinessContinuityPlanDetailPlanningAssumptions")
-                        .HasForeignKey("BusinessContinuityPlanId")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", "CriticalActivity")
+                        .WithMany("BusinessContinuityPlanCriticalActivities")
+                        .HasForeignKey("CriticalActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlan");
+                    b.Navigation("BusinessContinuityPlanVersioning");
+
+                    b.Navigation("CriticalActivity");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanPossibleAction", b =>
@@ -10809,11 +14053,57 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessContinuityPlan");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRelatedStaff", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                        .WithMany("BusinessContinuityPlanRelatedStaff")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Staff")
+                        .WithMany("BusinessContinuityPlanRelatedStaff")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityPlanVersioning");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanResponsible", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                        .WithMany("BusinessContinuityPlanResponsibles")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities.PlanResponsibility", "PlanResponsibility")
+                        .WithMany("BusinessContinuityPlanResponsibles")
+                        .HasForeignKey("PlanResponsibilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Staff")
+                        .WithMany("BusinessContinuityPlanResponsibles")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityPlanVersioning");
+
+                    b.Navigation("PlanResponsibility");
+
+                    b.Navigation("Staff");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRisk", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
                         .WithMany("BusinessContinuityPlanRisks")
-                        .HasForeignKey("BusinessContinuityPlanId")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -10823,16 +14113,16 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlan");
+                    b.Navigation("BusinessContinuityPlanVersioning");
 
                     b.Navigation("Risk");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanService", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
                         .WithMany("BusinessContinuityPlanServices")
-                        .HasForeignKey("BusinessContinuityPlanId")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -10842,28 +14132,20 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlan");
+                    b.Navigation("BusinessContinuityPlanVersioning");
 
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanStaff", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
-                        .WithMany("BusinessContinuityPlanStaff")
-                        .HasForeignKey("BusinessContinuityPlanId")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities.StrategyType", "StrategyType")
+                        .WithMany("BusinessContinuityStrategys")
+                        .HasForeignKey("StrategyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Staff")
-                        .WithMany("BusinessContinuityPlanStaff")
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BusinessContinuityPlan");
-
-                    b.Navigation("Staff");
+                    b.Navigation("StrategyType");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategyDocument", b =>
@@ -10953,6 +14235,44 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities.BusinessContinuityStratgyResponsible", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", "BusinessContinuityStrategy")
+                        .WithMany("BusinessContinuityStratgyResponsibles")
+                        .HasForeignKey("BusinessContinuityStrategyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities.PlanResponsibility", "PlanResponsibility")
+                        .WithMany("BusinessContinuityStratgyResponsibles")
+                        .HasForeignKey("PlanResponsibilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Staff")
+                        .WithMany("BusinessContinuityStratgyResponsibles")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityStrategy");
+
+                    b.Navigation("PlanResponsibility");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities.BusinessContinuityStratgySolution", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", "BusinessContinuityStratgy")
+                        .WithMany("BusinessContinuityStratgySolutions")
+                        .HasForeignKey("BusinessContinuityStratgyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityStratgy");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysis", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities.BackupPeriod", "BackupPeriod")
@@ -11009,11 +14329,19 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysisAsset", b =>
                 {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("BusinessImpactAnalysisAssets")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysis", "BusinessImpactAnalysis")
                         .WithMany("BusinessImpactAnalysisAssets")
                         .HasForeignKey("BusinessImpactAnalysisId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Asset");
 
                     b.Navigation("BusinessImpactAnalysis");
                 });
@@ -11108,6 +14436,66 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessImpactAnalysis");
 
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.NewFolder.Entities.ScenarioBusinessContinuityPlanVersioning", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                        .WithMany("ScenarioBusinessContinuityPlanVersionings")
+                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
+                        .WithMany("ScenarioBusinessContinuityPlanVersionings")
+                        .HasForeignKey("ScenarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityPlanVersioning");
+
+                    b.Navigation("Scenario");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities.ScenarioBusinessContinuityPlanAssumption", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanAssumption", "BusinessContinuityPlanAssumption")
+                        .WithMany("ScenarioBusinessContinuityPlanAssumptions")
+                        .HasForeignKey("BusinessContinuityPlanAssumptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
+                        .WithMany("ScenarioBusinessContinuityPlanAssumptions")
+                        .HasForeignKey("ScenarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BusinessContinuityPlanAssumption");
+
+                    b.Navigation("Scenario");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ScenarioRecoveryCriterias.Entities.ScenarioRecoveryCriteria", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
+                        .WithMany("ScenarioRecoveryCriterias")
+                        .HasForeignKey("ScenarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scenario");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ScenarioRecoveryOptions.Entities.ScenarioRecoveryOption", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
+                        .WithMany("ScenarioRecoveryOptions")
+                        .HasForeignKey("ScenarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scenario");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", b =>
@@ -12246,11 +15634,15 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities.ApiAuthentoicationMethod", "ApiAuthentoicationMethod")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities.ApiAuthenticationMethod", "ApiAuthenticationMethod")
                         .WithMany("Apis")
-                        .HasForeignKey("ApiAuthentoicationMethodId");
+                        .HasForeignKey("ApiAuthenticationMethodId");
 
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ApiMethodCalls.Entities.ApiMethodCall", "ApiMethodCall")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities.ApiMethodAction", "ApiMethodAction")
+                        .WithMany("Apis")
+                        .HasForeignKey("ApiMethodActionId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ApiMethodCalls.Entities.ApiMethodCall", null)
                         .WithMany("Apis")
                         .HasForeignKey("ApiMethodCallId");
 
@@ -12270,9 +15662,9 @@ namespace SIMA.Persistance.Migrations
                         .WithMany("ResponsibleApis")
                         .HasForeignKey("OwnerResponsibleId");
 
-                    b.Navigation("ApiAuthentoicationMethod");
+                    b.Navigation("ApiAuthenticationMethod");
 
-                    b.Navigation("ApiMethodCall");
+                    b.Navigation("ApiMethodAction");
 
                     b.Navigation("ApiType");
 
@@ -12304,9 +15696,13 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiRequestBodyParam", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", "Api")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", null)
                         .WithMany("ApiRequestBodyParams")
-                        .HasForeignKey("ApiId")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", "ApiVersion")
+                        .WithMany("ApiRequestBodyParams")
+                        .HasForeignKey("ApiVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12314,16 +15710,16 @@ namespace SIMA.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("Api");
+                    b.Navigation("ApiVersion");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiRequestHeaderParam", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", "Api")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", "ApiVersion")
                         .WithMany("ApiRequestHeaderParams")
-                        .HasForeignKey("ApiId")
+                        .HasForeignKey("ApiVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12331,16 +15727,20 @@ namespace SIMA.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("Api");
+                    b.Navigation("ApiVersion");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiRequestQueryStringParam", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", "Api")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", null)
                         .WithMany("ApiRequestQueryStringParams")
-                        .HasForeignKey("ApiId")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", "ApiVersion")
+                        .WithMany("ApiRequestQueryStringParams")
+                        .HasForeignKey("ApiVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12348,16 +15748,20 @@ namespace SIMA.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("Api");
+                    b.Navigation("ApiVersion");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiRequestUrlParam", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", "Api")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", null)
                         .WithMany("ApiRequestUrlParams")
-                        .HasForeignKey("ApiId")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", "ApiVersion")
+                        .WithMany("ApiRequestUrlParams")
+                        .HasForeignKey("ApiVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12365,16 +15769,20 @@ namespace SIMA.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("Api");
+                    b.Navigation("ApiVersion");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiResponseBodyParam", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", "Api")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", null)
                         .WithMany("ApiResponseBodyParams")
-                        .HasForeignKey("ApiId")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", "ApiVersion")
+                        .WithMany("ApiResponseBodyParams")
+                        .HasForeignKey("ApiVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12382,16 +15790,20 @@ namespace SIMA.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("Api");
+                    b.Navigation("ApiVersion");
 
                     b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiResponseHeaderParam", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", "Api")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.Api", null)
                         .WithMany("ApiResponseHeaderParams")
-                        .HasForeignKey("ApiId")
+                        .HasForeignKey("ApiId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", "ApiVersion")
+                        .WithMany("ApiResponseHeaderParams")
+                        .HasForeignKey("ApiVersionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -12399,7 +15811,7 @@ namespace SIMA.Persistance.Migrations
                         .WithMany()
                         .HasForeignKey("ParentId");
 
-                    b.Navigation("Api");
+                    b.Navigation("ApiVersion");
 
                     b.Navigation("Parent");
                 });
@@ -12453,39 +15865,126 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities.ServiceStatus", "ServiceStatus")
+                        .WithMany("Channels")
+                        .HasForeignKey("ServiceStatusId");
+
+                    b.Navigation("ServiceStatus");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ChannelAccessPoint", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", "Channel")
+                        .WithMany("ChannelAccessPoints")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Channel");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ChannelResponsible", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", "Channel")
+                        .WithMany("ChannelResponsibles")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Responsible")
+                        .WithMany("ChannelResponsibles")
+                        .HasForeignKey("ResponsibleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities.ResponsibleType", "ResponsibleType")
+                        .WithMany("ChannelResponsibles")
+                        .HasForeignKey("ResponsibleTypeId");
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("Responsible");
+
+                    b.Navigation("ResponsibleType");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ChannelUserType", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", "Channel")
+                        .WithMany("ChannelUserTypes")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.UserTypes.Entities.UserType", "UserType")
+                        .WithMany("ChannelUserTypes")
+                        .HasForeignKey("UserTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("UserType");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.ProductChannel", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", "Channel")
+                        .WithMany("ProductChannels")
+                        .HasForeignKey("ChannelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.Product", "Product")
+                        .WithMany("ProductChannels")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Channel");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "Department")
-                        .WithMany("CriticalActivities")
-                        .HasForeignKey("DepartmentId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "TechnicalResponsible")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
                         .WithMany("CriticalActivityTechnicalResponsibles")
-                        .HasForeignKey("TechnicalResponsibleId");
+                        .HasForeignKey("StaffId");
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "TechnicalSupervisor")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
                         .WithMany("CriticalActivityTechnicalSupervisors")
-                        .HasForeignKey("TechnicalSupervisorId");
+                        .HasForeignKey("StaffId1");
 
-                    b.Navigation("Department");
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "TechnicalSupervisorDepartment")
+                        .WithMany("CriticalActivities")
+                        .HasForeignKey("TechnicalSupervisorDepartmentId");
 
-                    b.Navigation("TechnicalResponsible");
-
-                    b.Navigation("TechnicalSupervisor");
+                    b.Navigation("TechnicalSupervisorDepartment");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityAsset", b =>
                 {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("CriticalActivityAssets")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", "CriticalActivity")
                         .WithMany("CriticalActivityAssets")
                         .HasForeignKey("CriticalActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Asset");
+
                     b.Navigation("CriticalActivity");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityAssignStaff", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityAssignedStaff", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", "CriticalActivity")
                         .WithMany("CriticalActivityAssignStaffs")
@@ -12523,14 +16022,22 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.Risk", "Risk")
+                        .WithMany("CriticalActivityRisks")
+                        .HasForeignKey("RiskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", null)
                         .WithMany("CriticalActivityRisks")
                         .HasForeignKey("ServiceId");
 
                     b.Navigation("CriticalActivity");
+
+                    b.Navigation("Risk");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityService", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivityServices", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", "CriticalActivity")
                         .WithMany("CriticalActivityServices")
@@ -12547,6 +16054,44 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("CriticalActivity");
 
                     b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.Product", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Companies.Entities.Company", "ProviderCompany")
+                        .WithMany("Products")
+                        .HasForeignKey("ProviderCompanyId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities.ServiceStatus", "ServiceStatus")
+                        .WithMany("Products")
+                        .HasForeignKey("ServiceStatusId");
+
+                    b.Navigation("ProviderCompany");
+
+                    b.Navigation("ServiceStatus");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.ProductResponsible", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.Product", "Product")
+                        .WithMany("ProductResponsibles")
+                        .HasForeignKey("ProductId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities.ResponsibleType", "ResponsibleType")
+                        .WithMany("ProductResponsibles")
+                        .HasForeignKey("ResponsibleTypeId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Responsilbe")
+                        .WithMany("ProductResponsibles")
+                        .HasForeignKey("ResponsilbeId")
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("ResponsibleType");
+
+                    b.Navigation("Responsilbe");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities.ServiceBoundle", b =>
@@ -12569,24 +16114,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("serviceType");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities.ServiceCustomerType", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities.ServiceCustomerType", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities.ServiceUserType", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities.ServiceUserType", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.PreRequisiteServices", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "PreRequiredService")
@@ -12606,72 +16133,60 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "StaffBusinessResponsible")
-                        .WithMany("ServiceTBusinessResponsibles")
-                        .HasForeignKey("BusinessResponsibleId")
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "OwnerDepartment")
-                        .WithMany("OwnerService")
-                        .HasForeignKey("OwnerDepartmentId");
-
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities.ServiceBoundle", "ServiceBoundle")
                         .WithMany("Services")
-                        .HasForeignKey("ServiceBoundleId");
+                        .HasForeignKey("ServiceBoundleId")
+                        .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities.ServicePriority", "ServicePriority")
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities.ServiceStatus", "ServiceStatus")
                         .WithMany("Services")
-                        .HasForeignKey("ServicePriorityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ServiceStatusId");
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "StaffTechnicalResponsible")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("ServiceTBusinessResponsibles")
+                        .HasForeignKey("StaffId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
                         .WithMany("ServiceTechnicalResponsibles")
-                        .HasForeignKey("TechnicalResponsibleId")
-                        .IsRequired();
+                        .HasForeignKey("StaffId1");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("ServiceTechnicalSupervisors")
+                        .HasForeignKey("StaffId2");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
+                        .WithMany("ServiceTechnicalSupports")
+                        .HasForeignKey("StaffId3");
 
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "TechnicalSupervisorDepartment")
                         .WithMany("TechnicalSupervisorServices")
                         .HasForeignKey("TechnicalSupervisorDepartmentId");
 
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "StaffTechnicalSupervisor")
-                        .WithMany("ServiceTechnicalSupervisors")
-                        .HasForeignKey("TechnicalSupervisorId")
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "StaffTechnicalSupport")
-                        .WithMany("ServiceTechnicalSupports")
-                        .HasForeignKey("TechnicalSupportId")
-                        .IsRequired();
-
-                    b.Navigation("OwnerDepartment");
-
                     b.Navigation("ServiceBoundle");
 
-                    b.Navigation("ServicePriority");
-
-                    b.Navigation("StaffBusinessResponsible");
-
-                    b.Navigation("StaffTechnicalResponsible");
-
-                    b.Navigation("StaffTechnicalSupervisor");
-
-                    b.Navigation("StaffTechnicalSupport");
+                    b.Navigation("ServiceStatus");
 
                     b.Navigation("TechnicalSupervisorDepartment");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceAsset", b =>
                 {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", "Asset")
+                        .WithMany("ServiceAssets")
+                        .HasForeignKey("AssetId")
+                        .IsRequired();
+
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
                         .WithMany("ServiceAssets")
                         .HasForeignKey("ServiceId")
                         .IsRequired();
 
+                    b.Navigation("Asset");
+
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceAssignStaff", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceAssignedStaff", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
                         .WithMany("ServiceAssignStaffes")
@@ -12698,16 +16213,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Service");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceCantract", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
-                        .WithMany("ServiceCantracts")
-                        .HasForeignKey("ServiceId")
-                        .IsRequired();
-
-                    b.Navigation("Service");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceChannel", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities.ChannelType", "ChannelType")
@@ -12725,9 +16230,36 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceConfigurationItem", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", "ConfigurationItem")
+                        .WithMany("ServiceConfigurationItems")
+                        .HasForeignKey("ConfigurationItemId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
+                        .WithMany("ServiceConfigurationItems")
+                        .HasForeignKey("ServiceId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItem");
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceContract", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
+                        .WithMany("ServiceCantracts")
+                        .HasForeignKey("ServiceId")
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceCustomer", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities.ServiceCustomerType", "ServiceCustomerType")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities.CustomerType", "ServiceCustomerType")
                         .WithMany("ServiceCustomers")
                         .HasForeignKey("ServiceCustomerTypeId")
                         .IsRequired();
@@ -12793,6 +16325,23 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Service");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceRisk", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.Risk", "Risk")
+                        .WithMany("ServiceRisks")
+                        .HasForeignKey("RiskId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
+                        .WithMany("ServiceRisks")
+                        .HasForeignKey("ServiceId")
+                        .IsRequired();
+
+                    b.Navigation("Risk");
+
+                    b.Navigation("Service");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.ServiceUser", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
@@ -12800,7 +16349,7 @@ namespace SIMA.Persistance.Migrations
                         .HasForeignKey("ServiceId")
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities.ServiceUserType", "ServiceUserType")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.UserTypes.Entities.UserType", "ServiceUserType")
                         .WithMany("ServiceUsers")
                         .HasForeignKey("ServiceUserTypeId")
                         .IsRequired();
@@ -13144,6 +16693,111 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkFlow");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities.AssetPhysicalStatus", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("FromAssetChangePhysicalStatusHistories");
+
+                    b.Navigation("ToAssetChangePhysicalStatusHistories");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities.AssetTechnicalStatus", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("FromAssetChangeTechnicalStatusHistories");
+
+                    b.Navigation("ToAssetChangeTechnicalStatusHistories");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities.AssetType", b =>
+                {
+                    b.Navigation("Assets");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities.Asset", b =>
+                {
+                    b.Navigation("AssetChangeOwnerHistories");
+
+                    b.Navigation("AssetChangePhysicalStatusHistories");
+
+                    b.Navigation("AssetChangeTechnicalStatusHistories");
+
+                    b.Navigation("AssetDocuments");
+
+                    b.Navigation("AssetIssues");
+
+                    b.Navigation("AssetWarehouseHistories");
+
+                    b.Navigation("BusinessImpactAnalysisAssets");
+
+                    b.Navigation("ConfigurationItemAssetHistories");
+
+                    b.Navigation("ConfigurationItemAssets");
+
+                    b.Navigation("CriticalActivityAssets");
+
+                    b.Navigation("ServiceAssets");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities.BusinessCriticality", b =>
+                {
+                    b.Navigation("Assets");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelationshipTypes.Entities.ConfigurationItemRelationshipType", b =>
+                {
+                    b.Navigation("ConfigurationItemRelationships");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities.ConfigurationItemStatus", b =>
+                {
+                    b.Navigation("ConfigurationItems");
+
+                    b.Navigation("FromConfigurationItemChangeStatusHistories");
+
+                    b.Navigation("ToConfigurationItemChangeStatusHistories");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities.ConfigurationItemType", b =>
+                {
+                    b.Navigation("ConfigurationItems");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", b =>
+                {
+                    b.Navigation("ConfigurationItemChangeOwnerHistories");
+
+                    b.Navigation("ConfigurationItemChangeStatusHistories");
+
+                    b.Navigation("ConfigurationItemVersionings");
+
+                    b.Navigation("ServiceConfigurationItems");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", b =>
+                {
+                    b.Navigation("ConfigurationItemAccessInfos");
+
+                    b.Navigation("ConfigurationItemAssetHistories");
+
+                    b.Navigation("ConfigurationItemAssets");
+
+                    b.Navigation("ConfigurationItemDocuments");
+
+                    b.Navigation("ConfigurationItemIssues");
+
+                    b.Navigation("ConfigurationItemRelationships");
+
+                    b.Navigation("RelatedConfigurationItemRelationships");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities.LicenseType", b =>
+                {
+                    b.Navigation("ConfigurationItems");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.AddressTypes.Entities.AddressType", b =>
                 {
                     b.Navigation("AddressBooks");
@@ -13151,6 +16805,8 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities.ApiMethodAction", b =>
                 {
+                    b.Navigation("Apis");
+
                     b.Navigation("ProgressStoreProcedureParams");
                 });
 
@@ -13159,9 +16815,13 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Companies")
                         .IsRequired();
 
+                    b.Navigation("CompanyBuildingLocations");
+
                     b.Navigation("Departments");
 
                     b.Navigation("Invitees");
+
+                    b.Navigation("Products");
 
                     b.Navigation("ResponsibleApprovals");
 
@@ -13174,6 +16834,11 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkFlowCompanies");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Entities.CompanyBuildingLocation", b =>
+                {
+                    b.Navigation("Warehouses");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Entities.ConfigurationAttribute", b =>
                 {
                     b.Navigation("ConfigurationAttributeValues");
@@ -13181,6 +16846,16 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("SysConfigs");
 
                     b.Navigation("UserConfigs");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ConfigurationTypes.Entities.ConfigurationType", b =>
+                {
+                    b.Navigation("ConfigurationAttributes");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.Entities.CustomeFieldType", b =>
+                {
+                    b.Navigation("CustomeFields");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.DataTypes.Entities.DataType", b =>
@@ -13201,8 +16876,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Invitees");
 
                     b.Navigation("OwnerApis");
-
-                    b.Navigation("OwnerService");
 
                     b.Navigation("Positions");
 
@@ -13231,6 +16904,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("FormFields");
 
                     b.Navigation("FormGroups");
+
+                    b.Navigation("FormPermissions");
 
                     b.Navigation("FormRoles");
 
@@ -13268,7 +16943,13 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("AdminLocationAccesses");
 
+                    b.Navigation("Assets");
+
                     b.Navigation("Branches");
+
+                    b.Navigation("CompanyBuildingLocations");
+
+                    b.Navigation("ConfigurationItems");
 
                     b.Navigation("Departments");
 
@@ -13277,6 +16958,8 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.MainAggregates.Entities.MainAggregate", b =>
                 {
+                    b.Navigation("CustomeFields");
+
                     b.Navigation("Documents");
 
                     b.Navigation("IssueChangeHistories");
@@ -13291,8 +16974,22 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Apis");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.OwnershipType", b =>
+                {
+                    b.Navigation("Assets");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities.Warehouse", b =>
+                {
+                    b.Navigation("AssetWarehouseHistories");
+
+                    b.Navigation("Assets");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Permissions.Entities.Permission", b =>
                 {
+                    b.Navigation("FormPermissions");
+
                     b.Navigation("GroupPermissions");
 
                     b.Navigation("RolePermissions");
@@ -13303,6 +17000,16 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities.PhoneType", b =>
                 {
                     b.Navigation("PhoneBooks");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.PositionLevels.Entities.PositionLevel", b =>
+                {
+                    b.Navigation("Positions");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.PositionTypes.Entities.PositionType", b =>
+                {
+                    b.Navigation("Positions");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Positions.Entities.Position", b =>
@@ -13323,6 +17030,13 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities.ResponsibleType", b =>
+                {
+                    b.Navigation("ChannelResponsibles");
+
+                    b.Navigation("ProductResponsibles");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Roles.Entities.Role", b =>
                 {
                     b.Navigation("FormRoles");
@@ -13336,9 +17050,16 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("WorkFlows");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities.CustomerType", b =>
+                {
+                    b.Navigation("ServiceCustomers");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", b =>
                 {
                     b.Navigation("ApiSupportTeams");
+
+                    b.Navigation("AssetOwners");
 
                     b.Navigation("BusinessContinuityPlanExecutiveResponsibles");
 
@@ -13348,15 +17069,23 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("BusinessContinuityPlanRecoveryManagers");
 
-                    b.Navigation("BusinessContinuityPlanStaff");
+                    b.Navigation("BusinessContinuityPlanRelatedStaff");
+
+                    b.Navigation("BusinessContinuityPlanResponsibles");
 
                     b.Navigation("BusinessContinuityStrategyStaff");
+
+                    b.Navigation("BusinessContinuityStratgyResponsibles");
 
                     b.Navigation("BusinessImpactAnalysisAnnouncements");
 
                     b.Navigation("BusinessImpactAnalysisStaff");
 
+                    b.Navigation("ChannelResponsibles");
+
                     b.Navigation("ChiefBranches");
+
+                    b.Navigation("ConfigurationItemOwners");
 
                     b.Navigation("CriticalActivityAssignStaffs");
 
@@ -13366,7 +17095,13 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("DeputyBranches");
 
+                    b.Navigation("FromAssetChangeOwnerHistories");
+
+                    b.Navigation("FromConfigurationItemChangeOwnerHistories");
+
                     b.Navigation("Invitees");
+
+                    b.Navigation("ProductResponsibles");
 
                     b.Navigation("ResponsibleApis");
 
@@ -13383,11 +17118,24 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ServiceTechnicalSupports");
 
                     b.Navigation("SupervisorApprovals");
+
+                    b.Navigation("ToAssetChangeOwnerHistories");
+
+                    b.Navigation("ToConfigurationItemChangeOwnerHistories");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.UIInputElements.Entities.UIInputElement", b =>
                 {
                     b.Navigation("ProgressStoreProcedureParams");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.UserTypes.Entities.UserType", b =>
+                {
+                    b.Navigation("Assets");
+
+                    b.Navigation("ChannelUserTypes");
+
+                    b.Navigation("ServiceUsers");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.Users.Entities.User", b =>
@@ -13431,11 +17179,28 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessImpactAnalyses");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
                 {
+                    b.Navigation("BusinessContinuityPlanAssumptions");
+
                     b.Navigation("BusinessContinuityPlanCriticalActivities");
 
-                    b.Navigation("BusinessContinuityPlanDetailPlanningAssumptions");
+                    b.Navigation("BusinessContinuityPlanRelatedStaff");
+
+                    b.Navigation("BusinessContinuityPlanResponsibles");
+
+                    b.Navigation("BusinessContinuityPlanRisks");
+
+                    b.Navigation("BusinessContinuityPlanServices");
+
+                    b.Navigation("BusinessContinuityPlanStratgies");
+
+                    b.Navigation("ScenarioBusinessContinuityPlanVersionings");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
+                {
+                    b.Navigation("BusinessContinuityPlanAssumptions");
 
                     b.Navigation("BusinessContinuityPlanPossibleActions");
 
@@ -13443,15 +17208,18 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("BusinessContinuityPlanRecoveryOptions");
 
-                    b.Navigation("BusinessContinuityPlanRisks");
+                    b.Navigation("BusinessContinuityPlanVersionings");
+                });
 
-                    b.Navigation("BusinessContinuityPlanServices");
-
-                    b.Navigation("BusinessContinuityPlanStaff");
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanAssumption", b =>
+                {
+                    b.Navigation("ScenarioBusinessContinuityPlanAssumptions");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", b =>
                 {
+                    b.Navigation("BusinessContinuityPlanStratgies");
+
                     b.Navigation("BusinessContinuityPlans");
 
                     b.Navigation("BusinessContinuityStrategyDocuments");
@@ -13463,6 +17231,10 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessContinuityStrategyServices");
 
                     b.Navigation("BusinessContinuityStrategyStaff");
+
+                    b.Navigation("BusinessContinuityStratgyResponsibles");
+
+                    b.Navigation("BusinessContinuityStratgySolutions");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysis", b =>
@@ -13495,9 +17267,27 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessImpactAnalyses");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities.PlanResponsibility", b =>
+                {
+                    b.Navigation("BusinessContinuityPlanResponsibles");
+
+                    b.Navigation("BusinessContinuityStratgyResponsibles");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities.RecoveryPointObjective", b =>
                 {
                     b.Navigation("BusinessImpactAnalysisDisasterOrigins");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", b =>
+                {
+                    b.Navigation("ScenarioBusinessContinuityPlanAssumptions");
+
+                    b.Navigation("ScenarioBusinessContinuityPlanVersionings");
+
+                    b.Navigation("ScenarioRecoveryCriterias");
+
+                    b.Navigation("ScenarioRecoveryOptions");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities.OrganizationalServicePriority", b =>
@@ -13505,9 +17295,19 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessImpactAnalyses");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities.StrategyType", b =>
+                {
+                    b.Navigation("BusinessContinuityStrategys");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities.BranchType", b =>
                 {
                     b.Navigation("Branches");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", b =>
+                {
+                    b.Navigation("Positions");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Entities.BrokerType", b =>
@@ -13544,9 +17344,13 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("ApprovalSupervisorAnswerDocuments");
 
+                    b.Navigation("AssetDocuments");
+
                     b.Navigation("BusinessContinuityStrategyDocuments");
 
                     b.Navigation("BusinessImpactAnalysisDocuments");
+
+                    b.Navigation("ConfigurationItemDocuments");
 
                     b.Navigation("IssueDocuments");
 
@@ -13586,6 +17390,10 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.IssueManagement.Issues.Entities.Issue", b =>
                 {
                     b.Navigation("Approvals");
+
+                    b.Navigation("AssetIssues");
+
+                    b.Navigation("ConfigurationItemIssues");
 
                     b.Navigation("IssueApprovals");
 
@@ -13698,7 +17506,13 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Logistics.Suppliers.Entities.Supplier", b =>
                 {
+                    b.Navigation("Assets");
+
                     b.Navigation("CandidatedSuppliers");
+
+                    b.Navigation("ConfigurationItems");
+
+                    b.Navigation("LicensedConfigurationItems");
 
                     b.Navigation("SupplierBlackListHistories");
                 });
@@ -13759,11 +17573,15 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("CorrectiveActions");
 
+                    b.Navigation("CriticalActivityRisks");
+
                     b.Navigation("EffectedAssets");
 
                     b.Navigation("PreventiveActions");
 
                     b.Navigation("RiskRelatedIssues");
+
+                    b.Navigation("ServiceRisks");
 
                     b.Navigation("Threats");
                 });
@@ -13835,7 +17653,7 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ApprovalSupervisorAnswers");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities.ApiAuthentoicationMethod", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities.ApiAuthenticationMethod", b =>
                 {
                     b.Navigation("Apis");
                 });
@@ -13856,8 +17674,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("ApiRequestBodyParams");
 
-                    b.Navigation("ApiRequestHeaderParams");
-
                     b.Navigation("ApiRequestQueryStringParams");
 
                     b.Navigation("ApiRequestUrlParams");
@@ -13873,13 +17689,41 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ServiceApis");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities.ApiVersion", b =>
+                {
+                    b.Navigation("ApiRequestBodyParams");
+
+                    b.Navigation("ApiRequestHeaderParams");
+
+                    b.Navigation("ApiRequestQueryStringParams");
+
+                    b.Navigation("ApiRequestUrlParams");
+
+                    b.Navigation("ApiResponseBodyParams");
+
+                    b.Navigation("ApiResponseHeaderParams");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities.ChannelType", b =>
                 {
                     b.Navigation("ServiceChanneles");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities.Channel", b =>
+                {
+                    b.Navigation("ChannelAccessPoints");
+
+                    b.Navigation("ChannelResponsibles");
+
+                    b.Navigation("ChannelUserTypes");
+
+                    b.Navigation("ProductChannels");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities.CriticalActivity", b =>
                 {
+                    b.Navigation("BusinessContinuityPlanCriticalActivities");
+
                     b.Navigation("BusinessImpactAnalysisCriticalActivities");
 
                     b.Navigation("CriticalActivityAssets");
@@ -13893,6 +17737,13 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("CriticalActivityServices");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities.Product", b =>
+                {
+                    b.Navigation("ProductChannels");
+
+                    b.Navigation("ProductResponsibles");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities.ServiceBoundle", b =>
                 {
                     b.Navigation("Services");
@@ -13903,24 +17754,18 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ServiceBoundles");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCustomerTypes.Entities.ServiceCustomerType", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities.ServiceStatus", b =>
                 {
-                    b.Navigation("ServiceCustomers");
-                });
+                    b.Navigation("Channels");
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities.ServicePriority", b =>
-                {
+                    b.Navigation("Products");
+
                     b.Navigation("Services");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities.ServiceType", b =>
                 {
                     b.Navigation("ServiceCategories");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceUserTypes.Entities.ServiceUserType", b =>
-                {
-                    b.Navigation("ServiceUsers");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", b =>
@@ -13951,6 +17796,8 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("ServiceChanneles");
 
+                    b.Navigation("ServiceConfigurationItems");
+
                     b.Navigation("ServiceCustomers");
 
                     b.Navigation("ServiceDocuments");
@@ -13958,6 +17805,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ServiceProviders");
 
                     b.Navigation("ServiceRelatedIssues");
+
+                    b.Navigation("ServiceRisks");
 
                     b.Navigation("ServiceUsers");
                 });

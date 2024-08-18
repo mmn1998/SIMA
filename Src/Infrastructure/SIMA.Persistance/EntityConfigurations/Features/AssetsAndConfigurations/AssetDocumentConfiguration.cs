@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetDocumentConfiguration
+public class AssetDocumentConfiguration : IEntityTypeConfiguration<AssetDocument>
 {
     public void Configure(EntityTypeBuilder<AssetDocument> entity)
     {

@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceBoundleConfiguration : IEntityTypeConfiguration<ServiceBoundle>
+public class ServiceBoundleConfiguration : IEntityTypeConfiguration<ServiceBoundle>
 {
     public void Configure(EntityTypeBuilder<ServiceBoundle> entity)
     {

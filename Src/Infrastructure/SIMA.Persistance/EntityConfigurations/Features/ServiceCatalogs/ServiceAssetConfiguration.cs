@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceAssetConfiguration : IEntityTypeConfiguration<ServiceAsset>
+public class ServiceAssetConfiguration : IEntityTypeConfiguration<ServiceAsset>
 {
     public void Configure(EntityTypeBuilder<ServiceAsset> entity)
     {
@@ -25,6 +25,12 @@ internal class ServiceAssetConfiguration : IEntityTypeConfiguration<ServiceAsset
 .HasConversion(v => v.Value, v => new ServiceId(v));
         entity.HasOne(d => d.Service).WithMany(p => p.ServiceAssets)
                 .HasForeignKey(d => d.ServiceId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.AssetId)
+.HasConversion(v => v.Value, v => new AssetId(v));
+        entity.HasOne(d => d.Asset).WithMany(p => p.ServiceAssets)
+                .HasForeignKey(d => d.AssetId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

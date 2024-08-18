@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
@@ -112,6 +113,8 @@ public class Branch : Entity
     public long? ModifiedBy { get; private set; }
 
     public virtual BranchType BranchType { get; private set; }
+    private List<Position> _positions = new();
+    public ICollection<Position> Positions => _positions;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

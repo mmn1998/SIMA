@@ -64,19 +64,13 @@ public class OrganizationalServicePriority : Entity, IAggregateRoot
     }
     #endregion
     public OrganizationalServicePriorityId Id { get; set; }
-    public string? Name { get; private set; }
-
-    public string? Code { get; private set; }
-
+    public string Name { get; private set; }
+    public string Code { get; private set; }
     public float Ordering { get; private set; }
     public long ActiveStatusId { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)
     {

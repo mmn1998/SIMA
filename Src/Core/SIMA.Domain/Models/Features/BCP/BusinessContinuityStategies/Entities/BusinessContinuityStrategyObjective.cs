@@ -35,8 +35,8 @@ public class BusinessContinuityStrategyObjective : Entity
     public BusinessContinuityStrategyObjectiveId Id { get; set; }
     public BusinessContinuityStrategyId BusinessContinuityStategyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStategy { get; private set; }
-    public string? Code { get; private set; }
-    public string? Title { get; private set; }
+    public string Code { get; private set; }
+    public string Title { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

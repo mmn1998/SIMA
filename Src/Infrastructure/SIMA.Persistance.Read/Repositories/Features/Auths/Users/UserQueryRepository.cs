@@ -56,13 +56,19 @@ public class UserQueryRepository : IUserQueryRepository
         }
     }
 
-    public async Task<bool> IsUsernameUnique(string username)
+    public async Task<bool> IsUsernameUnique(string username, long userId)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
+
             await connection.OpenAsync();
 
-            var result = await connection.QueryFirstOrDefaultAsync<int>("SELECT top 1 1 FROM Authentication.Users WHERE Username = @Username", new { Username = username });
+            int result = 0;
+
+            if (userId > 0)
+                result = await connection.QueryFirstOrDefaultAsync<int>("SELECT top 1 1 FROM Authentication.Users WHERE Username = @Username and Id <> @UserId", new { Username = username , UserId = userId });
+            else
+                result = await connection.QueryFirstOrDefaultAsync<int>("SELECT top 1 1 FROM Authentication.Users WHERE Username = @Username", new { Username = username });
             return result == 0;
         }
     }
@@ -595,47 +601,74 @@ SELECT DISTINCT
         using (var connection = new SqlConnection(_connectionString))
         {
             string query = @"
-                SELECT U.Id,U.ProfileId,U.CompanyId,U.Username
-                FROM Authentication.Users  U
-                WHERE U.Id = @UserId;
+                           SELECT
+                            U.Id,
+                            U.ProfileId,
+                            U.CompanyId,
+                            U.Username
+                            FROM Authentication.Users  U
+                            WHERE U.Id = @UserID;
+                            
+                           --UserDomainAccess
 
-                SELECT  distinct   D.name as  DomainName ,D.id as DomainId, UDA.id  as UserDomainId
-                FROM            Authentication.Users  U
-                INNER JOIN      Authentication.UserDomainAccess UDA ON U.ID = UDA.UserID
-                INNER JOIN     Authentication.Domain D ON UDA.DomainID = D.ID
-                where U.ID = @UserID and D.[ActiveStatusID]=1
-                group by UDA.Id, D.name, D.id;
+                            SELECT  distinct 
+                            D.name as DomainName,
+                            D.id as DomainId,
+                            UDA.id as UserDomainId
+                            FROM Authentication.Users  U
+                            INNER JOIN Authentication.UserDomainAccess UDA ON U.ID = UDA.UserID
+                            INNER JOIN Authentication.Domain D ON UDA.DomainID = D.ID
+                            where U.ID = @UserID and D.[ActiveStatusID]<>3 and UDA.[ActiveStatusID]<>3
+                            group by UDA.Id, D.name, D.id;
+                                                        
+                            --UserPermission
 
-                SELECT distinct P.name PermissionName ,P.id  PermissionId , UP.id UserPermissionId, D.name as  DomainName ,D.id as DomainId
-                FROM            Authentication.Users U INNER JOIN
-                Authentication.UserPermission UP  ON U.ID =UP.UserID INNER JOIN
-                Authentication.Permission P ON UP.PermissionID = P.ID
-                INNER JOIN      Authentication.UserDomainAccess UDA ON U.ID = UDA.UserID
-                INNER JOIN     Authentication.Domain D ON UDA.DomainID = D.ID
-                where U.ID = @UserID and P.[ActiveStatusID]=1
-                group by UP.id,P.name ,P.id, D.name, D.id;
+                              SELECT distinct 
+                                 P.name PermissionName 
+                                 ,P.id  PermissionId 
+                                 ,UP.id UserPermissionId
+                                 ,P.DomainId DomainId 
+                                 ,D.Name DomainName
+                                 FROM  Authentication.Users U 
+                                 INNER JOIN Authentication.UserPermission UP ON U.ID =UP.UserID 
+                                 INNER JOIN Authentication.Permission P ON UP.PermissionID = P.ID
+                                 Inner Join Authentication.Domain D on D.Id = P.DomainId
+                                 where U.ID = @UserID and P.[ActiveStatusID]<>3 and UP.[ActiveStatusID]<>3 
+                                 group by UP.id,P.name ,P.id, P.DomainId ,D.Name;
+                            
+                            --UserRole
 
-                SELECT   R.name RoleName ,R.id RoleId,UR.id UserRoleId
-                FROM            Authentication.Users U INNER JOIN
-                Authentication.UserRole UR ON U.ID =UR.UserID   INNER JOIN
-                Authentication.Role  R ON UR.RoleID = R.ID
-                where  U.ID = @UserID and UR.[ActiveStatusID]=1
-                group by UR.id,R.name ,R.id;
+                            SELECT
+                            R.name RoleName 
+                            ,R.id RoleId
+                            ,UR.id UserRoleId
+                            FROM  Authentication.Users U 
+                            INNER JOIN Authentication.UserRole UR ON U.ID =UR.UserID 
+                            INNER JOIN Authentication.Role  R ON UR.RoleID = R.ID
+                            where  U.ID = @UserID and UR.[ActiveStatusID]<>3 and UR.[ActiveStatusID]<>3 
+                            group by UR.id,R.name ,R.id;
+                            
+                            --UserLocationAccess
 
-                SELECT ULA.id UserLocationId ,LL.name as  LocationName,ll.id as  LocationId,LL.LocationTypeID as  LocationTypeId,LT.Name as  LocationTypeName
-                FROM            Authentication.Users AS U INNER JOIN
-                Authentication.UserLocationAccess AS ULA ON U.ID = ULA.UserID INNER JOIN
-                Basic.Location LL ON ULA.LocationID = LL.ID  INNER JOIN
-                Basic.LocationType AS LT ON LL.LocationTypeID = LT.ID
-                where  U.ID = @UserID and LL.[ActiveStatusID]=1
-                group by   ULA.id  ,LL.name ,ll.id,LL.LocationTypeID ,LT.Name;
+                            SELECT
+                            ULA.id UserLocationId
+                            ,LL.name as LocationName
+                            ,ll.id as LocationId
+                            ,LL.LocationTypeID as LocationTypeId
+                            ,LT.Name as  LocationTypeName
+                            FROM  Authentication.Users AS U
+                            INNER JOIN Authentication.UserLocationAccess AS ULA ON U.ID = ULA.UserID
+                            INNER JOIN Basic.Location LL ON ULA.LocationID = LL.ID 
+                            INNER JOIN Basic.LocationType AS LT ON LL.LocationTypeID = LT.ID
+                            where  U.ID = @UserID and LL.[ActiveStatusID]<>3 and ULA.[ActiveStatusID]<>3 
+                            group by   ULA.id  ,LL.name ,ll.id,LL.LocationTypeID ,LT.Name;
 ";
             using (var multi = await connection.QueryMultipleAsync(query, new { UserID = userId }))
             {
-                response.User = multi.ReadAsync<GetUserQueryForAggregate>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+                response = multi.ReadAsync<GetUserAggregateQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+                response.UserDomains = multi.ReadAsync<GetUserDomainQueryForAggregate>().GetAwaiter().GetResult().ToList();
                 response.UserPermissions = multi.ReadAsync<GetUserPermissionQueryForAggregate>().GetAwaiter().GetResult().ToList();
                 response.UserRoles = multi.ReadAsync<GetUserRoleQueryForAggregate>().GetAwaiter().GetResult().ToList();
-                response.UserDomains = multi.ReadAsync<GetUserDomainQueryForAggregate>().GetAwaiter().GetResult().ToList();
                 response.UserLocations = multi.ReadAsync<GetUserLocationQueryForAggregate>().GetAwaiter().GetResult().ToList();
             }
         }

@@ -1,7 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 using System.Xml.Linq;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
@@ -21,7 +23,7 @@ public class ServiceProvider : Entity
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<ServiceProvider> Create(CreateServiceProviderArg arg)
+    public static ServiceProvider Create(CreateServiceProviderArg arg)
     {
         return new ServiceProvider(arg);
     }
@@ -32,7 +34,19 @@ public class ServiceProvider : Entity
     public CompanyId CompanyId { get; private set; }
     public long? ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
-    public byte[]? ModifiedAt { get; private set; }
-    public long? ModifiedBy { get; private set; }
+    public long CreatedBy { get; private set; }
+    public byte[] ModifiedAt { get; private set; }
+    public long ModifiedBy { get; private set; }
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 }

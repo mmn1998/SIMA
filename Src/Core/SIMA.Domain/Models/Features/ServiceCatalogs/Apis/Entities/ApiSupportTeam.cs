@@ -13,9 +13,9 @@ public class ApiSupportTeam : Entity
     private ApiSupportTeam() { }
     private ApiSupportTeam(CreateApiSupportTeamArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
-        ApiId = new(arg.ApiId);
-        StaffId = new(arg.StaffId);
+        Id = new ApiSupportTeamId(arg.Id);
+        ApiId = new ApiId(arg.ApiId);
+        StaffId = new StaffId(arg.StaffId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -38,8 +38,8 @@ public class ApiSupportTeam : Entity
     public StaffId StaffId { get; private set; }
     public virtual Staff Staff { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sima.Framework.Core.Repository;
@@ -26,7 +27,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     //ICommandHandler<CreateUserLocationCommand, Result<long>>,
     ICommandHandler<UpdateUserCommand, Result<long>>, ICommandHandler<UpdateUserRoleCommand, Result<long>>,
     ICommandHandler<UpdateUserPermissionCommand, Result<long>>
-    ,ICommandHandler<UpdateUserLocationCommand, Result<long>>, ICommandHandler<UpdateUserDomainCommand,
+    , ICommandHandler<UpdateUserLocationCommand, Result<long>>, ICommandHandler<UpdateUserDomainCommand,
         Result<long>>, ICommandHandler<DeleteUserDomainCommand, Result<long>>
     , ICommandHandler<DeleteUserLocationCommand, Result<long>>, ICommandHandler<DeleteUserPermissionCommand, Result<long>>,
     ICommandHandler<DeleteUserRoleCommand, Result<long>>, ICommandHandler<CreateUserAggregateCommand, Result<long>>,
@@ -136,30 +137,43 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         if (request.UserDomains != null && request.UserDomains.Count != 0)
         {
             var userDomainsArgs = _mapper.Map<List<CreateUserDomainArg>>(request.UserDomains);
-            foreach (var domain in userDomainsArgs) domain.UserId = entity.Id.Value;
-            foreach (var item in userDomainsArgs) item.CreatedBy = _simaIdentity.UserId;
+            foreach (var domain in userDomainsArgs)
+            {
+                domain.UserId = entity.Id.Value; 
+                domain.CreatedBy = _simaIdentity.UserId;
+            }
             await entity.AddUserDomain(userDomainsArgs, entity.Id.Value);
         }
         if (request.UserPermissions != null && request.UserPermissions.Count != 0)
         {
             var userPermissionsArgs = _mapper.Map<List<CreateUserPermissionArg>>(request.UserPermissions);
-            foreach (var permission in userPermissionsArgs) permission.UserId = entity.Id.Value;
-            foreach (var item in userPermissionsArgs) item.CreatedBy = _simaIdentity.UserId;
+            foreach (var permission in userPermissionsArgs)
+            {
+                permission.UserId = entity.Id.Value;
+                permission.CreatedBy = _simaIdentity.UserId;
+            }
             await entity.AddUserPermission(userPermissionsArgs, entity.Id.Value);
         }
 
         if (request.UserRoles != null && request.UserRoles.Count != 0)
         {
             var userRolesArgs = _mapper.Map<List<CreateUserRoleArg>>(request.UserRoles);
-            foreach (var role in userRolesArgs) role.UserId = entity.Id.Value;
-            foreach (var item in userRolesArgs) item.UserId = _simaIdentity.UserId;
+            foreach (var role in userRolesArgs)
+            {
+                role.UserId = entity.Id.Value;
+                role.CreatedBy = _simaIdentity.UserId;
+            }
+
             await entity.AddUserRole(userRolesArgs, entity.Id.Value);
         }
         if (request.UserLocations != null && request.UserLocations.Count != 0)
         {
             var userLocationsArgs = _mapper.Map<List<CreateUserLocationAccessArg>>(request.UserLocations);
-            foreach (var location in userLocationsArgs) location.UserId = entity.Id.Value;
-            foreach (var item in userLocationsArgs) item.CreatedBy = _simaIdentity.UserId;
+            foreach (var location in userLocationsArgs)
+            {
+                location.UserId = entity.Id.Value;
+                location.CreatedBy = _simaIdentity.UserId;
+            }
             await entity.AddUserLocation(userLocationsArgs, entity.Id.Value);
         }
 
@@ -250,7 +264,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
 
     public async Task<Result<long>> Handle(CreateUserAggregateCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateUserArg>(request.User);
+        var arg = _mapper.Map<CreateUserArg>(request);
         var entity = await User.Create(_service, arg);
         await _repository.Add(entity);
 
@@ -335,8 +349,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         //SendSMS
     }
 
-
-
     //ForSSO
     public async Task<Result<LoginUserQueryResult>> Handle(GetUserNameWithSSO request, CancellationToken cancellationToken)
     {
@@ -361,6 +373,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             #endregion
 
             #region user
+
             var profileId = profileEntity.Id;
             CreateUserCommand usercommand = new CreateUserCommand();
             usercommand.Username = userSSO.EmployeeCode;

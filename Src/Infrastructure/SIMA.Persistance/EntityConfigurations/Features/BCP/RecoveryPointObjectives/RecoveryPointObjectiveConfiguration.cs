@@ -16,7 +16,10 @@ public class RecoveryPointObjectiveConfiguration : IEntityTypeConfiguration<Reco
              v => v.Value,
              v => new RecoveryPointObjectiveId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
-        entity.Property(e => e.Code).HasMaxLength(50);
+        entity.Property(e => e.Code).HasMaxLength(20);
+        entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
+        entity.Property(e => e.RpoFrom).HasMaxLength(10);
+        entity.Property(e => e.RpoTo).HasMaxLength(10);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
@@ -24,6 +27,5 @@ public class RecoveryPointObjectiveConfiguration : IEntityTypeConfiguration<Reco
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-        entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
     }
 }

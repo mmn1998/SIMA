@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -13,7 +14,7 @@ public class BusinessContinuityPlanRisk : Entity
     private BusinessContinuityPlanRisk(CreateBusinessContinuityPlanRiskArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
+        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -24,14 +25,14 @@ public class BusinessContinuityPlanRisk : Entity
     }
     public void Modify(ModifyBusinessContinuityPlanRiskArg arg)
     {
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
+        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
     }
     public BusinessContinuityPlanRiskId Id { get; private set; }
-    public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
-    public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
+    public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
+    public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
     public RiskId RiskId { get; private set; }
     public virtual Risk Risk { get; private set; }
     public long ActiveStatusId { get; private set; }

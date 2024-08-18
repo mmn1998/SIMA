@@ -123,9 +123,9 @@ public class UserService : IUserService
         return _specialCharRegex.IsMatch(password);
     }
     #endregion
-    public async Task<bool> IsUsernameUnique(string username)
+    public async Task<bool> IsUsernameUnique(string username, long userId)
     {
-        return await _repository.IsUsernameUnique(username);
+        return await _repository.IsUsernameUnique(username , userId);
     }
 
     public bool IsUsernameValidRegex(string username)

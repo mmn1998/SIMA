@@ -1,5 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -12,7 +14,7 @@ public class BusinessContinuityPlanCriticalActivity : Entity
     private BusinessContinuityPlanCriticalActivity(CreateBusinessContinuityPlanCriticalActivityArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
+        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -23,18 +25,16 @@ public class BusinessContinuityPlanCriticalActivity : Entity
     }
     public void Modify(ModifyBusinessContinuityPlanCriticalActivityArg arg)
     {
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
+        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
     }
     public BusinessContinuityPlanCriticalActivityId Id { get; private set; }
-    public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
-    public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
-    /// <summary>
-    /// TODO : CriticalActivityId
-    /// </summary>
-    //public long CriticalActivityId { get; set; }
+    public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
+    public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
+    public CriticalActivityId CriticalActivityId { get; private set; }
+    public virtual CriticalActivity CriticalActivity { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

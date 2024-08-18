@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetPhysicalStatusConfiguration
+public class AssetPhysicalStatusConfiguration : IEntityTypeConfiguration<AssetPhysicalStatus>
 {
     public void Configure(EntityTypeBuilder<AssetPhysicalStatus> entity)
     {

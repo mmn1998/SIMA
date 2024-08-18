@@ -49,7 +49,7 @@ public class GroupsQueryController : ControllerBase
     }
     [HttpGet("GetGroupAggregate/{groupId}")]
     [SimaAuthorize(Permissions.GetGroupAggregate)]
-    public async Task<Result> Get([FromRoute] int groupId)
+    public async Task<Result> GetGroupAggregate([FromRoute] long groupId)
     {
         var query = new GetGroupAggregate { GroupId = groupId };
         return await _mediator.Send(query);

@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-internal class ServiceAvalibilityConfiguration : IEntityTypeConfiguration<ServiceAvalibility>
+public class ServiceAvalibilityConfiguration : IEntityTypeConfiguration<ServiceAvalibility>
 {
     public void Configure(EntityTypeBuilder<ServiceAvalibility> entity)
     {

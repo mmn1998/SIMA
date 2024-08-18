@@ -25,14 +25,14 @@ public class ApiRequestQueryStringParamConfiguration : IEntityTypeConfiguration<
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()
                     .IsConcurrencyToken();
-
+        
         entity.Property(x => x.ParentId)
             .HasConversion(x => x.Value, x => new ApiRequestQueryStringParamId(x));
         
-        entity.Property(x => x.ApiId)
-            .HasConversion(x => x.Value, x => new ApiId(x));
-        entity.HasOne(x=>x.Api)
+        entity.Property(x => x.ApiVersionId)
+            .HasConversion(x => x.Value, x => new ApiVersionId(x));
+        entity.HasOne(x=>x.ApiVersion)
             .WithMany(x=>x.ApiRequestQueryStringParams)
-            .HasForeignKey(x=>x.ApiId);
+            .HasForeignKey(x=>x.ApiVersionId);
     }
 }

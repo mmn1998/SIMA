@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Positions.Args;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Positions.Repositories;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Interfaces;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;

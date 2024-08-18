@@ -2,7 +2,7 @@
 
 public class ModifyBusinessContinuityPlanCriticalActivityArg
 {
-    public long BusinessContinuityPlanId { get; set; }
+    public long BusinessContinuityPlanVersioningId { get; set; }
     public long CriticalActivityId { get; set; }
     public long ActiveStatusId { get; set; }
 

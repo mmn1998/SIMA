@@ -1,9 +1,15 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.PositionLevels.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.Args;
 using SIMA.Domain.Models.Features.Auths.Positions.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.PositionTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.PositionTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -17,10 +23,13 @@ public class Position : Entity
     private Position() { }
     private Position(CreatePositionArg arg)
     {
-        Id = new PositionId(IdHelper.GenerateUniqueId());
+        Id = new PositionId(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
-        if (arg.DepartmentId.HasValue) DepartmentId = new DepartmentId(arg.DepartmentId.Value);
+        if (arg.DepartmentId.HasValue) DepartmentId = new(arg.DepartmentId.Value);
+        if (arg.BranchId.HasValue) BranchId = new(arg.BranchId.Value);
+        PositionLevelId = new(arg.PositionLevelId);
+        PositionTypeId = new(arg.PositionTypeId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -35,7 +44,10 @@ public class Position : Entity
         await ModifyGuards(arg, service);
         Code = arg.Code;
         Name = arg.Name;
-        if (arg.DepartmentId.HasValue) DepartmentId = new DepartmentId(arg.DepartmentId.Value);
+        if (arg.DepartmentId.HasValue) DepartmentId = new(arg.DepartmentId.Value);
+        if (arg.BranchId.HasValue) BranchId = new(arg.BranchId.Value);
+        PositionLevelId = new(arg.PositionLevelId);
+        PositionTypeId = new(arg.PositionTypeId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -48,7 +60,7 @@ public class Position : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyPositionArg arg, IPositionService service)
     {
@@ -56,12 +68,18 @@ public class Position : Entity
         arg.Name.NullCheck();
         arg.Code.NullCheck();
 
-        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code,Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public PositionId Id { get; private set; }
 
     public DepartmentId? DepartmentId { get; private set; }
+    public BranchId? BranchId { get; private set; }
+    public virtual Branch? Branch { get; private set; }
+    public PositionTypeId? PositionTypeId { get; private set; }
+    public virtual PositionType? PositionType { get; private set; }
+    public PositionLevelId? PositionLevelId { get; private set; }
+    public virtual PositionLevel? PositionLevel { get; private set; }
 
     public string? Name { get; private set; }
 

@@ -1,0 +1,1 @@
+﻿public record ScenarioBusinessContinuityPlanVersioningId(long Value);

@@ -41,13 +41,9 @@ public class BusinessImpactAnalysisDocument : Entity
     public BusinessImpactAnalysisId BusinessImpactAnalysisId { get; private set; }
     public virtual BusinessImpactAnalysis BusinessImpactAnalysis { get; private set; }
     public long ActiveStatusId { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)
     {

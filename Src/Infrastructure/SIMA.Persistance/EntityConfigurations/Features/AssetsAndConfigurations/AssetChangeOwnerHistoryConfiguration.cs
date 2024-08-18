@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
-public class AssetChangeOwnerHistoryConfiguration
+public class AssetChangeOwnerHistoryConfiguration : IEntityTypeConfiguration<AssetChangeOwnerHistory>
 {
     public void Configure(EntityTypeBuilder<AssetChangeOwnerHistory> entity)
     {

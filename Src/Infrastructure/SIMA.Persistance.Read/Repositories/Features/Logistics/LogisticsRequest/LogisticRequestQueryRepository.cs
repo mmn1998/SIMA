@@ -1177,14 +1177,18 @@ select
 
     }
 
-    public async Task<Result<IEnumerable<GetLogesticRequestGoodsQueryResult>>> GetLogesticRequestGoods(long Id)
+    public async Task<Result<IEnumerable<GetLogesticRequestGoodsQueryResult>>> GetLogesticRequestGoods(GetLogesticRequestGoodsQuery request)
     {
+
 
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
 
-            string query = $@" select 
+
+            string queryCount = $@"  WITH Query as(
+				select 
+                               
                                 RG.LogisticsRequestId,
                                 RG.GoodsId,
                                 RG.Quantity,
@@ -1195,22 +1199,54 @@ select
                                 join Logistics.LogisticsRequest LR on RG.LogisticsRequestId = LR.Id
                                 join Logistics.Goods G on  G.Id = RG.GoodsId 
                                 join Logistics.GoodsCategory GC on GC.Id = G.GoodsCategoryId
-                                where LR.Id = @LogesticRequestId and LR.ActiveStatusId != 3 and G.ActiveStatusId != 3 and RG.ActiveStatusId != 3";
-            using (var multi = await connection.QueryMultipleAsync(query, new { LogesticRequestId = Id }))
+                                where LR.Id = @LogesticRequestId and LR.ActiveStatusId != 3 and G.ActiveStatusId != 3 and RG.ActiveStatusId != 3
+                    )
+                    SELECT Count(*) FROM Query
+                     /**where**/
+                     ; ";
+
+            string query = $@" WITH Query as(
+	               	select 
+                               
+                                RG.LogisticsRequestId,
+                                RG.GoodsId,
+                                RG.Quantity,
+                                G.Name GoodsName,
+                                G.Code GoodsCode,
+                                GC.Name GoodsCategoryName,
+                                RG.CreatedAt
+                                from Logistics.LogisticsRequestGoods RG
+                                join Logistics.LogisticsRequest LR on RG.LogisticsRequestId = LR.Id
+                                join Logistics.Goods G on  G.Id = RG.GoodsId 
+                                join Logistics.GoodsCategory GC on GC.Id = G.GoodsCategoryId
+                                where LR.Id = @LogesticRequestId and LR.ActiveStatusId != 3 and G.ActiveStatusId != 3 and RG.ActiveStatusId != 3
+							)
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+            dynaimcParameters.Item2.Add("LogesticRequestId",request.Id);
+
+
+            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
             {
+                var count = await multi.ReadFirstAsync<int>();
                 var response = await multi.ReadAsync<GetLogesticRequestGoodsQueryResult>();
+
                 if (response is null) throw new SimaResultException(CodeMessges._400Code, Messages.GoodsIsNull);
 
                 var result = new List<GetLogesticRequestGoodsQueryResult>();
-                int id = 0;
+                int index = 0;
                 foreach (var item in response)
                 {
                     for (int i = 1; i <= item.Quantity; i++)
                     {
-                        id++;
+                        index++;
                         var goods = new GetLogesticRequestGoodsQueryResult
                         {
-                            Id = id,
+                            Index = index,
+                            Id = item.GoodsId,
                             GoodsCode = item.GoodsCode,
                             GoodsCategoryName = item.GoodsCategoryName,
                             GoodsId = item.GoodsId,
@@ -1221,8 +1257,7 @@ select
                         result.Add(goods);
                     }
                 }
-
-                return Result.Ok(result.AsEnumerable());
+                return Result.Ok(result.AsEnumerable(), request, count);
             }
         }
     }
@@ -1642,8 +1677,7 @@ WHERE LR.Id = @Id and LR.CreatedBy = @userId
         }
     }
 
-
-    public async  Task<bool> IsTechnological(List<long> goodsId)
+    public async Task<bool> IsTechnological(List<long> goodsId)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -1655,7 +1689,7 @@ WHERE LR.Id = @Id and LR.CreatedBy = @userId
             return result;
         }
     }
-    public async  Task<bool> IsGoods(List<long> goodsId)
+    public async Task<bool> IsGoods(List<long> goodsId)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -1667,7 +1701,7 @@ WHERE LR.Id = @Id and LR.CreatedBy = @userId
             return result;
         }
     }
-    public async  Task<bool> IsHardware(List<long> goodsId)
+    public async Task<bool> IsHardware(List<long> goodsId)
     {
         using (var connection = new SqlConnection(_connectionString))
         {

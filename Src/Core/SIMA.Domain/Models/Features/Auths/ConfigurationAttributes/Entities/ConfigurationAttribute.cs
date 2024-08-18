@@ -1,6 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.Auths.ConfigurationAttributes;
 using SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.Args;
 using SIMA.Domain.Models.Features.Auths.ConfigurationAttributes.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.ConfigurationTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.ConfigurationTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.SysConfigs.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Framework.Common.Helper;
@@ -20,7 +22,7 @@ public class ConfigurationAttribute : Entity
         Name = arg.Name;
         IsUserConfige = arg.IsUserConfige;
         ActiveStatusId = arg.ActiveStatusId;
-        DataType = arg.DataType;
+        ConfigurationTypeId = new(arg.ConfigurationTypeId);
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
@@ -34,12 +36,12 @@ public class ConfigurationAttribute : Entity
 
 
     public ConfigurationAttributeId Id { get; private set; }
+    public ConfigurationTypeId ConfigurationTypeId { get; private set; }
+    public virtual ConfigurationType ConfigurationType { get; private set; }
 
     public string? EnglishKey { get; private set; }
 
     public string? Name { get; private set; }
-
-    public string? DataType { get; private set; }
 
     public string? IsUserConfige { get; private set; }
 
