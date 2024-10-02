@@ -7,32 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
-    <PackageReference Include="Scrutor" Version="4.2.2" />
-    <PackageReference Include="SIMA.Framework.Common" Version="2.1.2" />
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+    <PackageReference Include="Scrutor" Version="5.0.1" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="EntityConfigurations\Features\Logistics\UnitMeasurements\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\Suppliers\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\SupplierRanks\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\GoodsQuorumPrices\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\GoodsTypes\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\LogisticsRequests\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\PaymentCommands\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\PriceEstimations\" />
-    <Folder Include="EntityConfigurations\Features\Logistics\Goodses\" />
   </ItemGroup>
 
 </Project>

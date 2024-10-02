@@ -36,6 +36,16 @@ public class FormCommandHandler : ICommandHandler<CreateFormCommand, Result<long
             var arg = _mapper.Map<CreateFormArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
             var entity = await Form.Create(arg);
+            if (request.PermissoinIdList is not null && request.PermissoinIdList.Count > 0)
+            {
+                var args = _mapper.Map<List<CreateFormPermissionArg>>(request.PermissoinIdList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.FormId = entity.Id.Value;
+                }
+                entity.AddFormPermissions(args);
+            }
             await _repository.Add(entity);
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(entity.Id.Value);
@@ -67,7 +77,7 @@ public class FormCommandHandler : ICommandHandler<CreateFormCommand, Result<long
                         {
                             var formFieldArg = new CreateFormFieldArg
                             {
-                                ActiveStatusId = (long) ActiveStatusEnum.Active,
+                                ActiveStatusId = (long)ActiveStatusEnum.Active,
                                 CreatedAt = DateTime.Now,
                                 CreatedBy = _simaIdentity.UserId,
                                 FormId = entity.Id.Value,

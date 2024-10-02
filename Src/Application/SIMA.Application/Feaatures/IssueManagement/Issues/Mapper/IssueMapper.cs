@@ -96,6 +96,7 @@ public class IssueMapper : Profile
            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
            .ForMember(dest => dest.Summery, act => act.MapFrom(source => source.Name))
            .ForMember(dest => dest.Description, act => act.MapFrom(source => source.Name))
+           .ForMember(dest => dest.OwnerUserId, act => act.MapFrom(source => source.OwnerUserId))
            .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.MainAggregateType))
            ;
 
@@ -119,6 +120,12 @@ public class IssueMapper : Profile
          .ForMember(dest => dest.DocumentId, act => act.MapFrom(source => source.DocumentId.ToString()))
          .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now.ToString()))
          .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => ((long)ActiveStatusEnum.Active).ToString()));
+
+        CreateMap<long, CreateIssueManagerArg>()
+          .ForMember(dest => dest.UserId, act => act.MapFrom(source => source))
+          .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+          .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+          .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active));
 
     }
 }

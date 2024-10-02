@@ -36,6 +36,9 @@ public class WorkflowActorsController : ControllerBase
         return result;
     }
 
+
+
+
     [HttpPut]
     [SimaAuthorize(Permissions.WorkFlowActorPut)]
     public async Task<Result> Put([FromBody] ModifyWorkFlowActorCommand command)

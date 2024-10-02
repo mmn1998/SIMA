@@ -6,10 +6,12 @@ using SIMA.Domain.Models.Features.Auths.Locations;
 using SIMA.Domain.Models.Features.Auths.Locations.Args;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.Interfaces;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Framework.Infrastructure.Cachings;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.Auths.Locations;
 
@@ -25,7 +27,7 @@ public class LocationCommandHandler : ICommandHandler<CreateLocationCommand, Res
 
     public LocationCommandHandler(IMapper mapper, ILocationRepository repository, IUnitOfWork unitOfWork,
         IDistributedRedisService redisService, IConfiguration configuration, ILocationService service
-        ,ISimaIdentity simaIdentity)
+        , ISimaIdentity simaIdentity)
     {
         _mapper = mapper;
         _repository = repository;
@@ -58,7 +60,7 @@ public class LocationCommandHandler : ICommandHandler<CreateLocationCommand, Res
     public async Task<Result<long>> Handle(DeleteLocationCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById((long)request.Id);
-        long userId = _simaIdentity.UserId;entity.Delete(userId);
+        long userId = _simaIdentity.UserId; entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         DeleteCachedData();
         return Result.Ok(entity.Id.Value);
@@ -68,8 +70,15 @@ public class LocationCommandHandler : ICommandHandler<CreateLocationCommand, Res
     /// </summary>
     private void DeleteCachedData()
     {
-        string appName = _configuration.GetSection("AppName").Value ?? "";
-        string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Location);
-        _redisService.Delete(redisKey);
+        try
+        {
+            string appName = _configuration.GetSection("AppName").Value ?? "";
+            string redisKey = RedisHelper.GenerateRedisKey(appName, "basics", RedisKeys.Location);
+            _redisService.Delete(redisKey);
+        }
+        catch (Exception)
+        {
+            throw new SimaResultException(CodeMessges._100068Code, Messages.RedisConnectionError);
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.Auths.CustomerTypes;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Args;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 

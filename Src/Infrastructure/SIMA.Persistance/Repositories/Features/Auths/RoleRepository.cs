@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.Entities;
 using SIMA.Domain.Models.Features.Auths.Roles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
@@ -21,6 +22,10 @@ public class RoleRepository : Repository<Role>, IRoleRepository
     {
         var entity = await _context.Roles
         .Include(r => r.RolePermissions)
+        .Include(r=>r.UserRoles)
+        .Include(r=>r.FormRoles)
+            .ThenInclude(r=>r.Form)
+                .ThenInclude(r=>r.FormPermissions)
             .FirstOrDefaultAsync(r => r.Id == new RoleId(id));
         entity.NullCheck();
         return entity;

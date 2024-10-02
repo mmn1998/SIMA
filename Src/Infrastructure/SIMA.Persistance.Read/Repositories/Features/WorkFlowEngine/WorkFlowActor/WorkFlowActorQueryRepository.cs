@@ -31,6 +31,7 @@ public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
           ,C.[Code]
           ,C.[WorkFlowId]
           ,C.[IsDirectManagerOfIssueCreator]
+,c.IsActorManager
           ,C.[IsEveryOne]
           ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
@@ -112,6 +113,7 @@ Order By c.[CreatedAt] desc  ";
           ,C.[WorkFlowId]
           ,C.[IsDirectManagerOfIssueCreator]
           ,C.[IsEveryOne]
+,c.IsActorManager
           ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
       		  ,A.[Name] ActiveStatus
@@ -140,6 +142,7 @@ Order By c.[CreatedAt] desc  ";
           ,C.[Code]
           ,C.[WorkFlowId]
           ,C.[IsDirectManagerOfIssueCreator]
+,c.IsActorManager
           ,C.[IsEveryOne]
           ,W.[Name] as WorkFlowName
           ,C.[activeStatusId]
@@ -174,7 +177,17 @@ Order By c.[CreatedAt] desc  ";
             }
         }
     }
-
+    public async Task<IEnumerable<GetWorkflowActorEmployeeQueryResult>> GetEmployee(long actorId)
+    {
+        var query = @"select wa.Name, wae.EmployeeId, wae.ActorId from project.WorkFlowActorEmployees wae
+                        inner join project.WorkFlowActor wa on wa.Id = wae.EmployeeId
+                        where wae.ActorId = @Id and wae.ActiveStatusId != 3 and wa.ActiveStatusId != 3";
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            return await connection.QueryAsync<GetWorkflowActorEmployeeQueryResult>(query, new { Id = actorId });
+        }
+    }
     public async Task<bool> CheckAccessToIsEveryOne(long workFlowActorId)
     {
         var result = false;

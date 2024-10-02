@@ -7,7 +7,7 @@ namespace SIMA.WebApi.Controllers.Features.Auths.UserTypes.V1;
 
 [Route("[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "ServiceUserTypes")]
+[ApiExplorerSettings(GroupName = "UserTypes")]
 public class UserTypesController : ControllerBase
 {
     private readonly IMediator _mediator;

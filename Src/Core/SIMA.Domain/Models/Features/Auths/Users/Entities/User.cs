@@ -4,8 +4,10 @@ using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Forms.Entities;
+using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Entities;
+using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
@@ -16,6 +18,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
@@ -30,10 +33,8 @@ namespace SIMA.Domain.Models.Features.Auths.Users.Entities;
 
 public class User : Entity, IAggregateRoot
 {
-    // ValueObject
     private User()
     {
-
     }
     private User(CreateUserArg arg)
     {
@@ -151,6 +152,43 @@ public class User : Entity, IAggregateRoot
             permission.Delete((long)request[0].CreatedBy);
         }
     }
+    public async Task AddFormUser(List<CreateFormUserArg> request, long userId, IUserService service)
+    {
+        userId.NullCheck();
+
+        var previousUsers = _formUsers.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addForm = request.Where(x => !previousUsers.Any(c => c.FormId.Value == x.FormId)).ToList();
+        var deleteForm = previousUsers.Where(x => !request.Any(c => c.FormId == x.FormId.Value)).ToList();
+
+        foreach (var form in addForm)
+        {
+            var entity = _formUsers.Where(x => (x.FormId == new FormId(form.FormId.Value) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await FormUser.Create(form);
+                _formUsers.Add(entity);
+            }
+        }
+
+        if (deleteForm is not null && deleteForm.Count > 0)
+        {
+            foreach (var form in deleteForm)
+            {
+                form.Delete((long)request[0].CreatedBy);
+                var userPermissionIds = await ChangeFormAccessGuards(form.FormId.Value, userId, service);
+                foreach (var permission in userPermissionIds)
+                {
+                    var entity = _userPermission.Where(x => x.PermissionId.Value == permission && x.ActiveStatusId != 3).FirstOrDefault();
+                    entity.Delete((long)request[0].CreatedBy);
+                }
+            }
+        }
+    }
     public async Task AddUserRole(List<CreateUserRoleArg> request, long userId)
     {
         userId.NullCheck();
@@ -180,33 +218,34 @@ public class User : Entity, IAggregateRoot
             role.Delete((long)request[0].CreatedBy);
         }
     }
-    public async Task AddUserDomain(List<CreateUserDomainArg> request, long userId)
+
+    public async Task AddUserGroup(List<CreateUserGroupArg> request, long userId)
     {
         userId.NullCheck();
 
-        var previousDomains = _userDomainAccesses.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        var previousGroups = _userGroup.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
-        var addDomain = request.Where(x => !previousDomains.Any(c => c.DomainId.Value == x.DomainId)).ToList();
-        var deleteDomain = previousDomains.Where(x => !request.Any(c => c.DomainId == x.DomainId.Value)).ToList();
+        var addGroup = request.Where(x => !previousGroups.Any(c => c.GroupId.Value == x.GroupId)).ToList();
+        var deleteMember = previousGroups.Where(x => !request.Any(c => c.GroupId == x.GroupId.Value)).ToList();
 
 
-        foreach (var domain in addDomain)
+        foreach (var group in addGroup)
         {
-            var entity = _userDomainAccesses.Where(x => (x.DomainId == new DomainId((long)domain.DomainId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            var entity = _userGroup.Where(x => (x.GroupId == new GroupId(group.GroupId.Value) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
                 await entity.ChangeStatus(ActiveStatusEnum.Active);
             }
             else
             {
-                entity = await UserDomainAccess.Create(domain);
-                _userDomainAccesses.Add(entity);
+                entity = await UserGroup.Create(group);
+                _userGroup.Add(entity);
             }
         }
 
-        foreach (var domain in deleteDomain)
+        foreach (var group in deleteMember)
         {
-            domain.Delete((long)request[0].CreatedBy);
+            group.Delete((long)request[0].CreatedBy);
         }
     }
     public async Task AddUserLocation(List<CreateUserLocationAccessArg> request, long userId)
@@ -361,13 +400,6 @@ public class User : Entity, IAggregateRoot
         entity.NullCheck();
         entity.Modify(arg);
     }
-    public async Task ModifyUserDomain(ModifyUserDomainArg arg)
-    {
-
-        var entity = _userDomainAccesses.FirstOrDefault(ud => ud.Id == new UserDomainAccessId(arg.Id));
-        entity.NullCheck();
-        await entity.Modify(arg);
-    }
     #endregion
 
     #region DeleteMethods
@@ -377,12 +409,7 @@ public class User : Entity, IAggregateRoot
         entity.NullCheck();
         entity?.Delete(userId);
     }
-    public void DeleteUserDomainAccess(long UserDomainAccessId, long userId)
-    {
-        var entity = _userDomainAccesses.FirstOrDefault(uc => uc.Id == new UserDomainAccessId(UserDomainAccessId));
-        entity.NullCheck();
-        entity?.Delete(userId);
-    }
+   
     public void DeleteUserLocationAccess(long UserLocationId, long userId)
     {
         var entity = _userLocationAccesses.FirstOrDefault(uc => uc.Id == new UserLocationAccessId(UserLocationId));
@@ -416,8 +443,7 @@ public class User : Entity, IAggregateRoot
     public virtual ICollection<UserRole> UserRoles => _userRoles;
     private List<UserLocationAccess> _userLocationAccesses = new();
     public ICollection<UserLocationAccess> UserLocationAccesses => _userLocationAccesses;
-    private List<UserDomainAccess> _userDomainAccesses = new();
-    public ICollection<UserDomainAccess> UserDomainAccesses => _userDomainAccesses;
+
     private List<AdminLocationAccess> _adminLocationAccesses = new();
     private List<FormUser> _formUsers = new();
     public ICollection<FormUser> FormUsers => _formUsers;
@@ -435,6 +461,13 @@ public class User : Entity, IAggregateRoot
     public ICollection<SubjectMeeting> SubjectMeetings => _subjectMeetings;
 
     public ICollection<AdminLocationAccess> AdminLocationAccesses => _adminLocationAccesses;
+
+    private List<IssueManager> _issueManager = new();
+    public ICollection<IssueManager> IssueManagers => _issueManager;
+
+    private List<LogisticsRequest> _logisticsRequests = new();
+    public ICollection<LogisticsRequest> LogisticsRequests => _logisticsRequests;
+
     private static async Task CreateGuards(IUserService userService, CreateUserArg arg)
     {
         arg.Password.NullCheck();
@@ -455,6 +488,13 @@ public class User : Entity, IAggregateRoot
         if (request.ConfirmNewPassword is null) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmNewPasswordIsNull);
         if (request.NewPassword != request.ConfirmNewPassword) throw new SimaResultException(CodeMessges._400Code, Messages.ConfirmPasswordNotValid);
     }
+
+    private async Task<List<long>> ChangeFormAccessGuards(long fromId, long userId, IUserService service)
+    {
+        var UserPermissionIds = await service.GetUserPermissonByFormId(fromId , userId);
+        return UserPermissionIds;
+    }
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;

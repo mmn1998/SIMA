@@ -3,8 +3,6 @@ using SIMA.Domain.Models.Features.Auths.UserTypes.Args;
 using SIMA.Domain.Models.Features.Auths.UserTypes.Interfaces;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Args;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

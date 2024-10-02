@@ -10,11 +10,16 @@ public class DomainConfiguration : IEntityTypeConfiguration<Domain.Models.Featur
         entity.ToTable("Domain", "Authentication");
 
         entity.HasIndex(e => e.Code).IsUnique();
+        entity.HasKey(i => i.Id);
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
              v => new DomainId(v)).ValueGeneratedNever();
-        entity.HasKey(i => i.Id);
+
+        entity.Property(x => x.ParentId)
+            .HasConversion(
+             v => v.Value,
+             v => new DomainId(v));
         entity.Property(e => e.Code).HasMaxLength(50);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")

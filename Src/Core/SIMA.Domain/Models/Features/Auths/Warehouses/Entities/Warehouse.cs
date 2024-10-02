@@ -8,13 +8,13 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
+namespace SIMA.Domain.Models.Features.Auths.Warehouses.Entities;
 
 public class Warehouse : Entity, IAggregateRoot
 {
     private Warehouse()
     {
-        
+
     }
     private Warehouse(CreateWarehouseArg arg)
     {

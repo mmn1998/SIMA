@@ -18,7 +18,7 @@ public class PositionType : Entity, IAggregateRoot
     }
     private PositionType(CreatePositionTypeArg arg)
     {
-        Id = new PositionTypeId(arg.Id);
+        Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;

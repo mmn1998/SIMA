@@ -35,11 +35,12 @@ public class RolesQueryController : ControllerBase
     {
         return await _mediator.Send(request);
     }
-    [HttpGet("GetRolePermission")]
+    [HttpGet("GetRolePermission/{RoleId}/{FormId}")]
     [SimaAuthorize(Permissions.RolePermissionGet)]
-    public async Task<Result> Get([FromQuery] GetRolePermissionQuery query)
+    public async Task<Result> Get([FromRoute] GetRolePermissionQuery query)
     {
-        return await _mediator.Send(query);
+        var result = new GetRolePermissionQuery { FormId = query.FormId , RoleId = query.RoleId};
+        return await _mediator.Send(result);
     }
     [HttpGet("GetRoleAggregate/{roleId}")]
     [SimaAuthorize(Permissions.GetRoleAggregate)]

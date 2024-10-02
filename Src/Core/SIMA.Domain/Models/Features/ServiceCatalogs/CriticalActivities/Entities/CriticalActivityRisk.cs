@@ -20,7 +20,7 @@ public class CriticalActivityRisk : Entity
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<CriticalActivityRisk> Create(CreateCriticalActivityRiskArg arg)
+    public static CriticalActivityRisk Create(CreateCriticalActivityRiskArg arg)
     {
         return new CriticalActivityRisk(arg);
     }
@@ -30,6 +30,12 @@ public class CriticalActivityRisk : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 
     public CriticalActivityRiskId Id { get; private set; }

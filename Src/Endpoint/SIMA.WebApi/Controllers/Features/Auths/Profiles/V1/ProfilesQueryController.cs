@@ -6,68 +6,67 @@ using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.Auths.Profiles.V1
+namespace SIMA.WebApi.Controllers.Features.Auths.Profiles.V1;
+
+[Route("[controller]")]
+[ApiController]
+[ApiExplorerSettings(GroupName = "Profiles")]
+[Authorize]
+
+public class ProfilesQueryController : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    [ApiExplorerSettings(GroupName = "Profiles")]
-    [Authorize]
+    private readonly IMediator _mediator;
 
-    public class ProfilesQueryController : ControllerBase
+    public ProfilesQueryController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
+    [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.ProfileGetAll)]
+    public async Task<Result> Get(long id)
+    {
+        var query = new GetProfileQuery { Id = id };
+        var result = await _mediator.Send(query);
+        return result;
+    }
 
-        public ProfilesQueryController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-        [HttpGet("{id}")]
-        [SimaAuthorize(Permissions.ProfileGetAll)]
-        public async Task<Result> Get(long id)
-        {
-            var query = new GetProfileQuery { Id = id };
-            var result = await _mediator.Send(query);
-            return result;
-        }
+    [HttpPost("GetAll")]
+    [SimaAuthorize(Permissions.ProfileGet)]
+    public async Task<Result> Get(GetAllProfileQuery request)
+    {
+        var result = await _mediator.Send(request);
+        return result;
+    }
 
-        [HttpPost("GetAll")]
-        [SimaAuthorize(Permissions.ProfileGet)]
-        public async Task<Result> Get(GetAllProfileQuery request)
-        {
-            var result = await _mediator.Send(request);
-            return result;
-        }
+    [HttpGet("shortProfile")]
+    [SimaAuthorize(Permissions.UserGroupPut)]
+    public async Task<Result> GetShortProfile()
+    {
+        var query = new GetAllShortProfileQuery();
+        var result = await _mediator.Send(query);
+        return result;
 
-        [HttpGet("shortProfile")]
-        [SimaAuthorize(Permissions.UserGroupPut)]
-        public async Task<Result> GetShortProfile()
-        {
-            var query = new GetAllShortProfileQuery();
-            var result = await _mediator.Send(query);
-            return result;
+    }
 
-        }
+    [HttpPost("GetPhoneBooksByProfileId")]
+    public async Task<Result> GetPhoneBookByProfileId(GetAllPhoneBookQuery request)
+    {
+        var result = await _mediator.Send(request);
+        return result;
+    }
 
-        [HttpPost("GetPhoneBooksByProfileId")]
-        public async Task<Result> GetPhoneBookByProfileId(GetAllPhoneBookQuery request)
-        {
-            var result = await _mediator.Send(request);
-            return result;
-        }
+    [HttpPost("GetAddressBooksByProfileId")]
+    public async Task<Result> GetAddressBookByProfileId(GetAllAddressBookQuery request)
+    {
+        var result = await _mediator.Send(request);
+        return result;
+    }
 
-        [HttpPost("GetAddressBooksByProfileId")]
-        public async Task<Result> GetAddressBookByProfileId(GetAllAddressBookQuery request)
-        {
-            var result = await _mediator.Send(request);
-            return result;
-        }
-
-        [HttpGet("GetManagersByCompanyId/{companyId}")]
-        public async Task<Result<List<SelectModel>>> GetManagerByCompanyId(int companyId)
-        {
-            var query = new GetManagersByCompanyId { Id = companyId };
-            var result = await _mediator.Send(query);
-            return result;
-        }
+    [HttpGet("GetManagersByCompanyId/{companyId}")]
+    public async Task<Result<List<SelectModel>>> GetManagerByCompanyId(int companyId)
+    {
+        var query = new GetManagersByCompanyId { Id = companyId };
+        var result = await _mediator.Send(query);
+        return result;
     }
 }

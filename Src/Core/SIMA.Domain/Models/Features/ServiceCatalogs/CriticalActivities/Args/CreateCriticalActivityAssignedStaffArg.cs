@@ -4,7 +4,7 @@ public class CreateCriticalActivityAssignedStaffArg
 {
     public long Id { get; set; }
     public long CriticalActivityId { get; set; }
-    //public long ResponsilbeTypeId { get; set; } //TODO
+    public long ResponsibleTypeId { get; set; }
     public long StaffId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime CreatedAt { get; set; }

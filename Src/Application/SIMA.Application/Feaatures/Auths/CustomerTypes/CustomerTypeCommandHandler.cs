@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Auths.CustomerTypes;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Args;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Interfaces;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Args;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Interfaces;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
@@ -30,12 +30,13 @@ public class CustomerTypeCommandHandler : ICommandHandler<CreateCustomerTypeComm
     }
     public async Task<Result<long>> Handle(CreateCustomerTypeCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateCustomerTypeArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await CustomerType.Create(arg, _service);
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(arg.Id);
+       
+            var arg = _mapper.Map<CreateCustomerTypeArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
+            var entity = await CustomerType.Create(arg, _service);
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(arg.Id);
     }
 
     public async Task<Result<long>> Handle(ModifyCustomerTypeCommand request, CancellationToken cancellationToken)

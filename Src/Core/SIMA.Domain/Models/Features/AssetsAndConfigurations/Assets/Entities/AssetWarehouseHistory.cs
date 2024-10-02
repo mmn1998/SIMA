@@ -1,5 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Args;
-using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.Warehouses.Entities;
 using SIMA.Domain.Models.Features.Auths.Warehouses.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

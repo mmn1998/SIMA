@@ -12,7 +12,8 @@ public class IssueQueryHandler :
     IQueryHandler<GetIssuesQuery, Result<GetIssueQueryResult>>,
     IQueryHandler<GetIssueHistoriesByIdQuery, Result<GetIssueHistoriesByIdQueryResult>>,
     IQueryHandler<GetIssueHistoriesByIssueIdQuery, Result<IEnumerable<GetIssueHistoriesByIssueIdQueryResult>>>,
-    IQueryHandler<GetCasesByWorkflowIdQuery, Result<List<GetCasesByWorkflowIdQueryResult>>>
+    IQueryHandler<GetCasesByWorkflowIdQuery, Result<List<GetCasesByWorkflowIdQueryResult>>>,
+    IQueryHandler<GetIssueComponentQuery, Result<GetIssueComponentQueryResult>>
 {
     private readonly IIssueQueryRepository _repository;
 
@@ -61,5 +62,14 @@ public class IssueQueryHandler :
 
             throw;
         }
+    }
+
+    public async Task<Result<GetIssueComponentQueryResult>> Handle(GetIssueComponentQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.ComponentIssue(request.Id, request.IssueId);
+        if (result.IssueInfo is not null)
+            result.IssueInfo.WorkFlowFileContent =
+                result.IssueInfo.WorkFlowFileContent.ColorizeCurrentStep(result.IssueInfo.CurrentStepBpmnId);
+        return Result.Ok(result);
     }
 }

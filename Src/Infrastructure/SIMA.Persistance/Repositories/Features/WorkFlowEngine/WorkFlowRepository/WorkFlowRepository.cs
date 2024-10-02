@@ -55,7 +55,7 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 
     }
 
-    public async Task<WorkFlow> GetById2(WorkFlowId id)
+    public async Task<WorkFlow> GetByIdJustWorkFlow(WorkFlowId id)
     {
         WorkFlow workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -177,9 +177,10 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
 
     public Task<WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate)
     {
-        var xx = (long)mainAggregate;
 
-        var workFlow = _context.WorkFlows.FirstOrDefaultAsync(x => x.MainAggregateId == new MainAggregateId((long)mainAggregate));
+        var workFlow = _context.WorkFlows
+            .Include(x=>x.WorkFlowActors.Where(x=>x.ActiveStatusId != (long)ActiveStatusEnum.Delete))
+            .FirstOrDefaultAsync(x => x.MainAggregateId == new MainAggregateId((long)mainAggregate) && x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         return workFlow;
     }
 

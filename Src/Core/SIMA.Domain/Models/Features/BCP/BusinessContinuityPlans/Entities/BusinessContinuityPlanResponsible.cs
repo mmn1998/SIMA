@@ -3,7 +3,6 @@ using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
-using SIMA.Domain.Models.Features.BCP.NewFolder.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

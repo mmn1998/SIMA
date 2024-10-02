@@ -6,35 +6,34 @@ using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.Auths.Companies.V1
+namespace SIMA.WebApi.Controllers.Features.Auths.Companies.V1;
+
+[Route("[controller]")]
+[ApiController]
+[ApiExplorerSettings(GroupName = "Companies")]
+[Authorize]
+
+public class CompaniesQueryController : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    [ApiExplorerSettings(GroupName = "Companies")]
-    [Authorize]
-
-    public class CompaniesQueryController : ControllerBase
+    private readonly IMediator _mediator;
+    public CompaniesQueryController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
-        public CompaniesQueryController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        _mediator = mediator;
+    }
 
-        [HttpGet("{id}")]
-        [SimaAuthorize(Permissions.CompanyGet)]
-        public async Task<Result> Get(long id)
-        {
-            var query = new GetCompanyByIdQuery { Id = id };
-            var result = await _mediator.Send(query);
-            return result;
-        }
+    [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.CompanyGet)]
+    public async Task<Result> Get(long id)
+    {
+        var query = new GetCompanyByIdQuery { Id = id };
+        var result = await _mediator.Send(query);
+        return result;
+    }
 
-        [HttpPost("GetAll")]
-        //    [SimaAuthorize(Permissions.CompanyGetAll)]
-        public async Task<Result> Get(GetAllCompanyQuery request)
-        {
-            return await _mediator.Send(request);
-        }
+    [HttpPost("GetAll")]
+    [SimaAuthorize(Permissions.CompanyGetAll)]
+    public async Task<Result> Get(GetAllCompanyQuery request)
+    {
+        return await _mediator.Send(request);
     }
 }

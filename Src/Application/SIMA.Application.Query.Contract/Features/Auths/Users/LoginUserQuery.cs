@@ -28,8 +28,7 @@ public class LoginUserQueryResult
     public string RefreshToken { get; set; }
     public UserInfoLogin UserInfoLogin { get; set; }
     public IEnumerable<int> Permissions { get; set; }
-    public IEnumerable<Menue> TempMenues { get; set; }
-    public List<Menue> Menue { get; set; }
+    public IEnumerable<long> Menue { get; set; }
     public IEnumerable<long> RoleIds { get; set; }
     public IEnumerable<long> GroupIds { get; set; }
 }
@@ -44,19 +43,7 @@ public class UserInfoLogin
     public int AccessFailedOverallCount { get; set; }
     public DateTime? AccessFailedDate { get; set; }
 }
-public class Menue
-{
-    public long DomainId { get; set; }
-    public string Name { get; set; }
-    public string Code { get; set; }
-    public IEnumerable<SubMenue> SubMenues { get; set; }
-}
-public class SubMenue
-{
-    public long DomainId { get; set; }
-    public string Name { get; set; }
-    public string Code { get; set; }
-}
+
 
 public class TokenModelResult
 {

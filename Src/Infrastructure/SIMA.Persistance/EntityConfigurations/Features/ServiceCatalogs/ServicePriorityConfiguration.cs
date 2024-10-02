@@ -1,17 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriority.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 
-    public  class ServicePriorityConfiguration : IEntityTypeConfiguration<ServicePriority>
+public  class ServicePriorityConfiguration : IEntityTypeConfiguration<ServicePriority>
 {
 
     public void Configure(EntityTypeBuilder<ServicePriority> entity)
     {
         entity.ToTable("ServicePriority", "ServiceCatalog");
         entity.Property(x => x.Id)
-    .HasColumnName("Id")
     .HasConversion(
         v => v.Value,
         v => new ServicePriorityId(v))

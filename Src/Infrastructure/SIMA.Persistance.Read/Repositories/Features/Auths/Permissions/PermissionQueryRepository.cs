@@ -3,12 +3,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Permission;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
-using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.Step;
-using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Permissions;
@@ -137,5 +132,24 @@ join [Basic].[ActiveStatus] A on A.Id = P.ActiveStatusID
             }
 
         }
+    }
+
+    public async Task<Result<IEnumerable<GetPermissionQueryResult>>> GetPermissionByFormId(long formId)
+    {
+
+
+        string query = $@"select 
+	                               P.[Id] 
+                                  ,P.[Name]
+                                  ,P.[Code]
+                            from Authentication.Permission P
+                            join Authentication.FormPermission FP on P.Id = FP.PermissionId 
+                            where FP.FormId = @formId and P.ActiveStatusId <> 3 and FP.ActiveStatusId <> 3";
+
+        using var connection = new SqlConnection(_connectionString);
+        var result = await connection.QueryAsync<GetPermissionQueryResult>(query, new { formId });
+        return Result.Ok(result);
+
+
     }
 }

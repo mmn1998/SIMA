@@ -21,7 +21,7 @@ public class ServiceUserTypeQueryRepository : IServiceUserTypeQueryRepository
               ,ST.[Code]
               ,ST.[CreatedAt]
 	          ,A.[Name] ActiveStatus
-          FROM [ServiceCatalog].[ServiceUserType] ST
+          FROM [Basic].[UserType] ST
           INNER JOIN [Basic].[ActiveStatus] A ON ST.ActiveStatusId = A.ID
           WHERE ST.ActiveStatusId <> 3";
     }
@@ -65,7 +65,7 @@ public class ServiceUserTypeQueryRepository : IServiceUserTypeQueryRepository
               ,ST.[Name]
               ,ST.[Code]
 	          ,A.[Name] ActiveStatus
-          FROM [ServiceCatalog].[ServiceUserType] ST
+          FROM [Basic].[UserType] ST
           INNER JOIN [Basic].[ActiveStatus] A ON ST.ActiveStatusId = A.ID
           WHERE ST.[Id] = @Id AND ST.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))

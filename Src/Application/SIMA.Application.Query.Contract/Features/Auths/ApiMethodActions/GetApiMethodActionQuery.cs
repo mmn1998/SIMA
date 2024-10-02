@@ -7,4 +7,3 @@ public class GetApiMethodActionQuery : IQuery<Result<GetApiMethodActionQueryResu
 {
     public long Id { get; set; }
 }
-

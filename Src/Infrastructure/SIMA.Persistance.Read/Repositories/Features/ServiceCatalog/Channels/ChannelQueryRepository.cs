@@ -48,6 +48,44 @@ SELECT
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+
+        string relatedQuery = @"
+SELECT 
+		cr.ResponsibleTypeId
+		,RT.[Name] ResponsibleTypeName
+		,CR.ResponsibleId
+		,(p.FirstName + ' ' + p.LastName) Responsible
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ChannelResponsible CR on cr.ChannelId = c.Id and CR.ActiveStatusId <> 3
+  inner join Basic.ResponsibleType RT on RT.Id = CR.ResponsibleTypeId and rt.ActiveStatusId<>3
+  inner join Organization.Staff S on s.Id = cr.ResponsibleId and s.ActiveStatusId<>3
+  inner join Authentication.Profile P on s.ProfileId = p.Id and p.ActiveStatusId<>3
+  where c.Id = @Id and c.ActiveStatusId<>3;
+
+SELECT 
+		PC.ProductId
+		,p.[Name] ProductName
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ProductChannel PC on Pc.ChannelId = c.Id and pc.ActiveStatusId<>3
+  inner join ServiceCatalog.Product P on P.Id = Pc.ProductId
+  where c.Id = @Id and c.ActiveStatusId<>3;
+
+SELECT 
+
+		CUT.UserTypeId
+		,UT.[Name] UserTypeName
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ChannelUserType CUT on CUT.ChannelId = c.Id and CUT.ActiveStatusId<>3
+  inner join Basic.UserType UT on ut.Id = CUT.UserTypeId
+  where c.Id = @Id and c.ActiveStatusId<>3;
+
+SELECT 
+        cap.IpAddress
+		,cap.Port
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ChannelAccessPoint CAP on CAP.ChannelId = c.Id and CAP.ActiveStatusId<>3
+  where c.Id = @Id and c.ActiveStatusId<>3
+";
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
@@ -58,6 +96,16 @@ SELECT
             {
                 var count = await multi.ReadFirstAsync<int>();
                 var response = await multi.ReadAsync<GetChannelQueryResult>();
+                foreach (var item in response)
+                {
+                    using (var multiForRelated = await connection.QueryMultipleAsync(relatedQuery, new { Id = item.Id }))
+                    {
+                        item.ChannelResponsibleList = await multiForRelated.ReadAsync<GetChannelResponsibleQuery>();
+                        item.ProductChannelList = await multiForRelated.ReadAsync<GetProductChannelQuery>();
+                        item.ChannelUserTypeList = await multiForRelated.ReadAsync<GetChannelUserTypeQuery>();
+                        item.ChannelAccessPointList = await multiForRelated.ReadAsync<GetChannelAccessPointQuery>();
+                    }
+                }
                 return Result.Ok(response, request, count);
             }
         }
@@ -82,11 +130,10 @@ SELECT
   where c.Id = @Id and c.ActiveStatusId<>3;
 
 SELECT 
-		c.Id ChannelId
-		,cr.ResponsibleTypeId
+		cr.ResponsibleTypeId
 		,RT.[Name] ResponsibleTypeName
 		,CR.ResponsibleId
-		,(p.FirstName + ' ' + p.LastName) ResponsibleFullName
+		,(p.FirstName + ' ' + p.LastName) Responsible
   FROM [ServiceCatalog].[Channel] C
   inner join ServiceCatalog.ChannelResponsible CR on cr.ChannelId = c.Id and CR.ActiveStatusId <> 3
   inner join Basic.ResponsibleType RT on RT.Id = CR.ResponsibleTypeId and rt.ActiveStatusId<>3
@@ -95,8 +142,7 @@ SELECT
   where c.Id = @Id and c.ActiveStatusId<>3;
 
 SELECT 
-		c.Id ChannelId
-		,PC.ProductId
+		PC.ProductId
 		,p.[Name] ProductName
   FROM [ServiceCatalog].[Channel] C
   inner join ServiceCatalog.ProductChannel PC on Pc.ChannelId = c.Id and pc.ActiveStatusId<>3
@@ -105,8 +151,7 @@ SELECT
 
 SELECT 
 
-		c.Id ChannelId
-		,CUT.UserTypeId
+		CUT.UserTypeId
 		,UT.[Name] UserTypeName
   FROM [ServiceCatalog].[Channel] C
   inner join ServiceCatalog.ChannelUserType CUT on CUT.ChannelId = c.Id and CUT.ActiveStatusId<>3
@@ -114,8 +159,7 @@ SELECT
   where c.Id = @Id and c.ActiveStatusId<>3;
 
 SELECT 
-        c.Id ChannelId
-		,cap.IpAddress
+        cap.IpAddress
 		,cap.Port
   FROM [ServiceCatalog].[Channel] C
   inner join ServiceCatalog.ChannelAccessPoint CAP on CAP.ChannelId = c.Id and CAP.ActiveStatusId<>3

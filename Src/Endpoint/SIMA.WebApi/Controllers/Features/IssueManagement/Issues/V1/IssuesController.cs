@@ -25,6 +25,13 @@ public class IssuesController : ControllerBase
     {
         return await _mediator.Send(command);
     }
+
+    [HttpPut("ModifyAssignee")]
+    [SimaAuthorize(Permissions.IssuePut)]
+    public async Task<Result> Put([FromBody] ModifyIssueAssigneeCommand command)
+    {
+        return await _mediator.Send(command);
+    }
     [HttpPut]
     [SimaAuthorize(Permissions.IssuePut)]
     public async Task<Result> Put([FromBody] ModifyIssueCommand command)

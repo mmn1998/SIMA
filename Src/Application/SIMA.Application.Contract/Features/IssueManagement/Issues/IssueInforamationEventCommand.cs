@@ -5,5 +5,6 @@
         public string DueDate { get; set; }
         public long IssuePriorityId { get; set; }
         public int Weight { get; set; }
+        public long? OwnerUserId { get; set; }
     }
 }

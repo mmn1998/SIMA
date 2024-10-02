@@ -50,6 +50,7 @@ public class Step : Entity
         //}
         UIPropertyBoxTitle = arg.UIPropertyBoxTitle;
         ModifiedBy = arg.UserId;
+        IsAssigneeForced = arg.IsAssigneeForced;
         var allBmpnIds = arg.ActorStepArgs.Select(x => x.BpmnId);
 
         var deActiveSteps = _workFlowActorStep.Where(x => !allBmpnIds.Contains(x.BpmnId));
@@ -163,6 +164,7 @@ public class Step : Entity
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
     public StepId Id { get; private set; }
+    public string? IsAssigneeForced { get; private set; }
     public string? Name { get; private set; }
     public string? CompleteName { get; private set; }
     public string? HasDocument { get; private set; }

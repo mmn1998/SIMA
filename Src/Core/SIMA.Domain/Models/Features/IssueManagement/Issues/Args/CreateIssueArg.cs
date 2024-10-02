@@ -16,11 +16,12 @@ public class CreateIssueArg
     public int Weight { get; set; }
     public DateTime IssueDate { get; set; }
     public string Description { get; set; }
-    public DateTime DueDate { get; set; }
+    public DateTime? DueDate { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }
     public long CompanyId { get; set; }
+    public long? OwnerUserId { get; set; }
 
     public List<CreateIssueLinkArg> IssueLinks { get; set; }
     public List<CreateIssueDocumentArg> IssueDocument { get; set; }

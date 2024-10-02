@@ -1,10 +1,11 @@
-﻿using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
-using System.Xml.Linq;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
@@ -15,9 +16,10 @@ public class ServiceAssignedStaff : Entity
     }
     private ServiceAssignedStaff(CreateServiceAssignedStaffArg arg)
     {
-        Id = new ServiceAssignedStaffId(arg.Id);
-        ServiceId = new ServiceId(arg.ServiceId);
-        StaffId = new StaffId(arg.ServiceId);
+        Id = new(arg.Id);
+        ServiceId = new(arg.ServiceId);
+        StaffId = new(arg.ServiceId);
+        ResponsibleTypeId = new(arg.ResponsibleTypeId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -32,6 +34,8 @@ public class ServiceAssignedStaff : Entity
     public ServiceId ServiceId { get; private set; }
     public virtual Staff Staff { get; private set; }
     public StaffId StaffId { get; private set; }
+    public virtual ResponsibleType ResponsibleType { get; private set; }
+    public ResponsibleTypeId ResponsibleTypeId { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public long CreatedBy { get; private set; }

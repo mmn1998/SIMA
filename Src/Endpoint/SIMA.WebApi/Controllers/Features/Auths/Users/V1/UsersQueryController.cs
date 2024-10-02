@@ -95,12 +95,12 @@ public class UsersQueryController : ControllerBase
         return result;
     }
 
-    [HttpGet("GetUserPermission")]
+    [HttpGet("GetUserPermission/{UserId}/{FormId}")]
     [SimaAuthorize(Permissions.UserPermissionGet)]
-    public async Task<Result>? Get([FromQuery] GetUserPermissionQuery query)
+    public async Task<Result>? Get([FromRoute] GetUserPermissionQuery query)
     {
-        var result = await _mediator.Send(query);
-        return result;
+        var request = new GetUserPermissionQuery { UserId = query.UserId , FormId =  query.FormId };
+        return await _mediator.Send(request);
     }
 
     [HttpGet("GetUserLocation")]
@@ -110,14 +110,7 @@ public class UsersQueryController : ControllerBase
         var result = await _mediator.Send(query);
         return result;
     }
-
-    [HttpGet("GetUserDomain")]
-    [SimaAuthorize(Permissions.UserDomainGet)]
-    public async Task<Result>? Get([FromQuery] GetUserDomainQuery query)
-    {
-        var result = await _mediator.Send(query);
-        return result;
-    }
+    
 
     [HttpGet("GetUserAggregate/{userId}")]
     [SimaAuthorize(Permissions.GetUserAggregate)]

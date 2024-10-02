@@ -26,10 +26,10 @@ public class ServiceChannelConfiguration : IEntityTypeConfiguration<ServiceChann
         entity.HasOne(d => d.Service).WithMany(p => p.ServiceChanneles)
                 .HasForeignKey(d => d.ServiceId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
-        entity.Property(x => x.ChannelTypeId)
-      .HasConversion(v => v.Value, v => new ChannelTypeId(v));
-        entity.HasOne(d => d.ChannelType).WithMany(p => p.ServiceChanneles)
-                .HasForeignKey(d => d.ChannelTypeId)
+        entity.Property(x => x.ChannelId)
+      .HasConversion(v => v.Value, v => new ChannelId(v));
+        entity.HasOne(d => d.Channel).WithMany(p => p.ServiceChannels)
+                .HasForeignKey(d => d.ChannelId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

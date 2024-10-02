@@ -23,7 +23,8 @@ namespace SIMA.Application.Feaatures.IssueManagement.Issues;
 public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<long>>, ICommandHandler<ModifyIssueCommand, Result<long>>
 , ICommandHandler<DeleteIssueCommand, Result<long>>, ICommandHandler<DeleteIssueCommentCommand, Result<long>>,
   ICommandHandler<CreateIssueCommentCommand, Result<long>>
- , ICommandHandler<IssueRunActionCommand, Result<long>>
+ , ICommandHandler<IssueRunActionCommand, Result<long>>,
+    ICommandHandler<ModifyIssueAssigneeCommand, Result<long>>
 {
 
     private readonly IIssueRepository _repository;
@@ -153,50 +154,25 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     public async Task<Result<long>> Handle(IssueRunActionCommand request, CancellationToken cancellationToken)
     {
 
+        var userId = _simaIdentity.UserId;
+
         var issue = await _repository.GetById(request.IssueId);
 
+        var documents = PrepareDocuments(request.InputDocuments, issue.SourceId, userId);
 
-        //var checkDoc = await _workFlowRepository.CheckDocumentForStep(issue.CurrenStepId.Value);
-        //if (checkDoc)
-        //{
-        //    var doc = _mapper.Map<List<AddDocumentToSPQuery>>(request.InputDocuments);
-        //    foreach (var item in doc)
-        //    {
-        //        item.SourceId = issue.SourceId.ToString();
-        //        item.CreatedBy = _simaIdentity.UserId.ToString();
-        //        //item.MainAggregateId = issue.MainAggregateId.Value.ToString();
-        //    }
-        //   await _issueQueryRepository.AddDocToSp(doc);
-        //}
+        var nextStepModel = PrepareSystemParams(request, issue.SourceId);
 
-        var doc = _mapper.Map<List<AddDocumentToSPQuery>>(request.InputDocuments);
-        foreach (var item in doc)
-        {
-            item.SourceId = issue.SourceId.ToString();
-            item.CreatedBy = _simaIdentity.UserId.ToString();
-        }
-        var nextStepModel = _mapper.Map<GetNextStepQuery>(request);
-        nextStepModel.SystemParams.Add(new InputModel { Key = "IssueId", Value = request.IssueId.ToString() });
-        nextStepModel.SystemParams.Add(new InputModel { Key = "UserId", Value = _simaIdentity.UserId.ToString() });
-        nextStepModel.SystemParams.Add(new InputModel { Key = "CreatedBy", Value = _simaIdentity.UserId.ToString() });
-        nextStepModel.SystemParams.Add(new InputModel { Key = "CompanyId", Value = _simaIdentity.CompanyId.ToString() });
-        nextStepModel.SystemParams.Add(new InputModel { Key = "SourceId", Value = issue.SourceId.ToString() });
+        var inputParams = MapInputParams(request.InputParams);
 
-        var inputParam = request.InputParams?.Select(it => new InputParamQueryModel
-        {
-            Id = it.Id,
-            ParamName = it.ParamName,
-            ParamValue = it.ParamValue
-        }).ToList();
-        var mainAggregateName = Enum.GetName(typeof(MainAggregateEnums),issue.MainAggregateId.Value);
-        await _workFlowQueryRepository.ExecuteSP(request.ProgressId,mainAggregateName ,nextStepModel.SystemParams, inputParam, doc);
+        var mainAggregateName = Enum.GetName(typeof(MainAggregateEnums), issue.MainAggregateId.Value);
+
+        await _workFlowQueryRepository.ExecuteSP(request.ProgressId, mainAggregateName, nextStepModel.SystemParams, inputParams, documents);
+
         var nextStep = await _workFlowQueryRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel);
 
+        AddHistory(userId, issue, nextStep.SourceStateId, nextStep.SourceStepId);
 
-        var arg = _mapper.Map<IssueRunActionArg>(request);
-        arg.ModifiedBy = _simaIdentity.UserId;
-        arg.CurrentStepId = nextStep.SourceStepId;
-        arg.CurrentStateId = nextStep.SourceStateId;
+        #region Comment
 
         if (!string.IsNullOrEmpty(request.Comment))
         {
@@ -204,41 +180,35 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             await issue.AddComment(commentArg);
         }
 
+        #endregion
+
         #region Approval
 
         if (request.StepApprovalOptionId is not null && request.StepApprovalOptionId > 0)
         {
-            var approvalArg = _mapper.Map<CreateIssueApprovalArg>(request);
-            approvalArg.ApprovedBy = _simaIdentity.UserId;
-            approvalArg.CreatedBy = _simaIdentity.UserId;
-            var workFlowActor = await _workFlowActorRepository.GetWorkFlowActorByUser(issue.CurrentWorkflowId.Value);
-            approvalArg.WorkflowActorId = workFlowActor.Id.Value;
-            await issue.AddIssueApproval(approvalArg);
-
+            var addApproval = await AddApprovalOption(userId, request, issue.CurrentWorkflowId.Value);
+            await issue.AddIssueApproval(addApproval);
         }
 
         #endregion
 
-        #region IssueHistory
-        var history = _mapper.Map<CreateIssueHistoryArg>(issue);
-        history.CreatedBy = _simaIdentity.UserId;
-        if (issue.CurrentStateId is not null)
-            history.SourceStateId = issue.CurrentStateId.Value;
-        history.TargetStateId = nextStep.SourceStateId;
-        history.SourceStepId = issue.CurrenStepId.Value;
-        history.TargetStepId = nextStep.SourceStepId;
-        issue.AddHistory(history);
-
-        #endregion
+        var arg = _mapper.Map<IssueRunActionArg>(request);
+        arg.ModifiedBy = userId;
+        arg.CurrentStepId = nextStep.SourceStepId;
+        arg.CurrentStateId = nextStep.SourceStateId;
 
         issue.RunAction(arg);
+
+        if (nextStep.ActionTypeId == (long)ActionTypeEnum.endEvent)
+            issue.Finish(_simaIdentity.UserId);
+
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.IssueId);
     }
     public async Task<Result<long>> Handle(DeleteIssueCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        long userId = _simaIdentity.UserId;entity.Delete(userId);
+        long userId = _simaIdentity.UserId; entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -258,4 +228,70 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.IssueId);
     }
+
+    #region privateMethod
+
+    private List<AddDocumentToSPQuery> PrepareDocuments(IEnumerable<InputDocument> inputDocuments, long sourceId, long userId)
+    {
+        var documents = _mapper.Map<List<AddDocumentToSPQuery>>(inputDocuments);
+        foreach (var document in documents)
+        {
+            document.SourceId = sourceId.ToString();
+            document.CreatedBy = userId.ToString();
+        }
+        return documents;
+    }
+    private GetNextStepQuery PrepareSystemParams(IssueRunActionCommand request, long sourceId)
+    {
+        var nextStepModel = _mapper.Map<GetNextStepQuery>(request);
+        nextStepModel.SystemParams.Add(new InputModel { Key = "IssueId", Value = request.IssueId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "UserId", Value = _simaIdentity.UserId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "CreatedBy", Value = _simaIdentity.UserId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "CompanyId", Value = _simaIdentity.CompanyId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "SourceId", Value = sourceId.ToString() });
+        return nextStepModel;
+    }
+    private List<InputParamQueryModel>? MapInputParams(List<InputParamModel> inputParams)
+    {
+        var paramList = inputParams?.Select(param => new InputParamQueryModel
+        {
+            Id = param.Id,
+            ParamName = param.ParamName,
+            ParamValue = param.ParamValue
+        }).ToList();
+
+        return paramList;
+    }
+    private void AddHistory(long userId, Issue issue, long? sourceStateId, long? sourceStepId)
+    {
+        var history = _mapper.Map<CreateIssueHistoryArg>(issue);
+        history.CreatedBy = userId;
+        if (issue.CurrentStateId is not null)
+            history.SourceStateId = issue.CurrentStateId.Value;
+        history.TargetStateId = sourceStateId;
+        history.SourceStepId = issue.CurrenStepId.Value;
+        history.TargetStepId = sourceStepId;
+        history.PerformerUserId = _simaIdentity.UserId;
+        issue.AddHistory(history);
+    }
+    private async Task<CreateIssueApprovalArg> AddApprovalOption(long userId, IssueRunActionCommand request, long workflowId)
+    {
+        var approvalArg = _mapper.Map<CreateIssueApprovalArg>(request);
+        approvalArg.ApprovedBy = userId;
+        approvalArg.CreatedBy = userId;
+        var workFlowActor = await _workFlowActorRepository.GetWorkFlowActorByUser(workflowId);
+        approvalArg.WorkflowActorId = workFlowActor.Id.Value;
+        return approvalArg;
+    }
+
+    public async Task<Result<long>> Handle(ModifyIssueAssigneeCommand request, CancellationToken cancellationToken)
+    {
+        var issue = await _repository.GetById(request.IssueId);
+        issue.AddAsiggnee(request.UserId);
+        return Result.Ok(request.IssueId);
+    }
+
+    #endregion
+
+
 }

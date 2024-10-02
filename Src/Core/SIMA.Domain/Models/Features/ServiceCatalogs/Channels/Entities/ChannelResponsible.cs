@@ -9,10 +9,11 @@ using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
+using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 
-public class ChannelResponsible
+public class ChannelResponsible :Entity
 {
 
     public ChannelResponsible()

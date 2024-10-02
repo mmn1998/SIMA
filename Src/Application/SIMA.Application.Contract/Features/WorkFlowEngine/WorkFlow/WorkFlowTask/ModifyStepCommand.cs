@@ -14,6 +14,7 @@ namespace SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTas
         public string? DisplayName { get; set; }
         public long? FormId { get; set; }
         public string HasDocument { get; set; }
+        public string? IsAssigneeForced { get; set; }
         public string? UIPropertyBoxTitle { get; set; }
         public List<RequiredDocument>? RequiredDocuments { get; set; }
     }

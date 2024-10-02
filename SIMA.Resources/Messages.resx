@@ -206,6 +206,9 @@
   <data name="ExternalServiceException" xml:space="preserve">
     <value>برقراری ارتباط با سرویس خارجی امکان پذیر نمی باشد</value>
   </data>
+  <data name="FileContentNullError" xml:space="preserve">
+    <value>محتوی فایل خالی است.</value>
+  </data>
   <data name="FileNotFoundError" xml:space="preserve">
     <value>فایل مورد نظر یافت نشد.</value>
     <comment>10044</comment>
@@ -258,6 +261,9 @@
   <data name="IbanIsIncorrectError" xml:space="preserve">
     <value>شماره شبا اشتباه است.</value>
     <comment>10038</comment>
+  </data>
+  <data name="IbanIsNotValid" xml:space="preserve">
+    <value>شماره شبا نامعتبر است</value>
   </data>
   <data name="InvalidUsernameOrPasswordError" xml:space="preserve">
     <value>نام کاربری یا کلمه عبور اشتباه است</value>
@@ -315,6 +321,9 @@
   <data name="NationalCodeIsNotUniqueError" xml:space="preserve">
     <value>کد ملی مورد نظر نا معتبر است.</value>
     <comment>100067</comment>
+  </data>
+  <data name="NationalCodeIsNotValid" xml:space="preserve">
+    <value>کد ملی نامعتبر است</value>
   </data>
   <data name="NewPasswordIsNull" xml:space="preserve">
     <value>لطفا کلمه عبور جدید را وارد نمایید</value>
@@ -417,6 +426,13 @@
     <value>حداقل و حداکثر محدوده انتخاب ش ده با یکدیگر مطابقت ندارند.</value>
     <comment>10047</comment>
   </data>
+  <data name="RedisConnectionError" xml:space="preserve">
+    <value>خطا در برقراری ارتباط.لطفا با پشتیبانی تماس بگیرید.</value>
+    <comment>100068</comment>
+  </data>
+  <data name="RegisterNumberIsNotValid" xml:space="preserve">
+    <value>شناسه ملی نامعتبر است</value>
+  </data>
   <data name="RequiredProp" xml:space="preserve">
     <value>لطفا {0} تکمیل نمایید </value>
   </data>
@@ -453,8 +469,8 @@
   <data name="StepNotAllowedAddApproval" xml:space="preserve">
     <value>برای این گام امکان افزودن گزینه پذیرش وجود ندارد</value>
   </data>
-  <data name="string" xml:space="preserve">
-    <value />
+  <data name="WorkFlowActorNameError" xml:space="preserve">
+    <value>نام بازیگران فرآیند نمیتواند بیشتر از 200 حرف باشد</value>
   </data>
   <data name="TimeIsOverError" xml:space="preserve">
     <value>زمان اقدام به پایان رسید است.</value>
@@ -535,13 +551,22 @@
     <comment>10021</comment>
   </data>
   <data name="WorkFlowCodeIsUniqueException" xml:space="preserve">
-    <value>کد فرایند نمی تواند تکراری باشد  !</value>
+    <value>کد فرایند نمی تواند تکراری باشد!</value>
   </data>
   <data name="WorkFlowNameRequiredException" xml:space="preserve">
-    <value>نام فرایند اجباری است !</value>
+    <value>نام فرایند اجباری است!</value>
   </data>
   <data name="WorkflowNotFoundError" xml:space="preserve">
     <value>جریان کاری مورد نظر یافت نشد.</value>
     <comment>10057</comment>
+  </data>
+  <data name="DateOnlyError" xml:space="preserve">
+    <value>روز شروع نمیتواند بعد از روز پایان باشد.</value>
+  </data>
+  <data name="TimeOnlyError" xml:space="preserve">
+    <value>زمان شروع نمیتواند عقب تر زمان پایان باشد.</value>
+  </data>
+  <data name="QuantityNullError" xml:space="preserve">
+    <value>تعداد نمیتواند خالی باشد.</value>
   </data>
 </root>

@@ -72,7 +72,7 @@ public class Company : Entity
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
         if (await service.IsCompanyParent(arg.ParentId)) throw new SimaResultException(CodeMessges._100022Code, Messages.ParentCompaniesCannotDefinedAsChildError);
     }
     #endregion
@@ -84,26 +84,17 @@ public class Company : Entity
     }
 
     public CompanyId Id { get; private set; }
-
     public string? Name { get; private set; }
-
     public string? Code { get; private set; }
-
     public CompanyId? ParentId { get; private set; }
-
     public long ActiveStatusId { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
     public virtual Company? Parent { get; set; }
 
     private List<Department> _department = new();
-
     public virtual Company Companies { get; set; }
     public ICollection<Department> Departments => _department;
 

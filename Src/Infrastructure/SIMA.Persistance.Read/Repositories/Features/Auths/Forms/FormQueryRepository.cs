@@ -105,6 +105,23 @@ public class FormQueryRepository : IFormQueryRepository
         }
     }
 
+    public async Task<Result<IEnumerable<GetFormQueryResult>>> GetFormByDomainId(long domainId)
+    {
+        var query = @"select 
+                         F.Id
+                        ,F.Name 
+                        ,F.Title  
+                        ,DF.FormId 
+                        ,DF.DomainId 
+                        from Authentication.Form F 
+                        join Authentication.DomainForms DF on F.Id = DF.FormId  
+                        where DF.DomainId  = @domainId and F.ActiveStatusId <> 3 and DF.ActiveStatusId <> 3";
+
+        using var connection = new SqlConnection(_connectionString);
+        var result = await connection.QueryAsync<GetFormQueryResult>(query, new { domainId });
+        return Result.Ok(result);
+    }
+
     public async Task<Result<IEnumerable<GetFormFieldsQueryResult>>> GetAllFormFields(GetAllFormFieldsQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))

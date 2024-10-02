@@ -1,7 +1,7 @@
-﻿using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
-using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
+﻿using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
@@ -12,8 +12,8 @@ public class ServiceAvalibility : Entity
     }
     private ServiceAvalibility(CreateServiceAvalibilityArg arg)
     {
-        Id = new ServiceAvalibilityId(arg.Id);
-        ServiceId = new ServiceId(arg.ServiceId);
+        Id = new(arg.Id);
+        ServiceId = new(arg.ServiceId);
         WeekDay = arg.WeekDay;
         ServiceAvalibilityEndTime = arg.ServiceAvalibilityEndTime;
         ServiceAvalibilityStartTime = arg.ServiceAvalibilityStartTime;
@@ -22,7 +22,7 @@ public class ServiceAvalibility : Entity
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<ServiceAvalibility> Create(CreateServiceAvalibilityArg arg)
+    public static ServiceAvalibility Create(CreateServiceAvalibilityArg arg)
     {
         return new ServiceAvalibility(arg);
     }
@@ -37,4 +37,16 @@ public class ServiceAvalibility : Entity
     public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    public void Delete(long userId)
+    {
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ModifiedBy = userId;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ModifiedBy = userId;
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 }

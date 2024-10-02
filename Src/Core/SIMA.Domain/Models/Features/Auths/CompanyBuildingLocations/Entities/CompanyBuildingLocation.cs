@@ -1,11 +1,11 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Args;
 using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Contracts;
 using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Args;
-using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.Warehouses.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;

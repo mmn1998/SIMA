@@ -1,8 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.Risks;
-using SIMA.Application.Contract.Features.SecurityCommitees.Meetings;
-using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.Risks

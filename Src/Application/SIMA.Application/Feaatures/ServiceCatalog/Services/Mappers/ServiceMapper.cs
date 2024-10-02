@@ -14,12 +14,18 @@ public class ServiceMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => DateOnly.FromDateTime(source.InServiceDate.ToMiladiDate())))
-            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()));
+            .ForMember(dest => dest.ServiceWorkflowBpmn, act => act.MapFrom(source => source.WorkflowFileContent))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            ;
         CreateMap<ModifyServiceCommand, ModifyServiceArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
             .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => DateOnly.FromDateTime(source.InServiceDate.ToMiladiDate())))
-            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()));
+            .ForMember(dest => dest.ServiceWorkflowBpmn, act => act.MapFrom(source => source.WorkflowFileContent))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            ;
 
         CreateMap<long, CreateServiceUserArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
@@ -33,13 +39,13 @@ public class ServiceMapper : Profile
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.ServiceCustomerTypeId, act => act.MapFrom(source => source))
             ;
-        /// TODO ServiceChannel should have ChannelId not ChannelTypeId ??
-        //CreateMap<long, CreateServiceChannelArg>()
-        //    .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-        //    .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-        //    .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
-        //    .ForMember(dest => dest.ChannelTypeId, act => act.MapFrom(source => source))
-        //    ;
+
+        CreateMap<long, CreateServiceChannelArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.ChannelId, act => act.MapFrom(source => source))
+            ;
         CreateMap<long, CreatePreRequisiteServicesArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
@@ -73,6 +79,27 @@ public class ServiceMapper : Profile
         CreateMap<CreateServiceAssignedStaffCommand, CreateServiceAssignedStaffArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            ;
+        CreateMap<CreateServiceArg, CreateServiceRelatedIssueArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.IssueId, act => act.MapFrom(source => source.IssueId))
+            .ForMember(dest => dest.ServiceId, act => act.MapFrom(source => source.Id))
+            ;
+        CreateMap<ModifyServiceArg, CreateServiceRelatedIssueArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.IssueId, act => act.MapFrom(source => source.IssueId))
+            .ForMember(dest => dest.ServiceId, act => act.MapFrom(source => source.Id))
+            ;
+        CreateMap<CreateserviceAvalibilityCommand, CreateServiceAvalibilityArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvalibilityStartTime.ToTimeOnlyFromUnixTimestamp()))
+            .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvalibilityEndTime.ToTimeOnlyFromUnixTimestamp()))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
 

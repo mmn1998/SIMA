@@ -77,29 +77,6 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
             var arg = _mapper.Map<ModifyWorkFlowActorArg>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
             await entity.Modify(arg , _workFlowActorDomainService);
-
-            if(request.RoleId is not null && request.RoleId.Count > 0) 
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorRoleArg>>(request.RoleId);
-                foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
-                entity.AddActorRoles(args , request.Id);
-            }
-
-            if (request.GroupId is not null && request.GroupId.Count > 0)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorGroupArg>>(request.GroupId);
-                foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
-                entity.AddActorGroups(args , request.Id);
-            }
-
-            if (request.UserId is not null && request.UserId.Count > 0)
-            {
-                var args = _mapper.Map<List<CreateWorkFlowActorUserArg>>(request.UserId);
-                foreach (var item in args) item.CreatedBy = _simaIdentity.UserId;
-                entity.AddActorUsers(args, request.Id);
-            }
-
-
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);
         }

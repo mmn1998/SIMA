@@ -3,13 +3,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.IssueManagement.IssuePriorities;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
-using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -21,7 +15,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues;
 
 public class IssueQueryRepository : IIssueQueryRepository
 {
-
     private readonly string _connectionString;
     private readonly ISimaIdentity _simaIdentity;
 
@@ -66,7 +59,7 @@ public class IssueQueryRepository : IIssueQueryRepository
 							join Project.Project project on project.Id = W.ProjectID
        left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
        left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-       join  [Authentication].[Users] U on I.CreatedBy = U.Id
+       join  [Authentication].[Users] U on I.CreatedBy = U.Idq
        join  [Authentication].[Profile] P on P.Id = U.ProfileID
        WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
        and I.ActiveStatusId != 3   and I.SourceId = 0
@@ -359,7 +352,7 @@ public class IssueQueryRepository : IIssueQueryRepository
                     inner  join  [Project].[Progress] P on S.Id = P.SourceId
                     inner   join  [Project].[Step] ST on P.TargetId = ST.Id
                     CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
-                 Where    I.Id = @Id  and  (WA.IsEveryOne = 1 or WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds)
+                    Where    I.Id = @Id  and  (WA.IsEveryOne = 1 or WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds)
                     and I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3
 
                 ----ProgressStoredProcedureParam
@@ -395,8 +388,6 @@ public class IssueQueryRepository : IIssueQueryRepository
 
                                 EXEC [Project].[ReturnApprovalList] @Id";
 
-
-
             using (var multi = await connection.QueryMultipleAsync(query, new { Id = id, userId = userId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
             {
                 response = multi.ReadAsync<GetIssueQueryResult>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
@@ -417,48 +408,245 @@ public class IssueQueryRepository : IIssueQueryRepository
                     }
                 }
             }
-            //var paramList = new List<StoreProcedureParams>();
-            //var groupedResults = response.RelatedProgresses.GroupBy(x => new { x.ProgressId/*, x.ProgressStoreProcedureId */})
-            //    .Select(g => new
-            //    {
-            //        ProgressId = g.Key.ProgressId,
-            //        // ProgressStoreProcedureId = g.Key.ProgressStoreProcedureId
-            //        Items = g.ToList()
-            //    });
-            //foreach (var progress in response.RelatedProgresses)
-            //{
-            //    if (progress.HasStoredProcedure == "1" && !string.IsNullOrEmpty(progress.ProcedureInfo) && progress.ProcedureInfo.Contains(":"))
-            //    {
-            //        var obj = new StoreProcedureParams();
-            //        /// <summary>
-            //        /// splitedinfo[0] is ProgressStoreProcedureId, splitedinfo[1] is Name, splitedinfo[2] is IsSystemParam, splitedinfo[3] is SystemParam and splitedinfo[4] is DisplayName
-            //        /// </summary>
-            //        var splitedinfo = progress.ProcedureInfo.Split(":");
-            //        obj.ProgressStoredProcedureParamId = Convert.ToInt64(splitedinfo[0].ToString());
-            //        obj.Name = splitedinfo[1];
-            //        obj.DisplayName = splitedinfo[4];
-            //        if (splitedinfo[2] == "0")
-            //        {
-            //            paramList.Add(obj);
-            //        }
-            //    }
-            //}
-            //response.RelatedProgresses.ToList().Clear();
-            //response.RelatedProgresses = new();
-            //foreach (var item in groupedResults)
-            //{
-            //    var obj = new GetRelatedProgressQueryResult
-            //    {
-            //        Params = paramList,
-            //        Id = item.Items[0].Id,
-            //        Name = item.Items[0].Name,
-            //        ProgressId = item.ProgressId,
-            //        TargetId = item.Items[0].TargetId,
-            //        TargetName = item.Items[0].TargetName,
-            //        //ProgressStoreProcedureId = item.ProgressStoreProcedureId,
-            //    };
-            //    response.RelatedProgresses.Add(obj);
-            //}
+            response.NullCheck();
+            return response;
+        }
+    }
+    public async Task<GetIssueComponentQueryResult> ComponentIssue(long id, long issueId)
+    {
+        var userId = _simaIdentity.UserId;
+        var response = new GetIssueComponentQueryResult();
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            string query = @"
+                           ------ IssueInformation
+                                     select
+                                       I.Id
+                                       ,I.Code
+                                       ,I.CurrentWorkflowId WorkflowId
+                                       ,W.Name WorkflowName
+                                       ,W.FileContent WorkFlowFileContent
+                                       ,I.MainAggregateId
+                                       ,I.IssuePriorityId
+                                       ,IP.Name IssuePriorityName
+                                       ,I.IssueWeightCategoryId issueWeightId
+                                       ,IWC.Name issueWeightName
+                                       ,IWC.MaxRange Weight
+                                       ,I.CurrentStateId
+                                       ,State.Name CurrentStateName
+                                       ,I.CurrenStepId CurrentStepId
+                                       ,step.Name CurrentStepName
+                                       ,i.DueDate
+                                       ,Step.HasDocument
+                                       ,Step.DisplayName as StepDisplayName
+                                       ,Step.BpmnId CurrentStepBpmnId
+                                     FROM 
+                                     IssueManagement.Issue I 
+                                     INNER JOIN Project.WorkFlow W ON I.CurrentWorkflowId = W.Id
+                                     INNER JOIN IssueManagement.IssuePriority IP ON IP.Id = I.IssuePriorityId
+                                     INNER JOIN IssueManagement.IssueWeightCategory IWC ON IWC.Id = I.IssueWeightCategoryId
+                                     Left Join Project.State State on State.Id = i.CurrentStateId
+                                     left Join Project.Step Step on Step.Id = i.CurrenStepId
+                                     WHERE  I.Id = @issueId AND I.ActiveStatusId <> 3
+                                    
+                                     ------ Comment
+                                    select 
+                                     IC.[Id]
+                                     ,IC.[Comment]
+                                     ,IC.[CreatedAt] CommentDate
+                                     ,IC.[CreatedBy]
+                                     ,U.[Username]
+                                     ,(P.FirstName + ' ' + P.LastName) CreatorFullname
+                                     FROM [IssueManagement].[Issue] I
+                                       join [IssueManagement].[IssueComment] IC on I.Id = IC.IssueId
+                                       join [Authentication].[Users] U on Ic.CreatedBy = U.Id
+                                       join [Authentication].[Profile] P on P.Id = U.ProfileID
+                                    Where I.ActiveStatusId != 3 and I.Id = @issueId
+                                    order by IC.CreatedAt desc
+                                    
+                                  ------ IssueApproval
+                                       select 
+                                              SAO.Id StepApprovalOptionId
+                                              ,IAP.Description
+                                              ,Step2.Name StepName
+                                              ,AO.Name StepApprovalOptionName
+                                              ,Step2.Id StepId
+                                              ,WA.Id ActorId
+                                              ,WA.Name ActorName
+                                              ,(p2.FirstName + ' ' + P2.LastName) CreatedBy
+                                              ,(p3.FirstName + ' ' + P3.LastName) ApprovedBy
+                                              ,IAP.CreatedAt
+                                         from 
+                                          IssueManagement.Issue I 
+                                         INNER JOIN IssueManagement.IssueApproval IAP on IAP.IssueId = I.Id
+                                         INNER join Project.StepApprovalOption SAO on SAO.ApprovalOptionId = IAP.Id
+                                         INNER join Project.ApprovalOption AO on AO.Id = SAO.ApprovalOptionId
+                                         INNER join Project.Step Step2 on Step2.Id = SAO.StepId
+                                         INNER join Project.WorkFlowActorStep WAS on WAS.StepID = Step2.Id
+                                         INNER join Project.WorkFlowActor WA on WA.Id = WAS.WorkFlowActorID
+                                         INNER JOIN Authentication.Users U2 on I.CreatedBy = U2.Id
+                                         INNER JOIN Authentication.Profile P2 on P2.Id = U2.ProfileID
+                                         INNER JOIN Authentication.Users U3 on IAP.ApprovedBy = U3.Id
+                                         INNER JOIN Authentication.Profile P3 on P3.Id = U3.ProfileID
+                                         WHERE I.Id = @issueId AND I.ActiveStatusId <> 3
+                                     ------ Progress
+                                     Select distinct
+                                          P.Id CurrentProgressId
+                                          ,FStep.Id ProgressId
+                                          ,s.id 
+                                          ,s.Name
+                                          ,P.HasStoreProcedure HasStoredProcedure
+                                          ,FStep.Name TargetName
+                                          ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId
+                                          From  [IssueManagement].[Issue] I
+                                          inner join  [Project].[WorkFlow] W on I.CurrentWorkflowId = W.Id
+                                          inner   join  [Project].[Step] S on I.CurrenStepId = S.Id
+                                          join Project.WorkFlowActorStep WS on S.Id = WS.StepID
+                                          join Project.WorkFlowActor WA on WS.WorkFlowActorID = WA.Id
+                                          left join Project.WorkFlowActorGroup AS WG ON WA.Id = WG.WorkFlowActorID 
+                                          left join Project.WorkFlowActorRole AS WR ON WA.Id = WR.WorkFlowActorID 
+                                          left join  Project.WorkFlowActorUser AS WU ON WA.Id = WU.WorkFlowActorID 
+                                          inner  join  [Project].[Progress] P on S.Id = P.SourceId
+                                          inner   join  [Project].[Step] ST on P.TargetId = ST.Id
+                                          CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
+                                          left join  IssueManagement.IssueManager IM on IM.IssueId = I.id
+                                          Where    I.Id = @issueId  and 
+                                                    (( (ISNULL(IsDirectManagerOfIssueCreator,0)=0 and  (WU.UserID=@userId or WR.RoleID IN @RoleIds or WG.GroupID IN @GroupIds) )
+                                                                      or (ISNULL(IsDirectManagerOfIssueCreator,0)=1 and IM.UserId=@userId)))
+                                         and I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3
+                                    
+                                     ------ ProgressStoredProcedureParam
+                                     select
+                                                 PSP.ProgressId
+                                                 ,PSPP.Id ProgressStoredProcedureParamId
+                                                 ,PSPP.Name 
+                                                 ,PSPP.DisplayName
+                                                 ,PSPP.JsonFormat
+                                                 ,PSPP.BoundFormat
+                                                 ,UI.IsMultiSelect
+                                                 ,UI.IsSingleSelect
+                                                 ,UI.HasInputInEachRecord
+                                                 ,UI.Name UiInputElementName
+                                                 ,UI.Id UiInputElementId
+                                                 ,PSPP.ApiNameForDataBounding
+                                                 ,PSPP.StoredProcedureForDataBounding
+                                                 ,PSPP.[TextBoundName]
+                                                 ,PSPP.[ValueBoundName]
+                                    	         ,AMA.Name ApiMethodAction
+                                                 From  
+                                                         [Project].ProgressStoreProcedure PSP 
+                                                         inner join Project.ProgressStoreProcedureParam PSPP on PSP.Id = pspp.ProgressStoreProcedureId
+                                                         inner join Basic.UIInputElement  UI on UI.Id = pspp.UiInputElementId 
+                                    			left join Basic.ApiMethodAction AMA on AMA.Id = PSPP.ApiMethodActionId
+                                    
+                                                 		where Psp.ProgressId In
+                                                 		(
+                                                 		SELECT FStep.Id 
+                                                         FROM  
+                                    			 [IssueManagement].[Issue] I
+                                    			 INNER JOIN [Project].[WorkFlow] W ON I.CurrentWorkflowId = W.Id
+                                    			 INNER JOIN [Project].[Step] S ON I.CurrenStepId = S.Id
+                                    			 CROSS APPLY [Project].[ReturnNextStepN](S.Id, W.Id) FStep
+                                    				 WHERE 
+                                    				     I.Id = @issueId
+                                    				 UNION 
+                                    				 SELECT P.Id
+                                    				 FROM  
+                                    				     [IssueManagement].[Issue] I
+                                    				     INNER JOIN [Project].[WorkFlow] W ON I.CurrentWorkflowId = W.Id
+                                    				     INNER JOIN [Project].[Step] S ON I.CurrenStepId = S.Id
+                                    				     INNER JOIN [Project].[Progress] P ON P.SourceId = S.Id
+                                    				 WHERE 
+                                    				     I.Id = @issueId
+                                                 		)
+                                    
+                                     ------ StepRequiredDocument
+                                      SELECT 
+                                            dt.Id DocumentTypeId,
+                                            dt.Name DocumentTypeName,
+                                            srd.Count
+                                        FROM  [IssueManagement].[Issue] I
+                                        JOIN  [Project].[Step] S on I.CurrenStepId = S.Id
+                                        left join Project.StepRequiredDocument srd on srd.StepId = s.Id
+                                        left join DMS.DocumentType dt on dt.Id =srd.DocumentTypeId
+                                      Where I.ActiveStatusId != 3 and I.Id =  @issueId and srd.ActiveStatusID <>3
+                                    
+                                     ------ ApprovalOption
+                                      EXEC [Project].[ReturnApprovalList] @issueId";
+            using (var multi = await connection.QueryMultipleAsync(query, new { issueId = issueId, userId = _simaIdentity.UserId, RoleIds = _simaIdentity.RoleIds, GroupIds = _simaIdentity.GroupId }))
+            {
+                response.IssueInfo = multi.ReadAsync<IssueInfo>().GetAwaiter().GetResult()?.FirstOrDefault();
+                response.IssueInfo.IssueCommentList = await multi.ReadAsync<GetIssueCommentQueryResult>();
+                response.IssueApprovalList = (await multi.ReadAsync<IssueApprovalList>())?.ToList();
+                response.RelatedProgressList = (await multi.ReadAsync<GetRelatedProgressQueryResult>())?.ToList();
+                var storeProcedureParams = (await multi.ReadAsync<StoreProcedureParams>())?.ToList();
+                var groupedStoreProcedureParams = storeProcedureParams?.GroupBy(x => x.Name);
+
+                response.StepRequiredDocumentList = (await multi.ReadAsync<GetStepRequiredDocumentQueryResult>())?.ToList();
+                response.ApprovalOptionList = (await multi.ReadAsync<GetApprovalOptionQueryResult>())?.ToList();
+
+                if (response.RelatedProgressList is not null)
+                {
+                    response.FormParams = groupedStoreProcedureParams?.Select(x => new StoreProcedureParams
+                    {
+                        Name = x.Key,
+                        ProgressStoredProcedureParamId = x.First().ProgressStoredProcedureParamId,
+                        StoredProcedureForDataBounding = x.First().StoredProcedureForDataBounding,
+                        ApiNameForDataBounding = x.First().ApiNameForDataBounding?.Replace("{Id}", id.ToString()),
+                        ApiMethodAction = x.First().ApiMethodAction,
+                        DisplayName = x.First().DisplayName,
+                        BoundFormat = x.First().BoundFormat,
+                        HasInputInEachRecord = x.First().HasInputInEachRecord,
+                        IsMultiSelect = x.First().IsMultiSelect,
+                        IsSingleSelect = x.First().IsSingleSelect,
+                        JsonFormat = x.First().JsonFormat,
+                        ProgressId = x.First().ProgressId,
+                        UiInputElementId = x.First().UiInputElementId,
+                        UiInputElementName = x.First().UiInputElementName,
+                        TextBoundName = x.First().TextBoundName,
+                        ValueBoundName = x.First().ValueBoundName,
+                        DeserializedBoundFormat = !string.IsNullOrEmpty(x.First().BoundFormat) ? JsonConvert.DeserializeObject<IEnumerable<BoundFormatDeserialized>>(x.First().BoundFormat) : null
+                    });
+                    foreach (var item in response.RelatedProgressList)
+                    {
+                        if (storeProcedureParams is not null)
+                        {
+                            var selectedParams = storeProcedureParams.Where(x => x.ProgressId == item.ProgressId).ToList();
+                            var currentProject = storeProcedureParams.Where(x => x.ProgressId == item.CurrentProgressId).ToList();
+                            if (selectedParams.Count != 0)
+                            {
+                                item.Params = selectedParams;
+                            }
+                            if (currentProject.Count != 0 && selectedParams.Count == 0)
+                            {
+                                item.Params = currentProject;
+                            }
+                            foreach (var param in item.Params)
+                            {
+                                if (!string.IsNullOrEmpty(param.BoundFormat))
+                                    param.DeserializedBoundFormat = JsonConvert.DeserializeObject<IEnumerable<BoundFormatDeserialized>>(param.BoundFormat);
+                            }
+                        }
+                    }
+                }
+
+                ///// در تاریخ 10 شهریور 1403، تیم تحلیل نظرش عوض شد و علی رغم داشتن متدی برای دریافت اطلاعات درخواست تدارکات و خرید برای کسی که ثبت کرده، دوباره این قسمت ریفکتور میشود
+                //#region DisableUploadForCreator
+                //if (!string.IsNullOrEmpty(response.IsEditable))
+                //{
+                //    if (string.Equals("1", response.IsEditable, StringComparison.InvariantCultureIgnoreCase))
+                //    {
+                //        response.IssueInfo.HasDocument = "0";
+                //        response.CandidateSupplierList = Enumerable.Empty<CandidatedSupplierList>();
+                //        response.FormParams = Enumerable.Empty<StoreProcedureParams>();
+                //        response.RelatedProgressList = Enumerable.Empty<GetRelatedProgressQueryResult>();
+                //    }
+                //}
+                //#endregion
+                ///// 
+
+            }
             response.NullCheck();
             return response;
         }
@@ -584,6 +772,22 @@ public class IssueQueryRepository : IIssueQueryRepository
         {
             await connection.OpenAsync();
 
+        }
+    }
+
+    public async Task<List<long>> GetIssueManager(long userId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var query = @"
+                        select UU.Id from Authentication.Users U
+                        Join Organization.Staff S on U.ProfileId = S.ProfileId and S.ActiveStatusId != 3
+                        join Organization.Staff SS on S.ManagerId = SS.Id and SS.ActiveStatusId != 3
+                        join Authentication.Users UU on SS.ProfileId = UU.ProfileID  and UU.ActiveStatusId != 3
+                        where U.Id = @userId and  U.ActiveStatusId != 3";
+            var result = await connection.QueryAsync<long>(query, new { userId });
+            return result.ToList();
         }
     }
 }

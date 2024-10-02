@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities;
-using SIMA.Domain.Models.Features.BCP.NewFolder.Entities;
+using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanVersionings.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios
 {

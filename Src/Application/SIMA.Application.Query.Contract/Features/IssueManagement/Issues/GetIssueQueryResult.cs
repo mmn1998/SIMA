@@ -34,7 +34,7 @@ public class GetIssueQueryResult
     public string? HasDocument { get; set; }
     public long ActiveStatusId { get; set; }
     [JsonIgnore]
-    public DateTime DueDate { get; set; }
+    public DateTime? DueDate { get; set; }
     public string? DueDatePersian => DateHelper.ToPersianDateTime(DueDate);
     public string? WorkFlowFileContent { get; set; }
     [JsonIgnore]

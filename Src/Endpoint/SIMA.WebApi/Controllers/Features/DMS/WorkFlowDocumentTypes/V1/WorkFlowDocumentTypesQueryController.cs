@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.DMS.WorkFlowDocumentTypes;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 

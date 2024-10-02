@@ -2,12 +2,9 @@
 using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Gender;
 using SIMA.Application.Query.Contract.Features.Auths.Groups;
-using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
-using SIMA.Resources;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Groups;
 
@@ -97,63 +94,92 @@ public class GroupQueryRepository : IGroupQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             var query = $@"
-                       SELECT
-                           G.[ID] Id
-                          ,G.[Name]
-                          ,G.[Code]
-                          ,a.ID ActiveStatusId
-                          ,a.Name ActiveStatus
-                      FROM [Authentication].[Groups] G
-                            join Basic.ActiveStatus a
-                            on G.ActiveStatusId = a.ID
-                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3
-                            GROUP BY G.ID,G.Name,G.Code,a.ID ,a.Name; 
+                    SELECT
+                        G.[ID] Id
+                       ,G.[Name]
+                       ,G.[Code]
+                       ,a.ID ActiveStatusId
+                       ,a.Name ActiveStatus
+                   FROM [Authentication].[Groups] G
+                         join Basic.ActiveStatus a
+                         on G.ActiveStatusId = a.ID
+                         WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3
+                         GROUP BY G.ID,G.Name,G.Code,a.ID ,a.Name; 
 
-                            SELECT DISTINCT D.Name as DomainName, D.ID as DomainId, P.Name as PermissionName, P.ID as PermissionId
-                            FROM [Authentication].[Groups] G
-                            INNER JOIN [Authentication].[GroupPermission] GP on GP.GroupID = G.ID
-                            INNER JOIN [Authentication].[Permission] P on P.ID = GP.PermissionID
-                            INNER JOIN [Authentication].[Domain] D on D.ID = P.DomainID
-                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3 and GP.[ActiveStatusID] <> 3
-                            GROUP BY D.Name, D.ID, P.Name, P.ID;
+                        Select 
+                         F.Id  FormId
+                        ,F.Name FormName 
+                           ,F.Title FormTitle
+                        ,D.Id DomainId
+                        ,D.Name DomainName 
+                        from Authentication.Groups G
+                        join Authentication.FormGroup FG on FG.GroupId = G.Id
+                        join Authentication.Form F on F.Id = FG.FormId 
+                        join Authentication.DomainForms DF on F.Id  = DF.FormId
+                        join Authentication.Domain D on DF.DomainId = D.Id
+                     where G.ID = @GroupId and FG.ActiveStatusId <> 3
 
-                            SELECT DISTINCT U.ID as UserId, (P.FirstName + ' ' + p.LastName) as FullName, P.NationalID as NationalCode
-                            FROM [Authentication].[Groups] G
-                            INNER JOIN [Authentication].[UserGroup] UG on UG.GroupID = G.ID
-                            INNER JOIN [Authentication].[Users] U on U.ID = UG.UserID
-                            INNER JOIN [Authentication].[Profile] P on P.ID = U.ProfileID
-                            WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3 and UG.[ActiveStatusID] <> 3";
+                         SELECT DISTINCT U.ID as UserId, (P.FirstName + ' ' + p.LastName) as FullName, P.NationalID as NationalCode
+                         FROM [Authentication].[Groups] G
+                         INNER JOIN [Authentication].[UserGroup] UG on UG.GroupID = G.ID
+                         INNER JOIN [Authentication].[Users] U on U.ID = UG.UserID
+                         INNER JOIN [Authentication].[Profile] P on P.ID = U.ProfileID
+                         WHERE G.ID = @GroupId and G.[ActiveStatusID] <> 3 and UG.[ActiveStatusID] <> 3
+
+
+                         Select 
+                          G.Id GroupId
+                         ,FP.FormId FormId 
+                         ,P.Name PermissionName 
+                         ,P.Id PermissionId
+                         from Authentication.Groups G
+                         join Authentication.GroupPermission GP on GP.GroupId = G.Id and GP.ActiveStatusId <>3
+                         join Authentication.FormPermission FP on FP.PermissionId= GP.PermissionId and FP.ActiveStatusId <>3
+                         join Authentication.Permission P on GP.PermissionId = P.Id and P.ActiveStatusId <>3
+                         where GP.GroupId = @groupId ";
+
             using (var multi = await connection.QueryMultipleAsync(query, new { GroupId = groupId }))
             {
                 response = multi.ReadAsync<GetGroupAggregateResult>().GetAwaiter().GetResult().Single();
-                response.GroupPermissions = multi.ReadAsync<GetGroupPermissionResultForAggregate>().GetAwaiter().GetResult().ToList();
+                var formGroups = multi.ReadAsync<GetFormGroupQuery>().GetAwaiter().GetResult().ToList();
                 response.UsrGroups = multi.ReadAsync<GetUserGroupResultForAggregate>().GetAwaiter().GetResult().ToList();
+                var groupPermission = multi.ReadAsync<GetGroupPermissionQueryResult>().GetAwaiter().GetResult().ToList();
+
+
+                var formPermission = formGroups.Select(form => new GetGroupFormPermissions
+                {
+                    Form = form,
+                    Permissions = groupPermission.Where(p => p.FormId == form.FormId).ToList()
+                }).ToList();
+
+                response.FormPermissions = formPermission;
+
             }
         }
         return response;
     }
-    public async Task<GetGroupPermissionQueryResult> GetGroupPermission(long groupPermissionId)
+    public async Task<Result<List<GetGroupPermissionQueryResult>>> GetGroupPermission(long formId , long groupId)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             string query = @"
-                           SELECT DISTINCT
-                           	   g.[Id]
-                              ,g.[GroupId]
-                              ,g.[PermissionId]
-                              ,a.ID ActiveStatusId
-                              ,a.Name ActiveStatus
-                             FROM [Authentication].[GroupPermission] g
-                              join Basic.ActiveStatus a
-                                 on g.ActiveStatusId = a.ID
-                               WHERE  g.Id = @Id
+                           Select 
+                             G.Id GroupId
+                            ,F.Id FormId 
+                            ,F.Name FormName 
+                            ,F.Title FormTitle
+                            ,P.Name PermissionName 
+                            ,P.Id PermissionId
+                            from Authentication.Groups G
+                            join Authentication.GroupPermission GP on GP.GroupId = G.Id and GP.ActiveStatusId <>3
+                            join Authentication.FormPermission FP on FP.PermissionId= GP.PermissionId and FP.ActiveStatusId <>3
+                            join Authentication.Permission P on GP.PermissionId = P.Id and P.ActiveStatusId <>3
+                            join Authentication.Form F on FP.FormId = F.Id and F.ActiveStatusId <>3
+                            where FP.FormId = @formId and GP.GroupId = @groupId 
 ";
-            var result = await connection.QueryFirstOrDefaultAsync<GetGroupPermissionQueryResult>(query, new { Id = groupPermissionId });
-            result.NullCheck();
-            if (result.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100015Code, Messages.GroupMemberShipIsExpiredError);
-            if (result.ActiveStatusId == 2 || result.ActiveStatusId == 4) throw new SimaResultException(CodeMessges._100016Code, Messages.GroupMemberShipIsDeactiveError);
-            return result;
+            var result = await connection.QueryAsync<GetGroupPermissionQueryResult>(query, new { formId , groupId });
+            return Result.Ok(result.ToList());
         }
     }
     public async Task<GetUserGroupQueryResult> GetGroupUser(long userGroupId)

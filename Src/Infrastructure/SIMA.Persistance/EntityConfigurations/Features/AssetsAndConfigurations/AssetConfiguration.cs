@@ -6,8 +6,8 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.OwnershipTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Suppliers.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Warehouses.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 

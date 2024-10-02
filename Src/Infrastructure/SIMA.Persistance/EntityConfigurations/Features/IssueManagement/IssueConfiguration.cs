@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 
@@ -25,6 +26,7 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
                     .IsRowVersion()
                     .IsConcurrencyToken();
         entity.Property(e => e.Description).IsUnicode();
+        entity.Property(e => e.IsFinished).HasMaxLength(1).IsFixedLength();
         entity.Property(e => e.Code)
                     .HasMaxLength(20).IsUnicode();
         entity.HasIndex(e => e.Code).IsUnique();
@@ -62,6 +64,14 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
        .HasConversion(
         v => v.Value,
         v => new IssueWeightCategoryId(v));
+        entity.Property(x => x.AssigneeId)
+       .HasConversion(
+        v => v.Value,
+        v => new UserId(v));
+        entity.Property(x => x.OwnerUserId)
+      .HasConversion(
+       v => v.Value,
+       v => new UserId(v));
         entity.HasOne(d => d.IssueWeightCategory).WithMany(p => p.Issues)
                 .HasForeignKey(d => d.IssueWeightCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
@@ -77,5 +87,6 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
         entity.HasOne(x => x.MainAggregate)
             .WithMany(p => p.Issues)
             .HasForeignKey(x => x.MainAggregateId);
+        
     }
 }

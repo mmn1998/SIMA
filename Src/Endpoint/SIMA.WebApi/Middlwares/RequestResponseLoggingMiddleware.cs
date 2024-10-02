@@ -15,7 +15,7 @@ public class RequestResponseLoggingMiddleware
     public async Task Invoke(HttpContext context)
     {
 
-
+        
         if (context.Request.Method == "POST" || context.Request.Method == "PUT" || context.Request.Method == "DELETE")
         {
             // Log additional information as needed
@@ -61,7 +61,6 @@ public class RequestResponseLoggingMiddleware
         _logger.LogInformation($"Response {context.Request.Method}: {context.Request.Path}, Status Code: {response.StatusCode}, Body: {responseBody}");
     }
 }
-
 // Extension method used to add the middleware to the HTTP request pipeline
 public static class RequestResponseLoggingMiddlewareExtensions
 {

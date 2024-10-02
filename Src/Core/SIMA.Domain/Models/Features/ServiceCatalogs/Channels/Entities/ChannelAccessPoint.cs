@@ -1,11 +1,12 @@
 ﻿
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 
-public class ChannelAccessPoint
+public class ChannelAccessPoint : Entity
 {
     public ChannelAccessPoint()
     {

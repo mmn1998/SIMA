@@ -1,6 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 
@@ -19,7 +21,7 @@ public class ServiceRelatedIssue : Entity
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<ServiceRelatedIssue> Create(CreateServiceRelatedIssueArg arg)
+    public static ServiceRelatedIssue Create(CreateServiceRelatedIssueArg arg)
     {
         return new ServiceRelatedIssue(arg);
     }
@@ -33,4 +35,16 @@ public class ServiceRelatedIssue : Entity
     public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    public void Delete(long userId)
+    {
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ModifiedBy = userId;
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ModifiedBy = userId;
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 }

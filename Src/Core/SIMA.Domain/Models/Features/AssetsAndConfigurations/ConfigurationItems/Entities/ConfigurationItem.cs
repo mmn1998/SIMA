@@ -9,8 +9,9 @@ using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
+using SIMA.Domain.Models.Features.Auths.Suppliers.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -103,4 +104,6 @@ public class ConfigurationItem : Entity, IAggregateRoot
 
     private List<ServiceConfigurationItem> _serviceConfigurationItems = new();
     public ICollection<ServiceConfigurationItem> ServiceConfigurationItems => _serviceConfigurationItems;
+    private List<CriticalActivityConfigurationItem> _criticalActivityConfigurationItems = new();
+    public ICollection<CriticalActivityConfigurationItem> CriticalActivityConfigurationItems => _criticalActivityConfigurationItems;
 }

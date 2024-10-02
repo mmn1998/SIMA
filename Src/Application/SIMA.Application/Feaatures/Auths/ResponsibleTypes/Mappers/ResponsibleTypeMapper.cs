@@ -17,6 +17,7 @@ public class ResponsibleTypeMapper : Profile
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()));
 
         CreateMap<ModifyResponsibleTypeCommands, ModifyResponsibleTypeArg>()
+            .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => (int)ActiveStatusEnum.Active))
             .ForMember(x => x.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTime.UtcNow.ToString())));
     }
 }

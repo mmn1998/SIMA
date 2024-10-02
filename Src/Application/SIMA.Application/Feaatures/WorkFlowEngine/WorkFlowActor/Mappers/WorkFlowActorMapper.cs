@@ -39,7 +39,11 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowActor.Mappers
                 //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
                 .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
                 .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
-            ;
+            CreateMap<long, WorkflowActorEmployeeArg>()
+                .ForMember(dest => dest.EmployeeId, act => act.MapFrom(source => source))
+                //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
+                .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+                .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
 
         }
     }

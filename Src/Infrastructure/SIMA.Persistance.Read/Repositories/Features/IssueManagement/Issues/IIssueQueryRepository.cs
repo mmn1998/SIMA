@@ -16,4 +16,6 @@ public interface IIssueQueryRepository : IQueryRepository
     Task<List<GetCasesByWorkflowIdQueryResult>> GetCasesByWorkflowId(long workflowId);
     Task AddDocToSp(List<AddDocumentToSPQuery> docs);
     Task UpdateDocuments(List<long> documentIds, long issueId, long currrentWorkflowId);
+    Task<List<long>> GetIssueManager(long userId);
+    Task<GetIssueComponentQueryResult> ComponentIssue(long id, long issueId);
 }

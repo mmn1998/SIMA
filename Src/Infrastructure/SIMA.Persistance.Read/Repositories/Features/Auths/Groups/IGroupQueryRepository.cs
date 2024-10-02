@@ -9,7 +9,7 @@ public interface IGroupQueryRepository : IQueryRepository
 {
     Task<GetGroupQueryResult> FindById(long id);
     Task<Result<IEnumerable<GetGroupQueryResult>>> GetAll(GetAllGroupQuery? baseRequest = null);
-    Task<GetGroupPermissionQueryResult> GetGroupPermission(long groupPermissionId);
+    Task<Result<List<GetGroupPermissionQueryResult>>> GetGroupPermission(long formId, long groupId);
     Task<GetUserGroupQueryResult> GetGroupUser(long userGroupId);
     Task<GetGroupAggregateResult> GetGroupAggregate(long groupId);
 }

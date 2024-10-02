@@ -234,6 +234,15 @@
   <data name="100067Code" xml:space="preserve">
     <value>100067</value>
   </data>
+  <data name="100068Code" xml:space="preserve">
+    <value>100068</value>
+  </data>
+  <data name="100069Code" xml:space="preserve">
+    <value>100069</value>
+  </data>
+  <data name="100070Code" xml:space="preserve">
+    <value>100070</value>
+  </data>
   <data name="200Code" xml:space="preserve">
     <value>200</value>
   </data>
@@ -257,5 +266,8 @@
   </data>
   <data name="PostalCodeRegex" xml:space="preserve">
     <value>\b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b</value>
+  </data>
+  <data name="100071Code" xml:space="preserve">
+    <value>100071</value>
   </data>
 </root>

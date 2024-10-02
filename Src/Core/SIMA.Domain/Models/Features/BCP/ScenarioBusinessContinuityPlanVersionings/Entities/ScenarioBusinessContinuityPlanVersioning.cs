@@ -9,7 +9,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 
-namespace SIMA.Domain.Models.Features.BCP.NewFolder.Entities
+namespace SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanVersionings.Entities
 {
     public class ScenarioBusinessContinuityPlanVersioning : Entity
     {

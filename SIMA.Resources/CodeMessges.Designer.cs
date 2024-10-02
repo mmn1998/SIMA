@@ -412,6 +412,42 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 100068.
+        /// </summary>
+        public static string _100068Code {
+            get {
+                return ResourceManager.GetString("100068Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100069.
+        /// </summary>
+        public static string _100069Code {
+            get {
+                return ResourceManager.GetString("100069Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100070.
+        /// </summary>
+        public static string _100070Code {
+            get {
+                return ResourceManager.GetString("100070Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100071.
+        /// </summary>
+        public static string _100071Code {
+            get {
+                return ResourceManager.GetString("100071Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 200.
         /// </summary>
         public static string _200Code {

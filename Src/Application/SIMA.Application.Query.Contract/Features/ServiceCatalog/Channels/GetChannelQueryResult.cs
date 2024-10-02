@@ -20,27 +20,23 @@ public class GetChannelQueryResult
 }
 public class GetChannelResponsibleQuery
 {
-    public long ChannelId { get; set; }
     public long ResponsibleTypeId { get; set; }
     public string? ResponsibleTypeName { get; set; }
     public long ResponsibleId { get; set; }
-    public string? ResponsibleFullName { get; set; }
+    public string? Responsible { get; set; }
 }
 public class GetProductChannelQuery
 {
-    public long ChannelId { get; set; }
     public long ProductId { get; set; }
     public string? ProductName { get; set; }
 }
 public class GetChannelUserTypeQuery
 {
-    public long ChannelId { get; set; }
     public long UserTypeId { get; set; }
     public string? UserTypeName { get; set; }
 }
 public class GetChannelAccessPointQuery
 {
-    public long ChannelId { get; set; }
     public string? IpAddress { get; set; }
     public string? Port { get; set; }
 }

@@ -25,7 +25,9 @@ public class LogisticCartablesGetAllQueryResult
     public string CreateFullName => $"{FirstName} {LastName}";
     public DateTime CreatedAt { get; set; }
     public string? CreatedAtPersian => DateHelper.ToPersianDateTime(CreatedAt);
-
+    public string? IsEditable { get; set; }
+    public long? OwnerUserId { get; set; }
+    public string? OwnerUser { get; set; }
 }
 
 

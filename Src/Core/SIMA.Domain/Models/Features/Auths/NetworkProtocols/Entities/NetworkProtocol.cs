@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.NetworkProtocols.Args;
+﻿using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Entities;
+using SIMA.Domain.Models.Features.Auths.NetworkProtocols.Args;
 using SIMA.Domain.Models.Features.Auths.NetworkProtocols.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Framework.Common.Helper;
@@ -30,4 +31,6 @@ public class NetworkProtocol : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<AccessRequest> _accessRequests = new();
+    public ICollection<AccessRequest> AccessRequests => _accessRequests;
 }

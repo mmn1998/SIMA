@@ -17,10 +17,10 @@ public interface IUserQueryRepository : IQueryRepository
     Task<GetProfileByProfileIdQueryResult> GetProfileByProfileId(long profileId);
     Task<long> GetProfileIdyUserId(long userId);
     Task<GetUserRoleQueryResult> GetUserRole(long userRoleId);
-    Task<GetUserPermissionQueryResult> GetUserPermission(long userPermissionId);
+    Task<Result<List<GetUserPermissionQueryResult>>> GetUserPermission(long userId, long formId);
     Task<GetUserLocationQueryResult> GetUserLocation(long userLocationId);
-    Task<GetUserDomainQueryResult> GetUserDomain(long userDomainId);
     Task<GetUserAggregateQueryResult> GetUserAggreagate(long userId);
     Task<bool> IsCompanyMatchPersonCompany(long companyId, long profileId);
+    Task<List<long>> GetUserPermissonByFormId(long formId, long userId);
 
 }

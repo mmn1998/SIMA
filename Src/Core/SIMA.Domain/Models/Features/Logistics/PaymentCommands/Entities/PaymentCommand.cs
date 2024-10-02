@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
+using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.PaymentCommands.ValueObjects;
 using SIMA.Framework.Core.Entities;
 
@@ -8,9 +9,8 @@ namespace SIMA.Domain.Models.Features.Logistics.PaymentCommands.Entities;
 public class PaymentCommand : Entity, IAggregateRoot
 {
     public PaymentCommandId Id { get; private set; }
-    public LogisticsRequestId LogisticsRequestId { get; private set; }
-    public virtual LogisticsRequest LogisticsRequest { get; private set; }
-
+    public OrderingId OrderingId { get; private set; }
+    public virtual Ordering Ordering { get; private set; }
     public DateTime CommandDate { get; private set; }
     public string? CommandDescription { get; private set; }
     public string? IsPrePayment { get; private set; }

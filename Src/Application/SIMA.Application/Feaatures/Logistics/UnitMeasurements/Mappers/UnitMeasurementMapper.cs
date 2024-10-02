@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.Logistics.UnitMeasurements;
-using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Args;
+using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 

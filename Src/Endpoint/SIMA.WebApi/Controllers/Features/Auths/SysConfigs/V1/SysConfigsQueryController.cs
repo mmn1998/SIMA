@@ -20,7 +20,7 @@ public class SysConfigsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    [SimaAuthorize(Permissions.GenderGet)]
+    [SimaAuthorize(Permissions.SysConfigsGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetSysConfigQuery { Id = id };
@@ -29,7 +29,7 @@ public class SysConfigsQueryController : ControllerBase
     }
 
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.GenderGetAll)]
+    [SimaAuthorize(Permissions.SysConfigsGetAll)]
     public async Task<Result> Get([FromQuery] BaseRequest request)
     {
         var query = new GetAllSysConfigQuery { Request = request };

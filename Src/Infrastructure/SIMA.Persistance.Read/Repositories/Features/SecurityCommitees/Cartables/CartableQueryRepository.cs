@@ -34,8 +34,8 @@ public class CartableQueryRepository : ICartableQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            
-                string queryCount = $@"  WITH Query as(
+            //TODO Hossein Mahmoud added ) at the end of count query and (ISNULL(wa.IsActorManager, '0') = '1' OR ISNULL(S.IsAssigneeForced, '0') = 0 OR (I.AssigneeActor Is Not Null And I.AssigneeActor = WA.Id)) ,s.IsAssigneeForced ,wa.IsActorManager
+            string queryCount = $@"  WITH Query as(
 						  SELECT  
  M.Id, M.Code,M.Description,
  I.Id IssueId,I.Code IssueCode,I.[CurrentWorkflowId] WorkflowId
@@ -45,6 +45,8 @@ public class CartableQueryRepository : ICartableQueryRepository
 ,ST.Name currentStateName
 ,S.id currentStepId
 ,S.Name currentStepName -- Button for Detail
+,s.IsAssigneeForced
+,wa.IsActorManager
 ,I.summery,I.description IssueDescription
 ,P.[FirstName] as FirstName
 ,P.[LastName] as LastName
@@ -68,7 +70,7 @@ join  [Authentication].[Users] U on I.CreatedBy = U.Id
 join  [Authentication].[Profile] P on P.Id = U.ProfileID
                           
 WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-and I.ActiveStatusId != 3 and M.ActiveStatusId != 3 and W.ActiveStatusId != 3
+and I.ActiveStatusId != 3 and M.ActiveStatusId != 3 and W.ActiveStatusId != 3) and (ISNULL(wa.IsActorManager, '0') = '1' OR ISNULL(S.IsAssigneeForced, '0') = 0 OR (I.AssigneeActor Is Not Null And I.AssigneeActor = WA.Id)))
 								SELECT Count(*) FROM Query
 								 /**where**/
 								 
@@ -83,6 +85,8 @@ and I.ActiveStatusId != 3 and M.ActiveStatusId != 3 and W.ActiveStatusId != 3
 ,ST.Name currentStateName
 ,S.id currentStepId
 ,S.Name currentStepName -- Button for Detail
+,s.IsAssigneeForced
+,wa.IsActorManager
 ,I.summery,I.description IssueDescription
 ,P.[FirstName] as FirstName
 ,P.[LastName] as LastName
@@ -106,8 +110,8 @@ join  [Authentication].[Users] U on I.CreatedBy = U.Id
 join  [Authentication].[Profile] P on P.Id = U.ProfileID
                           
 WHERE  ((WR.RoleID IN @roleIds or WG.GroupID IN @groupIds or  WU.UserID=@userId)
-and I.ActiveStatusId != 3 and M.ActiveStatusId != 3 and W.ActiveStatusId != 3
-							)
+and I.ActiveStatusId != 3 and M.ActiveStatusId != 3 and W.ActiveStatusId != 3 and (ISNULL(wa.IsActorManager, '0') = '1' OR ISNULL(S.IsAssigneeForced, '0') = 0 OR (I.AssigneeActor Is Not Null And I.AssigneeActor = WA.Id))
+							))
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
@@ -223,6 +227,8 @@ Where M.ActiveStatusId != 3 and I.ActiveStatusId != 3 and W.ActiveStatusId != 3 
 
          FStep.Id ProgressId
          ,s.id 
+         ,s.IsAssigneeForced
+         ,wa.IsActorManager
          ,s.Name 
          ,FStep.Name TargetName
          ,case when FStep.TargetId = 0 then ST.Id else FStep.TargetId end as TargetId
@@ -238,7 +244,7 @@ Where M.ActiveStatusId != 3 and I.ActiveStatusId != 3 and W.ActiveStatusId != 3 
          inner   join  [Project].[Step] ST on P.TargetId = ST.Id
          CROSS APPLY [Project].[ReturnNextStepN]   (s.id,w.Id) FStep
          Where    I.Id = @IssueId and  (WU.UserID=@userId or WR.RoleId in @RoleIds or WG.GroupId in @GroupIds) and
-         I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3 and M.ActiveStatusId <> 3 "";
+         I.ActiveStatusId <> 3 and P.ActiveStatusId <> 3 and S.ActiveStatusId <> 3 and ST.ActiveStatusId <> 3 and M.ActiveStatusId <> 3 and (ISNULL(wa.IsActorManager, '0') = '1' OR ISNULL(S.IsAssigneeForced, '0') = 0 OR (I.AssigneeActor Is Not Null And I.AssigneeActor = WA.Id)) "";
     "
         ;
         using (var connection = new SqlConnection(_connectionString))

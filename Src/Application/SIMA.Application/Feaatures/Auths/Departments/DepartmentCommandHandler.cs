@@ -30,7 +30,7 @@ public class DepartmentCommandHandler : ICommandHandler<CreateDepartmentCommand,
     }
     public async Task<Result<long>> Handle(DeleteDepartmentCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById((int)request.Id);
+        var entity = await _repository.GetById(request.Id);
         long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);

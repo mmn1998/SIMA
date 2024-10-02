@@ -1,5 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
-using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Args;
+using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Args;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Contracts;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.ValueObjects;
 using SIMA.Framework.Common.Exceptions;

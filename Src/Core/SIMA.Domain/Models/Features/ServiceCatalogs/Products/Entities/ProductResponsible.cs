@@ -19,17 +19,23 @@ public class ProductResponsible : Entity
     private ProductResponsible(CreateProductResponsibleArg arg)
     {
         Id = new ProductResponsibleId(arg.Id);
-        ResponsilbeId = new StaffId(arg.ResponsilbeId);
-        ResponsibleTypeId = new (arg.ResposibleTypeId);
+        ResponsilbeId = new StaffId(arg.ResponsibleId);
+        ResponsibleTypeId = new (arg.ResponsibleTypeId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<ProductResponsible> Create(CreateProductResponsibleArg arg)
+    public static ProductResponsible Create(CreateProductResponsibleArg arg)
     {
         return new ProductResponsible(arg);
     }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;

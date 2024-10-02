@@ -9,6 +9,7 @@ public class CreateStaffArg
     public long? ManagerId { get; set; }
 
     public long? PositionId { get; set; }
+    public long? SignatureId { get; set; }
 
     public string? StaffNumber { get; set; }
 

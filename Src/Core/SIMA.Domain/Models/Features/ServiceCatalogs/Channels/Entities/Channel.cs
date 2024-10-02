@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.UserTypes.Interfaces;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Contracts;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -261,5 +262,8 @@ public class Channel : Entity, IAggregateRoot
     public ICollection<ChannelAccessPoint> ChannelAccessPoints => _channelAccessPoints;
     private List<ProductChannel> _productChannels = new();
     public ICollection<ProductChannel> ProductChannels => _productChannels;
+    private List<ServiceChannel> _serviceChannels = new();
+    public ICollection<ServiceChannel> ServiceChannels => _serviceChannels;
+
 
 }

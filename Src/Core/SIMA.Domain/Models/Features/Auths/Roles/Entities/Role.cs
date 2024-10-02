@@ -1,10 +1,17 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
+using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Groups.Args;
+using SIMA.Domain.Models.Features.Auths.Groups.Entities;
+using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.Args;
 using SIMA.Domain.Models.Features.Auths.Roles.Exceptions;
 using SIMA.Domain.Models.Features.Auths.Roles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
@@ -57,6 +64,13 @@ public class Role : Entity
 
         if (await service.IsRoleSatisfied(arg.Code, arg.EnglishKey, arg.Id)) throw RoleExceptions.RoleNotSatisfiedException;
     }
+
+    private async Task<List<long>> ChangeFormAccessGuards(long fromId, long roleId , IRoleService service)
+    {
+        var RolePermissionIds = await service.GetRolePermissonByFormId(fromId , roleId);
+        return RolePermissionIds;
+    }
+
     #endregion
     //public async Task AddRolePermission(CreateRolePermissionArg arg)
     //{
@@ -100,6 +114,83 @@ public class Role : Entity
         foreach (var permission in deleteMember)
         {
             permission.Delete((long)request[0].CreatedBy);
+        }
+    }
+
+    public async Task AddFormRole(List<CreateFormRoleArg> request, long roleId, IRoleService service)
+    {
+        try
+        {
+            roleId.NullCheck();
+
+            var previousRoles = _formRoles.Where(x => x.RoleId == new RoleId(roleId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+            var addForm = request.Where(x => !previousRoles.Any(c => c.FormId.Value == x.FormId)).ToList();
+            var deleteForm = previousRoles.Where(x => !request.Any(c => c.FormId == x.FormId.Value)).ToList();
+
+            foreach (var form in addForm)
+            {
+                var entity = _formRoles.Where(x => (x.FormId == new FormId(form.FormId) && x.RoleId == new RoleId(roleId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+                if (entity is not null)
+                {
+                    await entity.ChangeStatus(ActiveStatusEnum.Active);
+                }
+                else
+                {
+                    entity = await FormRole.Create(form);
+                    _formRoles.Add(entity);
+                }
+            }
+
+            if (deleteForm is not null && deleteForm.Count > 0)
+            {
+                foreach (var form in deleteForm)
+                {
+                    form.Delete((long)request[0].CreatedBy);
+                    var rolePermissionIds = await ChangeFormAccessGuards(form.FormId.Value, roleId, service);
+                    foreach (var permission in rolePermissionIds)
+                    {
+                        var entity = _rolePermissions.Where(x => x.PermissionId.Value == permission && x.ActiveStatusId != 3).FirstOrDefault();
+                        entity.Delete((long)request[0].CreatedBy);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+      
+    }
+
+    public async Task AddUserRole(List<CreateUserRoleArg> request, long roleId)
+    {
+        roleId.NullCheck();
+
+        var previousRoles = _userRoles.Where(x => x.RoleId == new RoleId(roleId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addRole = request.Where(x => !previousRoles.Any(c => c.UserId.Value == x.UserId)).ToList();
+        var deleteMember = previousRoles.Where(x => !request.Any(c => c.UserId == x.UserId.Value)).ToList();
+
+
+        foreach (var role in addRole)
+        {
+            var entity = _userRoles.Where(x => (x.RoleId == new RoleId(roleId) && x.UserId == new UserId((long)role.UserId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await UserRole.Create(role);
+                _userRoles.Add(entity);
+            }
+        }
+
+        foreach (var role in deleteMember)
+        {
+            role.Delete((long)request[0].CreatedBy);
         }
     }
 

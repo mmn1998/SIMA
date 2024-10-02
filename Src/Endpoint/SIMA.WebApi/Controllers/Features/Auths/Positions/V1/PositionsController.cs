@@ -19,7 +19,6 @@ public class PositionsController : ControllerBase
     {
         _mediator = mediator;
     }
-    [SimaAuthorize(Permissions.PositionsDelete)]
 
     [HttpPost]
     [SimaAuthorize(Permissions.PositionsPost)]

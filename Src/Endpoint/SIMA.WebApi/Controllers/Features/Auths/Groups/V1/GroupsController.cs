@@ -20,27 +20,7 @@ public class GroupsController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpPost]
-    [SimaAuthorize(Permissions.GroupPost)]
-    public async Task<Result> Post(CreateGroupCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
-    [HttpPost("AddGroupUser")]
-    [SimaAuthorize(Permissions.UserGroupPost)]
-    public async Task<Result> Post([FromBody] CreateGroupUserCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
-    [HttpPost("AddGroupPermission")]
-    [SimaAuthorize(Permissions.GroupPermissionPost)]
-    public async Task<Result> Post([FromBody] CreateGroupPermissionCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
+    
     [HttpPost("AddGroupAggregate")]
     [SimaAuthorize(Permissions.AddGroupAggregate)]
     public async Task<Result> Post([FromBody] CreateGroupAggregate command)
@@ -56,20 +36,6 @@ public class GroupsController : ControllerBase
         var result = await _mediator.Send(command);
         return result;
     }
-    [HttpPut("EditGroupUser")]
-    [SimaAuthorize(Permissions.UserGroupPut)]
-    public async Task<Result> Put([FromBody] UpdateGroupUserCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
-    [HttpPut("EditGroupPermission")]
-    [SimaAuthorize(Permissions.GroupPermissionPut)]
-    public async Task<Result> Put([FromBody] UpdateGroupPermissionCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
 
     [HttpDelete("{id}")]
     [SimaAuthorize(Permissions.GroupDelete)]
@@ -78,16 +44,57 @@ public class GroupsController : ControllerBase
         var command = new DeleteGroupCommand { Id = id };
         return await _mediator.Send(command);
     }
-    [HttpDelete("DeleteGroupPermission")]
-    [SimaAuthorize(Permissions.GroupPermissionDelete)]
-    public async Task<Result> Delete([FromRoute] DeleteGroupPermissionCommand command)
-    {
-        return await _mediator.Send(command);
-    }
-    [HttpDelete("DeleteGroupUser")]
-    [SimaAuthorize(Permissions.UserGroupDelete)]
-    public async Task<Result> Delete([FromRoute] DeleteUserGroupCommand command)
-    {
-        return await _mediator.Send(command);
-    }
+
+    //[HttpPost]
+    //[SimaAuthorize(Permissions.GroupPost)]
+    //public async Task<Result> Post(CreateGroupCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+
+    //[HttpPost("AddGroupUser")]
+    //[SimaAuthorize(Permissions.UserGroupPost)]
+    //public async Task<Result> Post([FromBody] CreateGroupUserCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+    //[HttpPost("AddGroupPermission")]
+    //[SimaAuthorize(Permissions.GroupPermissionPost)]
+    //public async Task<Result> Post([FromBody] CreateGroupPermissionCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+
+    //[HttpPut("EditGroupUser")]
+    //[SimaAuthorize(Permissions.UserGroupPut)]
+    //public async Task<Result> Put([FromBody] UpdateGroupUserCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+
+    //[HttpPut("EditGroupPermission")]
+    //[SimaAuthorize(Permissions.GroupPermissionPut)]
+    //public async Task<Result> Put([FromBody] UpdateGroupPermissionCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+
+    //[HttpDelete("DeleteGroupPermission")]
+    //[SimaAuthorize(Permissions.GroupPermissionDelete)]
+    //public async Task<Result> Delete([FromRoute] DeleteGroupPermissionCommand command)
+    //{
+    //    return await _mediator.Send(command);
+    //}
+
+    //[HttpDelete("DeleteGroupUser")]
+    //[SimaAuthorize(Permissions.UserGroupDelete)]
+    //public async Task<Result> Delete([FromRoute] DeleteUserGroupCommand command)
+    //{
+    //    return await _mediator.Send(command);
+    //}
 }

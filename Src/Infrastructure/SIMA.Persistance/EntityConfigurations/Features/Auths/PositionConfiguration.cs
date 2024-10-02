@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.PositionLevels.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.PositionTypes.ValueObjects;

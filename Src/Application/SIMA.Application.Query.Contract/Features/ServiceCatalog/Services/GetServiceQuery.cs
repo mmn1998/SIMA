@@ -6,4 +6,5 @@ namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.Services;
 public class GetServiceQuery : IQuery<Result<GetServiceQueryResult>>
 {
     public long Id { get; set; }
+    public long IssueId { get; set; }
 }

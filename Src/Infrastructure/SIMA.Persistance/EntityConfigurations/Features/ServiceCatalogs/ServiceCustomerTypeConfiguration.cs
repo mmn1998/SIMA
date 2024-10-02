@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs;
 

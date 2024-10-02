@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.Auths.Forms.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
@@ -72,6 +72,43 @@ public class Group : Entity
         foreach (var permission in deleteMember)
         {
             permission.Delete((long)request[0].CreatedBy);
+        }
+    }
+    public async Task AddFormGroup(List<CreateFormGroupArg> request, long groupId, IGroupService service)
+    {
+        groupId.NullCheck();
+
+        var previousGroups = _formGroups.Where(x => x.GroupId == new GroupId(groupId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+        var addForm = request.Where(x => !previousGroups.Any(c => c.FormId.Value == x.FormId)).ToList();
+        var deleteForm = previousGroups.Where(x => !request.Any(c => c.FormId == x.FormId.Value)).ToList();
+
+        foreach (var form in addForm)
+        {
+            var entity = _formGroups.Where(x => (x.FormId == new FormId(form.FormId) && x.GroupId == new GroupId(groupId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            if (entity is not null)
+            {
+                await entity.ChangeStatus(ActiveStatusEnum.Active);
+            }
+            else
+            {
+                entity = await FormGroup.Create(form);
+                _formGroups.Add(entity);
+            }
+        }
+
+        if (deleteForm is not null && deleteForm.Count > 0)
+        {
+            foreach (var form in deleteForm)
+            {
+                form.Delete((long)request[0].CreatedBy);
+                var groupPermissionIds = await ChangeFormAccessGuards(form.FormId.Value,groupId, service);
+                foreach (var permission in groupPermissionIds)
+                {
+                    var entity = _groupPermissions.Where(x => x.PermissionId.Value == permission && x.ActiveStatusId != 3).FirstOrDefault();
+                     entity.Delete((long)request[0].CreatedBy);
+                }
+            }
         }
     }
     public async Task AddUserGroup(List<CreateUserGroupArg> request, long groupId)
@@ -198,29 +235,26 @@ public class Group : Entity
 
         if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
+    private async Task<List<long>> ChangeFormAccessGuards(long fromId, long groupId, IGroupService service)
+    {
+        var GroupPermissionIds = await service.GetGroupPermissonByFormId(fromId , groupId);
+        return GroupPermissionIds;
+    }
+
     #endregion
 
     public GroupId Id { get; private set; }
-
     public string? Name { get; private set; }
-
     public string? Code { get; private set; }
-
     public long ActiveStatusId { get; private set; }
-
     public DateOnly? ActiveFrom { get; private set; }
-
     public DateOnly? ActiveTo { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
-    private List<GroupPermission> _groupPermissions = new();
 
+    private List<GroupPermission> _groupPermissions = new();
     public ICollection<GroupPermission> GroupPermissions => _groupPermissions;
 
     private List<UserGroup> _userGroups = new();

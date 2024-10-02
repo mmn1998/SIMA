@@ -21,7 +21,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
 {
     public class WorkFlowCommandHandler : ICommandHandler<CreateWorkFlowCommand, Result<long>>, ICommandHandler<DeleteWorkFlowCommand, Result<long>>,
         ICommandHandler<ModifyWorkFlowCommand, Result<long>>,
-        ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask.ModifyStepCommand, Result<long>>,
+ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask.ModifyStepCommand, Result<long>>,
         ICommandHandler<DeleteStepCommand, Result<long>>,
         ICommandHandler<CreateStateCommand, Result<long>>, ICommandHandler<ModifyStateCommand, Result<long>>,
         ICommandHandler<DeleteStateCommand, Result<long>>
@@ -57,7 +57,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         }
         public async Task<Result<long>> Handle(ModifyWorkFlowCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _repository.GetById(request.Id);
+            var entity = await _repository.GetByIdJustWorkFlow(new WorkFlowId(request.Id));
             var arg = _mapper.Map<ModifyWorkFlowArg>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
             await entity.Modify(arg, _service);
@@ -136,7 +136,7 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow
         public async Task<Result<long>> Handle(CreateStateCommand request, CancellationToken cancellationToken)
         {
             if (!await _service.CheckWorkFlow((long)request.WorkFlowId)) throw new SimaResultException(CodeMessges._100057Code, Messages.WorkflowNotFoundError);
-            var workflow = await _repository.GetById2(new WorkFlowId(Value: (long)request.WorkFlowId));
+            var workflow = await _repository.GetByIdJustWorkFlow(new WorkFlowId(Value: (long)request.WorkFlowId));
             var arg = _mapper.Map<CreateStateArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
             var state = await workflow.AddState(arg, _service);

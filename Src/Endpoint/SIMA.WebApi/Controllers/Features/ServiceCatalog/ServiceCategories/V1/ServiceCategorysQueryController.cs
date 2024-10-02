@@ -27,10 +27,4 @@ public class ServiceCategoriesQueryController : ControllerBase
     {
         return await _mediator.Send(query);
     }
-    [HttpGet("GetAllByServiceType/{ServiceTypeId}")]
-    public async Task<Result> GetAllByServiceType([FromRoute] GetAllServiceCategoriesByServiceTypeIdQuery query)
-    {
-        var result = new GetAllServiceCategoriesByServiceTypeIdQuery { ServiceTypeId = query.ServiceTypeId };
-        return await _mediator.Send(result);
-    }
 }

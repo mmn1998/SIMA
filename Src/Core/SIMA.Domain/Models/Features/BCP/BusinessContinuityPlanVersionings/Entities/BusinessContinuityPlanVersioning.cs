@@ -3,7 +3,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Contracts;
-using SIMA.Domain.Models.Features.BCP.NewFolder.Entities;
+using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanVersionings.Entities;
 using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities

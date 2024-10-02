@@ -55,6 +55,12 @@ public class IssuesQueryController : ControllerBase
         }
         return result;
     }
+    [HttpGet("ComponetIssue/{id}/{issueId}")]
+    public async Task<Result> ComponentIssue([FromRoute] long id, [FromRoute] long issueId)
+    {
+        var query = new GetIssueComponentQuery { Id = id, IssueId = issueId };
+        return await _mediator.Send(query);
+    }
 
     [HttpGet("History/{issueId}")]
     [SimaAuthorize(Permissions.GetHistory)]
@@ -71,6 +77,7 @@ public class IssuesQueryController : ControllerBase
         var query = new GetIssueHistoriesByIdQuery { Id = id };
         return await _mediator.Send(query);
     }
+
     [HttpGet("CasesByWorkflowId/{workflowId}")]
     [SimaAuthorize(Permissions.IssueGet)]
     public async Task<Result> GetCasesByWorkflowId([FromRoute] long workflowId)

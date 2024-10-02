@@ -9,4 +9,5 @@ public interface IDepartmentQueryRepository : IQueryRepository
 {
     Task<GetDepartmentQueryResult> FindById(long id);
     Task<Result<IEnumerable<GetDepartmentQueryResult>>> GetAll(GetAllDepartmentsQuery? request = null);
+    Task<Result<IEnumerable<GetDepartmentQueryResult>>> GetByCpmpamyId(long comapnyId);
 }

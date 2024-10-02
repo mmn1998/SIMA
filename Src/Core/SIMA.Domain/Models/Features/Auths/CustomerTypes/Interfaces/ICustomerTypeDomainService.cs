@@ -1,6 +1,6 @@
 ﻿using SIMA.Framework.Core.Domain;
 
-namespace SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Interfaces;
+namespace SIMA.Domain.Models.Features.Auths.CustomerTypes.Interfaces;
 
 public interface ICustomerTypeDomainService : IDomainService
 {

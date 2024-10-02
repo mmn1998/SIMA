@@ -22,14 +22,14 @@ public class StaffsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.StaffsGetAll)]
+    //[SimaAuthorize(Permissions.StaffsGetAll)]
     public async Task<Result> Get(GetAllStaffQuery request)
     {
         return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]
-    [SimaAuthorize(Permissions.StaffsGet)]
+    //[SimaAuthorize(Permissions.StaffsGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetStaffQuery { Id = id };

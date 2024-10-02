@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Args;
+﻿namespace SIMA.Domain.Models.Features.Auths.CustomerTypes.Args;
 
 public class CreateCustomerTypeArg
 {

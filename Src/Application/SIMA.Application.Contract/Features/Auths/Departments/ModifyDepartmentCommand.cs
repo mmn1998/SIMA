@@ -1,10 +1,5 @@
 ﻿using Sima.Framework.Core.Mediator;
 using SIMA.Framework.Common.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SIMA.Application.Contract.Features.Auths.Departments
 {

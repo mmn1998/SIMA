@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.Logistics.GoodsCategories.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -48,6 +49,7 @@ public class GoodsCategory : Entity, IAggregateRoot
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
+
     #region Guards
     private static async Task CreateGuards(CreateGoodsCategoryArg arg, IGoodsCategoryDomainService service)
     {
@@ -70,18 +72,19 @@ public class GoodsCategory : Entity, IAggregateRoot
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
+
     public GoodsCategoryId Id { get; private set; }
     public GoodsTypeId GoodsTypeId { get; private set; }
     public virtual GoodsType GoodsType { get; private set; }
-    public string? IsTechnological { get; private set; }
-    public string? IsHardware { get; private set; }
-    public string? IsGoods { get; private set; }
-    public string? IsRequiredSecurityCheck { get; private set; }
-    public string? Name { get; private set; }
-    public string? Code { get; private set; }
+    public string IsTechnological { get; private set; }
+    public string IsHardware { get; private set; }
+    public string IsGoods { get; private set; }
+    public string IsRequiredSecurityCheck { get; private set; }
+    public string Name { get; private set; }
+    public string Code { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long?CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)
@@ -92,4 +95,10 @@ public class GoodsCategory : Entity, IAggregateRoot
     }
     private List<Goods> _goods = new();
     public ICollection<Goods> Goods => _goods;
+
+    private List<LogisticsRequestGoods> _logisticsRequestGoods = new();
+    public ICollection<LogisticsRequestGoods> LogisticsRequestGoods => _logisticsRequestGoods;
+
+    private List<GoodsCategorySupplier> _goodsCategorySuppliers = new();
+    public ICollection<GoodsCategorySupplier> GoodsCategorySuppliers => _goodsCategorySuppliers;
 }

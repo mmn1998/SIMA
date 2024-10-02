@@ -21,6 +21,8 @@ public class CreateIssueChangeHistoryArg
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }
     public long CompanyId { get; set; }
+    public long PerformerUserId { get; set; }
+
 
     public List<CreateIssueLinkArg> IssueLinks { get; set; }
     public List<CreateIssueDocumentArg> IssueDocument { get; set; }

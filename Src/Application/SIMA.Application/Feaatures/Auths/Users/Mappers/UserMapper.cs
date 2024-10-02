@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using SIMA.Application.Contract.Features.Auths.Users;
 using SIMA.Application.Query.Contract.Features.Auths.Users;
+using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
@@ -42,7 +43,7 @@ public class UserMapper : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
             //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
-        CreateMap<CreateUserDomainCommand, CreateUserDomainArg>()
+        CreateMap<CreateFormUserCommand, CreateFormUserArg>()
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
             //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
@@ -54,10 +55,8 @@ public class UserMapper : Profile
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
         ;
-        CreateMap<UpdateUserDomainCommand, ModifyUserDomainArg>()
-            .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
-        //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
-        ;
+
+       
         CreateMap<UpdateUserLocationCommand, ModifyUserLocationArg>()
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
@@ -76,7 +75,9 @@ public class UserMapper : Profile
             .ForMember(dest => dest.AccessFailedCount, opt => opt.MapFrom(src => "0"))
             .ForMember(x => x.IsFirstLogin, opt => opt.MapFrom(src => "0"));
 
-
+        CreateMap<CreateUserGroupCommand, CreateUserGroupArg>()
+      .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+      .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
 
 
     }

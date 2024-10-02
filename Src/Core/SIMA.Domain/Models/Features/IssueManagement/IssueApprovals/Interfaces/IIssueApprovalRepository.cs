@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
+﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Framework.Core.Repository;
 
 namespace SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Interfaces;

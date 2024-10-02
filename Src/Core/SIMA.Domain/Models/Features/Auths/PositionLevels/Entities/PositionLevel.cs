@@ -1,7 +1,7 @@
-﻿using SIMA.Domain.Models.Features.Auths.PositionLevels.Contracts;
+﻿using SIMA.Domain.Models.Features.Auths.PositionLevels.Args;
+using SIMA.Domain.Models.Features.Auths.PositionLevels.Contracts;
+using SIMA.Domain.Models.Features.Auths.PositionLevels.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
-using SIMA.Domain.Models.Features.Auths.PositionTypes.Args;
-using SIMA.Domain.Models.Features.Auths.PositionTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -18,7 +18,7 @@ public class PositionLevel : Entity, IAggregateRoot
     }
     private PositionLevel(CreatePositionLevelArg arg)
     {
-        Id = new PositionLevelId(arg.Id);
+        Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;

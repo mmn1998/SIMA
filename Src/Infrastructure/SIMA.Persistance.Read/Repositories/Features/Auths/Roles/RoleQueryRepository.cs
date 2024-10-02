@@ -3,10 +3,12 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using SIMA.Application.Query.Contract.Features.Auths.Groups;
 using SIMA.Application.Query.Contract.Features.Auths.Positions;
 using SIMA.Application.Query.Contract.Features.Auths.Profiles;
 using SIMA.Application.Query.Contract.Features.Auths.Roles;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
+using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
@@ -44,7 +46,6 @@ public class RoleQueryRepository : IRoleQueryRepository
             return result;
         }
     }
-
     public async Task<Result<IEnumerable<GetRoleQueryResult>>> GetAll(GetAllRoleQuery? request = null)
     {
         using (var connection = new SqlConnection(_connectionString))
@@ -92,34 +93,34 @@ WHERE [ActiveStatusID] <> 3
         }
 
     }
-
-    public async Task<GetRolePermissionQueryResult> GetRolePermission(long rolePermissionId)
+    public async Task<Result<List<GetRolePermissionQueryResult>>> GetRolePermission(long roleId , long formId)
     {
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
             string query = @"
-                SELECT DISTINCT
-                	   RP.[Id]
-                      ,RP.[RoleId]
-                      ,RP.[PermissionId]
-                      ,RP.[ActiveStatusId]
-                      ,A.[Name] as ActiveStatus
-                  FROM [Authentication].[RolePermission] RP
-                  join [Basic].[ActiveStatus] A on A.Id = RP.ActiveStatusID
-                  WHERE RP.ActiveStatusId <> 3 AND RP.Id = @Id
-";
-            var result = await connection.QueryFirstOrDefaultAsync<GetRolePermissionQueryResult>(query, new { Id = rolePermissionId });
-            result.NullCheck();
-            return result;
+                            Select 
+                             R.Id RoleId
+                            ,F.Id FormId 
+                            ,F.Name FormName 
+                            ,F.Title FormTitle
+                            ,P.Name PermissionName 
+                            ,P.Id PermissionId
+                            from Authentication.Role R
+                            join Authentication.RolePermission RP on RP.RoleId = R.Id and RP.ActiveStatusId <>3
+                            join Authentication.FormPermission FP on FP.PermissionId= RP.PermissionId and FP.ActiveStatusId <>3
+                            join Authentication.Permission P on RP.PermissionId = P.Id and P.ActiveStatusId <>3
+                            join Authentication.Form F on FP.FormId = F.Id and F.ActiveStatusId <>3
+                            where FP.FormId = @formId and RP.RoleId = @roleId 
+                                ";
+            var result = await connection.QueryAsync<GetRolePermissionQueryResult>(query, new { roleId , formId });
+            return Result.Ok(result.ToList());
         }
     }
-
     public async Task<bool> IsRoleSatisfied(string code, string englishKey)
     {
         return !await _context.Roles.AnyAsync(r => r.Code == code && r.EnglishKey == englishKey);
     }
-
     public async Task<GetRoleAggregateResult> GetRoleAggegate(long roleId)
     {
         var response = new GetRoleAggregateResult();
@@ -137,26 +138,64 @@ WHERE [ActiveStatusID] <> 3
                           WHERE R.ID = @RoleId and R.[ActiveStatusID] <> 3
                           GROUP BY R.ID,R.Name,R.Code,R.ActiveStatusID,A.Name,R.EnglishKey;
 
-                         SELECT DISTINCT
-                          D.Name as DomainName
-                          ,D.ID as DomainId
-                          ,P.Name as PermissionName
-                          ,P.ID as PermissionId
-                          ,R.[ActiveStatusID]
-                          ,A.[Name] as ActiveStatus
-                          ,rp.[CreatedAt]
-                         FROM [Authentication].[Role] R
-                         INNER JOIN [Authentication].[RolePermission] RP on RP.RoleID = R.ID
-                         INNER JOIN [Authentication].[Permission] P on P.ID = RP.PermissionID
-                         INNER JOIN [Authentication].[Domain] D on D.ID = P.DomainID
-                         join [Basic].[ActiveStatus] A on A.Id = R.ActiveStatusID
-                         WHERE R.ID = @RoleId and R.[ActiveStatusID] <> 3 and RP.[ActiveStatusID] <> 3
-                         GROUP BY D.Name, D.ID, P.Name, P.ID ,R.ActiveStatusID,A.Name ,rp.[CreatedAt]
-                         Order By rp.[CreatedAt] desc  ";
+                         Select 
+	                           F.Id  FormId
+	                          ,F.Name FormName 
+							  ,f.Title FormTitle
+	                          ,D.Id DomainId
+	                          ,D.Name DomainName 
+	                          from Authentication.Role R
+	                          join Authentication.FormRole FR on FR.RoleId = R.Id
+	                          join Authentication.Form F on F.Id = FR.FormId 
+	                          join Authentication.DomainForms DF on F.Id  = DF.FormId
+	                          join Authentication.Domain D on DF.DomainId = D.Id
+	                     where R.ID = @RoleId and FR.ActiveStatusId <> 3
+
+
+                        Select
+							 U.Id UserId
+							,U.Username 
+							,R.Id RoleId
+							,R.Name RoleName
+							,P.Id ProfileId
+							,P.FirstName + ' '+ P.LastName FullName
+							,P.NationalID 
+							from Authentication.Role R
+							join Authentication.UserRole UR on UR.RoleId = R.Id and UR.ActiveStatusId <> 3
+							join Authentication.Users U on U.Id = UR.UserId and U.ActiveStatusId <> 3
+							join Authentication.Profile P on U.ProfileId =P.Id
+						where R.Id = @RoleId 
+
+
+                            Select 
+                             R.Id RoleId
+                            ,FP.FormId FormId 
+                            ,F.Title FormTitle
+                            ,P.Name PermissionName 
+                            ,P.Id PermissionId
+                            from Authentication.Role R
+                            join Authentication.RolePermission RP on RP.RoleId = R.Id and RP.ActiveStatusId <>3
+                            join Authentication.FormPermission FP on FP.PermissionId= RP.PermissionId and FP.ActiveStatusId <>3
+                            join Authentication.Form F on F.Id = FP.FormId and F.ActiveStatusId <> 3
+                            join Authentication.Permission P on RP.PermissionId = P.Id and P.ActiveStatusId <>3
+                            where RP.RoleId = @roleId ";
+
+
             using (var multi = await connection.QueryMultipleAsync(query, new { RoleId = roleId }))
             {
                 response = multi.ReadAsync<GetRoleAggregateResult>().GetAwaiter().GetResult().Single();
-                response.RolePermissions = multi.ReadAsync<GetRolePermissionQueryResultForAggregate>().GetAwaiter().GetResult().ToList();
+                var formRoles = multi.ReadAsync<GetFormRoleQuery>().GetAwaiter().GetResult().ToList();
+                response.RoleUsers = multi.ReadAsync<GetRoleUserQuery>().GetAwaiter().GetResult().ToList();
+                var rolePermissions = multi.ReadAsync<GetRolePermissionQueryResult>().GetAwaiter().GetResult().ToList();
+
+                var formPermission = formRoles.Select(form => new GetRoleFormPermissions
+                {
+                    Form = form,
+                    Permissions = rolePermissions.Where(p => p.FormId == form.FormId).ToList()
+                }).ToList();
+
+                response.FormPermissions = formPermission;
+
             }
         }
         return response;

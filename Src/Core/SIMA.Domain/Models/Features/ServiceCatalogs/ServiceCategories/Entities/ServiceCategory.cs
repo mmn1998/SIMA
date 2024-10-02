@@ -1,7 +1,6 @@
-﻿using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Args;
+﻿using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Contracts;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -18,9 +17,9 @@ public class ServiceCategory : Entity
     private ServiceCategory(CreateServiceCategoryArg arg)
     {
         Id = new ServiceCategoryId(arg.Id);
-        ServiceTypeId = new ServiceTypeId(arg.ServiceTypeId);
         Name = arg.Name;
         Code = arg.Code;
+        ParentId = arg.ParentId.HasValue ? new(arg.ParentId.Value) : null;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -34,9 +33,9 @@ public class ServiceCategory : Entity
     public async Task Modify(ModifyServiceCategoryArg arg, IServiceCategoryDomainService service)
     {
         await ModifyGuards(arg, service);
-        ServiceTypeId = new ServiceTypeId(arg.ServiceTypeId);
         Name = arg.Name;
         Code = arg.Code;
+        ParentId = arg.ParentId.HasValue ? new(arg.ParentId.Value) : null;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -64,10 +63,10 @@ public class ServiceCategory : Entity
     }
     #endregion
     public ServiceCategoryId Id { get; private set; }
-    public ServiceTypeId ServiceTypeId { get; private set; }
-    public virtual ServiceType serviceType { get; private set; }
-    public string Name { get; private set; }
-    public string Code { get; private set; }
+    public ServiceCategoryId? ParentId { get; private set; }
+    public virtual ServiceCategory? Parent { get; private set; }
+    public string? Name { get; private set; }
+    public string? Code { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public long CreatedBy { get; private set; }
@@ -80,6 +79,6 @@ public class ServiceCategory : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<ServiceBoundle> _serviceBoundles = new();
-    public ICollection<ServiceBoundle> ServiceBoundles => _serviceBoundles;
+    private List<Service> _services = new();
+    public ICollection<Service> Services => _services;
 }

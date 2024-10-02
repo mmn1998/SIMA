@@ -28,6 +28,8 @@ public class Domain : Entity
         return new Domain(arg);
     }
     public DomainId Id { get; private set; }
+    public DomainId? ParentId { get; private set; }
+    public virtual Domain? Parent { get; private set; }
 
     public string? Name { get; private set; }
 
@@ -49,13 +51,15 @@ public class Domain : Entity
     private List<Permission> _permissions = new();
     public ICollection<Permission> Permissions => _permissions;
 
-    private List<UserDomainAccess> _userDomainAccesses = new();
-    public ICollection<UserDomainAccess> UserDomainAccesses => _userDomainAccesses;
     private List<Project> _projects = new();
     public ICollection<Project> Projects => _projects;
 
     private List<Form> _forms = new();
     public ICollection<Form> Forms => _forms;
+
+    private List<DomainForm> _domainForms = new();
+    public List<DomainForm> DomainForms => _domainForms;
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;

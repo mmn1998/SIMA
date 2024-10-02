@@ -20,7 +20,6 @@ public class UserQueryMapper : Profile
         //_simaIdentity = simaIdentity;
         CreateMap<UserLocationAccess, GetUserLocationQueryResult>();
         CreateMap<UserPermission, GetUserPermissionQueryResult>();
-        CreateMap<UserDomainAccess, GetUserDomainQueryResult>();
         CreateMap<UserRole, GetUserRoleQueryResult>();
     }
 

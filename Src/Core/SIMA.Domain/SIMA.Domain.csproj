@@ -20,9 +20,8 @@
 
   
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="2.1.2" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.1.8" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,25 +30,25 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Features\AccessManagement\AccessRequests\Contracts\" />
     <Folder Include="Models\Features\Auths\ResponsibleTypes\Exceptions\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />
+    <Folder Include="Models\Features\Logistics\LogisticsSupplies\Contracts\" />
+    <Folder Include="Models\Features\Logistics\OrderingItems\Contracts\" />
+    <Folder Include="Models\Features\Logistics\Orderings\Args\" />
     <Folder Include="Models\Features\Logistics\PaymentCommands\Args\" />
     <Folder Include="Models\Features\Logistics\PaymentCommands\Contracts\" />
     <Folder Include="Models\Features\Logistics\PriceEstimations\Args\" />
     <Folder Include="Models\Features\Logistics\PriceEstimations\Contracts\" />
     <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Interfaces\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ChannelTypes\Exceptions\" />
     <Folder Include="Models\Features\Auths\CustomerTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Interfaces\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServicePriority\Interfaces\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServiceTypes\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServicePriorities\Interfaces\" />
     <Folder Include="Models\Features\Auths\UserTypes\Exceptions\" />
-    <Folder Include="Models\Features\ServiceCatalogs\ServiceBoundles\Exceptions\" />
   </ItemGroup>
 
 </Project>

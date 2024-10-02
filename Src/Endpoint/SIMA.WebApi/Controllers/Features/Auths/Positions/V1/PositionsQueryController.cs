@@ -36,5 +36,14 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Positions.V1
         {
             return await _mediator.Send(request);
         }
+
+        [HttpGet("GetByDepartment/{DepartmentId}")]
+        [SimaAuthorize(Permissions.PositionsGetAll)]
+        public async Task<Result> GetByDepartment([FromRoute] long DepartmentId)
+        {
+            var query = new GetPositionByDepartemantQuery { DepartmentId = DepartmentId };
+            var result = await _mediator.Send(query);
+            return result;
+        }
     }
 }

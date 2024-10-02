@@ -2,8 +2,11 @@
 
 public class GetUserPermissionQueryResult
 {
-    public long Id { get; set; }
     public long UserId { get; set; }
     public long PermissionId { get; set; }
+    public long FormId { get; set; }
+    public string FormName { get; set; }
+    public string FormTitle { get; set; }
+    public string PermissionName { get; set; }
 }
 

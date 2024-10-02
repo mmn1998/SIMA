@@ -32,9 +32,9 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
     {
         var arg = _mapper.Map<CreateServiceArg>(request);
         var entity = await Service.Create(arg, _service);
-        if (request.CustomerList is not null)
+        if (request.CustomerTypeList is not null)
         {
-            var args = _mapper.Map<List<CreateServiceCustomerArg>>(request.CustomerList);
+            var args = _mapper.Map<List<CreateServiceCustomerArg>>(request.CustomerTypeList);
             foreach (var item in args)
             {
                 item.CreatedBy = _simaIdentity.UserId;
@@ -122,6 +122,23 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             }
             entity.AddServiceAssignedStaffs(args);
         }
+        if (request.ServiceAvalibilityList is not null)
+        {
+            var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);
+            foreach (var item in args)
+            {
+                item.CreatedBy = _simaIdentity.UserId;
+                item.ServiceId = arg.Id;
+            }
+            entity.AddServiceAvalibilities(args);
+        }
+        #region ServiceIssues
+        var serviceIssueArg = _mapper.Map<CreateServiceRelatedIssueArg>(arg);
+        entity.AddServiceIssues(new List<CreateServiceRelatedIssueArg>
+        {
+            serviceIssueArg
+        });
+        #endregion
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -131,9 +148,9 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
         var entity = await _repository.GetById(new(request.Id));
         var arg = _mapper.Map<ModifyServiceArg>(request);
         await entity.Modify(arg, _service);
-        if (request.CustomerList is not null)
+        if (request.CustomerTypeList is not null)
         {
-            var args = _mapper.Map<List<CreateServiceCustomerArg>>(request.CustomerList);
+            var args = _mapper.Map<List<CreateServiceCustomerArg>>(request.CustomerTypeList);
             foreach (var item in args)
             {
                 item.CreatedBy = _simaIdentity.UserId;
@@ -221,6 +238,23 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             }
             entity.ModifyServiceAssignedStaffs(args);
         }
+        if (request.ServiceAvalibilityList is not null)
+        {
+            var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);
+            foreach (var item in args)
+            {
+                item.CreatedBy = _simaIdentity.UserId;
+                item.ServiceId = arg.Id;
+            }
+            entity.ModifyServiceAvalibilities(args);
+        }
+        var serviceIssueArg = _mapper.Map<CreateServiceRelatedIssueArg>(arg);
+        #region ServiceIssues
+        entity.ModifyServiceIssues(new List<CreateServiceRelatedIssueArg>
+        {
+            serviceIssueArg
+        });
+        #endregion
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -228,7 +262,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
     public async Task<Result<long>> Handle(DeleteServiceCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new(request.Id));
-        entity.Delete(_simaIdentity.UserId);
+        entity.Delete(userId: _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

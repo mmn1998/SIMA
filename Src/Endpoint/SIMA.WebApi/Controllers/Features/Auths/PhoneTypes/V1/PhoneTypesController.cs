@@ -21,7 +21,7 @@ public class PhoneTypesController : ControllerBase
         _mediator = mediator;
     }
     [HttpDelete("{id}")]
-    [SimaAuthorize(Permissions.PhoneTypesPut)]
+    [SimaAuthorize(Permissions.PhoneTypesDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeletePhoneTypeCommand { Id = id };

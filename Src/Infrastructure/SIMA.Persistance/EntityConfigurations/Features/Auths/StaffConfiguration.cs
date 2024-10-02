@@ -4,6 +4,8 @@ using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.DMS.Documents.Entities;
+using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Auths;
 
@@ -21,9 +23,10 @@ internal class StaffConfiguration : IEntityTypeConfiguration<Staff>
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
-        entity.Property(e => e.ManagerId).HasConversion(v => v.Value, v => new ProfileId(v));
+        entity.Property(e => e.ManagerId).HasConversion(v => v.Value, v => new StaffId(v));
         entity.Property(e => e.ProfileId).HasConversion(v => v.Value, v => new ProfileId(v));
         entity.Property(e => e.PositionId).HasConversion(v => v.Value, v => new PositionId(v));
+        entity.Property(e => e.SignatureId).HasConversion(v => v.Value, v => new DocumentId(v));
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
@@ -31,9 +34,9 @@ internal class StaffConfiguration : IEntityTypeConfiguration<Staff>
             .HasMaxLength(20)
             .IsUnicode(false);
 
-        entity.HasOne(d => d.Manager).WithMany(p => p.StaffManagers)
-            .HasForeignKey(d => d.ManagerId)
-            .HasConstraintName("FK_Staff_Profile_manager");
+        //entity.HasOne(d => d.Manager).WithMany(p => p.StaffManagers)
+        //    .HasForeignKey(d => d.ManagerId)
+        //    .HasConstraintName("FK_Staff_Profile_manager");
 
         entity.HasOne(d => d.Position).WithMany(p => p.Staff)
             .HasForeignKey(d => d.PositionId)
@@ -42,5 +45,8 @@ internal class StaffConfiguration : IEntityTypeConfiguration<Staff>
         entity.HasOne(d => d.Profile).WithMany(p => p.StaffProfiles)
             .HasForeignKey(d => d.ProfileId)
             .HasConstraintName("FK_Staff_Profile");
+
+        entity.HasOne(d => d.Signature).WithOne(p => p.StaffSignature)
+            .HasForeignKey<Staff>(d=>d.SignatureId);
     }
 }

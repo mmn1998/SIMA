@@ -22,7 +22,7 @@ public class ResponsibleTypeController : ControllerBase
     }
 
     [HttpPost]
-    //[SimaAuthorize(Permissions.ResponsibleTypePost)]
+    [SimaAuthorize(Permissions.ResponsibleTypePost)]
     public async Task<Result> Post([FromBody] CreateResponsibleTypeCommand command)
     {
         var result = await _mediator.Send(command);
@@ -30,7 +30,7 @@ public class ResponsibleTypeController : ControllerBase
     }
 
     [HttpPut]
-    //  [SimaAuthorize(Permissions.ResponsibleTypePut)]
+    [SimaAuthorize(Permissions.ResponsibleTypePut)]
     public async Task<Result> Put([FromBody] ModifyResponsibleTypeCommands command)
     {
         var result = await _mediator.Send(command);
@@ -38,7 +38,7 @@ public class ResponsibleTypeController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    // [SimaAuthorize(Permissions.ResponsibleTypeDelete)]
+    [SimaAuthorize(Permissions.ResponsibleTypeDelete)]
     public async Task<Result> Delete(long id)
     {
         var command = new DeleteResponsibleTypeCommand { Id = id };

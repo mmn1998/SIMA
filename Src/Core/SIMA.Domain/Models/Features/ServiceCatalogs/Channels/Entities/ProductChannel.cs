@@ -1,11 +1,12 @@
 ﻿using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 
-public class ProductChannel
+public class ProductChannel:Entity
 {
     public ProductChannel()
     {
@@ -36,6 +37,11 @@ public class ProductChannel
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
     }
 
     public ProductChannelId Id { get; set; }

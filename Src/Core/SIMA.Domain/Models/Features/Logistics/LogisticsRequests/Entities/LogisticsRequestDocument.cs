@@ -2,7 +2,8 @@
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Args;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
+using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -24,12 +25,12 @@ public class LogisticsRequestDocument : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<LogisticsRequestDocument> Create(CreateLogisticsRequestDocumentArg arg)
+    public static LogisticsRequestDocument Create(CreateLogisticsRequestDocumentArg arg)
     {
         return new LogisticsRequestDocument(arg);
     }
 
-    public async Task ChangeStatus(ActiveStatusEnum status)
+    public void ChangeStatus(ActiveStatusEnum status)
     {
         ActiveStatusId = (long)status;
     }

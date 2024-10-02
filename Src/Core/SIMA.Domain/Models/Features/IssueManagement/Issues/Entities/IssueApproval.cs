@@ -1,5 +1,4 @@
 ﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
@@ -8,7 +7,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
+namespace SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 
 public class IssueApproval : Entity
 {
@@ -55,7 +54,7 @@ public class IssueApproval : Entity
     public virtual Issue Issue { get; private set; }
     public StepApprovalOptionId StepApprovalOptionId { get; private set; }
     public virtual StepApprovalOption StepApprovalOption { get; private set; }
-    public long ApprovedBy { get;private set; }
+    public long ApprovedBy { get; private set; }
     public WorkFlowActorId WorkflowActorId { get; private set; }
     public virtual WorkFlowActor WorkflowActor { get; private set; }
     public string Description { get; private set; }

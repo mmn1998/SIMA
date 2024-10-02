@@ -9,4 +9,7 @@ public class CreateRoleAggregate : ICommand<Result<long>>
     public string? EnglishKey { get; set; }
     public string? Code { get; set; }
     public List<CreateRolePermissionCommand>? RolePermissions { get; set; }
+    public List<CreateFormRoleCommand>? FormRoles { get; set; }
+    public List<CreateRoleUserCommand>? RoleUsers { get; set; }
+
 }

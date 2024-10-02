@@ -5,6 +5,8 @@ using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.ValueObjects;
+using SIMA.Framework.Core.Entities;
+using static Dapper.SqlMapper;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowActorConfiguration
 {
@@ -39,8 +41,27 @@ namespace SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlow
                .HasForeignKey(x => x.WorkFlowId);
             entity.Property(e => e.IsDirectManagerOfIssueCreator)
                .HasColumnType("char(1)");
+            entity.Property(x => x.IsActorManager)
+                     .HasColumnType("char(1)");
             entity.Property(e => e.IsEveryOne).HasColumnType("char(1)");
 
+        }
+    }
+    public class WorkFlowActorEmployeeConfiguration : IEntityTypeConfiguration<WorkFlowActorEmployee>
+    {
+        public void Configure(EntityTypeBuilder<WorkFlowActorEmployee> builder)
+        {
+            builder.ToTable("WorkFlowActorEmployees", "Project");
+            builder.Property(x => x.EmployeeId)
+                                .HasConversion(
+                                    v => v.Value,
+                                    v => new WorkFlowActorId(v));
+            builder.Property(x => x.ActorId)
+                                .HasConversion(
+                                    v => v.Value,
+                                    v => new WorkFlowActorId(v));
+            builder.HasKey(e => new { e.EmployeeId , e.ActorId });
+            builder.HasOne(x => x.Actor).WithMany(x => x.Employees).HasForeignKey(x => x.ActorId);
         }
     }
 

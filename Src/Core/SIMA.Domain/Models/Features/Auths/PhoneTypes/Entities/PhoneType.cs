@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.PhoneTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.PhoneTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
+using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -59,21 +60,19 @@ public class PhoneType : Entity
     }
     #endregion
     public PhoneTypeId Id { get; private set; }
-
     public string? Name { get; private set; }
     public long ActiveStatusId { get; private set; }
-
     public string? Code { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
+
     private List<PhoneBook> _phoneBooks = new();
     public virtual ICollection<PhoneBook> PhoneBooks => _phoneBooks;
+
+    private List<SupplierPhoneBook> _supplierPhoneBooks = new();
+    public ICollection<SupplierPhoneBook> SupplierPhoneBooks => _supplierPhoneBooks;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

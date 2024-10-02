@@ -42,6 +42,13 @@ public class GroupMapper : Profile
             //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
                 .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
+
+        ;
+        CreateMap<CreateFormGroupCommand, CreateFormGroupArg>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+            .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
+
+
         CreateMap<UpdateGroupUserCommand, ModifyUserGroupArg>()
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))

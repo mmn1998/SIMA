@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.Domains;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 

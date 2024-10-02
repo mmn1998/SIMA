@@ -36,10 +36,20 @@ public class FormsQueryController : ControllerBase
         return await _mediator.Send(request);
 
     }
+
     [HttpPost("FormFields")]
     //[SimaAuthorize(Permissions.FormGetAll)]
     public async Task<Result> Get(GetAllFormFieldsQuery request)
     {
+        return await _mediator.Send(request);
+
+    }
+
+
+    [HttpGet("GetFormByDomain/{DomainId}")]
+    public async Task<Result> GetFormByDomain(long DomainId)
+    {
+        var request = new GetFormByDomainQuery { DomainId = DomainId };
         return await _mediator.Send(request);
 
     }

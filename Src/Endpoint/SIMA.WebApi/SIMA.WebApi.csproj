@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
-	<InformationalVersion>2.1.6</InformationalVersion>
+	<InformationalVersion>3.0.4</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,12 +18,18 @@
   <ItemGroup>
     <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesController.cs" />
     <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\AccessTypes\V1\AccessTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\AccessTypes\V1\AccessTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\ApiMethodActions\V1\ApiMethodActionsController.cs" />
     <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesController.cs" />
     <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesController.cs" />
     <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\ApiMethodActions\V1\ApiMethodActionsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionTypes\PositionTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionTypes\PositionTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionLevels\V1\PositionLevelsController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionLevels\V1\PositionLevelsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\DataTypes\V1\DataTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsController.cs" />
     <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsQueryController.cs" />
@@ -105,10 +111,10 @@
     <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Logistics\LogisticsRequest\LogisticsRequestController.cs" />
     <Compile Include="Controllers\Features\Logistics\LogisticsRequest\LogisticsRequestQueryController.cs" />
-    <Compile Include="Controllers\Features\Logistics\Suppliers\V1\SuppliersController.cs" />
-    <Compile Include="Controllers\Features\Logistics\Suppliers\V1\SuppliersQueryController.cs" />
-    <Compile Include="Controllers\Features\Logistics\SupplierRanks\V1\SupplierRanksController.cs" />
-    <Compile Include="Controllers\Features\Logistics\SupplierRanks\V1\SupplierRanksQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Suppliers\V1\SuppliersController.cs" />
+    <Compile Include="Controllers\Features\Auths\Suppliers\V1\SuppliersQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\SupplierRanks\V1\SupplierRanksController.cs" />
+    <Compile Include="Controllers\Features\Auths\SupplierRanks\V1\SupplierRanksQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\RiskCriterias\RiskCriteriaController.cs" />
@@ -145,22 +151,20 @@
     <Compile Include="Controllers\Features\ServiceCatalog\ApiTypes\ApiTypesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Channels\V1\ChannelsController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Channels\V1\ChannelsQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\CriticalActivities\V1\CriticalActivitiesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\CriticalActivities\V1\CriticalActivitiesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Services\V1\ServicesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Services\V1\ServicesQueryController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ServiceBoundles\V1\ServiceBoundlesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Products\V1\ProductsController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Products\V1\ProductsQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategoriesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategorysQueryController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCustomerTypes\V1\ServiceCustomerTypesController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCustomerTypes\V1\ServiceCustomerTypesQueryController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ChannelTypes\V1\ChannelTypesController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ChannelTypes\V1\ChannelTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\CustomerTypes\V1\CustomerTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\CustomerTypes\V1\CustomerTypesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\ImportanceDegrees\ImportanceDegreesController.cs" />
     <Compile Include="Controllers\Features\BCP\ImportanceDegrees\ImportanceDegreesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceStatuses\ServiceStatusController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceStatuses\ServiceStatusQueryController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypeController.cs" />
-    <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\UserTypes\V1\UserTypesController.cs" />
     <Compile Include="Controllers\Features\Auths\UserTypes\V1\UserTypesQueryController.cs" />
     <Compile Include="Controllers\Features\WorkFlowEngine\ApprovalOptions\ApprovalOptionController.cs" />
@@ -189,21 +193,17 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Portable.Licensing" Version="1.1.0" />
-    <PackageReference Include="Scrutor" Version="4.2.2" />
+    <PackageReference Include="Scrutor" Version="5.0.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
-    <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.0.3" />
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
     <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
-    <PackageReference Include="SIMA.Framework.Common" Version="2.1.2" />
-    <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
-    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
     <PackageReference Include="SIMA.Framework.WebApi" Version="1.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>

@@ -20,14 +20,14 @@ public class UIInputElementsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.UIInputElementGet)]
+    [SimaAuthorize(Permissions.UIInputElementGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetUIInputElementQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    //[SimaAuthorize(Permissions.UIInputElementGetAll)]
+    [SimaAuthorize(Permissions.UIInputElementGetAll)]
     public async Task<Result> Get([FromBody] GetAllUIInputElementsQuery query)
     {
         return await _mediator.Send(query);

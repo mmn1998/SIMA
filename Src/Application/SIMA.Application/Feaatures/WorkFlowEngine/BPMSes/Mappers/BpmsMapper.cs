@@ -7,8 +7,10 @@ using SIMA.Application.Contract.Features.WorkFlowEngine.BPMSes;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
+using SIMA.Resources;
 using System.Diagnostics.Metrics;
 using System.Xml;
 using System.Xml.Serialization;
@@ -572,11 +574,12 @@ public class BpmsMapper : Profile
     private static WorkFlowActorArg AddActor(string laneId, string name)
     {
         long actorId = IdHelper.GenerateUniqueId();
+        if (name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.WorkFlowActorNameError);
         var actor = new WorkFlowActorArg
         {
             BpmnId = laneId,
             ActiveStatusId = (long)ActiveStatusEnum.Active,
-            Code = actorId.ToString(),
+            Code = IdHelper.GenerateUniqueId().ToString(),
             CreatedAt = DateTime.Now,
             Id = actorId,
             Name = name

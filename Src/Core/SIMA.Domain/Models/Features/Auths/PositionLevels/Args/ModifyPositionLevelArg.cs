@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.Auths.PositionTypes.Args;
+﻿namespace SIMA.Domain.Models.Features.Auths.PositionLevels.Args;
 
 public class ModifyPositionLevelArg
 {

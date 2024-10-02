@@ -9,13 +9,13 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Genders.V1;
 
 [Route("[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "Gender")]
+[ApiExplorerSettings(GroupName = "Genders")]
 [Authorize]
 
-public class GenderController : ControllerBase
+public class GendersController : ControllerBase
 {
     private readonly IMediator _mediator;
-    public GenderController(IMediator mediator)
+    public GendersController(IMediator mediator)
     {
         _mediator = mediator;
     }

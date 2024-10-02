@@ -5,9 +5,11 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceBoundles.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Contracts;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Events;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -25,21 +27,27 @@ public class Service : Entity, IAggregateRoot
     private Service(CreateServiceArg arg)
     {
         Id = new ServiceId(arg.Id);
-        ServiceBoundleId = new ServiceBoundleId(arg.ServiceBoundleId);
+        ServiceCategoryId = new(arg.ServiceCategoryId);
+        ServicePriorityId = new(arg.ServicePriorityId);
         ServiceStatusId = arg.ServiceStatusId.HasValue ? new(arg.ServiceStatusId.Value) : null;
-        TechnicalSupervisorDepartmentId = arg.TechnicalSupervisorDepartmentId.HasValue ? new DepartmentId(arg.TechnicalSupervisorDepartmentId.Value) : null;
+        TechnicalSupervisorDepartmentId = arg.TechnicalSupervisorDepartmentId.HasValue ? new(arg.TechnicalSupervisorDepartmentId.Value) : null;
         Name = arg.Name;
         Code = arg.Code;
         ServiceCost = arg.ServiceCost;
         Description = arg.Description;
-        ServiceWorkflowDescription = arg.ServiceWorkflowDescription;
+        ServiceWorkflowBpmn = arg.ServiceWorkflowBpmn;
         ContinuousImprovement = arg.ContinuousImprovement;
-        Suggestion = arg.Suggestion;
         FeedbackUrl = arg.FeedbackUrl;
         ActiveStatusId = arg.ActiveStatusId;
         InServiceDate = arg.InServiceDate;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        IsInternalService = arg.IsInternalService;
+        IsCriticalService = arg.IsCriticalService;
+        ParentId = arg.ParentId.HasValue ? new(arg.ParentId.Value) : null;
+        AddDomainEvent(new CreateServiceEvent
+            (issueId: arg.IssueId, mainAggregateType: MainAggregateEnums.CatalogService,
+            name: arg.Name, sourceId:arg.Id , issuePriorityId:arg.IssuePriorityId, issueWeightCategoryId: arg.IssueWeightCategoryId));
     }
 
     public static async Task<Service> Create(CreateServiceArg arg, IServiceDomainService service)
@@ -50,21 +58,26 @@ public class Service : Entity, IAggregateRoot
     public async Task Modify(ModifyServiceArg arg, IServiceDomainService service)
     {
         await ModifyGuards(arg, service);
-        ServiceBoundleId = new ServiceBoundleId(arg.ServiceBoundleId);
+        ServiceCategoryId = new(arg.ServiceCategoryId);
+        ServicePriorityId = new(arg.ServicePriorityId);
         TechnicalSupervisorDepartmentId = arg.TechnicalSupervisorDepartmentId.HasValue ? new(arg.TechnicalSupervisorDepartmentId.Value) : null;
         ServiceStatusId = arg.ServiceStatusId.HasValue ? new(arg.ServiceStatusId.Value) : null;
         Name = arg.Name;
         Code = arg.Code;
+        ParentId = arg.ParentId.HasValue ? new(arg.ParentId.Value) : null;
         ServiceCost = arg.ServiceCost;
         Description = arg.Description;
-        ServiceWorkflowDescription = arg.ServiceWorkflowDescription;
+        ServiceWorkflowBpmn = arg.ServiceWorkflowBpmn;
         ContinuousImprovement = arg.ContinuousImprovement;
-        Suggestion = arg.Suggestion;
         FeedbackUrl = arg.FeedbackUrl;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         InServiceDate = arg.InServiceDate;
+        IsInternalService = arg.IsInternalService;
+        IsCriticalService = arg.IsCriticalService;
+        AddDomainEvent(new ModifyServiceEvent(issueId: arg.IssueId, mainAggregateType: MainAggregateEnums.CatalogService,
+            name: arg.Name, sourceId: arg.Id, issuePriorityId: arg.IssuePriorityId, issueWeightCategoryId: arg.IssueWeightCategoryId));
     }
     #region Guards
     private static async Task CreateGuards(CreateServiceArg arg, IServiceDomainService service)
@@ -103,7 +116,10 @@ public class Service : Entity, IAggregateRoot
         DeleteServiceProviders(userId);
         DeleteServiceRisks(userId);
         DeleteServiceUsers(userId);
+        DeleteServiceIssues(userId);
+        DeleteServiceAvalibilities(userId);
         #endregion
+
     }
     #region AddMethods
     public void AddServiceUsers(List<CreateServiceUserArg> args)
@@ -178,6 +194,22 @@ public class Service : Entity, IAggregateRoot
             _serviceAssignStaffes.Add(entity);
         }
     }
+    public void AddServiceIssues(List<CreateServiceRelatedIssueArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ServiceRelatedIssue.Create(arg);
+            _serviceRelatedIssues.Add(entity);
+        }
+    }
+    public void AddServiceAvalibilities(List<CreateServiceAvalibilityArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ServiceAvalibility.Create(arg);
+            _serviceAvalibilities.Add(entity);
+        }
+    }
     #endregion
     #region DeleteMethods
     public void DeleteServiceUsers(long userId)
@@ -243,6 +275,21 @@ public class Service : Entity, IAggregateRoot
             item.Delete(userId);
         }
     }
+    public void DeleteServiceIssues(long userId)
+    {
+        foreach (var item in _serviceRelatedIssues)
+        {
+            AddDomainEvent(new DeleteServiceEvent(issueId: item.IssueId.Value));
+            item.Delete(userId);
+        }
+    }
+    public void DeleteServiceAvalibilities(long userId)
+    {
+        foreach (var item in _serviceAvalibilities)
+        {
+            item.Delete(userId);
+        }
+    }
     #endregion
     #region ModifyMethods
     public void ModifyServiceUsers(List<CreateServiceUserArg> args)
@@ -294,11 +341,11 @@ public class Service : Entity, IAggregateRoot
     public void ModifyServiceChannels(List<CreateServiceChannelArg> args)
     {
         var activeEntities = _serviceChanneles.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
-        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ChannelTypeId == x.ChannelTypeId.Value));
-        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ChannelTypeId.Value == x.ChannelTypeId));
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ChannelId == x.ChannelId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ChannelId.Value == x.ChannelId));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _serviceChanneles.FirstOrDefault(x => x.ChannelTypeId.Value == arg.ChannelTypeId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _serviceChanneles.FirstOrDefault(x => x.ChannelId.Value == arg.ChannelId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);
@@ -432,11 +479,11 @@ public class Service : Entity, IAggregateRoot
     public void ModifyServiceAssignedStaffs(List<CreateServiceAssignedStaffArg> args)
     {
         var activeEntities = _serviceAssignStaffes.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
-        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.StaffId == x.StaffId.Value));
-        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StaffId.Value == x.StaffId));
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.StaffId == x.StaffId.Value && c.ResponsibleTypeId == x.ResponsibleTypeId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StaffId.Value == x.StaffId && c.ResponsibleTypeId.Value == x.ResponsibleTypeId));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _serviceAssignStaffes.FirstOrDefault(x => x.StaffId.Value == arg.StaffId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _serviceAssignStaffes.FirstOrDefault(x => x.StaffId.Value == arg.StaffId && x.ResponsibleTypeId.Value == arg.ResponsibleTypeId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);
@@ -452,16 +499,62 @@ public class Service : Entity, IAggregateRoot
             entity.Delete(args[0].CreatedBy);
         }
     }
+    public void ModifyServiceIssues(List<CreateServiceRelatedIssueArg> args)
+    {
+        var activeEntities = _serviceAssignStaffes.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.IssueId == x.StaffId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StaffId.Value == x.IssueId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _serviceRelatedIssues.FirstOrDefault(x => x.IssueId.Value == arg.IssueId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ServiceRelatedIssue.Create(arg);
+                _serviceRelatedIssues.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void ModifyServiceAvalibilities(List<CreateServiceAvalibilityArg> args)
+    {
+        var activeEntities = _serviceAvalibilities.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.WeekDay == x.WeekDay && c.ServiceAvalibilityEndTime == x.ServiceAvalibilityEndTime && c.ServiceAvalibilityStartTime == x.ServiceAvalibilityStartTime));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.WeekDay == x.WeekDay && c.ServiceAvalibilityEndTime == x.ServiceAvalibilityEndTime && c.ServiceAvalibilityStartTime == x.ServiceAvalibilityStartTime));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _serviceAvalibilities.FirstOrDefault(x => x.WeekDay == arg.WeekDay && arg.ServiceAvalibilityEndTime == x.ServiceAvalibilityEndTime && arg.ServiceAvalibilityStartTime == x.ServiceAvalibilityStartTime && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ServiceAvalibility.Create(arg);
+                _serviceAvalibilities.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
     #endregion
     public ServiceId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
-    public long? ParentId { get; private set; }
-    public double? ServiceCost { get; private set; }
+    public ServiceId? ParentId { get; private set; }
+    public virtual Service? Parent { get; private set; }
+    public decimal? ServiceCost { get; private set; }
     public string? Description { get; private set; }
-    public string? ServiceWorkflowDescription { get; private set; }
+    public string? ServiceWorkflowBpmn { get; private set; }
     public string? ContinuousImprovement { get; private set; }
-    public string? Suggestion { get; private set; }
     public string? FeedbackUrl { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
@@ -469,14 +562,16 @@ public class Service : Entity, IAggregateRoot
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
 
-    public virtual ServiceBoundle ServiceBoundle { get; private set; }
-    public ServiceBoundleId ServiceBoundleId { get; private set; }
+    public virtual ServiceCategory ServiceCategory { get; private set; }
+    public ServiceCategoryId ServiceCategoryId { get; private set; }
+    public virtual ServicePriority ServicePriority { get; private set; }
+    public ServicePriorityId ServicePriorityId { get; private set; }
 
-    public virtual ServiceStatus ServiceStatus { get; private set; }
+    public virtual ServiceStatus? ServiceStatus { get; private set; }
     public ServiceStatusId? ServiceStatusId { get; private set; }
     public DateOnly? InServiceDate { get; private set; }
+    public string? IsInternalService { get; private set; }
     public string? IsCriticalService { get; private set; }
-
 
     public virtual Department TechnicalSupervisorDepartment { get; private set; }
     public DepartmentId? TechnicalSupervisorDepartmentId { get; private set; }
@@ -514,8 +609,8 @@ public class Service : Entity, IAggregateRoot
     public ICollection<ServiceUser> ServiceUsers => _serviceUsers;
     private List<ServiceApi> _serviceApis = new();
     public ICollection<ServiceApi> ServiceApis => _serviceApis;
-    private List<CriticalActivityServices> _criticalActivityServices = new();
-    public ICollection<CriticalActivityServices> CriticalActivityServices => _criticalActivityServices;
+    private List<CriticalActivityService> _criticalActivityServices = new();
+    public ICollection<CriticalActivityService> CriticalActivityServices => _criticalActivityServices;
 
     private List<ServiceRelatedIssue> _serviceRelatedIssues = new();
     public ICollection<ServiceRelatedIssue> ServiceRelatedIssues => _serviceRelatedIssues;
@@ -530,8 +625,8 @@ public class Service : Entity, IAggregateRoot
     private List<BusinessImpactAnalysis> _businessImpactAnalyses = new();
     public ICollection<BusinessImpactAnalysis> BusinessImpactAnalyses => _businessImpactAnalyses;
     private List<BusinessContinuityStrategyService> _businessContinuityStrategyServices = new();
-    public ICollection<BusinessContinuityStrategyService> BusinessContinuityStrategyServices => _businessContinuityStrategyServices
-        ; private List<BusinessContinuityPlanService> _businessContinuityPlanServices = new();
+    public ICollection<BusinessContinuityStrategyService> BusinessContinuityStrategyServices => _businessContinuityStrategyServices;
+    private List<BusinessContinuityPlanService> _businessContinuityPlanServices = new();
     public ICollection<BusinessContinuityPlanService> BusinessContinuityPlanServices => _businessContinuityPlanServices;
 
 }

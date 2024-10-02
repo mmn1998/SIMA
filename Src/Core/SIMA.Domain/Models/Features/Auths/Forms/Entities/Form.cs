@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Forms.Args;
 using SIMA.Domain.Models.Features.Auths.Forms.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -93,8 +94,19 @@ public class Form : Entity
         var entity = FormField.Create(arg);
         _formFields.Add(entity);
     }
+    public void AddFormPermissions(List<CreateFormPermissionArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = FormPermission.Create(arg);
+            _formPermissions.Add(entity);
+        }
+    }
     private List<FormField> _formFields = new();
     public List<FormField> FormFields => _formFields;
     private List<FormPermission> _formPermissions = new();
     public List<FormPermission> FormPermissions => _formPermissions;
+
+    private List<DomainForm> _domainForms = new();
+    public List<DomainForm> DomainForms => _domainForms;
 }

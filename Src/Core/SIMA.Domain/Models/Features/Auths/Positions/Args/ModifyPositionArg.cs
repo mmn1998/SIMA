@@ -12,4 +12,7 @@ public class ModifyPositionArg
     public string? Code { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
+    public int PersonLimitation { get; set; }
+
+
 }

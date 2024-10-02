@@ -16,14 +16,17 @@ public class ServiceCategoryQueryRepository : IServiceCategoryQueryRepository
     public ServiceCategoryQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
-        _mainQuery = @"SELECT ST.[Id]
-    ,ST.[Name]
-    ,ST.[Code]
-    ,ST.[ServiceTypeId]
-    ,ST.[CreatedAt]
-    ,A.[Name] ActiveStatus
-FROM [ServiceCatalog].[ServiceCategory] ST
-INNER JOIN [Basic].[ActiveStatus] A ON ST.ActiveStatusId = A.ID
+        _mainQuery = @"
+SELECT ST.[Id]
+              ,ST.[Name]
+              ,ST.[Code]
+              ,ST.ParentId
+              ,STP.Name ParentName
+	          ,A.[Name] ActiveStatus
+              ,ST.CreatedAt
+          FROM [ServiceCatalog].[ServiceCategory] ST
+          INNER JOIN [Basic].[ActiveStatus] A ON ST.ActiveStatusId = A.ID
+          LEFT JOIN [ServiceCatalog].[ServiceCategory] STP On STP.Id = St.ParentId and STP.ActiveStatusId<>3
 WHERE ST.ActiveStatusId <> 3";
     }
 
@@ -65,10 +68,12 @@ WHERE ST.ActiveStatusId <> 3";
           SELECT ST.[Id]
               ,ST.[Name]
               ,ST.[Code]
-              ,ST.[ServiceTypeId]
+              ,ST.ParentId
+              ,STP.Name ParentName
 	          ,A.[Name] ActiveStatus
           FROM [ServiceCatalog].[ServiceCategory] ST
           INNER JOIN [Basic].[ActiveStatus] A ON ST.ActiveStatusId = A.ID
+          LEFT JOIN [ServiceCatalog].[ServiceCategory] STP On STP.Id = St.ParentId and STP.ActiveStatusId<>3
           WHERE ST.[Id] = @Id AND ST.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -76,24 +81,6 @@ WHERE ST.ActiveStatusId <> 3";
             var result = await connection.QueryFirstAsync<GetServiceCategoryQueryResult>(query, new { request.Id });
             result.NullCheck();
             return result ?? throw SimaResultException.NotFound;
-        }
-    }
-
-    public async Task<Result<IEnumerable<GetServiceCategoryQueryResult>>> GetByServiceTypeId(long serviceTypeId)
-    {
-        var query = @"
-          SELECT ST.[Id]
-              ,ST.[Name]
-              ,ST.[Code]
-              ,ST.[ServiceTypeId]
-          FROM [ServiceCatalog].[ServiceCategory] ST
-          WHERE ST.[ServiceTypeId] = @ServiceTypeId AND ST.ActiveStatusId <> 3";
-        using (var connection = new SqlConnection(_connectionString))
-        {
-            await connection.OpenAsync();
-            var result = await connection.QueryAsync<GetServiceCategoryQueryResult>(query, new { ServiceTypeId = serviceTypeId });
-            result.NullCheck();
-            return Result.Ok(result ?? throw SimaResultException.NotFound);
         }
     }
 }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.Permission;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -48,5 +47,13 @@ public class PermissionsQueryController : ControllerBase
         };
         var result = await _mediator.Send(query);
         return result;
+    }
+
+    [HttpGet("GetPermissionByForm/{FormId}")]
+    public async Task<Result> GetFormByDomain(long FormId)
+    {
+        var request = new GetPermissionByFormQuery { FormId = FormId };
+        return await _mediator.Send(request);
+
     }
 }

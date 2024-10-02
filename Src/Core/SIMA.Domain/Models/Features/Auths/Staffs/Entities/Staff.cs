@@ -13,6 +13,8 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.DMS.Documents.Entities;
+using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
@@ -34,9 +36,10 @@ public class Staff : Entity
     private Staff(CreateStaffArg arg)
     {
         Id = new StaffId(IdHelper.GenerateUniqueId());
-        if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
-        if (arg.PositionId.HasValue) PositionId = new PositionId(arg.PositionId.Value);
-        if (arg.ManagerId.HasValue) ManagerId = new ProfileId(arg.ManagerId.Value);
+        if (arg.ProfileId.HasValue) ProfileId = new(arg.ProfileId.Value);
+        if (arg.PositionId.HasValue) PositionId = new(arg.PositionId.Value);
+        if (arg.ManagerId.HasValue) ManagerId = new(arg.ManagerId.Value);
+        if (arg.SignatureId.HasValue) SignatureId = new(arg.SignatureId.Value);
         StaffNumber = arg.StaffNumber;
         ActiveFrom = arg.ActiveFrom;
         ActiveTo = arg.ActiveTo;
@@ -47,9 +50,10 @@ public class Staff : Entity
     public async Task Modify(ModifyStaffArg arg, IStaffService service)
     {
         await ModifyGuards(arg, service);
-        if (arg.ProfileId.HasValue) ProfileId = new ProfileId(arg.ProfileId.Value);
-        if (arg.PositionId.HasValue) PositionId = new PositionId(arg.PositionId.Value);
-        if (arg.ManagerId.HasValue) ManagerId = new ProfileId(arg.ManagerId.Value);
+        if (arg.ProfileId.HasValue) ProfileId = new(arg.ProfileId.Value);
+        if (arg.PositionId.HasValue) PositionId = new(arg.PositionId.Value);
+        if (arg.ManagerId.HasValue) ManagerId = new(arg.ManagerId.Value);
+        if (arg.SignatureId.HasValue) SignatureId = new(arg.SignatureId.Value);
         StaffNumber = arg.StaffNumber;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -95,34 +99,22 @@ public class Staff : Entity
     }
     #endregion
     public StaffId Id { get; private set; }
-
     public ProfileId? ProfileId { get; private set; }
-
-    public ProfileId? ManagerId { get; private set; }
-
-    public PositionId? PositionId { get; private set; }
-
-    public string? StaffNumber { get; private set; }
-
-    public DateOnly? ActiveFrom { get; private set; }
-
-    public DateOnly? ActiveTo { get; private set; }
-
-    public long ActiveStatusId { get; private set; }
-
-    public DateTime? CreatedAt { get; private set; }
-
-    public long? CreatedBy { get; private set; }
-
-    public byte[]? ModifiedAt { get; private set; }
-
-    public long? ModifiedBy { get; private set; }
-
-    public virtual Profile? Manager { get; private set; }
-
-    public virtual Position? Position { get; private set; }
-
     public virtual Profile? Profile { get; private set; }
+    public StaffId? ManagerId { get; private set; }
+    public virtual Staff? Manager { get; private set; }
+    public PositionId? PositionId { get; private set; }
+    public virtual Position? Position { get; private set; }
+    public DocumentId? SignatureId { get; private set; }
+    public virtual Document? Signature { get; private set; }
+    public string? StaffNumber { get; private set; }
+    public DateOnly? ActiveFrom { get; private set; }
+    public DateOnly? ActiveTo { get; private set; }
+    public long ActiveStatusId { get; private set; }
+    public DateTime? CreatedAt { get; private set; }
+    public long? CreatedBy { get; private set; }
+    public byte[]? ModifiedAt { get; private set; }
+    public long? ModifiedBy { get; private set; }
     public virtual ICollection<Branch> ChiefBranches { get; private set; }
     public virtual ICollection<Branch> DeputyBranches { get; private set; }
 

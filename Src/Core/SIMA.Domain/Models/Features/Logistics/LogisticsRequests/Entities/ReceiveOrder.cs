@@ -1,4 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
+using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
 using SIMA.Framework.Core.Entities;
 
 namespace SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
@@ -7,8 +9,8 @@ public class ReceiveOrder : Entity
 {    
     public ReceiveOrderId Id { get; private set; }
     public DateTime ReceiveDate { get; private set; }
-    public LogisticsRequestId LogisticsRequestId { get; private set; }
-    public virtual LogisticsRequest LogisticsRequest { get; private set; }
+    public OrderingId OrderingId { get; private set; }
+    public virtual Ordering Ordering { get; private set; }
     public LogisticsRequestDocumentId ReceiptDocumentId { get; private set; }
     public virtual LogisticsRequestDocument ReceiptDocument { get; private set; }
     public string? ReceiptNumber { get; private set; }

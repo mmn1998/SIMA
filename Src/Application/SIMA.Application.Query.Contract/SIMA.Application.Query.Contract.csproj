@@ -9,8 +9,7 @@
 	<ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="8.0.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-	  <PackageReference Include="SIMA.Framework.Common" Version="2.1.2" />
+	  <PackageReference Include="SIMA.Framework.Common" Version="2.1.8" />
 	  <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
-	  <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.1.9" />
 	</ItemGroup>
 </Project>

@@ -10,4 +10,5 @@ public interface IFormQueryRepository : IQueryRepository
     Task<Result<IEnumerable<GetFormQueryResult>>> GetAll(GetAllFormQuery requests);
     Task<Result<IEnumerable<GetFormFieldsQueryResult>>> GetAllFormFields(GetAllFormFieldsQuery request);
     Task<List<GetViewResult>> FetchFromView(string viewName);
+    Task<Result<IEnumerable<GetFormQueryResult>>> GetFormByDomainId(long domainId);
 }

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-using SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.PhoneTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Args;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;

@@ -2,11 +2,12 @@
 using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Core.Entities;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 
-public class ChannelUserType
+public class ChannelUserType : Entity
 {
 
     public ChannelUserType()

@@ -8,5 +8,6 @@ public class GetRoleAggregateResult
     public string EnglishKey { get; set; }
     public long ActiveStatusId { get; set; }
     public string ActiveStatus { get; set; }
-    public List<GetRolePermissionQueryResultForAggregate> RolePermissions { get; set; }
+    public List<GetRoleFormPermissions> FormPermissions { get; set; }
+    public List<GetRoleUserQuery> RoleUsers { get; set; }
 }

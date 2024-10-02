@@ -20,19 +20,19 @@ public class UIInputElementsController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    //[SimaAuthorize(Permissions.UIInputElementPost)]
+    [SimaAuthorize(Permissions.UIInputElementPost)]
     public async Task<Result> Post([FromBody] CreateUIInputElementCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    //[SimaAuthorize(Permissions.UIInputElementPut)]
+    [SimaAuthorize(Permissions.UIInputElementPut)]
     public async Task<Result> Put([FromBody] ModifyUIInputElementCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    //[SimaAuthorize(Permissions.UIInputElementDelete)]
+    [SimaAuthorize(Permissions.UIInputElementDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteUIInputElementCommand { Id = id };

@@ -1,12 +1,12 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.PositionLevels.Entities;
+using SIMA.Domain.Models.Features.Auths.PositionLevels.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Args;
 using SIMA.Domain.Models.Features.Auths.Positions.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.PositionTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.PositionTypes.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
@@ -28,6 +28,7 @@ public class Position : Entity
         Code = arg.Code;
         if (arg.DepartmentId.HasValue) DepartmentId = new(arg.DepartmentId.Value);
         if (arg.BranchId.HasValue) BranchId = new(arg.BranchId.Value);
+        PersonLimitation = arg.PersonLimitation;
         PositionLevelId = new(arg.PositionLevelId);
         PositionTypeId = new(arg.PositionTypeId);
         ActiveStatusId = arg.ActiveStatusId;
@@ -51,6 +52,8 @@ public class Position : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
+        PersonLimitation = arg.PersonLimitation;
+
     }
 
     #region Gaurds
@@ -80,6 +83,7 @@ public class Position : Entity
     public virtual PositionType? PositionType { get; private set; }
     public PositionLevelId? PositionLevelId { get; private set; }
     public virtual PositionLevel? PositionLevel { get; private set; }
+    public int PersonLimitation { get; private set; }
 
     public string? Name { get; private set; }
 

@@ -11,4 +11,6 @@ public class UpdateGroupCommand : ICommand<Result<long>>
     public string Code { get; set; }
     public List<CreateGroupUserCommand>? UserGroups { get; set; }
     public List<CreateGroupPermissionCommand>? GroupPermissions { get; set; }
+    public List<CreateFormGroupCommand> FormGroups { get; set; }
+
 }

@@ -6,7 +6,7 @@ using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.ServiceCatalog.ApiAuthenticationMethods
 {
-    [Route("serviceCatalog/[controller]")]
+    [Route("basic/[controller]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "ApiAuthenticationMethods")]
     [Authorize]

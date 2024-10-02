@@ -13,7 +13,5 @@ public class CreateProductArg
     public long ActiveStatusId { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
-    public long? TechnicalResponsibleId { get; set; }
-    public long? TechnicalSupervisorId { get; set; }
-    public long? DepartmentId { get; set; }
+
 }

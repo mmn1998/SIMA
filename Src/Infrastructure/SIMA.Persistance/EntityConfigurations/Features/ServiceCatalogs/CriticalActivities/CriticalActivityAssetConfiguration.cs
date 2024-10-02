@@ -31,14 +31,16 @@ public class CriticalActivityAssetConfiguration : IEntityTypeConfiguration<Criti
 
         entity.HasOne(x => x.CriticalActivity)
             .WithMany(x => x.CriticalActivityAssets)
-            .HasForeignKey(x => x.CriticalActivityId);
+            .HasForeignKey(x => x.CriticalActivityId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.AssetId)
             .HasConversion(x => x.Value, x => new AssetId(x));
 
         entity.HasOne(x => x.Asset)
             .WithMany(x => x.CriticalActivityAssets)
-            .HasForeignKey(x => x.AssetId);
+            .HasForeignKey(x => x.AssetId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

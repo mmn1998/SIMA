@@ -551,12 +551,12 @@ Order By c.[CreatedAt] desc
             var queryResult = await connection.QueryAsync<dynamic>(getNextStepQuery, new { WorkflowId = workflowId, NextStepId = query.NextStepId, ProgressId = query.ProgressId });
             foreach (var current in queryResult)
             {
-                Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo item;
+                NextProgressInfo item;
                 if (current.TargetId != null)
                 {
                     if (!model.TryGetValue(current.TargetId, out item))
                     {
-                        item = new Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo { WorkflowId = workflowId, ProgressId = current.ProgressId, ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId, SpName = current.SpName };
+                        item = new NextProgressInfo { WorkflowId = workflowId, ProgressId = current.ProgressId, ConditionExpression = current.ConditionExpression, Extension = current.Extension, NextStateId = current.NextStateId, TargetId = current.TargetId, SpName = current.SpName };
                         model.Add(current.TargetId, item);
                     }
                 }
@@ -583,10 +583,11 @@ Order By c.[CreatedAt] desc
             {
                 return await EvaluateNextProgress(result.NextProgressInfo, query.ConditionValue, query.SystemParams);
             }
-            return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = result.StepId, SourceStateId = result.CurrentProgressStateId };
+            return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = result.StepId, SourceStateId = result.CurrentProgressStateId, ActionTypeId = result.ActionTypeId };
 
         }
     }
+
 
     public async Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoByIdAsync(long workFlowId)
     {
@@ -633,7 +634,7 @@ Order By c.[CreatedAt] desc
             var startEventActionTypeId = (long)ActionTypeEnum.startEvent;
             var steps = workFlow.Steps.Where(x => x.ActionTypeId == startEventActionTypeId).ToList();
 
-            if (steps.Count > 1)
+            if (steps.Count >= 1)
             {
                 var checkIsEveryOne = new GetWorkflowInfoByIdResponseQueryResult();
                 var checkActorAccess = new GetWorkflowInfoByIdResponseQueryResult();
@@ -732,6 +733,152 @@ Order By c.[CreatedAt] desc
             throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
         }
     }
+
+    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoByIdAsyncSanaz(long workFlowId)
+    {
+        var result = new GetWorkflowInfoByIdResponseQueryResult();
+
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            // Load workflow with related entities
+            var sql = @"
+           SELECT * FROM Project.WorkFlow W WHERE W.Id = @WorkFlowId AND W.ActiveStatusId <> 3 ;
+            SELECT * FROM Project.State ST WHERE ST.WorkFlowId = @WorkFlowId;
+            SELECT * FROM Project.Step S WHERE S.WorkFlowId = @WorkFlowId;
+            SELECT * FROM Project.Progress P WHERE P.SourceId IN (SELECT Id FROM Project.Step SS WHERE  SS.WorkFlowId = @WorkFlowId);
+            SELECT * FROM Project.WorkFlowActor A WHERE A.WorkFlowId = @WorkFlowId;
+            SELECT * FROM Project.WorkFlowActorStep WAS WHERE WAS.WorkFlowActorId IN (SELECT Id FROM Project.WorkFlowActor WHERE WorkFlowId = @WorkFlowId);
+            SELECT * FROM Project.WorkFlowActorUser WAU WHERE WorkFlowActorId IN (SELECT Id FROM Project.WorkFlowActor WHERE WorkFlowId = @WorkFlowId);
+        ";
+
+            var workFlow = new WorkflowInfoQueryResult();
+            using (var multi = await connection.QueryMultipleAsync(sql, new { WorkFlowId = workFlowId }))
+            {
+                workFlow = multi.Read<WorkflowInfoQueryResult>().SingleOrDefault();
+                if (workFlow == null) throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+
+                workFlow.States = multi.Read<StateInfo>().ToList();
+                workFlow.Steps = multi.Read<StepInfo>().ToList();
+                var sourceProgresses = multi.Read<SourceProgressInfo>().ToList();
+                workFlow.WorkFlowActors = multi.Read<WorkFlowActorInfo>().ToList();
+                var actorSteps = multi.Read<WorkFlowActorStepInfo>().ToList();
+                var actorUsers = multi.Read<WorkFlowActorUserInfo>().ToList();
+
+                foreach (var step in workFlow.Steps)
+                {
+                    step.SourceProgresses = sourceProgresses.Where(x => x.SourceId == step.Id).ToList();
+                }
+
+                foreach (var actor in workFlow.WorkFlowActors)
+                {
+                    actor.WorkFlowActorSteps = actorSteps.Where(x => x.WorkFlowActorId == actor.Id).ToList();
+                    actor.WorkFlowActorUsers = actorUsers.Where(x => x.WorkFlowActorId == actor.Id).ToList();
+                }
+            }
+
+            var startEventActionTypeId = (long)ActionTypeEnum.startEvent;
+            var steps = workFlow.Steps.Where(x => x.ActionTypeId == startEventActionTypeId).ToList();
+
+            if (steps.Count >= 1)
+            {
+                var checkIsEveryOne = new GetWorkflowInfoByIdResponseQueryResult();
+                var checkActorAccess = new GetWorkflowInfoByIdResponseQueryResult();
+                foreach (var actor in workFlow.WorkFlowActors)
+                {
+                    var checkUserInActor = workFlow.WorkFlowActors.Select(x => x.WorkFlowActorUsers.Select(c => c.UserId).Contains(_simaIdentity.UserId));
+
+                    var actorUsers = actor.WorkFlowActorUsers.FirstOrDefault(x => x.UserId == _simaIdentity.UserId && x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+                    if (actorUsers != null)
+                    {
+                        var actorStepIds = actor.WorkFlowActorSteps.Select(x => x.StepId);
+                        var step = workFlow.Steps.FirstOrDefault(s => actorStepIds.Contains(s.Id) && s.ActionTypeId == startEventActionTypeId);
+                        if (step != null)
+                        {
+                            var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
+                            if (progress != null)
+                            {
+                                var currentStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+                                var currentProgress = currentStep.SourceProgresses.FirstOrDefault(x => x.SourceId == currentStep.Id);
+                                var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                if (nextStep.ActionTypeId == (long)ActionTypeEnum.exclusiveGateway)
+                                {
+                                    var x = nextStep.SourceProgresses[0];
+                                    nextStep = workFlow.Steps.FirstOrDefault(i => i.Id == x.TargetId);
+                                }
+
+                                checkActorAccess.TargetStateId = nextStep.SourceProgresses[0].StateId;
+                                checkActorAccess.SourceStateId = null;
+                                checkActorAccess.TargetStepId = nextStep.SourceProgresses[0].SourceId;
+                                checkActorAccess.SourceStepId = step.Id;
+                                checkActorAccess.Id = workFlowId;
+                                checkActorAccess.ProjectId = workFlow.ProjectId;
+                                checkActorAccess.MainAggregateId = workFlow.MainAggregateId;
+                                //checkActorAccess = result;
+                            }
+                        }
+                    }
+                    else if (actor.IsEveryOne == "1")
+                    {
+                        var actorStepIds = actor.WorkFlowActorSteps.Select(x => x.StepId);
+                        var step = workFlow.Steps.FirstOrDefault(s => actorStepIds.Contains(s.Id) && s.ActionTypeId == startEventActionTypeId);
+                        if (step != null)
+                        {
+                            var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
+                            if (progress != null)
+                            {
+                                var currentStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+                                var currentProgress = currentStep.SourceProgresses.FirstOrDefault(x => x.SourceId == currentStep.Id);
+                                var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                if (nextStep.ActionTypeId == (long)ActionTypeEnum.exclusiveGateway)
+                                {
+                                    var x = nextStep.SourceProgresses[0];
+                                    nextStep = workFlow.Steps.FirstOrDefault(i => i.Id == x.TargetId);
+                                }
+
+                                checkIsEveryOne.TargetStateId = nextStep.SourceProgresses[0].StateId;
+                                checkIsEveryOne.SourceStateId = null;
+                                checkIsEveryOne.TargetStepId = nextStep.SourceProgresses[0].SourceId;
+                                checkIsEveryOne.SourceStepId = step.Id;
+                                checkIsEveryOne.Id = workFlowId;
+                                checkIsEveryOne.ProjectId = workFlow.ProjectId;
+                                checkIsEveryOne.MainAggregateId = workFlow.MainAggregateId;
+                                //checkIsEveryOne = result;
+                            }
+                        }
+                    }
+                }
+
+                if (checkActorAccess.Id != 0) return checkActorAccess;
+                else if (checkIsEveryOne.Id != 0) return checkIsEveryOne;
+                else throw new SimaResultException(CodeMessges._100063Code, Messages.CreateIssueWithChechActorException);
+
+            }
+            else
+            {
+                var step = workFlow.Steps.FirstOrDefault(s => s.ActionTypeId == startEventActionTypeId);
+                if (step != null)
+                {
+                    var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
+                    if (progress != null)
+                    {
+                        var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+
+                        result.TargetStateId = progress.StateId;
+                        result.SourceStateId = null;
+                        result.TargetStepId = progress.TargetId;
+                        result.SourceStepId = step.Id;
+                        result.Id = workFlowId;
+                        result.ProjectId = workFlow.ProjectId;
+                        result.MainAggregateId = workFlow.MainAggregateId;
+                        return result;
+                    }
+                }
+            }
+
+            throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
+        }
+    }
+
     public static string ContainsComparisonOperator(string text)
     {
         // Array of comparison operators to check for
@@ -740,8 +887,6 @@ Order By c.[CreatedAt] desc
         // Use Any method for efficient check
         return operators.FirstOrDefault(op => text.Contains(op));
     }
-
-
 
     private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo> progresses, string conditionValue, List<InputModel> inputs)
     {
@@ -767,17 +912,19 @@ Order By c.[CreatedAt] desc
                 if (conditionResult)
                 {
                     var sourceStepId = item.TargetId.Value;
-                    var nextProgress = await GetNextProgress(item.WorkflowId, sourceStepId);
-                    if (nextProgress.ActionTypeId == 6)
-                    {
-                        var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = nextProgress.ProgressId, SystemParams = inputs, NextStepId = nextProgress.TargetId, ConditionValue = conditionValue };
-                        return await GetNextStepById(item.WorkflowId, query);
+                    var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = item.ProgressId, SystemParams = inputs, NextStepId = item.TargetId.Value, ConditionValue = conditionValue };
 
-                        //var forFindTargetQuery = @"select p.TargetId from Project.Progress p where p.SourceId=@Id";
-                        //sourceStepId = await connection.QueryFirstOrDefaultAsync<long>(forFindTargetQuery, new { Id = sourceStepId });
-                    }
+                    return await GetNextStepById(item.WorkflowId, query);
+                    //if (nextProgress.ActionTypeId == 6)
+                    //{
+                    //    var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = nextProgress.ProgressId, SystemParams = inputs, NextStepId = nextProgress.TargetId, ConditionValue = conditionValue };
+                    //    return await GetNextStepById(item.WorkflowId, query);
 
-                    return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = sourceStepId, SourceStateId = item.NextStateId };
+                    //    //var forFindTargetQuery = @"select p.TargetId from Project.Progress p where p.SourceId=@Id";
+                    //    //sourceStepId = await connection.QueryFirstOrDefaultAsync<long>(forFindTargetQuery, new { Id = sourceStepId });
+                    //}
+
+                    //return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = sourceStepId, SourceStateId = item.NextStateId };
                 }
             }
             else
@@ -960,7 +1107,7 @@ Order By c.[CreatedAt] desc
         {
             if (skip)
             {
-               if (query.Combiner.Contains("||"))
+                if (query.Combiner.Contains("||"))
                 {
                     continue;
                 }

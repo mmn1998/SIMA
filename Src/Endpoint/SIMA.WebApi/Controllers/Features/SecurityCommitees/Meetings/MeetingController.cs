@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.SecurityCommitees.Meetings;
-using SIMA.Application.Contract.Features.SecurityCommitees.SubjectPriorities;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.SecurityCommitees.Meetings

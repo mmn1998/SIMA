@@ -34,35 +34,46 @@ public class LogisticRequestsCommandHandler : ICommandHandler<CreateLogisticRequ
 
     public async Task<Result<long>> Handle(CreateLogisticRequestCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateLogisticsRequestArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        #region GenerateCode
-        var lastRequest = await _repository.GetLastLogisticsRequest();
-        if (lastRequest != null)
-            arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
-        else
-            arg.Code = "101";
-        #endregion
-        var entity = await LogisticsRequest.Create(arg, _service);
-
-        var goodsArg = _mapper.Map<List<CreateLogisticsRequestGoodsArg>>(request.GoodsList);
-        await entity.AddRequestGoods(goodsArg, arg.Id, _simaIdentity.UserId, _service);
-
-        if (request.Documents.Count > 0 && request.Documents is not null)
+        try
         {
-            var docs = _mapper.Map<List<CreateLogisticsRequestDocumentArg>>(request.Documents);
-            foreach (var doc in docs)
+            var arg = _mapper.Map<CreateLogisticsRequestArg>(request);
+            if (!string.IsNullOrEmpty(request.IssueInforamation.DueDate)) 
+                arg.DueDate = request.IssueInforamation.DueDate.ToMiladiDate();
+            arg.CreatedBy = _simaIdentity.UserId;
+            #region GenerateCode
+            var lastRequest = await _repository.GetLastLogisticsRequest();
+            if (lastRequest != null)
+                arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
+            else
+                arg.Code = "101";
+            #endregion
+            var entity = await LogisticsRequest.Create(arg, _service);
+
+            var goodsArg = _mapper.Map<List<CreateLogisticsRequestGoodsArg>>(request.GoodsList);
+            await entity.AddRequestGoods(goodsArg, arg.Id, _simaIdentity.UserId, _service);
+
+            if (request.Documents.Count > 0 && request.Documents is not null)
             {
-                doc.CreatedBy = _simaIdentity.UserId;
+                var docs = _mapper.Map<List<CreateLogisticsRequestDocumentArg>>(request.Documents);
+                foreach (var doc in docs)
+                {
+                    doc.CreatedBy = _simaIdentity.UserId;
+                }
+                entity.AddLogisticsRequestDocument(docs, arg.Id, _simaIdentity.UserId);
             }
-            await entity.AddLogisticsRequestDocument(docs, arg.Id, _simaIdentity.UserId);
+
+            await _repository.Add(entity);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return Result.Ok(entity.Id.Value);
         }
-
-        await _repository.Add(entity);
-
-        await _unitOfWork.SaveChangesAsync();
-
-        return Result.Ok(entity.Id.Value);
+        catch (Exception ex) 
+        {
+            throw;
+        }
+        
+        
     }
 
     public async Task<Result<long>> Handle(ModifyLogisticsRequestCommand request, CancellationToken cancellationToken)
@@ -84,7 +95,7 @@ public class LogisticRequestsCommandHandler : ICommandHandler<CreateLogisticRequ
         await entity.AddRequestGoods(goodsArg, arg.Id, _simaIdentity.UserId, _service);
 
         var docs = _mapper.Map<List<CreateLogisticsRequestDocumentArg>>(request.Documents);
-        await entity.AddLogisticsRequestDocument(docs, arg.Id, _simaIdentity.UserId);
+        entity.AddLogisticsRequestDocument(docs, arg.Id, _simaIdentity.UserId);
 
         await _unitOfWork.SaveChangesAsync();
 
@@ -97,8 +108,8 @@ public class LogisticRequestsCommandHandler : ICommandHandler<CreateLogisticRequ
         var entity = await _repository.GetById(request.Id);
         var issueEntity = await _issueRepository.GetIssueBySourceId(request.Id, MainAggregateEnums.LogisticsRequest);
 
-        await entity.DeleteRequestGoods(request.Id, _simaIdentity.UserId);
-        await entity.DeleteLogisticsRequestDocument(request.Id, _simaIdentity.UserId);
+        entity.DeleteRequestGoods(request.Id, _simaIdentity.UserId);
+        entity.DeleteLogisticsRequestDocument(request.Id, _simaIdentity.UserId);
 
         entity.Delete(issueEntity.Id.Value, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();

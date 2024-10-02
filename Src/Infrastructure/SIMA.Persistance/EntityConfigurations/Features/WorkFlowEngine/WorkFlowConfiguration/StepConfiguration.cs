@@ -30,6 +30,8 @@ public class StepConfiguration : IEntityTypeConfiguration<Step>
             .IsConcurrencyToken();
         entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.CompleteName).HasColumnType("varchar(MAX)");
+        entity.Property(x => x.IsAssigneeForced)
+                        .HasColumnType("char(1)");
 
         entity.Property(x => x.FormId)
             .HasConversion(

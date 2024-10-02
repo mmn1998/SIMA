@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Entities;
-using SIMA.Domain.Models.Features.Auths.ServiceCustomerTypes.Interfaces;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.CustomerTypes.Interfaces;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;
@@ -19,7 +19,7 @@ public class CustomerTypeRepository : Repository<CustomerType>, ICustomerTypeRep
 
     public async Task<CustomerType> GetById(CustomerTypeId Id)
     {
-        var entity = await _context.ServiceCustomerTypes.FirstOrDefaultAsync(x => x.Id == Id);
+        var entity = await _context.CustomerTypes.FirstOrDefaultAsync(x => x.Id == Id);
         entity.NullCheck();
         return entity ?? throw SimaResultException.NotFound;
     }

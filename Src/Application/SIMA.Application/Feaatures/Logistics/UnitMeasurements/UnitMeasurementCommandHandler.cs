@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Logistics.UnitMeasurements;
-using SIMA.Domain.Models.Features.Logistics.GoodsTypes.Args;
+using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Args;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Contracts;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Entities;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.ValueObjects;

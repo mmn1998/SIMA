@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.AddressTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
+using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -68,8 +69,10 @@ public class AddressType : Entity
     }
 
     private List<AddressBook> _addressBooks = new();
-
     public ICollection<AddressBook> AddressBooks => _addressBooks;
+
+    private List<SupplierAddressBook> _supplierAddressBooks = new();
+    public ICollection<SupplierAddressBook> SupplierAddressBooks => _supplierAddressBooks;
     #region Gaurds
 
     private static async Task CreateGuards(CreateAddressTypeArg arg, IAddressTypeDomainService service)

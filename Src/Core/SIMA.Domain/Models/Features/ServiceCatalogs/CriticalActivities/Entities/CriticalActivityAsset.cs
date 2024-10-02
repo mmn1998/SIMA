@@ -19,7 +19,7 @@ public class CriticalActivityAsset : Entity
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<CriticalActivityAsset> Create(CreateCriticalActivityAssetArg arg)
+    public static CriticalActivityAsset Create(CreateCriticalActivityAssetArg arg)
     {
         return new CriticalActivityAsset(arg);
     }
@@ -29,6 +29,12 @@ public class CriticalActivityAsset : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 
     public CriticalActivityAssetId Id { get; private set; }

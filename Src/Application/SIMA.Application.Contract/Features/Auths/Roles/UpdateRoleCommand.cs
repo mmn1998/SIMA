@@ -11,4 +11,8 @@ public class UpdateRoleCommand : ICommand<Result<long>>
     public long ActiveStatusId { get; set; }
     public string? Code { get; set; }
     public List<CreateRolePermissionCommand>? RolePermissions { get; set; }
+    public List<CreateFormRoleCommand>? FormRoles { get; set; }
+    public List<CreateRoleUserCommand>? RoleUsers { get; set; }
+
+
 }

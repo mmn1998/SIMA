@@ -15,7 +15,9 @@ namespace SIMA.Application.Feaatures.DMS.Documents.Mappers;
 
 public class DocumentMapper : Profile
 {
-    private readonly IServiceProvider _serviceProvider;
+    private static IFileService _fileService;
+    private static IServiceProvider _serviceProvider;
+    private static string _root;
 
     public DocumentMapper(ISimaIdentity simaIdentity, IWebHostEnvironment webHost, IFileService fileService, IServiceProvider serviceProvider)
     {
@@ -41,16 +43,37 @@ public class DocumentMapper : Profile
 
             throw;
         }
-        
+        _fileService = fileService;
         _serviceProvider = serviceProvider;
+        _root = webHost.ContentRootPath;
+    }
+    public static async Task<List<CreateDocumentArg>> Map(List<CreateDocumentCommand> args, long userId)
+    {
+        var result = new List<CreateDocumentArg>();
+        foreach (var arg in args)
+        {
+            var item = new CreateDocumentArg();
+            item.Name = arg.Name;
+            item.Code = IdHelper.GenerateUniqueId().ToString();
+            item.FileAddress = await UploadFileInFileServer(arg.DocumentFile, arg.Name, arg.FileExtensionId, _fileService, _root);
+            item.AttachStepId = arg.AttachStepId;
+            item.SourceId = arg.SourceId;
+            item.CreatedBy = userId;
+            item.DocumentTypeId = arg.DocumentTypeId.HasValue ? arg.DocumentTypeId.Value : 0;
+            item.ActiveStatusId = (long)ActiveStatusEnum.Active;
+            item.FileExtensionId = arg.FileExtensionId.HasValue ? arg.FileExtensionId.Value : 0;
+            item.MainAggregateId = arg.MainAggregateId;
+            result.Add(item);
+        }
+        return result;
     }
 
-    private async Task<string> UploadFileInFileServer(string base64, string fileName, long? extensionTypeId, IFileService fileService, string rootPath)
+    private static async Task<string> UploadFileInFileServer(string base64, string fileName, long? extensionTypeId, IFileService fileService, string rootPath)
     {
         var fileContent = fileService.GetBytesFromBase64(base64);
         if (fileContent is null || fileContent.Length == 0)
         {
-            throw new SimaResultException(CodeMessges._400Code, Messages.FileNotFoundError);
+            throw new SimaResultException(CodeMessges._400Code, Messages.FileContentNullError);
         }
         var filePath = await fileService.Upload(fileContent, fileName, rootPath);
         try
@@ -60,12 +83,12 @@ public class DocumentMapper : Profile
         catch (SimaException)
         {
             fileService.DeleteFile(filePath);
-            throw new SimaResultException(CodeMessges._400Code, Messages.FileUploadException);
+            throw;
         }
         return filePath;
     }
     #region FileValidations
-    private async Task FileValidations(string filePath, long? extensionTypeId)
+    private static async Task FileValidations(string filePath, long? extensionTypeId)
     {
         var fileExtension = Path.GetExtension(filePath).Replace(".", "");
         if (extensionTypeId == null)

@@ -7,7 +7,7 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Roles;
 namespace SIMA.Application.Query.Features.Auths.Roles;
 
 public class RoleQueryHandler : IQueryHandler<GetRoleQuery, Result<GetRoleQueryResult>>, IQueryHandler<GetAllRoleQuery, Result<IEnumerable<GetRoleQueryResult>>>,
-    IQueryHandler<GetRolePermissionQuery, Result<GetRolePermissionQueryResult>>, IQueryHandler<GetRoleAggregate, Result<GetRoleAggregateResult>>
+    IQueryHandler<GetRolePermissionQuery, Result<List<GetRolePermissionQueryResult>>>, IQueryHandler<GetRoleAggregate, Result<GetRoleAggregateResult>>
 {
     private readonly IRoleQueryRepository _repository;
 
@@ -16,10 +16,22 @@ public class RoleQueryHandler : IQueryHandler<GetRoleQuery, Result<GetRoleQueryR
         _repository = repository;
     }
 
+    public async Task<Result<GetRoleAggregateResult>> Handle(GetRoleAggregate request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetRoleAggegate(request.RoleId);
+        return Result.Ok(result);
+    }
     public async Task<Result<GetRoleQueryResult>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
     {
         var result = await _repository.FindById(request.Id);
         return Result.Ok(result);
+    }
+
+    public async Task<Result<List<GetRolePermissionQueryResult>>> Handle(GetRolePermissionQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetRolePermission(request.RoleId , request.FormId);
+        return result;
+
     }
 
     public async Task<Result<IEnumerable<GetRoleQueryResult>>> Handle(GetAllRoleQuery request, CancellationToken cancellationToken)
@@ -27,16 +39,7 @@ public class RoleQueryHandler : IQueryHandler<GetRoleQuery, Result<GetRoleQueryR
         return await _repository.GetAll(request);
     }
 
-    public async Task<Result<GetRolePermissionQueryResult>> Handle(GetRolePermissionQuery request, CancellationToken cancellationToken)
-    {
-        var result = await _repository.GetRolePermission(request.RolePermissionId);
-        return Result.Ok(result);
+   
 
-    }
-
-    public async Task<Result<GetRoleAggregateResult>> Handle(GetRoleAggregate request, CancellationToken cancellationToken)
-    {
-        var result = await _repository.GetRoleAggegate(request.RoleId);
-        return Result.Ok(result);
-    }
+    
 }

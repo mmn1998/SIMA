@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SIMA.Application.Query.Contract.Features.Logistics.Goods;
 using SIMA.Application.Query.Contract.Features.Logistics.LogisticsRequests;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;

@@ -2,11 +2,11 @@
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
 
-public class CreateCriticalActivityExecutionPlanArg : Entity
+public class CreateCriticalActivityExecutionPlanArg
 {
     public long Id { get;  set; }
     public long CriticalActivityId { get;  set; }
-    public int WeekyDay { get;  set; }
+    public int WeekDay { get;  set; }
     public TimeOnly ServiceAvalibilityStartTime { get;  set; }
     public TimeOnly ServiceAvalibilityEndTime { get;  set; }
     public long ActiveStatusId { get;  set; }

@@ -61,12 +61,12 @@ public class GoodsType : Entity, IAggregateRoot
     }
     #endregion
     public GoodsTypeId Id { get; private set; }
-    public string? Name { get; private set; }
-    public string? Code { get; private set; }
-    public string? IsRequireItConfirmation { get; private set; }
+    public string Name { get; private set; }
+    public string Code { get; private set; }
+    public string IsRequireItConfirmation { get; private set; }
     public long ActiveStatusId { get; private set; }
-    public DateTime? CreatedAt { get; private set; }
-    public long? CreatedBy { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public long CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)

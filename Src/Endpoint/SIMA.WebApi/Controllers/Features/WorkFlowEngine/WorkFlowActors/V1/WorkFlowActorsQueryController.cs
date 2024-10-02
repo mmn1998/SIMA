@@ -35,4 +35,12 @@ public class WorkflowActorsQueryController : ControllerBase
     {
         return await _mediator.Send(query);
     }
+    // Todo hossein add a permission for employee
+    [HttpGet("GetEmployee/{id}")]
+    [SimaAuthorize(Permissions.WorkFlowActorGetAll)]
+    public async Task<Result<IEnumerable<GetWorkflowActorEmployeeQueryResult>>> GetEmployee(long id)
+    {
+        var query = new GetWorkflowActorEmployeeQuery { Id = id };
+        return await _mediator.Send(query);
+    }
 }

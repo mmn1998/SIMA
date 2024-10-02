@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs.CriticalActivities;
 
@@ -39,9 +37,19 @@ public class CriticalActivityConfiguration : IEntityTypeConfiguration<CriticalAc
 
 
         entity.Property(x => x.TechnicalSupervisorDepartmentId)
-    .HasConversion(x => x.Value, x => new DepartmentId(x));
+            .HasConversion(x => x.Value, x => new DepartmentId(x));
 
+        entity.HasOne(x => x.TechnicalSupervisorDepartment)
+            .WithMany(x => x.CriticalActivities)
+            .HasForeignKey(x => x.TechnicalSupervisorDepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.IssueId)
+            .HasConversion(x => x.Value, x => new IssueId(x));
         
-
+        entity.HasOne(x=>x.Issue)
+            .WithMany(x=>x.CriticalActivities)
+            .HasForeignKey(x=>x.IssueId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

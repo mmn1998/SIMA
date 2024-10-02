@@ -14,7 +14,7 @@ public class CriticalActivityExecutionPlan : Entity
     {
         Id = new CriticalActivityExecutionPlanId(arg.Id);
         CriticalActivityId = new CriticalActivityId(arg.CriticalActivityId);
-        WeekyDay = arg.WeekyDay;
+        WeekDay = arg.WeekDay;
         ServiceAvalibilityStartTime = arg.ServiceAvalibilityStartTime;
         ServiceAvalibilityEndTime = arg.ServiceAvalibilityEndTime;
         ActiveStatusId = arg.ActiveStatusId;
@@ -22,7 +22,7 @@ public class CriticalActivityExecutionPlan : Entity
         CreatedBy = arg.CreatedBy;
     }
 
-    public static async Task<CriticalActivityExecutionPlan> Create(CreateCriticalActivityExecutionPlanArg arg)
+    public static CriticalActivityExecutionPlan Create(CreateCriticalActivityExecutionPlanArg arg)
     {
         return new CriticalActivityExecutionPlan(arg);
     }
@@ -33,11 +33,17 @@ public class CriticalActivityExecutionPlan : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 
     public CriticalActivityExecutionPlanId Id { get; private set; }
     public virtual CriticalActivity CriticalActivity { get; private set; }
     public CriticalActivityId CriticalActivityId { get; private set; }
-    public int WeekyDay { get; private set; }
+    public int WeekDay { get; private set; }
     public TimeOnly ServiceAvalibilityStartTime { get; private set; }
     public TimeOnly ServiceAvalibilityEndTime { get; private set; }
     public long ActiveStatusId { get; private set; }

@@ -21,7 +21,10 @@ namespace SIMA.Persistance.Repositories.Features.Auths
         {
             var entity = await _context.Groups
             .Include(g => g.UserGroups)
-                .Include(g => g.GroupPermissions)
+            .Include(g => g.GroupPermissions)
+            .Include(g => g.FormGroups)
+                .ThenInclude(g => g.Form)
+                    .ThenInclude(x => x.FormPermissions)
                     .FirstOrDefaultAsync(g => g.Id == new GroupId(id));
             entity.NullCheck();
             return entity;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
@@ -49,5 +50,9 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
         entity.HasOne(x => x.AttachStep)
             .WithMany(x => x.Documents)
                 .HasForeignKey(x => x.AttachStepId);
+
+        entity.Property(e => e.StaffSignatureId).HasConversion(v => v.Value, v => new StaffId(v));
+        entity.HasOne(d => d.StaffSignature).WithOne(p => p.Signature)
+            .HasForeignKey<Document>(d => d.StaffSignatureId);
     }
 }

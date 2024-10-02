@@ -34,8 +34,3 @@ public class BoundFormatDeserialized
     public string? apiNameForDataBounding { get; set; }
     public string? storedProcedureForDataBounding { get; set; }
 }
-//public class ApiNameForDataBoundingObj
-//{
-//    public string? Key { get; set; }
-//    public string? Value { get; set; }
-//}

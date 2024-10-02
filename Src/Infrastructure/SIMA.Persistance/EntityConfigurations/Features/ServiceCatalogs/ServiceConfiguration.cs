@@ -15,6 +15,10 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
         v => v.Value,
         v => new ServiceId(v))
     .ValueGeneratedNever();
+        entity.Property(x => x.ParentId)
+    .HasConversion(
+        v => v.Value,
+        v => new ServiceId(v));
         entity.HasKey(e => e.Id);
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
@@ -26,18 +30,27 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
                      .HasMaxLength(20).IsUnicode();
         entity.HasIndex(e => e.Code).IsUnique();
 
-        entity.Property(x => x.ServiceBoundleId)
-             .HasConversion(v => v.Value, v => new ServiceBoundleId(v));
-        entity.HasOne(d => d.ServiceBoundle).WithMany(p => p.Services)
-                .HasForeignKey(d => d.ServiceBoundleId).OnDelete(DeleteBehavior.ClientSetNull);
+        entity.Property(x => x.ServiceCategoryId)
+             .HasConversion(v => v.Value, v => new ServiceCategoryId(v));
+        entity.HasOne(d => d.ServiceCategory)
+                .WithMany(p => p.Services)
+                .HasForeignKey(d => d.ServiceCategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+        entity.Property(x => x.ServicePriorityId)
+             .HasConversion(v => v.Value, v => new ServicePriorityId(v));
+        entity.HasOne(d => d.ServicePriority)
+                .WithMany(p => p.Services)
+                .HasForeignKey(d => d.ServicePriorityId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.IsCriticalService).HasMaxLength(1).IsFixedLength();
+        entity.Property(x => x.IsInternalService).HasMaxLength(1).IsFixedLength();
 
         entity.Property(x => x.TechnicalSupervisorDepartmentId)
             .HasConversion(v => v.Value, v => new DepartmentId(v));
         entity.HasOne(d => d.TechnicalSupervisorDepartment).WithMany(p => p.TechnicalSupervisorServices)
             .HasForeignKey(d => d.TechnicalSupervisorDepartmentId);
-        
+
         entity.Property(x => x.ServiceStatusId)
             .HasConversion(v => v.Value, v => new ServiceStatusId(v));
         entity.HasOne(d => d.ServiceStatus).WithMany(p => p.Services)

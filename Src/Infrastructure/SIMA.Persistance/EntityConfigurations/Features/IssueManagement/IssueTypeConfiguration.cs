@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.IssueManagement;
 
-internal class IssueTypeConfiguration : IEntityTypeConfiguration<IssueType>
+public class IssueTypeConfiguration : IEntityTypeConfiguration<IssueType>
 {
     public void Configure(EntityTypeBuilder<IssueType> entity)
     {

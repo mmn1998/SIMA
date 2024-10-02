@@ -1,34 +1,32 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.DMS.WorkFlowDocumentExtensions;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 
-namespace SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentExtentions.V1
+namespace SIMA.WebApi.Controllers.Features.DMS.WorkFlowDocumentExtentions.V1;
+
+
+[Route("[controller]")]
+[ApiController]
+[ApiExplorerSettings(GroupName = "WorkflowDocumentExtentions")]
+public class WorkflowDocumentExtentionsQueryController : ControllerBase
 {
-
-    [Route("[controller]")]
-    [ApiController]
-    [ApiExplorerSettings(GroupName = "WorkflowDocumentExtentions")]
-    public class WorkflowDocumentExtentionsQueryController : ControllerBase
+    private readonly IMediator _mediator;
+    public WorkflowDocumentExtentionsQueryController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
-        public WorkflowDocumentExtentionsQueryController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        _mediator = mediator;
+    }
 
-        [HttpPost("GetAll")]
-        public async Task<Result> Get(GetAllWorkFlowDocumentExtensionQuery query)
-        {
-            return await _mediator.Send(query);
-        }
+    [HttpPost("GetAll")]
+    public async Task<Result> Get(GetAllWorkFlowDocumentExtensionQuery query)
+    {
+        return await _mediator.Send(query);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<Result> Get([FromRoute] long id)
-        {
-            var query = new GetWorkFlowDocumentExtensionQuery { Id = id };
-            return await _mediator.Send(query);
-        }
+    [HttpGet("{id}")]
+    public async Task<Result> Get([FromRoute] long id)
+    {
+        var query = new GetWorkFlowDocumentExtensionQuery { Id = id };
+        return await _mediator.Send(query);
     }
 }

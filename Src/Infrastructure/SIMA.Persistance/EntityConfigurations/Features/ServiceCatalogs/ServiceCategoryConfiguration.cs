@@ -14,6 +14,10 @@ public class ServiceCategoryConfiguration : IEntityTypeConfiguration<ServiceCate
     .HasConversion(v => v.Value, v => new ServiceCategoryId(v))
     .ValueGeneratedNever();
         entity.HasKey(e => e.Id);
+        entity.Property(x => x.ParentId)
+    .HasConversion(
+        v => v.Value,
+        v => new ServiceCategoryId(v));
         entity.Property(e => e.CreatedAt)
                         .HasDefaultValueSql("(getdate())")
                         .HasColumnType("datetime");
@@ -23,11 +27,5 @@ public class ServiceCategoryConfiguration : IEntityTypeConfiguration<ServiceCate
         entity.Property(e => e.Code)
               .HasMaxLength(20).IsUnicode();
         entity.HasIndex(e => e.Code).IsUnique();
-
-        entity.Property(x => x.ServiceTypeId)
-         .HasConversion(v => v.Value, v => new ServiceTypeId(v));
-        entity.HasOne(d => d.serviceType).WithMany(p => p.ServiceCategories)
-                .HasForeignKey(d => d.ServiceTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

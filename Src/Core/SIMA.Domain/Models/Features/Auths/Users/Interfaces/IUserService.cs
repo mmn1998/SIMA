@@ -13,5 +13,6 @@ public interface IUserService : IDomainService
     Task<bool> IsCompanyMatchPersonCompany(CompanyId companyId, ProfileId profileId);
     string GenerateCode();
     string GeneratePassword();
+    Task<List<long>> GetUserPermissonByFormId(long formId, long userId);
 }
 

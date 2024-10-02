@@ -4,7 +4,6 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Companies;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Resources;
 
@@ -28,13 +27,13 @@ public class CompanyQueryRepository : ICompanyQueryRepository
                 SELECT DISTINCT C.[ID] as Id
                   ,C.[Name]
                   ,C.[Code]
+                  ,C.[ParentId]
 	              , (select PC.name from[Organization].[Company] PC where  PC.ID = C.ParentID and PC.ActiveStatusID <> 3 ) ParentName
                    ,a.ID ActiveStatusId
                    ,a.Name ActiveStatus
                      FROM [Organization].[Company] C
                           join Basic.ActiveStatus a
                          on c.ActiveStatusId = a.ID
-
               WHERE C.Id = @Id
 ";
             var result = await connection.QueryFirstOrDefaultAsync<GetCompanyQueryResult>(query, new { Id = id });
@@ -58,13 +57,14 @@ public class CompanyQueryRepository : ICompanyQueryRepository
                                         C.[ID] as Id
                                        ,C.[Name]
                                        ,C.[Code]
-	                                   , (select PC.name from[Organization].[Company] PC where  PC.ID = C.ParentID and PC.ActiveStatusID = 1 )ParentName
+                                       ,C.[ParentId]
+	                                   ,(select PC.name from[Organization].[Company] PC where  PC.ID = C.ParentID and PC.ActiveStatusID = 1 ) ParentName
                                       ,a.ID ActiveStatusId
                                       ,a.Name ActiveStatus
                                       ,C.[CreatedAt]
                                       FROM [Organization].[Company] C
-                                           join Basic.ActiveStatus a on c.ActiveStatusId = a.ID
-                                    WHERE C.[ActiveStatusID] <> 3)
+                                      join Basic.ActiveStatus a on c.ActiveStatusId = a.ID
+                                      WHERE C.[ActiveStatusID] <> 3)
 								SELECT COUNT(*) Result FROM Query
                                 /**where**/
                                 ; ";
@@ -73,13 +73,14 @@ public class CompanyQueryRepository : ICompanyQueryRepository
                                         C.[ID] as Id
                                        ,C.[Name]
                                        ,C.[Code]
-	                                   , (select PC.name from[Organization].[Company] PC where  PC.ID = C.ParentID and PC.ActiveStatusID = 1 )ParentName
+                                       ,C.[ParentId]
+	                                   , (select PC.name from[Organization].[Company] PC where  PC.ID = C.ParentID and PC.ActiveStatusID = 1 ) ParentName
                                       ,a.ID ActiveStatusId
                                       ,a.Name ActiveStatus
                                       ,C.[CreatedAt]
                                       FROM [Organization].[Company] C
-                                           join Basic.ActiveStatus a on c.ActiveStatusId = a.ID
-                                    WHERE C.[ActiveStatusID] <> 3)
+                                      join Basic.ActiveStatus a on c.ActiveStatusId = a.ID
+                                      WHERE C.[ActiveStatusID] <> 3)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/

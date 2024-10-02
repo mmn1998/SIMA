@@ -1,7 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;

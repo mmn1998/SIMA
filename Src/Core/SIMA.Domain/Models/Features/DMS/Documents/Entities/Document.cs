@@ -1,7 +1,11 @@
-﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+﻿using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentExtensions.Entities;
@@ -13,6 +17,7 @@ using SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
+using SIMA.Domain.Models.Features.Logistics.OrderingItems.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
@@ -129,10 +134,22 @@ public class Document : Entity
     public ICollection<AssetDocument> AssetDocuments => _assetDocuments;
     private List<ConfigurationItemDocument> _configurationItemDocuments = new();
     public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
+    private List<SupplierDocument> _supplierDocuments = new();
+    public ICollection<SupplierDocument> SupplierDocuments => _supplierDocuments;
+    public virtual Staff? StaffSignature { get; set; }
+    public StaffId? StaffSignatureId { get; set; }
     public void Delete(long userId)
     {
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<DeliveryItem> _deliveryItems = new();
+    public ICollection<DeliveryItem> DeliveryItems => _deliveryItems;
+
+    private List<ReturnOrderingItem> _returnOrderingItems = new();
+    public ICollection<ReturnOrderingItem> ReturnOrderingItems => _returnOrderingItems;
+
+    private List<AccessRequestDocument> _accessRequestDocuments = new();
+    public ICollection<AccessRequestDocument> AccessRequestDocuments => _accessRequestDocuments;
 }

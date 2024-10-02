@@ -5,6 +5,7 @@ public class CreatePositionArg
     public long Id { get; set; }
     public long? DepartmentId { get; set; }
     public long? BranchId { get; set; }
+    public int PersonLimitation { get; set; }
     public long PositionLevelId { get; set; }
     public long PositionTypeId { get; set; }
     public string? Name { get; set; }

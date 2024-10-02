@@ -10,4 +10,5 @@ public class CreateFormCommand : ICommand<Result<long>>
     public string? Title { get; set; }
     public string? Code { get; set; }
     public string? IsSystemForm { get; set; }
+    public List<long>? PermissoinIdList { get; set; }
 }

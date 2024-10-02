@@ -4,9 +4,9 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.ServiceCatalogs.CriticalActivities;
 
-public class CriticalActivityServiceConfiguration : IEntityTypeConfiguration<CriticalActivityServices>
+public class CriticalActivityServiceConfiguration : IEntityTypeConfiguration<CriticalActivityService>
 {
-    public void Configure(EntityTypeBuilder<CriticalActivityServices> entity)
+    public void Configure(EntityTypeBuilder<CriticalActivityService> entity)
     {
         entity.ToTable("CriticalActivityService", "ServiceCatalog");
         

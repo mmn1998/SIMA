@@ -9,6 +9,7 @@ public class GetWorkflowInfoByIdResponseQueryResult
     public long TargetStateId { get; set; }
     public long ProjectId { get; set; }
     public long MainAggregateId { get; set; }
+    public long ActionTypeId { get; set; }
 }
 // long workflowId, long nextStepId, long progressId, string ConditionValue
 public class GetNextStepQuery

@@ -16,7 +16,7 @@ public class ServiceQueryHandler : IQueryHandler<GetServiceQuery, Result<GetServ
     }
     public async Task<Result<GetServiceQueryResult>> Handle(GetServiceQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetById(request.Id);
+        var result = await _repository.GetById(id: request.Id, issueId: request.IssueId);
         return Result.Ok(result);
     }
 

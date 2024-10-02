@@ -16,7 +16,8 @@ namespace SIMA.Application.Feaatures.Logistics.LogisticRequests.Mapper
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.IssuePreorityId, act => act.MapFrom(source => source.IssueInforamation.IssuePriorityId))
             .ForMember(dest => dest.Weight, act => act.MapFrom(source => source.IssueInforamation.Weight))
-            .ForMember(dest => dest.DueDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.IssueInforamation.DueDate)))
+            .ForMember(dest => dest.OwnerUserId, act => act.MapFrom(source => source.IssueInforamation.OwnerUserId))
+            //.ForMember(dest => dest.DueDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.IssueInforamation.DueDate)))
             .ForMember(x => x.IssueId, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()));
 
 

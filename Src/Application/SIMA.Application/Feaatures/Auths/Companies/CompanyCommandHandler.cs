@@ -32,12 +32,20 @@ public class CompanyCommandHandler : ICommandHandler<CreateCompanyCommand, Resul
     }
     public async Task<Result<long>> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateCompanyArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await Company.Create(arg, _service);
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
+        try
+        {
+            var arg = _mapper.Map<CreateCompanyArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
+            var entity = await Company.Create(arg, _service);
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
+        catch (Exception e)
+        {
+
+            throw;
+        }
     }
 
     public async Task<Result<long>> Handle(ModifyCompanyCommands request, CancellationToken cancellationToken)

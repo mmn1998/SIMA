@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.Warehouses.Entities;
 using SIMA.Domain.Models.Features.Auths.Warehouses.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Auths;

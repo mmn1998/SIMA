@@ -1,8 +1,10 @@
-﻿using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+﻿using MediatR;
+using Org.BouncyCastle.Asn1.Ocsp;
+using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
@@ -56,7 +58,12 @@ public class WorkFlowActor : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         IsEveryOne = arg.IsEveryOne;
+        IsActorManager = arg.IsActorManager;
         IsDirectManagerOfIssueCreator = arg.IsDirectManagerOfIssueCreator;
+        AddActorRoles(arg.RoleId, arg.Id);
+        AddActorGroups(arg.GroupId, arg.Id);
+        AddActorUsers(arg.UserId, arg.Id);
+        AddEmployee(arg.EmployeeId);
     }
 
     public void Delete(long userId)
@@ -82,6 +89,37 @@ public class WorkFlowActor : Entity
             workflowActorStep.Activate(userId);
         }
         #endregion
+    }
+    public void AddEmployee(List<WorkflowActorEmployeeArg> args)
+    {
+        GuardAgainstActorIsManager(args);
+        var newIds = args.Select(x => new WorkFlowActorId(x.EmployeeId)).ToList();
+
+        var removed = _employees.Where(x => !newIds.Contains(x.EmployeeId)).ToList();
+        foreach (var employee in removed)
+        {
+            var currentItem = _employees.First(x => x.EmployeeId == employee.EmployeeId);
+            currentItem.Delete();
+        }
+        foreach (var item in args)
+        {
+            var existingEmployee = _employees.FirstOrDefault(x => x.EmployeeId == new WorkFlowActorId(item.EmployeeId));
+            if (existingEmployee != null)
+            {
+                existingEmployee.Activate();
+                continue;
+            }
+            var entity = WorkFlowActorEmployee.Create(item, ModifiedBy.Value);
+            _employees.Add(entity);
+        }
+    }
+
+    private void GuardAgainstActorIsManager(List<WorkflowActorEmployeeArg> args)
+    {
+        if (IsActorManager == "0" && args.Any())
+        {
+            //  Todo Sanaz Exception Should Be handled
+        }
     }
 
     public void AddActorRoles(List<CreateWorkFlowActorRoleArg> args , long workFlowActorId)
@@ -221,14 +259,17 @@ public class WorkFlowActor : Entity
     public byte[]? ModifiedAt { get; private set; }
     public string? IsDirectManagerOfIssueCreator { get; private set; }
     public string? IsEveryOne { get; private set; }
+    public string? IsActorManager { get; private set; }
     public string BpmnId { get; private set; }
     public long? ModifiedBy { get; set; }
+    private List<WorkFlowActorEmployee> _employees = new();
+    public IReadOnlyCollection<WorkFlowActorEmployee> Employees => _employees.AsReadOnly();
     public WorkFlow.Entities.WorkFlow WorkFlow { get; private set; }
 
     private List<WorkFlowActorRole> _workFlowActorRoles = new();
     public IList<WorkFlowActorRole> WorkFlowActorRoles => _workFlowActorRoles;
     private List<WorkFlowActorStep> _workFlowActorSteps = new();
-    public virtual ICollection<WorkFlowActorStep> WorkFlowActorSteps => _workFlowActorSteps;
+    public virtual IReadOnlyCollection<WorkFlowActorStep> WorkFlowActorSteps => _workFlowActorSteps.AsReadOnly();
     private List<WorkFlowActorUser> _workFlowActorUsers = new();
     public ICollection<WorkFlowActorUser> WorkFlowActorUsers => _workFlowActorUsers;
     private List<WorkFlowActorGroup> _workFlowActorGroups = new();

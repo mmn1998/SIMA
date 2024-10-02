@@ -10,5 +10,7 @@ public class GetRelatedProgressQueryResult
     public string? ProcedureInfo { get; set; }
     public long TargetId { get; set; }
     public string TargetName { get; set; }
+    public string? IsAssigneeForced { get; set; }
+    public string? IsActorManager { get; set; }
     public List<StoreProcedureParams> Params { get; set; } = new();
 }

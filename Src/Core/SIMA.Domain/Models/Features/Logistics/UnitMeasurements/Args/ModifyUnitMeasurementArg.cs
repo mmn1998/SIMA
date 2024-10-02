@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.Logistics.GoodsTypes.Args;
+﻿namespace SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Args;
 
 public class ModifyUnitMeasurementArg
 {

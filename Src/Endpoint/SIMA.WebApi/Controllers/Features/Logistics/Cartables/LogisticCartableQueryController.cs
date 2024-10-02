@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Logistics.Cartables;
-using SIMA.Application.Query.Contract.Features.Logistics.GoodsCategories;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.WebApi.Extensions;
@@ -22,6 +21,9 @@ public class LogisticCartableQueryController : ControllerBase
     {
         _mediator = mediator;
     }
+    /// <summary>
+    /// کارتاپل درخواست های تدارکات
+    /// </summary>
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.LogisticCartableGetAll)]
     public async Task<Result> GetAll(LogisticCartableGetAllQuery request)
@@ -29,51 +31,37 @@ public class LogisticCartableQueryController : ControllerBase
         return await _mediator.Send(request);
     }
 
+    /// <summary>
+    /// درخواست های تدارکات من
+    /// </summary>
+    [HttpPost("MyLogisticsRequestList")]
+    [SimaAuthorize(Permissions.LogisticsRequestsGetAll)]
+    public async Task<Result> MyLogisticsRequestList(GetAllLogisticsRequestsQuery query)
+    {
+        return await _mediator.Send(query);
+    }
+
+    /// <summary>
+    /// جزئیات تدارکات
+    /// </summary>
     [HttpGet("{id}/{issueId}")]
-    [SimaAuthorize(Permissions.GoodsCategoriesGet)]
+    [SimaAuthorize(Permissions.LogisticsRequestsGet)]
     public async Task<Result> Get([FromRoute] long id, [FromRoute] long issueId)
     {
         var query = new LogisticCartableGetQuery { Id = id, IssueId = issueId };
         var result = await _mediator.Send(query);
         foreach (var document in result.Data.DocumentList)
         {
-            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
+            document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
         }
         foreach (var document in result.Data.InvoiceDocumentList)
         {
-            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
+            document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
         }
         foreach (var document in result.Data.ReceiptDocumentList)
         {
-            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
+            document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
         }
         return result;
-    }
-    [HttpGet("GetMy/{id}/{issueId}")]
-    [SimaAuthorize(Permissions.GoodsCategoriesGet)]
-    public async Task<Result> GetMy([FromRoute] long id, [FromRoute] long issueId)
-    {
-        var query = new GetMyLogisticCartableGetQuery { Id = id, IssueId = issueId };
-        var result = await _mediator.Send(query);
-        foreach (var document in result.Data.DocumentList)
-        {
-            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
-        }
-        foreach (var document in result.Data.InvoiceDocumentList)
-        {
-            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
-        }
-        foreach (var document in result.Data.ReceiptDocumentList)
-        {
-            document.DocumentContentType = document.DocumentExtensionName.GetContentType();
-        }
-        return result;
-    }
-
-    [HttpPost("MyLogisticsRequestList")]
-    [SimaAuthorize(Permissions.LogisticsRequestsGetAll)]
-    public async Task<Result> MyLogisticsRequestList(GetAllLogisticsRequestsQuery query)
-    {
-        return await _mediator.Send(query);
     }
 }

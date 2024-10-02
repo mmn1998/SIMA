@@ -24,6 +24,8 @@ public class UserService : IUserService
     private static readonly Regex _specialCharRegex = new Regex("[!@#$%^&*(),.?\":{}|<>]");
     private static readonly Regex _minLengthRegex = new Regex(".{6,}");
 
+
+
     public UserService(IUserQueryRepository repository, SIMADBContext context, IOptions<PasswordPolicy> passwordPolicy)
     {
         _repository = repository;
@@ -137,5 +139,10 @@ public class UserService : IUserService
     public async Task<bool> IsUsrConfigSatisfied(long configurationId, long userId)
     {
         return await _repository.IsUsrConfigSatisfied(configurationId, userId);
+    }
+
+    public async Task<List<long>> GetUserPermissonByFormId(long formId, long userId)
+    {
+        return await _repository.GetUserPermissonByFormId(formId, userId);
     }
 }

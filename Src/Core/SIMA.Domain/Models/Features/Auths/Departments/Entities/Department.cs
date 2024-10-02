@@ -11,7 +11,6 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;

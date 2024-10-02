@@ -7,6 +7,8 @@ public class ModifyGoodsArg
     public string? IsFixedAsset { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
+    public int? DurationOfConsumption { get; set; }
+    public int? DurationOfService { get; set; }
     public long ActiveStatusId { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }

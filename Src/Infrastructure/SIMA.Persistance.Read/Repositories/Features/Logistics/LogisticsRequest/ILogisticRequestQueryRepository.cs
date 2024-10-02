@@ -12,14 +12,6 @@ public interface ILogisticRequestQueryRepository : IQueryRepository
     Task<Result<IEnumerable<LogisticCartablesGetAllQueryResult>>> GetLogesticCartables(LogisticCartableGetAllQuery request);
     Task<LogisticCartableGetQueryResult> GetLogesticCartableDetail(long logesticId, long issueId);
     Task<Result<IEnumerable<GetLogesticRequestGoodsQueryResult>>> GetLogesticRequestGoods(GetLogesticRequestGoodsQuery request);
-    /// <summary>
-    /// دریافت اطلاعات یک درخواست دارکات و خرید برای ثبت کننده آن
-    /// </summary>
-    /// <param name="logesticId"></param>
-    /// <param name="issueId"></param>
-    /// <returns></returns>
-    Task<GetMyLogisticCartableGetQueryResult> GetMyLogesticCartableDetail(long logesticId, long issueId);
-
     Task<bool> IsTechnological(List<long> goodsId);
     Task<bool> IsGoods(List<long> goodsId);
     Task<bool> IsHardware(List<long> goodsId);

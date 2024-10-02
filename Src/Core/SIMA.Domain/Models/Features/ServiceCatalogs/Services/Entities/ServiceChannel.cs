@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.ServiceCatalogs.ChannelTypes.Entities;
+﻿using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -15,7 +15,7 @@ public class ServiceChannel : Entity
     {
         Id = new ServiceChannelId(arg.Id);
         ServiceId = new ServiceId(arg.ServiceId);
-        ChannelTypeId = new ChannelTypeId(arg.ChannelTypeId);
+        ChannelId = new(arg.ChannelId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -28,8 +28,8 @@ public class ServiceChannel : Entity
     public ServiceChannelId Id { get; private set; }
     public virtual Service Service { get; private set; }
     public ServiceId ServiceId { get; private set; }
-    public virtual ChannelType ChannelType { get; private set; }
-    public ChannelTypeId ChannelTypeId { get; private set; }
+    public virtual Channel Channel { get; private set; }
+    public ChannelId ChannelId { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public long CreatedBy { get; private set; }

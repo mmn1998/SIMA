@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Sima.Framework.Core.Repository;
 using SIMA.Application.Query.Contract.Features.Auths.Permission;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
@@ -9,7 +8,9 @@ using SIMA.Resources;
 
 namespace SIMA.Application.Query.Features.Auths.Permissions;
 
-public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<GetPermissionQueryResult>>, IQueryHandler<GetAllPermissionsByDomainIdQuery, Result<IEnumerable<GetPermissionQueryResult>>>
+public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<GetPermissionQueryResult>>,
+    IQueryHandler<GetAllPermissionsByDomainIdQuery, Result<IEnumerable<GetPermissionQueryResult>>>,
+    IQueryHandler<GetPermissionByFormQuery, Result<IEnumerable<GetPermissionQueryResult>>>
 {
     private readonly IMapper _mapper;
     private readonly IPermissionQueryRepository _repository;
@@ -32,6 +33,15 @@ public class PermissionQueryHandler : IQueryHandler<GetPermissionQuery, Result<G
 
         if (request.DomainId is not null && request.DomainId != 0) result = await _repository.GetAll(request,  request.DomainId.Value);
         else throw new SimaResultException(CodeMessges._400Code , Messages.DomainIsNotNull);
+        return result;
+    }
+
+    public async Task<Result<IEnumerable<GetPermissionQueryResult>>> Handle(GetPermissionByFormQuery request, CancellationToken cancellationToken)
+    {
+        var result = new Result<IEnumerable<GetPermissionQueryResult>>();
+
+        if (request.FormId != 0) result = await _repository.GetPermissionByFormId(request.FormId);
+        else throw new SimaResultException(CodeMessges._400Code, Messages.DomainIsNotNull);
         return result;
     }
 }

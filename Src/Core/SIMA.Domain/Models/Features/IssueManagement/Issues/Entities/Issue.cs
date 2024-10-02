@@ -1,19 +1,21 @@
-﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+﻿using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Exceptions;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
 using SIMA.Domain.Models.Features.IssueManagement.IssueTypes.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueWeightCategories.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -47,9 +49,11 @@ public class Issue : Entity
         Description = arg.Description;
         DueDate = arg.DueDate;
         CompanyId = arg.CompanyId;
+        OwnerUserId = arg.OwnerUserId != 0 ? new UserId(arg.OwnerUserId.Value) : null;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        
     }
 
     public static async Task<Issue> Create(CreateIssueArg arg, IIssueDomainService service)
@@ -95,12 +99,23 @@ public class Issue : Entity
         IssueChangeHistory.Create(arg);
     }
 
+    public  void AddIssueManagers(List<CreateIssueManagerArg> args)
+    {
+        foreach (CreateIssueManagerArg arg in args)
+        {
+            arg.IssueId = Id.Value;
+            var manager = IssueManager.Create(arg);
+            _issueManager.Add(manager);
+        }
+    }
+
     public void RunAction(IssueRunActionArg arg)
     {
         CurrentStateId = arg.CurrentStateId == null ? null : new(arg.CurrentStateId.Value); //new((long)arg.CurrentStateId);
         CurrenStepId = new(arg.CurrentStepId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        AssigneeId = null;
     }
     public async Task AddComment(CreateIssueCommentArg issueCommentArg)
     {
@@ -202,8 +217,24 @@ public class Issue : Entity
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
+    public UserId? AssigneeId { get; private set; }
+    public UserId? OwnerUserId { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    public string? IsFinished { get; private set; }
+    public DateTime? FinishedDate { get; private set; }
+    public long? FinishedBy { get; private set; }
+    public void Finish(long userId)
+    {
+        FinishedDate = DateTime.Now;
+        IsFinished = "1";
+        FinishedBy = userId;
+    }
+
+    public void AddAsiggnee(long assigneeId)
+    {
+        AssigneeId = new UserId(assigneeId);
+    }
     public void Delete(long userId)
     {
         ModifiedBy = userId;
@@ -264,6 +295,16 @@ public class Issue : Entity
     private List<ConfigurationItemIssue> _configurationItemIssues = new();
     public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;
 
+    private List<IssueManager> _issueManager = new();
+    public ICollection<IssueManager> IssueManagers => _issueManager;
+    private List<CriticalActivity> _criticalActivities = new();
+    public ICollection<CriticalActivity> CriticalActivities => _criticalActivities;
+
+    private List<LogisticsSupply> _logisticsSupplies = new();
+    public ICollection<LogisticsSupply> LogisticsSupplies => _logisticsSupplies;
+
+    private List<AccessRequest> _accessRequests = new();
+    public ICollection<AccessRequest> AccessRequests => _accessRequests;
 
     #region Gaurds
 
@@ -275,7 +316,7 @@ public class Issue : Entity
 
         if (arg.DueDate != null)
         {
-            var checkDuDate = await service.CheckDueDate(arg.DueDate);
+            var checkDuDate = await service.CheckDueDate(arg.DueDate.Value);
             if (!checkDuDate) throw new SimaResultException(CodeMessges._400Code, Messages.DueDateError);
         }
 

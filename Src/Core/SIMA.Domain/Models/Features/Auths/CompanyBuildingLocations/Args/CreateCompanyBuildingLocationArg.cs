@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.Auths.OwnershipTypes.Args;
+﻿namespace SIMA.Domain.Models.Features.Auths.CompanyBuildingLocations.Args;
 
 public class CreateCompanyBuildingLocationArg
 {

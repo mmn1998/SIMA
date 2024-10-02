@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using SIMA.Application.Feaatures.Auths.AccessTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.AddressTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.ApiMethodActions.Mappers;
 using SIMA.Application.Feaatures.Auths.Companies;
@@ -15,11 +16,15 @@ using SIMA.Application.Feaatures.Auths.Locations.Mappers;
 using SIMA.Application.Feaatures.Auths.LocationTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Permision.Mappers;
 using SIMA.Application.Feaatures.Auths.PhoneTypes.Mappers;
+using SIMA.Application.Feaatures.Auths.PositionLevels.Mappers;
 using SIMA.Application.Feaatures.Auths.Positions.Mappers;
+using SIMA.Application.Feaatures.Auths.PositionTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Profiles.Mappers;
 using SIMA.Application.Feaatures.Auths.ResponsibleTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Roles.Mappers;
 using SIMA.Application.Feaatures.Auths.Staffs.Mappers;
+using SIMA.Application.Feaatures.Auths.SupplierRanks.Mappers;
+using SIMA.Application.Feaatures.Auths.Suppliers.Mappers;
 using SIMA.Application.Feaatures.Auths.SysConfigs.Mappers;
 using SIMA.Application.Feaatures.Auths.UIInputElements.Mappers;
 using SIMA.Application.Feaatures.Auths.Users.Mappers;
@@ -48,8 +53,6 @@ using SIMA.Application.Feaatures.Logistics.Goodses.Mappers;
 using SIMA.Application.Feaatures.Logistics.GoodsQuorumPrices.Mappers;
 using SIMA.Application.Feaatures.Logistics.GoodsTypes.Mappers;
 using SIMA.Application.Feaatures.Logistics.LogisticRequests.Mapper;
-using SIMA.Application.Feaatures.Logistics.SupplierRanks.Mappers;
-using SIMA.Application.Feaatures.Logistics.Suppliers.Mappers;
 using SIMA.Application.Feaatures.Logistics.UnitMeasurements.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ImpactScales.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskCriterias.Mapper;
@@ -66,14 +69,14 @@ using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingReasons.Mappers
 using SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingStatus.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper;
 using SIMA.Application.Feaatures.SecurityCommitees.SubjectPriorities.Mappers;
-using SIMA.Application.Feaatures.ServiceCatalog.Channels.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ApiAuthenticationMethods.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ApiTypes.Mapper;
-using SIMA.Application.Feaatures.ServiceCatalog.ChannelTypes.Mappers;
-using SIMA.Application.Feaatures.ServiceCatalog.ServiceBoundles.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.Channels.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.CriticalActivities.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.Products.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.Services.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceStatuses.Mapper;
-using SIMA.Application.Feaatures.ServiceCatalog.ServiceTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceUserTypes.Mappers;
 using SIMA.Application.Feaatures.WorkFlowEngine.ApprovalOptions.Mapper;
 using SIMA.Application.Feaatures.WorkFlowEngine.BPMSes.Mappers;
@@ -85,7 +88,6 @@ using SIMA.Application.Feaatures.WorkFlowEngine.WorkFlowCompany.Mapper;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
-using SIMA.Application.Feaatures.ServiceCatalog.Services.Mappers;
 
 namespace SIMA.Application.ConfigurationExtensions;
 
@@ -121,7 +123,12 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new UIInputElementMapper());
                 conf.AddProfile(new ApiMethodActionMapper());
                 conf.AddProfile(new CustomerTypeMapper());
+                conf.AddProfile(new PositionTypeMapper());
+                conf.AddProfile(new PositionLevelMapper());
                 conf.AddProfile(new ResponsibleTypeMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
+                conf.AddProfile(new SupplierMapper());
+                conf.AddProfile(new SupplierRankMapper());
+                conf.AddProfile(new AccessTypeMapper());
                 #endregion
 
                 #region WorkFlows
@@ -189,16 +196,15 @@ public static class ApplicationRegistrationExtension
                 #endregion
 
                 #region ServiceCatalog
-                conf.AddProfile(new ServiceTypeMapper());
                 conf.AddProfile(new ServiceCategoryMapper());
-                conf.AddProfile(new ServiceBoundleMapper());
                 conf.AddProfile(new UserTypeMapper());
-                conf.AddProfile(new ChannelTypeMapper());
                 conf.AddProfile(new ApiAuthenticationMethodMapper());
                 conf.AddProfile(new ServiceStatusMapper());
                 conf.AddProfile(new ApiTypeMapper());
                 conf.AddProfile(new ChannelMapper());
                 conf.AddProfile(new ServiceMapper());
+                conf.AddProfile(new ProductMapper());
+                conf.AddProfile(new CriticalActivityMapper());
                 #endregion
 
                 #region BCP
@@ -214,8 +220,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new GoodsMapper());
                 conf.AddProfile(new GoodsTypeMapper());
                 conf.AddProfile(new GoodsQuorumPriceMapper());
-                conf.AddProfile(new SupplierMapper());
-                conf.AddProfile(new SupplierRankMapper());
+
                 conf.AddProfile(new GoodsCategoryMapper());
                 conf.AddProfile(new LogisticRequestMapper());
                 #endregion

@@ -1,6 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
+using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.PaymentCommands.Entities;
 using SIMA.Domain.Models.Features.Logistics.PaymentCommands.ValueObjects;
 using SIMA.Framework.Core.Entities;
@@ -11,8 +13,8 @@ public class PaymentHistory : Entity
 {    
     public PaymentHistoryId Id { get; private set; }
     public DateTime PaymentDate { get; private set; }
-    public LogisticsRequestId LogisticsRequestId { get; private set; }
-    public virtual LogisticsRequest LogisticsRequest { get; private set; }
+    public OrderingId OrderingId { get; private set; }
+    public virtual Ordering Ordering { get; private set; }
     public LogisticsRequestDocumentId PaymentDocumentId { get; private set; }
     public virtual LogisticsRequestDocument PaymentDocument { get; private set; }
     public PaymentCommandId PaymentCommandId { get; private set; }

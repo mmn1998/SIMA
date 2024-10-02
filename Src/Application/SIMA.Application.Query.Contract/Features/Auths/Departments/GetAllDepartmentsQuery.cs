@@ -6,4 +6,5 @@ namespace SIMA.Application.Query.Contract.Features.Auths.Departments;
 
 public class GetAllDepartmentsQuery : BaseRequest, IQuery<Result<IEnumerable<GetDepartmentQueryResult>>>
 {
+    public long? CompanyId { get; set; }
 }

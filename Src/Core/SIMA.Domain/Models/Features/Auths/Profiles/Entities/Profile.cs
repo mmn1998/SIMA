@@ -127,13 +127,9 @@ public class Profile : Entity
 
     public virtual Gender? Gender { get; private set; }
 
-    //ایجاد استف باید در اگریگیت خودش ایجاد بشه
-    private List<Staff> _staffManager = new();
-    public ICollection<Staff> StaffManagers => _staffManager;
-
     private List<Staff> _staffProfile = new();
-
     public ICollection<Staff> StaffProfiles => _staffProfile;
+
     // یوزر هم در اگریگیت خودش ایجاد میشه
     private List<User> _user = new();
     public ICollection<User> Users => _user;

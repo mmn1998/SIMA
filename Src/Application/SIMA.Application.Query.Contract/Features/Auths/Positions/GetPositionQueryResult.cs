@@ -5,10 +5,17 @@ public class GetPositionQueryResult
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
-    public string? DepartemantName { get; set; }
+    public string? DepartmentName { get; set; }
+    public long DepartmentId { get; set; }
     public string? CompanyName { get; set; }
+    public long? CompanyId { get; set; }
     public long ActiveStatusId { get; set; }
-    public string ActiveStatus { get; set; }
-    public bool IsDeactivated { get; set; } = false;
-    public bool IsDeleted { get; set; } = false;
+    public string? ActiveStatus { get; set; }
+    public long PositionLevelId { get; set; }
+    public string? PositionLevelName { get; set; }
+    public long PositionTypeId { get; set; }
+    public string? PositionTypeName { get; set; }
+    public long BranchId { get; set; }
+    public string? BranchName { get; set; }
+    public int? PersonLimitation { get; set; }
 }

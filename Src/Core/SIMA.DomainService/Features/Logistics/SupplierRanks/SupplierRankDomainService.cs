@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.Logistics.SupplierRanks.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Contracts;
+using SIMA.Domain.Models.Features.Auths.SupplierRanks.Contracts;
+using SIMA.Domain.Models.Features.Auths.SupplierRanks.ValueObjects;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.Logistics.SupplierRanks;

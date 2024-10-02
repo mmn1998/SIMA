@@ -7,7 +7,8 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Positions;
 namespace SIMA.Application.Query.Features.Auths.Positions;
 
 public class PositionQueryHandler : IQueryHandler<GetPositionQuery, Result<GetPositionQueryResult>>,
-    IQueryHandler<GetAllPositionsQuery, Result<IEnumerable<GetPositionQueryResult>>>
+    IQueryHandler<GetAllPositionsQuery, Result<IEnumerable<GetPositionQueryResult>>>,
+    IQueryHandler<GetPositionByDepartemantQuery, Result<IEnumerable<GetPositionQueryResult>>>
 {
     private readonly IPositionQueryRepository _repository;
 
@@ -25,5 +26,11 @@ public class PositionQueryHandler : IQueryHandler<GetPositionQuery, Result<GetPo
         var result = await _repository.FindById(request.Id);
         return Result.Ok(result);
 
+    }
+
+    public async Task<Result<IEnumerable<GetPositionQueryResult>>> Handle(GetPositionByDepartemantQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetByDepartemantId(request.DepartmentId);
+        return result;
     }
 }

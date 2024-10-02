@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.Contracts;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Suppliers.Contracts;
+using SIMA.Domain.Models.Features.Auths.Suppliers.ValueObjects;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.Logistics.Suppliers;

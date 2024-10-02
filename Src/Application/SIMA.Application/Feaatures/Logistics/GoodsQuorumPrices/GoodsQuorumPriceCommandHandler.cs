@@ -5,6 +5,7 @@ using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Args;
 using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Contracts;
 using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.Entities;
 using SIMA.Domain.Models.Features.Logistics.GoodsQuorumPrices.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.GoodsStatuses.Contracts;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;

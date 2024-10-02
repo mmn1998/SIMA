@@ -34,34 +34,21 @@ public class GroupPermission
         ModifiedAt = arg.ModifiedAt;
         ActiveStatusId = arg.ActiveStatusId;
     }
-
     public async Task ChangeStatus(ActiveStatusEnum status)
     {
         ActiveStatusId = (long)status;
     }
-
     public GroupPermissionId Id { get; private set; }
-
     public GroupId? GroupId { get; private set; }
-
     public PermissionId PermissionId { get; private set; }
-
     public long ActiveStatusId { get; private set; }
-
     public DateOnly? ActiveFrom { get; private set; }
-
     public DateOnly? ActiveTo { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
-
     public virtual Group? Group { get; private set; }
-
     public virtual Permission? Permission { get; private set; }
     public void Delete(long userId)
     {

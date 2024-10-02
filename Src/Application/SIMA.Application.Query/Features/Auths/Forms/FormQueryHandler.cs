@@ -9,7 +9,8 @@ namespace SIMA.Application.Query.Features.Auths.Forms;
 
 public class FormQueryHandler : IQueryHandler<GetFormQuery, Result<GetFormQueryResult>>,
     IQueryHandler<GetAllFormQuery, Result<IEnumerable<GetFormQueryResult>>>,
-    IQueryHandler<GetAllFormFieldsQuery, Result<IEnumerable<GetFormFieldsQueryResult>>>
+    IQueryHandler<GetAllFormFieldsQuery, Result<IEnumerable<GetFormFieldsQueryResult>>>,
+    IQueryHandler<GetFormByDomainQuery, Result<IEnumerable<GetFormQueryResult>>>
 {
     private readonly IFormQueryRepository _repository;
     public FormQueryHandler(IFormQueryRepository repository)
@@ -35,6 +36,11 @@ public class FormQueryHandler : IQueryHandler<GetFormQuery, Result<GetFormQueryR
     public async Task<Result<IEnumerable<GetFormFieldsQueryResult>>> Handle(GetAllFormFieldsQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAllFormFields(request);
+    }
+
+    public async Task<Result<IEnumerable<GetFormQueryResult>>> Handle(GetFormByDomainQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetFormByDomainId(request.DomainId);
     }
 
     private async Task<string> ProcessJsonContent(string jsonContent)

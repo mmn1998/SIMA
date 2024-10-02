@@ -1,5 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.IssueApprovals.Entities;
+using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;

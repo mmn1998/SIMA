@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Val
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Suppliers.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 

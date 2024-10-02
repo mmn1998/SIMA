@@ -1,4 +1,6 @@
-﻿namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Modify
+﻿using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Create;
+
+namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Args.Modify
 {
     public class ModifyWorkFlowActorArg
     {
@@ -11,6 +13,11 @@
         public string? IsDirectManagerOfIssueCreator { get; set; }
         public byte[]? ModifiedAt { get; set; }
         public long? ModifiedBy { get; set; }
+        public string? IsActorManager { get; set; }
+        public List<CreateWorkFlowActorRoleArg> RoleId { get; set; }
+        public List<CreateWorkFlowActorGroupArg> GroupId { get; set; }
+        public List<CreateWorkFlowActorUserArg> UserId { get; set; }
+        public List<WorkflowActorEmployeeArg> EmployeeId { get; set; }
 
     }
 }

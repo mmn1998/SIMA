@@ -63,18 +63,10 @@ public class DocumentCommandHandler : ICommandHandler<CreateDocumentCommand, Res
     public async Task<Result<List<long>>> Handle(MultiCreateDocumentCommand request, CancellationToken cancellationToken)
     {
         var args = new List<CreateDocumentArg>();
-        try
-        {
-            args = _mapper.Map<List<CreateDocumentArg>>(request.Documents);
-        }
-        catch (Exception)
-        {
-            throw new SimaResultException(CodeMessges._100066Code, Messages.FileUploadError);
-        }
+        args = await Mappers.DocumentMapper.Map(request.Documents, _simaIdentity.UserId);
         List<long> documentIds = new List<long>();
         foreach (var arg in args)
         {
-            arg.CreatedBy = _simaIdentity.UserId;
             var entity = await Document.Create(arg, _service);
             documentIds.Add(entity.Id.Value);
             await _repository.Add(entity);

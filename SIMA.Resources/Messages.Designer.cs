@@ -61,15 +61,6 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string _string {
-            get {
-                return ResourceManager.GetString("string", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to شما مجاز به دسترسی به این بخش نمی باشید.
         /// </summary>
         public static string AccessDeny {
@@ -214,6 +205,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to روز شروع نمیتواند بعد از روز پایان باشد..
+        /// </summary>
+        public static string DateOnlyError {
+            get {
+                return ResourceManager.GetString("DateOnlyError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to زمان ختمه وظیفه گذشته است.
         /// </summary>
         public static string DeadlineIsOverDueWarning {
@@ -300,6 +300,15 @@ namespace SIMA.Resources {
         public static string ExternalServiceException {
             get {
                 return ResourceManager.GetString("ExternalServiceException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to محتوی فایل خالی است..
+        /// </summary>
+        public static string FileContentNullError {
+            get {
+                return ResourceManager.GetString("FileContentNullError", resourceCulture);
             }
         }
         
@@ -426,6 +435,15 @@ namespace SIMA.Resources {
         public static string IbanIsIncorrectError {
             get {
                 return ResourceManager.GetString("IbanIsIncorrectError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شماره شبا نامعتبر است.
+        /// </summary>
+        public static string IbanIsNotValid {
+            get {
+                return ResourceManager.GetString("IbanIsNotValid", resourceCulture);
             }
         }
         
@@ -570,6 +588,15 @@ namespace SIMA.Resources {
         public static string NationalCodeIsNotUniqueError {
             get {
                 return ResourceManager.GetString("NationalCodeIsNotUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کد ملی نامعتبر است.
+        /// </summary>
+        public static string NationalCodeIsNotValid {
+            get {
+                return ResourceManager.GetString("NationalCodeIsNotValid", resourceCulture);
             }
         }
         
@@ -808,6 +835,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to تعداد نمیتواند خالی باشد..
+        /// </summary>
+        public static string QuantityNullError {
+            get {
+                return ResourceManager.GetString("QuantityNullError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to محدوده مورد نظر پیش تر تخصیص یافته است..
         /// </summary>
         public static string RangeAlreadyAllocatedError {
@@ -822,6 +858,24 @@ namespace SIMA.Resources {
         public static string RangeNotValidError {
             get {
                 return ResourceManager.GetString("RangeNotValidError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to خطا در برقراری ارتباط.لطفا با پشتیبانی تماس بگیرید..
+        /// </summary>
+        public static string RedisConnectionError {
+            get {
+                return ResourceManager.GetString("RedisConnectionError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شناسه ملی نامعتبر است.
+        /// </summary>
+        public static string RegisterNumberIsNotValid {
+            get {
+                return ResourceManager.GetString("RegisterNumberIsNotValid", resourceCulture);
             }
         }
         
@@ -921,6 +975,15 @@ namespace SIMA.Resources {
         public static string TimeIsOverError {
             get {
                 return ResourceManager.GetString("TimeIsOverError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to زمان شروع نمیتواند عقب تر زمان پایان باشد..
+        /// </summary>
+        public static string TimeOnlyError {
+            get {
+                return ResourceManager.GetString("TimeOnlyError", resourceCulture);
             }
         }
         
@@ -1087,6 +1150,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to نام بازیگران فرآیند نمیتواند بیشتر از 200 حرف باشد.
+        /// </summary>
+        public static string WorkFlowActorNameError {
+            get {
+                return ResourceManager.GetString("WorkFlowActorNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to بازیگر موردنظر اجازه دسترسی به همه کاربران را ندارد.
         /// </summary>
         public static string WorkFlowActorNotAccessForIsEveryOne {
@@ -1105,7 +1177,7 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to کد فرایند نمی تواند تکراری باشد  !.
+        ///   Looks up a localized string similar to کد فرایند نمی تواند تکراری باشد!.
         /// </summary>
         public static string WorkFlowCodeIsUniqueException {
             get {
@@ -1114,7 +1186,7 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to نام فرایند اجباری است !.
+        ///   Looks up a localized string similar to نام فرایند اجباری است!.
         /// </summary>
         public static string WorkFlowNameRequiredException {
             get {

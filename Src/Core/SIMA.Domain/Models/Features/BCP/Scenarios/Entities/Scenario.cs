@@ -1,6 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
-using SIMA.Domain.Models.Features.BCP.NewFolder.Entities;
 using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities;
+using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.BCP.ScenarioRecoveryCriterias.Entities;
 using SIMA.Domain.Models.Features.BCP.ScenarioRecoveryOptions.Entities;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Args;

@@ -20,34 +20,7 @@ public class RolesController : ControllerBase
     {
         _mediator = mediator;
     }
-    [HttpDelete("{id}")]
-    [SimaAuthorize(Permissions.RoleDelete)]
-    public async Task<Result> Delete([FromRoute] long id)
-    {
-        var command = new DeleteRoleCommand { Id = id };
-        return await _mediator.Send(command);
-    }
-    [HttpDelete("DeleteRolePermission")]
-    [SimaAuthorize(Permissions.RolePermissionDelete)]
-    public async Task<Result> Delete([FromBody] DeleteRolePermissionCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
-    [HttpPost]
-    [SimaAuthorize(Permissions.RolePost)]
-    public async Task<Result> Post([FromBody] CreateRoleCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
-    [HttpPost("AddRolePermission")]
-    [SimaAuthorize(Permissions.RolePermissionPost)]
-    public async Task<Result> Post([FromBody] CreateRolePermissionCommand command)
-    {
-        var result = await _mediator.Send(command);
-        return result;
-    }
+
     [HttpPost("AddRoleAggregate")]
     [SimaAuthorize(Permissions.AddRoleAggregate)]
     public async Task<Result> Post([FromBody] CreateRoleAggregate command)
@@ -55,6 +28,7 @@ public class RolesController : ControllerBase
         var result = await _mediator.Send(command);
         return result;
     }
+
     [HttpPut]
     [SimaAuthorize(Permissions.RolePut)]
     public async Task<Result> Put([FromBody] UpdateRoleCommand command)
@@ -62,11 +36,43 @@ public class RolesController : ControllerBase
         var result = await _mediator.Send(command);
         return result;
     }
-    [HttpPut("EditRolePermission")]
-    [SimaAuthorize(Permissions.RolePermissionPut)]
-    public async Task<Result> Put([FromBody] UpdateRolePermissionCommand command)
+
+    [HttpDelete("{id}")]
+    [SimaAuthorize(Permissions.RoleDelete)]
+    public async Task<Result> Delete([FromRoute] long id)
     {
-        var result = await _mediator.Send(command);
-        return result;
+        var command = new DeleteRoleCommand { Id = id };
+        return await _mediator.Send(command);
     }
+
+
+    //[HttpDelete("DeleteRolePermission")]
+    //[SimaAuthorize(Permissions.RolePermissionDelete)]
+    //public async Task<Result> Delete([FromBody] DeleteRolePermissionCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+    //[HttpPost]
+    //[SimaAuthorize(Permissions.RolePost)]
+    //public async Task<Result> Post([FromBody] CreateRoleCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+    //[HttpPost("AddRolePermission")]
+    //[SimaAuthorize(Permissions.RolePermissionPost)]
+    //public async Task<Result> Post([FromBody] CreateRolePermissionCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
+
+    //[HttpPut("EditRolePermission")]
+    //[SimaAuthorize(Permissions.RolePermissionPut)]
+    //public async Task<Result> Put([FromBody] UpdateRolePermissionCommand command)
+    //{
+    //    var result = await _mediator.Send(command);
+    //    return result;
+    //}
 }

@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using SIMA.Application.Contract.Features.Auths.Groups;
 using SIMA.Application.Contract.Features.Auths.Roles;
+using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Roles.Args;
+using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 using System.Text;
@@ -35,5 +38,13 @@ public class RoleMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (int)ActiveStatusEnum.Active))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             ;
+
+        CreateMap<CreateFormRoleCommand, CreateFormRoleArg>()
+           .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+           .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
+
+        CreateMap<CreateRoleUserCommand, CreateUserRoleArg>()
+            .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
+                .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
     }
 }

@@ -1,0 +1,1 @@
+﻿public record IssueManagerId(long Value);

@@ -17,6 +17,7 @@
         public string? Code { get; set; }
 
         public long? ActiveStatusId { get; set; }
+        public string? IsActorManager { get; set; }
         public List<WorkFlowActorGroup>? WorkFlowActorGroups { get; set; }
         public List<WorkFlowActorRole>? WorkFlowActorRoles { get; set; }
         public List<WorkFlowActorUser>? WorkFlowActorUsers { get; set; }

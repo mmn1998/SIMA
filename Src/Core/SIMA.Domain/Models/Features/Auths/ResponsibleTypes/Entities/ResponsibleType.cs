@@ -2,7 +2,9 @@
 using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -75,4 +77,8 @@ public class ResponsibleType:Entity
 
     private List<ChannelResponsible> _channelResponsible = new();
     public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsible;
+    private List<CriticalActivityAssignedStaff> _criticalActivityAssignedStaffs = new();
+    public ICollection<CriticalActivityAssignedStaff> CriticalActivityAssignedStaffs => _criticalActivityAssignedStaffs;
+    private List<ServiceAssignedStaff> _serviceAssignedStaffs = new();
+    public ICollection<ServiceAssignedStaff> ServiceAssignedStaffs => _serviceAssignedStaffs;
 }

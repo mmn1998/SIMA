@@ -1,26 +1,18 @@
-﻿using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
+﻿using SIMA.Domain.Models.Features.Auths.Users.Entities;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
-using SIMA.Domain.Models.Features.Logistics.Goodses.Entities;
 using SIMA.Domain.Models.Features.Logistics.Goodses.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequestGoodss.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Args;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Contracts;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Events;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.PaymentCommands.Entities;
 using SIMA.Domain.Models.Features.Logistics.PriceEstimations.Entities;
-using SIMA.Domain.Models.Features.Logistics.Suppliers.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.Risks.Events;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Create;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
-using System.Xml.Linq;
 
 namespace SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 
@@ -33,10 +25,11 @@ public class LogisticsRequest : Entity, IAggregateRoot
         Description = arg.Description;
         Code = arg.Code;
         IssueId = new(arg.IssueId);
+        RequesterId = new(arg.RequesterId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        AddDomainEvent(new CreateLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, Description, Id.Value, arg.IssuePreorityId, arg.Weight, arg.DueDate));
+        AddDomainEvent(new CreateLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, Description, Id.Value, arg.IssuePreorityId, arg.Weight, arg.DueDate , arg.OwnerUserId));
     }
     public static async Task<LogisticsRequest> Create(CreateLogisticsRequestArg arg, ILogisticsRequestDomainService service)
     {
@@ -49,6 +42,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
         Description = arg.Description;
         Code = arg.Code;
         IssueId = new(arg.IssueId);
+        RequesterId = new(arg.RequesterId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -79,11 +73,11 @@ public class LogisticsRequest : Entity, IAggregateRoot
             var entity = _logisticsRequestGoods.Where(x => (x.GoodsId == new GoodsId(goods.GoodsId) && x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
-                await entity.ChangeStatus(ActiveStatusEnum.Active);
+                entity.ChangeStatus(ActiveStatusEnum.Active);
             }
             else
             {
-                entity = await LogisticsRequestGoodss.Entities.LogisticsRequestGoods.Create(goods);
+                entity = Entities.LogisticsRequestGoods.Create(goods);
                 _logisticsRequestGoods.Add(entity);
             }
         }
@@ -93,7 +87,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
             goods.Delete(userId);
         }
     }
-    public async Task AddLogisticsRequestDocument(List<CreateLogisticsRequestDocumentArg> args, long LogisticsRequestId, long userId)
+    public void AddLogisticsRequestDocument(List<CreateLogisticsRequestDocumentArg> args, long LogisticsRequestId, long userId)
     {
         var previousLogisticsRequestDocumentGoods = _logisticsRequestDocuments.Where(x => x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
@@ -106,11 +100,11 @@ public class LogisticsRequest : Entity, IAggregateRoot
             var entity = _logisticsRequestDocuments.Where(x => (x.DocumentId == new DocumentId(document.DocumentId) && x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
-                await entity.ChangeStatus(ActiveStatusEnum.Active);
+                entity.ChangeStatus(ActiveStatusEnum.Active);
             }
             else
             {
-                entity = await LogisticsRequestDocument.Create(document);
+                entity = LogisticsRequestDocument.Create(document);
                 _logisticsRequestDocuments.Add(entity);
             }
         }
@@ -120,8 +114,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
             document.Delete(userId);
         }
     }
-
-    public async Task DeleteRequestGoods(long LogisticsRequestId, long loginUserId)
+    public void DeleteRequestGoods(long LogisticsRequestId, long loginUserId)
     {
         var logisticsRequestGoods = _logisticsRequestGoods.Where(x => x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
@@ -130,8 +123,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
             goods.Delete(loginUserId);
         }
     }
-
-    public async Task DeleteLogisticsRequestDocument(long LogisticsRequestId, long loginUserId)
+    public void DeleteLogisticsRequestDocument(long LogisticsRequestId, long loginUserId)
     {
         var logisticsRequestDocument = _logisticsRequestDocuments.Where(x => x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
@@ -140,7 +132,6 @@ public class LogisticsRequest : Entity, IAggregateRoot
             goods.Delete(loginUserId);
         }
     }
-
     #region Guards
     private static async Task CreateGuards(CreateLogisticsRequestArg arg, ILogisticsRequestDomainService service)
     {
@@ -154,6 +145,8 @@ public class LogisticsRequest : Entity, IAggregateRoot
     public LogisticsRequestId Id { get; private set; }
     public IssueId IssueId { get; private set; }
     public virtual Issue Issue { get; private set; }
+    public UserId RequesterId { get; private set; }
+    public virtual User Requester { get; private set; }
     public string? Description { get; private set; }
     public string? Code { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -168,34 +161,16 @@ public class LogisticsRequest : Entity, IAggregateRoot
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
         AddDomainEvent(new DeleteLogisticsRequestEvent(issueId));
     }
-    private List<PaymentCommand> _paymentCommands = new();
-    public ICollection<PaymentCommand> PaymentCommands => _paymentCommands;
     private List<PriceEstimation> _priceEstimations = new();
     public ICollection<PriceEstimation> PriceEstimations => _priceEstimations;
     private List<LogisticsRequestDocument> _logisticsRequestDocuments = new();
     public ICollection<LogisticsRequestDocument> LogisticsRequestDocuments => _logisticsRequestDocuments;
-    private List<SupplierBlackListHistory> _supplierBlackListHistories = new();
-    public ICollection<SupplierBlackListHistory> SupplierBlackListHistories => _supplierBlackListHistories;
-    private List<CandidatedSupplier> _candidatedSuppliers = new();
-    public ICollection<CandidatedSupplier> CandidatedSuppliers => _candidatedSuppliers;
-    private List<GoodsCoding> _goodsCodings = new();
-    public ICollection<GoodsCoding> GoodsCodings => _goodsCodings;
-    private List<Ordering> _orderings = new();
-    public ICollection<Ordering> Orderings => _orderings;
+    
     private List<DeliveryOrder> _deliveryOrders = new();
     public ICollection<DeliveryOrder> DeliveryOrders => _deliveryOrders;
     private List<ReturnOrder> _returnOrders = new();
     public ICollection<ReturnOrder> ReturnOrders => _returnOrders;
-    private List<ReceiveOrder> _receiveOrders = new();
-    public ICollection<ReceiveOrder> ReceiveOrders => _receiveOrders;
-    private List<TenderResult> _tenderResults = new();
-    public ICollection<TenderResult> TenderResults => _tenderResults;
-    private List<SupplierContract> _supplierContracts = new();
-    public ICollection<SupplierContract> SupplierContracts => _supplierContracts;
-    private List<PaymentHistory> _paymentHistories = new();
-    public ICollection<PaymentHistory> PaymentHistories => _paymentHistories;
-    private List<RequestInquiry> _requestInquiries = new();
-    public ICollection<RequestInquiry> RequestInquiries => _requestInquiries;
+
     private List<LogisticsRequestGoods> _logisticsRequestGoods = new();
     public ICollection<LogisticsRequestGoods> LogisticsRequestGoods => _logisticsRequestGoods;
 }
