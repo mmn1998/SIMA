@@ -114,7 +114,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             }
             await _unitOfWork.SaveChangesAsync();
 
-            if (string.Equals(user.IsLocked, "0") && user.AccessFailedCount < 4)
+            if (string.Equals(user.IsLocked, "0") && user.AccessFailedCount < 4 && user.AccessFailedCount > 0)
                 throw new SimaResultException(CodeMessges._400Code, Messages.InvalidUsernameOrPasswordError);
             
 
