@@ -1,10 +1,9 @@
 ﻿using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
 using SIMA.Framework.Core.Repository;
 
-namespace SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Contracts
+namespace SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Contracts;
+
+public interface IPlanResponsibilityRepository : IRepository<PlanResponsibility>
 {
-    public interface IPlanResponsibilityRepository : IRepository<PlanResponsibility>
-    {
-        Task<PlanResponsibility> GetById(PlanResponsibilityId id);
-    }
+    Task<PlanResponsibility> GetById(PlanResponsibilityId id);
 }

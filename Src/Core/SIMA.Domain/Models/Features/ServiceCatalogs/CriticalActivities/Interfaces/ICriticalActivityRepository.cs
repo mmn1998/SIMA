@@ -6,4 +6,5 @@ namespace SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Interfa
 public interface ICriticalActivityRepository : IRepository<CriticalActivity>
 {
     Task<CriticalActivity> GetById(CriticalActivityId id);
+    Task<CriticalActivity?> GetLastCriticalActivity();
 }

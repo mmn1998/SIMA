@@ -33,6 +33,11 @@ public class BusinessContinuityPlanRelatedStaff : Entity
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
     }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
     public BusinessContinuityPlanRelatedStaffId Id { get; private set; }
     public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
     public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }

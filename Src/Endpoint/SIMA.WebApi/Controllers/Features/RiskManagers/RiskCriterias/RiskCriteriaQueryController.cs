@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.RiskManagement.RiskCriterias;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.RiskCriterias
 {
@@ -17,12 +18,14 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.RiskCriterias
             _mediator = mediator;
         }
         [HttpPost("GetAll")]
+        [SimaAuthorize(Permissions.RiskCriteriasGetAll)]
         public async Task<Result> Get([FromBody] GetAllRiskCriteriasQuery request)
         {
             return await _mediator.Send(request);
         }
 
         [HttpGet("{id}")]
+        [SimaAuthorize(Permissions.RiskCriteriasGet)]
         public async Task<Result> Get([FromRoute] long id)
         {
             var query = new GetRiskCriteriaQuery { Id = id };

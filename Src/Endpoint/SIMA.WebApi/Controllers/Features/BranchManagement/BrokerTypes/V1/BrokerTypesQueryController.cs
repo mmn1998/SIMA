@@ -7,9 +7,9 @@ using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.BranchManagement.BrokerTypes.V1;
 
-[Route("[controller]")]
+[Route("branch/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "BrokerTypes")]
+[ApiExplorerSettings(GroupName = "Branch/BrokerTypes")]
 [Authorize]
 public class BrokerTypesQueryController : ControllerBase
 {

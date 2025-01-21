@@ -2,6 +2,7 @@
 
 public class ModifyRecoveryPointObjectiveArg
 {
+    public long TimeMeasurementId { get; set; }
     public int RpoFrom { get; set; }
     public int RpoTo { get; set; }
     public string? Name { get; set; }

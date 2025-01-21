@@ -8,5 +8,5 @@ namespace SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.CriticalAct
 public interface ICriticalActivitiyQueryRepository : IQueryRepository
 {
     Task<Result<GetCriticalActivityQueryResult>> GetDetail(long id, long issueId);
-    Task<Result<IEnumerable<GetCriticalActivityQueryResult>>> GetAll(GetAllCriticalActivitiesQuery request);
+    Task<Result<IEnumerable<GetAllCriticalActivitiesQueryResult>>> GetAll(GetAllCriticalActivitiesQuery request);
 }

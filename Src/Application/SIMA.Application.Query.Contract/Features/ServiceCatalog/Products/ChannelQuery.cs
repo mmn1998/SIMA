@@ -2,6 +2,7 @@
 
 public class ChannelQuery
 {
+    public long? Id { get; set; }
     public long? ChannelId { get; set; }
     public string? ChannelName { get; set; }
 }

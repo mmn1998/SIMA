@@ -1,5 +1,4 @@
 ﻿using SIMA.Application.Query.Contract.Features.Auths.Staffs;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 
@@ -10,4 +9,6 @@ public interface IStaffQueryRepository : IQueryRepository
     Task<bool> IsStaffSatisfied(long profileId, long positionId);
     Task<GetStaffQueryResult> FindById(long id);
     Task<Result<IEnumerable<GetStaffQueryResult>>> GetAll(GetAllStaffQuery? request = null);
+    Task<IEnumerable<GetStaffQueryResult>> GetAllByDepartmentId(long? departmentId);
+    Task<long> GetStaffIdByUserId(long userId);
 }

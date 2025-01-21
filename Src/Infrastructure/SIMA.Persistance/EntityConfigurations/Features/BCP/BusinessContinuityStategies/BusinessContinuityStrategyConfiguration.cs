@@ -17,7 +17,6 @@ public class BusinessContinuityStrategyConfiguration : IEntityTypeConfiguration<
         entity.HasKey(i => i.Id);
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(e => e.Code).HasMaxLength(20);
-        entity.Property(e => e.IsStableStrategy).HasMaxLength(1);
         entity.Property(e => e.Title).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")

@@ -1,0 +1,18 @@
+﻿using Sima.Framework.Core.Mediator;
+using SIMA.Framework.Common.Response;
+
+namespace SIMA.Application.Contract.Features.TrustyDrafts.Resources;
+
+public class CreateResourceCommand : ICommand<Result<long>>
+{
+    public long? ParentId { get; set; }
+    public long AccountTypeId { get; set; }
+    public long CurrencyTypeId { get; set; }
+    public long BrokerId { get; set; }
+    public string? Title { get; set; }
+    public string? AccountNumber { get; set; }
+    public decimal CurrentBalance { get; set; }
+    public decimal AvaliableBalance { get; set; }
+    public decimal BlockedBalance { get; set; }
+    public string? Code { get; set; }
+}

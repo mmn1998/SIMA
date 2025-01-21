@@ -6,4 +6,8 @@ public class ProductResponsibleQuery
     public string? ResponsibleTypeName { get; set; }
     public long? ResponsibleId { get; set; }
     public string? Responsible { get; set; }
+    public long? CompanyId { get; set; }
+    public string? CompanyName { get; set; }
+    public long? DepartmentId { get; set; }
+    public string? DepartmentName { get; set; }
 }

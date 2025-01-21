@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingReasons.Map
 
 public class MeetingHoldingReasonMapper : Profile
 {   
-    public MeetingHoldingReasonMapper(ISimaIdentity simaIdentity)
+    public MeetingHoldingReasonMapper()
     {
         CreateMap<CreateMeetingHoldingReasonCommand, CreateMeetingHoldingReasonArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

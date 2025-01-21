@@ -13,7 +13,7 @@ public class BusinessContinuityStrategyDocument : Entity
     private BusinessContinuityStrategyDocument() { }
     private BusinessContinuityStrategyDocument(CreateBusinessContinuityStrategyDocumentArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
+        Id = new(arg.Id);
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
         DocumentId = new(arg.DocumentId);
         ActiveStatusId = arg.ActiveStatusId;
@@ -47,5 +47,11 @@ public class BusinessContinuityStrategyDocument : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 }

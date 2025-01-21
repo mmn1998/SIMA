@@ -1,1 +1,1 @@
-﻿public record BusinessContinuityPlanStratgyId(long Value);
+﻿public sealed record BusinessContinuityPlanStratgyId(long Value);

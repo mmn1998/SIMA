@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.Logistics.GoodsCategories.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Goodses.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Args;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Contracts;
@@ -25,11 +26,10 @@ public class LogisticsRequest : Entity, IAggregateRoot
         Description = arg.Description;
         Code = arg.Code;
         IssueId = new(arg.IssueId);
-        RequesterId = new(arg.RequesterId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        AddDomainEvent(new CreateLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, Description, Id.Value, arg.IssuePreorityId, arg.Weight, arg.DueDate , arg.OwnerUserId));
+        AddDomainEvent(new CreateLogisticsRequestEvent(arg.IssueId, MainAggregateEnums.LogisticsRequest, Description, Id.Value, arg.IssuePreorityId, arg.DueDate , arg.RequesterId));
     }
     public static async Task<LogisticsRequest> Create(CreateLogisticsRequestArg arg, ILogisticsRequestDomainService service)
     {
@@ -42,7 +42,6 @@ public class LogisticsRequest : Entity, IAggregateRoot
         Description = arg.Description;
         Code = arg.Code;
         IssueId = new(arg.IssueId);
-        RequesterId = new(arg.RequesterId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -53,7 +52,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
     {
         #region Guard For Goods
         //سیستم نمی تواند درخواستی را ثبت نماید که کالاهای آن به لحاظ ویژگی و تنظیمات  با یکدیگر متفاوت باشند.
-        var goodsId = args.Select(it => it.GoodsId).ToList();
+        var goodsId = args.Select(it => it.GoodsCategoryId).ToList();
         bool isTechnological = await service.IsTechnological(goodsId);
         if (!isTechnological) { throw new SimaResultException(CodeMessges._400Code, Messages.GoodsConfigMustBeTheSame); }
         bool isGoods = await service.IsGoods(goodsId);
@@ -61,16 +60,20 @@ public class LogisticsRequest : Entity, IAggregateRoot
         bool isHardware = await service.IsHardware(goodsId);
         if (!isHardware) { throw new SimaResultException(CodeMessges._400Code, Messages.GoodsConfigMustBeTheSame); }
 
-        #endregion 
+
+        //طبق گفته تحلیل ولیدیشن و بررسی سمت فرانت می باشد
+        //await service.IsCheckDurationGoodsCategory(args);
+
+
+        #endregion
         var previousLogisticsRequestGoods = _logisticsRequestGoods.Where(x => x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
-        var addGoods = args.Where(x => !previousLogisticsRequestGoods.Any(c => c.GoodsId.Value == x.GoodsId)).ToList();
-        var deleteGoods = previousLogisticsRequestGoods.Where(x => !args.Any(c => c.GoodsId == x.GoodsId.Value)).ToList();
-
+        var addGoods = args.Where(x => !previousLogisticsRequestGoods.Any(c => c.GoodsCategoryId.Value == x.GoodsCategoryId)).ToList();
+        var deleteGoods = previousLogisticsRequestGoods.Where(x => !args.Any(c => c.GoodsCategoryId == x.GoodsCategoryId.Value)).ToList();
 
         foreach (var goods in addGoods)
         {
-            var entity = _logisticsRequestGoods.Where(x => (x.GoodsId == new GoodsId(goods.GoodsId) && x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            var entity = _logisticsRequestGoods.Where(x => (x.GoodsCategoryId == new GoodsCategoryId(goods.GoodsCategoryId) && x.LogisticsRequestId == new LogisticsRequestId(LogisticsRequestId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
                 entity.ChangeStatus(ActiveStatusEnum.Active);
@@ -86,6 +89,12 @@ public class LogisticsRequest : Entity, IAggregateRoot
         {
             goods.Delete(userId);
         }
+    }
+
+    public async Task ChangeGoodsStatus(long logisticsRequestGoodsId , GoodsStatusEnum goodsStatus)
+    {
+        var requestGoods = _logisticsRequestGoods.Where(x => x.Id == new LogisticsRequestGoodsId(logisticsRequestGoodsId)).FirstOrDefault();
+        requestGoods.ChangeGoodsStatus(goodsStatus);
     }
     public void AddLogisticsRequestDocument(List<CreateLogisticsRequestDocumentArg> args, long LogisticsRequestId, long userId)
     {
@@ -145,8 +154,7 @@ public class LogisticsRequest : Entity, IAggregateRoot
     public LogisticsRequestId Id { get; private set; }
     public IssueId IssueId { get; private set; }
     public virtual Issue Issue { get; private set; }
-    public UserId RequesterId { get; private set; }
-    public virtual User Requester { get; private set; }
+   
     public string? Description { get; private set; }
     public string? Code { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -166,10 +174,10 @@ public class LogisticsRequest : Entity, IAggregateRoot
     private List<LogisticsRequestDocument> _logisticsRequestDocuments = new();
     public ICollection<LogisticsRequestDocument> LogisticsRequestDocuments => _logisticsRequestDocuments;
     
-    private List<DeliveryOrder> _deliveryOrders = new();
-    public ICollection<DeliveryOrder> DeliveryOrders => _deliveryOrders;
-    private List<ReturnOrder> _returnOrders = new();
-    public ICollection<ReturnOrder> ReturnOrders => _returnOrders;
+    //private List<DeliveryOrder> _deliveryOrders = new();
+    //public ICollection<DeliveryOrder> DeliveryOrders => _deliveryOrders;
+    //private List<ReturnOrder> _returnOrders = new();
+    //public ICollection<ReturnOrder> ReturnOrders => _returnOrders;
 
     private List<LogisticsRequestGoods> _logisticsRequestGoods = new();
     public ICollection<LogisticsRequestGoods> LogisticsRequestGoods => _logisticsRequestGoods;

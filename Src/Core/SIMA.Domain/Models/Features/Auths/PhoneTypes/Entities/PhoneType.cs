@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.PhoneTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.PhoneTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -73,6 +74,9 @@ public class PhoneType : Entity
 
     private List<SupplierPhoneBook> _supplierPhoneBooks = new();
     public ICollection<SupplierPhoneBook> SupplierPhoneBooks => _supplierPhoneBooks;
+
+    private List<BrokerPhoneBook> _brokerPhoneBooks = new();
+    public ICollection<BrokerPhoneBook> BrokerPhoneBooks => _brokerPhoneBooks;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

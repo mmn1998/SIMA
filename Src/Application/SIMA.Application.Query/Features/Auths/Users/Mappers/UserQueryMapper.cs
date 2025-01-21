@@ -16,8 +16,6 @@ public class UserQueryMapper : Profile
 {
     public UserQueryMapper()
     {
-        //_securitySettings = securitySettings.Value;
-        //_simaIdentity = simaIdentity;
         CreateMap<UserLocationAccess, GetUserLocationQueryResult>();
         CreateMap<UserPermission, GetUserPermissionQueryResult>();
         CreateMap<UserRole, GetUserRoleQueryResult>();

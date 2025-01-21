@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Logistics.GoodsCategories;
+using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Args;
 using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Contracts;
 using SIMA.Domain.Models.Features.Logistics.GoodsCategories.Entities;
@@ -31,19 +32,50 @@ public class GoodsCategoryCommandHandler : ICommandHandler<CreateGoodsCategoryCo
     }
     public async Task<Result<long>> Handle(CreateGoodsCategoryCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateGoodsCategoryArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await GoodsCategory.Create(arg, _service);
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(arg.Id);
+        try
+        {
+            var arg = _mapper.Map<CreateGoodsCategoryArg>(request);
+            var userId = _simaIdentity.UserId;
+            arg.CreatedBy = userId;
+            var entity = await GoodsCategory.Create(arg, _service);
+            if (request.SupplierList is not null)
+            {
+                var args = _mapper.Map<List<CreateGoodsCategorySupplierArg>>(request.SupplierList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.GoodsCategoryId = arg.Id;
+                }
+                entity.AddGoodsCategorySuppliers(args);
+            }
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(arg.Id);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+       
     }
 
     public async Task<Result<long>> Handle(ModifyGoodsCategoryCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new GoodsCategoryId(request.Id));
         var arg = _mapper.Map<ModifyGoodsCategoryArg>(request);
-        arg.ModifiedBy = _simaIdentity.UserId;
+        var userId = _simaIdentity.UserId;
+        arg.ModifiedBy = userId;
+        if (request.SupplierList is not null)
+        {
+            var args = _mapper.Map<List<CreateGoodsCategorySupplierArg>>(request.SupplierList);
+            foreach (var item in args)
+            {
+                item.CreatedBy = userId;
+                item.GoodsCategoryId = entity.Id.Value;
+            }
+            entity.ModifyGoodsCategorySuppliers(args);
+        }
+        
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);

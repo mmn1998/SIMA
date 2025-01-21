@@ -16,7 +16,6 @@ public class BrokerConfiguration : IEntityTypeConfiguration<Broker>
             .HasConversion(
              v => v.Value,
              v => new BrokerId(v)).ValueGeneratedNever();
-        entity.Property(e => e.Address).HasMaxLength(500);
         entity.Property(e => e.Code).HasMaxLength(20);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
@@ -26,7 +25,6 @@ public class BrokerConfiguration : IEntityTypeConfiguration<Broker>
             .IsRowVersion()
             .IsConcurrencyToken();
         entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
-        entity.Property(e => e.PhoneNumber).HasMaxLength(20);
 
         ///todo
         entity.HasOne(d => d.BrokerType).WithMany(p => p.Brokers)

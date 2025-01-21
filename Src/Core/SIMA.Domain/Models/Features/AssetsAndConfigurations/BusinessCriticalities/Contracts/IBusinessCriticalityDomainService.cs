@@ -4,4 +4,5 @@ namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalit
 
 public interface IBusinessCriticalityDomainService : IDomainService
 {
+    Task<bool> IsCodeUnique(string code, BusinessCriticalityId? id = null);
 }

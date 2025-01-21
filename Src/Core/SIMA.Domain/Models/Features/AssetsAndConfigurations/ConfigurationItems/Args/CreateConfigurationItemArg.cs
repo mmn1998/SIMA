@@ -8,6 +8,7 @@ public class CreateConfigurationItemArg
     public long ConfigurationItemStatusId { get; set; }
     public long LicenseTypeId { get; set; }
     public long? SupplierId { get; set; }
+    public string? Title { get;  set; }
     public long CompanyBuildingLocationId { get; set; }
     public string? Code { get; set; }
     public string? Description { get; set; }

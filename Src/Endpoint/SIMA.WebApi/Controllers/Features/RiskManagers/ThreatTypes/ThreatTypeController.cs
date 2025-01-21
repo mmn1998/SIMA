@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.ThreatTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.ThreatTypes
 {
@@ -17,17 +18,20 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.ThreatTypes
         }
 
         [HttpPost]
+        [SimaAuthorize(Permissions.ThreatTypesPost)]
         public async Task<Result> Post([FromBody] CreateThreatTypeCommand command)
         {
             return await _mediator.Send(command);
         }
 
         [HttpPut]
+        [SimaAuthorize(Permissions.ThreatTypesPut)]
         public async Task<Result> Put([FromBody] ModifyThreatTypeCommand command)
         {
             return await _mediator.Send(command);
         }
         [HttpDelete("{id}")]
+        [SimaAuthorize(Permissions.ThreatTypesDelete)]
         public async Task<Result> Delete([FromRoute] long id)
         {
             var command = new DeleteThreatTypeCommand { Id = id };

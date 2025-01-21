@@ -32,6 +32,7 @@ public class ConfigurationItem : Entity, IAggregateRoot
         if (arg.SupplierId.HasValue) SupplierId = new(arg.SupplierId.Value);
         CompanyBuildingLocationId = new(arg.CompanyBuildingLocationId);
         Code = arg.Code;
+        Title = arg.Title;
         Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -52,6 +53,7 @@ public class ConfigurationItem : Entity, IAggregateRoot
         if (arg.SupplierId.HasValue) SupplierId = new(arg.SupplierId.Value);
         CompanyBuildingLocationId = new(arg.CompanyBuildingLocationId);
         Code = arg.Code;
+        Title = arg.Title;
         Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
@@ -83,6 +85,7 @@ public class ConfigurationItem : Entity, IAggregateRoot
     public LocationId CompanyBuildingLocationId { get; private set; }
     public virtual Location CompanyBuildingLocation { get; private set; }
     public string? Code { get; private set; }
+    public string? Title { get; private set; }
     public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

@@ -40,6 +40,13 @@ public class PermisionsController : ControllerBase
         var command = new DeletePermissionCommand { Id = id };
         return await _mediator.Send(command);
     }
+
+    [HttpPost("AddPermission")]
+    public async Task<Result> AddPermission()
+    {
+        var command = new AddPermissionCommand();
+        return await _mediator.Send(command);
+    }
     #region Helpers
     [HttpPost("AddAllPermissionsToAUser/{userId}")]
     [SimaAuthorize(Permissions.SuperAdmin)]

@@ -41,7 +41,7 @@ public class RecoveryPointObjectiveCommandHandler : ICommandHandler<CreateRecove
 
     public async Task<Result<long>> Handle(ModifyRecoveryPointObjectiveCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(new RecoveryPointObjectiveId(request.Id));
+        var entity = await _repository.GetById(new(request.Id));
         var arg = _mapper.Map<ModifyRecoveryPointObjectiveArg>(request);
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
@@ -51,7 +51,7 @@ public class RecoveryPointObjectiveCommandHandler : ICommandHandler<CreateRecove
 
     public async Task<Result<long>> Handle(DeleteRecoveryPointObjectiveCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(new RecoveryPointObjectiveId(request.Id));
+        var entity = await _repository.GetById(new(request.Id));
         long userId = _simaIdentity.UserId;entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);

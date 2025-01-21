@@ -3,13 +3,10 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.Auths.Roles;
 using SIMA.Application.Query.Contract.Features.Auths.Staffs;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Persistance.Persistence;
 
@@ -45,14 +42,20 @@ public class StaffQueryRepository : IStaffQueryRepository
       		,A.[Name] as ActiveStatus
             ,P.Id ProfileId
       		,s.[CreatedAt]
-,S.ManagerId
-,(PP.FirstName + ' ' + PP.LastName) as ManagerFullName
+            ,S.ManagerId
+            ,(PP.FirstName + ' ' + PP.LastName) as ManagerFullName
+            ,B.Id BranchId
+            ,B.Name BranchName
+            ,PL.Id PositionLevelId
+            ,PL.Name PositionLevelName
 FROM [Organization].[Staff] S
 INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
 INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
 INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
 INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
 Inner Join [Organization].[Position] Po on Po.Id = S.PositionId
+LEFT JOIN Bank.Branch B ON Po.BranchId = B.Id and B.ActiveStatusId<>3
+left join Organization.PositionLevel PL on pl.Id = po.PositionLevelId and PL.ActiveStatusId<>3
 join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
 LEFT JOIN [Organization].[Staff] SP On SP.Id = S.ManagerId and SP.ActiveStatusId<>3
 LEFT JOIN [Authentication].[Profile] PP on PP.ID = SP.ProfileID
@@ -85,14 +88,20 @@ SELECT DISTINCT S.ID as Id
       		,A.[Name] as ActiveStatus
             ,P.Id ProfileId
       		,s.[CreatedAt]
-,S.ManagerId
-,(PP.FirstName + ' ' + PP.LastName) as ManagerFullName
+            ,S.ManagerId
+            ,(PP.FirstName + ' ' + PP.LastName) as ManagerFullName
+            ,B.Id BranchId
+            ,B.Name BranchName
+            ,PL.Id PositionLevelId
+            ,PL.Name PositionLevelName
 FROM [Organization].[Staff] S
 INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
 INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
 INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
 INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
 Inner Join [Organization].[Position] Po on Po.Id = S.PositionId
+LEFT JOIN Bank.Branch B ON Po.BranchId = B.Id and B.ActiveStatusId<>3
+left join Organization.PositionLevel PL on pl.Id = po.PositionLevelId and PL.ActiveStatusId<>3
 join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
 LEFT JOIN [Organization].[Staff] SP On SP.Id = S.ManagerId and SP.ActiveStatusId<>3
 LEFT JOIN [Authentication].[Profile] PP on PP.ID = SP.ProfileID
@@ -120,8 +129,69 @@ WHERE S.[ActiveStatusID] <> 3
         }
     }
 
+    public async Task<IEnumerable<GetStaffQueryResult>> GetAllByDepartmentId(long? departmentId)
+    {
+        var query = @"
+SELECT DISTINCT S.ID as Id
+      		,S.StaffNumber
+      		,(P.FirstName + ' ' + P.LastName) as FullName
+      		,D.Name as DepartmentName
+            ,D.Id as DepartmentId
+      		,C.Name as CompanyName
+            ,C.Id as CompanyId
+             ,Po.Name PositionName
+             ,Po.Id PositionId
+      		,S.[ActiveStatusID]
+      		,A.[Name] as ActiveStatus
+            ,P.Id ProfileId
+      		,s.[CreatedAt]
+            ,S.ManagerId
+            ,(PP.FirstName + ' ' + PP.LastName) as ManagerFullName
+            ,B.Id BranchId
+            ,B.Name BranchName
+            ,PL.Id PositionLevelId
+            ,PL.Name PositionLevelName
+FROM [Organization].[Staff] S
+INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
+INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
+INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
+Inner Join [Organization].[Position] Po on Po.Id = S.PositionId
+LEFT JOIN Bank.Branch B ON Po.BranchId = B.Id and B.ActiveStatusId<>3
+left join Organization.PositionLevel PL on pl.Id = po.PositionLevelId and PL.ActiveStatusId<>3
+join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
+LEFT JOIN [Organization].[Staff] SP On SP.Id = S.ManagerId and SP.ActiveStatusId<>3
+LEFT JOIN [Authentication].[Profile] PP on PP.ID = SP.ProfileID
+WHERE S.[ActiveStatusID] <> 3 and D.Id = @departmentId
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var result = await connection.QueryAsync<GetStaffQueryResult>(query, new {departmentId});
+        return result;
+    }
+
     public async Task<bool> IsStaffSatisfied(long profileId, long positionId)
     {
         return !await _context.Staff.AnyAsync(s => s.ProfileId == new ProfileId(profileId) && s.PositionId == new PositionId(positionId));
+    }
+
+    public async Task<long> GetStaffIdByUserId(long userId)
+    {
+
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            string query = @"
+                       select
+                            S.Id 
+                            from Organization.Staff S
+                            join Authentication.Profile P on s.ProfileId = P.Id 
+                            join Authentication.Users U on U.ProfileID = P.Id 
+                       where U.Id = @userId  
+                        ";
+            var result = await connection.QueryFirstOrDefaultAsync<long>(query, new { userId });
+            result.NullCheck();
+            return result;
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace SIMA.WebApi.Conventions
     {
         private const string Query = "QueryController";
         private const string StrRegex = @"api/v\d+/";
-        private const string serviceCatalogPattern = @"serviceCatalog/";
+        private const string serviceCatalogPattern = @"(serviceCatalog/)|(basic/)|(bcp/)|(riskManagement/)|(trusty/)|(assetAndConfiguration/)|(branch/)";
         public void Apply(ApplicationModel application)
         {
             //foreach (var controller in application.Controllers.Where(a => a.ControllerType.Name.EndsWith(Query, StringComparison.OrdinalIgnoreCase)))

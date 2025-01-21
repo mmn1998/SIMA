@@ -13,6 +13,7 @@ public class IssueRunActionCommand : ICommand<Result<long>>
     public string? ApprovalDescription { get; set; }
     public List<InputParamModel>? InputParams { get; set; }
     public List<InputDocument>? InputDocuments { get; set; }
+    public List<InputParamService>? InputParamServices { get; set; }
 }
 
 

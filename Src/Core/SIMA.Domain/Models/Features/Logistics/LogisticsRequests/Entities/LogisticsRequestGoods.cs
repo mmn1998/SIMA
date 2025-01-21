@@ -24,9 +24,9 @@ public class LogisticsRequestGoods : Entity
     {
         Id = new LogisticsRequestGoodsId(IdHelper.GenerateUniqueId());
         LogisticsRequestId = new LogisticsRequestId(arg.LogisticsRequestId);
-        GoodsStatusId = new GoodsStatusId(arg.GoodsStatusId);
+        GoodsStatusId = arg.GoodsStatusId !=0 ? new GoodsStatusId(arg.GoodsStatusId) :null ;
         GoodsCategoryId = new GoodsCategoryId(arg.GoodsCategoryId);
-        GoodsId = new GoodsId(arg.GoodsId);
+        GoodsId = arg.GoodsId != 0 ? new GoodsId(arg.GoodsId) : null;
         Quantity = arg.Quantity;
         ServiceDuration = arg.ServiceDuration;
         UsageDuration = arg.UsageDuration;
@@ -54,6 +54,11 @@ public class LogisticsRequestGoods : Entity
         ActiveStatusId = (long)status;
     }
 
+    public void ChangeGoodsStatus(GoodsStatusEnum status)
+    {
+        GoodsStatusId = new GoodsStatusId((long)status);
+    }
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;
@@ -66,12 +71,12 @@ public class LogisticsRequestGoods : Entity
     public virtual GoodsCategory GoodsCategory { get; private set; }
     public LogisticsRequestId LogisticsRequestId { get; private set; }
     public virtual LogisticsRequest LogisticsRequest { get; private set; }
-    public GoodsStatusId GoodsStatusId { get; private set; }
+    public GoodsStatusId? GoodsStatusId { get; private set; }
     public virtual GoodsStatus GoodsStatus { get; private set; }
     public GoodsId? GoodsId { get; private set; }
     public virtual Goods? Goods { get; private set; }
     public float Quantity { get; private set; }
-    public TimeOnly? ServiceDuration { get; private set; }
+    public float? ServiceDuration { get; private set; }
     public int? UsageDuration { get; private set; }
     public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }

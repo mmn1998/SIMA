@@ -2,11 +2,12 @@
 
 public class CreateLogisticsRequestGoodsArg
 {
+
     public long LogisticsRequestId { get; set; }
     public long GoodsCategoryId { get; set; }
     public long GoodsStatusId { get; set; }
     public long GoodsId { get; set; }
-    public TimeOnly? ServiceDuration { get;  set; }
+    public float? ServiceDuration { get;  set; }
     public int? UsageDuration { get;  set; }
     public string? Description { get;  set; }
     public float Quantity { get; set; }

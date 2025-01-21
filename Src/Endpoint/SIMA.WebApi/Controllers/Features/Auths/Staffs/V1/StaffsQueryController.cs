@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.Staffs;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -22,17 +21,25 @@ public class StaffsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAll")]
-    //[SimaAuthorize(Permissions.StaffsGetAll)]
+    [SimaAuthorize(Permissions.StaffsGetAll)]
     public async Task<Result> Get(GetAllStaffQuery request)
     {
         return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.StaffsGet)]
+    [SimaAuthorize(Permissions.StaffsGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetStaffQuery { Id = id };
+        var result = await _mediator.Send(query);
+        return result;
+    }
+    [HttpGet("StaffByDepartment/{departmentId}")]
+    [SimaAuthorize(Permissions.StaffsGet)]
+    public async Task<Result> GetStaffByDepartment([FromRoute] long? departmentId)
+    {
+        var query = new GetStaffByDepartmentQuery { DepartmentId = departmentId };
         var result = await _mediator.Send(query);
         return result;
     }

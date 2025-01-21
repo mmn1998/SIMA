@@ -55,6 +55,11 @@ namespace SIMA.Persistance.EntityConfigurations.Features.Auths
                .IsUnicode(false)
                .IsFixedLength();
 
+            entity.Property(e => e.IsSendOTP)
+               .HasMaxLength(1)
+               .IsUnicode(false)
+               .IsFixedLength();
+
             entity.HasOne(d => d.Company).WithMany(p => p.Users)
                 .HasForeignKey(d => d.CompanyId)
                 .HasConstraintName("FK_User_Company");

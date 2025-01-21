@@ -39,7 +39,7 @@ public class StepApprovalOption : Entity, IAggregateRoot
         ModifiedBy = arg.ModifiedBy;
     }
 
-    public async Task ChangeStatus(ActiveStatusEnum status)
+    public void ChangeStatus(ActiveStatusEnum status)
     {
         ActiveStatusId = (long)status;
     }

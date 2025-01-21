@@ -41,6 +41,11 @@ public class Permission : Entity
         return new Permission(arg);
     }
 
+    public static async Task<Permission> CreateWithoutService(CreatePermissionArg arg)
+    {
+        return new Permission(arg);
+    }
+
     private static async Task CreateGuards(CreatePermissionArg arg, IPermissionService service)
     {
         arg.NullCheck();
@@ -53,26 +58,16 @@ public class Permission : Entity
     }
 
     public PermissionId Id { get; private set; }
-
     public DomainId DomainId { get; private set; }
-
     public string? Name { get; private set; }
     public string? Description { get; private set; }
-
     public string? EnglishKey { get; private set; }
-
     public string? Code { get; private set; }
-
     public long ActiveStatusId { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
-
     public virtual Domains.Entities.Domain Domain { get; private set; } = null!;
 
     private List<GroupPermission> _groupPermision = new();

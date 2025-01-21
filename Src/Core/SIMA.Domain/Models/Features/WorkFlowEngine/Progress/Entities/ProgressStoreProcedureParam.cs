@@ -76,9 +76,11 @@ public class ProgressStoreProcedureParam : Entity
     public virtual UIInputElement? UiInputElement { get; private set; }
     public string? IsRequired { get; private set; }
     public string? IsSystemParam { get; private set; }
+    public string? ComboIsCascade { get; private set; }
     public string? SystemParamName { get; private set; }
     public string? TextBoundName { get; private set; }
     public string? ValueBoundName { get; private set; }
+    public string? FixedValue { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

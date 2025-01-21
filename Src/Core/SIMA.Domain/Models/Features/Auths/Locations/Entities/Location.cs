@@ -12,6 +12,7 @@ using SIMA.Domain.Models.Features.Auths.LocationTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.CurrencyPaymentChannels.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -119,4 +120,6 @@ public class Location : Entity
     public ICollection<Asset> Assets => _assets;
     private List<ConfigurationItem> _configurationItems = new();
     public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
+    private List<CurrencyPaymentChannel> _currencyPaymentChannels = new();
+    public ICollection<CurrencyPaymentChannel> CurrencyPaymentChannels => _currencyPaymentChannels;
 }

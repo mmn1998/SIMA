@@ -9,7 +9,7 @@ public class AssetTechnicalStatusConfiguration : IEntityTypeConfiguration<AssetT
 {
     public void Configure(EntityTypeBuilder<AssetTechnicalStatus> entity)
     {
-        entity.ToTable("AssetTechnicalStatusConfiguration", "AssetAndConfiguration");
+        entity.ToTable("AssetTechnicalStatus", "AssetAndConfiguration");
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,

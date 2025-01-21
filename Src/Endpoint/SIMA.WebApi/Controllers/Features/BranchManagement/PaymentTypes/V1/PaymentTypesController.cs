@@ -7,9 +7,9 @@ using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.BranchManagement.PaymentTypes.V1;
 
-[Route("[controller]")]
+[Route("branch/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "PaymentTypes")]
+[ApiExplorerSettings(GroupName = "Branch/PaymentTypes")]
 [Authorize]
 public class PaymentTypesController : ControllerBase
 {

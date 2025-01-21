@@ -9,7 +9,7 @@ public class GetProductQueryResult
     public string? Code { get; set; }
     public string? Scope { get; set; }
     public string? Description { get; set; }
-    public long ProviderCompanyId { get; set; }
+    public long? ProviderCompanyId { get; set; }
     public string? ProviderCompanyName { get; set; }
     public long ServiceStatusId { get; set; }
     public string? ServiceStatusName { get; set; }

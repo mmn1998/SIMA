@@ -25,6 +25,7 @@ public class GoodsCategory : Entity, IAggregateRoot
         IsGoods = arg.IsGoods;
         IsHardware = arg.IsHardware;
         IsRequiredSecurityCheck = arg.IsRequiredSecurityCheck;
+        IsFixedAsset = arg.IsFixedAsset;
         IsTechnological = arg.IsTechnological;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -44,6 +45,7 @@ public class GoodsCategory : Entity, IAggregateRoot
         IsGoods = arg.IsGoods;
         IsHardware = arg.IsHardware;
         IsRequiredSecurityCheck = arg.IsRequiredSecurityCheck;
+        IsFixedAsset = arg.IsFixedAsset;
         IsTechnological = arg.IsTechnological;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
@@ -79,6 +81,7 @@ public class GoodsCategory : Entity, IAggregateRoot
     public string IsTechnological { get; private set; }
     public string IsHardware { get; private set; }
     public string IsGoods { get; private set; }
+    public string IsFixedAsset { get; private set; }
     public string IsRequiredSecurityCheck { get; private set; }
     public string Name { get; private set; }
     public string Code { get; private set; }
@@ -92,6 +95,45 @@ public class GoodsCategory : Entity, IAggregateRoot
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        DeleteGoodsCategorySuppliers(userId);
+    }
+    public void AddGoodsCategorySuppliers(List<CreateGoodsCategorySupplierArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = GoodsCategorySupplier.Create(arg);
+            _goodsCategorySuppliers.Add(entity);
+        }
+    }
+    public void DeleteGoodsCategorySuppliers(long userId)
+    {
+        foreach(var entity in _goodsCategorySuppliers)
+        {
+            entity.Delete(userId);
+        }
+    }
+    public void ModifyGoodsCategorySuppliers(List<CreateGoodsCategorySupplierArg> args)
+    {
+        var activeEntities = _goodsCategorySuppliers.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.SupplierId == x.SupplierId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.SupplierId.Value == x.SupplierId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _goodsCategorySuppliers.FirstOrDefault(x => x.SupplierId.Value == arg.SupplierId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = GoodsCategorySupplier.Create(arg);
+                _goodsCategorySuppliers.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
     }
     private List<Goods> _goods = new();
     public ICollection<Goods> Goods => _goods;

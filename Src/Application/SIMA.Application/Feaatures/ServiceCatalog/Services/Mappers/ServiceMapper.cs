@@ -13,7 +13,6 @@ public class ServiceMapper : Profile
         CreateMap<CreateServiceCommand, CreateServiceArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-            .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => DateOnly.FromDateTime(source.InServiceDate.ToMiladiDate())))
             .ForMember(dest => dest.ServiceWorkflowBpmn, act => act.MapFrom(source => source.WorkflowFileContent))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
@@ -21,7 +20,6 @@ public class ServiceMapper : Profile
         CreateMap<ModifyServiceCommand, ModifyServiceArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
-            .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => DateOnly.FromDateTime(source.InServiceDate.ToMiladiDate())))
             .ForMember(dest => dest.ServiceWorkflowBpmn, act => act.MapFrom(source => source.WorkflowFileContent))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
@@ -98,8 +96,8 @@ public class ServiceMapper : Profile
         CreateMap<CreateserviceAvalibilityCommand, CreateServiceAvalibilityArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-            .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvalibilityStartTime.ToTimeOnlyFromUnixTimestamp()))
-            .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvalibilityEndTime.ToTimeOnlyFromUnixTimestamp()))
+            .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvalibilityStartTime.ToTimeOnly()))
+            .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvalibilityEndTime.ToTimeOnly()))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
 

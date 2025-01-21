@@ -7,7 +7,6 @@ public class ModifyBusinessContinuityStategyArg
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? Code { get; set; }
-    public string? IsStableStrategy { get; set; }
     public DateTime? ExpireDate { get; set; }
     public DateTime? ReviewDate { get; set; }
     public long ActiveStatusId { get; set; }

@@ -25,29 +25,29 @@ public class WorkFlowActor : Entity
     {
 
     }
-    private WorkFlowActor(WorkFlowActorArg arg)
+    private WorkFlowActor(WorkFlowActorArg arg, long userId)
     {
         Id = new WorkFlowActorId(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         BpmnId = arg.BpmnId;
-        CreatedBy = arg.UserId;
+        CreatedBy = userId;
         CreatedAt = arg.CreatedAt;
         WorkFlowId = new WorkFlowId(arg.WorkFlowId);
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public static WorkFlowActor New(WorkFlowActorArg arg)
+    public static WorkFlowActor New(WorkFlowActorArg arg, long userId)
     {
-        var result = new WorkFlowActor(arg);
+        var result = new WorkFlowActor(arg, userId);
         return result;
     }
 
-    public void Modify(WorkFlowActorArg arg)
+    public void Modify(WorkFlowActorArg arg, long userId)
     {
         Code = arg.Code;
         Name = arg.Name;
         ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.UserId;
+        ModifiedBy = userId;
     }
     public async Task Modify(ModifyWorkFlowActorArg arg , IWorkFlowActorDomainService service )
     {
@@ -63,7 +63,8 @@ public class WorkFlowActor : Entity
         AddActorRoles(arg.RoleId, arg.Id);
         AddActorGroups(arg.GroupId, arg.Id);
         AddActorUsers(arg.UserId, arg.Id);
-        AddEmployee(arg.EmployeeId);
+        if (arg.EmployeeId.Count > 0)
+            AddEmployee(arg.EmployeeId);
     }
 
     public void Delete(long userId)

@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.Services;
 namespace SIMA.Application.Query.Features.ServiceCatalog.Services;
 
 public class ServiceQueryHandler : IQueryHandler<GetServiceQuery, Result<GetServiceQueryResult>>,
-    IQueryHandler<GetAllServicesQuery, Result<IEnumerable<GetServiceQueryResult>>>
+    IQueryHandler<GetAllServicesQuery, Result<IEnumerable<GetAllServicesQueryResult>>>
 {
     private readonly IServiceQueryRepository _repository;
 
@@ -20,7 +20,7 @@ public class ServiceQueryHandler : IQueryHandler<GetServiceQuery, Result<GetServ
         return Result.Ok(result);
     }
 
-    public async Task<Result<IEnumerable<GetServiceQueryResult>>> Handle(GetAllServicesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetAllServicesQueryResult>>> Handle(GetAllServicesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

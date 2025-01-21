@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.RiskManagers.RiskImpacts.Mapper
 {
     public class RiskImpactMapper : Profile
     {
-        public RiskImpactMapper(ISimaIdentity simaIdentity)
+        public RiskImpactMapper()
         {
             CreateMap<CreateRiskImpactCommand, CreateRiskImpactArgs>()
                 .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

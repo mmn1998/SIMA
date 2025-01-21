@@ -18,13 +18,13 @@ public class CriticalActivitiesController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    [SimaAuthorize(Permissions.CriticalActivityPost)]
+    //[SimaAuthorize(Permissions.CriticalActivityPost)]
     public async Task<Result> Post([FromBody] CreateCriticalActivityCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    [SimaAuthorize(Permissions.CriticalActivityPut)]
+    //[SimaAuthorize(Permissions.CriticalActivityPut)]
     public async Task<Result> Put([FromBody] ModifyCriticalActivityCommand command)
     {
         return await _mediator.Send(command);

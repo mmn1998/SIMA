@@ -14,7 +14,16 @@ public static class ConfigurationExtention
     {
         return services.AddDbContext<DbContext, SIMADBContext>(options =>
             options.UseSqlServer(
-                connectionString
+                connectionString,
+            sqlOptions =>
+            {
+                sqlOptions.CommandTimeout(180);
+                sqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(10),
+                    errorNumbersToAdd: null
+                );
+            }
                 ));
     }
     public static IServiceCollection RegisterCommandRepository(this IServiceCollection services)

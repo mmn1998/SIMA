@@ -32,6 +32,18 @@ public class BusinessContinuityPlanService : Entity
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
     }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
+
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
     public BusinessContinuityPlanServiceId Id { get; private set; }
     public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
     public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
@@ -42,10 +54,5 @@ public class BusinessContinuityPlanService : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete(long userId)
-    {
-        ModifiedBy = userId;
-        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
-        ActiveStatusId = (long)ActiveStatusEnum.Delete;
-    }
+    
 }

@@ -20,7 +20,7 @@ public class Step : Entity
     {
 
     }
-    private Step(StepArg arg)
+    private Step(StepArg arg, long? createdBy)
     {
         Id = new StepId(arg.Id);
         Name = arg.Name ?? "";
@@ -31,12 +31,13 @@ public class Step : Entity
         CompleteName = arg.CompleteName;
         BpmnId = arg.BpmnId;
         ActiveStatusId = arg.ActiveStatusId;
-        CreatedBy = arg.UserId;
+        CreatedBy = createdBy;
         CreatedAt = arg.CreatedAt;
+        AddActorStep(arg.ActorStepArgs);
 
     }
 
-    public void Modify(StepArg arg)
+    public void Modify(StepArg arg, long createdBy)
     {
         Name = arg.Name;
         ActiveStatusId = arg.ActiveStatusId;
@@ -49,14 +50,14 @@ public class Step : Entity
         //    StateId = new StateId((long)arg.StateId);
         //}
         UIPropertyBoxTitle = arg.UIPropertyBoxTitle;
-        ModifiedBy = arg.UserId;
+        ModifiedBy = createdBy;
         IsAssigneeForced = arg.IsAssigneeForced;
         var allBmpnIds = arg.ActorStepArgs.Select(x => x.BpmnId);
 
         var deActiveSteps = _workFlowActorStep.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveSteps)
         {
-            item.Delete(arg.UserId.Value);
+            item.Delete(createdBy);
         }
         var existsBpmnIds = _workFlowActorStep.Select(x => x.BpmnId);
         var notExistsSteps = arg.ActorStepArgs.Where(x => !existsBpmnIds.Contains(x.BpmnId));
@@ -69,7 +70,7 @@ public class Step : Entity
         }
 
     }
-    public void Modify(ModifyStepArgs arg)
+    public void Modify(ModifyStepArgs arg, long? createdBy)
     {
         //Name = arg.Name;
         WorkFlowId = new WorkFlowId((long)arg.WorkFlowId);
@@ -80,9 +81,9 @@ public class Step : Entity
         DisplayName =arg.DisplayName;
         FormId = new FormId(arg.FormId).Value != 0 ? new FormId(arg.FormId) : null;
     }
-    public static Step New(StepArg arg)
+    public static Step New(StepArg arg, long? createdBy)
     {
-        return new Step(arg);
+        return new Step(arg, createdBy);
     }
     public void AddActorStep(IEnumerable<CreateWorkFlowActorStepArg> actorSteps)
     {
@@ -90,7 +91,7 @@ public class Step : Entity
         _workFlowActorStep.AddRange(actorStep);
     }
 
-    public async Task AddStepApprovalOption(List<CreateStepApprovalOptionArg> arg, long stepId)
+    public void AddStepApprovalOption(List<CreateStepApprovalOptionArg> arg, long stepId)
     {
         var previousStepApprovalOptions = _stepApprovalOptions.Where(x => x.StepId == new StepId(stepId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
@@ -103,7 +104,7 @@ public class Step : Entity
             var entity = _stepApprovalOptions.Where(x => (x.ApprovalOptionId == new ApprovalOptionId(item.ApprovalOptionId) && x.StepId == new StepId(stepId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
             {
-                await entity.ChangeStatus(ActiveStatusEnum.Active);
+                entity.ChangeStatus(ActiveStatusEnum.Active);
             }
             else
             {
@@ -210,4 +211,7 @@ public class Step : Entity
 
     private List<StepRequiredDocument> _stepRequiredDocuments = new();
     public ICollection<StepRequiredDocument> StepRequiredDocuments => _stepRequiredDocuments;
+
+    private List<StepServiceTask> _stepServiceTasks = new();
+    public ICollection<StepServiceTask> StepServiceTasks => _stepServiceTasks;
 }

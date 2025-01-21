@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.RiskManagers.ThreatTypes.Mapper
 {
     public class ThreatTypeMapper : Profile
     {
-        public ThreatTypeMapper(ISimaIdentity simaIdentity)
+        public ThreatTypeMapper()
         {
             CreateMap<CreateThreatTypeCommand, CreateThreatTypeArg>()
                 .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

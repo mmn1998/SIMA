@@ -26,7 +26,7 @@ public class BusinessContinuityPlanServiceConfiguration : IEntityTypeConfigurati
         entity.Property(x => x.BusinessContinuityPlanVersioningId)
             .HasConversion(
             x => x.Value,
-            x => new BusinessContinuityPlanVersioningId(x)
+            x => new(x)
             );
         entity.HasOne(x => x.BusinessContinuityPlanVersioning)
             .WithMany(x => x.BusinessContinuityPlanServices)

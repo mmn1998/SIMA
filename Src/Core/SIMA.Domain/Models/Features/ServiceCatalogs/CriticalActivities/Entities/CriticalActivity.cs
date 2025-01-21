@@ -42,13 +42,11 @@ public class CriticalActivity : Entity, IAggregateRoot
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
-        Code = arg.Code;
         if (arg.TechnicalSupervisorDepartmentId.HasValue) TechnicalSupervisorDepartmentId = new(arg.TechnicalSupervisorDepartmentId.Value);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
-        IssueId = new(arg.IssueId);
-        AddDomainEvent(new ModifyCriticalActivityEvent(IssueId.Value, MainAggregateEnums.CriticalActivity, arg.Name, Id.Value));
+        //AddDomainEvent(new ModifyCriticalActivityEvent(IssueId.Value, MainAggregateEnums.CriticalActivity, arg.Name, Id.Value));
     }
     #region Guards
     private static async Task CreateGuards(CreateCriticalActivityArg arg, ICriticalActivityDomainService service)
@@ -65,10 +63,8 @@ public class CriticalActivity : Entity, IAggregateRoot
     {
         arg.NullCheck();
         arg.Name.NullCheck();
-        arg.Code.NullCheck();
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     } 
     #endregion
@@ -185,7 +181,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     #region ModifyMethods
     public void ModifyAssignedStaffs(List<CreateCriticalActivityAssignedStaffArg> args)
     {
-        var activeEntities = _criticalActivityAssignStaffs.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _criticalActivityAssignStaffs.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ResponsibleTypeId == x.ResponsilbeTypeId.Value && c.StaffId == x.StaffId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ResponsilbeTypeId.Value == x.ResponsibleTypeId && c.StaffId.Value == x.StaffId));
         foreach (var arg in ShouldAddedArgs)
@@ -208,7 +204,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     }
     public void ModifyCriticalActivityAssets(List<CreateCriticalActivityAssetArg> args)
     {
-        var activeEntities = _criticalActivityAssets.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _criticalActivityAssets.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.AssetId == x.AssetId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.AssetId.Value == x.AssetId));
         foreach (var arg in ShouldAddedArgs)
@@ -231,7 +227,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     }
     public void ModifyCriticalActivityRisks(List<CreateCriticalActivityRiskArg> args)
     {
-        var activeEntities = _criticalActivityRisks.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _criticalActivityRisks.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.RiskId == x.RiskId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.RiskId.Value == x.RiskId));
         foreach (var arg in ShouldAddedArgs)
@@ -254,7 +250,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     }
     public void ModifyCriticalActivityExecutionPlans(List<CreateCriticalActivityExecutionPlanArg> args)
     {
-        var activeEntities = _criticalActivityExecutionPlans.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _criticalActivityExecutionPlans.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.WeekDay == x.WeekDay && c.ServiceAvalibilityEndTime == x.ServiceAvalibilityEndTime && c.ServiceAvalibilityStartTime == x.ServiceAvalibilityStartTime));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.WeekDay == x.WeekDay && c.ServiceAvalibilityEndTime == x.ServiceAvalibilityEndTime && c.ServiceAvalibilityStartTime == x.ServiceAvalibilityStartTime));
         foreach (var arg in ShouldAddedArgs)
@@ -277,7 +273,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     }
     public void ModifyCriticalActivityServices(List<CreateCriticalActivityServicesArg> args)
     {
-        var activeEntities = _criticalActivityServices.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _criticalActivityServices.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ServiceId == x.ServiceId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ServiceId.Value == x.ServiceId));
         foreach (var arg in ShouldAddedArgs)
@@ -300,7 +296,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     }
     public void ModifyCriticalConfigurationItems(List<CreateCriticalActivityConfigurationItemArg> args)
     {
-        var activeEntities = _criticalActivityConfigurationItems.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _criticalActivityConfigurationItems.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ConfigurationItemId == x.ConfigurationItemId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ConfigurationItemId.Value == x.ConfigurationItemId));
         foreach (var arg in ShouldAddedArgs)

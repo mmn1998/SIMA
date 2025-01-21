@@ -54,14 +54,14 @@ public class LogisticCartableQueryController : ControllerBase
         {
             document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
         }
-        foreach (var document in result.Data.InvoiceDocumentList)
-        {
-            document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
-        }
-        foreach (var document in result.Data.ReceiptDocumentList)
-        {
-            document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
-        }
+        //foreach (var document in result.Data.InvoiceDocumentList)
+        //{
+        //    document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
+        //}
+        //foreach (var document in result.Data.ReceiptDocumentList)
+        //{
+        //    document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
+        //}
         return result;
     }
 }

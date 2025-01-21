@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using SIMA.Application.Query.Contract.Features.Auths.Users;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Events;
 using SIMA.Domain.Models.Features.Auths.Users.Interfaces;
@@ -28,20 +29,27 @@ public class UserRepository : Repository<User>, IUserRepository
     public async Task<User> GetById(long id)
     {
         var entity = await _context.Users
-        .Include(u => u.UserConfigs)
-        .Include(u => u.UserGroups)
-        .Include(u => u.UserPermissions)
-        .Include(u => u.UserRoles)
-        .Include(u => u.AdminLocationAccesses)
-        .Include(u => u.UserLocationAccesses)
-        .Include(u=>u.FormUsers)
-            .ThenInclude(u=>u.Form)
-                .ThenInclude(u=>u.FormPermissions)
+        .Include(u => u.UserConfigs.Where(u => u.ActiveStatusId != 3))
+        .Include(u => u.UserGroups.Where(u => u.ActiveStatusId != 3))
+        .Include(u => u.UserPermissions.Where(u => u.ActiveStatusId != 3))
+        .Include(u => u.UserRoles.Where(u => u.ActiveStatusId != 3))
+        .Include(u => u.AdminLocationAccesses.Where(u => u.ActiveStatusId != 3))
+        .Include(u => u.UserLocationAccesses.Where(u => u.ActiveStatusId != 3))
+        .Include(u => u.FormUsers.Where(u => u.ActiveStatusId != 3))
+            .ThenInclude(u => u.Form)
+                .ThenInclude(u => u.FormPermissions.Where(C => C.ActiveStatusId != 3))
             .FirstOrDefaultAsync(u => u.Id == new UserId(id));
         if (entity is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
         return entity;
     }
 
+    public async Task<User> GetByIdOnlyUser(long id)
+    {
+        var entity = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == new UserId(id));
+        if (entity is null) throw new SimaResultException(CodeMessges._100051Code, Messages.UserNotFoundError);
+        return entity;
+    }
     public async Task<User> GetByUserName(string userName)
     {
         var entity = await _context.Users
@@ -51,7 +59,7 @@ public class UserRepository : Repository<User>, IUserRepository
         .Include(u => u.UserRoles)
         .Include(u => u.AdminLocationAccesses)
         .Include(u => u.UserLocationAccesses)
-                   .FirstOrDefaultAsync(u => u.Username == userName);
+            .FirstOrDefaultAsync(u => u.Username == userName);
         entity.NullCheck();
         return entity;
     }
@@ -95,7 +103,52 @@ public class UserRepository : Repository<User>, IUserRepository
         }
 
     }
+    public async Task<User> CheckForgetPasswordCode(long userId, string code)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == new UserId(userId));
+        user.NullCheck();
+        if (user.ConfirmCode == code)
+            return user;
+        else
+            throw new SimaResultException(CodeMessges._400Code, Messages.CodeNotValid);
+    }
+    public async Task<User> GetByUsernameAndPassword(string username, string password)
+    {
+        try
+        {
+            var user = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Username == username);
 
+            if (user is null) throw new SimaResultException(CodeMessges._100002Code, Messages.InvalidUsernameOrPasswordError);
+
+            var checkPassword = user.Password.Verify(password);
+            if (!checkPassword)
+            {
+                UserInfoLogin userInfo = new UserInfoLogin();
+                userInfo.AccessFailedCount = user.AccessFailedCount.HasValue ? user.AccessFailedCount.Value + 1 : 1;
+                userInfo.AccessFailedOverallCount = user.AccessFailedOverallCount.HasValue ? user.AccessFailedOverallCount.Value + 1 : 1;
+                userInfo.AccessFailedDate = DateTime.Now;
+
+
+                if (userInfo.AccessFailedCount < 4)
+                    userInfo.IsLocked = "0";
+                else
+                    userInfo.IsLocked = "1";
+
+                user.AccessFailed(userInfo);
+
+            }
+            else
+            {
+                if (string.Equals(user.IsLocked, "0")) user.ResetWrongPassActivity();
+            }
+            return user;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
     private async Task<string> GetUserNameSSO(string tiket)
     {
         string UserName = string.Empty;
@@ -165,15 +218,5 @@ public class UserRepository : Repository<User>, IUserRepository
 
             return result;
         }
-    }
-
-    public async Task<User> CheckForgetPasswordCode(long userId, string code)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == new UserId(userId));
-        user.NullCheck();
-        if (user.ConfirmCode == code)
-            return user;
-        else
-            throw new SimaResultException(CodeMessges._400Code, Messages.CodeNotValid);
     }
 }

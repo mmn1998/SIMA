@@ -1,8 +1,4 @@
-﻿using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
-using SIMA.Application.Query.Contract.Features.Logistics.LogisticsRequests;
-
-
-namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.CriticalActivities;
+﻿namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.CriticalActivities;
 
 public class GetCriticalActivityQueryResult
 {
@@ -20,12 +16,4 @@ public class GetCriticalActivityQueryResult
     public IEnumerable<GetCriticalActivityRiskQueryResult>? RiskList { get; set; }
     public IEnumerable<GetCriticalActivityAssignedStaffQueryResult>? AssignedStaffList { get; set; }
     public IEnumerable<GetCriticalActivityExecutionPlansQueryResult>? ExecutionPlanList { get; set; }
-    public IssueInfo? IssueInfo { get; set; }
-    public IEnumerable<IssueApprovalList>? IssueApprovalList { get; set; }
-    public IEnumerable<GetApprovalOptionQueryResult>? ApprovalOptionList { get; set; }
-    public IEnumerable<GetRelatedProgressQueryResult>? RelatedProgressList { get; set; }
-    public IEnumerable<GetStepRequiredDocumentQueryResult>? StepRequiredDocumentList { get; set; }
-    public string? UiPropertyBoxTitle { get; set; }
-    public IEnumerable<StoreProcedureParams>? FormParams { get; set; }
-    public string? IsEditable { get; set; }
 }

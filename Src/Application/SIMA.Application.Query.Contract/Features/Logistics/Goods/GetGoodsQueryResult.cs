@@ -11,6 +11,5 @@ public class GetGoodsQueryResult
     public string? GoodsTypeName { get; set; }
     public long UnitMeasurementId { get; set; }
     public string? UnitMeasurement { get; set; }
-    public string? IsFixedAsset { get; set; }
     public string? ActiveStatus { get; set; }
 }

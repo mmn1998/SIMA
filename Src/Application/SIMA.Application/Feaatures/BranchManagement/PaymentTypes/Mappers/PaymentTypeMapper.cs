@@ -13,6 +13,7 @@ public class PaymentTypeMapper : Profile
     {
         CreateMap<AddPaymentTypeCommand, CreatePaymentTypeArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             ;

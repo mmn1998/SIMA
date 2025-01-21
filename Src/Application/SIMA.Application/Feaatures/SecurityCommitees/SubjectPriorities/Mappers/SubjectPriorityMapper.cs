@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.SecurityCommitees.SubjectPriorities.Mappers
 
 public class SubjectPriorityMapper : Profile
 {
-    public SubjectPriorityMapper(ISimaIdentity simaIdentity)
+    public SubjectPriorityMapper()
     {
         CreateMap<CreateSubjectPriorityCommand, CreateSubjectPriorityArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

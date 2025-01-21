@@ -37,8 +37,8 @@ public class WorkFlowActorCommandHandler : ICommandHandler<CreateWorkFlowActorCo
     {
 
         var arg = _mapper.Map<WorkFlowActorArg>(request);
-        arg.UserId = _simaIdentity.UserId;
-        var actor = Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor.New(arg);
+        var userId = _simaIdentity.UserId;
+        var actor = Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites.WorkFlowActor.New(arg, userId);
         await _repository.Add(actor);
         //request.Id = new WorkFlowActorId(actor.Id);
 

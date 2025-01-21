@@ -3,10 +3,11 @@
 public class CreateDocumentArg
 {
     public string? Name { get; set; }
-
+    public string? IsOrganizationalDocumentation { get; set; }
     public string? Code { get; set; }
     public long? MainAggregateId { get; set; }
     public long? SourceId { get; set; }
+    public long CompanyId { get; set; }
     public long? AttachStepId { get; set; }
     public long DocumentTypeId { get; set; }
     public long FileExtensionId { get; set; }

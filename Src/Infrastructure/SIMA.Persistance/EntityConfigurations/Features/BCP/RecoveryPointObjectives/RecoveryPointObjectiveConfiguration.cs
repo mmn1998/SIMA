@@ -14,7 +14,7 @@ public class RecoveryPointObjectiveConfiguration : IEntityTypeConfiguration<Reco
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new RecoveryPointObjectiveId(v)).ValueGeneratedNever();
+             v => new(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(20);
         entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
@@ -27,5 +27,15 @@ public class RecoveryPointObjectiveConfiguration : IEntityTypeConfiguration<Reco
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
+
+        entity.Property(x => x.TimeMeasurementId)
+            .HasConversion
+            (x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x=>x.TimeMeasurement)
+            .WithMany(x=>x.RecoveryPointObjectives)
+            .HasForeignKey(x => x.TimeMeasurementId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

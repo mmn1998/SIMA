@@ -38,7 +38,7 @@ public class BusinessImpactAnalysisConfiguration : IEntityTypeConfiguration<Busi
         entity.Property(x => x.ServicePriorityId)
             .HasConversion(
             x => x.Value,
-            x => new OrganizationalServicePriorityId(x)
+            x => new(x)
             );
         entity.HasOne(x => x.ServicePriority)
             .WithMany(x => x.BusinessImpactAnalyses)

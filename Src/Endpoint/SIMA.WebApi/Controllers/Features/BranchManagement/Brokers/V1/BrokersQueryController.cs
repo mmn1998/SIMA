@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Brokers;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.BranchManagement.Brokers.V1;
 
-[Route("[controller]")]
+[Route("branch/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "Brokers")]
+[ApiExplorerSettings(GroupName = "Branch/Brokers")]
 [Authorize]
 public class BrokersQueryController : ControllerBase
 {
@@ -22,6 +21,12 @@ public class BrokersQueryController : ControllerBase
     [HttpPost("GetAll")]
     public async Task<Result> Get(GetAllBrokerQuery query)
     {
+        return await _mediator.Send(query);
+    }
+    [HttpGet("GetAllBrokersByBrokerTypeId/{brokerTypeId}")]
+    public async Task<Result> GetAllBrokersByBrokerTypeId([FromRoute] long brokerTypeId)
+    {
+        var query = new GetAllBrokersByBrokerTypeIdQuery { BrokerTypeId = brokerTypeId };
         return await _mediator.Send(query);
     }
     [HttpGet("{id}")]

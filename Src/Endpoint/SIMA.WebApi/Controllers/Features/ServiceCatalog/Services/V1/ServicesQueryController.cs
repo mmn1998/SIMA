@@ -9,6 +9,8 @@ namespace SIMA.WebApi.Controllers.Features.ServiceCatalog.Services.V1;
 [Route("serviceCatalog/[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "Services")]
+//[Authorize]
+
 public class ServicesQueryController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -25,7 +27,7 @@ public class ServicesQueryController : ControllerBase
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    //[SimaAuthorize(Permissions.ServiceGetAll)]
+    [SimaAuthorize(Permissions.ServiceGetAll)]
     public async Task<Result> Get([FromBody] GetAllServicesQuery query)
     {
         return await _mediator.Send(query);

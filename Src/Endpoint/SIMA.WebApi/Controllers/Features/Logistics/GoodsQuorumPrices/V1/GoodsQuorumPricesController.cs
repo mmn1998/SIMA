@@ -10,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.Logistics.GoodsQuorumPrices.V1;
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "GoodsQuorumPrices")]
-[Authorize]
+//[Authorize]
 public class GoodsQuorumPricesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -26,7 +26,7 @@ public class GoodsQuorumPricesController : ControllerBase
         return await _mediator.Send(command);
     }
     [HttpPut]
-    [SimaAuthorize(Permissions.GoodsQuorumPricessPut)]
+    //[SimaAuthorize(Permissions.GoodsQuorumPricessPut)]
     public async Task<Result> Put([FromBody] ModifyGoodsQuorumPriceCommand command)
     {
         return await _mediator.Send(command);

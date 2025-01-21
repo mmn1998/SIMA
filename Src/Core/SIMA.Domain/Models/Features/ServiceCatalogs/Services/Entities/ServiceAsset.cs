@@ -13,9 +13,9 @@ public class ServiceAsset : Entity
     }
     private ServiceAsset(CreateServiceAssetArg arg)
     {
-        Id = new ServiceAssetId(arg.Id);
-        ServiceId = new ServiceId(arg.ServiceId);
-        AssetId = new AssetId(arg.AssetId);
+        Id = new(arg.Id);
+        ServiceId = new(arg.ServiceId);
+        AssetId = new(arg.AssetId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;

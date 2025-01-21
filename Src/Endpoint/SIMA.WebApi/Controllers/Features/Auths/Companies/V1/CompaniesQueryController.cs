@@ -11,7 +11,7 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Companies.V1;
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "Companies")]
-[Authorize]
+//[Authorize]
 
 public class CompaniesQueryController : ControllerBase
 {
@@ -31,7 +31,7 @@ public class CompaniesQueryController : ControllerBase
     }
 
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.CompanyGetAll)]
+    //[SimaAuthorize(Permissions.CompanyGetAll)]
     public async Task<Result> Get(GetAllCompanyQuery request)
     {
         return await _mediator.Send(request);

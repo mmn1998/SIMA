@@ -36,6 +36,7 @@ public class DocumentCommandHandler : ICommandHandler<CreateDocumentCommand, Res
     {
         var arg = _mapper.Map<CreateDocumentArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
+        arg.CompanyId = _simaIdentity.CompanyId;
         var entity = await Document.Create(arg, _service);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -47,6 +48,7 @@ public class DocumentCommandHandler : ICommandHandler<CreateDocumentCommand, Res
         var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyDocumentArg>(request);
         arg.ModifiedBy = _simaIdentity.UserId;
+        arg.CompanyId = _simaIdentity.CompanyId;
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
@@ -63,7 +65,7 @@ public class DocumentCommandHandler : ICommandHandler<CreateDocumentCommand, Res
     public async Task<Result<List<long>>> Handle(MultiCreateDocumentCommand request, CancellationToken cancellationToken)
     {
         var args = new List<CreateDocumentArg>();
-        args = await Mappers.DocumentMapper.Map(request.Documents, _simaIdentity.UserId);
+        args = await Mappers.DocumentMapper.Map(request.Documents, _simaIdentity.UserId, _simaIdentity.CompanyId);
         List<long> documentIds = new List<long>();
         foreach (var arg in args)
         {

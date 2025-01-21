@@ -4,7 +4,7 @@ public class ModifyDocumentArg
 {
     public long Id { get; set; }
     public string? Name { get; set; }
-
+    public long CompanyId { get; set; }
     public string? Code { get; set; }
     public long? MainAggregateId { get; set; }
     public long SourceId { get; set; }
@@ -12,6 +12,7 @@ public class ModifyDocumentArg
     public long DocumentTypeId { get; set; }
     public long FileExtensionId { get; set; }
     public string? FileAddress { get; set; }
+    public string? IsOrganizationalDocumentation { get; set; }
     public long ActiveStatusId { get; set; }
     public byte[]? ModifiedAt { get; set; }
 

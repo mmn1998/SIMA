@@ -40,10 +40,10 @@ public class BpmsCommandHandler : ICommandHandler<CreateBpmsCommand, Result<long
             var workflow = await _workflowRepository.GetById(request.WorkFlowId);
             var arg = BpmsMapper.Map(request);
             arg.ModifyBy = _simaIdentity.UserId;
-            foreach (var step in arg.Steps) step.UserId = _simaIdentity.UserId;
-            foreach (var item in arg.Progresses) item.CreatedBy = _simaIdentity.UserId;
-            foreach (var item in arg.WorkFlowActors) item.UserId = _simaIdentity.UserId;
-            await workflow.Modify(arg);
+            //foreach (var step in arg.Steps) step.UserId = _simaIdentity.UserId;
+            //foreach (var item in arg.Progresses) item.CreatedBy = _simaIdentity.UserId;
+            //foreach (var item in arg.WorkFlowActors) item.UserId = _simaIdentity.UserId;
+            workflow.Modify(arg);
             await _unitOfWork.SaveChangesAsync();
             var workFlowId = workflow.Id.Value;
             return Result.Ok(workFlowId);
@@ -63,9 +63,6 @@ public class BpmsCommandHandler : ICommandHandler<CreateBpmsCommand, Result<long
 
         var arg = BpmsMapper.Map(request, workflow);
         arg.ModifyBy = _simaIdentity.UserId;
-        foreach (var step in arg.Steps) step.UserId = _simaIdentity.UserId;
-        foreach (var item in arg.Progresses) item.CreatedBy = _simaIdentity.UserId;
-        foreach (var item in arg.WorkFlowActors) item.UserId = _simaIdentity.UserId;
         workflow.ModifyFlow(arg);
         await _unitOfWork.SaveChangesAsync();
         var workFlowId = workflow.Id.Value;

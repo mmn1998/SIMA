@@ -3,7 +3,11 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssueCustomFeilds.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.IssuePriorities.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
@@ -17,6 +21,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -43,17 +48,17 @@ public class Issue : Entity
         SourceId = arg.SourceId;
         IssueTypeId = new(arg.IssueTypeId);
         IssuePriorityId = new(arg.IssuePriorityId);
-        IssueWeightCategoryId = new(arg.IssueWeightCategoryd);
+        IssueWeightCategoryId = arg.IssueWeightCategoryd != 0 ? new(arg.IssueWeightCategoryd) : null;
         Weight = arg.Weight;
         IssueDate = arg.IssueDate;
         Description = arg.Description;
         DueDate = arg.DueDate;
         CompanyId = arg.CompanyId;
-        OwnerUserId = arg.OwnerUserId != 0 ? new UserId(arg.OwnerUserId.Value) : null;
+        RequesterId = arg.RequesterId != 0 ? new UserId(arg.RequesterId) : null;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        
+
     }
 
     public static async Task<Issue> Create(CreateIssueArg arg, IIssueDomainService service)
@@ -70,7 +75,7 @@ public class Issue : Entity
         var isCodeUnique = await service.IsCodeUnique(code, id);
         if (isCodeUnique)
         {
-            throw new SimaResultException(CodeMessges._400Code,  Messages.IssueCodeIsNotUnique);
+            throw new SimaResultException(CodeMessges._400Code, Messages.IssueCodeIsNotUnique);
         }
     }
 
@@ -84,7 +89,7 @@ public class Issue : Entity
         await ModifyGuards(arg, service);
         IssueTypeId = new(arg.IssueTypeId);
         IssuePriorityId = new(arg.IssuePriorityId);
-        IssueWeightCategoryId = new(arg.IssueWeightCategoryd);
+        IssueWeightCategoryId = arg.IssueWeightCategoryd.HasValue ? new(arg.IssueWeightCategoryd.Value) : null;
         Weight = arg.Weight;
         Description = arg.Description;
         Summery = arg.Summery;
@@ -92,14 +97,13 @@ public class Issue : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         DueDate = arg.DueDate;
-
     }
     public void AddIssueChangeHistory(CreateIssueChangeHistoryArg arg)
     {
         IssueChangeHistory.Create(arg);
     }
 
-    public  void AddIssueManagers(List<CreateIssueManagerArg> args)
+    public void AddIssueManagers(List<CreateIssueManagerArg> args)
     {
         foreach (CreateIssueManagerArg arg in args)
         {
@@ -166,7 +170,7 @@ public class Issue : Entity
             return;
         foreach (var item in issueLinkArgs)
         {
-            if (item.IssueIdLinkedTo > 0 )
+            if (item.IssueIdLinkedTo > 0)
             {
                 item.IssueId = Id.Value;
                 var issuelink = await IssueLink.Create(item);
@@ -208,9 +212,9 @@ public class Issue : Entity
     public virtual IssueType IssueType { get; private set; }
     public IssuePriorityId IssuePriorityId { get; private set; }
     public virtual IssuePriority IssuePriority { get; private set; }
-    public IssueWeightCategoryId IssueWeightCategoryId { get; private set; }
+    public IssueWeightCategoryId? IssueWeightCategoryId { get; private set; }
     public virtual IssueWeightCategory IssueWeightCategory { get; private set; }
-    public int Weight { get; private set; }
+    public int? Weight { get; private set; }
     public DateTime IssueDate { get; private set; }
     public string? Description { get; private set; }
     public DateTime? DueDate { get; private set; }
@@ -218,12 +222,15 @@ public class Issue : Entity
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
     public UserId? AssigneeId { get; private set; }
-    public UserId? OwnerUserId { get; private set; }
+    public UserId? RequesterId { get; private set; }
+    public virtual User Requester { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public string? IsFinished { get; private set; }
     public DateTime? FinishedDate { get; private set; }
     public long? FinishedBy { get; private set; }
+
+
     public void Finish(long userId)
     {
         FinishedDate = DateTime.Now;
@@ -279,7 +286,7 @@ public class Issue : Entity
     public ICollection<Approval> Approvals => _approvals;
     private List<Meeting> _meetings = new();
     public ICollection<Meeting> Meetings => _meetings;
-    
+
     private List<ServiceRelatedIssue> _serviceRelatedIssues = new();
     public ICollection<ServiceRelatedIssue> ServiceRelatedIssues => _serviceRelatedIssues;
 
@@ -306,13 +313,23 @@ public class Issue : Entity
     private List<AccessRequest> _accessRequests = new();
     public ICollection<AccessRequest> AccessRequests => _accessRequests;
 
+    private List<TrustyDraft> _trustyDrafts = new();
+    public ICollection<TrustyDraft> TrustyDrafts => _trustyDrafts;
+
+    private List<BusinessContinuityPlanIssue> _businessContinuityPlanIssues = new();
+    public ICollection<BusinessContinuityPlanIssue> BusinessContinuityPlanIssues => _businessContinuityPlanIssues;
+    private List<BusinessImpactAnalysisIssue> _businessImpactAnalysisIssues = new();
+    public ICollection<BusinessImpactAnalysisIssue> BusinessImpactAnalysisIssues => _businessImpactAnalysisIssues;
+    private List<BusinessContinuityStrategyIssue> _businessContinuityStrategyIssues = new();
+    public ICollection<BusinessContinuityStrategyIssue> BusinessContinuityStrategyIssues => _businessContinuityStrategyIssues;
+
     #region Gaurds
 
     private static async Task CreateGuards(CreateIssueArg arg, IIssueDomainService service)
     {
         arg.Code.NullCheck();
         arg.ActiveStatusId.NullCheck();
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code,Messages.LengthCodeException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
 
         if (arg.DueDate != null)
         {

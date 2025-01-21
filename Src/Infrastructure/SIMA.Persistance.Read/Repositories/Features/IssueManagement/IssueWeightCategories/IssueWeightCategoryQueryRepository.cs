@@ -104,7 +104,7 @@ SELECT TOP (1000) WG.[Id]
                             FROM IssueManagement.IssueWeightCategory
                             WHERE MinRange <= @Weight AND MaxRange >= @Weight";
             var result = await connection.QueryFirstOrDefaultAsync<long>(query, new { Weight = weight });
-            result.NullCheck();
+            //result.NullCheck();
             return result;
         }
     }

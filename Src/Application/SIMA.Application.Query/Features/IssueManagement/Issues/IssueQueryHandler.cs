@@ -66,7 +66,7 @@ public class IssueQueryHandler :
 
     public async Task<Result<GetIssueComponentQueryResult>> Handle(GetIssueComponentQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.ComponentIssue(request.Id, request.IssueId);
+        var result = await _repository.ComponentIssue(request.SourceId, request.IssueId);
         if (result.IssueInfo is not null)
             result.IssueInfo.WorkFlowFileContent =
                 result.IssueInfo.WorkFlowFileContent.ColorizeCurrentStep(result.IssueInfo.CurrentStepBpmnId);

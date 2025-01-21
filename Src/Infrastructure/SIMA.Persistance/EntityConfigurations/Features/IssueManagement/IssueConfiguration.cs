@@ -68,10 +68,12 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
        .HasConversion(
         v => v.Value,
         v => new UserId(v));
-        entity.Property(x => x.OwnerUserId)
-      .HasConversion(
-       v => v.Value,
-       v => new UserId(v));
+        entity.Property(x => x.RequesterId)
+            .HasConversion(x => x.Value, x => new UserId(x));
+        entity.HasOne(x => x.Requester)
+            .WithMany(x => x.Issues)
+            .HasForeignKey(x => x.RequesterId).OnDelete(DeleteBehavior.ClientSetNull);
+
         entity.HasOne(d => d.IssueWeightCategory).WithMany(p => p.Issues)
                 .HasForeignKey(d => d.IssueWeightCategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
@@ -81,9 +83,6 @@ internal class IssueConfiguration : IEntityTypeConfiguration<Issue>
         entity.HasOne(x => x.CurrentState)
             .WithMany(p => p.Issues)
             .HasForeignKey(x => x.CurrentStateId);
-        entity.HasOne(x => x.CurrentWorkflow)
-            .WithMany(p => p.Issues)
-            .HasForeignKey(x => x.CurrentWorkflowId);
         entity.HasOne(x => x.MainAggregate)
             .WithMany(p => p.Issues)
             .HasForeignKey(x => x.MainAggregateId);

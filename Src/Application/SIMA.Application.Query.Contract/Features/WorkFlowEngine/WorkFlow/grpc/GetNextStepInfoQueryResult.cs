@@ -8,6 +8,12 @@ public class GetNextStepInfoQueryResult
     public long WorkflowId { get; set; }
     public long ActionTypeId { get; set; }
     public string? SpName { get; set; }
+    public string? URLAddress { get; set; }
+    public long? ApiMethodActionId { get; set; }
+    public string? APIMethodName { get; set; }
+    public string? InputServiceName { get; set; }
+    public long? DataTypeId { get; set; }
+    public string? DataTypeName { get; set; }
     public List<NextProgressInfo> NextProgressInfo { get; set; }
     //public List<StoreProcedureParams> Params { get; set; }
 

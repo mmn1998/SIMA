@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Repository;
 
@@ -14,4 +15,5 @@ public interface IIssueRepository : IRepository<Entities.Issue>
     Task<long> GetIssueTypeRequest();
     Task<(long,int)> GetIssueMiddleWeight();
     Task<Issue> GetIssueBySourceId(long sourceId, MainAggregateEnums mainAggregate);
+    Task<List<Issue>> GetByStepIds(List<StepId> ids);
 }

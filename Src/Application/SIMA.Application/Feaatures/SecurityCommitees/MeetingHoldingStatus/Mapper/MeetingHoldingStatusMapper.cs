@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.SecurityCommitees.MeetingHoldingStatus.Mapp
 {
     public class MeetingHoldingStatusMapper : Profile
     {
-        public MeetingHoldingStatusMapper(ISimaIdentity simaIdentity)
+        public MeetingHoldingStatusMapper()
         {
 
             CreateMap<CreateMeetingHoldingStatusCommand, CreateMeetingHoldingStatusArg>()

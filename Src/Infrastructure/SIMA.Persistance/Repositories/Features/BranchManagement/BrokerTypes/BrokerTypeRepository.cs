@@ -22,5 +22,11 @@ namespace SIMA.Persistance.Repositories.Features.BranchManagement.BrokerTypes
             entity.NullCheck();
             return entity;
         }
+
+        public async Task<BrokerType> GetByCode(string code)
+        {
+            var entity = await _context.BrokerTypes.FirstOrDefaultAsync(pt => pt.Code == code);
+            return entity;
+        }
     }
 }

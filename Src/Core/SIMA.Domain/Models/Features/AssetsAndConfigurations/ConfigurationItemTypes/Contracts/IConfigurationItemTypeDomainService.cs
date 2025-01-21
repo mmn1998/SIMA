@@ -4,4 +4,5 @@ namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemT
 
 public interface IConfigurationItemTypeDomainService : IDomainService
 {
+    Task<bool> IsCodeUnique(string code, ConfigurationItemTypeId? id = null);
 }

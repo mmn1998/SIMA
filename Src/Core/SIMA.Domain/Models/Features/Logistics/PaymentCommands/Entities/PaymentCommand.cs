@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
+﻿using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
 using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
 using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.PaymentCommands.ValueObjects;

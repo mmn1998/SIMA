@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Contracts;
 using SIMA.Domain.Models.Features.Auths.ApiMethodActions.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.ServiceTasks.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -69,6 +70,9 @@ public class ApiMethodAction : Entity, IAggregateRoot
     public byte[]? ModifiedAt { get; set; }
     public ICollection<ProgressStoreProcedureParam>? ProgressStoreProcedureParams { get; set; }
     public ICollection<Api>? Apis { get; set; }
+
+    private List<ServiceTask> _serviceTasks = new();
+    public ICollection<ServiceTask> ServiceTasks => _serviceTasks;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

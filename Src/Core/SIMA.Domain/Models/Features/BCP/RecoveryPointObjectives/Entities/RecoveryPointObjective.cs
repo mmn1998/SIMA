@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.TimeMeasurements.Entities;
+using SIMA.Domain.Models.Features.Auths.TimeMeasurements.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Args;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Contracts;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.ValueObjects;
@@ -19,6 +21,7 @@ public class RecoveryPointObjective : Entity, IAggregateRoot
     private RecoveryPointObjective(CreateRecoveryPointObjectiveArg arg)
     {
         Id = new(arg.Id);
+        TimeMeasurementId = new(arg.TimeMeasurementId);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;
@@ -35,6 +38,7 @@ public class RecoveryPointObjective : Entity, IAggregateRoot
     public async Task Modify(ModifyRecoveryPointObjectiveArg arg, IRecoveryPointObjectiveDomainService service)
     {
         await ModifyGuards(arg, service);
+        TimeMeasurementId = new(arg.TimeMeasurementId);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;
@@ -65,7 +69,9 @@ public class RecoveryPointObjective : Entity, IAggregateRoot
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
-    public RecoveryPointObjectiveId Id { get; set; }
+    public RecoveryPointObjectiveId Id { get; private set; }
+    public TimeMeasurementId TimeMeasurementId { get; private set; }
+    public virtual TimeMeasurement TimeMeasurement { get; private set; }
     public int RpoFrom { get; set; }
     public int RpoTo { get; set; }
     public string Name { get; private set; }

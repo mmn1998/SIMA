@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.Suppliers.Contracts;
 using SIMA.Domain.Models.Features.Auths.Suppliers.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -49,5 +50,8 @@ namespace SIMA.Domain.Models.Features.Auths.Suppliers.Entities
         public long? CreatedBy { get; private set; }
         public byte[]? ModifiedAt { get; private set; }
         public long? ModifiedBy { get; private set; }
+
+        private List<PaymentHistory> _paymentHistories = new();
+        public ICollection<PaymentHistory> PaymentHistories => _paymentHistories;
     }
 }

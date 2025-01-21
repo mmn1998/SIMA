@@ -45,5 +45,6 @@ public class GetIssueQueryResult
     public IEnumerable<GetIssueCommentQueryResult> IssueComments { get; set; }
     public List<GetRelatedProgressQueryResult> RelatedProgressList { get; set; }
     public IEnumerable<GetApprovalOptionQueryResult> ApprovalOptions { get; set; }
+    public IEnumerable<GetServiceInputParam>? GetServiceInputList { get; set; }
    
 }

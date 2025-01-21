@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Args;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
@@ -153,57 +154,66 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     }
     public async Task<Result<long>> Handle(IssueRunActionCommand request, CancellationToken cancellationToken)
     {
-
-        var userId = _simaIdentity.UserId;
-
-        var issue = await _repository.GetById(request.IssueId);
-
-        var documents = PrepareDocuments(request.InputDocuments, issue.SourceId, userId);
-
-        var nextStepModel = PrepareSystemParams(request, issue.SourceId);
-
-        var inputParams = MapInputParams(request.InputParams);
-
-        var mainAggregateName = Enum.GetName(typeof(MainAggregateEnums), issue.MainAggregateId.Value);
-
-        await _workFlowQueryRepository.ExecuteSP(request.ProgressId, mainAggregateName, nextStepModel.SystemParams, inputParams, documents);
-
-        var nextStep = await _workFlowQueryRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel);
-
-        AddHistory(userId, issue, nextStep.SourceStateId, nextStep.SourceStepId);
-
-        #region Comment
-
-        if (!string.IsNullOrEmpty(request.Comment))
+        try
         {
-            var commentArg = _mapper.Map<CreateIssueCommentArg>(request);
-            await issue.AddComment(commentArg);
+            var userId = _simaIdentity.UserId;
+
+            var issue = await _repository.GetById(request.IssueId);
+
+            var documents = PrepareDocuments(request.InputDocuments, issue.SourceId, userId);
+
+            var nextStepModel = PrepareSystemParams(request, issue.SourceId);
+
+            var inputParams = MapInputParams(request.InputParams);
+
+            var serviceInputParams = MapServiceInputParams(request.InputParamServices);
+
+            var mainAggregateName = Enum.GetName(typeof(MainAggregateEnums), issue.MainAggregateId.Value);
+
+            await _workFlowQueryRepository.ExecuteSP(request.ProgressId, mainAggregateName, nextStepModel.SystemParams, inputParams, documents);
+
+            var nextStep = await _workFlowQueryRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel, serviceInputParams);
+
+            AddHistory(userId, issue, nextStep.SourceStateId, nextStep.SourceStepId);
+
+            #region Comment
+
+            if (!string.IsNullOrEmpty(request.Comment))
+            {
+                var commentArg = _mapper.Map<CreateIssueCommentArg>(request);
+                await issue.AddComment(commentArg);
+            }
+
+            #endregion
+
+            #region Approval
+
+            if (request.StepApprovalOptionId is not null && request.StepApprovalOptionId > 0)
+            {
+                var addApproval = await AddApprovalOption(userId, request, issue.CurrentWorkflowId.Value);
+                await issue.AddIssueApproval(addApproval);
+            }
+
+            #endregion
+
+            var arg = _mapper.Map<IssueRunActionArg>(request);
+            arg.ModifiedBy = userId;
+            arg.CurrentStepId = nextStep.SourceStepId;
+            arg.CurrentStateId = nextStep.SourceStateId;
+
+            issue.RunAction(arg);
+
+            if (nextStep.ActionTypeId == (long)ActionTypeEnum.endEvent)
+                issue.Finish(_simaIdentity.UserId);
+
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(request.IssueId);
         }
-
-        #endregion
-
-        #region Approval
-
-        if (request.StepApprovalOptionId is not null && request.StepApprovalOptionId > 0)
+        catch(Exception ex)
         {
-            var addApproval = await AddApprovalOption(userId, request, issue.CurrentWorkflowId.Value);
-            await issue.AddIssueApproval(addApproval);
+            throw;
         }
-
-        #endregion
-
-        var arg = _mapper.Map<IssueRunActionArg>(request);
-        arg.ModifiedBy = userId;
-        arg.CurrentStepId = nextStep.SourceStepId;
-        arg.CurrentStateId = nextStep.SourceStateId;
-
-        issue.RunAction(arg);
-
-        if (nextStep.ActionTypeId == (long)ActionTypeEnum.endEvent)
-            issue.Finish(_simaIdentity.UserId);
-
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(request.IssueId);
+       
     }
     public async Task<Result<long>> Handle(DeleteIssueCommand request, CancellationToken cancellationToken)
     {
@@ -243,12 +253,14 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
     }
     private GetNextStepQuery PrepareSystemParams(IssueRunActionCommand request, long sourceId)
     {
+        var approvalId = request.StepApprovalOptionId.GetValueOrDefault(0).ToString();
         var nextStepModel = _mapper.Map<GetNextStepQuery>(request);
         nextStepModel.SystemParams.Add(new InputModel { Key = "IssueId", Value = request.IssueId.ToString() });
         nextStepModel.SystemParams.Add(new InputModel { Key = "UserId", Value = _simaIdentity.UserId.ToString() });
         nextStepModel.SystemParams.Add(new InputModel { Key = "CreatedBy", Value = _simaIdentity.UserId.ToString() });
         nextStepModel.SystemParams.Add(new InputModel { Key = "CompanyId", Value = _simaIdentity.CompanyId.ToString() });
         nextStepModel.SystemParams.Add(new InputModel { Key = "SourceId", Value = sourceId.ToString() });
+        nextStepModel.SystemParams.Add(new InputModel { Key = "ApprovalId", Value = approvalId });
         return nextStepModel;
     }
     private List<InputParamQueryModel>? MapInputParams(List<InputParamModel> inputParams)
@@ -258,6 +270,17 @@ public class IssueCommandHandler : ICommandHandler<CreateIssueCommand, Result<lo
             Id = param.Id,
             ParamName = param.ParamName,
             ParamValue = param.ParamValue
+        }).ToList();
+
+        return paramList;
+    }
+
+    private List<InputParamServiceQuery>? MapServiceInputParams(List<InputParamService> inputParams)
+    {
+        var paramList = inputParams?.Select(param => new InputParamServiceQuery
+        {
+            ParamKey = param.InputParamKey,
+            ParamName = param.InputParamValue
         }).ToList();
 
         return paramList;

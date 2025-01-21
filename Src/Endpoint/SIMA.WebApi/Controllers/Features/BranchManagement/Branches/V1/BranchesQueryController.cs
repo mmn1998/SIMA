@@ -9,7 +9,7 @@ namespace SIMA.WebApi.Controllers.Features.BranchManagement.Branches.V1;
 
 [Route("[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "Branches")]
+[ApiExplorerSettings(GroupName = "Branch/Branches")]
 [Authorize]
 public class BranchesQueryController : ControllerBase
 {
@@ -22,6 +22,12 @@ public class BranchesQueryController : ControllerBase
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.BranchGetAll)]
     public async Task<Result> Get(GetAllBranchQuery query)
+    {
+        return await _mediator.Send(query);
+    }
+    [HttpPost("GetAllForTrusty")]
+    [SimaAuthorize(Permissions.BranchGetAll)]
+    public async Task<Result> Get(GetAllTrustyBranchesQuery query)
     {
         return await _mediator.Send(query);
     }

@@ -1,9 +1,9 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.Threats.Args;
+﻿using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Threats.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.Threats.Entities
@@ -16,29 +16,19 @@ namespace SIMA.Domain.Models.Features.RiskManagement.Threats.Entities
         }
         private Threat(CreateThreatArg arg)
         {
-            Id = new ThreatId(IdHelper.GenerateUniqueId());
-            Code = arg.Code;
-            RiskId = new RiskId(arg.RiskId);
-            RiskPossibilityId = new RiskPossibilityId(arg.RiskPossibilityId);
-            ThreatTypeId = new ThreatTypeId(arg.ThreatTypeId);
+            Id = new ThreatId(arg.Id);
+            Description = arg.Description;
+            RiskId = new(arg.RiskId);
+            RiskPossibilityId = new(arg.RiskPossibilityId);
+            ThreatTypeId = new(arg.ThreatTypeId);
             ActiveStatusId = arg.ActiveStatusId;
             CreatedAt = arg.CreatedAt;
             CreatedBy = arg.CreatedBy;
         }
 
-        public static async Task<Threat> Create(CreateThreatArg arg)
+        public static Threat Create(CreateThreatArg arg)
         {
             return new Threat(arg);
-        }
-        public async Task Modify(ModifyThreatArg arg)
-        {
-            Code = arg.Code;
-            RiskId = new RiskId(arg.RiskId);
-            RiskPossibilityId = new RiskPossibilityId(arg.RiskPossibilityId);
-            ThreatTypeId = new ThreatTypeId(arg.ThreatTypeId);
-            ModifiedAt = arg.ModifiedAt;
-            ModifiedBy = arg.ModifiedBy;
-            ActiveStatusId = arg.ActiveStatusId;
         }
         public void Delete(long userId)
         {
@@ -46,8 +36,14 @@ namespace SIMA.Domain.Models.Features.RiskManagement.Threats.Entities
             ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
             ActiveStatusId = (long)ActiveStatusEnum.Delete;
         }
+        public void Active(long userId)
+        {
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Active;
+        }
         public ThreatId Id { get; set; }
-        public string Code { get; private set; }
+        public string Description { get; private set; }
         public RiskId RiskId { get; private set; }
         public virtual Risk Risk { get; private set; }
         public RiskPossibilityId RiskPossibilityId { get; private set; }

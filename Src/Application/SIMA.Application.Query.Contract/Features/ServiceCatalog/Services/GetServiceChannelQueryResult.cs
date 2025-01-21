@@ -12,6 +12,6 @@ public class GetServiceChannelQueryResult
     public long? ServiceStatusId { get; set; }
     public string? ServiceStatusName { get; set; }
     public string? ServiceStatusCode { get; set; }
-    public DateOnly? InServiceDate { get; set; }
+    public DateTime? InServiceDate { get; set; }
     public string? InServiceDatePersian => InServiceDate.ToPersianDate();
 }

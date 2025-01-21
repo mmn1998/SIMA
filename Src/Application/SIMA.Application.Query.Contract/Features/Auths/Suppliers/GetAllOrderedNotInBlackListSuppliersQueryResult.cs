@@ -9,4 +9,5 @@ public class GetAllOrderedNotInBlackListSuppliersQueryResult
     public long SupplierRankId { get; set; }
     public string? SupplierName { get; set; }
     public string? SupplierRankName { get; set; }
+    public string? Name { get; set; }
 }

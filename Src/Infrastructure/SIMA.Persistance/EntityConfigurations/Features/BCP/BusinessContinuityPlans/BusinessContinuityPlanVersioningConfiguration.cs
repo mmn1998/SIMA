@@ -13,7 +13,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessContinuityP
             entity.Property(x => x.Id)
                 .HasConversion(
                  v => v.Value,
-                 v => new BusinessContinuityPlanVersioningId(v)).ValueGeneratedNever();
+                 v => new(v)).ValueGeneratedNever();
             entity.HasKey(i => i.Id);
             entity.Property(e => e.VersionNumber).HasMaxLength(20).IsUnicode(true);
             entity.Property(e => e.CreatedAt)

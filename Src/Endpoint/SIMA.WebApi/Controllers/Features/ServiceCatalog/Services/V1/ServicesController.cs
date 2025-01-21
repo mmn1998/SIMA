@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.ServiceCatalog.Services;
 using SIMA.Framework.Common.Response;
@@ -9,6 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.ServiceCatalog.Services.V1;
 [Route("serviceCatalog/[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "Services")]
+[Authorize]
 public class ServicesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -18,13 +20,13 @@ public class ServicesController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    [SimaAuthorize(Permissions.ServicePost)]
+    //[SimaAuthorize(Permissions.ServicePost)]
     public async Task<Result> Post([FromBody] CreateServiceCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    [SimaAuthorize(Permissions.ServicePut)]
+    //[SimaAuthorize(Permissions.ServicePut)]
     public async Task<Result> Put([FromBody] ModifyServiceCommand command)
     {
         return await _mediator.Send(command);

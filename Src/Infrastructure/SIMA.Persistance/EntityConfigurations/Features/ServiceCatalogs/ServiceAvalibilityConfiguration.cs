@@ -21,6 +21,20 @@ public class ServiceAvalibilityConfiguration : IEntityTypeConfiguration<ServiceA
                     .IsRowVersion()
                     .IsConcurrencyToken();
 
+        entity.Property(e => e.ServiceAvalibilityStartTime)
+       .HasConversion(
+        v => new TimeSpan(v.Hour, v.Minute, v.Second),  
+        v => TimeOnly.FromTimeSpan(v))                  
+      .HasColumnType("TIME(7)");
+
+
+        entity.Property(e => e.ServiceAvalibilityEndTime)
+      .HasConversion(
+       v => new TimeSpan(v.Hour, v.Minute, v.Second),
+       v => TimeOnly.FromTimeSpan(v))
+     .HasColumnType("TIME(7)");
+
+
         entity.Property(x => x.ServiceId)
          .HasConversion(v => v.Value, v => new ServiceId(v));
         entity.HasOne(d => d.Service).WithMany(p => p.ServiceAvalibilities)

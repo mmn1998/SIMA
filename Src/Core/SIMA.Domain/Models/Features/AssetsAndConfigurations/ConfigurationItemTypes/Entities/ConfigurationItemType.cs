@@ -1,8 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Contracts;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities;
@@ -15,8 +17,6 @@ public class ConfigurationItemType : Entity
         Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
-        CreatedAt = arg.CreatedAt;
-        CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         CreatedAt = arg.CreatedAt;
@@ -40,11 +40,23 @@ public class ConfigurationItemType : Entity
     #region Guards
     private static async Task CreateGuards(CreateConfigurationItemTypeArg arg, IConfigurationItemTypeDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyConfigurationItemTypeArg arg, IConfigurationItemTypeDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public ConfigurationItemTypeId Id { get; private set; }

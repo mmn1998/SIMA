@@ -28,8 +28,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.Goodses
             entity.Property(e => e.Code)
                         .HasMaxLength(20).IsUnicode();
             entity.HasIndex(e => e.Code).IsUnique();
-            entity.Property(x => x.IsFixedAsset).HasMaxLength(1);
-
+            
             entity.Property(x => x.UnitMeasurementId)
                 .HasConversion(x => x.Value, x => new UnitMeasurementId(x));
             entity.HasOne(x => x.UnitMeasurement)

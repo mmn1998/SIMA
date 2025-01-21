@@ -9,6 +9,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Args;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Exceptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
@@ -50,24 +51,20 @@ public class WorkFlow : Entity
         await CreateGuards(arg, service);
         return new WorkFlow(arg);
     }
-    public void AddSteps(IEnumerable<StepArg> args)
+    public void AddSteps(IEnumerable<StepArg> args, long? modifiedUser)
     {
-        foreach (var item in args)
-        {
-            var step = Step.New(item);
-            step.AddActorStep(item.ActorStepArgs);
-            _step.Add(step);
-        }
+            var steps = args.Select(item => Step.New(item, modifiedUser));
+            _step.AddRange(steps);
     }
-    public void AddProgresses(IEnumerable<ProgressArg> args)
+    public void AddProgresses(IEnumerable<ProgressArg> args, long? modifiedUser)
     {
-        var progresses = args.Select(Progress.Entities.Progress.New);
+        var progresses = args.Select(item => Progress.Entities.Progress.New(item, modifiedUser));
 
         _progress.AddRange(progresses);
     }
-    public void AddActors(IEnumerable<WorkFlowActorArg> args)
+    public void AddActors(IEnumerable<WorkFlowActorArg> args, long? userId)
     {
-        var actors = args.Select(WorkFlowActor.Entites.WorkFlowActor.New);
+        var actors = args.Select(x => WorkFlowActor.Entites.WorkFlowActor.New(x , userId.Value));
         _workFlowActors.AddRange(actors);
     }
     public async Task Modify(ModifyWorkFlowArg arg, IWorkFlowDomainService service)
@@ -86,25 +83,25 @@ public class WorkFlow : Entity
         if (arg.ManagerRoleId.HasValue) ManagerRoleId = new(arg.ManagerRoleId.Value);
     }
 
-    public async Task Modify(ModifyFileContentArg arg)
+    public void Modify(ModifyFileContentArg arg)
     {
         BpmnId = arg.BpmnId;
         //ModifiedAt = arg.ModifyAt;
         ModifiedBy = arg.ModifyBy;
         FileContent = arg.FileContent;
-        AddSteps(arg.Steps);
-        AddActors(arg.WorkFlowActors);
-        AddProgresses(arg.Progresses);
+        AddSteps(arg.Steps, arg.ModifyBy);
+        AddActors(arg.WorkFlowActors, arg.ModifyBy);
+        AddProgresses(arg.Progresses, arg.ModifyBy);
     }
     public void ModifyFlow(ModifyFileContentArg arg)
     {
         BpmnId = arg.BpmnId;
         ModifiedBy = arg.ModifyBy;
         FileContent = arg.FileContent;
-        ModifyActors(arg.WorkFlowActors);
+        ModifyActors(arg.WorkFlowActors, arg.ModifyBy);
         UpdateStepArg(arg.Steps, arg.WorkFlowActors);
-        ModifySteps(arg.Steps);
-        ModifyProgresses(arg.Progresses);
+        ModifySteps(arg.Steps, arg.ModifyBy);
+        ModifyProgresses(arg.Progresses, arg.ModifyBy);
     }
     private void UpdateStepArg(List<StepArg> stepsArg, List<WorkFlowActorArg> actorsArg)
     {
@@ -116,36 +113,36 @@ public class WorkFlow : Entity
             item.WorkFlowActorId = actor.LastId ?? actor.Id;
         }
     }
-    private void ModifyProgresses(List<ProgressArg> args)
+    private void ModifyProgresses(List<ProgressArg> args, long? modifiedBy)
     {
         var allBmpnIds = args.Select(x => x.BpmnId);
         var deActiveActors = _progress.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveActors)
         {
-            item.Delete(args.First().CreatedBy.Value);
+            item.Delete(modifiedBy.Value);
         }
         var existsBpmnIds = _progress.Select(x => x.BpmnId);
         var notExistsProgresses = args.Where(x => !existsBpmnIds.Contains(x.BpmnId));
-        AddProgresses(notExistsProgresses);
+        AddProgresses(notExistsProgresses, modifiedBy);
         var existProgressArgs = args.Where(x => existsBpmnIds.Contains(x.BpmnId));
         foreach (var item in existProgressArgs)
         {
             var progress = _progress.FirstOrDefault(x => x.BpmnId == item.BpmnId);
-            progress.Modify(item);
+            progress.Modify(item, modifiedBy);
         }
     }
 
-    private void ModifyActors(List<WorkFlowActorArg> args)
+    private void ModifyActors(List<WorkFlowActorArg> args, long? userId)
     {
         var allBmpnIds = args.Select(x => x.BpmnId);
         var deActiveActors = _workFlowActors.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveActors)
         {
-            item.Delete(args.First().UserId);
+            item.Delete(userId.Value);
         }
         var existsBpmnIds = _workFlowActors.Select(x => x.BpmnId);
         var notExistsActors = args.Where(x => !existsBpmnIds.Contains(x.BpmnId));
-        AddActors(notExistsActors);
+        AddActors(notExistsActors, userId);
         var existActorArgs = args.Where(x => existsBpmnIds.Contains(x.BpmnId));
         foreach (var item in existActorArgs)
         {
@@ -153,32 +150,28 @@ public class WorkFlow : Entity
             if (actor is null)
                 continue;
             item.LastId = actor.Id.Value;
-            actor.Modify(item);
+            actor.Modify(item, userId.Value);
         }
     }
 
-    private void ModifySteps(List<StepArg> args)
+    private void ModifySteps(List<StepArg> args, long? userId)
     {
         var allBmpnIds = args.Select(x => x.BpmnId);
         var deActiveSteps = _step.Where(x => !allBmpnIds.Contains(x.BpmnId));
         foreach (var item in deActiveSteps)
         {
-            item.Delete(args.First().UserId.Value);
-            // business rule for deactive step
-            var relatedIssues = _Issues.Where(i => i.CurrenStepId == item.Id);
-            foreach (var relatedIssue in relatedIssues)
-            {
-                relatedIssue.Delete(args.First().UserId.Value);
-            }
+            item.Delete(userId.Value);
         }
+        var deactiveStepIds = deActiveSteps.Select(x => x.Id).ToList();
+        AddDomainEvent(new WorkflowModifiedEvent(deactiveStepIds, userId.Value));
         var existsBpmnIds = _step.Select(x => x.BpmnId);
         var notExistsSteps = args.Where(x => !existsBpmnIds.Contains(x.BpmnId));
-        AddSteps(notExistsSteps);
+        AddSteps(notExistsSteps, userId);
         var existActorArgs = args.Where(x => existsBpmnIds.Contains(x.BpmnId));
         foreach (var item in existActorArgs)
         {
             var actor = _step.FirstOrDefault(x => x.BpmnId == item.BpmnId);
-            actor.Modify(item);
+            actor.Modify(item, userId.Value);
         }
     }
 
@@ -209,10 +202,9 @@ public class WorkFlow : Entity
         {
             workflowActor.Delete(userId);
         }
-        foreach (var issue in _Issues)
-        {
-            issue.Delete(userId);
-        }
+        var stepIds = _step.Select(x => x.Id).ToList();
+        AddDomainEvent(new WorkflowModifiedEvent(stepIds, userId));
+
         #endregion
     }
     public void Activate(long userId)
@@ -242,10 +234,10 @@ public class WorkFlow : Entity
         {
             workflowActor.Activate(userId);
         }
-        foreach (var issue in _Issues)
-        {
-            issue.Activate(userId);
-        }
+        var stepIds = _step.Select(x => x.Id).ToList();
+
+        AddDomainEvent(new WorkflowModifiedEvent(stepIds, userId));
+
         #endregion
     }
     public bool DeleteStep(long stepId, long userId)
@@ -270,12 +262,12 @@ public class WorkFlow : Entity
         else
             return false;
     }
-    public async Task ModifyStep(ModifyStepArgs arg)
+    public void ModifyStep(ModifyStepArgs arg, long userId)
     {
         var result = _step.Where(x => x.Id == new StepId(arg.Id)).FirstOrDefault();
         if (result is not null)
         {
-            result.Modify(arg);
+            result.Modify(arg, userId);
         }
     }
 
@@ -285,7 +277,7 @@ public class WorkFlow : Entity
         if (checkApproval)
         {
             var step = _step.Where(x => x.Id == new StepId(StepId)).FirstOrDefault();
-            await step.AddStepApprovalOption(args, StepId);
+            step.AddStepApprovalOption(args, StepId);
         }
         else
             throw new SimaResultException(CodeMessges._400Code, Messages.StepNotAllowedAddApproval);
@@ -304,9 +296,9 @@ public class WorkFlow : Entity
             await result.Modify(arg, service);
         }
     }
-    public Step AddStep(StepArg arg)
+    public Step AddStep(StepArg arg, long userId)
     {
-        var step = Step.New(arg);
+        var step = Step.New(arg, userId);
         _step.Add(step);
         return step;
 
@@ -319,12 +311,6 @@ public class WorkFlow : Entity
 
     }
 
-    public async Task AddProgress(ProgressArg arg)
-    {
-        var currentProgress = Progress.Entities.Progress.New(arg);
-        _progress.Add(currentProgress);
-
-    }
 
 
     private static async Task CreateGuards(CreateWorkFlowArg arg, IWorkFlowDomainService service)
@@ -380,8 +366,8 @@ public class WorkFlow : Entity
 
     private List<WorkFlowCompany.Entities.WorkFlowCompany> _workFlowCompany = new();
     public virtual ICollection<WorkFlowCompany.Entities.WorkFlowCompany> WorkFlowCompanies => _workFlowCompany;
-    private List<Issue> _Issues = new();
-    public virtual ICollection<Issue> Issues => _Issues;
-    private List<IssueChangeHistory> _issueChangeHistories = new();
-    public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
+    //private List<Issue> _Issues = new();
+    //public virtual ICollection<Issue> Issues => _Issues;
+    //private List<IssueChangeHistory> _issueChangeHistories = new();
+    //public ICollection<IssueChangeHistory> IssueChangeHistories => _issueChangeHistories;
 }

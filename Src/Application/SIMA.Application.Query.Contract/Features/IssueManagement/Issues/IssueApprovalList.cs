@@ -1,4 +1,5 @@
-﻿using SIMA.Framework.Common.Helper;
+﻿using SIMA.Application.Query.Contract.Features.DMS.Documents;
+using SIMA.Framework.Common.Helper;
 
 namespace SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 
@@ -13,8 +14,10 @@ public class IssueApprovalList
     public string? ActorName { get; set; }
     public string? CreatedBy { get; set; }
     public string? ApprovedBy { get; set; }
+    public long SignatureId { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? CreatedAtPersian => DateHelper.ToPersianDateTime(CreatedAt);
+    public GetDownloadDocumentQueryResult? downloadedResult { get; set; }
 }
 
 

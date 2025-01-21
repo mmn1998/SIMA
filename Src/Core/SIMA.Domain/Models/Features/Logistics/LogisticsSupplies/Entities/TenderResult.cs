@@ -11,8 +11,8 @@ public class TenderResult : Entity
     public DateTime? TenderDate { get; private set; }
     public LogisticsSupplyId LogisticsSupplyId { get; private set; }
     public virtual LogisticsSupply LogisticsSupply { get; private set; }
-    public LogisticsRequestDocumentId TenderDocumentId { get; private set; }
-    public virtual LogisticsRequestDocument TenderDocument { get; private set; }
+    public LogisticsSupplyDocumentId? TenderDocumentId { get; private set; }
+    public virtual LogisticsSupplyDocument? TenderDocument { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

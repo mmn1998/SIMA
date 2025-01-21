@@ -101,7 +101,7 @@ public class UsersController : ControllerBase
         return result;
     }
 
-    [HttpPost("SendCode")]
+    [HttpPost("ForgetPassword")]
     [AllowAnonymous]
     public async Task<Result> Post([FromBody] CheckUserCommand request)
     {
@@ -112,6 +112,31 @@ public class UsersController : ControllerBase
     [HttpPost("ConfirmCode")]
     [AllowAnonymous]
     public async Task<Result> Post([FromBody] ConfirmCodeCommand request)
+    {
+        var result = await _mediator.Send(request);
+        return result;
+    }
+
+    [HttpPost("ConfirmOTPCode")]
+    [SimaAuthorize(Permissions.ConfirmCode)]
+    public async Task<Result> ConfirmCode([FromBody] GetConfirmOTPCode request)
+    {
+        var result = await _mediator.Send(request);
+        return result;
+    }
+
+    [HttpPost("ReSendOTP")]
+    [SimaAuthorize(Permissions.ConfirmCode)]
+    public async Task<Result> ReSendOTP([FromBody] ReSendOTPCommand request)
+    { 
+        var result = await _mediator.Send(request);
+        return result;
+    }
+
+    [HttpPost("SendOTPByUsername")]
+    [AllowAnonymous]
+    //[SimaAuthorize(Permissions.ConfirmCode)]
+    public async Task<Result> ReSendOTP([FromBody] SendOTPByUsernameCommand request)
     {
         var result = await _mediator.Send(request);
         return result;

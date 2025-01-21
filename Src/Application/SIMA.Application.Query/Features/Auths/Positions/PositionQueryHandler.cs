@@ -8,6 +8,7 @@ namespace SIMA.Application.Query.Features.Auths.Positions;
 
 public class PositionQueryHandler : IQueryHandler<GetPositionQuery, Result<GetPositionQueryResult>>,
     IQueryHandler<GetAllPositionsQuery, Result<IEnumerable<GetPositionQueryResult>>>,
+    IQueryHandler<GetAllFilteredPositionsQuery, Result<IEnumerable<GetPositionQueryResult>>>,
     IQueryHandler<GetPositionByDepartemantQuery, Result<IEnumerable<GetPositionQueryResult>>>
 {
     private readonly IPositionQueryRepository _repository;
@@ -32,5 +33,11 @@ public class PositionQueryHandler : IQueryHandler<GetPositionQuery, Result<GetPo
     {
         var result = await _repository.GetByDepartemantId(request.DepartmentId);
         return result;
+    }
+
+    public async Task<Result<IEnumerable<GetPositionQueryResult>>> Handle(GetAllFilteredPositionsQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetFiltered(request);
+        return Result.Ok(result);
     }
 }

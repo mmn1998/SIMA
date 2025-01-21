@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.RiskManagers.RiskPossibilities.Mapper
 {
     public class RiskPossibilityMapper : Profile
     {
-        public RiskPossibilityMapper(ISimaIdentity simaIdentity)
+        public RiskPossibilityMapper()
         {
             CreateMap<CreateRiskPossibilityCommand, CreateRiskPossibilityArgs>()
                 .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

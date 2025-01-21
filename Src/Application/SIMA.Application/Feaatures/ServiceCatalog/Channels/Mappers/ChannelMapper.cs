@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.ServiceCatalog.Channels;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
@@ -13,13 +14,13 @@ public class ChannelMapper : Profile
         CreateMap<CreateChannelCommand, CreateChannelArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-            .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => DateOnly.FromDateTime(source.InServiceDate.ToMiladiDate())))
+            .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => GetDate(source.InServiceDate)))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
         CreateMap<ModifyChannelCommand, ModifyChannelArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
-            .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => DateOnly.FromDateTime(source.InServiceDate.ToMiladiDate())))
+            .ForMember(dest => dest.InServiceDate, act => act.MapFrom(source => GetDate(source.InServiceDate)))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
         CreateMap<CreateChannelResponsibleCommand, CreateChannelResponsibleArg>()
@@ -38,11 +39,25 @@ public class ChannelMapper : Profile
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.UserTypeId, act => act.MapFrom(source => source))
             ;
-        CreateMap<long, CreateProductChannelArg>()
+        CreateMap<CreateProductList, CreateProductChannelArg>()
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+           ;
+        CreateMap<CreateServiceList, CreateServiceChannelArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
-            .ForMember(dest => dest.ProductId, act => act.MapFrom(source => source))
             ;
+    }
+    private DateOnly? GetDate(string? persianDate)
+    {
+        DateOnly? value = null;
+        var date = persianDate.ToMiladiDate();
+        if (date.HasValue)
+        {
+            value = DateOnly.FromDateTime(date.Value);
+        }
+        return value;
     }
 }

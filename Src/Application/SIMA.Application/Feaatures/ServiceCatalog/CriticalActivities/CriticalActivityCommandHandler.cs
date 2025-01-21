@@ -34,6 +34,12 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
         var arg = _mapper.Map<CreateCriticalActivityArg>(request);
         var userId = _simaIdentity.UserId;
         arg.CreatedBy = userId;
+        var lastRequest = await _repository.GetLastCriticalActivity();
+
+        if (lastRequest is not null)
+            arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
+        else
+            arg.Code = "101";
         var entity = await CriticalActivity.Create(arg, _service);
 
         #region IsFullTimeExecution
@@ -51,6 +57,11 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
         if (request.RelatedServiceList is not null)
         {
             var args = _mapper.Map<List<CreateCriticalActivityServicesArg>>(request.RelatedServiceList);
+            foreach (var item in args)
+            {
+                item.CreatedBy = userId;
+                item.CriticalActivityId = arg.Id;
+            }
             entity.AddCriticalActivityServices(args);
         }
         if (request.RiskList is not null)
@@ -110,86 +121,101 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
 
     public async Task<Result<long>> Handle(ModifyCriticalActivityCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(new(request.Id));
-        var arg = _mapper.Map<ModifyCriticalActivityArg>(request);
-        var userId = _simaIdentity.UserId;
+        try
+        {
+            var entity = await _repository.GetById(new(request.Id));
+            var arg = _mapper.Map<ModifyCriticalActivityArg>(request);
+            var userId = _simaIdentity.UserId;
 
-        #region IsFullTimeExecution
-        ///<summary>
-        /// if IsFullTimeExecution is setted to 1 then 7 records will be added to database foreach day of week and its from 00:00 to 23:59
-        ///</summary>
-        if (string.Equals(request.IsFullTimeExecution, "1", StringComparison.InvariantCultureIgnoreCase))
-        {
-            var list = GetRecordsForFullTimeExecution(userId: userId, criticalActivityId: arg.Id);
-            request.ExecutionPlanList = null;
-            entity.ModifyCriticalActivityExecutionPlans(list);
-        }
-        #endregion
+            #region IsFullTimeExecution
+            ///<summary>
+            /// if IsFullTimeExecution is setted to 1 then 7 records will be added to database foreach day of week and its from 00:00 to 23:59
+            ///</summary>
+            if (string.Equals(request.IsFullTimeExecution, "1", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var list = GetRecordsForFullTimeExecution(userId: userId, criticalActivityId: arg.Id);
+                request.ExecutionPlanList = null;
+                entity.ModifyCriticalActivityExecutionPlans(list);
+            }
+            #endregion
 
-        if (request.RelatedServiceList is not null)
-        {
-            var args = _mapper.Map<List<CreateCriticalActivityServicesArg>>(request.RelatedServiceList);
-            entity.ModifyCriticalActivityServices(args);
-        }
-        if (request.RiskList is not null)
-        {
-            var args = _mapper.Map<List<CreateCriticalActivityRiskArg>>(request.RiskList);
-            foreach (var item in args)
+            if (request.RelatedServiceList is not null)
             {
-                item.CreatedBy = userId;
-                item.CriticalActivityId = arg.Id;
+                var args = _mapper.Map<List<CreateCriticalActivityServicesArg>>(request.RelatedServiceList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.CriticalActivityId = arg.Id;
+                }
+                entity.ModifyCriticalActivityServices(args);
             }
-            entity.ModifyCriticalActivityRisks(args);
-        }
-        if (request.AssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateCriticalActivityAssetArg>>(request.AssetList);
-            foreach (var item in args)
+            if (request.RiskList is not null)
             {
-                item.CreatedBy = userId;
-                item.CriticalActivityId = arg.Id;
+                var args = _mapper.Map<List<CreateCriticalActivityRiskArg>>(request.RiskList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.CriticalActivityId = arg.Id;
+                }
+                entity.ModifyCriticalActivityRisks(args);
             }
-            entity.ModifyCriticalActivityAssets(args);
-        }
-        if (request.ConfigurationItemList is not null)
-        {
-            var args = _mapper.Map<List<CreateCriticalActivityConfigurationItemArg>>(request.ConfigurationItemList);
-            foreach (var item in args)
+            if (request.AssetList is not null)
             {
-                item.CreatedBy = userId;
-                item.CriticalActivityId = arg.Id;
+                var args = _mapper.Map<List<CreateCriticalActivityAssetArg>>(request.AssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.CriticalActivityId = arg.Id;
+                }
+                entity.ModifyCriticalActivityAssets(args);
             }
-            entity.ModifyCriticalConfigurationItems(args);
-        }
-        if (request.AssignedStaffList is not null)
-        {
-            var args = _mapper.Map<List<CreateCriticalActivityAssignedStaffArg>>(request.AssignedStaffList);
-            foreach (var item in args)
+            if (request.ConfigurationItemList is not null)
             {
-                item.CreatedBy = userId;
-                item.CriticalActivityId = arg.Id;
+                var args = _mapper.Map<List<CreateCriticalActivityConfigurationItemArg>>(request.ConfigurationItemList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.CriticalActivityId = arg.Id;
+                }
+                entity.ModifyCriticalConfigurationItems(args);
             }
-            entity.ModifyAssignedStaffs(args);
-        }
-        if (request.ExecutionPlanList is not null)
-        {
-            var args = _mapper.Map<List<CreateCriticalActivityExecutionPlanArg>>(request.ExecutionPlanList);
-            foreach (var item in args)
+            if (request.AssignedStaffList is not null)
             {
-                item.CreatedBy = userId;
-                item.CriticalActivityId = arg.Id;
+                var args = _mapper.Map<List<CreateCriticalActivityAssignedStaffArg>>(request.AssignedStaffList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.CriticalActivityId = arg.Id;
+                }
+                entity.ModifyAssignedStaffs(args);
             }
-            entity.ModifyCriticalActivityExecutionPlans(args);
+            if (request.ExecutionPlanList is not null)
+            {
+                var args = _mapper.Map<List<CreateCriticalActivityExecutionPlanArg>>(request.ExecutionPlanList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = userId;
+                    item.CriticalActivityId = arg.Id;
+                }
+                entity.ModifyCriticalActivityExecutionPlans(args);
+            }
+            await entity.Modify(arg, _service);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(request.Id);
         }
-        await entity.Modify(arg, _service);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(request.Id);
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+       
     }
 
     public async Task<Result<long>> Handle(DeleteCriticalActivityCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new(request.Id));
         entity.Delete(_simaIdentity.UserId);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
     private List<CreateCriticalActivityExecutionPlanArg> GetRecordsForFullTimeExecution(long userId, long criticalActivityId)

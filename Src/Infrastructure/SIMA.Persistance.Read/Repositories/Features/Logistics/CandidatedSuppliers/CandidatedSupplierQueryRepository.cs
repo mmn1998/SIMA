@@ -66,27 +66,74 @@ public class CandidatedSupplierQueryRepository : ICandidatedSupplierQueryReposit
         {
             await connection.OpenAsync();
             var mainQuery = @"
-                         select
-                        	  CS.Id
-                        	  ,s.Name Name
-                        	  ,cs.LogisticsRequestId
-                        	  ,cs.SupplierId
-                        	  ,cs.IsSelected
-                        	  ,CS.SelectionDate
-                        	  ,cs.ActiveStatusId
-                        	  ,a.Name ActiveStatus
-                             ,RI.InquieredPrice
-                             ,cs.CreatedAt
-                         from Logistics.CandidatedSupplier CS
-                         inner join Basic.ActiveStatus A on A.ID = cs.ActiveStatusId
-                         left join Logistics.RequestInquiry RI on RI.CandidatedSupplierId  = CS.Id
-                         inner join Logistics.Supplier S on s.Id = cs.SupplierId
-                         where s.ActiveStatusId <> 3 and CS.ActiveStatusId <> 3 and CS.LogisticsRequestId = @logesticId
+select
+  	  CS.Id
+  	  ,(s.Name + ' - ' + SR.Name) Name
+  	  ,cs.LogisticsSupplyId
+  	  ,cs.SupplierId
+  	  ,cs.IsSelected
+  	  ,CS.SelectionDate
+  	  ,cs.ActiveStatusId
+  	  ,a.Name ActiveStatus
+    ,RI.InquieredPrice
+    ,cs.CreatedAt
+from Logistics.CandidatedSupplier CS
+inner join Basic.ActiveStatus A on A.ID = cs.ActiveStatusId
+left join Logistics.RequestInquiry RI on RI.CandidatedSupplierId  = CS.Id
+inner join Basic.Supplier S on s.Id = cs.SupplierId
+inner join Basic.SupplierRank SR on SR.Id = S.SupplierRankId
+where s.ActiveStatusId <> 3 and CS.ActiveStatusId <> 3 and CS.LogisticsSupplyId = @logesticId
 							";
             
             using (var multi = await connection.QueryMultipleAsync(mainQuery  , new { logesticId = logesticId }))
             {
                 var response = await multi.ReadAsync<GetCandidatedSupplierQueryResult>();
+                int index = 1;
+
+                foreach (var item in response)
+                {
+                    item.Index = index++;
+                }
+                return Result.Ok(response);
+            }
+
+        }
+    }
+
+    public async Task<Result<IEnumerable<GetCandidatedSupplierQueryResult>>> GetSelectdSupplierByLogestictId(long logesticId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var mainQuery = @"
+                    select
+  	                      CS.Id
+  	                      ,(s.Name + ' - ' + SR.Name) Name
+  	                      ,cs.LogisticsSupplyId
+  	                      ,cs.SupplierId
+  	                      ,cs.IsSelected
+  	                      ,CS.SelectionDate
+  	                      ,cs.ActiveStatusId
+  	                      ,a.Name ActiveStatus
+                        ,RI.InquieredPrice
+                        ,cs.CreatedAt
+                    from Logistics.CandidatedSupplier CS
+                    inner join Basic.ActiveStatus A on A.ID = cs.ActiveStatusId
+                    left join Logistics.RequestInquiry RI on RI.CandidatedSupplierId  = CS.Id
+                    inner join Basic.Supplier S on s.Id = cs.SupplierId
+                    inner join Basic.SupplierRank SR on SR.Id = S.SupplierRankId
+                    where s.ActiveStatusId <> 3 and CS.ActiveStatusId <> 3 and CS.IsSelected = '1' and  CS.LogisticsSupplyId = @logesticId
+							";
+
+            using (var multi = await connection.QueryMultipleAsync(mainQuery, new { logesticId = logesticId }))
+            {
+                var response = await multi.ReadAsync<GetCandidatedSupplierQueryResult>();
+                int index = 1;
+
+                foreach (var item in response)
+                {
+                    item.Index = index++;
+                }
                 return Result.Ok(response);
             }
 

@@ -76,6 +76,8 @@ public class GoodsCategoryQueryRepository : IGoodsCategoryQueryRepository
 								,F.[Name]
 								,F.[Code]
 								,F.[GoodsTypeId]
+	                            ,F.[IsFixedAsset]
+	                            ,F.[IsGoods]
 								From Logistics.GoodsCategory F
 								WHERE F.[ActiveStatusID] <> 3 And F.GoodsTypeId = @GoodsTypeId
 							";
@@ -104,6 +106,7 @@ public class GoodsCategoryQueryRepository : IGoodsCategoryQueryRepository
 			,F.[IsHardware]
             ,F.CreatedAt
 			,F.[ActiveStatusId]
+            ,F.[IsFixedAsset]
 			,A.[Name] ActiveStatus
 			From Logistics.GoodsCategory F
 			join Basic.ActiveStatus A on F.ActiveStatusId = A.Id

@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.Auths.Suppliers.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.PaymentCommands.ValueObjects;
 
@@ -39,6 +41,12 @@ public class PaymentHistoryConfiguration : IEntityTypeConfiguration<PaymentHisto
             .WithMany(x => x.PaymentHistories)
             .HasForeignKey(x => x.OrderingId).OnDelete(DeleteBehavior.ClientSetNull);
 
+        entity.Property(x => x.SupplierAccountListId)
+           .HasConversion(x => x.Value, x => new SupplierAccountListId(x));
+        entity.HasOne(x => x.SupplierAccountList)
+            .WithMany(x => x.PaymentHistories)
+            .HasForeignKey(x => x.SupplierAccountListId).OnDelete(DeleteBehavior.ClientSetNull);
+
         entity.Property(x => x.PaymentCommandId)
             .HasConversion(x => x.Value, x => new PaymentCommandId(x));
         entity.HasOne(x => x.PaymentType)
@@ -46,7 +54,7 @@ public class PaymentHistoryConfiguration : IEntityTypeConfiguration<PaymentHisto
             .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.PaymentDocumentId)
-            .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
+            .HasConversion(x => x.Value, x => new LogisticsSupplyDocumentId(x));
         entity.HasOne(x => x.PaymentDocument)
             .WithMany(x => x.PaymentHistories)
             .HasForeignKey(x => x.PaymentDocumentId).OnDelete(DeleteBehavior.ClientSetNull);

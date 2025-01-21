@@ -5,12 +5,13 @@ namespace SIMA.Application.Query.Contract.Features.Logistics.CandidatedSuppliers
 public class GetCandidatedSupplierQueryResult
 {
     public long Id { get; set; }
+    public int Index { get; set; }
     /// <summary>
     /// name of supplier
     /// </summary>
     public string? Name { get; set; } 
     public string? IsSelected { get; set; }
-    public long LogisticsRequestId { get; set; }
+    public long LogisticsSupplyId { get; set; }
     public long SupplierId { get; set; }
     public DateTime? SelectedDate { get; set; }
     public string? SelectedDatePersian => SelectedDate.ToPersianDateTime();

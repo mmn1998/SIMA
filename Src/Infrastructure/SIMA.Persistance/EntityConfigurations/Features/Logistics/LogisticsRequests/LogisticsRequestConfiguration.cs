@@ -33,10 +33,6 @@ public class LogisticsRequestConfiguration : IEntityTypeConfiguration<LogisticsR
             .WithMany(x => x.Logistics)
             .HasForeignKey(x => x.IssueId).OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.RequesterId)
-            .HasConversion(x => x.Value, x => new UserId(x));
-        entity.HasOne(x => x.Requester)
-            .WithMany(x => x.LogisticsRequests)
-            .HasForeignKey(x => x.RequesterId).OnDelete(DeleteBehavior.ClientSetNull);
+       
     }
 }

@@ -4,6 +4,7 @@ using SIMA.Application.Contract.Features.ServiceCatalog.Channels;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Contracts;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
@@ -30,52 +31,70 @@ public class ChannelCommandHandler : ICommandHandler<CreateChannelCommand, Resul
     }
     public async Task<Result<long>> Handle(CreateChannelCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateChannelArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await Channel.Create(arg, _service);
-        if (request.ChannelResponsibleList is not null)
+        try
         {
-            var channelResponsibleArgs = _mapper.Map<List<CreateChannelResponsibleArg>>(request.ChannelResponsibleList);
-            foreach (var item in channelResponsibleArgs)
+            var arg = _mapper.Map<CreateChannelArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
+            var entity = await Channel.Create(arg, _service);
+            if (request.ChannelResponsibleList is not null)
             {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.ChannelId = arg.Id;
+                var channelResponsibleArgs = _mapper.Map<List<CreateChannelResponsibleArg>>(request.ChannelResponsibleList);
+                foreach (var item in channelResponsibleArgs)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ChannelId = arg.Id;
+                }
+                entity.AddChannelResponsibles(channelResponsibleArgs);
             }
-            entity.AddChannelResponsibles(channelResponsibleArgs);
+            if (request.ChannelAccessPointList is not null)
+            {
+                var channelAccessPointArgs = _mapper.Map<List<CreateChannelAccessPointArg>>(request.ChannelAccessPointList);
+                foreach (var item in channelAccessPointArgs)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ChannelId = arg.Id;
+                }
+                entity.AddChannelAccessPoints(channelAccessPointArgs);
+            }
+            if (request.UserTypes is not null)
+            {
+                var channelUserTypeArgs = _mapper.Map<List<CreateChannelUserTypeArg>>(request.UserTypes);
+                foreach (var item in channelUserTypeArgs)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ChannelId = arg.Id;
+                }
+                entity.AddChannelUserTypes(channelUserTypeArgs);
+            }
+            if (request.Products is not null)
+            {
+                var channelProductChannelArgs = _mapper.Map<List<CreateProductChannelArg>>(request.Products);
+                foreach (var item in channelProductChannelArgs)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ChannelId = arg.Id;
+                }
+                entity.AddProductChannels(channelProductChannelArgs);
+            }
+            if (request.Services is not null)
+            {
+                var channelProductChannelArgs = _mapper.Map<List<CreateServiceChannelArg>>(request.Services);
+                foreach (var item in channelProductChannelArgs)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ChannelId = arg.Id;
+                }
+                entity.AddServiceChannels(channelProductChannelArgs);
+            }
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
         }
-        if (request.ChannelAccessPointList is not null)
+        catch (Exception ex)
         {
-            var channelAccessPointArgs = _mapper.Map<List<CreateChannelAccessPointArg>>(request.ChannelAccessPointList);
-            foreach (var item in channelAccessPointArgs)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.ChannelId = arg.Id;
-            }
-            entity.AddChannelAccessPoints(channelAccessPointArgs);
+            throw;
         }
-        if (request.UserTypes is not null)
-        {
-            var channelUserTypeArgs = _mapper.Map<List<CreateChannelUserTypeArg>>(request.UserTypes);
-            foreach (var item in channelUserTypeArgs)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.ChannelId = arg.Id;
-            }
-            entity.AddChannelUserTypes(channelUserTypeArgs);
-        }
-        if (request.Products is not null)
-        {
-            var channelProductChannelArgs = _mapper.Map<List<CreateProductChannelArg>>(request.Products);
-            foreach (var item in channelProductChannelArgs)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.ChannelId = arg.Id;
-            }
-            entity.AddProductChannels(channelProductChannelArgs);
-        }
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
+
     }
 
     public async Task<Result<long>> Handle(ModifyChannelCommand request, CancellationToken cancellationToken)
@@ -122,6 +141,16 @@ public class ChannelCommandHandler : ICommandHandler<CreateChannelCommand, Resul
             }
             entity.ModifyProductChannels(channelProductChannelArgs);
         }
+        if (request.Services is not null)
+        {
+            var channelProductChannelArgs = _mapper.Map<List<CreateServiceChannelArg>>(request.Services);
+            foreach (var item in channelProductChannelArgs)
+            {
+                item.CreatedBy = _simaIdentity.UserId;
+                item.ChannelId = arg.Id;
+            }
+            entity.ModifyServiceChannels(channelProductChannelArgs);
+        }
         await entity.Modify(arg, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
@@ -131,6 +160,7 @@ public class ChannelCommandHandler : ICommandHandler<CreateChannelCommand, Resul
     {
         var entity = await _repository.GetById(new(request.Id));
         entity.Delete(_simaIdentity.UserId);
+        await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
 }

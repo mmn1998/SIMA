@@ -36,6 +36,8 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
         entity.Property(x => x.Name).HasMaxLength(200).IsUnicode();
         entity.Property(x => x.Code)
                     .HasMaxLength(20).IsUnicode();
+        entity.Property(x => x.IsOrganizationalDocumentation)
+                    .HasMaxLength(1).IsFixedLength();
         entity.Property(x => x.FileAddress).HasMaxLength(1000).IsUnicode();
         entity.HasOne(x => x.DocumentType)
             .WithMany(x => x.Documents)
@@ -54,5 +56,12 @@ public class DocumentConfiguration : IEntityTypeConfiguration<Document>
         entity.Property(e => e.StaffSignatureId).HasConversion(v => v.Value, v => new StaffId(v));
         entity.HasOne(d => d.StaffSignature).WithOne(p => p.Signature)
             .HasForeignKey<Document>(d => d.StaffSignatureId);
+
+        entity.Property(e => e.CompanyId)
+            .HasConversion(v => v.Value, v => new(v));
+        entity.HasOne(d => d.Company)
+            .WithMany(p => p.Documents)
+            .HasForeignKey(d => d.CompanyId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

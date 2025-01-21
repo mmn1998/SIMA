@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.ApiMethodActions;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.Auths.ApiMethodActions.V1;
 
@@ -19,11 +20,13 @@ public class ApiMethodActionsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAll")]
+    [SimaAuthorize(Permissions.apiActionMethodGetAll)]
     public async Task<Result> Get([FromBody] GetAllApiMethodActionsQuery query)
     {
         return await _mediator.Send(query);
     }
     [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.apiActionMethodGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetApiMethodActionQuery { Id = id };

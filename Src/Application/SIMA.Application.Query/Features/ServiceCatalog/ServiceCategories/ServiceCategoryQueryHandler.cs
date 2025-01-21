@@ -6,7 +6,8 @@ using SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.ServiceCategori
 namespace SIMA.Application.Query.Features.ServiceCatalog.ServiceCategories;
 
 public class ServiceCategoryQueryHandler : IQueryHandler<GetServiceCategoryQuery, Result<GetServiceCategoryQueryResult>>,
-    IQueryHandler<GetAllServiceCategoriesQuery, Result<IEnumerable<GetServiceCategoryQueryResult>>>
+    IQueryHandler<GetAllServiceCategoriesQuery, Result<IEnumerable<GetServiceCategoryQueryResult>>>,
+    IQueryHandler<GetAllServiceCategoriesExceptThisIdQuery, Result<IEnumerable<GetServiceCategoryQueryResult>>>
 {
     private readonly IServiceCategoryQueryRepository _repository;
 
@@ -23,5 +24,16 @@ public class ServiceCategoryQueryHandler : IQueryHandler<GetServiceCategoryQuery
     public async Task<Result<IEnumerable<GetServiceCategoryQueryResult>>> Handle(GetAllServiceCategoriesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
+    }
+    /// <summary>
+    /// this is for this reason : in edit of service category form, same id should not be in the drop down of this form
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Result<IEnumerable<GetServiceCategoryQueryResult>>> Handle(GetAllServiceCategoriesExceptThisIdQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetAllExceptThisIdForParents(request.Id);
+        return Result.Ok(result);
     }
 }

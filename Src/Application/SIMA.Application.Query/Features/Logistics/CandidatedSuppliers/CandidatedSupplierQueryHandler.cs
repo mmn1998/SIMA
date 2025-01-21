@@ -7,7 +7,8 @@ namespace SIMA.Application.Query.Features.Logistics.CandidatedSuppliers;
 
 public class CandidatedSupplierQueryHandler :
     IQueryHandler<GetAllCandidatedSuppliersQuery, Result<IEnumerable<GetCandidatedSupplierQueryResult>>>,
-    IQueryHandler<GetAllCandidatedSuppliersByLogesticIdQuery, Result<IEnumerable<GetCandidatedSupplierQueryResult>>>
+    IQueryHandler<GetAllCandidatedSuppliersByLogesticIdQuery, Result<IEnumerable<GetCandidatedSupplierQueryResult>>>,
+    IQueryHandler<GetSelectedCandidatedSupplierQuery, Result<IEnumerable<GetCandidatedSupplierQueryResult>>>
 
 {
     private readonly ICandidatedSupplierQueryRepository _repository;
@@ -25,5 +26,10 @@ public class CandidatedSupplierQueryHandler :
     public async Task<Result<IEnumerable<GetCandidatedSupplierQueryResult>>> Handle(GetAllCandidatedSuppliersByLogesticIdQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetByLogestictId(request.Id);
+    }
+
+    public async Task<Result<IEnumerable<GetCandidatedSupplierQueryResult>>> Handle(GetSelectedCandidatedSupplierQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetSelectdSupplierByLogestictId(request.LogisticsSupplyId);
     }
 }

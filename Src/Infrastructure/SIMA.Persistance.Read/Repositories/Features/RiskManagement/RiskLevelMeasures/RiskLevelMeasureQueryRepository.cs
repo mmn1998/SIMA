@@ -94,7 +94,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.RiskManagement.RiskLevelMe
 	                  ,S.[Name] as ActiveStatus
                   FROM [RiskManagement].[RiskLevelMeasure] R
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = R.ActiveStatusId
-                  WHERE R.ActiveStatusId != 3
+                  WHERE R.ActiveStatusId != 3 AND R.[Id] = @Id
 
 
                     --RiskLevel
@@ -109,7 +109,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.RiskManagement.RiskLevelMe
                   FROM [RiskManagement].[RiskLevelMeasure] R
 				  Left Join RiskManagement.RiskLevel RL on R.RiskLevelId = RL.Id
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = RL.ActiveStatusId
-                  WHERE R.ActiveStatusId != 3
+                  WHERE R.ActiveStatusId != 3 AND R.[Id] = @Id
 
 
 				  --RiskImpact
@@ -124,7 +124,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.RiskManagement.RiskLevelMe
                   FROM [RiskManagement].[RiskLevelMeasure] R
 				   Left Join RiskManagement.RiskImpact RI on R.RiskImpactId = RI.Id
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = RI.ActiveStatusId
-                  WHERE R.ActiveStatusId != 3
+                  WHERE R.ActiveStatusId != 3 AND R.[Id] = @Id
 
 				  --RiskPossibility
 
@@ -138,7 +138,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.RiskManagement.RiskLevelMe
                   FROM [RiskManagement].[RiskLevelMeasure] R
 				   Left Join RiskManagement.RiskPossibility RP on R.RiskPossibilityId = RP.Id
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = RP.ActiveStatusId
-                  WHERE R.ActiveStatusId != 3"
+                  WHERE R.ActiveStatusId != 3 AND R.[Id] = @Id"
                 ;
 
 

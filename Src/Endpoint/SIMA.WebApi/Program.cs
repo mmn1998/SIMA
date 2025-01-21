@@ -5,7 +5,9 @@ using Serilog.Exceptions.Core;
 using Serilog.Sinks.Elasticsearch;
 using SIMA.Application.ConfigurationExtensions;
 using SIMA.Application.Query.ConfigurationExtensions;
-using SIMA.Application.Query.Services;
+using SIMA.Application.Query.Services.ReportServices;
+using SIMA.Application.Services;
+using SIMA.Application.Services.BehsazanServices;
 using SIMA.DomainService.ConfigurationExtensions;
 using SIMA.Framework.Common.Cachings;
 using SIMA.Framework.Common.Helper.FileHelper;
@@ -113,6 +115,8 @@ try
     string CipherConnectionString = builder.Configuration.GetConnectionString("UserManagementCipher") ?? "";
     string SignedConnectionString = builder.Configuration.GetConnectionString("UserManagementSign") ?? "";
     string connectionString = builder.Configuration.GetDecriptedValue(CipherConnectionString, SignedConnectionString);
+    //string connectionString = "Server=172.20.156.178,49235;Database=SIMADBBehsazanNew;User Id=DV_User;Password=2YR@&jdppAya;TrustServerCertificate=True;";
+    //string connectionString = "Server=185.105.239.136;Database=SIMADBBank;User Id=foad;Password=foad1qaz!QAZ;TrustServerCertificate=True;";
 
     builder.Services.AddMemoryCache();
     builder.Services.AddHttpContextAccessor();
@@ -120,6 +124,7 @@ try
     builder.Services.AddSingleton<IMemoryCacheProvider, MemoryCacheProvider>();
     builder.Services.AddSingleton<ICaptchaService, CaptchaService>();
     builder.Services.Configure<SMSSetting>(builder.Configuration.GetSection(nameof(SMSSetting)));
+    builder.Services.Configure<BehsazanServiceSetting>(builder.Configuration.GetSection(nameof(BehsazanServiceSetting)));
     builder.Services.RegisterAuthentication(builder.Configuration)
                     .AddCommandHandlerServices()
                     .RegisterWriteDbContext(connectionString)
@@ -138,6 +143,8 @@ try
                     .RegisterTokenService()
                     .AddTransient<IRestfulClient, RestfulClient>()
                     .AddTransient<ISMSService, SMSService>()
+                    .AddTransient<IBehsazanService, BehsazanService>()
+                    .AddTransient<IBankReportService, BankReportService>()
                     ;
     #endregion
     #region Cors

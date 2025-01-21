@@ -5,9 +5,9 @@ using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.BCP.HappeningPossiblities.V1;
 
-[Route("[controller]")]
+[Route("bcp/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "HappeningPossiblities")]
+[ApiExplorerSettings(GroupName = "BCP/HappeningPossiblities")]
 public class HappeningPossiblitiesQueryController : ControllerBase
 {
     private readonly IMediator _mediator;

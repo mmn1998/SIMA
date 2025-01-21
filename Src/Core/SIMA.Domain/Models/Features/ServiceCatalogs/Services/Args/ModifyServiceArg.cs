@@ -18,7 +18,6 @@ public class ModifyServiceArg
     public long ServiceCategoryId { get; set; }
     public long ServicePriorityId { get; set; }
     public long? ServiceStatusId { get; set; }
-    public DateOnly? InServiceDate { get; set; }
     public string? IsInternalService { get; set; }
     public string? IsCriticalService { get; set; }
     public long IssueId { get; set; }

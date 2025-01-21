@@ -13,7 +13,6 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Scrutor" Version="5.0.1" />
-    <PackageReference Include="SIMA.Framework.Common" Version="2.1.8" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
   </ItemGroup>
 

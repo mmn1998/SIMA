@@ -7,3 +7,7 @@ public class GetStaffQuery : IQuery<Result<GetStaffQueryResult>>
 {
     public long Id { get; set; }
 }
+public class GetStaffByDepartmentQuery : IQuery<Result<IEnumerable<GetStaffQueryResult>>>
+{
+    public long? DepartmentId { get; set; }
+}

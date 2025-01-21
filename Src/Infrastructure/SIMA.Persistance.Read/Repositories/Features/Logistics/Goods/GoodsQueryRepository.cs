@@ -29,7 +29,6 @@ public class GoodsQueryRepository : IGoodsQueryRepository
 								,F.[Code]
 								,F.[GoodsCategoryId]
 								,F.[UnitMeasurementId]
-								,F.[IsFixedAsset]
 								,gc.Name GoodsCategory
 								,um.Name UnitMeasurement
                                 ,F.CreatedAt
@@ -97,7 +96,6 @@ public class GoodsQueryRepository : IGoodsQueryRepository
 			,F.[Code]
 			,F.[GoodsCategoryId]
 			,F.[UnitMeasurementId]
-			,F.[IsFixedAsset]
 			,gc.Name GoodsCategory
 			,um.Name UnitMeasurement
 			,GT.Id GoodsTypeId

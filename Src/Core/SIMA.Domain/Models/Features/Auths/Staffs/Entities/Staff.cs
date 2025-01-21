@@ -15,6 +15,8 @@ using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
+using SIMA.Domain.Models.Features.Notifications.Messages.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
@@ -22,6 +24,7 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -193,6 +196,17 @@ public class Staff : Entity
 
     private List<ChannelResponsible> _channelResponsibles = new();
     public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsibles;
+
+    private List<TrustyDraft> _trustyDrafts = new();
+    public ICollection<TrustyDraft> TrustyDrafts => _trustyDrafts;
+
+    private List<MessageSeenStatistics> _messageSeenStatisticses = new();
+    public ICollection<MessageSeenStatistics> MessageSeenStatisticses => _messageSeenStatisticses;
+
+    private List<RiskStaff> _riskStaffs = new();
+    public ICollection<RiskStaff> RiskStaffs => _riskStaffs;
+
+
 
     public void Delete(long userId)
     {

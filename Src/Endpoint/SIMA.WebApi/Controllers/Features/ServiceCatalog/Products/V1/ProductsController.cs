@@ -18,13 +18,13 @@ public class ProductsController :ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-     [SimaAuthorize(Permissions.ProductsPost)] 
+    //[SimaAuthorize(Permissions.ProductsPost)] 
     public async Task<Result> Post([FromBody] CreateProductCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-     [SimaAuthorize(Permissions.ProductsPut)] 
+     //[SimaAuthorize(Permissions.ProductsPut)] 
     public async Task<Result> Put([FromBody] ModifyProductCommand command)
     {
         return await _mediator.Send(command);

@@ -20,6 +20,7 @@ public class DocumentType : Entity
         Id = new(IdHelper.GenerateUniqueId());
         Name = arg.Name;
         Code = arg.Code;
+        ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }

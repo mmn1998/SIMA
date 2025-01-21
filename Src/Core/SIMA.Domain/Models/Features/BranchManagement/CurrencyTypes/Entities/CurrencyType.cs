@@ -1,6 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.Args;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.ValueObjects;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.Resources.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -56,6 +60,27 @@ public class CurrencyType : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+    private List<WageRate> _wageRates = new();
+    public ICollection<WageRate> WageRates => _wageRates;
+
+    private List<Resource> _resources = new();
+    public ICollection<Resource> Resources => _resources;
+
+    private List<TrustyDraft> _trustyDrafts = new();
+    public ICollection<TrustyDraft> TrustyDrafts => _trustyDrafts;
+
+    private List<TrustyDraft> _netTrustyDrafts = new();
+    public ICollection<TrustyDraft> NetTrustyDrafts => _netTrustyDrafts;
+
+    private List<TrustyDraft> _cancellationTrustyDrafts = new();
+    public ICollection<TrustyDraft> CancellationTrustyDrafts => _cancellationTrustyDrafts;
+
+    private List<InquiryRequestCurrency> _inquiryRequestCurrencies = new();
+    public ICollection<InquiryRequestCurrency> InquiryRequestCurrencies => _inquiryRequestCurrencies;
+
+    private List<InquiryRequest> _inquiryRequests = new();
+    public ICollection<InquiryRequest> InquiryRequests => _inquiryRequests;
 
     #region Guards
     private static async Task CreateGuards(CreateCurrencyTypeArg arg, ICurrencyTypeDomainService currencyTypeDomainService)

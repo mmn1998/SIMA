@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Permissions.Args;
+using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Framework.Core.Repository;
 
 namespace SIMA.Domain.Models.Features.Auths.Permissions;
@@ -16,5 +17,6 @@ public interface IPermissionRepository : IRepository<Permission>
     /// </summary>
     /// <returns></returns>
     Task<bool> AddAllPermissionsFromAUserToAnotherUser(long ownUserId, long targetUserId);
+    Task<List<CreatePermissionArg>> AddPermissionNotExist();
 }
 

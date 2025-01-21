@@ -25,12 +25,13 @@ public class GoodsCategoryConfiguration : IEntityTypeConfiguration<GoodsCategory
                     .IsConcurrencyToken();
         entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.Code).HasMaxLength(20).IsUnicode();
-        entity.HasIndex(e => e.Code).IsUnique()
-            .HasDatabaseName("Logistics.GoodsCategory.IX_GoodsCategory_Code1");
+        entity.HasIndex(e => e.Code).IsUnique();
+            //.HasDatabaseName("Logistics.GoodsCategory.IX_GoodsCategory_Code1");
         entity.Property(x => x.IsGoods).HasMaxLength(1);
         entity.Property(x => x.IsHardware).HasMaxLength(1);
         entity.Property(x => x.IsRequiredSecurityCheck).HasMaxLength(1);
         entity.Property(x => x.IsTechnological).HasMaxLength(1);
+        entity.Property(x => x.IsFixedAsset).HasMaxLength(1);
 
         entity.Property(x => x.GoodsTypeId)
             .HasConversion(x => x.Value, x => new GoodsTypeId(x));

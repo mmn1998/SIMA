@@ -8,4 +8,5 @@ public interface ICandidatedSupplierQueryRepository : IQueryRepository
 {
     Task<Result<IEnumerable<GetCandidatedSupplierQueryResult>>> GetAll(GetAllCandidatedSuppliersQuery request);
     Task<Result<IEnumerable<GetCandidatedSupplierQueryResult>>> GetByLogestictId(long logesticId);
+    Task<Result<IEnumerable<GetCandidatedSupplierQueryResult>>> GetSelectdSupplierByLogestictId(long logesticId);
 }

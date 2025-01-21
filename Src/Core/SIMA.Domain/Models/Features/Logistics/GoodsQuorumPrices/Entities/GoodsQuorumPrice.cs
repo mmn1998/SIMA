@@ -71,8 +71,8 @@ public class GoodsQuorumPrice : Entity, IAggregateRoot
     public string? IsRequiredCeoConfirmation { get; private set; }
     public string? IsRequiredBoardConfirmation { get; private set; }
     public string? IsRequiredSupplierWrittenInquiry { get; private set; }
-    public float MinPrice { get; private set; }
-    public float MaxPrice { get; private set; }
+    public decimal MinPrice { get; private set; }
+    public decimal MaxPrice { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
     public long ActiveStatusId { get; private set; }

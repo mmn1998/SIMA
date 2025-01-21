@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.Auths.Groups.Args;
 using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
+using SIMA.Framework.Common.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -22,6 +23,7 @@ public class UserMapper : Profile
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
             .ForMember(x => x.IsFirstLogin, opt => opt.MapFrom(src => "1"))
             .ForMember(x => x.IsLocked, opt => opt.MapFrom(src => "0"))
+            .ForMember(x => x.IsSendOTP, opt => opt.MapFrom(src => "1"))
             ////.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
 
@@ -32,6 +34,7 @@ public class UserMapper : Profile
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
             .ForMember(x => x.IsFirstLogin, opt => opt.MapFrom(src => "1"))
             .ForMember(x => x.IsLocked, opt => opt.MapFrom(src => "0"))
+            .ForMember(x => x.IsSendOTP, opt => opt.MapFrom(src => "1"))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
 
 
@@ -53,10 +56,10 @@ public class UserMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (long)ActiveStatusEnum.Active));
         CreateMap<UpdateUserCommand, ModifyUserArg>()
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
-            //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
+        //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId));
         ;
 
-       
+
         CreateMap<UpdateUserLocationCommand, ModifyUserLocationArg>()
             .ForMember(dest => dest.ModifiedAt, opt => opt.MapFrom(src => Encoding.UTF8.GetBytes(DateTimeOffset.Now.ToString())))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
@@ -82,37 +85,43 @@ public class UserMapper : Profile
 
     }
 
-    public static LoginUserQueryResult MapToToken(LoginUserQueryResult user, TokenModel _securitySettings)
+    public static LoginUserQueryResult MapToToken(LoginUserQueryResult user, ITokenService tokenService)
     {
         var claims = GenereteClaim(user);
-        user.Token = GenerateToken(claims, _securitySettings);
+        var res = GenerateToken(claims, tokenService);
+        user.Token = res.AccessToken;
+        user.RefreshToken = res.RefreshToken;
         return user;
     }
-    private static string GenerateToken(IEnumerable<Claim> claims, TokenModel tokenModel)
+    private static TokenModelResult GenerateToken(IEnumerable<Claim> claims, ITokenService tokenService)
     {
-        var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenModel.SigningKey));
+        var accessToken = tokenService.GenerateAccessToken(claims);
 
-        var tokenDescriptor = new SecurityTokenDescriptor
+        var refreshToken = tokenService.GenerateRefreshToken();
+
+        return new TokenModelResult
         {
-            Issuer = tokenModel.Issuer,
-            Audience = tokenModel.Issuer,
-            Expires = DateTime.UtcNow.AddHours(3),
-            SigningCredentials = new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256),
-            Subject = new ClaimsIdentity(claims)
+            AccessToken = accessToken,
+            RefreshToken = refreshToken,
         };
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
     }
     private static IEnumerable<Claim> GenereteClaim(LoginUserQueryResult user)
     {
+        //todo Mahmood
+        var permissions = user.Permissions.PackPermissionsIntoString();
+        //var permissions = "";
         return new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier,user.UserInfoLogin.UserId.ToString()),
             new Claim(ClaimTypes.Name, user.UserInfoLogin.Username),
             new Claim("CompanyId", user.UserInfoLogin.CompanyId.ToString()),
-            new Claim(ClaimTypes.Role, JsonSerializer.Serialize(user.Permissions))
+            new Claim(ClaimTypes.Role, JsonSerializer.Serialize(user.RoleIds)),
+            new Claim("Groups", JsonSerializer.Serialize(user.GroupIds)),
+            new Claim("Permissions", permissions)
         };
+    }
+    public static bool UserHasThisPermission(IEnumerable<Framework.Common.Security.Permissions> usersPermissions, Framework.Common.Security.Permissions permissionToCheck)
+    {
+        return usersPermissions.Contains(permissionToCheck);
     }
 }

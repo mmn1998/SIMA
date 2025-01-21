@@ -15,6 +15,7 @@ public class BusinessContinuityPlanRisk : Entity
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
+        RiskId = new(arg.RiskId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -30,6 +31,18 @@ public class BusinessContinuityPlanRisk : Entity
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
     }
+
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
+    }
     public BusinessContinuityPlanRiskId Id { get; private set; }
     public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
     public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
@@ -40,10 +53,5 @@ public class BusinessContinuityPlanRisk : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete(long userId)
-    {
-        ModifiedBy = userId;
-        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
-        ActiveStatusId = (long)ActiveStatusEnum.Delete;
-    }
+    
 }

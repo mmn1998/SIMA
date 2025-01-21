@@ -15,6 +15,6 @@ public class GetServiceProductQueryResult
     public long? ProviderCompanyId { get; set; }
     public string? ProviderCompanyName { get; set; }
     public string? ProviderCompanyCode { get; set; }
-    public DateOnly? InServiceDate { get; set; }
+    public DateTime? InServiceDate { get; set; }
     public string? InServiceDatePersian => InServiceDate.ToPersianDate();
 }

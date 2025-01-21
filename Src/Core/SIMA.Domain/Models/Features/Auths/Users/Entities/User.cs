@@ -49,6 +49,7 @@ public class User : Entity, IAggregateRoot
         CreatedAt = arg.CreatedAt;
         IsFirstLogin = arg.IsFirstLogin;
         IsLocked = arg.IsLocked;
+        IsSendOTP = arg.IsSendOTP;
     }
     #region AddMethods
 
@@ -324,7 +325,7 @@ public class User : Entity, IAggregateRoot
         return code;
     }
 
-    public async Task<string> GeneratePassword(IUserService userService)
+    public string GeneratePassword(IUserService userService)
     {
         string newPassword = userService.GeneratePassword();
         Password = PasswordValueObject.New(newPassword);
@@ -335,12 +336,22 @@ public class User : Entity, IAggregateRoot
         return newPassword;
     }
 
-    public async Task AccessFaild(UserInfoLogin arg)
+    public void ConfirmOTpCode()
+    {
+        ConfirmCode = null;
+        ConfirmCodeSendDate = null;
+    }
+
+    public void AccessFailed(UserInfoLogin arg)
     {
         AccessFailedCount = arg.AccessFailedCount;
         AccessFailedDate = arg.AccessFailedDate;
         AccessFailedOverallCount = arg.AccessFailedOverallCount;
         IsLocked = arg.IsLocked;
+    }
+    public void ResetWrongPassActivity()
+    {
+        AccessFailedCount = 0;
     }
     public string? SecretKey { get; set; }
     public ProfileId? ProfileId { get; private set; }
@@ -354,6 +365,7 @@ public class User : Entity, IAggregateRoot
     public UserId Id { get; private set; }
     public string IsFirstLogin { get; set; }
     public string IsLocked { get; set; }
+    public string IsSendOTP { get; set; }
     public DateTime? ChangePasswordDate { get; private set; }
     public int? AccessFailedCount { get; private set; }
     public int? AccessFailedOverallCount { get; private set; }
@@ -465,8 +477,9 @@ public class User : Entity, IAggregateRoot
     private List<IssueManager> _issueManager = new();
     public ICollection<IssueManager> IssueManagers => _issueManager;
 
-    private List<LogisticsRequest> _logisticsRequests = new();
-    public ICollection<LogisticsRequest> LogisticsRequests => _logisticsRequests;
+    private List<Issue> _issues = new();
+    public ICollection<Issue> Issues => _issues;
+
 
     private static async Task CreateGuards(IUserService userService, CreateUserArg arg)
     {

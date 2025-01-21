@@ -30,9 +30,12 @@ public class RecoveryPointObjectiveQueryRepository : IRecoveryPointObjectiveQuer
 								,F.[RpoFrom]
 								,F.[RpoTo]
                                 ,F.CreatedAt
+                                ,F.TimeMeasurementId
 								,A.[Name] ActiveStatus
+                                ,TM.Name TimeMeasurementName
 								From [BCP].RecoveryPointObjective F
 								join Basic.ActiveStatus A on F.ActiveStatusId = A.Id
+                                join Basic.TimeMeasurement TM on TM.Id = F.TimeMeasurementId and Tm.ActiveStatusId<>3
 								WHERE F.[ActiveStatusID] <> 3
 							";
             var queryCount = $@"
@@ -68,8 +71,11 @@ public class RecoveryPointObjectiveQueryRepository : IRecoveryPointObjectiveQuer
 			  ,C.[RpoFrom]
 			  ,C.[RpoTo]
               ,A.[Name] ActiveStatus
+              ,TM.Name TimeMeasurementName
+              ,c.TimeMeasurementId
           FROM [BCP].[RecoveryPointObjective] C
           INNER JOIN [Basic].[ActiveStatus] A ON C.ActiveStatusId = A.ID
+        join Basic.TimeMeasurement TM on TM.Id = C.TimeMeasurementId and Tm.ActiveStatusId<>3
           WHERE C.[Id] = @Id AND C.ActiveStatusId <> 3";
         using (var connection = new SqlConnection(_connectionString))
         {

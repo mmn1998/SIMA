@@ -1,5 +1,4 @@
-﻿using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Args;
-using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
@@ -18,8 +17,9 @@ public class ProductResponsible : Entity
 
     private ProductResponsible(CreateProductResponsibleArg arg)
     {
-        Id = new ProductResponsibleId(arg.Id);
-        ResponsilbeId = new StaffId(arg.ResponsibleId);
+        Id = new(arg.Id);
+        ResponsilbeId = new(arg.ResponsibleId);
+        ProductId = new(arg.ProductId);
         ResponsibleTypeId = new (arg.ResponsibleTypeId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;

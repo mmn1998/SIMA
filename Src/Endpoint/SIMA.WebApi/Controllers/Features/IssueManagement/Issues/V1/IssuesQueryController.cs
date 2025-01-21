@@ -36,7 +36,7 @@ public class IssuesQueryController : ControllerBase
     /// فهرست حوزه من
     /// </summary>
     /// <param name="request"></param>
-    /// <returns></returns>
+    /// <returns></returns> 
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.IssueGetAll)]
     public async Task<Result> Get(GetAllIssuesQuery request)
@@ -55,11 +55,17 @@ public class IssuesQueryController : ControllerBase
         }
         return result;
     }
-    [HttpGet("ComponetIssue/{id}/{issueId}")]
-    public async Task<Result> ComponentIssue([FromRoute] long id, [FromRoute] long issueId)
+    [HttpGet("ComponentIssue/{issueId}/{sourceId}")]
+    public async Task<Result> ComponentIssue([FromRoute] long issueId, [FromRoute] long sourceId)
     {
-        var query = new GetIssueComponentQuery { Id = id, IssueId = issueId };
-        return await _mediator.Send(query);
+        var query = new GetIssueComponentQuery { SourceId = sourceId, IssueId = issueId };
+        var result = await _mediator.Send(query);
+        foreach (var item in result.Data.IssueApprovalList)
+        {
+            if (item.downloadedResult is not null)
+                item.downloadedResult.ContentType = item.downloadedResult?.Extension.GetContentType();
+        }
+        return result;
     }
 
     [HttpGet("History/{issueId}")]

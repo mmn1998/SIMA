@@ -16,4 +16,8 @@ public class GetStaffQueryResult
     public long ActiveStatusId { get; set; }
     public long? ManagerId { get; set; }
     public string? ManagerFullName { get; set; }
+    public long? BranchId { get; set; }
+    public string? BranchName { get; set; }
+    public long? PositionLevelId { get; set; }
+    public string? PositionLevelName { get; set; }
 }

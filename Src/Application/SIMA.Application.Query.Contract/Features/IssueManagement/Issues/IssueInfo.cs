@@ -25,6 +25,10 @@ public class IssueInfo
     public DateTime? DueDate { get; set; }
     public string? DueDatePersian => DueDate.ToPersianDateTime();
     public IEnumerable<GetIssueCommentQueryResult>? IssueCommentList { get; set; }
+    public long? RequesterId { get; set; }
+    public string? RequesterName { get; set; }
+    public string? IsEditable { get; set; }
+    public string? UIPropertyBoxTitle { get; set; }
 }
 
 

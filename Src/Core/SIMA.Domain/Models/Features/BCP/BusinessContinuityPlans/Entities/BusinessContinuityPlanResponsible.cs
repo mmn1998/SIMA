@@ -39,6 +39,11 @@ namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities
             ModifiedAt = arg.ModifiedAt;
         }
 
+        public void ChangeStatus(ActiveStatusEnum status)
+        {
+            ActiveStatusId = (long)status;
+        }
+
         public BusinessContinuityPlanResponsibleId Id { get; private set; }
         public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
         public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }

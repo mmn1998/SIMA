@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.CustomerTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.Auths.CustomerTypes.V1;
 
@@ -17,12 +18,14 @@ public class CustomerTypesQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.customerTypeGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetCustomerTypeQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
+    [SimaAuthorize(Permissions.customerTypeGetAll)]
     public async Task<Result> Get([FromBody] GetAllCustomerTypesQuery query)
     {
         return await _mediator.Send(query);

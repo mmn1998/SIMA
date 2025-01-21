@@ -45,7 +45,7 @@ public class CartableCommandHandler
         {
             var issue = await _repository.GetById(request.IssueId.Value);
             var nextStepModel = _mapper.Map<GetNextStepQuery>(request);
-            var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel);
+            var nextStep = await _workFlowRepository.GetNextStepById(issue.CurrentWorkflowId.Value, nextStepModel, null);
 
             var arg = _mapper.Map<IssueRunActionArg>(request);
             arg.ModifiedBy = _simaIdentity.UserId;

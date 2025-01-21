@@ -5,6 +5,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.CriticalActivities;
 
-public class GetAllCriticalActivitiesQuery : BaseRequest, IQuery<Result<IEnumerable<GetCriticalActivityQueryResult>>>
+public class GetAllCriticalActivitiesQuery : BaseRequest, IQuery<Result<IEnumerable<GetAllCriticalActivitiesQueryResult>>>
 {
 }

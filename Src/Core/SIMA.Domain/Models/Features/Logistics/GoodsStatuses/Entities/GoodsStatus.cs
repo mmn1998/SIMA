@@ -16,7 +16,7 @@ public class GoodsStatus : Entity
     }
     public GoodsStatus(CreateGoodsStatusArg arg)
     {
-        Id = new GoodsStatusId(IdHelper.GenerateUniqueId());
+        Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         IsRequiredItConfirmation = arg.IsRequiredItConfirmation;

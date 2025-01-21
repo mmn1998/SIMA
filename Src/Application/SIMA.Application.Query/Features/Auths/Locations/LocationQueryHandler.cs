@@ -8,8 +8,10 @@ using SIMA.Persistance.Read.Repositories.Features.Auths.Locations;
 
 namespace SIMA.Application.Query.Features.Auths.Locations;
 
-public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLocationQueryResult>>, IQueryHandler<GetAllLocationQuery, Result<IEnumerable<GetLocationQueryResult>>>
-    , IQueryHandler<GetParentLocationsByLocationTypeIdQuery, Result<List<GetParentLocationsByLocationTypeIdQueryResult>>>
+public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLocationQueryResult>>,
+    IQueryHandler<GetAllLocationQuery, Result<IEnumerable<GetLocationQueryResult>>>,
+    IQueryHandler<GetAllCountriesQuery, Result<IEnumerable<GetLocationQueryResult>>>,
+    IQueryHandler<GetParentLocationsByLocationTypeIdQuery, Result<List<GetParentLocationsByLocationTypeIdQueryResult>>>
 {
     private readonly ILocationQueryRepository _repository;
     private readonly IConfiguration _configuration;
@@ -70,5 +72,10 @@ public class LocationQueryHandler : IQueryHandler<GetLocationQuery, Result<GetLo
     {
         var response = await _repository.GetParentsByChildId(request.LocationTypeId);
         return Result.Ok(response);
+    }
+
+    public async Task<Result<IEnumerable<GetLocationQueryResult>>> Handle(GetAllCountriesQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetAllCountries();
     }
 }

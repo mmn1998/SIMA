@@ -1,8 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Args;
-using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Exceptions;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -19,7 +21,7 @@ public class PaymentType : Entity
     }
     private PaymentType(CreatePaymentTypeArg arg)
     {
-        Id = new PaymentTypeId(IdHelper.GenerateUniqueId());
+        Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;
@@ -94,4 +96,13 @@ public class PaymentType : Entity
     }
     private List<PaymentHistory> _paymentHistories = new();
     public ICollection<PaymentHistory> PaymentHistories => _paymentHistories;
+
+    private List<TrustyDraft> _trustyDrafts = new();
+    public ICollection<TrustyDraft> TrustyDrafts => _trustyDrafts;
+
+    private List<WageRate> _wageRates = new();
+    public ICollection<WageRate> WageRates => _wageRates;
+
+    private List<InquiryRequest> _inquiryRequests = new();
+    public ICollection<InquiryRequest> InquiryRequests => _inquiryRequests;
 }

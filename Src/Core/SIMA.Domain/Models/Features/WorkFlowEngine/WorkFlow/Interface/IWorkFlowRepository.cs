@@ -10,6 +10,7 @@ namespace SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Interface
     {
         Task<Entities.WorkFlow> GetById(long id);
         Task<Entities.WorkFlow> GetByIdJustWorkFlow(WorkFlowId workFlowId);
+        Task<Entities.WorkFlow> GetByIdForStep(long id);
         Task<Step> GetStepById(long id);
         Task<Entities.WorkFlow> GetWorkFlowByDomainId(long domainId);
         Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoById(long workFlowId);

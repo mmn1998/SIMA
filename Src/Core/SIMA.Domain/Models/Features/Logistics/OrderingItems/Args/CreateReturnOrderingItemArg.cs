@@ -4,8 +4,9 @@ public class CreateReturnOrderingItemArg
 {
     public long Id { get; set; }
     public long OrderingItemId { get; set; }
+    public int ReturnQuantity { get; set; }
     public long ReceiptDocumentId { get; set; }
-    public DateTime DeliveryDate { get; set; }
+    public DateTime ReturnDate { get; set; }
     public string? Description { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime CreatedAt { get; set; }

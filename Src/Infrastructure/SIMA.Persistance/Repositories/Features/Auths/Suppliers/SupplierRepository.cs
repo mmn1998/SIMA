@@ -21,10 +21,11 @@ public class SupplierRepository : Repository<Supplier>, ISupplierRepository
     public async Task<Supplier> GetById(SupplierId Id)
     {
         var entity = await _context.Suppliers
-            .Include(x=>x.SupplierAddressBooks)
-            .Include(x=>x.SupplierAccountLists)
-            .Include(x=>x.SupplierPhoneBooks)
-            .FirstOrDefaultAsync(x => x.Id == Id);
+                .Include(x=>x.SupplierAddressBooks)
+                .Include(x=>x.SupplierAccountLists)
+                .Include(x=>x.SupplierPhoneBooks)
+                .Include(x=>x.SupplierDocuments)
+                    .FirstOrDefaultAsync(x => x.Id == Id);
         entity.NullCheck();
         return entity ?? throw SimaResultException.NotFound;
     }

@@ -71,9 +71,6 @@ internal class IssueChangeHistoryConfiguration : IEntityTypeConfiguration<IssueC
         entity.HasOne(x => x.CurrentState).WithMany(p => p.IssueChangeHistories)
             .HasForeignKey(x => x.CurrentStateId)
             .OnDelete(DeleteBehavior.ClientSetNull);
-        entity.HasOne(x => x.CurrentWorkflow).WithMany(p => p.IssueChangeHistories)
-            .HasForeignKey(x => x.CurrentWorkflowId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
         entity.HasOne(x => x.MainAggregate).WithMany(p => p.IssueChangeHistories)
             .HasForeignKey(x => x.MainAggregateId)
             .OnDelete(DeleteBehavior.ClientSetNull);

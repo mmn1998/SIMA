@@ -10,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.Logistics.GoodsCategories.V1;
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "GoodsCategories")]
-[Authorize]
+//[Authorize]
 public class GoodsCategoriesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -27,7 +27,7 @@ public class GoodsCategoriesController : ControllerBase
         return await _mediator.Send(command);
     }
     [HttpPut]
-    [SimaAuthorize(Permissions.GoodsCategoriesPut)]
+    //[SimaAuthorize(Permissions.GoodsCategoriesPut)]
     public async Task<Result> Put([FromBody] ModifyGoodsCategoryCommand command)
     {
         return await _mediator.Send(command);

@@ -13,7 +13,7 @@ public class Progress : Entity
     private Progress()
     {
     }
-    private Progress(ProgressArg arg)
+    private Progress(ProgressArg arg, long? createdBy)
     {
         Id = new ProgressId(arg.Id);
         Name = arg.Name;
@@ -23,14 +23,14 @@ public class Progress : Entity
         WorkFlowId = new WorkFlowId(arg.WorkFlowId);
         BpmnId = arg.BpmnId;
         CreatedAt = arg.CreatedAt;
-        CreatedBy = arg.CreatedBy;
+        CreatedBy = createdBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public static Progress New(ProgressArg arg)
+    public static Progress New(ProgressArg arg, long? createdBy)
     {
-        return new Progress(arg);
+        return new Progress(arg, createdBy);
     }
-    public void Modify(ProgressArg arg)
+    public void Modify(ProgressArg arg, long? modifiedBy)
     {
         Name = arg.Name;
         Description = arg.Description;
@@ -38,7 +38,7 @@ public class Progress : Entity
         TargetId = arg.TargetId.HasValue ? new StepId(arg.TargetId.Value) : null;
         BpmnId = arg.BpmnId;
         //  HasStoreProcedure = arg.HasStoreProcedure;
-        ModifiedBy = arg.CreatedBy;
+        ModifiedBy = modifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
     public void SetStoreProcedures(List<ProgressStoreProcedureArg> progressStoreProcedureArgs)

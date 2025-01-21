@@ -3,6 +3,6 @@
 public class GetStepRequiredDocumentQueryResult
 {
     public long DocumentTypeId { get; set; }
-    public string DocumentTypeName { get; set; }
+    public string? DocumentTypeName { get; set; }
     public int Count { get; set; }
 }

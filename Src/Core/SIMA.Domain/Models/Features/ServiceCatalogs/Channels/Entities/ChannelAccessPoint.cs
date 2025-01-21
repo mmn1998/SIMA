@@ -15,10 +15,12 @@ public class ChannelAccessPoint : Entity
 
     public ChannelAccessPoint(CreateChannelAccessPointArg arg)
     {
-        Id = new ChannelAccessPointId(arg.Id);
-        ChannelId =new ChannelId(arg.ChannelId);
-        IpAddress = arg.IpAddress;
-        Port = arg.Port;
+        Id = new(arg.Id);
+        ChannelId = new(arg.ChannelId);
+        IpAddressFrom = arg.IpAddressFrom;
+        IpAddressTo = arg.IpAddressTo;
+        PortFrom = arg.PortFrom;
+        PortTo = arg.PortTo;
         ActivationDate = arg.ActivationDate;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -46,8 +48,10 @@ public class ChannelAccessPoint : Entity
     public ChannelAccessPointId Id { get; private set; }
     public virtual Channel Channel { get; private set; }
     public ChannelId ChannelId { get; private set; }
-    public string? IpAddress { get; private set; }
-    public string? Port { get; private set; }
+    public string? IpAddressTo { get; private set; }
+    public string? PortTo { get; private set; }
+    public string? IpAddressFrom { get; private set; }
+    public string? PortFrom { get; private set; }
     public DateTime? ActivationDate { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }

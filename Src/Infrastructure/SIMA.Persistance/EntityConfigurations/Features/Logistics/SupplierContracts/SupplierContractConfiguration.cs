@@ -25,7 +25,7 @@ public class SupplierContractConfiguration : IEntityTypeConfiguration<SupplierCo
                     .IsConcurrencyToken();
 
         entity.Property(x => x.ContractDocumentId)
-            .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
+            .HasConversion(x => x.Value, x => new LogisticsSupplyDocumentId(x));
         entity.HasOne(x => x.ContractDocument)
             .WithMany(x => x.SupplierContracts)
             .HasForeignKey(x => x.ContractDocumentId).OnDelete(DeleteBehavior.ClientSetNull);

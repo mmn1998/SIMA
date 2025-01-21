@@ -3,15 +3,16 @@ using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
-using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Args;
-using SIMA.Domain.Models.Features.BranchManagement.Branches.Exceptions;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.ValueObjects;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.Reconsilations.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -115,6 +116,16 @@ public class Branch : Entity
     public virtual BranchType BranchType { get; private set; }
     private List<Position> _positions = new();
     public ICollection<Position> Positions => _positions;
+
+    //private List<Reconsilation> _reconsilations = new();
+    //public ICollection<Reconsilation> Reconsilations => _reconsilations;
+
+    private List<TrustyDraft> _trustyDrafts = new();
+    public ICollection<TrustyDraft> TrustyDrafts => _trustyDrafts;
+
+    private List<InquiryRequest> _inquiryRequests = new();
+    public ICollection<InquiryRequest> InquiryRequests => _inquiryRequests;
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;

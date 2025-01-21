@@ -47,7 +47,7 @@ public class DocumentMapper : Profile
         _serviceProvider = serviceProvider;
         _root = webHost.ContentRootPath;
     }
-    public static async Task<List<CreateDocumentArg>> Map(List<CreateDocumentCommand> args, long userId)
+    public static async Task<List<CreateDocumentArg>> Map(List<CreateDocumentCommand> args, long userId, long companyId)
     {
         var result = new List<CreateDocumentArg>();
         foreach (var arg in args)
@@ -59,6 +59,7 @@ public class DocumentMapper : Profile
             item.AttachStepId = arg.AttachStepId;
             item.SourceId = arg.SourceId;
             item.CreatedBy = userId;
+            item.CompanyId = companyId;
             item.DocumentTypeId = arg.DocumentTypeId.HasValue ? arg.DocumentTypeId.Value : 0;
             item.ActiveStatusId = (long)ActiveStatusEnum.Active;
             item.FileExtensionId = arg.FileExtensionId.HasValue ? arg.FileExtensionId.Value : 0;

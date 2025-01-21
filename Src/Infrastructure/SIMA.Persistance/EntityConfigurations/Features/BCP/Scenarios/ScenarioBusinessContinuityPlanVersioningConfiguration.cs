@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities;
-using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanVersionings.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios
 {
@@ -13,7 +12,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios
             entity.Property(x => x.Id)
                 .HasConversion(
                  v => v.Value,
-                 v => new ScenarioBusinessContinuityPlanVersioningId(v)).ValueGeneratedNever();
+                 v => new(v)).ValueGeneratedNever();
             entity.HasKey(i => i.Id);
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -26,7 +25,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios
             entity.Property(x => x.ScenarioId)
           .HasConversion(
           x => x.Value,
-          x => new ScenarioId(x)
+          x => new(x)
           );
             entity.HasOne(x => x.Scenario)
                 .WithMany(x => x.ScenarioBusinessContinuityPlanVersionings)
@@ -35,8 +34,9 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios
             entity.Property(x => x.BusinessContinuityPlanVersioningId)
           .HasConversion(
           x => x.Value,
-          x => new BusinessContinuityPlanVersioningId(x)
+          x => new(x)
           );
+
             entity.HasOne(x => x.BusinessContinuityPlanVersioning)
                 .WithMany(x => x.ScenarioBusinessContinuityPlanVersionings)
                 .HasForeignKey(x => x.BusinessContinuityPlanVersioningId);

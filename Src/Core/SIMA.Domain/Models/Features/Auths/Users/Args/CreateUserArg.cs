@@ -16,5 +16,6 @@ public class CreateUserArg
     public long ActiveStatusId { get; set; }
     public string IsFirstLogin { get; set; }
     public string IsLocked { get; set; }
+    public string IsSendOTP { get; set; }
 
 }

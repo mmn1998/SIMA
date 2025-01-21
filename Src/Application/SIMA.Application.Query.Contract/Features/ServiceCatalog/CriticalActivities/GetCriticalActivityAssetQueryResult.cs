@@ -45,4 +45,5 @@ public class GetCriticalActivityAssetQueryResult
     public long? PhysicalLocationId { get; set; }
     public string? PhysicalLocationName { get; set; }
     public string? PhysicalLocationCode { get; set; }
+    public string? Title { get; set; }
 }

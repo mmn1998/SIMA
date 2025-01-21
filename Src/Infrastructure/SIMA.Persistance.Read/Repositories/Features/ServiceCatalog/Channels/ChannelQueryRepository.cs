@@ -25,12 +25,14 @@ SELECT
       ,c.[Scope]
       ,c.[Description]
       ,c.[ServiceStatusId]
+	  ,SS.Name ServiceStatusName
       ,c.[InServiceDate]
       ,c.[CreatedAt]
 	  ,a.[Name] ActiveStatus
   FROM [ServiceCatalog].[Channel] C
   inner join Basic.ActiveStatus A on c.ActiveStatusId = a.ID and C.ActiveStatusId <> 3
-  where c.ActiveStatusId<>3;
+  left join ServiceCatalog.ServiceStatus SS on SS.Id = C.ServiceStatusId and SS.ActiveStatusId<>3
+  where c.ActiveStatusId<>3
 ";
         string queryCount = $@" WITH Query as(
 						                    {mainQuery}
@@ -96,16 +98,16 @@ SELECT
             {
                 var count = await multi.ReadFirstAsync<int>();
                 var response = await multi.ReadAsync<GetChannelQueryResult>();
-                foreach (var item in response)
-                {
-                    using (var multiForRelated = await connection.QueryMultipleAsync(relatedQuery, new { Id = item.Id }))
-                    {
-                        item.ChannelResponsibleList = await multiForRelated.ReadAsync<GetChannelResponsibleQuery>();
-                        item.ProductChannelList = await multiForRelated.ReadAsync<GetProductChannelQuery>();
-                        item.ChannelUserTypeList = await multiForRelated.ReadAsync<GetChannelUserTypeQuery>();
-                        item.ChannelAccessPointList = await multiForRelated.ReadAsync<GetChannelAccessPointQuery>();
-                    }
-                }
+                //foreach (var item in response)
+                //{
+                //    using (var multiForRelated = await connection.QueryMultipleAsync(relatedQuery, new { Id = item.Id }))
+                //    {
+                //        item.ChannelResponsibleList = await multiForRelated.ReadAsync<GetChannelResponsibleQuery>();
+                //        item.ProductChannelList = await multiForRelated.ReadAsync<GetProductChannelQuery>();
+                //        item.ChannelUserTypeList = await multiForRelated.ReadAsync<GetChannelUserTypeQuery>();
+                //        item.ChannelAccessPointList = await multiForRelated.ReadAsync<GetChannelAccessPointQuery>();
+                //    }
+                //}
                 return Result.Ok(response, request, count);
             }
         }
@@ -159,11 +161,22 @@ SELECT
   where c.Id = @Id and c.ActiveStatusId<>3;
 
 SELECT 
-        cap.IpAddress
-		,cap.Port
+        cap.IpAddressFrom
+		,cap.PortFrom		
+        ,cap.IpAddressTo
+		,cap.PortTo
   FROM [ServiceCatalog].[Channel] C
   inner join ServiceCatalog.ChannelAccessPoint CAP on CAP.ChannelId = c.Id and CAP.ActiveStatusId<>3
   where c.Id = @Id and c.ActiveStatusId<>3
+
+SELECT 
+
+		CUT.ServiceId
+		,UT.[Name] ServiceName
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ServiceChanel CUT on CUT.ChannelId = c.Id and CUT.ActiveStatusId<>3
+  inner join ServiceCatalog.Service UT on ut.Id = CUT.ServiceId
+  where c.Id = @Id and c.ActiveStatusId<>3;
 ";
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -176,6 +189,7 @@ SELECT
                 response.ProductChannelList = await multi.ReadAsync<GetProductChannelQuery>();
                 response.ChannelUserTypeList = await multi.ReadAsync<GetChannelUserTypeQuery>();
                 response.ChannelAccessPointList = await multi.ReadAsync<GetChannelAccessPointQuery>();
+                response.ServiceChannelList = await multi.ReadAsync<GetServiceChannelQuery>();
             }
 
         }

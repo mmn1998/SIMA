@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.Entities;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.OrderingItems;
 
@@ -29,5 +30,11 @@ public class OrderingItemConfiguration : IEntityTypeConfiguration<OrderingItem>
         entity.HasOne(x => x.Ordering)
             .WithMany(x => x.OrderingItems)
             .HasForeignKey(x => x.OrderingId).OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.LogisticsSupplyGoodsId)
+         .HasConversion(x => x.Value, x => new LogisticsSupplyGoodsId(x));
+        entity.HasOne(x => x.LogisticsSupplyGoods)
+            .WithMany(x => x.OrderingItems)
+            .HasForeignKey(x => x.LogisticsSupplyGoodsId).OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

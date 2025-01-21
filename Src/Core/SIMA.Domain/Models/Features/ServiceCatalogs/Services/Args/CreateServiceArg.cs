@@ -11,12 +11,11 @@ public class CreateServiceArg
     public string? ServiceWorkflowBpmn { get;  set; }
     public string? ContinuousImprovement { get;  set; }
     public string? FeedbackUrl { get;  set; }
-    public long? TechnicalSupervisorDepartmentId { get; set; }
+    public long TechnicalSupervisorDepartmentId { get; set; }
     public long ServiceCategoryId { get; set; }
     public long ServicePriorityId { get; set; }
     public long ActiveStatusId { get; set; }
     public long? ServiceStatusId { get; set; }
-    public DateOnly? InServiceDate { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
     public string? IsInternalService { get; set; }

@@ -13,9 +13,8 @@ namespace SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper
     {
         private static ISimaIdentity _simaIdentity;
 
-        public MeetingMapper(ISimaIdentity simaIdentity)
+        public MeetingMapper()
         {
-            _simaIdentity = simaIdentity;
 
             CreateMap<CreateMeetingCommands, CreateMeetingArg>()
            .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
@@ -24,8 +23,8 @@ namespace SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper
            //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
            .ForMember(dest => dest.Code, act => act.MapFrom(source => CreateCode() + "/" + source.MeetingTurn))
-           .ForMember(dest => dest.Labels, act => act.MapFrom(source => GetLabels(source.Lable)))
-           .ForMember(dest => dest.NewSubject, act => act.MapFrom(source => GetSubject(source.NewSubject)));
+           .ForMember(dest => dest.Labels, act => act.MapFrom(source => GetLabels(source.Lable)));
+           //.ForMember(dest => dest.NewSubject, act => act.MapFrom(source => GetSubject(source.NewSubject)));
 
             
             CreateMap<long, CreateMeetingLabelArg>()
@@ -62,24 +61,7 @@ namespace SIMA.Application.Feaatures.SecurityCommitees.Meetings.Mapper
         {
             return labels.Split(",").ToList();
         }
-        public List<CreateSubjectArg> GetSubject(List<CreateSubjectCommand> subjectCommands)
-        {
-            var subjectArgs = new List<CreateSubjectArg>();
-            foreach (var command in subjectCommands)
-            {
-                var subject = new CreateSubjectArg
-                {
-                    ActiveStatusId = (long)ActiveStatusEnum.Active,
-                    CreatedAt = DateTime.Now,
-                    CreatedBy = _simaIdentity.UserId,
-                    Id = IdHelper.GenerateUniqueId(),
-                    Title = command.Title,
-                    Description = command.Description,
-                };
-                subjectArgs.Add(subject);
-            }
-            return subjectArgs;
-        }
+        
 
         private string CreateCode()
         {

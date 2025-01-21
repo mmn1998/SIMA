@@ -12,8 +12,8 @@ public class SupplierContract : Entity
     public string? ContractNumber { get; private set; }
     public CandidatedSupplierId CandidatedSupplierId { get; private set; }
     public virtual CandidatedSupplier CandidatedSupplier { get; private set; }
-    public LogisticsRequestDocumentId ContractDocumentId { get; private set; }
-    public virtual LogisticsRequestDocument ContractDocument { get; private set; }
+    public LogisticsSupplyDocumentId? ContractDocumentId { get; private set; }
+    public virtual LogisticsSupplyDocument? ContractDocument { get; private set; }
     public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

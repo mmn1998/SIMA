@@ -37,6 +37,14 @@ namespace SIMA.Persistance.Repositories.Features.IssueManagement
             return result;
         }
 
+        public async Task<List<Issue>> GetByStepIds(List<StepId> ids)
+        {
+            var result = await _context.Issues.Where(x => ids.Contains(x.CurrenStepId))
+                .Include(x => x.Meetings)
+                .ToListAsync();
+            return result;
+        }
+
         public async Task<long> GetHighestPriority()
         {
             var result = await _context.IssuePriorities.OrderBy(it => it.Ordering).FirstOrDefaultAsync();

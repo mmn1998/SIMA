@@ -26,9 +26,13 @@ public class ChannelAccessPointConfiguration : IEntityTypeConfiguration<ChannelA
         entity.Property(e => e.ActivationDate)
                 .HasColumnType("datetime");
 
-        entity.Property(e => e.IpAddress).HasMaxLength(20).IsUnicode().HasColumnType("nvarchar"); 
+        entity.Property(e => e.IpAddressFrom).HasMaxLength(20).IsUnicode().HasColumnType("nvarchar"); 
 
-        entity.Property(e => e.Port).HasMaxLength(5).IsUnicode().HasColumnType("nvarchar");
+        entity.Property(e => e.PortFrom).HasMaxLength(5).IsUnicode().HasColumnType("nvarchar");
+
+        entity.Property(e => e.IpAddressTo).HasMaxLength(20).IsUnicode().HasColumnType("nvarchar"); 
+
+        entity.Property(e => e.PortTo).HasMaxLength(5).IsUnicode().HasColumnType("nvarchar");
 
         entity.Property(e => e.ModifiedAt)
                     .IsRowVersion()

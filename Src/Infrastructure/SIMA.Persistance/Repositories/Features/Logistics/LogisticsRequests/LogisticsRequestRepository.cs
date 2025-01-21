@@ -20,15 +20,26 @@ namespace SIMA.Persistance.Repositories.Features.Logistics.LogisticsRequests
 
         public async Task<LogisticsRequest> GetById(long Id)
         {
-            var entity = await _context.LogisticsRequests.Include(x=>x.LogisticsRequestGoods).Include(x=>x.LogisticsRequestDocuments).FirstOrDefaultAsync(x => x.Id ==new LogisticsRequestId(Id));
+            var entity = await _context.LogisticsRequests.Include(x => x.LogisticsRequestGoods).Include(x => x.LogisticsRequestDocuments).FirstOrDefaultAsync(x => x.Id == new LogisticsRequestId(Id));
             entity.NullCheck();
             return entity ?? throw SimaResultException.NotFound;
         }
 
-        public async Task<LogisticsRequest> GetLastLogisticsRequest()
+        public async Task<LogisticsRequest> GetByLogisticsRequestGoodsId(long requestGoodsId)
         {
-            var entity =await _context.LogisticsRequests.OrderByDescending(x=>x.CreatedAt).FirstOrDefaultAsync();
+            var entity = await _context.LogisticsRequests
+            .Include(x => x.LogisticsRequestGoods)
+            .FirstOrDefaultAsync(lr => lr.LogisticsRequestGoods.Any(s => s.Id == new LogisticsRequestGoodsId(requestGoodsId)));
+
+
             return entity;
         }
+
+        public async Task<LogisticsRequest> GetLastLogisticsRequest()
+        {
+            var entity = await _context.LogisticsRequests.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+            return entity;
+        }
+
     }
 }

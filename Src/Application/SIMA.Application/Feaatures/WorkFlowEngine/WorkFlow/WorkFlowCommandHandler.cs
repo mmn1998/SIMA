@@ -79,32 +79,17 @@ ICommandHandler<CreateStepCommand, Result<long>>, ICommandHandler<Contract.Featu
         {
             var workflow = await _repository.GetById((long)request.WorkFlowId);
             var arg = _mapper.Map<StepArg>(request);
-            arg.UserId = _simaIdentity.UserId;
-            var step = workflow.AddStep(arg);
-
-
-            List<CreateWorkFlowActorStepArg> listActorStepArg = new List<CreateWorkFlowActorStepArg>();
-            foreach (var item in request.ActorId)
-            {
-                CreateWorkFlowActorStepArg actorStepArg = new CreateWorkFlowActorStepArg();
-                actorStepArg.WorkFlowActorId = item;
-                actorStepArg.StepId = step.Id.Value;
-                actorStepArg.ActiveStatusId = (long)ActiveStatusEnum.Active;
-                actorStepArg.Id = IdHelper.GenerateUniqueId();
-                listActorStepArg.Add(actorStepArg);
-            }
-
-            step.AddActorStep(listActorStepArg);
+            var step = workflow.AddStep(arg, _simaIdentity.UserId);
             await _unitOfWork.SaveChangesAsync();
 
             return Result.Ok(step.Id.Value);
         }
         public async Task<Result<long>> Handle(ModifyStepCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _repository.GetById((long)request.WorkFlowId);
+            var entity = await _repository.GetByIdForStep((long)request.WorkFlowId);
             var arg = _mapper.Map<ModifyStepArgs>(request);
             arg.ModifiedBy = _simaIdentity.UserId;
-            await entity.ModifyStep(arg);
+            entity.ModifyStep(arg, arg.ModifiedBy.Value);
 
             if (request.ApprovalOptions is not null && request.ApprovalOptions.Count > 0)
             {

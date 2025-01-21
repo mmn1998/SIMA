@@ -7,6 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.DMS.Documents;
 
 public interface IDocumentQueryRepository : IQueryRepository
 {
-    Task<GetDocumentResult> GetForDownload(long documentId);
+    Task<GetDocumentResult> GetForDownload(long documentId, bool? forIssueDetail = false);
     Task<Result<IEnumerable<GetAllDocumentQueryResult>>> GetAll(GetAllDocumentsQuery request);
 }

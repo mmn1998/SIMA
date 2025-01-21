@@ -1,14 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Auths.Permissions;
+using SIMA.Domain.Models.Features.Auths.Permissions.Args;
 using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.Args;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 using SIMA.Resources;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace SIMA.Persistance.Repositories.Features.Auths;
 
@@ -66,6 +70,39 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
         return true;
     }
 
+    public async Task<List<CreatePermissionArg>> AddPermissionNotExist()
+    {
+        var enumList = Enum.GetValues(typeof(PermissionForAddEnum)).Cast<PermissionForAddEnum>();
+        var AddPermissionList = new List<CreatePermissionArg>();
+        foreach (var enumValue in enumList)
+        {
+            
+            var enumField = typeof(PermissionForAddEnum).GetField(enumValue.ToString());
+            var eunmCode = Convert.ToInt32(enumValue);
+            var displayAttribute = enumField.GetCustomAttribute<DisplayAttribute>();
+
+            var name = enumValue.ToString();
+            var groupName = displayAttribute?.GroupName ?? string.Empty;
+            var description = displayAttribute?.Description ?? string.Empty;
+
+            var exists = await _context.Permissions.Where(s => s.Code == eunmCode.ToString()).FirstOrDefaultAsync();
+            if (exists is null)
+            {
+                CreatePermissionArg arg = new CreatePermissionArg();
+
+                arg.Name = description;
+                arg.Code = eunmCode.ToString();
+                arg.EnglishKey = name;
+                arg.DomainId = 17;
+                arg.CreatedAt = DateTime.Now;
+                arg.CreatedBy = 9999;
+                arg.ActiveStatusId = 1;
+                AddPermissionList.Add(arg);
+            }
+            
+        }
+        return AddPermissionList;
+    }
     public async Task<Permission> GetById(long id)
     {
         var entity = await _context.Permissions.FirstOrDefaultAsync(x => x.Id == new PermissionId(id));

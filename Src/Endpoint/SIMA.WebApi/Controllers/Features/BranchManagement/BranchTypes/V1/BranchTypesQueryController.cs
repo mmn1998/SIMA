@@ -10,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.BranchManagement.BranchTypes.V1
 {
     [Route("[controller]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "BranchTypes")]
+    [ApiExplorerSettings(GroupName = "Branch/BranchTypes")]
     [Authorize]
     public class BranchTypesQueryController : ControllerBase
     {

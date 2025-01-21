@@ -36,5 +36,19 @@ public class LogisticsRequestQueryController : ControllerBase
         return await _mediator.Send(result);
     }
 
+    [HttpGet("GetLogisticsRequestGoods/{logisticsRequestId}")]
+    public async Task<Result> GetLogisticsRequestGoodsFiltered([FromRoute] long logisticsRequestId)
+    {
+        var query = new GetLogisticsRequestGoodsQuery { LogisticsRequestId = logisticsRequestId };
+        return await _mediator.Send(query);
+    }
+    [HttpGet("GetLogisticsRequestCodes")]
+    public async Task<Result> GetLogisticsRequestCode()
+    {
+        var query = new GetLogisticsRequestCodeQuery();
+        return await _mediator.Send(query);
+    }
+
+
 }
 

@@ -2,15 +2,14 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.BranchManagement.CurrencyTypes;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.BranchManagement.CurencyTypes.V1;
 
-[Route("[controller]")]
+[Route("branch/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "CurrencyTypes")]
+[ApiExplorerSettings(GroupName = "Branch/CurrencyTypes")]
 [Authorize]
 public class CurrencyTypesQueryController : ControllerBase
 {

@@ -24,5 +24,11 @@ namespace SIMA.Persistance.Repositories.Features.BranchManagement.CurrencyTypes
             entity.NullCheck();
             return entity;
         }
+
+        public async Task<CurrencyType> GetByCode(string code)
+        {
+            var entity = await _context.CurrencyTypes.FirstOrDefaultAsync(pt => pt.Code == code);
+            return entity;
+        }
     }
 }

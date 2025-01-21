@@ -17,8 +17,6 @@ public class StepArg
     public string? UIPropertyBoxTitle { get; set; }
     public long? ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
-    public long? UserId { get; set; }
-
     public List<ProgressArg> CreateProgresses { get; set; } = new();
     public List<CreateWorkFlowActorStepArg> ActorStepArgs { get; set; } = new();
 }

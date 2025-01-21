@@ -15,6 +15,7 @@ public class BusinessContinuityPlanCriticalActivity : Entity
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
+        CriticalActivityId = new(arg.CriticalActivityId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -25,10 +26,23 @@ public class BusinessContinuityPlanCriticalActivity : Entity
     }
     public void Modify(ModifyBusinessContinuityPlanCriticalActivityArg arg)
     {
+        CriticalActivityId = new(arg.CriticalActivityId);
         BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
+    }
+
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
     }
     public BusinessContinuityPlanCriticalActivityId Id { get; private set; }
     public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
@@ -40,10 +54,5 @@ public class BusinessContinuityPlanCriticalActivity : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    public void Delete(long userId)
-    {
-        ModifiedBy = userId;
-        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
-        ActiveStatusId = (long)ActiveStatusEnum.Delete;
-    }
+   
 }

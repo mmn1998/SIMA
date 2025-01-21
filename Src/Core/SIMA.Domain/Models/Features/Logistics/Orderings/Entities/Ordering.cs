@@ -1,5 +1,4 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
@@ -18,8 +17,8 @@ public class Ordering : Entity
     public virtual LogisticsSupply LogisticsSupply { get; private set; }
     public CandidatedSupplierId CandidatedSupplierId { get; private set; }
     public virtual CandidatedSupplier CandidatedSupplier { get; private set; }
-    public LogisticsRequestDocumentId ReceiptDocumentId { get; private set; }
-    public virtual LogisticsRequestDocument ReceiptDocument { get; private set; }
+    public LogisticsSupplyDocumentId? ReceiptDocumentId { get; private set; }
+    public virtual LogisticsSupplyDocument? ReceiptDocument { get; private set; }
     public string? ReceiptNumber { get; private set; }
     public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }

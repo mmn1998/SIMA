@@ -3,6 +3,7 @@
 public class CreateProductResponsibleArg
 {
     public long Id { get; set; }
+    public long ProductId { get; set; }
     public long ResponsibleTypeId { get; set; }
     public long ResponsibleId { get; set; }
     public long ActiveStatusId { get; set; }

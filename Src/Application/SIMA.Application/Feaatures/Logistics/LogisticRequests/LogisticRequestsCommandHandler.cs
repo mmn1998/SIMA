@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MediatR;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Logistics.LogisticRequests;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Interfaces;
@@ -10,11 +9,13 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsStatues;
 
 namespace SIMA.Application.Feaatures.Logistics.LogisticRequests;
 public class LogisticRequestsCommandHandler : ICommandHandler<CreateLogisticRequestCommand, Result<long>>, ICommandHandler<ModifyLogisticsRequestCommand, Result<long>>, ICommandHandler<DeleteLogisticRequestCommand, Result<long>>
 {
     private readonly ILogisticsRequestRepository _repository;
+    private readonly IGoodsStatusQueryRepository _goodsStatusQueryRepository;
     private readonly IIssueRepository _issueRepository;
     private readonly ILogisticsRequestDomainService _service;
     private readonly IUnitOfWork _unitOfWork;
@@ -22,7 +23,7 @@ public class LogisticRequestsCommandHandler : ICommandHandler<CreateLogisticRequ
     private readonly IMapper _mapper;
 
     public LogisticRequestsCommandHandler(ILogisticsRequestRepository repository, ILogisticsRequestDomainService service,
-        IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper, IIssueRepository issueRepository)
+        IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper, IIssueRepository issueRepository  , IGoodsStatusQueryRepository goodsStatusQueryRepository)
     {
         _repository = repository;
         _service = service;
@@ -41,12 +42,16 @@ public class LogisticRequestsCommandHandler : ICommandHandler<CreateLogisticRequ
                 arg.DueDate = request.IssueInforamation.DueDate.ToMiladiDate();
             arg.CreatedBy = _simaIdentity.UserId;
             #region GenerateCode
+
             var lastRequest = await _repository.GetLastLogisticsRequest();
+
             if (lastRequest != null)
                 arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
             else
                 arg.Code = "101";
+
             #endregion
+            arg.RequesterId = request.IssueInforamation.RequesterId;
             var entity = await LogisticsRequest.Create(arg, _service);
 
             var goodsArg = _mapper.Map<List<CreateLogisticsRequestGoodsArg>>(request.GoodsList);

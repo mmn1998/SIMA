@@ -7,8 +7,8 @@ public class GetIssueHistoriesByIssueIdQueryResult
     public long Id { get; set; }
     public string Name { get; set; }
     public long? IssueId { get; set; }
-    public long SourceStateId { get; set; }
-    public long TargetStateId { get; set; }
+    //public long SourceStateId { get; set; } // طبق گقته تیم تحلیل
+    //public long TargetStateId { get; set; } // طبق گقته تیم تحلیل
     public long SourceStepId { get; set; }
     public long TargetStepId { get; set; }
     public long PerformerUserId { get; set; }

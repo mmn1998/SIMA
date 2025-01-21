@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MediatR;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.WorkFlowEngine.ApprovalOptions;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Args;
@@ -8,25 +9,27 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
-namespace SIMA.Application.Feaatures.WorkFlowEngine.ApprovalOptions
+namespace SIMA.Application.Feaatures.WorkFlowEngine.ApprovalOptions;
+
+public class ApprovalOptionCommandHandler : ICommandHandler<CreateApprovalOptionCommand, Result<long>>, ICommandHandler<ModifyApprovalOptionCommand, Result<long>>
+, ICommandHandler<DeleteApprovalOptionCommand, Result<long>>
 {
-    public class ApprovalOptionCommandHandler :ICommandHandler<CreateApprovalOptionCommand, Result<long>>, ICommandHandler<ModifyApprovalOptionCommand, Result<long>>
-    , ICommandHandler<DeleteApprovalOptionCommand, Result<long>>
-    {
-        private readonly IApprovalOptionRepository _repository;
+    private readonly IApprovalOptionRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IApprovalOptionDomainService _service;
     private readonly ISimaIdentity _simaIdentity;
+    private readonly IMediator _mediator;
 
     public ApprovalOptionCommandHandler(IApprovalOptionRepository repository, IUnitOfWork unitOfWork,
-        IMapper mapper, IApprovalOptionDomainService service, ISimaIdentity simaIdentity)
+        IMapper mapper, IApprovalOptionDomainService service, ISimaIdentity simaIdentity, IMediator mediator)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _service = service;
         _simaIdentity = simaIdentity;
+        _mediator = mediator;
     }
     public async Task<Result<long>> Handle(CreateApprovalOptionCommand request, CancellationToken cancellationToken)
     {
@@ -51,9 +54,8 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.ApprovalOptions
     public async Task<Result<long>> Handle(DeleteApprovalOptionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        long userId = _simaIdentity.UserId;entity.Delete(userId);
+        long userId = _simaIdentity.UserId; entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-}
 }

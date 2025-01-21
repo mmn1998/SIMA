@@ -26,7 +26,7 @@ public class TenderResultConfiguration : IEntityTypeConfiguration<TenderResult>
                     .IsConcurrencyToken();
 
         entity.Property(x => x.TenderDocumentId)
-            .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
+            .HasConversion(x => x.Value, x => new LogisticsSupplyDocumentId(x));
         entity.HasOne(x => x.TenderDocument)
             .WithMany(x => x.TenderResults)
             .HasForeignKey(x => x.TenderDocumentId).OnDelete(DeleteBehavior.ClientSetNull);

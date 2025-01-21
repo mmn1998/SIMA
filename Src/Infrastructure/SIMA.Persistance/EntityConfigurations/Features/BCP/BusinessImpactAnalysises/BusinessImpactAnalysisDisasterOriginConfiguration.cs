@@ -30,39 +30,40 @@ public class BusinessImpactAnalysisDisasterOriginConfiguration : IEntityTypeConf
         entity.Property(x => x.ConsequenceId)
             .HasConversion(
             x => x.Value,
-            x => new ConsequenceId(x)
+            x => new(x)
             );
         entity.HasOne(x => x.Consequence)
             .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
             .HasForeignKey(x => x.ConsequenceId);
-        
+
+        entity.Property(x => x.OriginId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.Origin)
+            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
+            .HasForeignKey(x => x.OriginId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
         entity.Property(x => x.BusinessImpactAnalysisId)
             .HasConversion(
             x => x.Value,
-            x => new BusinessImpactAnalysisId(x)
+            x => new(x)
             );
         entity.HasOne(x => x.BusinessImpactAnalysis)
             .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
             .HasForeignKey(x => x.BusinessImpactAnalysisId);
-        
-        entity.Property(x => x.HappeningPossibilityId)
-            .HasConversion(
-            x => x.Value,
-            x => new HappeningPossibilityId(x)
-            );
-        entity.HasOne(x => x.HappeningPossibility)
-            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
-            .HasForeignKey(x => x.HappeningPossibilityId);
-        
+
         entity.Property(x => x.RecoveryPointObjectiveId)
             .HasConversion(
             x => x.Value,
-            x => new RecoveryPointObjectiveId(x)
+            x => new(x)
             );
         entity.HasOne(x => x.RecoveryPointObjective)
             .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
             .HasForeignKey(x => x.RecoveryPointObjectiveId);
-        
-        
+
+
     }
 }

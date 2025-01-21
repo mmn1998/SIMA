@@ -31,4 +31,9 @@ public class CriticalActivityRepository : Repository<CriticalActivity>, ICritica
         entity.NullCheck();
         return entity ?? throw SimaResultException.NotFound;
     }
+    public async Task<CriticalActivity?> GetLastCriticalActivity()
+    {
+        var entity = await _context.CriticalActivities.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+        return entity;
+    }
 }

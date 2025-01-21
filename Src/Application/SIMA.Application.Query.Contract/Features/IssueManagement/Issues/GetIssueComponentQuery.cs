@@ -5,6 +5,6 @@ namespace SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 
 public class GetIssueComponentQuery : IQuery<Result<GetIssueComponentQueryResult>>
 {
-    public long Id { get; set; }
+    public long SourceId { get; set; }
     public long IssueId { get; set; }
 }

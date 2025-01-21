@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement
 {
-    public  class ServiceRiskImpactConfiguration : IEntityTypeConfiguration<ServiceRiskImpact>
+    public class ServiceRiskImpactConfiguration : IEntityTypeConfiguration<ServiceRiskImpact>
     {
         public void Configure(EntityTypeBuilder<ServiceRiskImpact> entity)
         {
@@ -33,6 +33,19 @@ namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement
             entity.HasOne(d => d.RiskImpact).WithMany(p => p.ServiceRiskImpacts)
                 .HasForeignKey(d => d.RiskImpactId)
                 .HasConstraintName("FK_ServiceRiskImpact_ServiceRiskImpact");
+
+            entity.Property(x => x.ServiceRiskId)
+                .HasConversion(
+                v => v.Value,
+                v => new(v)
+                );
+
+            entity.HasOne(d => d.ServiceRisk).WithMany(p => p.ServiceRiskImpacts)
+                .HasForeignKey(d => d.ServiceRiskId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+
         }
     }
 }

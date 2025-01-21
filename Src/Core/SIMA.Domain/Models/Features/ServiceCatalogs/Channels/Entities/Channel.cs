@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.UserTypes.Interfaces;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Contracts;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
 using SIMA.Framework.Common.Exceptions;
@@ -80,8 +81,10 @@ public class Channel : Entity, IAggregateRoot
         DeleteChannelResponsibles(userId);
         DeleteChannelUserTypes(userId);
         DeleteProductChannels(userId);
+        DeleteServiceChannels(userId);
         #endregion
     }
+
     #region DeleteMethods
     public void DeleteProductChannels(long userId)
     {
@@ -111,7 +114,15 @@ public class Channel : Entity, IAggregateRoot
             item.Delete(userId);
         }
     }
+    public void DeleteServiceChannels(long userId)
+    {
+        foreach (var item in _serviceChannels)
+        {
+            item.Delete(userId);
+        }
+    }
     #endregion
+
     #region AddMethods
     public void AddProductChannels(List<CreateProductChannelArg> args)
     {
@@ -119,6 +130,14 @@ public class Channel : Entity, IAggregateRoot
         {
             var entity = ProductChannel.Create(arg);
             _productChannels.Add(entity);
+        }
+    }
+    public void AddServiceChannels(List<CreateServiceChannelArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ServiceChannel.Create(arg);
+            _serviceChannels.Add(entity);
         }
     }
     public void AddChannelResponsibles(List<CreateChannelResponsibleArg> args)
@@ -146,11 +165,12 @@ public class Channel : Entity, IAggregateRoot
         }
     }
     #endregion
+
     #region ModifyMethods
 
     public void ModifyProductChannels(List<CreateProductChannelArg> args)
     {
-        var activeEntities = _productChannels.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _productChannels.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ProductId == x.ProductId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ProductId.Value == x.ProductId));
         foreach (var arg in ShouldAddedArgs)
@@ -173,9 +193,9 @@ public class Channel : Entity, IAggregateRoot
     }
     public void ModifyChannelResponsibles(List<CreateChannelResponsibleArg> args)
     {
-        var activeEntities = _channelResponsibles.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
-        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ResponsibleId == x.ResponsibleId.Value));
-        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ResponsibleId.Value == x.ResponsibleId));
+        var activeEntities = _channelResponsibles.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ResponsibleId == x.ResponsibleId.Value && c.ResponsibleTypeId == x.ResponsibleTypeId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ResponsibleId.Value == x.ResponsibleId && c.ResponsibleTypeId.Value == x.ResponsibleTypeId));
         foreach (var arg in ShouldAddedArgs)
         {
             var entity = _channelResponsibles.FirstOrDefault(x => x.ResponsibleId.Value == arg.ResponsibleId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
@@ -196,7 +216,7 @@ public class Channel : Entity, IAggregateRoot
     }
     public void ModifyChannelUserTypes(List<CreateChannelUserTypeArg> args)
     {
-        var activeEntities = _channelUserTypes.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
+        var activeEntities = _channelUserTypes.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.UserTypeId == x.UserTypeId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.UserTypeId.Value == x.UserTypeId));
         foreach (var arg in ShouldAddedArgs)
@@ -219,12 +239,12 @@ public class Channel : Entity, IAggregateRoot
     }
     public void ModifyChannelAccessPoints(List<CreateChannelAccessPointArg> args)
     {
-        var activeEntities = _channelAccessPoints.Where(x => x.ActiveStatusId == (long)ActiveStatusEnum.Delete);
-        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.IpAddress == x.IpAddress && x.Port == c.Port));
-        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.IpAddress == x.IpAddress && x.Port == c.Port));
+        var activeEntities = _channelAccessPoints.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.IpAddressFrom == x.IpAddressFrom && x.PortFrom == c.PortFrom));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.IpAddressFrom == x.IpAddressFrom && x.PortFrom == c.PortFrom));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _channelAccessPoints.FirstOrDefault(x => x.IpAddress == arg.IpAddress && x.Port == arg.Port && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _channelAccessPoints.FirstOrDefault(x => x.IpAddressFrom == arg.IpAddressFrom && x.PortFrom == arg.PortFrom && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);
@@ -240,7 +260,31 @@ public class Channel : Entity, IAggregateRoot
             entity.Delete(args[0].CreatedBy);
         }
     }
+    public void ModifyServiceChannels(List<CreateServiceChannelArg> args)
+    {
+        var activeEntities = _serviceChannels.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ServiceId == x.ServiceId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ServiceId.Value == x.ServiceId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _serviceChannels.FirstOrDefault(x => x.ServiceId.Value == arg.ServiceId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ServiceChannel.Create(arg);
+                _serviceChannels.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
     #endregion
+
     public ChannelId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }

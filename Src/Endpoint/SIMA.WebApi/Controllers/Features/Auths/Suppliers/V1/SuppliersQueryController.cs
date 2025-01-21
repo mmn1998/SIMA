@@ -32,6 +32,14 @@ public class SuppliersQueryController : ControllerBase
     {
         return await _mediator.Send(query);
     }
+
+    [HttpPost("SupplierAccountByLogisticsSupply/{LogisticsSupplyId}")]
+    //[SimaAuthorize(Permissions.SuppliersGetAll)]
+    public async Task<Result> SupplierAccountByLogisticsSupply([FromRoute] long LogisticsSupplyId)
+    {
+        var query = new GetSupplierAccountByLogisticsSupplyQuery { LogisticsSupplyId = LogisticsSupplyId };
+        return await _mediator.Send(query);
+    }
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.SuppliersGetAll)]
     public async Task<Result> Get([FromBody] GetAllSuppliersQuery query)

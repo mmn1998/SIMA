@@ -8,6 +8,7 @@ public class ModifyAssetArg
     public long AssetTypeId { get; set; }
     public long? WarehouseId { get; set; }
     public string? Model { get; set; }
+    public string? Title { get; set; }
     public string? Manufacturer { get; set; }
     public DateOnly? ManufactureDate { get; set; }
     public DateOnly? OwnershipDate { get; set; }

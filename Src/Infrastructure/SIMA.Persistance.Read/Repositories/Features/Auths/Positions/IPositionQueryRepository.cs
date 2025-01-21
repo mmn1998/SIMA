@@ -8,5 +8,7 @@ public interface IPositionQueryRepository : IQueryRepository
 {
     Task<GetPositionQueryResult> FindById(long id);
     Task<Result<IEnumerable<GetPositionQueryResult>>> GetAll(GetAllPositionsQuery request);
+    // front requirement !
+    Task<IEnumerable<GetPositionQueryResult>> GetFiltered(GetAllFilteredPositionsQuery request);
     Task<Result<IEnumerable<GetPositionQueryResult>>> GetByDepartemantId(long departmentId);
 }

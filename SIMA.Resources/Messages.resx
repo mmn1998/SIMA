@@ -206,6 +206,9 @@
   <data name="ExternalServiceException" xml:space="preserve">
     <value>برقراری ارتباط با سرویس خارجی امکان پذیر نمی باشد</value>
   </data>
+  <data name="FailedSendSMS" xml:space="preserve">
+    <value>خطا در ارسال پیامک</value>
+  </data>
   <data name="FileContentNullError" xml:space="preserve">
     <value>محتوی فایل خالی است.</value>
   </data>
@@ -319,7 +322,7 @@
     <comment>10007</comment>
   </data>
   <data name="NationalCodeIsNotUniqueError" xml:space="preserve">
-    <value>کد ملی مورد نظر نا معتبر است.</value>
+    <value>کد ملی مورد نظر قبلا ثبت شده است.</value>
     <comment>100067</comment>
   </data>
   <data name="NationalCodeIsNotValid" xml:space="preserve">
@@ -333,6 +336,10 @@
   </data>
   <data name="NoMiddleIssueWeightFound" xml:space="preserve">
     <value>وزن وارد شده در بازه های موجود یافت نشد.</value>
+  </data>
+  <data name="NoMobileFoundError" xml:space="preserve">
+    <value>برای کاربر موردنظر، شماره همراه فعالی ثبت نشده است</value>
+    <comment>100068</comment>
   </data>
   <data name="NotAllowtoChangePassword" xml:space="preserve">
     <value>در این بازه زمانی شما اجازه تغییر کلمه عبور را ندارید</value>
@@ -568,5 +575,99 @@
   </data>
   <data name="QuantityNullError" xml:space="preserve">
     <value>تعداد نمیتواند خالی باشد.</value>
+  </data>
+  <data name="UsageDurationError" xml:space="preserve">
+    <value>مدت زمان دوره مصرف برای کالا های مصرفی نمیتواند خالی باشد</value>
+  </data>
+  <data name="ServiceDuration" xml:space="preserve">
+    <value>مدت زمان دوره خدمت برای خدمات نمیتواند خالی باشد</value>
+  </data>
+  <data name="ErrorFromBehsazanService" xml:space="preserve">
+    <value>خطا در فراخوانی سرویس بهسازان</value>
+  </data>
+  <data name="ContinueForAddDraft" xml:space="preserve">
+    <value>لطفا ثبت حواحه خود را تکمیل نمایید</value>
+  </data>
+  <data name="DraftInProgress" xml:space="preserve">
+    <value>حواله مورد نظر در جریان می باشد</value>
+  </data>
+  <data name="InvalidWageRateException" xml:space="preserve">
+    <value>نوع ارز تعرفه انتخاب شده و نوع ارز استعلام انجام شده یکسان نیست.</value>
+    <comment>1001001</comment>
+  </data>
+  <data name="BranchIsNotDefinedWithUserId" xml:space="preserve">
+    <value>برای این کاربر شعبه ای تعریف نشده است!</value>
+  </data>
+  <data name="WageRateNotMatchCurrencyType" xml:space="preserve">
+    <value>نوع ارز با الگوی کارمزد مطابقت ندارد!</value>
+    <comment>100103</comment>
+  </data>
+  <data name="BrokerNotValid" xml:space="preserve">
+    <value>کارگزار انتخابی با کارگزار پاسخ استعلام مطابقت ندارد</value>
+  </data>
+  <data name="WagePercentageError" xml:space="preserve">
+    <value>کارمزد باید بین 0.01 تا 100 باشد!</value>
+    <comment>100104</comment>
+  </data>
+  <data name="NoBrokerTypeForBrokerIdError" xml:space="preserve">
+    <value>برای کارگذار ارسالی نوع کارگذاری مشخص نشده است!</value>
+    <comment>100105</comment>
+  </data>
+  <data name="RefferalLetterNotAllowCreate" xml:space="preserve">
+    <value>برای این حواله نمی توانید نامه ای ثبت کنید</value>
+    <comment>برای این حواله نمی توانید نامه ای ثبت کنید</comment>
+  </data>
+  <data name="DraftRequetAmountError" xml:space="preserve">
+    <value>مبلغ درخواستی درخواست با استعلام مطابقت ندارد</value>
+  </data>
+  <data name="CurrencyTypeError" xml:space="preserve">
+    <value>نوع ارز درخواست با استعلام مطابقت ندارد</value>
+  </data>
+  <data name="DraftTypeError" xml:space="preserve">
+    <value>نوع حواله درخواست با استعلام مطابقت ندارد</value>
+  </data>
+  <data name="UserIsNotInSameBranch" xml:space="preserve">
+    <value>ثبت کننده باید با شعبه انتخاب شده تطابق داشته باشد.</value>
+    <comment>100107</comment>
+  </data>
+  <data name="BrokerTypeErrorInTrustyDraftFinal" xml:space="preserve">
+    <value>نوع کارگزار انتخاب شده با حواله استعلام شده مطابقت ندارد.</value>
+  </data>
+  <data name="EFError" xml:space="preserve">
+    <value>میزان درصد از دست دادن دارایی در زمان وقوع تهدید نمیتواند بیشتر از 100 باشد</value>
+  </data>
+  <data name="ALEError" xml:space="preserve">
+    <value>میزان احتمال از دست دادن ارزش دارایی نمی تواند بیشتر از 100 باشد</value>
+  </data>
+  <data name="RiskPossibilityIdRiskImpactIdRiskDegreeIdUniqueError" xml:space="preserve">
+    <value>ترکیب 3 فیلد درجه، احتمال ووقع و تاثیر ریسک را نباید تکراری باشد.</value>
+    <comment>100111</comment>
+  </data>
+  <data name="BranchCodeError" xml:space="preserve">
+    <value>کد شعبه مورد نظر اشتباه است. لطفا با پشتیبانی تماس بگیرید</value>
+    <comment>100108</comment>
+  </data>
+  <data name="CustomerNumberNotValidError" xml:space="preserve">
+    <value>کد مشتزی اشتباه است!</value>
+    <comment>100109</comment>
+  </data>
+  <data name="CurrencyTypeOverCountError" xml:space="preserve">
+    <value>کاربر قادر است حداکثر سه نوع ارز را در یک استعلام درخواست نماید</value>
+    <comment>100110</comment>
+  </data>
+  <data name="CustomerIsNull" xml:space="preserve">
+    <value>مشتری وجود ندارد</value>
+    <comment>400</comment>
+  </data>
+  <data name="DepositProformaCurrencyTypeIdException" xml:space="preserve">
+    <value>درصورت انتخاب نوع پرداخت واریز به حساب، شماره پروفرما اجباری است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="OrderingNotUniqueError" xml:space="preserve">
+    <value>مقدار اولویت بندی وارد شده موجود میباشد لطفا مقدار دیگری انتخاب کنید.</value>
+    <comment>400</comment>
+  </data>
+  <data name="UrlError" xml:space="preserve">
+    <value>فرمت تارنمای وارد شده اشتبا است.</value>
   </data>
 </root>

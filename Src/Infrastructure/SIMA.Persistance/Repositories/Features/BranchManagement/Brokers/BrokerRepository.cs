@@ -19,7 +19,11 @@ public class BrokerRepository : Repository<Broker>, IBrokerRepository
 
     public async Task<Broker> GetById(BrokerId id)
     {
-        var entity = await _context.Brokers.FirstOrDefaultAsync(b => b.Id == id);
+        var entity = await _context.Brokers
+            .Include(x=>x.BrokerAddressBooks)
+            .Include(x=>x.BrokerAccountBooks)
+            .Include(x=>x.BrokerPhoneBooks)
+            .FirstOrDefaultAsync(b => b.Id == id);
         entity.NullCheck();
         return entity;
     }

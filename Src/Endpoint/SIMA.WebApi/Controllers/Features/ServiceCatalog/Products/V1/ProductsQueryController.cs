@@ -27,7 +27,7 @@ public class ProductsQueryController :ControllerBase
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.ProductsGetAll)]
+    //[SimaAuthorize(Permissions.ProductsGetAll)]
     public async Task<Result> Get([FromBody] GetAllProductQuery query)
     {
         return await _mediator.Send(query);

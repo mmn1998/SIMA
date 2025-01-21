@@ -4,6 +4,6 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.Services;
 
-public class GetAllServicesQuery : BaseRequest, IQuery<Result<IEnumerable<GetServiceQueryResult>>>
+public class GetAllServicesQuery : BaseRequest, IQuery<Result<IEnumerable<GetAllServicesQueryResult>>>
 {
 }

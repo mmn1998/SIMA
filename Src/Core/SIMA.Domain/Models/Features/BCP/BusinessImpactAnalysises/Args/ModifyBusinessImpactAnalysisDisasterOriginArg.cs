@@ -5,6 +5,7 @@ public class ModifyBusinessImpactAnalysisDisasterOriginArg
     public long BusinessImpactAnalysisId { get; set; }
     public long HappeningPossibilityId { get; set; }
     public long ConsequenceId { get; set; }
+    public long OriginId { get; set; }
     public long RecoveryPointObjectiveId { get; set; }
     public string? Description { get; set; }
     public float? RTO { get; set; }

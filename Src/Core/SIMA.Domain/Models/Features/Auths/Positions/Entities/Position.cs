@@ -10,6 +10,7 @@ using SIMA.Domain.Models.Features.Auths.PositionTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
+using SIMA.Domain.Models.Features.Notifications.Messages.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -103,6 +104,9 @@ public class Position : Entity
 
     private List<Staff> _staff = new();
     public ICollection<Staff> Staff => _staff;
+
+    private List<MessagePositionDisplay> _messagePositionDisplay = new();
+    public ICollection<MessagePositionDisplay> MessagePositionDisplay => _messagePositionDisplay;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

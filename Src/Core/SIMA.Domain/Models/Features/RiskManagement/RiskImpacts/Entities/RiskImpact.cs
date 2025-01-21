@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Interfaces;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
@@ -67,6 +68,8 @@ public class RiskImpact : Entity
 
     private List<ServiceRiskImpact> _serviceRiskImpacts = new();
     public ICollection<ServiceRiskImpact> ServiceRiskImpacts => _serviceRiskImpacts;
+    private List<EvaluationCriteria> _evaluationCriterias = new();
+    public ICollection<EvaluationCriteria> EvaluationCriterias => _evaluationCriterias;
 
     #region Guards
     private static async Task CreateGuard(CreateRiskImpactArgs arg, IRiskImpactDomainService service)

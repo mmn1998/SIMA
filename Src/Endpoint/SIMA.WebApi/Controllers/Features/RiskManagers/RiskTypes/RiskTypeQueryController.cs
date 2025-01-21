@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.RiskManagement.RiskTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.RiskTypes;
 
@@ -17,12 +18,14 @@ public class RiskTypeQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAll")]
+    [SimaAuthorize(Permissions.RiskTypesGetAll)]
     public async Task<Result> Get([FromBody] GetAllRiskTypesQuery request)
     {
         return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.RiskTypesGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetRiskTypeQuery { Id = id };

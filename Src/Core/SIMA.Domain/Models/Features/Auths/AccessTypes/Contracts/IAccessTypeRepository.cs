@@ -1,5 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.AccessTypes.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.AccessTypes.ValueObjects;
 using SIMA.Framework.Core.Repository;
 
 namespace SIMA.Domain.Models.Features.Auths.AccessTypes.Contracts;

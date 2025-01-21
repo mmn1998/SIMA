@@ -6,9 +6,9 @@ using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.BranchManagement.Brokers.V1;
 
-[Route("[controller]")]
+[Route("branch/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "Brokers")]
+[ApiExplorerSettings(GroupName = "Branch/Brokers")]
 [Authorize]
 public class BrokersController : ControllerBase
 {

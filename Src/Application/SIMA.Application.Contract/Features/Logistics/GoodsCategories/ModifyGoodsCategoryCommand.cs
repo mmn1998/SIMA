@@ -13,4 +13,6 @@ public class ModifyGoodsCategoryCommand : ICommand<Result<long>>
     public string? IsHardware { get; set; }
     public string? IsGoods { get; set; }
     public string? IsRequiredSecurityCheck { get; set; }
+    public string? IsFixedAsset { get; set; }
+    public List<long>? SupplierList { get; set; }
 }

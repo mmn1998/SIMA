@@ -19,6 +19,7 @@ using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.Warehouses.Entities;
 using SIMA.Domain.Models.Features.Auths.Warehouses.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
@@ -112,6 +113,7 @@ public class Asset : Entity
     public WarehouseId? WarehouseId { get; private set; }
     public virtual Warehouse? Warehouse { get; private set; }
     public string? Model { get; private set; }
+    public string? Title { get; private set; }
     public string? Manufacturer { get; private set; }
     public DateOnly? ManufactureDate { get; private set; }
     public DateOnly? OwnershipDate { get; private set; }
@@ -168,6 +170,14 @@ public class Asset : Entity
     public ICollection<BusinessImpactAnalysisAsset> BusinessImpactAnalysisAssets => _businessImpactAnalysisAsset;
     private List<CriticalActivityAsset> _criticalActivityAssets = new();
     public ICollection<CriticalActivityAsset> CriticalActivityAssets => _criticalActivityAssets;
-    
+    private List<EffectedAsset> _effectedAssets = new();
+    public ICollection<EffectedAsset> EffectedAssets => _effectedAssets;
+
+    private List<ComplexAsset> _assets = new();
+    public ICollection<ComplexAsset> Assets => _assets;
+
+    private List<ComplexAsset> _parentAssets = new();
+    public ICollection<ComplexAsset> ParentAssets => _parentAssets;
+
 }
 

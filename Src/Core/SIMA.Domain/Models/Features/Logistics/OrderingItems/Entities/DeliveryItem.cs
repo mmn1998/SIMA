@@ -1,5 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.DMS.Documents.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.Args;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -32,8 +34,9 @@ public class DeliveryItem : Entity
     public DeliveryItemId Id { get; private set; }
     public OrderingItemId OrderingItemId { get; private set; }
     public virtual OrderingItem OrderingItem { get; private set; }
-    public DocumentId ReciptDocumentId { get; private set; }
-    public virtual Document ReciptDocument { get; private set; }
+    public int DeliveryQuantity { get; private set; }
+    public LogisticsSupplyDocumentId? ReciptDocumentId { get; private set; }
+    public virtual LogisticsSupplyDocument? ReciptDocument { get; private set; }
     public DateTime DeliveryDate { get; private set; }
     public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }

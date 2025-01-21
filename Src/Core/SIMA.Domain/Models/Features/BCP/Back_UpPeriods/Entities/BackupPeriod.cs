@@ -2,8 +2,10 @@
 using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Contracts;
 using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
@@ -16,19 +18,19 @@ public class BackupPeriod : Entity, IAggregateRoot
     }
     private BackupPeriod(CreateBackupPeriodArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
+        Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<BackupPeriod> Create(CreateBackupPeriodArg arg, IBackupPeriodDomainService service)
+    public static async Task<BackupPeriod> Create(CreateBackupPeriodArg arg, IBackupPeriodDomianService service)
     {
         await CreateGuards(arg, service);
         return new BackupPeriod(arg);
     }
-    public async Task Modify(ModifyBackupPeriodArg arg, IBackupPeriodDomainService service)
+    public async Task Modify(ModifyBackupPeriodArg arg, IBackupPeriodDomianService service)
     {
         await ModifyGuards(arg, service);
         Name = arg.Name;
@@ -38,13 +40,25 @@ public class BackupPeriod : Entity, IAggregateRoot
         ModifiedBy = arg.ModifiedBy;
     }
     #region Guards
-    private static async Task CreateGuards(CreateBackupPeriodArg arg, IBackupPeriodDomainService service)
+    private static async Task CreateGuards(CreateBackupPeriodArg arg, IBackupPeriodDomianService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
-    private async Task ModifyGuards(ModifyBackupPeriodArg arg, IBackupPeriodDomainService service)
+    private async Task ModifyGuards(ModifyBackupPeriodArg arg, IBackupPeriodDomianService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public BackupPeriodId Id { get; set; }

@@ -18,7 +18,7 @@ public class ServiceAssignedStaff : Entity
     {
         Id = new(arg.Id);
         ServiceId = new(arg.ServiceId);
-        StaffId = new(arg.ServiceId);
+        StaffId = new(arg.StaffId);
         ResponsibleTypeId = new(arg.ResponsibleTypeId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;

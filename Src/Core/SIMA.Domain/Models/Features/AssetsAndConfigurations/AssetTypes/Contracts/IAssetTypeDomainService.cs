@@ -4,4 +4,5 @@ namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Contrac
 
 public interface IAssetTypeDomainService : IDomainService
 {
+    Task<bool> IsCodeUnique(string code, AssetTypeId? id = null);
 }

@@ -448,6 +448,123 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 100072.
+        /// </summary>
+        public static string _100072Code {
+            get {
+                return ResourceManager.GetString("100072Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1001001.
+        /// </summary>
+        public static string _1001001Code {
+            get {
+                return ResourceManager.GetString("1001001Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100100.
+        /// </summary>
+        public static string _100100Code {
+            get {
+                return ResourceManager.GetString("100100Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100102.
+        /// </summary>
+        public static string _100102Code {
+            get {
+                return ResourceManager.GetString("100102Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100103.
+        /// </summary>
+        public static string _100103Code {
+            get {
+                return ResourceManager.GetString("100103Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100104.
+        /// </summary>
+        public static string _100104Code {
+            get {
+                return ResourceManager.GetString("100104Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100105.
+        /// </summary>
+        public static string _100105Code {
+            get {
+                return ResourceManager.GetString("100105Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100106.
+        /// </summary>
+        public static string _100106Code {
+            get {
+                return ResourceManager.GetString("100106Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100107.
+        /// </summary>
+        public static string _100107Code {
+            get {
+                return ResourceManager.GetString("100107Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100111.
+        /// </summary>
+        public static string _100111Code {
+            get {
+                return ResourceManager.GetString("100111Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100108.
+        /// </summary>
+        public static string _100108Code {
+            get {
+                return ResourceManager.GetString("100108Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100109.
+        /// </summary>
+        public static string _100109Code {
+            get {
+                return ResourceManager.GetString("100109Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100110.
+        /// </summary>
+        public static string _100110Code {
+            get {
+                return ResourceManager.GetString("100110Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 200.
         /// </summary>
         public static string _200Code {
@@ -493,11 +610,29 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to کارگزار انتخابی با کارگزار پاسخ استعلام مطابقت ندارد.
+        /// </summary>
+        public static string BrokerNotValid {
+            get {
+                return ResourceManager.GetString("BrokerNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (0|\+98)?([ ]|-|[()]){0,2}9[1|2|3|4]([ ]|-|[()]){0,2}(?:[0-9]([ ]|-|[()]){0,2}){8}.
         /// </summary>
         public static string MobileRegex {
             get {
                 return ResourceManager.GetString("MobileRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شناسه ملی وارد شده نامعتبر میباشد..
+        /// </summary>
+        public static string NationalIdError {
+            get {
+                return ResourceManager.GetString("NationalIdError", resourceCulture);
             }
         }
         

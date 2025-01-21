@@ -1,5 +1,4 @@
 ﻿using SIMA.Application.Query.Contract.Features.Auths.Users;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 
@@ -11,7 +10,7 @@ public interface IUserQueryRepository : IQueryRepository
     Task<Result<IEnumerable<GetUserQueryResult>>> GetAll(GetAllUserQuery? request = null);
     Task<bool> IsUsernameUnique(string username, long userId);
     Task<bool> IsUsrConfigSatisfied(long configurationId, long userId);
-    Task<LoginUserQueryResult> GetByUsernameAndPassword(string username, string password);
+    Task<LoginUserQueryResult> GetPermissions(long userId);
     Task<GetUserQueryResult> FindById(long id);
     Task<GetInfoByUserIdQueryResult> GetInfoByUserId(long userId);
     Task<GetProfileByProfileIdQueryResult> GetProfileByProfileId(long profileId);
@@ -21,6 +20,7 @@ public interface IUserQueryRepository : IQueryRepository
     Task<GetUserLocationQueryResult> GetUserLocation(long userLocationId);
     Task<GetUserAggregateQueryResult> GetUserAggreagate(long userId);
     Task<bool> IsCompanyMatchPersonCompany(long companyId, long profileId);
+    Task<string> GetUserMobileNumber(long userId);
     Task<List<long>> GetUserPermissonByFormId(long formId, long userId);
 
 }

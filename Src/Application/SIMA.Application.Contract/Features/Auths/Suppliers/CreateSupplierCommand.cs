@@ -10,8 +10,10 @@ public class CreateSupplierCommand : ICommand<Result<long>>
     public long SupplierRankId { get; set; }
     public string? IsInBlackList { get; set; }
     public int SuccessOrderCountinTheYear { get; set; }
+    public string? NationalCode { get; set; }
+    public string? NationalId { get; set; }
     public List<CreateSupplierAccountListCommand> AccountList { get; set; }
     public List<CreateSupplierAddressBookCommand> AddressBooks { get; set; }
     public List<CreateSupplierPhoneBookCommand> PhoneBooks { get; set; }
-
+    public List<long>? DocumentList { get; set; }
 }

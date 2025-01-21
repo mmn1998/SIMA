@@ -24,11 +24,19 @@ public class CandidatedSuppliersQueryController : ControllerBase
         return await _mediator.Send(query);
     }
 
-    [HttpGet("GetByLogesticId/{Id}")]
+    [HttpPost("GetByLogesticSupplyId/{Id}")]
     [SimaAuthorize(Permissions.CandidatedSuppliersGetAll)]
-    public async Task<Result> Get( long Id)
+    public async Task<Result> Get([FromRoute] long Id)
     {
         var result = new GetAllCandidatedSuppliersByLogesticIdQuery { Id = Id };
+        return await _mediator.Send(result);
+    }
+
+    [HttpPost("GetSelectedSupplier/GetByLogesticSupplyId/{Id}")]
+    [SimaAuthorize(Permissions.CandidatedSuppliersGetAll)]
+    public async Task<Result> GetSelectedSupplier([FromRoute] long Id)
+    {
+        var result = new GetSelectedCandidatedSupplierQuery { LogisticsSupplyId = Id };
         return await _mediator.Send(result);
     }
 }

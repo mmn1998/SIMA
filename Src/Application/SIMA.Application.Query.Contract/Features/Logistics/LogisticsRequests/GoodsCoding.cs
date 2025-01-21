@@ -2,6 +2,7 @@
 
 public class GoodsCoding
 {
+    public long? LogisticsSupplyGoodsId { get; set; }
     public long? GoodsId { get; set; }
     public string? GoodsName { get; set; }
     public string? Code { get; set; }

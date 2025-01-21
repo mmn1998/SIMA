@@ -3,7 +3,7 @@ using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.Auths.AccessTypes;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.Args;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.Contracts;
-using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
+using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;

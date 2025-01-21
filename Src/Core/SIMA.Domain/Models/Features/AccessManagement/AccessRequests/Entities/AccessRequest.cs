@@ -1,8 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Args;
 using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Exceptions;
 using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
 using SIMA.Domain.Models.Features.Auths.NetworkProtocols.Entities;
 using SIMA.Domain.Models.Features.Auths.NetworkProtocols.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
@@ -12,7 +12,7 @@ using System;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Entities;
-
+ 
 public class AccessRequest : Entity, IAggregateRoot
 {
     private AccessRequest() { }
@@ -128,3 +128,4 @@ public class AccessRequest : Entity, IAggregateRoot
     private List<AccessRequestDocument> _accessRequestDocuments = new();
     public ICollection<AccessRequestDocument> AccessRequestDocuments => _accessRequestDocuments;
 }
+ 

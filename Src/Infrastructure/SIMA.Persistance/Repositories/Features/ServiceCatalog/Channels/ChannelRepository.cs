@@ -24,6 +24,7 @@ public class ChannelRepository : Repository<Channel>, IChannelRepository
             .Include(x => x.ChannelAccessPoints)
             .Include(x => x.ChannelUserTypes)
             .Include(x => x.ChannelResponsibles)
+            .Include(x => x.ServiceChannels)
             .FirstOrDefaultAsync(x => x.Id == Id)
             ;
         entity.NullCheck();

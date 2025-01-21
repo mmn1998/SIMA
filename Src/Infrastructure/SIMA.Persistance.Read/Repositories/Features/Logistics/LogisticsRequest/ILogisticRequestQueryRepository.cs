@@ -15,4 +15,6 @@ public interface ILogisticRequestQueryRepository : IQueryRepository
     Task<bool> IsTechnological(List<long> goodsId);
     Task<bool> IsGoods(List<long> goodsId);
     Task<bool> IsHardware(List<long> goodsId);
+    Task<Result<List<GetLogisticsRequestCodeQueryResult>>> GetLogisticsRequestCode();
+    Task<Result<IEnumerable<GetLogisticsRequestGoodsQueryResult>>> GetLogisticsRequestGoodsFiltered(long logisticsRequestId);
 }

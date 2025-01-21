@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.AddressTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
 using SIMA.Domain.Models.Features.Auths.Suppliers.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -47,20 +48,23 @@ public class AddressType : Entity
 
 
     public AddressTypeId Id { get; private set; }
-
     public string? Name { get; private set; }
-
     public string? Code { get; private set; }
-
     public long ActiveStatusId { get; private set; }
-
     public DateTime? CreatedAt { get; private set; }
-
     public long? CreatedBy { get; private set; }
-
     public byte[]? ModifiedAt { get; private set; }
-
     public long? ModifiedBy { get; private set; }
+
+    private List<AddressBook> _addressBooks = new();
+    public ICollection<AddressBook> AddressBooks => _addressBooks;
+
+    private List<SupplierAddressBook> _supplierAddressBooks = new();
+    public ICollection<SupplierAddressBook> SupplierAddressBooks => _supplierAddressBooks;
+
+    private List<BrokerAddressBook> _brokerAddressBooks = new();
+    public ICollection<BrokerAddressBook> BrokerAddressBooks => _brokerAddressBooks;
+
     public void Delete(long userId)
     {
         ModifiedBy = userId;
@@ -68,11 +72,6 @@ public class AddressType : Entity
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
-    private List<AddressBook> _addressBooks = new();
-    public ICollection<AddressBook> AddressBooks => _addressBooks;
-
-    private List<SupplierAddressBook> _supplierAddressBooks = new();
-    public ICollection<SupplierAddressBook> SupplierAddressBooks => _supplierAddressBooks;
     #region Gaurds
 
     private static async Task CreateGuards(CreateAddressTypeArg arg, IAddressTypeDomainService service)

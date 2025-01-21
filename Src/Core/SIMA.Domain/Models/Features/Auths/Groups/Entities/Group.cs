@@ -4,6 +4,7 @@ using SIMA.Domain.Models.Features.Auths.Groups.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.Notifications.Messages.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
@@ -266,6 +267,9 @@ public class Group : Entity
     public ICollection<ProjectGroup> ProjectGroups => _projectGroups;
     private List<WorkFlowActorGroup> _workFlowActorGroups = new();
     public ICollection<WorkFlowActorGroup> WorkFlowActorGroups => _workFlowActorGroups;
+
+    private List<MessageGroupDisplay> _messageGroupDisplay = new();
+    public ICollection<MessageGroupDisplay> MessageGroupDisplay => _messageGroupDisplay;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

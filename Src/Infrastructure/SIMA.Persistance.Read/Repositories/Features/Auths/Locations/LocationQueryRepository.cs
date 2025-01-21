@@ -3,14 +3,10 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.Companies;
 using SIMA.Application.Query.Contract.Features.Auths.Locations;
-using SIMA.Application.Query.Contract.Features.Auths.Positions;
-using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
 using SIMA.Domain.Models.Features.Auths.LocationTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Infrastructure.Cachings;
 using SIMA.Persistance.Persistence;
@@ -131,6 +127,35 @@ public class LocationQueryRepository : ILocationQueryRepository
 
 
         }
+    }
+
+    public async Task<Result<IEnumerable<GetLocationQueryResult>>> GetAllCountries()
+    {
+        var mainQuery = @"
+SELECT DISTINCT L.ID as Id,
+		L.Name as Name,
+		L.Code  as Code,
+		LT.Name as LocationTypeName,
+        LT.Id as LocationTypeId,
+		PLT.Name as  ParentLocationTypeName
+        ,PLT.Id as ParentLocationTypeId
+		,a.ID ActiveStatusId
+		,a.Name ActiveStatus
+        ,L.CreatedAt
+        ,PL.Name ParentName
+        ,PL.Id ParentId 
+FROM [Basic].[Location] L
+join Basic.ActiveStatus a
+on L.ActiveStatusId = a.ID
+INNER JOIN [Basic].[LocationType] LT on L.LocationTypeID = LT.ID
+left JOIN [Basic].[LocationType] PLT on PLT.ID = LT.ParentID
+left join [Basic].[Location] PL on PL.Id = L.ParentId
+WHERE  L.ActiveStatusId != 3 and L.ParentId is null
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var result = await connection.QueryAsync<GetLocationQueryResult>(mainQuery);
+        return Result.Ok(result);
     }
 
     public async Task<List<GetParentLocationsByLocationTypeIdQueryResult>> GetParentsByChildId(long locationTypeId)

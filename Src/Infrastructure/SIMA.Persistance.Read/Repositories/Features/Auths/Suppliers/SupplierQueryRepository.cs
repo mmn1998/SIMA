@@ -74,20 +74,21 @@ public class SupplierQueryRepository : ISupplierQueryRepository
             await connection.OpenAsync();
             request.Sorts = new List<SortModel>
             {
-               new SortModel{Key="Ordering",Type="asc"}
+               new SortModel{ Key = "Ordering", Type = "asc"}
             };
 
             string mainQuery = @"select
             s.Id 
             ,s.Id SupplierId
             ,sr.Id SupplierRankId
+            ,s.Name Name
             ,s.Name SupplierName
             ,sr.Name SupplierRankName
-,sr.Ordering
-,s.CreatedAt
-            from Logistics.Supplier s
-            inner join Logistics.SupplierRank sr on sr.Id = s.SupplierRankId
-        where s.IsInBlackList <> '1'
+            ,sr.Ordering
+            ,s.CreatedAt
+            from basic.Supplier s
+            inner join Basic.SupplierRank sr on sr.Id = s.SupplierRankId
+        where s.IsInBlackList <> '1' and S.ActiveStatusId <> 3
         ";
             string queryCount = $@"
 WITH Query as(	{mainQuery}	)
@@ -107,6 +108,12 @@ WITH Query as(	{mainQuery}	)
                 var count = await multi.ReadFirstAsync<int>();
                 var response = await multi.ReadAsync<GetAllOrderedNotInBlackListSuppliersQueryResult>();
                 int index = 1;
+                if (request.Page > 1)
+                {
+                    var page = request.Page - 1;
+                    var pagination = request.PageSize * page + 1;
+                    index = pagination;
+                }
 
                 foreach (var item in response)
                 {
@@ -178,5 +185,31 @@ WITH Query as(	{mainQuery}	)
             return response;
         }
 
+    }
+
+    public async Task<Result<IEnumerable<GetSupplierAccountByLogisticsSupplyQueryResult>>> GetSupplierAccountByLogisticsSupply(long logisticsSupplyId)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+               
+
+            string mainQuery = @"select 
+                            LS.Id LogisticsSupplyId,
+                            CS.Id CandidatedSupplier,
+                            S.Id SupplierId,
+                            SAL.IBAN Name,
+                            SAL.Id
+                            from Logistics.LogisticsSupply Ls
+                            join Logistics.CandidatedSupplier CS on Ls.Id = CS.LogisticsSupplyId and CS.ActiveStatusId <> 3
+                            join Basic.Supplier S on CS.SupplierId = S.Id and CS.ActiveStatusId <> 3
+                            join Basic.SupplierAccountList SAL on S.Id = SAL.SupplierId and SAL.ActiveStatusId <> 3
+                            where Ls.Id = @Id  and LS.ActiveStatusId<> 3
+        ";
+
+            var result = await connection.QueryAsync<GetSupplierAccountByLogisticsSupplyQueryResult>(mainQuery, new { Id = logisticsSupplyId });
+            
+            return Result.Ok(result);
+        }
     }
 }

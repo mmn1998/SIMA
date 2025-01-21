@@ -1,5 +1,4 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Sima.Framework.Core.Repository;
@@ -7,6 +6,8 @@ using SIMA.Application.Contract.Features.Auths.Users;
 using SIMA.Application.Feaatures.Auths.Users.Mappers;
 using SIMA.Application.Query.Contract.Features.Auths.Users;
 using SIMA.Domain.Models.Features.Auths.Groups.Args;
+using SIMA.Application.Services;
+using SIMA.Application.Services.Request;
 using SIMA.Domain.Models.Features.Auths.Profiles.Args;
 using SIMA.Domain.Models.Features.Auths.Profiles.Interfaces;
 using SIMA.Domain.Models.Features.Auths.Users.Args;
@@ -16,6 +17,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
+using SIMA.Framework.Common.Services;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Framework.Infrastructure.Cachings;
 using SIMA.Persistance.Read.Repositories.Features.Auths.Users;
@@ -23,20 +25,24 @@ using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.Auths.Users;
 
-public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long>>, 
+public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long>>,
     ICommandHandler<CreateUserCommand, Result<long>>,
     ICommandHandler<UpdateUserCommand, Result<long>>, 
     ICommandHandler<UpdateUserRoleCommand, Result<long>>,
     ICommandHandler<UpdateUserPermissionCommand, Result<long>>
     , ICommandHandler<UpdateUserLocationCommand, Result<long>>
-    , ICommandHandler<DeleteUserLocationCommand, Result<long>>, 
+    , ICommandHandler<DeleteUserLocationCommand, Result<long>>,
     ICommandHandler<DeleteUserPermissionCommand, Result<long>>,
-    ICommandHandler<DeleteUserRoleCommand, Result<long>>, 
+    ICommandHandler<DeleteUserRoleCommand, Result<long>>,
     ICommandHandler<CreateUserAggregateCommand, Result<long>>,
     ICommandHandler<GetUserNameWithSSO, Result<LoginUserQueryResult>>,
     ICommandHandler<ChangePasswordCommand, Result<long>>,
     ICommandHandler<CheckUserCommand, Result<long>>,
-    ICommandHandler<ConfirmCodeCommand, Result<long>>
+    ICommandHandler<ConfirmCodeCommand, Result<long>>,
+    IQueryHandler<LoginUserQuery, Result<LoginUserQueryResult>>,
+    IQueryHandler<GetConfirmOTPCode, Result<LoginUserQueryResult>>,
+    ICommandHandler<ReSendOTPCommand, Result<long>>,
+    IQueryHandler<SendOTPByUsernameCommand, Result<LoginUserQueryResult>>
 
 
 {
@@ -44,6 +50,8 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     private readonly IUserRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _service;
+    private readonly ITokenService _tokenService;
+    private readonly ISMSService _sMSService;
 
     //ForSSO
     private readonly IProfileService _profileService;
@@ -56,7 +64,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
     public UserCommandHandler(IMapper mapper, IUserRepository repository,
          IUnitOfWork unitOfWork, IUserService service, ILogger<UserCommandHandler> logger, IProfileRepository profileRepository,
          IProfileService profileService, IUserQueryRepository queryrepository, IOptions<TokenModel> securitySettings,
-         ISimaIdentity simaIdentity, IDistributedRedisService redisService)
+         ISimaIdentity simaIdentity, IDistributedRedisService redisService, ITokenService tokenService, ISMSService sMSService)
     {
         _mapper = mapper;
         _repository = repository;
@@ -68,6 +76,66 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         _simaIdentity = simaIdentity;
         _securitySettings = securitySettings.Value;
         _redisService = redisService;
+        _tokenService = tokenService;
+        _sMSService = sMSService;
+    }
+
+    public async Task<Result<LoginUserQueryResult>> Handle(LoginUserQuery request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _repository.GetByUsernameAndPassword(request.Username, request.Password);
+
+            if (user.IsFirstLogin == "0" && user.IsSendOTP == "1")
+            {
+                var code = await user.GenerateCode(_service);
+
+                #region Send SMS
+
+                var userMobileNumber = await _queryrepository.GetUserMobileNumber(user.Id.Value);
+
+                var sendsms = await _sMSService.SendSMS(new SendSMSRequest
+                {
+                    DestinationAddress = userMobileNumber,
+                    MessageText = $"کد فعال سازی جهت ورود به سیستم {code}"
+                });
+
+                if (!sendsms.Succeeded)
+                    throw new SimaResultException(CodeMessges._400Code, Messages.FailedSendSMS);
+
+                #endregion
+
+                #region Expirtion Code
+                string key = RedisKeys.SendSMS + user.Id.Value;
+                TimeSpan expirtionTime = TimeSpan.FromMinutes(3);
+                _redisService.Delete(key);
+                await _redisService.InsertAsync(key, code, expirtionTime);
+                #endregion
+            }
+            await _unitOfWork.SaveChangesAsync();
+
+            if (string.Equals(user.IsLocked, "0") && user.AccessFailedCount < 4)
+                throw new SimaResultException(CodeMessges._400Code, Messages.InvalidUsernameOrPasswordError);
+            
+
+            else if (string.Equals(user.IsLocked, "1"))
+                throw new SimaResultException(CodeMessges._400Code, Messages.UserIsLocked);
+
+            var permissions = await _queryrepository.GetPermissions(user.Id.Value);
+            permissions.UserInfoLogin.ConfirmCode = null;
+
+            var result = UserMapper.MapToToken(permissions, _tokenService);
+
+            //insert refreshToken in Redis
+            await _redisService.InsertAsync(permissions.UserInfoLogin.Username, result.RefreshToken, TimeSpan.FromHours(_securitySettings.RefreshTokenLifeTime));
+
+             return Result.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
     }
     public async Task<Result<long>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
@@ -76,7 +144,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
     public async Task<Result<long>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateUserArg>(request);
@@ -87,64 +154,15 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         return Result.Ok(entity.Id.Value);
     }
 
-    //public async Task<Result<long>> Handle(CreateUserRoleCommand request, CancellationToken cancellationToken)
-    //{
-    //    var entity = await _repository.GetById(request.UserId);
-    //    var arg = _mapper.Map<CreateUserRoleArg>(request);
-    //    arg.CreatedBy = _simaIdentity.UserId;
-    //    await entity.AddUserRole(arg);
-    //    await _unitOfWork.SaveChangesAsync();
-    //    return Result.Ok(entity.Id.Value);
-    //}
-
-    //public async Task<Result<long>> Handle(CreateUserPermissionCommand request, CancellationToken cancellationToken)
-    //{
-    //    var entity = await _repository.GetById(request.UserId);
-    //    var arg = _mapper.Map<CreateUserPermissionArg>(request);
-    //    arg.CreatedBy = _simaIdentity.UserId;
-    //    await entity.AddUserPermission(arg);
-    //    await _unitOfWork.SaveChangesAsync();
-    //    return Result.Ok(entity.Id.Value);
-    //}
-
-    //public async Task<Result<long>> Handle(CreateUserDomainCommand request, CancellationToken cancellationToken)
-    //{
-    //    var entity = await _repository.GetById(request.UserId);
-    //    var arg = _mapper.Map<CreateUserDomainArg>(request);
-    //    arg.CreatedBy = _simaIdentity.UserId;
-    //    await entity.AddUserDomain(arg);
-    //    await _unitOfWork.SaveChangesAsync();
-    //    return Result.Ok(entity.Id.Value);
-    //}
-
-    //public async Task<Result<long>> Handle(CreateUserLocationCommand request, CancellationToken cancellationToken)
-    //{
-    //    var entity = await _repository.GetById(request.UserId);
-    //    var arg = _mapper.Map<CreateUserLocationAccessArg>(request);
-    //    arg.CreatedBy = _simaIdentity.UserId;
-    //    await entity.AddUserLocation(arg);
-    //    await _unitOfWork.SaveChangesAsync();
-    //    return Result.Ok(entity.Id.Value);
-    //}
-
     public async Task<Result<long>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(request.Id);
+        try 
+        {
+             var entity = await _repository.GetById(request.Id);
         var arg = _mapper.Map<ModifyUserArg>(request);
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
 
-
-        if (request.UserPermissions != null && request.UserPermissions.Count != 0)
-        {
-            var userPermissionsArgs = _mapper.Map<List<CreateUserPermissionArg>>(request.UserPermissions);
-            foreach (var permission in userPermissionsArgs)
-            {
-                permission.UserId = entity.Id.Value;
-                permission.CreatedBy = _simaIdentity.UserId;
-            }
-            await entity.AddUserPermission(userPermissionsArgs, entity.Id.Value);
-        }
         if (request.FormUsers != null && request.FormUsers.Count != 0)
         {
             var formUserArg = _mapper.Map<List<CreateFormUserArg>>(request.FormUsers);
@@ -156,17 +174,23 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
 
             await entity.AddFormUser(formUserArg, entity.Id.Value, _service);
         }
+
+        if (request.UserPermissions != null && request.UserPermissions.Count != 0)
+        {
+            var userPermissionsArgs = _mapper.Map<List<CreateUserPermissionArg>>(request.UserPermissions);
+            foreach (var permission in userPermissionsArgs) permission.UserId = entity.Id.Value;
+            foreach (var item in userPermissionsArgs) item.CreatedBy = _simaIdentity.UserId;
+            await entity.AddUserPermission(userPermissionsArgs, entity.Id.Value);
+        }
+
         if (request.UserRoles != null && request.UserRoles.Count != 0)
         {
             var userRolesArgs = _mapper.Map<List<CreateUserRoleArg>>(request.UserRoles);
-            foreach (var role in userRolesArgs)
-            {
-                role.UserId = entity.Id.Value;
-                role.CreatedBy = _simaIdentity.UserId;
-            }
-
+            foreach (var role in userRolesArgs) role.UserId = entity.Id.Value;
+            foreach (var item in userRolesArgs) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddUserRole(userRolesArgs, entity.Id.Value);
         }
+
         if (request.UserGroups != null && request.UserGroups.Count != 0)
         {
             var userGroupsArgs = _mapper.Map<List<CreateUserGroupArg>>(request.UserGroups);
@@ -174,19 +198,23 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             foreach (var item in userGroupsArgs) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddUserGroup(userGroupsArgs, entity.Id.Value);
         }
+
         if (request.UserLocations != null && request.UserLocations.Count != 0)
         {
             var userLocationsArgs = _mapper.Map<List<CreateUserLocationAccessArg>>(request.UserLocations);
-            foreach (var location in userLocationsArgs)
-            {
-                location.UserId = entity.Id.Value;
-                location.CreatedBy = _simaIdentity.UserId;
-            }
+            foreach (var location in userLocationsArgs) location.UserId = entity.Id.Value;
+            foreach (var item in userLocationsArgs) item.CreatedBy = _simaIdentity.UserId;
             await entity.AddUserLocation(userLocationsArgs, entity.Id.Value);
         }
 
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+       
     }
 
     public async Task<Result<long>> Handle(UpdateUserRoleCommand request, CancellationToken cancellationToken)
@@ -198,7 +226,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
     public async Task<Result<long>> Handle(UpdateUserPermissionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
@@ -208,7 +235,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
 
     //public async Task<int> Handle(UpdateUserGroupCommand request, CancellationToken cancellationToken)
     //{
@@ -228,15 +254,13 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
-       public async Task<Result<long>> Handle(DeleteUserLocationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<long>> Handle(DeleteUserLocationCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
         entity.DeleteUserLocationAccess(request.UserLocationAccessId, _simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
     public async Task<Result<long>> Handle(DeleteUserPermissionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
@@ -244,7 +268,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
     public async Task<Result<long>> Handle(DeleteUserRoleCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.UserId);
@@ -252,7 +275,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
     public async Task<Result<long>> Handle(CreateUserAggregateCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateUserArg>(request);
@@ -304,7 +326,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
-
     public async Task<Result<long>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
     {
         var user = await _repository.GetUserForChangePassword(_simaIdentity.UserId, request.CurrentPassword);
@@ -315,12 +336,25 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         return user.Id.Value;
 
     }
-
     public async Task<Result<long>> Handle(CheckUserCommand request, CancellationToken cancellationToken)
     {
         var user = await _repository.GetByUserName(request.UserName);
         var code = await user.GenerateCode(_service);
-        //SendSMS
+
+        #region Send SMS
+
+        var userMobileNumber = await _queryrepository.GetUserMobileNumber(user.Id.Value);
+
+        var sendsms = await _sMSService.SendSMS(new SendSMSRequest
+        {
+            DestinationAddress = userMobileNumber,
+            MessageText = $"کد فعال سازی جهت ورود به سیستم {code}"
+        });
+
+        if (!sendsms.Succeeded)
+            throw new SimaResultException(CodeMessges._400Code, Messages.FailedSendSMS);
+
+        #endregion
 
         #region Expirtion Code
         string key = RedisKeys.SendSMS + user.Id.Value;
@@ -339,7 +373,6 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         await _unitOfWork.SaveChangesAsync();
         return user.Id.Value;
     }
-
     public async Task<Result<long>> Handle(ConfirmCodeCommand request, CancellationToken cancellationToken)
     {
         string redisKey = RedisKeys.SendSMS + request.UserId;
@@ -347,8 +380,23 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
         if (code is not null)
         {
             var user = await _repository.CheckForgetPasswordCode(request.UserId, request.Code);
-            var password = await user.GeneratePassword(_service);
+            var password = user.GeneratePassword(_service);
             await _unitOfWork.SaveChangesAsync();
+
+            #region Send SMS
+
+            var userMobileNumber = await _queryrepository.GetUserMobileNumber(user.Id.Value);
+
+            var sendsms = await _sMSService.SendSMS(new SendSMSRequest
+            {
+                DestinationAddress = userMobileNumber,
+                MessageText = $"کلمه عبور شما با موفقیت تغییر یافت برای ورود از کلمه عبور جدید استفاده نمایید  {password}"
+            });
+
+            if (!sendsms.Succeeded)
+                throw new SimaResultException(CodeMessges._400Code, Messages.FailedSendSMS);
+            #endregion
+
             return user.Id.Value;
         }
         else
@@ -356,7 +404,129 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             throw new SimaResultException(CodeMessges._400Code, Messages.CodeIsExpired);
         }
 
-        //SendSMS
+    }
+
+    public async Task<Result<long>> Handle(ReSendOTPCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _repository.GetByIdOnlyUser(request.UserId);
+            string OTPCode = string.Empty;
+
+            if (user.IsFirstLogin == "0" && user.IsSendOTP == "1")
+            {
+                OTPCode = await user.GenerateCode(_service);
+
+                #region Send SMS
+
+                var userMobileNumber = await _queryrepository.GetUserMobileNumber(user.Id.Value);
+
+                var sendsms = await _sMSService.SendSMS(new SendSMSRequest
+                {
+                    DestinationAddress = userMobileNumber,
+                    MessageText = $"کد فعال سازی جهت ورود به سیستم {OTPCode}"
+                });
+
+                if (!sendsms.Succeeded)
+                    throw new SimaResultException(CodeMessges._400Code, Messages.FailedSendSMS);
+
+                #endregion
+
+                #region Expirtion Code
+                string key = RedisKeys.SendSMS + user.Id.Value;
+                TimeSpan expirtionTime = TimeSpan.FromMinutes(2);
+                _redisService.Delete(key);
+                await _redisService.InsertAsync(key, OTPCode, expirtionTime);
+                #endregion
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return user.Id.Value;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+
+    }
+
+    public async Task<Result<LoginUserQueryResult>> Handle(GetConfirmOTPCode request, CancellationToken cancellationToken)
+    {
+        string redisKey = RedisKeys.SendSMS + request.UserId;
+        var code = await _redisService.GetAsync(redisKey);
+        if (code is not null)
+        {
+            var user = await _repository.CheckForgetPasswordCode(request.UserId, request.Code);
+            user.ConfirmOTpCode();
+            await _unitOfWork.SaveChangesAsync();
+            var permissions = await _queryrepository.GetPermissions(user.Id.Value);
+
+            var result = UserMapper.MapToToken(permissions, _tokenService);
+
+            //insert refreshToken in Redis
+            await _redisService.InsertAsync(permissions.UserInfoLogin.Username, result.RefreshToken, TimeSpan.FromHours(_securitySettings.RefreshTokenLifeTime));
+
+            return permissions;
+        }
+        else
+        {
+            throw new SimaResultException(CodeMessges._400Code, Messages.CodeIsExpired);
+        }
+    }
+
+    public async Task<Result<LoginUserQueryResult>> Handle(SendOTPByUsernameCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _repository.GetByUserName(request.UserName);
+
+            if (user.IsFirstLogin == "0" && user.IsSendOTP == "1")
+            {
+                var code = await user.GenerateCode(_service);
+
+                #region Send SMS
+
+                var userMobileNumber = await _queryrepository.GetUserMobileNumber(user.Id.Value);
+
+                var sendsms = await _sMSService.SendSMS(new SendSMSRequest
+                {
+                    DestinationAddress = userMobileNumber,
+                    MessageText = $"کد فعال سازی جهت ورود به سیستم {code}"
+                });
+
+                if (!sendsms.Succeeded)
+                    throw new SimaResultException(CodeMessges._400Code, Messages.FailedSendSMS);
+
+                #endregion
+
+                #region Expirtion Code
+                string key = RedisKeys.SendSMS + user.Id.Value;
+                TimeSpan expirtionTime = TimeSpan.FromMinutes(3);
+                _redisService.Delete(key);
+                await _redisService.InsertAsync(key, code, expirtionTime);
+                #endregion
+            }
+            await _unitOfWork.SaveChangesAsync();
+
+            if (user.AccessFailedCount > 0)
+                throw new SimaResultException(CodeMessges._400Code, Messages.InvalidUsernameOrPasswordError);
+
+            if (user.IsLocked == "1")
+                throw new SimaResultException(CodeMessges._400Code, Messages.UserIsLocked);
+
+            var permissions = await _queryrepository.GetPermissions(user.Id.Value);
+            permissions.UserInfoLogin.ConfirmCode = null;
+
+            var result = UserMapper.MapToToken(permissions, _tokenService);
+
+            //insert refreshToken in Redis
+            await _redisService.InsertAsync(permissions.UserInfoLogin.Username, result.RefreshToken, TimeSpan.FromHours(_securitySettings.RefreshTokenLifeTime));
+
+            return Result.Ok(result);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
     }
 
     //ForSSO
@@ -408,18 +578,21 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             #endregion
             await _unitOfWork.SaveChangesAsync();
 
-            var tokenUser = await _queryrepository.GetByUsernameAndPassword(userEntity.Username, userSSO.EmployeeCode);
-            var result = UserMapper.MapToToken(tokenUser, _securitySettings);
+
+            var tokenUser = await _repository.GetByUsernameAndPassword(userEntity.Username, userSSO.EmployeeCode);
+            var permissions = await _queryrepository.GetPermissions(tokenUser.Id.Value);
+            var result = UserMapper.MapToToken(permissions, _tokenService);
             return Result.Ok(result);
         }
         else
         {
             //TODO Change GetByUsernameAndPassword
-            var tokenUser = await _queryrepository.GetByUsernameAndPassword(user.Username, userSSO.EmployeeCode);
-            var result = UserMapper.MapToToken(tokenUser, _securitySettings);
+            var tokenUser = await _repository.GetByUsernameAndPassword(user.Username, userSSO.EmployeeCode);
+            var permissions = await _queryrepository.GetPermissions(tokenUser.Id.Value);
+            var result = UserMapper.MapToToken(permissions, _tokenService);
             return Result.Ok(result);
         }
     }
-
-
 }
+
+

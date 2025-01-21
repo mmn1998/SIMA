@@ -9,6 +9,12 @@ public class NextProgressInfo
     public string? SpName{ get; set; }
     public long ProgressId { get; set; }
     public long WorkflowId { get; set; }
+    public string? URLAddress { get; set; }
+    public long? ApiMethodActionId { get; set; }
+    public string? APIMethodName { get; set; }
+    public string? InputServiceName { get; set; }
+    public long? DataTypeId { get; set; }
+    public string? DataTypeName { get; set; }
 
 }
 public class StoreProcedureParamInfo
@@ -19,4 +25,6 @@ public class StoreProcedureParamInfo
     public string IsSystemParam { get; set; }
     public string SystemParamName { get; set; }
     public string Value { get; set; }
+    public string? FixedValue { get; set; }
+    public string? JsonFormat { get; set; }
 }

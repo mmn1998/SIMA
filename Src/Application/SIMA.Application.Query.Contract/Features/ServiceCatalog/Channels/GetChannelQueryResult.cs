@@ -10,13 +10,15 @@ public class GetChannelQueryResult
     public string? Scope { get; set; }
     public string? Description { get; set; }
     public long? ServiceStatusId { get; set; }
-    public DateOnly? InServiceDate { get; set; }
+    public string? ServiceStatusName { get; set; }
+    public DateTime? InServiceDate { get; set; }
     public string? InServiceDatePersian => InServiceDate.ToPersianDate();
     public string? ActiveStatus { get; set; }
     public IEnumerable<GetChannelResponsibleQuery>? ChannelResponsibleList { get; set; }
     public IEnumerable<GetProductChannelQuery>? ProductChannelList { get; set; }
     public IEnumerable<GetChannelUserTypeQuery>? ChannelUserTypeList { get; set; }
     public IEnumerable<GetChannelAccessPointQuery>? ChannelAccessPointList { get; set; }
+    public IEnumerable<GetServiceChannelQuery>? ServiceChannelList { get; set; }
 }
 public class GetChannelResponsibleQuery
 {
@@ -37,6 +39,13 @@ public class GetChannelUserTypeQuery
 }
 public class GetChannelAccessPointQuery
 {
-    public string? IpAddress { get; set; }
-    public string? Port { get; set; }
+    public string? IpAddressTo { get; set; }
+    public string? PortTo { get; set; }
+    public string? IpAddressFrom { get; set; }
+    public string? PortFrom { get; set; }
+}
+public class GetServiceChannelQuery
+{
+    public long? ServiceId { get; set; }
+    public string? ServiceName { get; set; }
 }

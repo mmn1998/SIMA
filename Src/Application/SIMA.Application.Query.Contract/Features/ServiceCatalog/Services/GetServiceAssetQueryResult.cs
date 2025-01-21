@@ -8,6 +8,7 @@ public class GetServiceAssetQueryResult
     public string? SerialNumber { get; set; }
     public string? Model { get; set; }
     public string? Manufacturer { get; set; }
+    public string? Title { get; set; }
     public DateTime? ManufactureDate { get; set; }
     public string? ManufactureDatePersian => ManufactureDate.ToPersianDate();
     public DateTime? OwnershipDate { get; set; }

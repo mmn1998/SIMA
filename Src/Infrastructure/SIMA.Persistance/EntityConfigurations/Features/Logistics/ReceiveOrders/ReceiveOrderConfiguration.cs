@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.ReceiveOrders;
 
@@ -25,7 +27,7 @@ public class ReceiveOrderConfiguration : IEntityTypeConfiguration<ReceiveOrder>
                     .IsConcurrencyToken();
 
         entity.Property(x => x.ReceiptDocumentId)
-            .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
+            .HasConversion(x => x.Value, x => new LogisticsSupplyDocumentId(x));
         entity.HasOne(x => x.ReceiptDocument)
             .WithMany(x => x.ReceiveOrders)
             .HasForeignKey(x => x.ReceiptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);

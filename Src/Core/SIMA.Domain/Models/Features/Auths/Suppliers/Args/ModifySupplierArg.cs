@@ -8,6 +8,8 @@ public class ModifySupplierArg
     public int SuccessOrderCountinTheYear { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
+    public string? NationalCode { get; set; }
+    public string? NationalId { get; set; }
     public long ActiveStatusId { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }

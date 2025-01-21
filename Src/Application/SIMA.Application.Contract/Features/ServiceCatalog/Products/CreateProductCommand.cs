@@ -13,5 +13,12 @@ public class CreateProductCommand : ICommand<Result<long>>
     public long ServiceStatusId { get; set; }
     public string? InServiceDate { get; set; }
     public List<ProductResponsibleCommand>? ProductResponsibles { get; set; }
-    public List<ProductChannelCommand>? Channels { get; set; }
+    public List<CreateChannelList>? Channels { get; set; }
+
+
+}
+
+public class CreateChannelList
+{
+    public long ChannelId { get; set; }
 }

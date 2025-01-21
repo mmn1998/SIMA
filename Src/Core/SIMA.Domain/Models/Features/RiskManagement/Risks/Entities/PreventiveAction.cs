@@ -13,8 +13,8 @@ namespace SIMA.Domain.Models.Features.RiskManagement.Risks.Entities
         }
         private PreventiveAction(CreatePreventiveActionArg arg)
         {
-            Id = new PreventiveActionId(IdHelper.GenerateUniqueId());
-            RiskId = new RiskId(arg.RiskId);
+            Id = new(arg.Id);
+            RiskId = new(arg.RiskId);
             ActionDescription = arg.ActionDescription;
             ActiveStatusId = arg.ActiveStatusId;
             CreatedAt = arg.CreatedAt;
@@ -25,19 +25,17 @@ namespace SIMA.Domain.Models.Features.RiskManagement.Risks.Entities
         {
             return new PreventiveAction(arg);
         }
-        public async Task Modify(ModifyPreventiveActionArg arg)
-        {
-            RiskId = new RiskId(arg.RiskId);
-            ActionDescription = arg.ActionDescription;
-            ModifiedAt = arg.ModifiedAt;
-            ModifiedBy = arg.ModifiedBy;
-            ActiveStatusId = arg.ActiveStatusId;
-        }
         public void Delete(long userId)
         {
             ModifiedBy = userId;
             ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
             ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        }
+        public void Active(long userId)
+        {
+            ModifiedBy = userId;
+            ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+            ActiveStatusId = (long)ActiveStatusEnum.Active;
         }
         public PreventiveActionId Id { get; private set; }
         public RiskId RiskId { get; private set; }

@@ -18,7 +18,7 @@ public class ChannelsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    [SimaAuthorize(Permissions.ChannelGet)]
+    //[SimaAuthorize(Permissions.ChannelGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetChannelQuery { Id = id };

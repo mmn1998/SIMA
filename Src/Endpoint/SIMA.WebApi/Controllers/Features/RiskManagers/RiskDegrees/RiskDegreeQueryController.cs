@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.RiskManagement.RiskDegrees;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.RiskDegrees;
 
@@ -17,12 +18,14 @@ public class RiskDegreeQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAll")]
+    [SimaAuthorize(Permissions.RiskDegreesGetAll)]
     public async Task<Result> Get([FromBody] GetAllRiskDegreesQuery request)
     {
         return await _mediator.Send(request);
     }
 
     [HttpGet("{id}")]
+    [SimaAuthorize(Permissions.RiskDegreesGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetRiskDegreeQuery { Id = id };

@@ -19,6 +19,7 @@ public class ServiceRepository : Repository<Service>, IServiceRepository
 
     public async Task<Service> GetById(ServiceId Id)
     {
+        _context.Database.SetCommandTimeout(180);
         var entity = await _context.Services
             .Include(x => x.ServiceCustomers)
             .Include(x => x.ServiceUsers)
@@ -29,9 +30,16 @@ public class ServiceRepository : Repository<Service>, IServiceRepository
             .Include(x => x.ServiceAssets)
             .Include(x => x.ServiceConfigurationItems)
             .Include(x => x.ServiceAssignStaffes)
+            .Include(x => x.ServiceRelatedIssues)
             .FirstOrDefaultAsync(x => x.Id == Id)
             ;
         entity.NullCheck();
         return entity ?? throw SimaResultException.NotFound;
+    }
+
+    public async Task<Service?> GetLastService()
+    {
+        var entity = await _context.Services.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+        return entity;
     }
 }

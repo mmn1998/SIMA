@@ -88,6 +88,24 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to میزان احتمال از دست دادن ارزش دارایی نمی تواند بیشتر از 100 باشد.
+        /// </summary>
+        public static string ALEError {
+            get {
+                return ResourceManager.GetString("ALEError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کد شعبه مورد نظر اشتباه است. لطفا با پشتیبانی تماس بگیرید.
+        /// </summary>
+        public static string BranchCodeError {
+            get {
+                return ResourceManager.GetString("BranchCodeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شعبه ها نباید نزدیک هم باشند!.
         /// </summary>
         public static string BranchDistanceException {
@@ -97,11 +115,38 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to برای این کاربر شعبه ای تعریف نشده است!.
+        /// </summary>
+        public static string BranchIsNotDefinedWithUserId {
+            get {
+                return ResourceManager.GetString("BranchIsNotDefinedWithUserId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to محل انتخاب شده برای شعبه با یک شعبه دیگر همپوشانی دارد.
         /// </summary>
         public static string BranchLocationHasOverlapError {
             get {
                 return ResourceManager.GetString("BranchLocationHasOverlapError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کارگزار انتخابی با کارگزار پاسخ استعلام مطابقت ندارد.
+        /// </summary>
+        public static string BrokerNotValid {
+            get {
+                return ResourceManager.GetString("BrokerNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نوع کارگزار انتخاب شده با حواله استعلام شده مطابقت ندارد..
+        /// </summary>
+        public static string BrokerTypeErrorInTrustyDraftFinal {
+            get {
+                return ResourceManager.GetString("BrokerTypeErrorInTrustyDraftFinal", resourceCulture);
             }
         }
         
@@ -196,11 +241,56 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to لطفا ثبت حواحه خود را تکمیل نمایید.
+        /// </summary>
+        public static string ContinueForAddDraft {
+            get {
+                return ResourceManager.GetString("ContinueForAddDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شما دسترسی ایجاد مورد برای این فرایند را ندارید.
         /// </summary>
         public static string CreateIssueWithChechActorException {
             get {
                 return ResourceManager.GetString("CreateIssueWithChechActorException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نوع ارز درخواست با استعلام مطابقت ندارد.
+        /// </summary>
+        public static string CurrencyTypeError {
+            get {
+                return ResourceManager.GetString("CurrencyTypeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کاربر قادر است حداکثر سه نوع ارز را در یک استعلام درخواست نماید.
+        /// </summary>
+        public static string CurrencyTypeOverCountError {
+            get {
+                return ResourceManager.GetString("CurrencyTypeOverCountError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مشتری وجود ندارد.
+        /// </summary>
+        public static string CustomerIsNull {
+            get {
+                return ResourceManager.GetString("CustomerIsNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کد مشتزی اشتباه است!.
+        /// </summary>
+        public static string CustomerNumberNotValidError {
+            get {
+                return ResourceManager.GetString("CustomerNumberNotValidError", resourceCulture);
             }
         }
         
@@ -250,6 +340,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to درصورت انتخاب نوع پرداخت واریز به حساب، شماره پروفرما اجباری است..
+        /// </summary>
+        public static string DepositProformaCurrencyTypeIdException {
+            get {
+                return ResourceManager.GetString("DepositProformaCurrencyTypeIdException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to مقدار زیر سامانه نمیتواند خالی باشد.
         /// </summary>
         public static string DomainIsNotNull {
@@ -268,11 +367,56 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to حواله مورد نظر در جریان می باشد.
+        /// </summary>
+        public static string DraftInProgress {
+            get {
+                return ResourceManager.GetString("DraftInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مبلغ درخواستی درخواست با استعلام مطابقت ندارد.
+        /// </summary>
+        public static string DraftRequetAmountError {
+            get {
+                return ResourceManager.GetString("DraftRequetAmountError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نوع حواله درخواست با استعلام مطابقت ندارد.
+        /// </summary>
+        public static string DraftTypeError {
+            get {
+                return ResourceManager.GetString("DraftTypeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to تاریخ وارد شده باید بیشتر از تاریخ امروز باشد.
         /// </summary>
         public static string DueDateError {
             get {
                 return ResourceManager.GetString("DueDateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to میزان درصد از دست دادن دارایی در زمان وقوع تهدید نمیتواند بیشتر از 100 باشد.
+        /// </summary>
+        public static string EFError {
+            get {
+                return ResourceManager.GetString("EFError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to خطا در فراخوانی سرویس بهسازان.
+        /// </summary>
+        public static string ErrorFromBehsazanService {
+            get {
+                return ResourceManager.GetString("ErrorFromBehsazanService", resourceCulture);
             }
         }
         
@@ -300,6 +444,15 @@ namespace SIMA.Resources {
         public static string ExternalServiceException {
             get {
                 return ResourceManager.GetString("ExternalServiceException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to خطا در ارسال پیامک.
+        /// </summary>
+        public static string FailedSendSMS {
+            get {
+                return ResourceManager.GetString("FailedSendSMS", resourceCulture);
             }
         }
         
@@ -457,6 +610,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to نوع ارز تعرفه انتخاب شده و نوع ارز استعلام انجام شده یکسان نیست..
+        /// </summary>
+        public static string InvalidWageRateException {
+            get {
+                return ResourceManager.GetString("InvalidWageRateException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کد مورد یکتا نمی باشد.
         /// </summary>
         public static string IssueCodeIsNotUnique {
@@ -583,7 +745,7 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to کد ملی مورد نظر نا معتبر است..
+        ///   Looks up a localized string similar to کد ملی مورد نظر قبلا ثبت شده است..
         /// </summary>
         public static string NationalCodeIsNotUniqueError {
             get {
@@ -610,6 +772,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to برای کارگذار ارسالی نوع کارگذاری مشخص نشده است!.
+        /// </summary>
+        public static string NoBrokerTypeForBrokerIdError {
+            get {
+                return ResourceManager.GetString("NoBrokerTypeForBrokerIdError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to عدم انطباق داده های فرایند..
         /// </summary>
         public static string NoConditionWasCorrect {
@@ -624,6 +795,15 @@ namespace SIMA.Resources {
         public static string NoMiddleIssueWeightFound {
             get {
                 return ResourceManager.GetString("NoMiddleIssueWeightFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to برای کاربر موردنظر، شماره همراه فعالی ثبت نشده است.
+        /// </summary>
+        public static string NoMobileFoundError {
+            get {
+                return ResourceManager.GetString("NoMobileFoundError", resourceCulture);
             }
         }
         
@@ -678,6 +858,15 @@ namespace SIMA.Resources {
         public static string OrderingAllocatedError {
             get {
                 return ResourceManager.GetString("OrderingAllocatedError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مقدار اولویت بندی وارد شده موجود میباشد لطفا مقدار دیگری انتخاب کنید..
+        /// </summary>
+        public static string OrderingNotUniqueError {
+            get {
+                return ResourceManager.GetString("OrderingNotUniqueError", resourceCulture);
             }
         }
         
@@ -871,6 +1060,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to برای این حواله نمی توانید نامه ای ثبت کنید.
+        /// </summary>
+        public static string RefferalLetterNotAllowCreate {
+            get {
+                return ResourceManager.GetString("RefferalLetterNotAllowCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شناسه ملی نامعتبر است.
         /// </summary>
         public static string RegisterNumberIsNotValid {
@@ -885,6 +1083,15 @@ namespace SIMA.Resources {
         public static string RequiredProp {
             get {
                 return ResourceManager.GetString("RequiredProp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ترکیب 3 فیلد درجه، احتمال ووقع و تاثیر ریسک را نباید تکراری باشد..
+        /// </summary>
+        public static string RiskPossibilityIdRiskImpactIdRiskDegreeIdUniqueError {
+            get {
+                return ResourceManager.GetString("RiskPossibilityIdRiskImpactIdRiskDegreeIdUniqueError", resourceCulture);
             }
         }
         
@@ -912,6 +1119,15 @@ namespace SIMA.Resources {
         public static string ServerError {
             get {
                 return ResourceManager.GetString("ServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مدت زمان دوره خدمت برای خدمات نمیتواند خالی باشد.
+        /// </summary>
+        public static string ServiceDuration {
+            get {
+                return ResourceManager.GetString("ServiceDuration", resourceCulture);
             }
         }
         
@@ -1033,6 +1249,24 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فرمت تارنمای وارد شده اشتبا است..
+        /// </summary>
+        public static string UrlError {
+            get {
+                return ResourceManager.GetString("UrlError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مدت زمان دوره مصرف برای کالا های مصرفی نمیتواند خالی باشد.
+        /// </summary>
+        public static string UsageDurationError {
+            get {
+                return ResourceManager.GetString("UsageDurationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کاربر مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است..
         /// </summary>
         public static string UserActorDuplicateError {
@@ -1096,6 +1330,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ثبت کننده باید با شعبه انتخاب شده تطابق داشته باشد..
+        /// </summary>
+        public static string UserIsNotInSameBranch {
+            get {
+                return ResourceManager.GetString("UserIsNotInSameBranch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کاربر در محدوده بازیگر مجاز برای اجرای این فعالیت نیست..
         /// </summary>
         public static string UserIsNotValidInActorScopeError {
@@ -1146,6 +1389,24 @@ namespace SIMA.Resources {
         public static string UserRoleDuplicateError {
             get {
                 return ResourceManager.GetString("UserRoleDuplicateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to کارمزد باید بین 0.01 تا 100 باشد!.
+        /// </summary>
+        public static string WagePercentageError {
+            get {
+                return ResourceManager.GetString("WagePercentageError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نوع ارز با الگوی کارمزد مطابقت ندارد!.
+        /// </summary>
+        public static string WageRateNotMatchCurrencyType {
+            get {
+                return ResourceManager.GetString("WageRateNotMatchCurrencyType", resourceCulture);
             }
         }
         

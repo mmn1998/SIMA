@@ -21,7 +21,6 @@ public class UserQueryRepository : IUserQueryRepository
 {
     private readonly string _connectionString;
     private readonly SIMADBContext _readContext;
-
     public UserQueryRepository(IConfiguration configuration, SIMADBContext context)
     {
         _connectionString = configuration.GetConnectionString();
@@ -82,72 +81,67 @@ public class UserQueryRepository : IUserQueryRepository
             return result != 0;
         }
     }
-    public async Task<LoginUserQueryResult> GetByUsernameAndPassword(string username, string password)
+    public async Task<LoginUserQueryResult> GetPermissions(long userId)
     {
         var response = new LoginUserQueryResult();
-        var user = await _readContext.Users.FirstOrDefaultAsync(u => u.Username == username);
-        if (user is null) throw new SimaResultException(CodeMessges._100002Code, Messages.InvalidUsernameOrPasswordError);
-        var checkPassword = user.Password.Verify(password);
-        if (!checkPassword)
-        {
-            UserInfoLogin userInfo = new UserInfoLogin();
-            userInfo.AccessFailedCount = (int)user.AccessFailedCount + 1;
-            userInfo.AccessFailedOverallCount = (int)user.AccessFailedOverallCount + 1;
-            userInfo.AccessFailedDate = DateTime.Now;
-
-            if (user.AccessFailedCount < 4)
-                userInfo.IsLocked = "0";
-            else
-                userInfo.IsLocked = "1";
-            response.UserInfoLogin = userInfo;
-            await user.AccessFaild(userInfo);
-            return response;
-        }
         var query = @"
-                           --User
-                           select distinct
-                           u.Id UserId, u.CompanyId,u.Username, u.IsFirstLogin , u.IsLocked , u.AccessFailedOverallCount , u.AccessFailedDate
-                           from Authentication.Users u
-                           where U.Id=@UserId  and U.ActiveStatusId<>3
-                          
-                           --Roles
-                           select distinct r.id RoleId
-                           from Authentication.Users u
-                           inner join Authentication.UserRole ur on u.Id = ur.UserId
-                           inner join Authentication.Role r on r.Id = ur.RoleId
-                           where U.Id=@UserId  and U.ActiveStatusId<>3
-                          
-                           --Groups
-                           select distinct g.id GroupId
-                           from Authentication.Users u
-                           inner  join Authentication.UserGroup ug on u.Id = ug.UserId
-                           inner join Authentication.Groups g on g.Id = ug.GroupId
-                           where U.Id=@UserId  and U.ActiveStatusId<>3
-                          
-                           --Permissions
-                           select distinct p1.Code Code
-                           from Authentication.Users u
-                           inner  join Authentication.UserPermission up on u.Id = up.UserId
-                           inner join [Authentication].[Permission] P1 on P1.Id=up.PermissionId
-                           where U.Id=@UserId  and U.ActiveStatusId<>3 and up.ActiveStatusId != 3
-                           union 
-                           select distinct p2.Code Code
-                           from Authentication.Users u
-                           inner join Authentication.UserRole ur on u.Id = ur.UserId
-                           inner join Authentication.Role r on r.Id = ur.RoleId
-                           inner join Authentication.RolePermission rp on r.Id = rp.RoleId
-                           inner join [Authentication].[Permission] P2 on P2.Id=rp.PermissionId
-                           where U.Id=@UserId and U.ActiveStatusId<>3
-                           union 
-                           select distinct P3.Code Code
-                           from Authentication.Users u
-                           inner  join Authentication.UserGroup ug on u.Id = ug.UserId
-                           inner join Authentication.Groups g on g.Id = ug.GroupId
-                           inner join Authentication.GroupPermission gp on g.Id = gp.GroupId
-                           inner join [Authentication].[Permission] P3 on P3.Id=gp.PermissionId
-                           where U.Id=@UserId  and u.ActiveStatusId<>3
-                          
-                          --Menus
+                                         --user
+
+                            select distinct
+                                u.Id UserId,
+                                u.CompanyId,
+                                u.Username,
+                                u.IsFirstLogin,
+                                u.IsLocked,
+                                u.AccessFailedOverallCount,
+                                u.AccessFailedDate,
+                                u.ConfirmCode,
+                                u.IsSendOTP
+                             from Authentication.Users u
+                            where U.Id=@UserId  and U.ActiveStatusId<>3
+
+                             --Roles
+                             select distinct r.id RoleId
+                             from Authentication.Users u
+                             inner join Authentication.UserRole ur on u.Id = ur.UserId
+                             inner join Authentication.Role r on r.Id = ur.RoleId
+                             where U.Id=@UserId  and U.ActiveStatusId<>3
+
+                             --groups
+                             select distinct g.id GroupId
+                             from Authentication.Users u
+                             inner  join Authentication.UserGroup ug on u.Id = ug.UserId
+                             inner join Authentication.Groups g on g.Id = ug.GroupId
+                             where U.Id=@UserId  and U.ActiveStatusId<>3
+
+                             --permission
+                             select distinct p1.Code Code
+                             from Authentication.Users u
+                             inner  join Authentication.UserPermission up on u.Id = up.UserId
+                             inner join [Authentication].[Permission] P1 on P1.Id=up.PermissionId
+                             where U.Id=@UserId  and U.ActiveStatusId<>3 and up.ActiveStatusId != 3
+
+                             union 
+
+                             select distinct p2.Code Code
+                             from Authentication.Users u
+                             inner join Authentication.UserRole ur on u.Id = ur.UserId
+                             inner join Authentication.Role r on r.Id = ur.RoleId
+                             inner join Authentication.RolePermission rp on r.Id = rp.RoleId
+                             inner join [Authentication].[Permission] P2 on P2.Id=rp.PermissionId
+                             where U.Id=@UserId and U.ActiveStatusId<>3
+
+                             union 
+
+                             select distinct P3.Code Code
+                             from Authentication.Users u
+                             inner  join Authentication.UserGroup ug on u.Id = ug.UserId
+                             inner join Authentication.Groups g on g.Id = ug.GroupId
+                             inner join Authentication.GroupPermission gp on g.Id = gp.GroupId
+                             inner join [Authentication].[Permission] P3 on P3.Id=gp.PermissionId
+                             where U.Id=@UserId  and u.ActiveStatusId<>3
+
+                             --Menus
                           SELECT distinct f.Code Code    from 
                           Authentication.Domain d 
                           join Authentication.DomainForms df on d.Id=df.DomainId
@@ -157,28 +151,27 @@ public class UserQueryRepository : IUserQueryRepository
                           where fu.UserId=@UserId  and fu.ActiveStatusId<>3 and u.ActiveStatusId <>3 and f.ActiveStatusId <>3
                           union
                           select distinct f.Code Code from 
-                          Authentication.Domain d
-                          join Authentication.DomainForms df on d.Id=df.DomainId
-                          join Authentication.Form f on df.FormId=f.Id
-                          join Authentication.FormGroup fg on f.Id=fg.FormId
-                          join Authentication.Groups g on fg.GroupId=g.Id
-                          join Authentication.UserGroup ug on g.Id=ug.GroupId
-                          join Authentication.Users u on ug.UserId=u.Id
-                          where u.Id=@UserId  and u.ActiveStatusId<>3 and fg.ActiveStatusId <>3 and f.ActiveStatusId <>3
+                         Authentication.Domain d
+                         join Authentication.DomainForms df on d.Id=df.DomainId and df.ActiveStatusId <>3
+                         join Authentication.Form f on df.FormId=f.Id and f.ActiveStatusId <>3
+                         join Authentication.FormGroup fg on f.Id=fg.FormId and fg.ActiveStatusId <>3
+                         join Authentication.Groups g on fg.GroupId=g.Id and g.ActiveStatusId <>3
+                         join Authentication.UserGroup ug on g.Id=ug.GroupId  and ug.ActiveStatusId <>3
+                         join Authentication.Users u on ug.UserId=u.Id and u.ActiveStatusId <>3
+                         where u.Id=@UserId  and u.ActiveStatusId<>3 and fg.ActiveStatusId <>3 and f.ActiveStatusId <>3
                           union
                           select distinct f.Code Code from 
-                          Authentication.Domain d
-                          join Authentication.DomainForms df on d.Id=df.DomainId
-                          join Authentication.Form f on df.FormId=f.Id
-                          join Authentication.FormRole fr on f.Id=fr.FormId
-                          join Authentication.Role r on fr.RoleId=r.Id
-                          join Authentication.UserRole ur on r.Id=ur.RoleId
-                          join Authentication.Users u on ur.UserId=u.Id
-                          where u.Id=@UserId  and u.ActiveStatusId<>3 and fr.ActiveStatusId <>3 and f.ActiveStatusId <>3
-                    ";
+                            Authentication.Domain d
+                            join Authentication.DomainForms df on d.Id=df.DomainId and df.ActiveStatusId <>3
+                            join Authentication.Form f on df.FormId=f.Id and f.ActiveStatusId <>3
+                            join Authentication.FormRole fr on f.Id=fr.FormId and fr.ActiveStatusId <>3
+                            join Authentication.Role r on fr.RoleId=r.Id and R.ActiveStatusId <>3
+                            join Authentication.UserRole ur on r.Id=ur.RoleId and UR.ActiveStatusId <> 3
+                            join Authentication.Users u on ur.UserId=u.Id and u.ActiveStatusId <>3
+                            where u.Id=@UserId  and u.ActiveStatusId<>3 and fr.ActiveStatusId <>3 and f.ActiveStatusId <>3 ";
         using (var connection = new SqlConnection(_connectionString))
         {
-            using (var multi = await connection.QueryMultipleAsync(query, new { UserId = user.Id.Value }))
+            using (var multi = await connection.QueryMultipleAsync(query, new { UserId = userId }))
             {
                 response.UserInfoLogin = multi.ReadAsync<UserInfoLogin>().GetAwaiter().GetResult().FirstOrDefault() ?? throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
                 response.RoleIds = await multi.ReadAsync<long>();
@@ -187,21 +180,23 @@ public class UserQueryRepository : IUserQueryRepository
                 response.Menue = await multi.ReadAsync<long>();
             }
         }
+
         if (response.UserInfoLogin.IsFirstLogin != "0")
         {
-            response.Permissions = response.Permissions.Where(x => 
-            x == 1001);
+            response.Permissions = response.Permissions.Where(x => x == 1001); //Access for ChangePassword
             response.RoleIds = null;
             response.GroupIds = null;
             response.Menue = null;
+            return response;
         }
-        else
+
+        if (response.UserInfoLogin.ConfirmCode is not null)
         {
-            if (response.UserInfoLogin.IsLocked == "0")
-            {
-                response.UserInfoLogin.AccessFailedCount = 0;
-                await user.AccessFaild(response.UserInfoLogin);
-            }
+            response.Permissions = response.Permissions.Where(x => x == 1002); //Access For OTP
+            response.RoleIds = null;
+            response.GroupIds = null;
+            response.Menue = null;
+            return response;
         }
 
         return response;
@@ -519,7 +514,9 @@ SELECT DISTINCT
         using (var connection = new SqlConnection(_connectionString))
         {
             string query = @"
-                           SELECT
+                           
+
+SELECT
                             U.Id,
                             U.ProfileId,
                             U.CompanyId,
@@ -532,6 +529,7 @@ SELECT DISTINCT
                              Select 
 	                           F.Id  FormId
 	                          ,F.Name FormName 
+	                          ,F.Title FormTitle 
 	                          ,D.Id DomainId
 	                          ,D.Name DomainName 
 	                          from Authentication.Users U
@@ -552,7 +550,7 @@ SELECT DISTINCT
                             join Authentication.UserPermission UP on UP.UserId = U.Id and UP.ActiveStatusId <>3
                             join Authentication.FormPermission FP on FP.PermissionId= UP.PermissionId and FP.ActiveStatusId <>3
                             join Authentication.Permission P on UP.PermissionId = P.Id and P.ActiveStatusId <>3
-                          where  UP.UserId = @userId
+                          where  UP.UserId = @userId order by FP.FormId
                             
                             --UserRole
 
@@ -592,8 +590,6 @@ SELECT DISTINCT
                             INNER JOIN Basic.LocationType AS LT ON LL.LocationTypeID = LT.ID
                             where  U.ID = @UserID and LL.[ActiveStatusID]<>3 and ULA.[ActiveStatusID]<>3 
                             group by   ULA.id  ,LL.name ,ll.id,LL.LocationTypeID ,LT.Name;
-
-
 ";
             using (var multi = await connection.QueryMultipleAsync(query, new { UserID = userId }))
             {
@@ -636,6 +632,27 @@ where s.ProfileId = @ProfileId and c.Id = @CompanyId and s.ActiveStatusId = 1
             }
         }
         return result;
+    }
+    public async Task<string> GetUserMobileNumber(long userId)
+    {
+        string mobileNumber = string.Empty;
+        var query = @"
+                    select top 1 PB.PhoneNumber from 
+                      Authentication.Users U
+                      join Authentication.Profile P on p.Id = u.ProfileID and P.ActiveStatusId<>3
+                      join [Authentication].[PhoneBook] PB on PB.ProfileId = P.Id and PB.ActiveStatusId<>3
+                      join [Basic].[PhonType] PT on PB.PhoneTypeId = PT.Id and PT.ActiveStatusId<>3
+                      where u.Id = @Id and PT.Id = 3 -- phoneTypeId = 3 is mobile 
+";
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            var response = await connection.QueryFirstOrDefaultAsync<string>(query, new { Id = userId });
+            if (string.IsNullOrEmpty(response)) throw new SimaResultException(CodeMessges._100068Code, Messages.NoMobileFoundError);
+            else mobileNumber = response;
+        }
+        return mobileNumber;
+
     }
     public async Task<List<long>> GetUserPermissonByFormId(long formId, long userId)
     {

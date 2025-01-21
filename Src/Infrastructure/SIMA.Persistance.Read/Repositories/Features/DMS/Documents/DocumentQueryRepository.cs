@@ -22,12 +22,12 @@ public class DocumentQueryRepository : IDocumentQueryRepository
     public async Task<Result<IEnumerable<GetAllDocumentQueryResult>>> GetAll(GetAllDocumentsQuery request)
     {
         int totalCount = 0;
-        
+
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            
-                string queryCount = @" WITH Query as(
+
+            string queryCount = @" WITH Query as(
 						   SELECT DISTINCT
 		D.[Id]
       ,D.[Code]
@@ -41,7 +41,7 @@ public class DocumentQueryRepository : IDocumentQueryRepository
 								SELECT Count(*) FROM Query
 								 /**where**/
 								 ; ";
-                string query = $@" WITH Query as(
+            string query = $@" WITH Query as(
 							 SELECT DISTINCT
 		D.[Id]
       ,D.[Code]
@@ -62,11 +62,11 @@ public class DocumentQueryRepository : IDocumentQueryRepository
                 var count = await multi.ReadFirstAsync<int>();
                 var response = await multi.ReadAsync<GetAllDocumentQueryResult>();
                 return Result.Ok(response, request, count);
-            }            
+            }
         }
     }
 
-    public async Task<GetDocumentResult> GetForDownload(long documentId)
+    public async Task<GetDocumentResult> GetForDownload(long documentId, bool? forIssueDetail = false)
     {
         var result = new GetDocumentResult();
         string query = @"
@@ -83,7 +83,7 @@ SELECT DISTINCT
         {
             await connection.OpenAsync();
             result = await connection.QueryFirstOrDefaultAsync<GetDocumentResult>(query, new { Id = documentId });
-            result.NullCheck();
+            if (forIssueDetail == false) result.NullCheck();
         }
         return result;
     }

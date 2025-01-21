@@ -4,7 +4,6 @@ using SIMA.Domain.Models.Features.Logistics.Goodses.Args;
 using SIMA.Domain.Models.Features.Logistics.Goodses.Contracts;
 using SIMA.Domain.Models.Features.Logistics.Goodses.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
-using SIMA.Domain.Models.Features.Logistics.OrderingItems.Entities;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Entities;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -25,7 +24,6 @@ public class Goods : Entity, IAggregateRoot
         UnitMeasurementId = new(arg.UnitMeasurementId);
         Name = arg.Name;
         Code = arg.Code;
-        IsFixedAsset = arg.IsFixedAsset;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -42,7 +40,6 @@ public class Goods : Entity, IAggregateRoot
         UnitMeasurementId = new(arg.UnitMeasurementId);
         Name = arg.Name;
         Code = arg.Code;
-        IsFixedAsset = arg.IsFixedAsset;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -74,7 +71,6 @@ public class Goods : Entity, IAggregateRoot
     public virtual GoodsCategory GoodsCategory { get; private set; }
     public UnitMeasurementId UnitMeasurementId { get; private set; }
     public virtual UnitMeasurement UnitMeasurement { get; private set; }
-    public string? IsFixedAsset { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -92,6 +88,4 @@ public class Goods : Entity, IAggregateRoot
     private List<LogisticsRequestGoods> _logisticsRequestGoods = new();
     public ICollection<LogisticsRequestGoods> LogisticsRequestGoods => _logisticsRequestGoods;
 
-    private List<OrderingItem> _orderingItems = new();
-    public ICollection<OrderingItem> OrderingItems => _orderingItems;
 }

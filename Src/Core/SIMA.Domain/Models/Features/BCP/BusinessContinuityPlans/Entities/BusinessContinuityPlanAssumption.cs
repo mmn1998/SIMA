@@ -1,7 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
-using SIMA.Domain.Models.Features.BCP.ScenarioBusinessContinuityPlanAssumptions.Entities;
+using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -33,6 +33,11 @@ public class BusinessContinuityPlanAssumption : Entity
         Code = arg.Code;
         ModifiedBy = arg.ModifiedBy;
         ModifiedAt = arg.ModifiedAt;
+    }
+
+    public void ChangeStatus(ActiveStatusEnum status)
+    {
+        ActiveStatusId = (long)status;
     }
     public BusinessContinuityPlanAssumptionId Id { get; private set; }
     public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }

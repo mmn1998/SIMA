@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.Contracts;
+using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;

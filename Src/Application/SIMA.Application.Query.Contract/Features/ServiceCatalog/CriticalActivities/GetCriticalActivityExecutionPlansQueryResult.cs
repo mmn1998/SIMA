@@ -6,8 +6,27 @@ namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.CriticalActivi
 public class GetCriticalActivityExecutionPlansQueryResult
 {
     public int WeekDay { get; set; }
-    public TimeOnly? ServiceAvalibilityStartTime { get; set; }
-    public string? ServiceAvalibilityStartTimeNormalized => DateHelper.ToTimeOnly(ServiceAvalibilityStartTime);
-    public TimeOnly? ServiceAvalibilityEndTime { get; set; }
-    public string? ServiceAvalibilityEndTimeNormalized => DateHelper.ToTimeOnly(ServiceAvalibilityEndTime);
+    public TimeSpan? ServiceAvalibilityStartTime { get; set; }
+    private TimeOnly? ServiceAvalibilityStartTimeOnly
+    {
+        get
+        {
+            return ServiceAvalibilityStartTime.HasValue
+                ? TimeOnly.FromTimeSpan(ServiceAvalibilityStartTime.Value)
+                : (TimeOnly?)null;
+        }
+    }
+    public string? ServiceAvalibilityStartTimeNormalized => DateHelper.ToTimeOnly(ServiceAvalibilityStartTimeOnly);
+
+    public TimeSpan? ServiceAvalibilityEndTime { get; set; }
+    private TimeOnly? ServiceAvalibilityEndTimeOnly
+    {
+        get
+        {
+            return ServiceAvalibilityEndTime.HasValue
+                ? TimeOnly.FromTimeSpan(ServiceAvalibilityEndTime.Value)
+                : (TimeOnly?)null;
+        }
+    }
+    public string? ServiceAvalibilityEndTimeNormalized => DateHelper.ToTimeOnly(ServiceAvalibilityEndTimeOnly);
 }

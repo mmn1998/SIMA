@@ -7,7 +7,8 @@ namespace SIMA.Application.Query.Features.Auths.Suppliers;
 
 public class SupplierQueryHandler : IQueryHandler<GetSupplierQuery, Result<GetSupplierQueryResult>>,
     IQueryHandler<GetAllSuppliersQuery, Result<IEnumerable<GetSupplierQueryResult>>>,
-    IQueryHandler<GetAllOrderedNotInBlackListSuppliersQuery, Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>>
+    IQueryHandler<GetAllOrderedNotInBlackListSuppliersQuery, Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>>,
+    IQueryHandler<GetSupplierAccountByLogisticsSupplyQuery, Result<IEnumerable<GetSupplierAccountByLogisticsSupplyQueryResult>>>
 {
     private readonly ISupplierQueryRepository _repository;
 
@@ -29,5 +30,10 @@ public class SupplierQueryHandler : IQueryHandler<GetSupplierQuery, Result<GetSu
     public async Task<Result<IEnumerable<GetAllOrderedNotInBlackListSuppliersQueryResult>>> Handle(GetAllOrderedNotInBlackListSuppliersQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAllOrderedNotInBlackList(request);
+    }
+
+    public async Task<Result<IEnumerable<GetSupplierAccountByLogisticsSupplyQueryResult>>> Handle(GetSupplierAccountByLogisticsSupplyQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetSupplierAccountByLogisticsSupply(request.LogisticsSupplyId);
     }
 }

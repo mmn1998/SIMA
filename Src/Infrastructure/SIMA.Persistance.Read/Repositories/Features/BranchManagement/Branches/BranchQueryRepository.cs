@@ -1,11 +1,9 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Query.Contract.Features.Auths.ViewLists.ViewField;
 using SIMA.Application.Query.Contract.Features.BranchManagement.Branches;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Framework.Common.Exceptions;
-using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -20,12 +18,10 @@ public class BranchQueryRepository : IBranchQueryRepository
     }
     public async Task<Result<IEnumerable<GetBranchQueryResult>>> GetAll(GetAllBranchQuery request)
     {
-        using (var connection = new SqlConnection(_connectionString))
-        {
-            await connection.OpenAsync();
-
-            string queryCount = @" WITH Query as(
-						                    SELECT DISTINCT B.[Id]
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var mainQuery = @"
+SELECT DISTINCT B.[Id]
                         ,B.[Name]
                         ,B.[Code]
                         ,B.[BranchTypeId]
@@ -44,15 +40,32 @@ public class BranchQueryRepository : IBranchQueryRepository
 FROM [Bank].[Branch] B
 INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
 WHERE  B.ActiveStatusId != 3
-							)
+";
+        string queryCount = $@" WITH Query as({mainQuery})
 								SELECT Count(*) FROM Query
 								 /**where**/
 								 
 								 ; ";
 
 
-            string query = $@" WITH Query as(
-							                  SELECT DISTINCT B.[Id]
+        string query = $@" WITH Query as({mainQuery})
+								SELECT * FROM Query
+								 /**where**/
+								 /**orderby**/
+                                    OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
+        var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+        using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
+        var count = await multi.ReadFirstAsync<int>();
+        var response = await multi.ReadAsync<GetBranchQueryResult>();
+        return Result.Ok(response, request, count);
+    }
+
+    public async Task<Result<IEnumerable<GetBranchQueryResult>>> GetAllForTrusty(GetAllTrustyBranchesQuery request)
+    {
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var mainQuery = @"
+SELECT DISTINCT B.[Id]
                         ,B.[Name]
                         ,B.[Code]
                         ,B.[BranchTypeId]
@@ -70,21 +83,25 @@ WHERE  B.ActiveStatusId != 3
 				  ,b.[CreatedAt]
 FROM [Bank].[Branch] B
 INNER JOIN [Basic].[ActiveStatus] S on S.ID = B.ActiveStatusId
-WHERE  B.ActiveStatusId != 3
-							)
+WHERE  B.ActiveStatusId != 3 and B.BranchTypeId in (255047415, 1705309086)
+";
+        string queryCount = $@" WITH Query as({mainQuery})
+								SELECT Count(*) FROM Query
+								 /**where**/
+								 
+								 ; ";
+
+
+        string query = $@" WITH Query as({mainQuery})
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
-            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
-            {
-                var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetBranchQueryResult>();
-                return Result.Ok(response, request, count);
-            }
-
-        }
+        var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+        using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
+        var count = await multi.ReadFirstAsync<int>();
+        var response = await multi.ReadAsync<GetBranchQueryResult>();
+        return Result.Ok(response, request, count);
     }
 
     public async Task<GetBranchQueryResult> GetById(long id)

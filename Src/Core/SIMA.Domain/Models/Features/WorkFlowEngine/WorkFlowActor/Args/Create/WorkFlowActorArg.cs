@@ -9,7 +9,6 @@ public class WorkFlowActorArg
     public string BpmnId { get; set; }
     public long? ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
-    public long UserId { get; set; }
     public long? LastId { get; set; }
 
 }

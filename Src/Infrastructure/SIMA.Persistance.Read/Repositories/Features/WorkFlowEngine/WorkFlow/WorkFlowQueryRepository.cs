@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
@@ -11,8 +12,11 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
+using SIMA.Framework.Infrastructure.RestfulClient;
 using SIMA.Resources;
 using System.Data.SqlClient;
+using System.Net.Http;
+using System.Text;
 using static Dapper.SqlMapper;
 
 namespace SIMA.Persistance.Read.Repositories.Features.WorkFlowEngine.WorkFlow;
@@ -21,10 +25,12 @@ public class WorkFlowQueryRepository : IWorkFlowQueryRepository
 {
     private readonly string _connectionString;
     private readonly ISimaIdentity _simaIdentity;
-    public WorkFlowQueryRepository(IConfiguration configuration, ISimaIdentity simaIdentity)
+    private readonly IRestfulClient _restfulClient;
+    public WorkFlowQueryRepository(IConfiguration configuration, ISimaIdentity simaIdentity, IRestfulClient restfulClient)
     {
         _connectionString = configuration.GetConnectionString();
         _simaIdentity = simaIdentity;
+        _restfulClient = restfulClient;
 
     }
     public async Task<Result<IEnumerable<GetWorkFlowQueryResult>>> GetAll(GetAllWorkFlowsQuery request)
@@ -312,7 +318,6 @@ WHERE  C.ActiveStatusId != 3 and C.[ActionTypeId] != 6
         }
         return response;
     }
-
     public async Task<Result<IEnumerable<GetStateQueryResult>>> GetAllStates(GetAllStatesQuery request)
     {
         using (var connection = new SqlConnection(_connectionString))
@@ -524,7 +529,8 @@ Order By c.[CreatedAt] desc
         }
         return result;
     }
-    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query)
+
+    public async Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query, List<InputParamServiceQuery>? inputParamServices)
     {
         var model = new Dictionary<long, Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo>();
         // var spParams = new Dictionary<long, StoreProcedureParams>();
@@ -539,11 +545,23 @@ Order By c.[CreatedAt] desc
 								 p.HasStoreProcedure, 
 								 p.StateId NextStateId, 
 								 p.Extension,
-                                 p.Id ProgressId
+                                 p.Id ProgressId,
+								 ST.Address URLAddress,
+								 ST.ApiMethodActionId,
+								 AM.Name APIMethodName,
+								 IP.InputName InputServiceName,
+								 IP.DataTypeId,
+								 DT.Name DataTypeName
 								 from project.Step s
                                   inner join project.WorkFlow w on w.Id = s.WorkFlowID
                                   left join Project.Progress p on p.SourceId = s.Id
                                   left join (SELECT iwp.Id ProgressId, iwp.StateId, iwp.WorkFlowId from Project.Progress iwp where iwp.Id = @ProgressId) wp on wp.WorkFlowId = w.Id
+								  left join Project.StepServiceTask SST on SST.StepId = S.Id
+								  left join Project.ServiceTask ST on SST.ServiceTaskId  = ST.Id
+								  LEFT join Basic.ApiMethodAction AM on AM.Id = ST.ApiMethodActionId
+								  left join Project.ServiceInputParam SIP on SIP.ServiceTaskId = ST.Id
+								  left join Project.InputParam IP on IP.Id = SIP.InputParamId
+								  left join Basic.DataType DT on DT.Id = IP.DataTypeId
 				                  where w.Id = @WorkflowId and s.Id = @NextStepId and w.ActiveStatusID = 1";
         var result = new GetNextStepInfoQueryResult();
         using (var connection = new SqlConnection(_connectionString))
@@ -560,38 +578,57 @@ Order By c.[CreatedAt] desc
                         model.Add(current.TargetId, item);
                     }
                 }
-                //StoreProcedureParams spParam;
-                //if (current.Id != null)
-                //{
-                //    if (!spParams.TryGetValue(current.Id, out spParam))
-                //    {
-                //        spParam = new StoreProcedureParams { Id = current.Id, IsRequired = current.IsRequired, Name = current.Name };
-                //        spParams.Add(current.TargetId, spParam);
-
-                //    }
-                //}
                 result.CurrentProgressId = current.CurrentProgressId;
                 result.CurrentProgressStateId = current.CurrentProgressStateId;
 
                 result.StepId = current.StepId;
                 result.WorkflowId = current.WorkflowId;
                 result.ActionTypeId = current.ActionTypeId;
+
+                result.URLAddress = current.URLAddress;
+                result.ApiMethodActionId = current.ApiMethodActionId;
+                result.APIMethodName = current.APIMethodName;
+                result.InputServiceName = current.InputServiceName;
+                result.DataTypeId = current.DataTypeId;
+                result.DataTypeName = current.DataTypeName;
+
             }
             result.NextProgressInfo = model.Values.Any() ? model.Values.ToList() : null;
-            //  result.Params = spParams.Values.Any() ? spParams.Values.ToList() : null;
             if (result.ActionTypeId == 6)
             {
                 return await EvaluateNextProgress(result.NextProgressInfo, query.ConditionValue, query.SystemParams);
             }
+
+            if (result.ActionTypeId == 3)
+            {
+                switch (result.ApiMethodActionId)
+                {
+                    case 1:
+
+                        break;
+                    case 2:
+                        var messageList = new List<string>();
+                        var mess = string.Empty;
+                        var parameterDictionary = inputParamServices.ToDictionary(p => p.ParamKey, p => p.ParamName);
+                        var message = JsonConvert.SerializeObject(parameterDictionary);
+
+                        var response = await PostAsync<string, string>(result.URLAddress, message, null);
+
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
             return new GetWorkflowInfoByIdResponseQueryResult { SourceStepId = result.StepId, SourceStateId = result.CurrentProgressStateId, ActionTypeId = result.ActionTypeId };
 
         }
     }
-
-
     public async Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoByIdAsync(long workFlowId)
     {
         var result = new GetWorkflowInfoByIdResponseQueryResult();
+        var nextStep = new StepInfo();
 
         using (var connection = new SqlConnection(_connectionString))
         {
@@ -652,13 +689,29 @@ Order By c.[CreatedAt] desc
                             var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
                             if (progress != null)
                             {
+
                                 var currentStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
                                 var currentProgress = currentStep.SourceProgresses.FirstOrDefault(x => x.SourceId == currentStep.Id);
-                                var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
                                 if (nextStep.ActionTypeId == (long)ActionTypeEnum.exclusiveGateway)
                                 {
-                                    var x = nextStep.SourceProgresses[0];
-                                    nextStep = workFlow.Steps.FirstOrDefault(i => i.Id == x.TargetId);
+                                    var GatewayStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                    var GateWayProgress = GatewayStep.SourceProgresses.Where(x => x.SourceId == GatewayStep.Id).ToList();
+                                    foreach (var item in GateWayProgress)
+                                    {
+                                        nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == item.TargetId && x.ActionTypeId != (long)ActionTypeEnum.serviceTask);
+                                        if (nextStep is not null) break;
+
+                                    }
+                                }
+
+                                if (nextStep.ActionTypeId == (long)ActionTypeEnum.endEvent)
+                                {
+                                    result.Id = workFlow.Id;
+                                    result.SourceStepId = step.Id;
+                                    result.TargetStepId = nextStep.Id;
+                                    result.ProjectId = workFlow.ProjectId;
+                                    return result;
                                 }
 
                                 checkActorAccess.TargetStateId = nextStep.SourceProgresses[0].StateId;
@@ -683,11 +736,17 @@ Order By c.[CreatedAt] desc
                             {
                                 var currentStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
                                 var currentProgress = currentStep.SourceProgresses.FirstOrDefault(x => x.SourceId == currentStep.Id);
-                                var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
                                 if (nextStep.ActionTypeId == (long)ActionTypeEnum.exclusiveGateway)
                                 {
-                                    var x = nextStep.SourceProgresses[0];
-                                    nextStep = workFlow.Steps.FirstOrDefault(i => i.Id == x.TargetId);
+                                    var GatewayStep = workFlow.Steps.FirstOrDefault(x => x.Id == currentProgress.TargetId);
+                                    var GateWayProgress = GatewayStep.SourceProgresses.Where(x => x.SourceId == GatewayStep.Id).ToList();
+                                    foreach (var item in GateWayProgress)
+                                    {
+                                        nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == item.TargetId && x.ActionTypeId != (long)ActionTypeEnum.serviceTask);
+                                        if (nextStep is not null) break;
+
+                                    }
                                 }
 
                                 checkIsEveryOne.TargetStateId = nextStep.SourceProgresses[0].StateId;
@@ -716,7 +775,7 @@ Order By c.[CreatedAt] desc
                     var progress = step.SourceProgresses.FirstOrDefault(x => x.SourceId == step.Id);
                     if (progress != null)
                     {
-                        var nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
+                        nextStep = workFlow.Steps.FirstOrDefault(x => x.Id == progress.TargetId);
 
                         result.TargetStateId = progress.StateId;
                         result.SourceStateId = null;
@@ -733,7 +792,6 @@ Order By c.[CreatedAt] desc
             throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
         }
     }
-
     public async Task<GetWorkflowInfoByIdResponseQueryResult> GetWorkflowInfoByIdAsyncSanaz(long workFlowId)
     {
         var result = new GetWorkflowInfoByIdResponseQueryResult();
@@ -878,7 +936,6 @@ Order By c.[CreatedAt] desc
             throw new SimaResultException(CodeMessges._400Code, Messages.IssueErrorException);
         }
     }
-
     public static string ContainsComparisonOperator(string text)
     {
         // Array of comparison operators to check for
@@ -887,6 +944,143 @@ Order By c.[CreatedAt] desc
         // Use Any method for efficient check
         return operators.FirstOrDefault(op => text.Contains(op));
     }
+    public async Task ExecuteSP(long ProgressId, string mainAggregateName, List<InputModel> SystemParams, List<InputParamQueryModel> InputParam, List<AddDocumentToSPQuery> docs)
+    {
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            var issueId = SystemParams.First(x => x.Key == "IssueId").Value;
+            #region -- exe Sp --
+            var SpQury = @"select 
+                  p.Id ProgressId,
+                  ps.StoreProcedureName StoreProcedureName,
+                  ps.Id ProgressStoreProcedureId,
+                  psp.Id ParamId,
+                  psp.Name ParamName,
+                  psp.FixedValue,
+                  psp.IsSystemParam IsSystemParam,
+                  psp.SystemParamName SystemParamName,
+                  psp.DataTypeId,
+                  ps.ExecutionOrdering,
+                  psp.JsonFormat
+                  from
+                  Project.Progress p 
+				  join Project.ProgressStoreProcedure ps on p.Id = ps.ProgressId  and ps.ActiveStatusId <>3
+                  left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id and psp.ActiveStatusId <>3
+                  where p.Id= @ProgressId
+
+				  union
+
+                  select 
+                  p.Id ProgressId,
+                  ps.StoreProcedureName StoreProcedureName,
+                  ps.Id ProgressStoreProcedureId,
+                  psp.Id ParamId,
+                  psp.Name ParamName,
+                  psp.FixedValue,
+                  psp.IsSystemParam IsSystemParam,
+                  psp.SystemParamName SystemParamName,
+                  psp.DataTypeId,
+                  ps.ExecutionOrdering,
+                  psp.JsonFormat
+                  from
+                 Project.Progress p
+				 join Project.Step S on S.Id = P.SourceId 
+				 join Project.Progress PT on PT.TargetId = S.Id and PT.ActiveStatusId <>3
+				 join IssueManagement.Issue I On I.CurrenStepId = PT.SourceId and I.ActiveStatusId <>3
+				 join  Project.ProgressStoreProcedure ps on PT.Id = ps.ProgressId  and ps.ActiveStatusId <>3
+                 left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id and psp.ActiveStatusId <>3
+                 where p.Id= @ProgressId and I.Id =@issueId and S.ActiveStatusID <> 3
+                  ";
+            var spQuery = await connection.QueryAsync<StoreProcedureInfo>(SpQury, new { ProgressId, issueId });
+            var spGroup = spQuery.OrderBy(x => x.ExecutionOrdering).GroupBy(x => x.StoreProcedureName);
+            foreach (var item in spGroup)
+            {
+                string sp = string.Empty;
+                //if (item.Key.Contains(mainAggregateName + "Document"))
+                //{
+
+                if (item.Key.Contains("UploadedFile"))
+                {
+                    if (docs is not null && docs.Count > 0)
+                    {
+                        var json = JsonConvert.SerializeObject(docs);
+                        sp = $"{item.Key} @UserId ={SystemParams.First(x => x.Key == "UserId").Value},@DocumentIdList= N'{json}'";
+                    }
+                }
+                else
+                {
+                    var paramas = new List<StoreProcedureParamInfo>();
+                    paramas = item.Select(it => new StoreProcedureParamInfo
+                    {
+                        ParamName = it.ParamName,
+                        IsSystemParam = it.IsSystemParam,
+                        ParamId = it.ParamId,
+                        SystemParamName = it.SystemParamName,
+                        DataTypeId = it.DataTypeId,
+                        FixedValue = it.FixedValue,
+                        JsonFormat = it.JsonFormat
+                    }).ToList();
+                    // build-in params
+                    foreach (var p in InputParam)
+                    {
+                        var param = paramas.Where(it => it.ParamId == p.Id).FirstOrDefault();
+                        if (param != null) param.Value = p.ParamValue;
+                    }
+
+                    foreach (var p in paramas)
+                    {
+                        if (!string.IsNullOrEmpty(p.FixedValue) && string.IsNullOrEmpty(p.JsonFormat))
+                        {
+                            p.Value = p.FixedValue;
+                        }
+
+                        if (p.IsSystemParam == "1")
+                        {
+                            if (p.SystemParamName == "Id")
+                            {
+                                var id = IdHelper.GenerateUniqueId();
+                                p.Value = id.ToString();
+                            }
+                            var param2 = SystemParams.FirstOrDefault(it => it.Key == p.SystemParamName);
+                            if (param2 != null) p.Value = param2.Value;
+                        }
+                    }
+                    sp = $"{item.Key} ";
+                    foreach (var i in paramas)
+                    {
+                        if (i.DataTypeId == 2)
+                            sp += $"@{i.ParamName} = N'{i.Value}' ,";
+                        else if (i.DataTypeId == 6)
+                        {
+                            var date = i.Value.ToMiladiDate().ToString();
+                            sp += $"@{i.ParamName} = N'{date}' ,";
+                        }
+                        else
+                            sp += $"@{i.ParamName} = {i.Value} ,";
+                    }
+                    sp = sp.Remove(sp.Length - 1);
+                }
+                try
+                {
+                    //var result = await connection.ExecuteAsync(sp);
+                    //if (result == -1)
+                    //{
+                    //    throw new SimaResultException(CodeMessges._100062Code, Messages.ExecStoreProcedureError);
+                    //}
+                    if (!string.IsNullOrEmpty(sp))
+                        await connection.ExecuteAsync(sp);
+                }
+                catch (Exception)
+                {
+                    throw new SimaResultException(CodeMessges._100062Code, Messages.ExecStoreProcedureError);
+                }
+            }
+            #endregion
+        }
+    }
+
+
+
 
     private async Task<GetWorkflowInfoByIdResponseQueryResult> EvaluateNextProgress(List<Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc.NextProgressInfo> progresses, string conditionValue, List<InputModel> inputs)
     {
@@ -896,7 +1090,7 @@ Order By c.[CreatedAt] desc
             if (string.IsNullOrEmpty(item.ConditionExpression))
             {
                 var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = item.ProgressId, SystemParams = inputs, NextStepId = item.TargetId.Value, ConditionValue = conditionValue };
-                return await GetNextStepById(item.WorkflowId, query);
+                return await GetNextStepById(item.WorkflowId, query, null);
 
             }
             var condition = item.ConditionExpression;
@@ -914,7 +1108,7 @@ Order By c.[CreatedAt] desc
                     var sourceStepId = item.TargetId.Value;
                     var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = item.ProgressId, SystemParams = inputs, NextStepId = item.TargetId.Value, ConditionValue = conditionValue };
 
-                    return await GetNextStepById(item.WorkflowId, query);
+                    return await GetNextStepById(item.WorkflowId, query, null);
                     //if (nextProgress.ActionTypeId == 6)
                     //{
                     //    var query = new GetNextStepQuery { WorkflowId = item.WorkflowId, ProgressId = nextProgress.ProgressId, SystemParams = inputs, NextStepId = nextProgress.TargetId, ConditionValue = conditionValue };
@@ -939,7 +1133,6 @@ Order By c.[CreatedAt] desc
         }
         throw new SimaResultException(CodeMessges._100061Code, Messages.NoConditionWasCorrect);
     }
-
     private async Task<NextProgressDetails> GetNextProgress(long workflowId, long sourceStepId)
     {
         using (var connection = new SqlConnection(_connectionString))
@@ -950,7 +1143,6 @@ Order By c.[CreatedAt] desc
             return await connection.QueryFirstOrDefaultAsync<NextProgressDetails>(targetStepQuery, new { TargetId = sourceStepId, WorkflowId = workflowId });
         }
     }
-
     private string EvaluateConditionExtension(string condition, Dictionary<string, string> evalueatedExtension)
     {
         if (!condition.Contains("*"))
@@ -1248,7 +1440,7 @@ Order By c.[CreatedAt] desc
     private string SelectGenerator(string[] tableAndColumn)
     {
         var column = tableAndColumn.LastOrDefault();
-        var query = $"SELECT {column} FROM {tableAndColumn[0]}";
+        var query = !string.IsNullOrEmpty(tableAndColumn[0]) ? $"SELECT {column} FROM {tableAndColumn[0]}" : $"SELECT {column} ";
         return query;
     }
     private string ConditionGenerator(string condition)
@@ -1305,119 +1497,57 @@ Order By c.[CreatedAt] desc
         }
         return condition;
     }
-    public async Task ExecuteSP(long ProgressId, string mainAggregateName, List<InputModel> SystemParams, List<InputParamQueryModel> InputParam, List<AddDocumentToSPQuery> docs)
+
+    public async Task<TResult> PostAsync<TResult, TRequest>(string actionUrl, TRequest request, Dictionary<string, string> headers = null) where TResult : class
     {
-        using (var connection = new SqlConnection(_connectionString))
+        var _httpClient = new HttpClient();
+        if (headers != null)
+            foreach (var item in headers)
+                _httpClient.DefaultRequestHeaders.Add(item.Key, item.Value);
+
+
+
+        var response = await _httpClient.PostAsync(actionUrl, CreateHttpContent<TRequest>(request));
+        //response.EnsureSuccessStatusCode();
+        var data = await response.Content.ReadAsStringAsync();
+
+        if (typeof(TResult) == typeof(string))
         {
-            var issueId = SystemParams.First(x => x.Key == "IssueId").Value;
-            #region -- exe Sp --
-            var SpQury = @"select 
-                  p.Id ProgressId,
-                  ps.StoreProcedureName StoreProcedureName,
-                  ps.Id ProgressStoreProcedureId,
-                  psp.Id ParamId,
-                  psp.Name ParamName,
-                  psp.IsSystemParam IsSystemParam,
-                  psp.SystemParamName SystemParamName,
-                  psp.DataTypeId,
-                  ps.ExecutionOrdering
-                  from
-                  Project.Progress p join 
-                  Project.ProgressStoreProcedure ps on p.Id = ps.ProgressId 
-                  left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id
-                  where p.Id= @ProgressId
+            return data as TResult;
+        }
+        var model = JsonConvert.DeserializeObject<TResult>(data);
 
-				  union
+        return model;
+    }
 
-                  select 
-                  p.Id ProgressId,
-                  ps.StoreProcedureName StoreProcedureName,
-                  ps.Id ProgressStoreProcedureId,
-                  psp.Id ParamId,
-                  psp.Name ParamName,
-                  psp.IsSystemParam IsSystemParam,
-                  psp.SystemParamName SystemParamName,
-                  psp.DataTypeId,
-                  ps.ExecutionOrdering
-                  from
-                 Project.Progress p
-				 join Project.Step S on S.Id = P.SourceId 
-				 join Project.Progress PT on PT.TargetId = S.Id
-				 join IssueManagement.Issue I On I.CurrenStepId = PT.SourceId
-				 join  Project.ProgressStoreProcedure ps on PT.Id = ps.ProgressId 
-                 left join Project.ProgressStoreProcedureParam psp on psp.ProgressStoreProcedureId = ps.Id
-                 where p.Id= @ProgressId and I.Id =@issueId
-                  ";
-            var spQuery = await connection.QueryAsync<StoreProcedureInfo>(SpQury, new { ProgressId, issueId });
-            var spGroup = spQuery.OrderBy(x => x.ExecutionOrdering).GroupBy(x => x.StoreProcedureName);
-            foreach (var item in spGroup)
-            {
-                string sp = string.Empty;
-                //if (item.Key.Contains(mainAggregateName + "Document"))
-                //{
-                if (item.Key.Trim() == "SP_Logisticses_RegisterUploadedFile")
-                {
-                    var json = JsonConvert.SerializeObject(docs);
-                    sp = $"{item.Key} @UserId ={SystemParams.First(x => x.Key == "UserId").Value},@DocumentIdList= N'{json}'";
-                }
-                else
-                {
-                    var paramas = new List<StoreProcedureParamInfo>();
-                    paramas = item.Select(it => new StoreProcedureParamInfo
-                    {
-                        ParamName = it.ParamName,
-                        IsSystemParam = it.IsSystemParam,
-                        ParamId = it.ParamId,
-                        SystemParamName = it.SystemParamName,
-                        DataTypeId = it.DataTypeId,
-                    }).ToList();
-                    // build-in params
-                    foreach (var p in InputParam)
-                    {
-                        var param = paramas.Where(it => it.ParamId == p.Id).FirstOrDefault();
-                        if (param != null) param.Value = p.ParamValue;
-                    }
+    private HttpContent CreateHttpContent<T>(T content)
+    {
+        var json = string.Empty;
+        if (typeof(T) == typeof(string))
+        {
+            json = content.ToString();
+            return new StringContent(json, Encoding.UTF8, "application/json");
+        }
+        else
+        {
+            json = JsonConvert.SerializeObject(content, MicrosoftDateFormatSettings);
+            return new StringContent(json, Encoding.UTF8, "application/json");
 
-                    foreach (var p in paramas)
-                    {
 
-                        if (p.IsSystemParam == "1")
-                        {
-                            if (p.SystemParamName == "Id")
-                            {
-                                var id = IdHelper.GenerateUniqueId();
-                                p.Value = id.ToString();
-                            }
-                            var param2 = SystemParams.FirstOrDefault(it => it.Key == p.SystemParamName);
-                            if (param2 != null) p.Value = param2.Value;
-                        }
-                    }
-                    sp = $"{item.Key} ";
-                    foreach (var i in paramas)
-                    {
-                        if (i.DataTypeId == 2)
-                            sp += $"@{i.ParamName} = N'{i.Value}' ,";
-                        else if (i.DataTypeId == 6)
-                        {
-                            var date = i.Value.ToMiladiDate().ToString();
-                            sp += $"@{i.ParamName} = N'{date}' ,";
-                        }
-                        else
-                            sp += $"@{i.ParamName} = {i.Value} ,";
-                    }
-                    sp = sp.Remove(sp.Length - 1);
-                }
-                try
-                {
-                    await connection.ExecuteAsync(sp);
-                }
-                catch (Exception)
-                {
-                    throw new SimaResultException(CodeMessges._100062Code, Messages.ExecStoreProcedureError);
-                }
-            }
-            #endregion
         }
     }
 
+    private static JsonSerializerSettings MicrosoftDateFormatSettings
+    {
+        get
+        {
+            return new JsonSerializerSettings
+            {
+                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
+            };
+        }
+    }
+
+
 }
+

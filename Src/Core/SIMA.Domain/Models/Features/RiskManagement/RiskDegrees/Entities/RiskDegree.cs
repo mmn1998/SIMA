@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Interfaces;
 using SIMA.Framework.Common.Exceptions;
@@ -96,4 +97,6 @@ public class RiskDegree : Entity
         if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
+    private List<EvaluationCriteria> _evaluationCriterias = new();
+    public ICollection<EvaluationCriteria> EvaluationCriterias => _evaluationCriterias;
 }

@@ -19,6 +19,9 @@ public class StoreProcedureInfo
     public string SystemParamName { get; set; }
     public long DataTypeId { get; set; }
     public float ExecutionOrdering { get; set; }
+    public string? FixedValue { get; set; }
+    public string? JsonFormat { get; set; }
+
     public List<StoreProcedureParamInfo> Params { get; set; }
 
 }

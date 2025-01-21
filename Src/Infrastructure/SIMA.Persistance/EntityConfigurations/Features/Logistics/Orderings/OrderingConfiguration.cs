@@ -26,7 +26,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.Orderings
                         .IsConcurrencyToken();
 
             entity.Property(x => x.ReceiptDocumentId)
-                .HasConversion(x => x.Value, x => new LogisticsRequestDocumentId(x));
+                .HasConversion(x => x.Value, x => new LogisticsSupplyDocumentId(x));
             entity.HasOne(x => x.ReceiptDocument)
                 .WithMany(x => x.Orderings)
                 .HasForeignKey(x => x.ReceiptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);

@@ -9,5 +9,5 @@ public class GetIssueComponentQueryResult
     public IEnumerable<GetStepRequiredDocumentQueryResult>? StepRequiredDocumentList { get; set; }
     public string? UIPropertyBoxTitle { get; set; }
     public IEnumerable<StoreProcedureParams>? FormParams { get; set; }
-    public string? IsEditable { get; set; }
+    //public string? IsEditable { get; set; }
 }

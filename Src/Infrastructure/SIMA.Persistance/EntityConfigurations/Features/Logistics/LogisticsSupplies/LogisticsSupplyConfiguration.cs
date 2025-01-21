@@ -24,6 +24,7 @@ public class LogisticsSupplyConfiguration : IEntityTypeConfiguration<LogisticsSu
                     .IsConcurrencyToken();
         entity.Property(e => e.Code)
                     .HasMaxLength(20).IsUnicode();
+        entity.Property(e => e.PayByFundCard).HasMaxLength(1).IsFixedLength();
         entity.HasIndex(e => e.Code).IsUnique();
 
         entity.Property(x => x.IssueId)

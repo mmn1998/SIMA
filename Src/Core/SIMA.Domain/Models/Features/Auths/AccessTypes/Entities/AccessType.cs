@@ -10,7 +10,7 @@ using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
+namespace SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
 
 public class AccessType : Entity, IAggregateRoot
 {

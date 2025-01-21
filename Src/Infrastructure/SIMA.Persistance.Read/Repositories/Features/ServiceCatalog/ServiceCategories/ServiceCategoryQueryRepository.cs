@@ -61,6 +61,18 @@ WHERE ST.ActiveStatusId <> 3";
             }
         }
     }
+    /// <summary>
+    /// this is for this reason : in edit of service category form, same id should not be in the drop down of this form
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<GetServiceCategoryQueryResult>> GetAllExceptThisIdForParents(long id)
+    {
+        var query = $@"{_mainQuery} AND ST.Id <> @Id";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        return await connection.QueryAsync<GetServiceCategoryQueryResult>(query, new { Id = id });
+    }
 
     public async Task<GetServiceCategoryQueryResult> GetById(GetServiceCategoryQuery request)
     {

@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Args;
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.BrokerTypes.ValueObjects;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -54,6 +55,9 @@ public class BrokerType : Entity
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public virtual ICollection<Broker> Brokers { get; private set; } = new List<Broker>();
+
+    private List<TrustyDraft> _trustyDrafts = new();
+    public ICollection<TrustyDraft> TrustyDrafts => _trustyDrafts;
 
     #region Guards
     private static async Task CreateGuards(CreateBrokerTypeArg arg, IBrokerTypeDomainService brokerTypeDomainService)

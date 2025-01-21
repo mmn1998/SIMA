@@ -14,7 +14,7 @@ public class BusinessContinuityPlanRelatedStaffConfiguration : IEntityTypeConfig
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new BusinessContinuityPlanRelatedStaffId(v)).ValueGeneratedNever();
+             v => new(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
@@ -27,22 +27,22 @@ public class BusinessContinuityPlanRelatedStaffConfiguration : IEntityTypeConfig
         entity.Property(x => x.BusinessContinuityPlanVersioningId)
             .HasConversion(
             x => x.Value,
-            x => new BusinessContinuityPlanVersioningId(x)
+            x => new(x)
             );
-      
-
         entity.HasOne(x => x.BusinessContinuityPlanVersioning)
             .WithMany(x => x.BusinessContinuityPlanRelatedStaff)
-            .HasForeignKey(x => x.BusinessContinuityPlanVersioningId);
+            .HasForeignKey(x => x.BusinessContinuityPlanVersioningId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.StaffId)
           .HasConversion(
           x => x.Value,
-          x => new StaffId(x)
+          x => new(x)
           );
 
         entity.HasOne(x => x.Staff)
             .WithMany(x => x.BusinessContinuityPlanRelatedStaff)
-            .HasForeignKey(x => x.StaffId);
+            .HasForeignKey(x => x.StaffId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

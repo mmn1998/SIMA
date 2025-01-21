@@ -24,7 +24,7 @@ public class ChannelsController : ControllerBase
         return await _mediator.Send(command);
     }
     [HttpPut]
-    [SimaAuthorize(Permissions.ChannelPut)]
+    //[SimaAuthorize(Permissions.ChannelPut)]
     public async Task<Result> Put([FromBody] ModifyChannelCommand command)
     {
         return await _mediator.Send(command);

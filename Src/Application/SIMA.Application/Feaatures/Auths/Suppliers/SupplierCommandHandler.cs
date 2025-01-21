@@ -59,6 +59,22 @@ public class SupplierCommandHandler : ICommandHandler<CreateSupplierCommand, Res
 
         #endregion
 
+
+        #region AddSupplierDocuments
+        if (request.DocumentList is not null)
+        {
+            var userId = _simaIdentity.UserId;
+            var supplierId = entity.Id.Value;
+            var documentArgs = _mapper.Map<List<CreateSupplierDocumentArg>>(request.DocumentList);
+            foreach (var item in documentArgs)
+            {
+                item.SupplierId = supplierId;
+                item.CreatedBy = userId;
+            }
+            entity.AddSupplierDocuments(documentArgs);
+        }
+        #endregion
+
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(arg.Id);
@@ -92,6 +108,21 @@ public class SupplierCommandHandler : ICommandHandler<CreateSupplierCommand, Res
         PhoneBookArgs.ForEach(x => x.CreatedBy = _simaIdentity.UserId);
         await entity.AddPhoneBook(PhoneBookArgs, entity.Id.Value);
 
+        #endregion
+
+        #region AddSupplierDocuments
+        if (request.DocumentList is not null)
+        {
+            var userId = _simaIdentity.UserId;
+            var supplierId = entity.Id.Value;
+            var documentArgs = _mapper.Map<List<CreateSupplierDocumentArg>>(request.DocumentList);
+            foreach (var item in documentArgs)
+            {
+                item.SupplierId = supplierId;
+                item.CreatedBy = userId;
+            }
+            entity.ModifySupplierDocuments(documentArgs);
+        }
         #endregion
 
         await entity.Modify(arg, _service);

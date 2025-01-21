@@ -41,6 +41,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
             foreach (var item in channelArg)
             {
                 item.CreatedBy = _simaIdentity.UserId;
+                item.ProductId = entity.Id.Value;
             }
             entity.CreateChannel(channelArg, entity.Id.Value);
         }
@@ -50,6 +51,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
             foreach (var item in responsibleArg)
             {
                 item.CreatedBy = _simaIdentity.UserId;
+                item.ProductId = entity.Id.Value;
             }
             entity.CreateResponsible(responsibleArg, entity.Id.Value);
         }
@@ -70,6 +72,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
             foreach (var item in channelArg)
             {
                 item.CreatedBy = _simaIdentity.UserId;
+                item.ProductId = entity.Id.Value;
             }
             entity.CreateChannel(channelArg, entity.Id.Value);
         }
@@ -79,6 +82,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
             foreach (var item in responsibleArg)
             {
                 item.CreatedBy = _simaIdentity.UserId;
+                item.ProductId = entity.Id.Value;
             }
             entity.CreateResponsible(responsibleArg, entity.Id.Value);
         }

@@ -1,4 +1,5 @@
 ﻿using SIMA.Application.Contract.Features.IssueManagement.Issues;
+using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.State;
@@ -20,7 +21,7 @@ public interface IWorkFlowQueryRepository : IQueryRepository
     Task<List<GetWorkFlowQueryResult>> GetByProjectId(long projectId);
     Task<List<GetStateQueryResult>> GetAllStatesByWorkFlowId(long id);
     Task<IEnumerable<GetWorkFlowQueryResult>> GetAllWorkFlowForIssue();
-    Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query);
+    Task<GetWorkflowInfoByIdResponseQueryResult> GetNextStepById(long workflowId, GetNextStepQuery query , List<InputParamServiceQuery>? inputParamServices  );
     Task<bool> AllowAddApprovalForStep(long stepId);
     Task ExecuteSP(long ProgressId, string mainAggregateName, List<InputModel> SystemParams, List<InputParamQueryModel> InputParam, List<AddDocumentToSPQuery> docs);
 

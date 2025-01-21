@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.Auths.DataTypes.Interfaces;
 using SIMA.Domain.Models.Features.Auths.DataTypes.ValueObjects;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
+using SIMA.Domain.Models.Features.WorkFlowEngine.ServiceTasks.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -77,6 +78,9 @@ public class DataType : Entity
     public ICollection<ProgressStoreProcedureParam> ProgressStoreProcedureParams => _progressStoreProcedureParams;
     private List<StepOutputParam> _stepOutputParams = new();
     public ICollection<StepOutputParam> StepOutputParams => _stepOutputParams;
+
+    private List<InputParam> _inputParams = new();
+    public ICollection<InputParam> InputParams => _inputParams;
 
     public void Delete(long userId)
     {

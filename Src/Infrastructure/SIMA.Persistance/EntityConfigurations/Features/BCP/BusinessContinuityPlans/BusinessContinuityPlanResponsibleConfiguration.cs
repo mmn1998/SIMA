@@ -28,7 +28,7 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessContinuityP
             entity.Property(x => x.BusinessContinuityPlanVersioningId)
                 .HasConversion(
                 x => x.Value,
-                x => new BusinessContinuityPlanVersioningId(x)
+                x => new(x)
                 );
             entity.HasOne(x => x.BusinessContinuityPlanVersioning)
                 .WithMany(x => x.BusinessContinuityPlanResponsibles)

@@ -6,7 +6,7 @@ using SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.CriticalActivit
 namespace SIMA.Application.Query.Features.ServiceCatalog.CriticalActivities;
 
 public class CriticalActivityQueryHandler : IQueryHandler<GetCriticalActivityQuery, Result<GetCriticalActivityQueryResult>>,
-    IQueryHandler<GetAllCriticalActivitiesQuery, Result<IEnumerable<GetCriticalActivityQueryResult>>>
+    IQueryHandler<GetAllCriticalActivitiesQuery, Result<IEnumerable<GetAllCriticalActivitiesQueryResult>>>
 {
     private readonly ICriticalActivitiyQueryRepository _repository;
 
@@ -19,7 +19,7 @@ public class CriticalActivityQueryHandler : IQueryHandler<GetCriticalActivityQue
         return await _repository.GetDetail(id: request.Id, issueId: request.IssueId);
     }
 
-    public async Task<Result<IEnumerable<GetCriticalActivityQueryResult>>> Handle(GetAllCriticalActivitiesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetAllCriticalActivitiesQueryResult>>> Handle(GetAllCriticalActivitiesQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
     }

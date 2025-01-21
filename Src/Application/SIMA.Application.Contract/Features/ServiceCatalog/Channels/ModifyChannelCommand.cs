@@ -13,8 +13,8 @@ public class ModifyChannelCommand : ICommand<Result<long>>
     public long? ServiceStatusId { get; set; }
     public string? InServiceDate { get; set; }
     public List<CreateChannelResponsibleCommand>? ChannelResponsibleList { get; set; }
-    public List<long>? Products { get; set; }
-    public List<long>? Services { get; set; }
+    public List<CreateProductList>? Products { get; set; }
+    public List<CreateServiceList>? Services { get; set; }
     public List<long>? UserTypes { get; set; }
     public List<CreateChannelAccessPointCommand>? ChannelAccessPointList { get; set; }
 }

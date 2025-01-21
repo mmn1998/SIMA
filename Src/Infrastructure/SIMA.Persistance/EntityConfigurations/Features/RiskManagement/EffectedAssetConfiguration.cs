@@ -25,7 +25,17 @@ namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement
 
             entity.HasOne(d => d.Risk).WithMany(p => p.EffectedAssets)
                 .HasForeignKey(d => d.RiskId)
-                .HasConstraintName("FK_EffectedAsset_Risk");
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.Property(x => x.AssetId)
+                .HasConversion(
+                v => v.Value,
+                v => new(v)
+                );
+
+            entity.HasOne(d => d.Asset).WithMany(p => p.EffectedAssets)
+                .HasForeignKey(d => d.AssetId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

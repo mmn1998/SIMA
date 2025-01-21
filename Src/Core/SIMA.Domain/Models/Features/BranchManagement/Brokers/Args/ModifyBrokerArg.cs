@@ -8,11 +8,7 @@ public class ModifyBrokerArg
 
     public string? Code { get; set; }
 
-    public long? BrokerTypeId { get; set; }
-
-    public string? PhoneNumber { get; set; }
-
-    public string? Address { get; set; }
+    public long BrokerTypeId { get; set; }
 
     public DateTime? ExpireDate { get; set; }
 

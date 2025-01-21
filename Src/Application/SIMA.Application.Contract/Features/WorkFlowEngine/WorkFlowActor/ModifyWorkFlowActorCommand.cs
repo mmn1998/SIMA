@@ -14,5 +14,5 @@ public class ModifyWorkFlowActorCommand : ICommand<Result<long>>
     public List<long>? RoleId { get; set; }
     public List<long>? GroupId { get; set; }
     public string? IsActorManager { get; set; }
-    public List<long> EmployeeId { get; set; }
+    public List<long>? EmployeeId { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Logistics.OrderingItems.Args;
+﻿using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.OrderingItems.Args;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.Orderings.Entities;
 using SIMA.Domain.Models.Features.Logistics.Orderings.ValueObjects;
@@ -29,6 +31,9 @@ public class OrderingItem : Entity
     public OrderingItemId Id { get; private set; }
     public virtual Ordering Ordering { get; private set; }
     public OrderingId OrderingId { get; private set; }
+    public virtual LogisticsSupplyGoods LogisticsSupplyGoods { get; private set; }
+    public LogisticsSupplyGoodsId LogisticsSupplyGoodsId { get; private set; }
+    public decimal ItemPrice { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public long CreatedBy { get; private set; }

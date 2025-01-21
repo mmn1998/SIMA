@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.Entities;
 using SIMA.Domain.Models.Features.Logistics.OrderingItems.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.ReturnOrderingItems;
 
@@ -31,7 +32,7 @@ public class ReturnOrderingItemConfiguration : IEntityTypeConfiguration<ReturnOr
             .HasForeignKey(x => x.OrderingItemId).OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.ReciptDocumentId)
-            .HasConversion(x => x.Value, x => new DocumentId(x));
+            .HasConversion(x => x.Value, x => new LogisticsSupplyDocumentId(x));
         entity.HasOne(x => x.ReciptDocument)
             .WithMany(x => x.ReturnOrderingItems)
             .HasForeignKey(x => x.ReciptDocumentId).OnDelete(DeleteBehavior.ClientSetNull);

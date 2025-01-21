@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using SIMA.Application.Query.Contract.Features.Auths.Locations;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Infrastructure.Cachings;
-using SIMA.Persistance.Read.Repositories.Features.Auths.Locations;
 
 namespace SIMA.Persistance.Read.Repositories.Features.Auths.Locations.Decorators;
 
@@ -44,6 +42,11 @@ public class LocationQueryRepositoryCachingDecorator : ILocationQueryRepository
         }
 
         return await _queryRepository.GetAll(request);
+    }
+
+    public async Task<Result<IEnumerable<GetLocationQueryResult>>> GetAllCountries()
+    {
+        return await _queryRepository.GetAllCountries();
     }
 
     public async Task<List<GetParentLocationsByLocationTypeIdQueryResult>> GetParentsByChildId(long locationTypeId)

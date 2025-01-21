@@ -1,4 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Args;
+using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -41,6 +43,15 @@ public class ServiceRisk : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        DeleteServiceRiskImpacts(userId);
+        
+    }
+    public void DeleteServiceRiskImpacts(long userId)
+    {
+        foreach (var item in _serviceRiskImpacts)
+        {
+            item.Delete(userId);
+        }
     }
     public void Active(long userId)
     {
@@ -48,4 +59,14 @@ public class ServiceRisk : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
+    public void AddServiceRiskImpacts(List<CreateServiceRiskImpactArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ServiceRiskImpact.Create(arg);
+            _serviceRiskImpacts.Add(entity);
+        }
+    }
+    private List<ServiceRiskImpact> _serviceRiskImpacts = new();
+    public ICollection<ServiceRiskImpact> ServiceRiskImpacts => _serviceRiskImpacts;
 }

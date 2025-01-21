@@ -1,5 +1,4 @@
 ﻿using SIMA.Application.Query.Contract.Features.Auths.Locations;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 
@@ -9,5 +8,6 @@ public interface ILocationQueryRepository : IQueryRepository
 {
     Task<GetLocationQueryResult> FindById(long id);
     Task<Result<IEnumerable<GetLocationQueryResult>>> GetAll(GetAllLocationQuery? request = null);
+    Task<Result<IEnumerable<GetLocationQueryResult>>> GetAllCountries();
     Task<List<GetParentLocationsByLocationTypeIdQueryResult>> GetParentsByChildId(long locationTypeId);
 }

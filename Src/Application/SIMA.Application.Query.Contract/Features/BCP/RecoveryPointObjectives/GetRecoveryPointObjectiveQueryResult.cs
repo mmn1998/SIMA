@@ -8,4 +8,6 @@ public class GetRecoveryPointObjectiveQueryResult
     public int RpoFrom { get; set; }
     public int RpoTo { get; set; }
     public string? ActiveStatus { get; set; }
+    public long TimeMeasurementId { get; set; }
+    public string? TimeMeasurementName { get; set; }
 }

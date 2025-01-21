@@ -10,7 +10,10 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Feaatures.Auths.Permision;
 
-public class PermissionCommandHandler : ICommandHandler<CreatePermissionCommand, Result<long>>, ICommandHandler<DeletePermissionCommand, Result<long>>
+public class PermissionCommandHandler :
+     ICommandHandler<CreatePermissionCommand, Result<long>>
+    ,ICommandHandler<DeletePermissionCommand, Result<long>>
+    ,ICommandHandler<AddPermissionCommand, Result<long>>
 {
     private readonly IMapper _mapper;
     private readonly IPermissionRepository _repository;
@@ -36,10 +39,30 @@ public class PermissionCommandHandler : ICommandHandler<CreatePermissionCommand,
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }
+
+    public async Task<Result<long>> Handle(AddPermissionCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var args = await _repository.AddPermissionNotExist();
+            foreach (var arg in args)
+            {
+                var entity = await Domain.Models.Features.Auths.Permissions.Entities.Permission.Create(arg, _service);
+                await _repository.Add(entity);
+            }
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(args[0].Id);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+        
+    }
     public async Task<Result<long>> Handle(DeletePermissionCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(request.Id);
-        long userId = _simaIdentity.UserId;entity.Delete(userId);
+        long userId = _simaIdentity.UserId; entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
     }

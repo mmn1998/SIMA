@@ -1,5 +1,4 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
-using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Args;
+﻿using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Args;
 using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Contracts;
 using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -78,6 +77,4 @@ public class HappeningPossibility : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
-    public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
 }

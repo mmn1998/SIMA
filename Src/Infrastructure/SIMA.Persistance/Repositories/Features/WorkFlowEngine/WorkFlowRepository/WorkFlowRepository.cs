@@ -33,18 +33,12 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         {
             var workFlowId = new WorkFlowId(Value: id);
             var workFlow = await _context.WorkFlows
-                .Include(x => x.Steps)
-                .ThenInclude(x => x.StepRequiredDocuments)
-                 .Include(x => x.Steps)
-                .ThenInclude(x => x.StepApprovalOptions)
-                .Include(x => x.States)
-                .Include(x => x.Progresses)
-                .Include(x => x.WorkFlowCompanies)
-                .Include(x => x.Issues)
-                    .ThenInclude(x => x.Meetings)
-                .Include(x => x.WorkFlowActors)
-                    .ThenInclude(x => x.WorkFlowActorSteps)
-                .FirstOrDefaultAsync(x => x.Id == workFlowId);
+                 .Include(x => x.Steps.Where(y => y.ActiveStatusId != 3))
+                .ThenInclude(x => x.StepApprovalOptions.Where(y => y.ActiveStatusId != 3))
+                .Include(x => x.Progresses.Where(y => y.ActiveStatusId != 3))
+                .Include(x => x.WorkFlowActors.Where(y => y.ActiveStatusId != 3))
+                    .ThenInclude(x => x.WorkFlowActorSteps.Where(y => y.ActiveStatusId != 3))
+                .FirstAsync(x => x.Id == workFlowId);
 
             return workFlow ?? throw new SimaResultException(CodeMessges._100057Code, Messages.WorkflowNotFoundError);
         }
@@ -52,12 +46,29 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
         {
             throw;
         }
-
     }
+    public async Task<WorkFlow> GetByIdForStep(long id)
+    {
+        try
+        {
+            var workFlowId = new WorkFlowId(Value: id);
+            var workFlow = await _context.WorkFlows
+                 .Include(x => x.Steps.Where(y => y.ActiveStatusId != 3))
+                .ThenInclude(x => x.StepApprovalOptions.Where(y => y.ActiveStatusId != 3))
+                .Include(x => x.Steps.Where(y => y.ActiveStatusId != 3))
+                .ThenInclude(x => x.StepRequiredDocuments)
+                .FirstAsync(x => x.Id == workFlowId);
 
+            return workFlow ?? throw new SimaResultException(CodeMessges._100057Code, Messages.WorkflowNotFoundError);
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
     public async Task<WorkFlow> GetByIdJustWorkFlow(WorkFlowId id)
     {
-        WorkFlow workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == id);
+        WorkFlow workFlow = await _context.WorkFlows.FirstOrDefaultAsync(x => x.Id == id) ?? throw SimaResultException.NotFound;
 
         return workFlow;
     }
@@ -175,10 +186,10 @@ public class WorkFlowRepository : Repository<WorkFlow>, IWorkFlowRepository
     //    }
     //}
 
-    public Task<WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate)
+    public async Task<WorkFlow> GetWorkFlowByAggregateId(MainAggregateEnums mainAggregate)
     {
 
-        var workFlow = _context.WorkFlows
+        var workFlow = await _context.WorkFlows
             .Include(x=>x.WorkFlowActors.Where(x=>x.ActiveStatusId != (long)ActiveStatusEnum.Delete))
             .FirstOrDefaultAsync(x => x.MainAggregateId == new MainAggregateId((long)mainAggregate) && x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         return workFlow;

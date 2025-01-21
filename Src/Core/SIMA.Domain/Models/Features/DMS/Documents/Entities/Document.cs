@@ -1,6 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.Auths.Companies.Entities;
+using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
@@ -17,11 +19,15 @@ using SIMA.Domain.Models.Features.DMS.DocumentTypes.Entities;
 using SIMA.Domain.Models.Features.DMS.DocumentTypes.ValueObjects;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
-using SIMA.Domain.Models.Features.Logistics.OrderingItems.Entities;
+using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
+using SIMA.Domain.Models.Features.Notifications.Messages.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.ValueObjects;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -44,6 +50,8 @@ public class Document : Entity
         SourceId = arg.SourceId;
         if (arg.AttachStepId.HasValue) AttachStepId = new(arg.AttachStepId.Value);
         FileAddress = arg.FileAddress;
+        CompanyId = new(arg.CompanyId);
+        IsOrganizationalDocumentation = arg.IsOrganizationalDocumentation;
         FileExtensionId = new(arg.FileExtensionId);
         DocumentTypeId = new(arg.DocumentTypeId);
         CreatedAt = arg.CreatedAt;
@@ -61,6 +69,8 @@ public class Document : Entity
         Name = arg.Name;
         Code = arg.Code;
         if (arg.MainAggregateId.HasValue) MainAggregateId = new(arg.MainAggregateId.Value);
+        CompanyId = new(arg.CompanyId);
+        IsOrganizationalDocumentation = arg.IsOrganizationalDocumentation;
         ActiveStatusId = arg.ActiveStatusId;
         SourceId = arg.SourceId;
         AttachStepId = new(arg.AttachStepId);
@@ -96,7 +106,8 @@ public class Document : Entity
     public string? Name { get; private set; }
 
     public string? Code { get; private set; }
-
+    public CompanyId? CompanyId { get; set; }
+    public virtual Company? Company { get; set; }
     public MainAggregateId? MainAggregateId { get; private set; }
     public virtual MainAggregate? MainAggregate { get; private set; }
     public long? SourceId { get; private set; }
@@ -107,6 +118,7 @@ public class Document : Entity
     public DocumentExtensionId FileExtensionId { get; private set; }
     public virtual DocumentExtension FileExtension { get; private set; }
     public string? FileAddress { get; private set; }
+    public string? IsOrganizationalDocumentation { get; private set; }
     public long ActiveStatusId { get; private set; }
 
     public DateTime? CreatedAt { get; private set; }
@@ -136,6 +148,13 @@ public class Document : Entity
     public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
     private List<SupplierDocument> _supplierDocuments = new();
     public ICollection<SupplierDocument> SupplierDocuments => _supplierDocuments;
+
+    private List<TrustyDraftDocument> _trustyDraftDocuments = new();
+    public ICollection<TrustyDraftDocument> TrustyDraftDocuments => _trustyDraftDocuments;
+
+    private List<MessageAttachment> _messageAttachments = new();
+    public ICollection<MessageAttachment> MessageAttachments => _messageAttachments;
+
     public virtual Staff? StaffSignature { get; set; }
     public StaffId? StaffSignatureId { get; set; }
     public void Delete(long userId)
@@ -144,12 +163,16 @@ public class Document : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<DeliveryItem> _deliveryItems = new();
-    public ICollection<DeliveryItem> DeliveryItems => _deliveryItems;
 
-    private List<ReturnOrderingItem> _returnOrderingItems = new();
-    public ICollection<ReturnOrderingItem> ReturnOrderingItems => _returnOrderingItems;
+
+
 
     private List<AccessRequestDocument> _accessRequestDocuments = new();
     public ICollection<AccessRequestDocument> AccessRequestDocuments => _accessRequestDocuments;
+
+    private List<LogisticsSupplyDocument> _logisticsSupplyDocuments = new();
+    public ICollection<LogisticsSupplyDocument> LogisticsSupplyDocuments => _logisticsSupplyDocuments;
+
+    private List<InquiryRequestDocument> _inquiryRequestDocuments = new();
+    public ICollection<InquiryRequestDocument> InquiryRequestDocuments => _inquiryRequestDocuments;
 }

@@ -26,67 +26,72 @@ public class WorkFlowActorQueryRepository : IWorkFlowActorQueryRepository
             await connection.OpenAsync();
 
             string query = $@"
-                  SELECT DISTINCT C.[ID] as Id
-          ,C.[Name]
-          ,C.[Code]
-          ,C.[WorkFlowId]
-          ,C.[IsDirectManagerOfIssueCreator]
-,c.IsActorManager
-          ,C.[IsEveryOne]
-          ,W.[Name] as WorkFlowName
-          ,C.[activeStatusId]
-		  ,A.[Name] ActiveStatus
-		  ,P.[Name] ProjectName
-		  ,P.Id ProjectId
-		  ,D.[Name] DomainName
-		  ,D.[Id] DomainId
-,c.[CreatedAt]
-      FROM [PROJECT].[WORKFLOWACTOR] C
-      join [Project].[WorkFlow] W on C.WorkFlowId = W.Id
-	  INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
-	  INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
-	  INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
-      WHERE C.[ActiveStatusID] <> 3 AND C.Id = @Id
-         Order By c.[CreatedAt] desc               
+                            SELECT DISTINCT C.[ID] as Id
+                                      ,C.[Name]
+                                      ,C.[Code]
+                                      ,C.[WorkFlowId]
+                                      ,C.[IsDirectManagerOfIssueCreator]
+                                      ,c.IsActorManager
+                                      ,C.[IsEveryOne]
+                                      ,W.[Name] as WorkFlowName
+                                      ,C.[activeStatusId]
+		                              ,A.[Name] ActiveStatus
+		                              ,P.[Name] ProjectName
+		                              ,P.Id ProjectId
+		                              ,D.[Name] DomainName
+		                              ,D.[Id] DomainId
+	                                  ,c.[CreatedAt]
+                            FROM [PROJECT].[WORKFLOWACTOR] C
+                            join [Project].[WorkFlow] W on C.WorkFlowId = W.Id
+                            INNER JOIN [Project].[Project] P on w.ProjectID = P.Id
+                            INNER JOIN [Authentication].[Domain] D on D.Id = P.DomainID
+                            INNER JOIN [Basic].[ActiveStatus] A on A.ID = C.ActiveStatusID
+                            WHERE C.[ActiveStatusID] <> 3 AND C.Id = @Id
+                            Order By c.[CreatedAt] desc               
                         
                         --ActorGroup
-                        SELECT DISTINCT G.[ID] as GroupId
-                            ,G.[Name] as GroupName
-                            ,G.[Code] as GroupCode
-,c.[CreatedAt]
-                        FROM  [PROJECT].[WORKFLOWACTOR] C
-                        left join  [Project].[WorkFlowActorGroup] AG on AG.WorkFlowActorID  = C.Id
-                        join  [Authentication].[Groups] G on AG.GroupID = G.Id
-                        WHERE C.[ActiveStatusID] = 1 and G.ActiveStatusId = 1 and C.Id = @Id
-Order By c.[CreatedAt] desc  
+
+                            SELECT DISTINCT
+			                             G.[ID] as GroupId
+			                            ,G.[Name] as GroupName
+			                            ,G.[Code] as GroupCode
+			                            ,c.[CreatedAt]
+                            FROM  [PROJECT].[WORKFLOWACTOR] C
+                            left join  [Project].[WorkFlowActorGroup] AG on AG.WorkFlowActorID  = C.Id and AG.ActiveStatusId <> 3
+                            join  [Authentication].[Groups] G on AG.GroupID = G.Id
+                            WHERE C.[ActiveStatusID] = 1 and G.ActiveStatusId = 1 and C.Id = @Id
+                            Order By c.[CreatedAt] desc  
                         
                         
                         
-                        --ActorRole
-                        SELECT DISTINCT R.[ID] as RoleId
-                            ,R.[Name] as RoleName
-                            ,R.[Code] as RoleCode
-,c.[CreatedAt]
-                        FROM  [PROJECT].[WORKFLOWACTOR] C
-                        left join  [Project].[WorkFlowActorRole] AR on AR.WorkFlowActorID  = C.Id
-                        join  [Authentication].Role R on AR.RoleID = R.Id
-                        WHERE C.[ActiveStatusID] = 1 and R.ActiveStatusId = 1 and C.Id = @Id
-                        Order By c.[CreatedAt] desc  
+                           --ActorRole
+
+                            SELECT DISTINCT
+			                             R.[ID] as RoleId
+                                        ,R.[Name] as RoleName
+                                        ,R.[Code] as RoleCode
+			                            ,c.[CreatedAt]
+                            FROM  [PROJECT].[WORKFLOWACTOR] C
+                            left join  [Project].[WorkFlowActorRole] AR on AR.WorkFlowActorID  = C.Id and AR.ActiveStatusID <> 3 
+                            join  [Authentication].Role R on AR.RoleID = R.Id 
+                            WHERE C.[ActiveStatusID] = 1 and R.ActiveStatusId = 1 and C.Id = @Id
+                            Order By c.[CreatedAt] desc  
                         
                         
-                        --ActorUser
-                        SELECT DISTINCT U.[ID] as UserId
-                            ,P.[FirstName] as FirstName
-                            ,P.[LastName] as LastName
-                        	,U.[Username] as UserName
-,c.[CreatedAt]
-                        FROM  [PROJECT].[WORKFLOWACTOR] C
-                        left join  [Project].[WorkFlowActorUser] AU on AU.WorkFlowActorID  = C.Id
-                        join  [Authentication].[Users] U on AU.UserID = U.Id
-                        join  [Authentication].[Profile] P on U.ProfileID = P.Id
-                        
-                        WHERE C.[ActiveStatusID] = 1 and U.ActiveStatusId = 1 and C.Id = @Id
-Order By c.[CreatedAt] desc  ";
+                            --ActorUser
+
+                            SELECT DISTINCT 
+			                             U.[ID] as UserId
+                                        ,P.[FirstName] as FirstName
+                                        ,P.[LastName] as LastName
+                                        ,U.[Username] as UserName
+			                            ,c.[CreatedAt]
+                            FROM  [PROJECT].[WORKFLOWACTOR] C
+                            left join  [Project].[WorkFlowActorUser] AU on AU.WorkFlowActorID  = C.Id
+                            join  [Authentication].[Users] U on AU.UserID = U.Id and AU.ActiveStatusID <> 3 
+                            join  [Authentication].[Profile] P on U.ProfileID = P.Id                       
+                            WHERE C.[ActiveStatusID] = 1 and U.ActiveStatusId = 1 and C.Id = @Id
+                            Order By c.[CreatedAt] desc   ";
 
 
 

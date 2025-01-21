@@ -17,6 +17,12 @@ public class PaymentTypeRepository : Repository<PaymentType>, IPaymentTypeReposi
         _context = context;
     }
 
+    public async Task<PaymentType> GetByCode(string code)
+    {
+        var entity = await _context.PaymentTypes.FirstOrDefaultAsync(pt => pt.Code == code);
+        return entity;
+    }
+
     public async Task<PaymentType> GetById(long id)
     {
         var strongTypeId = new PaymentTypeId(id);

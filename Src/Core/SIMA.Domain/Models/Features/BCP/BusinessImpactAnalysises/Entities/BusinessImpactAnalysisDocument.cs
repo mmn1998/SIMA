@@ -16,7 +16,7 @@ public class BusinessImpactAnalysisDocument : Entity
     }
     private BusinessImpactAnalysisDocument(CreateBusinessImpactAnalysisDocumentArg arg)
     {
-        Id = new(IdHelper.GenerateUniqueId());
+        Id = new(arg.Id);
         DocumentId = new(arg.DocumentId);
         BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
         ActiveStatusId = arg.ActiveStatusId;
@@ -50,5 +50,11 @@ public class BusinessImpactAnalysisDocument : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 }

@@ -5,6 +5,7 @@ using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.Steps;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;
+using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 using System.Text;
@@ -26,7 +27,18 @@ namespace SIMA.Application.Feaatures.WorkFlowEngine.WorkFlow.Mapper
             CreateMap<CreateStepCommand, StepArg>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()))
                 .ForMember(x => x.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
-                .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active));
+                .ForMember(x => x.ActiveStatusId, opt => opt.MapFrom(src => ActiveStatusEnum.Active))
+                .AfterMap((c, s) =>
+                {
+                    foreach (var item in c.ActorId)
+                    {
+                        CreateWorkFlowActorStepArg actorStepArg = new CreateWorkFlowActorStepArg();
+                        actorStepArg.WorkFlowActorId = item;
+                        actorStepArg.ActiveStatusId = (long)ActiveStatusEnum.Active;
+                        actorStepArg.Id = IdHelper.GenerateUniqueId();
+                        s.ActorStepArgs.Add(actorStepArg);
+                    }
+                });
 
 
             CreateMap<ModifyStateCommand, ModifyStateArgs>()

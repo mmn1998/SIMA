@@ -15,7 +15,7 @@ public class ProfileMapper : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.Now))
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (int)ActiveStatusEnum.Active))
             .ForMember(dest => dest.NationalId, opt => opt.MapFrom(src => src.NationalCode))
-            .ForMember(dest => dest.Brithday, opt => opt.MapFrom(src => DateOnly.FromDateTime(src.BirthDatePersian.ToMiladiDate())))
+            .ForMember(dest => dest.Brithday, opt => opt.MapFrom(src => GetDate(src.BirthDatePersian)))
             //.ForMember(dest => dest.CreatedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             .ForMember(x => x.Id, opt => opt.MapFrom(src => IdHelper.GenerateUniqueId()));
         ;
@@ -31,5 +31,15 @@ public class ProfileMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, opt => opt.MapFrom(src => (int)ActiveStatusEnum.Active))
             //.ForMember(dest => dest.ModifiedBy, opt => opt.MapFrom(src => simaIdentity.UserId))
             ;
+    }
+    private DateOnly? GetDate(string persianDate)
+    {
+        DateOnly? value = null;
+        var date = persianDate.ToMiladiDate();
+        if (date.HasValue)
+        {
+            value = DateOnly.FromDateTime(date.Value);
+        }
+        return value;
     }
 }

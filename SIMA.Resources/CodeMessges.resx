@@ -270,4 +270,49 @@
   <data name="100071Code" xml:space="preserve">
     <value>100071</value>
   </data>
+  <data name="100072Code" xml:space="preserve">
+    <value>100072</value>
+  </data>
+  <data name="NationalIdError" xml:space="preserve">
+    <value>شناسه ملی وارد شده نامعتبر میباشد.</value>
+  </data>
+  <data name="100100Code" xml:space="preserve">
+    <value>100100</value>
+  </data>
+  <data name="1001001Code" xml:space="preserve">
+    <value>1001001</value>
+  </data>
+  <data name="100102Code" xml:space="preserve">
+    <value>100102</value>
+  </data>
+  <data name="100103Code" xml:space="preserve">
+    <value>100103</value>
+  </data>
+  <data name="BrokerNotValid" xml:space="preserve">
+    <value>کارگزار انتخابی با کارگزار پاسخ استعلام مطابقت ندارد</value>
+  </data>
+  <data name="100104Code" xml:space="preserve">
+    <value>100104</value>
+  </data>
+  <data name="100105Code" xml:space="preserve">
+    <value>100105</value>
+  </data>
+  <data name="100107Code" xml:space="preserve">
+    <value>100107</value>
+  </data>
+  <data name="100106Code" xml:space="preserve">
+    <value>100106</value>
+  </data>
+  <data name="100111Code" xml:space="preserve">
+    <value>100111</value>
+  </data>
+  <data name="100108Code" xml:space="preserve">
+    <value>100108</value>
+  </data>
+  <data name="100109Code" xml:space="preserve">
+    <value>100109</value>
+  </data>
+  <data name="100110Code" xml:space="preserve">
+    <value>100110</value>
+  </data>
 </root>

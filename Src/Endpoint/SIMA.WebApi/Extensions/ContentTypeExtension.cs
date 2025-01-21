@@ -8,14 +8,14 @@ public static class ContentTypeExtension
         {"xls","application/vnd.ms-excel" },
         {"xlsx","application/vnd.ms-excel" },
         {"csv","text/cs" },
-        {"xml","text/xml" },
         {"pdf","application/pdf" },
         {"png","image/png" },
         {"jpg","image/jpeg" },
         {"jpeg","image/jpeg" },
+        {"xml","application/xml" },
     };
     public static string GetContentType(this string extension)
     {
-        return Mappings[extension];
+        return  Mappings[extension];
     }
 }

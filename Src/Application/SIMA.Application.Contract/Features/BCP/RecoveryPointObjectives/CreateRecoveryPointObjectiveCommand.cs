@@ -9,4 +9,5 @@ public class CreateRecoveryPointObjectiveCommand : ICommand<Result<long>>
     public string? Code { get; set; }
     public int RpoFrom { get; set; }
     public int RpoTo { get; set; }
+    public long TimeMeasurementId { get; set; }
 }

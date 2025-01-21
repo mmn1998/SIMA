@@ -13,7 +13,7 @@ using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
 
-public class ResponsibleType:Entity
+public class ResponsibleType : Entity
 {
     private ResponsibleType() { }
     private ResponsibleType(CreateResponsibleTypeArg arg)
