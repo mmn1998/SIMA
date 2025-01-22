@@ -101,8 +101,8 @@ where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and 
                 p.Code,
                 p.Scope,
                 p.Description,
-                p.ProviderCompanyId CompanyId,
-                c.Name CompanyName,
+                p.ProviderCompanyId,
+                c.Name ProviderCompanyName,
                 p.ServiceStatusId,
                 ss.Name ServiceStatusName,
                 p.InServiceDate
