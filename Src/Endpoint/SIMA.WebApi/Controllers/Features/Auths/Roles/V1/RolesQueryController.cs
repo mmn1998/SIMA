@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.Roles;
-using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
@@ -43,7 +42,7 @@ public class RolesQueryController : ControllerBase
         return await _mediator.Send(result);
     }
     [HttpGet("GetRoleAggregate/{roleId}")]
-    [SimaAuthorize(Permissions.GetRoleAggregate)]
+    [SimaAuthorize(Permissions.RoleGet)]
     public async Task<Result> GetRoleAggregate([FromRoute] long roleId)
     {
         var query = new GetRoleAggregate { RoleId = roleId };
