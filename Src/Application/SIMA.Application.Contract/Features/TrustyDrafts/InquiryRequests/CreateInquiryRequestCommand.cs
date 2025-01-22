@@ -13,7 +13,7 @@ public class CreateInquiryRequestCommand : ICommand<Result<long>>
     public long PaymentTypeId { get; set; }
     public long DraftOriginId { get; set; }
     public string? DraftOrderDate { get; set; }
-    public string? ProformaDate { get; set; }
+    public DateTime? ProformaDate { get; set; }
     public decimal? ProformaAmount { get; set; }
     public long? ProformaCurrencyTypeId { get; set; }
     public List<CreateInquiryRequestDocumentCommand>? InquiryRequestDocuments { get; set; }
