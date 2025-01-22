@@ -1463,5 +1463,14 @@ namespace SIMA.Resources {
                 return ResourceManager.GetString("WorkflowNotFoundError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مشتری انتخاب شده اشتباه است.
+        /// </summary>
+        public static string WrongCustomerError {
+            get {
+                return ResourceManager.GetString("WrongCustomerError", resourceCulture);
+            }
+        }
     }
 }

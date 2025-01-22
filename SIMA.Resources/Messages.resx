@@ -670,4 +670,8 @@
   <data name="UrlError" xml:space="preserve">
     <value>فرمت تارنمای وارد شده اشتبا است.</value>
   </data>
+  <data name="WrongCustomerError" xml:space="preserve">
+    <value>مشتری انتخاب شده اشتباه است</value>
+    <comment>400</comment>
+  </data>
 </root>

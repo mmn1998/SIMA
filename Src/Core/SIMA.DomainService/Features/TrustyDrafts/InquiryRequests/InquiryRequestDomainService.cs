@@ -70,7 +70,7 @@ where C.Id = @CustomerId
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
-        var response = await connection.QueryFirstOrDefaultAsync<string?>(query, new { CustomerId = customerId }) ?? throw new SimaResultException(CodeMessges._400Code, "مشتری انتخاب شده اشتباه است!");
+        var response = await connection.QueryFirstOrDefaultAsync<string?>(query, new { CustomerId = customerId }) ?? throw new SimaResultException(CodeMessges._400Code, Messages.WrongCustomerError);
         return response.PadLeft(12, '0');
     }
 
