@@ -22,10 +22,11 @@ public class CurrencyType : Entity
 
     private CurrencyType(CreateCurrencyTypeArg arg)
     {
-        Id = new CurrencyTypeId(IdHelper.GenerateUniqueId());
+        Id = new(IdHelper.GenerateUniqueId());
         Name = arg.Name;
         Code = arg.Code;
         IsBaseCurrency = arg.IsBaseCurrency;
+        Symbol = arg.Symbol;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -41,6 +42,7 @@ public class CurrencyType : Entity
         Name = arg.Name;
         Code = arg.Code;
         IsBaseCurrency = arg.IsBaseCurrency;
+        Symbol= arg.Symbol;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -54,6 +56,7 @@ public class CurrencyType : Entity
     public CurrencyTypeId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
+    public string? Symbol { get; private set; }
     public string? IsBaseCurrency { get; private set; }
     public long? ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
@@ -88,6 +91,8 @@ public class CurrencyType : Entity
         arg.NullCheck();
         arg.Name.NullCheck();
         arg.Code.NullCheck();
+        arg.IsBaseCurrency.NullCheck();
+        arg.Symbol.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
         if (await currencyTypeDomainService.IsBaseCurrencyUnique())
@@ -113,6 +118,8 @@ public class CurrencyType : Entity
         arg.NullCheck();
         arg.Name.NullCheck();
         arg.Code.NullCheck();
+        arg.IsBaseCurrency.NullCheck();
+        arg.Symbol.NullCheck();
         arg.ActiveStatusId.NullCheck();
 
         if (await currencyTypeDomainService.IsBaseCurrencyUnique())

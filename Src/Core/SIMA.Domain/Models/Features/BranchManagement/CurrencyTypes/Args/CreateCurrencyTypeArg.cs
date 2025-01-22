@@ -6,6 +6,7 @@ public class CreateCurrencyTypeArg
     public string? Name { get; set; }
     public string? Code { get; set; }
     public string? IsBaseCurrency { get; set; }
+    public string? Symbol { get; set; }
     public long? ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }
