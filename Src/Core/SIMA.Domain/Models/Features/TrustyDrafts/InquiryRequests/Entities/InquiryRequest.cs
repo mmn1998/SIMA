@@ -45,7 +45,7 @@ public class InquiryRequest : Entity
         ProformaAmount = arg.ProformaAmount;
         DraftOrderDate = arg.DraftOrderDate;
         ProformaDate = arg.ProformaDate;
-        if (arg.ProformaCurrencyTypeId.HasValue) ProformaCurrencyTypeId = new(arg.ProformaCurrencyTypeId.Value);
+        ProformaCurrencyTypeId = new(arg.ProformaCurrencyTypeId);
     }
     public static async Task<InquiryRequest> Create(CreateInquiryRequestArg arg, IInquiryRequestDomainService service)
     {
@@ -55,7 +55,7 @@ public class InquiryRequest : Entity
     #region Guards
     private static async Task CreateGuards(CreateInquiryRequestArg arg, IInquiryRequestDomainService service)
     {
-        if (arg.ProformaCurrencyTypeId.HasValue && arg.ProformaCurrencyTypeId.Value == (long)PaymentTypeEnum.Deposit)
+        if (arg.ProformaCurrencyTypeId == (long)PaymentTypeEnum.Deposit)
             if (string.IsNullOrEmpty(arg.ProformaNumber)) throw InquiryRequestExceptions.DepositProformaCurrencyTypeIdException;
     }
     #endregion

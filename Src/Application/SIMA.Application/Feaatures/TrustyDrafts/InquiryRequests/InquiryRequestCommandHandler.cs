@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
+using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.TrustyDrafts.InquiryRequests;
+using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Contracts;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
-using Sima.Framework.Core.Repository;
-using SIMA.Framework.Common.Exceptions;
 using SIMA.Resources;
-using System.Globalization;
 
 namespace SIMA.Application.Feaatures.TrustyDrafts.InquiryRequests;
 
@@ -35,7 +35,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
     {
         var arg = _mapper.Map<CreateInquiryRequestArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        arg.ReferenceNumber = await CalculateRefrenceNumber(request.CustomerId);
+        //arg.ReferenceNumber = await CalculateRefrenceNumber(request.CustomerId);
         var entity = await InquiryRequest.Create(arg, _service);
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
@@ -77,34 +77,43 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
     public async Task<Result<long>> Handle(DeleteInquiryRequestCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new(request.Id));
-        long userId = _simaIdentity.UserId; entity.Delete(userId);
+        long userId = _simaIdentity.UserId;
+        entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-    private async Task<string> CalculateRefrenceNumber(long customerId)
+    private async Task<string> CalculateRefrenceNumber(/*long customerId*/long currencyTypeId, string? draftOrderNumber, string? beneficiaryName)
     {
         var value = string.Empty;
-        // 5 digits
-        var branchCode = await _service.GetBranchCodeByUserId(_simaIdentity.UserId);
-        if (branchCode == null || branchCode.Length >= 6) throw new SimaResultException(CodeMessges._100108Code, Messages.BranchCodeError);
-        // 12 digits
+        #region Fisrt Approach
+        //// 5 digits
+        //var branchCode = await _service.GetBranchCodeByUserId(_simaIdentity.UserId);
+        //if (branchCode == null || branchCode.Length >= 6) throw new SimaResultException(CodeMessges._100108Code, Messages.BranchCodeError);
+        //// 12 digits
 
-        var customerNumber = await _service.GetCustomerNumber(customerId);
-        if (customerNumber.Length > 12) throw new SimaResultException(CodeMessges._100109Code, Messages.CustomerNumberNotValidError);
+        //var customerNumber = await _service.GetCustomerNumber(customerId);
+        //if (customerNumber.Length > 12) throw new SimaResultException(CodeMessges._100109Code, Messages.CustomerNumberNotValidError);
 
-        // 24 digits
-        var lastRefrenceNumber = await _service.GetLastRefrenceNumber();
+        //// 24 digits
+        //var lastRefrenceNumber = await _service.GetLastRefrenceNumber();
 
-        // 4 digits
-        var year = DateTime.Now.Year.ToString();
-        // 3 digits
-        var counter = "001";
-        if (!string.IsNullOrEmpty(lastRefrenceNumber))
-        {
-            var lastCounter = lastRefrenceNumber.Substring(21, 3);
-            counter = (Convert.ToInt64(lastCounter) + 1).ToString("000");
-        }
-        value = $@"{year}{branchCode}{customerNumber}{counter}";
+        //// 4 digits
+        //var year = DateTime.Now.Year.ToString();
+        //// 3 digits
+        //var counter = "001";
+        //if (!string.IsNullOrEmpty(lastRefrenceNumber))
+        //{
+        //    var lastCounter = lastRefrenceNumber.Substring(21, 3);
+        //    counter = (Convert.ToInt64(lastCounter) + 1).ToString("000");
+        //}
+        //value = $@"{year}{branchCode}{customerNumber}{counter}";
+        //return value;var value = string.Empty;
+        #endregion
+        #region Second Approach
+        var symbol = await _service.GetCurrencySymbol(currencyTypeId);
+
+        value = $"{symbol}{draftOrderNumber.Substring(0, 8)}";
+        #endregion
         return value;
     }
 }

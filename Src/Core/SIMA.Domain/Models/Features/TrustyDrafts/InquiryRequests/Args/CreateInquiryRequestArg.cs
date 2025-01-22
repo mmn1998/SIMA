@@ -7,7 +7,7 @@ public class CreateInquiryRequestArg
     public string ReferenceNumber { get; set; }
     public string DraftOrderNumber { get; set; }
     public long DraftOriginId { get; set; }
-    public long? ProformaCurrencyTypeId { get; set; }
+    public long ProformaCurrencyTypeId { get; set; }
     public DateTime? DraftOrderDate { get; set; }
     public DateTime? ProformaDate { get; set; }
     public decimal? ProformaAmount { get; set; }

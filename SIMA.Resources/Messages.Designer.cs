@@ -1465,6 +1465,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to نوع ارز انتخاب شده اشتباه است.
+        /// </summary>
+        public static string WrongCurrencyTypeError {
+            get {
+                return ResourceManager.GetString("WrongCurrencyTypeError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to مشتری انتخاب شده اشتباه است.
         /// </summary>
         public static string WrongCustomerError {

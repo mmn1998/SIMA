@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Customers.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Contracts;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Persistance.Persistence;
@@ -72,6 +73,19 @@ where C.Id = @CustomerId
         await connection.OpenAsync();
         var response = await connection.QueryFirstOrDefaultAsync<string?>(query, new { CustomerId = customerId }) ?? throw new SimaResultException(CodeMessges._400Code, Messages.WrongCustomerError);
         return response.PadLeft(12, '0');
+    }
+
+    public async Task<string?> GetCurrencySymbol(long currencyTypeId)
+    {
+        var query = @"
+select CT.Symbol from
+Bank.CurrencyType CT
+where CT.Id = @Id
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var response = await connection.QueryFirstOrDefaultAsync<string?>(query, new { Id = currencyTypeId }) ?? throw new SimaResultException(CodeMessges._400Code, Messages.WrongCurrencyTypeError);
+        return response.Substring(0, 2);
     }
 
     //public Task<bool> IsCodeUnique(string code, InquiryRequestId? id = null)
