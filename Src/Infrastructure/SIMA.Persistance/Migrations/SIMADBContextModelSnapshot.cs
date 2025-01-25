@@ -9720,6 +9720,394 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("MessageSeenStatistics", "Notification");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Entities.CobitScenarioCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("CobitScenarioCategory", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities.CobitScenario", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CobitScenarioCategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CobitScenarioCategoryId");
+
+                    b.HasIndex("ScenarioId");
+
+                    b.ToTable("CobitScenario", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.AffectedHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("AffectedHistory", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("ConsequenceCategory", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceLevel", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<long>("ConsequenceCategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ConsequenceCategoryId");
+
+                    b.ToTable("ConsequenceLevel", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ScenarioHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("ScenarioHistory", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities.CurrentOccurrenceProbability", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("InherentOccurrenceProbabilityValueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MatrixAValueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioHistoryId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("InherentOccurrenceProbabilityValueId");
+
+                    b.HasIndex("MatrixAValueId");
+
+                    b.HasIndex("ScenarioHistoryId");
+
+                    b.ToTable("CurrentOccurrenceProbability", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities.CurrentOccurrenceProbabilityValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValuingIntervalTitle")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("CurrentOccurrenceProbabilityValue", "RiskManagement");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities.EvaluationCriteria", b =>
                 {
                     b.Property<long>("Id")
@@ -9767,6 +10155,56 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("EvaluationCriteria", "RiskManagement");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities.Frequency", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Frequency", "RiskManagement");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities.ImpactScale", b =>
                 {
                     b.Property<long>("Id")
@@ -9807,6 +10245,199 @@ namespace SIMA.Persistance.Migrations
                         .IsUnique();
 
                     b.ToTable("ImpactScale", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities.InherentOccurrenceProbability", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("InherentOccurrenceProbabilityValueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MatrixAValueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ScenarioHistoryId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("InherentOccurrenceProbabilityValueId");
+
+                    b.HasIndex("MatrixAValueId");
+
+                    b.HasIndex("ScenarioHistoryId");
+
+                    b.ToTable("InherentOccurrenceProbability", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities.RiskConsequence", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConsequenceCategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConsequenceLevelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsequenceCategoryId");
+
+                    b.HasIndex("ConsequenceLevelId");
+
+                    b.ToTable("RiskConsequence", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities.MatrixAValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("MatrixAValue", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities.MatrixA", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MatrixAValueId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TriggerStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UseVulnerabilityId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("MatrixAValueId");
+
+                    b.HasIndex("TriggerStatusId");
+
+                    b.HasIndex("UseVulnerabilityId");
+
+                    b.ToTable("MatrixA", "RiskManagement");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities.RiskCriteria", b =>
@@ -10145,6 +10776,56 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("RiskType", "RiskManagement");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities.RiskValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("Condition")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("RiskValue", "RiskManagement");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.CorrectiveAction", b =>
                 {
                     b.Property<long>("Id")
@@ -10280,10 +10961,16 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("AffectedHistoryId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<long?>("ConsequenceCategoryId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -10296,6 +10983,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("FrequencyId")
+                        .HasColumnType("bigint");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -10313,12 +11003,33 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("RiskTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ScenarioHistoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("TriggerStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UseVulnerabilityId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("AffectedHistoryId");
 
                     b.HasIndex("Code")
                         .IsUnique();
 
+                    b.HasIndex("ConsequenceCategoryId");
+
+                    b.HasIndex("FrequencyId");
+
                     b.HasIndex("RiskTypeId");
+
+                    b.HasIndex("ScenarioHistoryId");
+
+                    b.HasIndex("TriggerStatusId");
+
+                    b.HasIndex("UseVulnerabilityId");
 
                     b.ToTable("Risk", "RiskManagement");
                 });
@@ -10401,6 +11112,45 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("RiskStaff", "RiskManagement");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.RiskValueStrategy", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("RiskId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StrategyId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RiskId");
+
+                    b.HasIndex("StrategyId");
+
+                    b.ToTable("RiskValueStrategy", "RiskManagement");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities.ServiceRiskImpact", b =>
                 {
                     b.Property<long>("Id")
@@ -10443,6 +11193,163 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("ServiceRiskId");
 
                     b.ToTable("ServiceRiskImpact", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Severities.Entities.Severity", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AffectedHistoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<long>("ConsequenceCategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SeverityValueId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AffectedHistoryId");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.HasIndex("ConsequenceCategoryId");
+
+                    b.HasIndex("SeverityValueId");
+
+                    b.ToTable("Severity", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.InherentOccurrenceProbabilityValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("InherentOccurrenceProbabilityValue", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.SeverityValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValuingIntervalTitle")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("SeverityValue", "RiskManagement");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities.ThreatType", b =>
@@ -10533,6 +11440,106 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("ThreatTypeId");
 
                     b.ToTable("Threat", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities.TriggerStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("TriggerStatus", "RiskManagement");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities.UseVulnerability", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<float>("NumericValue")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ValueTitle")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("UseVulnerability", "RiskManagement");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Vulnerabilities.Entities.Vulnerability", b =>
@@ -19481,6 +20488,57 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities.CobitScenario", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Entities.CobitScenarioCategory", "CobitScenarioCategory")
+                        .WithMany("CobitScenarios")
+                        .HasForeignKey("CobitScenarioCategoryId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
+                        .WithMany("CobitScenarios")
+                        .HasForeignKey("ScenarioId")
+                        .IsRequired();
+
+                    b.Navigation("CobitScenarioCategory");
+
+                    b.Navigation("Scenario");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceLevel", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", "ConsequenceCategory")
+                        .WithMany("ConsequenceLevels")
+                        .HasForeignKey("ConsequenceCategoryId")
+                        .IsRequired();
+
+                    b.Navigation("ConsequenceCategory");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities.CurrentOccurrenceProbability", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.InherentOccurrenceProbabilityValue", "InherentOccurrenceProbabilityValue")
+                        .WithMany("CurrentOccurrenceProbabilities")
+                        .HasForeignKey("InherentOccurrenceProbabilityValueId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities.MatrixAValue", "MatrixAValue")
+                        .WithMany("CurrentOccurrenceProbabilities")
+                        .HasForeignKey("MatrixAValueId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ScenarioHistory", "ScenarioHistory")
+                        .WithMany("CurrentOccurrenceProbabilities")
+                        .HasForeignKey("ScenarioHistoryId")
+                        .IsRequired();
+
+                    b.Navigation("InherentOccurrenceProbabilityValue");
+
+                    b.Navigation("MatrixAValue");
+
+                    b.Navigation("ScenarioHistory");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities.EvaluationCriteria", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities.RiskDegree", "RiskDegree")
@@ -19503,6 +20561,71 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("RiskImpact");
 
                     b.Navigation("RiskPossibility");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities.InherentOccurrenceProbability", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.InherentOccurrenceProbabilityValue", "InherentOccurrenceProbabilityValue")
+                        .WithMany("InherentOccurrenceProbabilities")
+                        .HasForeignKey("InherentOccurrenceProbabilityValueId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities.MatrixAValue", "MatrixAValue")
+                        .WithMany("InherentOccurrenceProbabilities")
+                        .HasForeignKey("MatrixAValueId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ScenarioHistory", "ScenarioHistory")
+                        .WithMany("InherentOccurrenceProbabilities")
+                        .HasForeignKey("ScenarioHistoryId")
+                        .IsRequired();
+
+                    b.Navigation("InherentOccurrenceProbabilityValue");
+
+                    b.Navigation("MatrixAValue");
+
+                    b.Navigation("ScenarioHistory");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities.RiskConsequence", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", "ConsequenceCategory")
+                        .WithMany("RiskConsequences")
+                        .HasForeignKey("ConsequenceCategoryId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceLevel", "ConsequenceLevel")
+                        .WithMany("RiskConsequences")
+                        .HasForeignKey("ConsequenceLevelId")
+                        .IsRequired();
+
+                    b.Navigation("ConsequenceCategory");
+
+                    b.Navigation("ConsequenceLevel");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities.MatrixA", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities.MatrixAValue", "MatrixAValue")
+                        .WithMany("MatrixAs")
+                        .HasForeignKey("MatrixAValueId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities.TriggerStatus", "TriggerStatus")
+                        .WithMany("MatrixAs")
+                        .HasForeignKey("TriggerStatusId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities.UseVulnerability", "UseVulnerability")
+                        .WithMany("MatrixAs")
+                        .HasForeignKey("UseVulnerabilityId")
+                        .IsRequired();
+
+                    b.Navigation("MatrixAValue");
+
+                    b.Navigation("TriggerStatus");
+
+                    b.Navigation("UseVulnerability");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities.RiskCriteria", b =>
@@ -19608,6 +20731,18 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.Risk", b =>
                 {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.AffectedHistory", "AffectedHistory")
+                        .WithMany("Risks")
+                        .HasForeignKey("AffectedHistoryId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", "ConsequenceCategory")
+                        .WithMany("Risks")
+                        .HasForeignKey("ConsequenceCategoryId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities.Frequency", "Frequency")
+                        .WithMany("Risks")
+                        .HasForeignKey("FrequencyId");
+
                     b.HasOne("SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities.RiskType", "RiskType")
                         .WithMany("Risks")
                         .HasForeignKey("RiskTypeId")
@@ -19615,7 +20750,31 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired()
                         .HasConstraintName("FK_Risk_RiskType");
 
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ScenarioHistory", "ScenarioHistory")
+                        .WithMany("Risks")
+                        .HasForeignKey("ScenarioHistoryId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities.TriggerStatus", "TriggerStatus")
+                        .WithMany("Risks")
+                        .HasForeignKey("TriggerStatusId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities.UseVulnerability", "UseVulnerability")
+                        .WithMany("Risks")
+                        .HasForeignKey("UseVulnerabilityId");
+
+                    b.Navigation("AffectedHistory");
+
+                    b.Navigation("ConsequenceCategory");
+
+                    b.Navigation("Frequency");
+
                     b.Navigation("RiskType");
+
+                    b.Navigation("ScenarioHistory");
+
+                    b.Navigation("TriggerStatus");
+
+                    b.Navigation("UseVulnerability");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.RiskRelatedIssue", b =>
@@ -19656,6 +20815,23 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.RiskValueStrategy", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.Risks.Entities.Risk", "Risk")
+                        .WithMany("RiskValueStrategies")
+                        .HasForeignKey("RiskId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities.BusinessContinuityPlanStratgy", "Strategy")
+                        .WithMany("RiskValueStrategies")
+                        .HasForeignKey("StrategyId")
+                        .IsRequired();
+
+                    b.Navigation("Risk");
+
+                    b.Navigation("Strategy");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities.ServiceRiskImpact", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities.ImpactScale", "ImpactScale")
@@ -19682,6 +20858,30 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("RiskImpact");
 
                     b.Navigation("ServiceRisk");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Severities.Entities.Severity", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.AffectedHistory", "AffectedHistory")
+                        .WithMany("Severities")
+                        .HasForeignKey("AffectedHistoryId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", "ConsequenceCategory")
+                        .WithMany("Severities")
+                        .HasForeignKey("ConsequenceCategoryId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.SeverityValue", "SeverityValue")
+                        .WithMany("Severities")
+                        .HasForeignKey("SeverityValueId")
+                        .IsRequired();
+
+                    b.Navigation("AffectedHistory");
+
+                    b.Navigation("ConsequenceCategory");
+
+                    b.Navigation("SeverityValue");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Threats.Entities.Threat", b =>
@@ -22305,6 +23505,11 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessImpactAnalyses");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities.BusinessContinuityPlanStratgy", b =>
+                {
+                    b.Navigation("RiskValueStrategies");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
                 {
                     b.Navigation("BusinessContinuityPlanAssumptions");
@@ -22418,6 +23623,8 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", b =>
                 {
+                    b.Navigation("CobitScenarios");
+
                     b.Navigation("ScenarioBusinessContinuityPlanAssumptions");
 
                     b.Navigation("ScenarioBusinessContinuityPlanVersionings");
@@ -22810,9 +24017,60 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("MessageSeenStatisticses");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Entities.CobitScenarioCategory", b =>
+                {
+                    b.Navigation("CobitScenarios");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.AffectedHistory", b =>
+                {
+                    b.Navigation("Risks");
+
+                    b.Navigation("Severities");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", b =>
+                {
+                    b.Navigation("ConsequenceLevels");
+
+                    b.Navigation("RiskConsequences");
+
+                    b.Navigation("Risks");
+
+                    b.Navigation("Severities");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceLevel", b =>
+                {
+                    b.Navigation("RiskConsequences");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ScenarioHistory", b =>
+                {
+                    b.Navigation("CurrentOccurrenceProbabilities");
+
+                    b.Navigation("InherentOccurrenceProbabilities");
+
+                    b.Navigation("Risks");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities.Frequency", b =>
+                {
+                    b.Navigation("Risks");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities.ImpactScale", b =>
                 {
                     b.Navigation("ServiceRiskImpacts");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities.MatrixAValue", b =>
+                {
+                    b.Navigation("CurrentOccurrenceProbabilities");
+
+                    b.Navigation("InherentOccurrenceProbabilities");
+
+                    b.Navigation("MatrixAs");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities.RiskDegree", b =>
@@ -22877,14 +24135,42 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("RiskStaffs");
 
+                    b.Navigation("RiskValueStrategies");
+
                     b.Navigation("ServiceRisks");
 
                     b.Navigation("Threats");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.InherentOccurrenceProbabilityValue", b =>
+                {
+                    b.Navigation("CurrentOccurrenceProbabilities");
+
+                    b.Navigation("InherentOccurrenceProbabilities");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.SeverityValue", b =>
+                {
+                    b.Navigation("Severities");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities.ThreatType", b =>
                 {
                     b.Navigation("Threats");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities.TriggerStatus", b =>
+                {
+                    b.Navigation("MatrixAs");
+
+                    b.Navigation("Risks");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities.UseVulnerability", b =>
+                {
+                    b.Navigation("MatrixAs");
+
+                    b.Navigation("Risks");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities.Approval", b =>

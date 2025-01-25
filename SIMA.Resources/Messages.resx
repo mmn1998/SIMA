@@ -678,4 +678,8 @@
     <value>نوع ارز انتخاب شده اشتباه است</value>
     <comment>400</comment>
   </data>
+  <data name="ColorMaxLengthError" xml:space="preserve">
+    <value>رنگ بیشتر از 10 کاراکتر نمیتواند باشد!</value>
+    <comment>400</comment>
+  </data>
 </root>

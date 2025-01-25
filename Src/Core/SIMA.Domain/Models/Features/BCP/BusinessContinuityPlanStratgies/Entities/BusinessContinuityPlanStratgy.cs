@@ -1,8 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Args;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Contracts;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -59,4 +59,6 @@ public class BusinessContinuityPlanStratgy : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    private List<RiskValueStrategy> _riskValueStrategies = new();
+    public ICollection<RiskValueStrategy> RiskValueStrategies => _riskValueStrategies;
 }

@@ -44,6 +44,10 @@
     <Folder Include="Models\Features\Logistics\PaymentCommands\Contracts\" />
     <Folder Include="Models\Features\Logistics\PriceEstimations\Args\" />
     <Folder Include="Models\Features\Logistics\PriceEstimations\Contracts\" />
+    <Folder Include="Models\Features\RiskManagement\RiskValueStrategies\Args\" />
+    <Folder Include="Models\Features\RiskManagement\RiskValueStrategies\Contracts\" />
+    <Folder Include="Models\Features\RiskManagement\RiskValueStrategies\Entities\" />
+    <Folder Include="Models\Features\RiskManagement\RiskValueStrategies\ValueObjects\" />
     <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Exceptions\" />
     <Folder Include="Models\Features\Auths\CustomerTypes\Exceptions\" />
     <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />

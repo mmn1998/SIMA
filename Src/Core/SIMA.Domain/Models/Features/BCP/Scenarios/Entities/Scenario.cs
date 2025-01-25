@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.BCP.ScenarioExecutionHistories.Entities;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Args;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Contracts;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -213,4 +214,6 @@ public class Scenario : Entity
 
     private List<ScenarioPossibleAction> _scenarioPossibleActions = new();
     public ICollection<ScenarioPossibleAction> ScenarioPossibleActions => _scenarioPossibleActions;
+    private List<CobitScenario> _cobitScenarios = new();
+    public ICollection<CobitScenario> CobitScenarios => _cobitScenarios;
 }

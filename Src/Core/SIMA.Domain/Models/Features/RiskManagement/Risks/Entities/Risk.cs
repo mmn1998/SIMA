@@ -1,5 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Events;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Interfaces;
@@ -7,6 +12,10 @@ using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Vulnerabilities.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
@@ -387,7 +396,18 @@ public class Risk : Entity
     public string Description { get; private set; }
     public RiskTypeId RiskTypeId { get; private set; }
     public virtual RiskType RiskType { get; private set; }
-
+    public AffectedHistoryId? AffectedHistoryId { get; private set; }
+    public virtual AffectedHistory? AffectedHistory { get; private set; }
+    public UseVulnerabilityId? UseVulnerabilityId { get; private set; }
+    public virtual UseVulnerability? UseVulnerability { get; private set; }
+    public ConsequenceCategoryId? ConsequenceCategoryId { get; private set; }
+    public virtual ConsequenceCategory? ConsequenceCategory { get; private set; }
+    public TriggerStatusId? TriggerStatusId { get; private set; }
+    public virtual TriggerStatus? TriggerStatus { get; private set; }
+    public ScenarioHistoryId? ScenarioHistoryId { get; private set; }
+    public virtual ScenarioHistory? ScenarioHistory { get; private set; }
+    public FrequencyId? FrequencyId { get; private set; }
+    public virtual Frequency? Frequency { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -414,5 +434,6 @@ public class Risk : Entity
     public ICollection<ServiceRisk> ServiceRisks => _serviceRisks;
     private List<RiskStaff> _riskStaffs = new();
     public ICollection<RiskStaff> RiskStaffs => _riskStaffs;
-
+    private List<RiskValueStrategy> _riskValueStrategies = new();
+    public ICollection<RiskValueStrategy> RiskValueStrategies => _riskValueStrategies;
 }

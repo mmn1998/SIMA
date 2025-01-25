@@ -196,6 +196,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to رنگ بیشتر از 10 کاراکتر نمیتواند باشد!.
+        /// </summary>
+        public static string ColorMaxLengthError {
+            get {
+                return ResourceManager.GetString("ColorMaxLengthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شرکت غیرفعال شده است..
         /// </summary>
         public static string ComapnyDeactiveError {
