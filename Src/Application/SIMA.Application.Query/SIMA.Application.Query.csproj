@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <Folder Include="Features\Logistics\GoodsStatues\" />
-    <Folder Include="Features\RiskManagement\SeverityValues\" />
   </ItemGroup>
 
 </Project>

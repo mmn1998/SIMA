@@ -23,6 +23,7 @@ public class ConsequenceCategory : Entity, IAggregateRoot
         Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
+        Description = arg.Description;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -37,6 +38,7 @@ public class ConsequenceCategory : Entity, IAggregateRoot
         await ModifyGuard(arg, service);
         Name = arg.Name;
         Code = arg.Code;
+        Description= arg.Description;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -44,6 +46,7 @@ public class ConsequenceCategory : Entity, IAggregateRoot
     public ConsequenceCategoryId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
+    public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SIMA.Application.Query.Contract.Features.RiskManagement.EvaluationCriterias;
 using SIMA.Application.Query.Contract.Features.RiskManagement.UseVulnerabilities;
 using SIMA.Framework.Common.Response;
 
@@ -10,7 +9,7 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.UseVulnerabilities.V1;
 [ApiController]
 [Route("riskManagement/[controller]")]
 [Authorize]
-[ApiExplorerSettings(GroupName = "RiskManagement/EvaluationCriteria")]
+[ApiExplorerSettings(GroupName = "RiskManagement/UseVulnerabilities")]
 public class UseVulnerabilitiesQueryController : ControllerBase
 {
     private readonly IMediator _mediator;
