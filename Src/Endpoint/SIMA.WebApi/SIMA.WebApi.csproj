@@ -114,6 +114,10 @@
     <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Diagrams\V1\RiskDiagramsQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\TriggerStatuses\V1\TriggerStatusesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\TriggerStatuses\V1\TriggerStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\UseVulnerabilities\V1\UseVulnerabilitiesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\UseVulnerabilities\V1\UseVulnerabilitiesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Diagrams\V1\ServiceDiagramsQueryController.cs" />
     <Compile Include="Controllers\Features\Notifications\Messages\MessagesController.cs" />
     <Compile Include="Controllers\Features\Notifications\Messages\MessagesQueryController.cs" />
