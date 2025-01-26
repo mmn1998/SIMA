@@ -26,7 +26,7 @@ public class TriggerStatusesQueryController : ControllerBase
     */
     public async Task<Result> Get([FromRoute] long id)
     {
-        var query = new GetTriggerStatusesQuery { Id = id };
+        var query = new GetTriggerStatusQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]

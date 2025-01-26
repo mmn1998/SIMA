@@ -1,5 +1,4 @@
-﻿using SIMA.Application.Query.Contract.Features.RiskManagement.ThreatTypes;
-using SIMA.Application.Query.Contract.Features.RiskManagement.TriggerStatuses;
+﻿using SIMA.Application.Query.Contract.Features.RiskManagement.TriggerStatuses;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 

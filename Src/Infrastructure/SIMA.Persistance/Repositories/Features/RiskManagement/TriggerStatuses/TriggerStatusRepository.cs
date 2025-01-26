@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Application.Query.Contract.Features.RiskManagement.TriggerStatuses;
-using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Contracts;
-using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.ValueObjects;

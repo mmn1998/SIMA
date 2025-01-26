@@ -1,11 +1,11 @@
-﻿using System.Data.SqlClient;
-using ArmanIT.Investigation.Dapper.QueryBuilder;
+﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
-using SIMA.Application.Query.Contract.Features.RiskManagement.RiskTypes;
+using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.RiskManagement.ScenarioHistories;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
+using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.RiskManagement.ScenarioHistories;
 
@@ -14,9 +14,9 @@ public class ScenarioHistoryQureyRepository : IScenarioHistoryQureyRepository
     private readonly string _connectionString;
     private readonly string _mainQuery;
 
-    public ScenarioHistoryQureyRepository(string connectionString, string mainQuery)
+    public ScenarioHistoryQureyRepository(IConfiguration configuration)
     {
-        _connectionString = connectionString;
+        _connectionString = configuration.GetConnectionString();
         _mainQuery = @"SELECT DISTINCT T.[Id]
                       ,T.[Name]
                       ,T.[Code]

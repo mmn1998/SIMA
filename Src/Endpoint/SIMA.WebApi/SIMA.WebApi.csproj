@@ -13,7 +13,6 @@
     <Content Remove="Controllers\**" />
     <EmbeddedResource Remove="Controllers\**" />
     <None Remove="Controllers\**" />
-    <Content Remove="appsettings.json" />
   </ItemGroup>
 
   <ItemGroup>
