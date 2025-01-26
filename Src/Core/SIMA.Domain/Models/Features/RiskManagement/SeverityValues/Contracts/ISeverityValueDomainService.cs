@@ -6,4 +6,5 @@ namespace SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Contracts;
 public interface ISeverityValueDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, SeverityValueId? id = null);
+    Task<bool> IsNumericUnique(float value, SeverityValueId? id = null);
 }

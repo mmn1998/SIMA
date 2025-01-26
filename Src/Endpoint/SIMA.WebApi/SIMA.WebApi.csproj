@@ -109,6 +109,8 @@
     <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\SeverityValues\V1\SeverityValuesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\SeverityValues\V1\SeverityValuesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Diagrams\V1\RiskDiagramsQueryController.cs" />

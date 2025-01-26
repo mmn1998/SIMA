@@ -156,6 +156,7 @@ using SIMA.Domain.Models.Features.TrustyDrafts.AgentBankWageShareStatuses.Entiti
 using SIMA.Domain.Models.Features.TrustyDrafts.ReferralLetters.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 
 #endregion
 
@@ -309,6 +310,7 @@ public class SIMADBContext : DbContext
     public DbSet<TriggerStatus> TriggerStatuses { get; set; }
     public DbSet<ConsequenceCategory> ConsequenceCategories { get; set; }
     public DbSet<AffectedHistory> AffectedHistories { get; set; }
+    public DbSet<SeverityValue> SeverityValues { get; set; }
     public DbSet<ConsequenceLevel> ConsequenceLevels { get; set; }
     public DbSet<RiskLevel> RiskLevels { get; set; }
     public DbSet<RiskImpact> RiskImpacts { get; set; }
