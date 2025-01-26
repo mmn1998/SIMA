@@ -10,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.UseVulnerabilities.V1;
 [ApiController]
 [Route("riskManagement/[controller]")]
 [Authorize]
-[ApiExplorerSettings(GroupName = "UseVulnerability")]
+[ApiExplorerSettings(GroupName = "RiskManagement/UseVulnerability")]
 public class UseVulnerabilitiesController : ControllerBase
 {
     private readonly IMediator _mediator;

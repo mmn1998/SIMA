@@ -10,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.TriggerStatuses.V1;
 [ApiController]
 [Route("riskManagement/[controller]")]
 [Authorize]
-[ApiExplorerSettings(GroupName = "TriggerStatus")]
+[ApiExplorerSettings(GroupName = "RiskManagement/TriggerStatus")]
 public class TriggerStatusesQueryController : ControllerBase
 {
     private readonly IMediator _mediator;
