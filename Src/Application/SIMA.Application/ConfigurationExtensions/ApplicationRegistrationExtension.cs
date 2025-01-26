@@ -140,6 +140,11 @@ using SIMA.Application.Feaatures.TrustyDrafts.InquiryRequests.Mapper;
 using SIMA.Application.Feaatures.TrustyDrafts.InquiryResponses.Mapper;
 using SIMA.Application.Feaatures.TrustyDrafts.AgentBankWageShareStatuses.Mappers;
 using SIMA.Application.Feaatures.TrustyDrafts.ReferralLetters.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.ConsequenceCategories.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.TriggerStatuses.Mapper;
+using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
+
 #endregion
 
 namespace SIMA.Application.ConfigurationExtensions;
@@ -243,6 +248,8 @@ public static class ApplicationRegistrationExtension
 
                 #region RiskManagement
                 conf.AddProfile(new ImpactScaleMapper());
+                conf.AddProfile(new ConsequenceCategoryMapper());
+                conf.AddProfile(new ConsequenceLevelMapper());
                 conf.AddProfile(new RiskDegreeMapper());
                 conf.AddProfile(new RiskImpactMapper());
                 conf.AddProfile(new RiskLevelMapper());
@@ -253,7 +260,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new RiskLevelMeasureMapper());
                 conf.AddProfile(new RiskCriteriaMapper()); ;
                 conf.AddProfile(new EvaluationCriteriaMapper());
-
+                conf.AddProfile(new TriggerStatusMapper());
                 #endregion
 
                 #region ServiceCatalog

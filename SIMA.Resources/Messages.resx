@@ -682,4 +682,7 @@
     <value>رنگ بیشتر از 10 کاراکتر نمیتواند باشد!</value>
     <comment>400</comment>
   </data>
+  <data name="NumericValueNotUniqueError" xml:space="preserve">
+    <value>فیلد ارزش عددی باید تنها عدد یکتا باشد</value>
+  </data>
 </root>

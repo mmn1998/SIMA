@@ -862,6 +862,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فیلد ارزش عددی باید تنها عدد یکتا باشد.
+        /// </summary>
+        public static string NumericValueNotUniqueError {
+            get {
+                return ResourceManager.GetString("NumericValueNotUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شماره مرتبسازی مورد نظر پیش تر تخصیص یافته است..
         /// </summary>
         public static string OrderingAllocatedError {
