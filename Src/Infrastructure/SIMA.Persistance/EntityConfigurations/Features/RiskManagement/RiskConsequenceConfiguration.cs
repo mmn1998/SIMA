@@ -1,12 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement;
 
-public class RiskConsequenceConfiguration : IEntityTypeConfiguration<RiskConsequence>
+public class RiskConsequenceConfiguration : IEntityTypeConfiguration<ConsequenceLevelCategory>
 {
-    public void Configure(EntityTypeBuilder<RiskConsequence> entity)
+    public void Configure(EntityTypeBuilder<ConsequenceLevelCategory> entity)
     {
         entity.ToTable("RiskConsequence", "RiskManagement");
 

@@ -1,14 +1,12 @@
-﻿using System.Text;
-using AutoMapper;
-using SIMA.Application.Contract.Features.RiskManagers.ThreatTypes;
+﻿using AutoMapper;
 using SIMA.Application.Contract.Features.RiskManagers.TriggerStatuses;
-using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Args;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Args;
 using SIMA.Framework.Common.Helper;
+using System.Text;
 
 namespace SIMA.Application.Feaatures.RiskManagers.TriggerStatuses.Mapper;
 
-public class TriggerStatusMapper: Profile
+public class TriggerStatusMapper : Profile
 {
     public TriggerStatusMapper()
     {

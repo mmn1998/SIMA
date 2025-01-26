@@ -1,7 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 using SIMA.Framework.Common.Exceptions;
@@ -80,12 +80,10 @@ public class ConsequenceCategory : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<ConsequenceLevel> _consequenceLevels = new();
-    public ICollection<ConsequenceLevel> ConsequenceLevels => _consequenceLevels;
     private List<Severity> _severities = new();
     public ICollection<Severity> Severities => _severities;
-    private List<RiskConsequence> _riskConsequences = new();
-    public ICollection<RiskConsequence> RiskConsequences => _riskConsequences;
+    private List<ConsequenceLevelCategory> _riskConsequences = new();
+    public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
     private List<Risk> _risks = new();
     public ICollection<Risk> Risks => _risks;
 }

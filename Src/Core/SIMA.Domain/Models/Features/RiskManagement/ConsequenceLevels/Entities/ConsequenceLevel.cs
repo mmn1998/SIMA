@@ -1,7 +1,8 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -21,10 +22,8 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         Id = new(arg.Id);
         Name = arg.Name;
         Code = arg.Code;
-        Description = arg.Description;
         ValueTitle = arg.ValueTitle;
         NumericValue = arg.NumericValue;
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -39,10 +38,8 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         await ModifyGuard(arg, service);
         Name = arg.Name;
         Code = arg.Code;
-        Description = arg.Description;
         ValueTitle = arg.ValueTitle;
         NumericValue = arg.NumericValue;
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -52,9 +49,6 @@ public class ConsequenceLevel : Entity, IAggregateRoot
     public string? Code { get; private set; }
     public float NumericValue { get; private set; }
     public string? ValueTitle { get; private set; }
-    public string? Description { get; private set; }
-    public ConsequenceCategoryId ConsequenceCategoryId { get; private set; }
-    public virtual ConsequenceCategory ConsequenceCategory { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -93,7 +87,46 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        DeleteCategories(userId);
     }
-    private List<RiskConsequence> _riskConsequences = new();
-    public ICollection<RiskConsequence> RiskConsequences => _riskConsequences;
+    public void ModifyCategories(List<CreateConsequenceLevelCategoryArg> args)
+    {
+        var activeEntities = _riskConsequences.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ConsequenceCategoryId == x.ConsequenceCategoryId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ConsequenceCategoryId.Value == x.ConsequenceCategoryId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _riskConsequences.FirstOrDefault(x => x.ConsequenceCategoryId.Value == arg.ConsequenceCategoryId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ConsequenceLevelCategory.Create(arg);
+                _riskConsequences.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void AddCategories(List<CreateConsequenceLevelCategoryArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ConsequenceLevelCategory.Create(arg);
+            _riskConsequences.Add(entity);
+        }
+    }
+    public void DeleteCategories(long userId)
+    {
+        foreach (var entity in _riskConsequences)
+        {
+            entity.Delete(userId);
+        }
+    }
+    private List<ConsequenceLevelCategory> _riskConsequences = new();
+    public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
 }

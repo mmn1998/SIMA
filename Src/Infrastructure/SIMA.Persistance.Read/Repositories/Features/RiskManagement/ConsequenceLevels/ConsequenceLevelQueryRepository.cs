@@ -21,14 +21,10 @@ SELECT CL.[Id]
               ,CL.[Name]
               ,CL.[Code]
 			  ,CL.NumericValue
-			  ,CL.Description
 	          ,A.[Name] ActiveStatus
               ,CL.CreatedAt
-			  ,CL.Id ConsequenceCategoryId
-			  ,CL.Name ConsequenceCategoryName
           FROM [RiskManagement].[ConsequenceLevel] CL
           INNER JOIN [Basic].[ActiveStatus] A ON CL.ActiveStatusId = A.ID
-		  LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = CL.ConsequenceCategoryId and Cl.ActiveStatusId<>3
 WHERE CC.ActiveStatusId <> 3
 ";
     }

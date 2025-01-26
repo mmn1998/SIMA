@@ -7,7 +7,6 @@ public class CreateConsequenceLevelCommand : ICommand<Result<long>>
 {
     public string Name { get; set; }
     public string Code { get; set; }
-    public string Description { get; set; }
     public float NumericValue { get; set; }
-    public long ConsequenceCategoryId { get; set; }
+    public List<long>? ConsequenceCategoryList { get; set; }
 }

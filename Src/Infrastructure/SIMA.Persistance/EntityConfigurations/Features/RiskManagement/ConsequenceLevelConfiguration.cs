@@ -28,13 +28,6 @@ public class ConsequenceLevelConfiguration : IEntityTypeConfiguration<Consequenc
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-
-        entity.Property(x => x.ConsequenceCategoryId)
-            .HasConversion(x => x.Value,
-            x => new(x));
-        entity.HasOne(x => x.ConsequenceCategory)
-            .WithMany(x => x.ConsequenceLevels)
-            .HasForeignKey(x => x.ConsequenceCategoryId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        
     }
 }

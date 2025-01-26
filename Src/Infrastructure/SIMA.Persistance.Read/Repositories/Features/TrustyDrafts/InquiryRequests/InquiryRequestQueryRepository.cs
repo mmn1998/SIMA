@@ -5,6 +5,7 @@ using SIMA.Application.Query.Contract.Features.TrustyDrafts.InquiryRequests;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.TrustyDrafts.InquiryRequests;
@@ -13,8 +14,11 @@ public class InquiryRequestQueryRepository : IInquiryRequestQueryRepository
 {
     private readonly string _connectionString;
     private readonly string _mainQuery;
-    public InquiryRequestQueryRepository(IConfiguration configuration)
+    private readonly ISimaIdentity _simaIdentity;
+
+    public InquiryRequestQueryRepository(IConfiguration configuration, ISimaIdentity simaIdentity)
     {
+        _simaIdentity = simaIdentity;
         _connectionString = configuration.GetConnectionString();
         _mainQuery = @"
 select 
@@ -75,7 +79,7 @@ LEFT JOIN TrustyDraft.InquiryRequestCurrency IRC on IRC.Id = IRes.InquiryRequest
 LEFT JOIN Bank.CurrencyType CT on CT.Id = IRC.CurrencyTypeId and CT.ActiveStatusId<>3
 LEFT JOIN Bank.CurrencyType CT2 on CT2.Id = IR.ProformaCurrencyTypeId and CT2.ActiveStatusId<>3
 LEFT JOIN TrustyDraft.DraftOrigin DO on DO.Id = IR.DraftOriginId and DO.ActiveStatusId<>3
-WHERE IR.ActiveStatusId<>3 AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
+WHERE IR.ActiveStatusId<>3
 ";
     }
 
@@ -85,7 +89,7 @@ WHERE IR.ActiveStatusId<>3 AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 
         await connection.OpenAsync();
 
         string queryCount = $@" WITH Query as(
-						                    {_mainQuery}
+						                    {_mainQuery}  AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
@@ -94,13 +98,14 @@ WHERE IR.ActiveStatusId<>3 AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 
 
 
         string query = $@" WITH Query as(
-							                  {_mainQuery}
+							                  {_mainQuery}  AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
         var dynaimcParameters = (queryCount + query).GenerateQuery(request);
+        dynaimcParameters.Item2.Add("UserId", _simaIdentity.UserId);
         using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
         var count = await multi.ReadFirstAsync<int>();
         var response = await multi.ReadAsync<GetInquiryRequestQueryResult>();

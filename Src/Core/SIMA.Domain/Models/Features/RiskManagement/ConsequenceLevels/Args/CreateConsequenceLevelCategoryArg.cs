@@ -1,6 +1,6 @@
-﻿namespace SIMA.Domain.Models.Features.RiskManagement.Consequences.Args;
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 
-public class CreateRiskConsequenceArg
+public class CreateConsequenceLevelCategoryArg
 {
     public long Id { get; set; }
     public long ActiveStatusId { get; set; }

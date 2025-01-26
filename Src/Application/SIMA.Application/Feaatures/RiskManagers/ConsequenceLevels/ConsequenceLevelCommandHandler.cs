@@ -7,6 +7,7 @@ using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
 using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 
 namespace SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels;
 
@@ -31,8 +32,19 @@ public class ConsequenceLevelCommandHandler : ICommandHandler<CreateConsequenceL
     public async Task<Result<long>> Handle(CreateConsequenceLevelCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateConsequenceLevelArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
+        var userId = _simaIdentity.UserId;
+        arg.CreatedBy = userId;
         var entity = await ConsequenceLevel.Create(arg, _service);
+        if (request.ConsequenceCategoryList is not null && request.ConsequenceCategoryList.Count > 0)
+        {
+            var categoryArgs = _mapper.Map<List<CreateConsequenceLevelCategoryArg>>(request.ConsequenceCategoryList);
+            foreach (var categoryArg in categoryArgs)
+            {
+                categoryArg.ConsequenceLevelId = arg.Id;
+                categoryArg.CreatedBy = userId;
+            }
+            entity.AddCategories(categoryArgs);
+        }
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -42,8 +54,19 @@ public class ConsequenceLevelCommandHandler : ICommandHandler<CreateConsequenceL
     {
         var entity = await _repository.GetById(new(request.Id));
         var arg = _mapper.Map<ModifyConsequenceLevelArg>(request);
-        arg.ModifiedBy = _simaIdentity.UserId;
+        var userId = _simaIdentity.UserId;
+        arg.ModifiedBy = userId;
         await entity.Modify(arg, _service);
+        if (request.ConsequenceCategoryList is not null && request.ConsequenceCategoryList.Count > 0)
+        {
+            var categoryArgs = _mapper.Map<List<CreateConsequenceLevelCategoryArg>>(request.ConsequenceCategoryList);
+            foreach (var categoryArg in categoryArgs)
+            {
+                categoryArg.ConsequenceLevelId = request.Id;
+                categoryArg.CreatedBy = userId;
+            }
+            entity.ModifyCategories(categoryArgs);
+        }
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
