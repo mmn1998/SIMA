@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Feaatures\RiskManagers\ConsequenceCategories\" />
     <Folder Include="Feaatures\SecurityCommitees\Cartables\Mappers\" />
   </ItemGroup>
 

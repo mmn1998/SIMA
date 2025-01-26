@@ -15,5 +15,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Features\Logistics\GoodsStatues\" />
+	  <Folder Include="Features\RiskManagement\ConsequenceCategories\" />
 	</ItemGroup>
 </Project>
