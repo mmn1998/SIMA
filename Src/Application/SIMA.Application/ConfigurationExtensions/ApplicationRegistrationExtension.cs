@@ -146,6 +146,7 @@ using SIMA.Application.Feaatures.RiskManagers.TriggerStatuses.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.UseVulnerabilities.Mapper;
 using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
 using SIMA.Application.Feaatures.RiskManagers.AffectedHistories.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.ScenarioHistories.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.SeverityValues.Mappers;
 
 #endregion
@@ -267,6 +268,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new EvaluationCriteriaMapper());
                 conf.AddProfile(new TriggerStatusMapper());
                 conf.AddProfile(new UseVulnerabilityMapper());
+                conf.AddProfile(new ScenarioHistoryMapper());
                 #endregion
 
                 #region ServiceCatalog
