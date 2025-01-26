@@ -23,8 +23,4 @@
     <ProjectReference Include="..\SIMA.Domain\SIMA.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\RiskManagers\ConsequenceCategories\" />
-  </ItemGroup>
-
 </Project>

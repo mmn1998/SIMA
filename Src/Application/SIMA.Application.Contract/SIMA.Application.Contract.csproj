@@ -15,8 +15,4 @@
     <ProjectReference Include="..\..\..\SIMA.Resources\SIMA.Resources.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\RiskManagers\ConsequenceCategories\" />
-  </ItemGroup>
-
 </Project>

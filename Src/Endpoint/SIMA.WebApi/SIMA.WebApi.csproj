@@ -111,6 +111,8 @@
     <Compile Include="Controllers\Features\ServiceCatalog\Diagrams\V1\ServiceDiagramsQueryController.cs" />
     <Compile Include="Controllers\Features\Notifications\Messages\MessagesController.cs" />
     <Compile Include="Controllers\Features\Notifications\Messages\MessagesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceCategories\V1\ConsequenceCategoriesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceCategories\V1\ConsequenceCategoriesQueryController.cs" />
     <Compile Include="Controllers\Features\TrustyDrafts\AgentBankWageShareStatuses\V1\AgentBankWageShareStatusController.cs" />
     <Compile Include="Controllers\Features\TrustyDrafts\AgentBankWageShareStatuses\V1\AgentBankWageShareStatusQueryController.cs" />
     <Compile Include="Controllers\Features\TrustyDrafts\BrokerInquiryStatuses\BrokerInquiryStatusController.cs" />
@@ -323,7 +325,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Features\RiskManagers\ConsequenceCategories\" />
     <Folder Include="SeriLog_Logs\" />
   </ItemGroup>
 
