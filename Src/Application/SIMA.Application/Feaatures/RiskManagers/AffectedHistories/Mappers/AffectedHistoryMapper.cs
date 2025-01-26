@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
-using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
+using SIMA.Application.Contract.Features.RiskManagers.AffectedHistories;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
-namespace SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels.Mappers;
+namespace SIMA.Application.Feaatures.RiskManagers.AffectedHistories.Mappers;
 
-public class ConsequenceLevelMapper : Profile
+public class AffectedHistoryMapper : Profile
 {
-    public ConsequenceLevelMapper()
+    public AffectedHistoryMapper()
     {
-        CreateMap<CreateConsequenceLevelCommand, CreateConsequenceLevelArg>()
+        CreateMap<CreateAffectedHistoryCommand, CreateAffectedHistoryArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
-        CreateMap<ModifyConsequenceLevelCommand, ModifyConsequenceLevelArg>()
+        CreateMap<ModifyAffectedHistoryCommand, ModifyAffectedHistoryArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
     }
