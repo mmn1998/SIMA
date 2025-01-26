@@ -2,11 +2,10 @@
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 
-namespace SIMA.Persistance.Read.Repositories.Features.TrustyDrafts.InquiryRequests
+namespace SIMA.Persistance.Read.Repositories.Features.TrustyDrafts.InquiryRequests;
+
+public interface IInquiryRequestQueryRepository : IQueryRepository
 {
-    public interface IInquiryRequestQueryRepository : IQueryRepository
-    {
-        Task<GetInquiryRequestQueryResult> GetById(GetInquiryRequestQuery request);
-        Task<Result<IEnumerable<GetInquiryRequestQueryResult>>> GetAll(GetAllInquiryRequestsQuery request);
-    }
+    Task<GetInquiryRequestQueryResult> GetById(GetInquiryRequestQuery request);
+    Task<Result<IEnumerable<GetInquiryRequestQueryResult>>> GetAll(GetAllInquiryRequestsQuery request);
 }

@@ -75,7 +75,7 @@ LEFT JOIN TrustyDraft.InquiryRequestCurrency IRC on IRC.Id = IRes.InquiryRequest
 LEFT JOIN Bank.CurrencyType CT on CT.Id = IRC.CurrencyTypeId and CT.ActiveStatusId<>3
 LEFT JOIN Bank.CurrencyType CT2 on CT2.Id = IR.ProformaCurrencyTypeId and CT2.ActiveStatusId<>3
 LEFT JOIN TrustyDraft.DraftOrigin DO on DO.Id = IR.DraftOriginId and DO.ActiveStatusId<>3
-WHERE IR.ActiveStatusId<>3
+WHERE IR.ActiveStatusId<>3 AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
 ";
     }
 
