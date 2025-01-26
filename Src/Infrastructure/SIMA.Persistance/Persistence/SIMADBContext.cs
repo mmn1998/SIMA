@@ -308,6 +308,7 @@ public class SIMADBContext : DbContext
     public DbSet<RiskDegree> RiskDegrees { get; set; }
     public DbSet<TriggerStatus> TriggerStatuses { get; set; }
     public DbSet<ConsequenceCategory> ConsequenceCategories { get; set; }
+    public DbSet<AffectedHistory> AffectedHistories { get; set; }
     public DbSet<ConsequenceLevel> ConsequenceLevels { get; set; }
     public DbSet<RiskLevel> RiskLevels { get; set; }
     public DbSet<RiskImpact> RiskImpacts { get; set; }
