@@ -107,10 +107,14 @@
     <Compile Include="Controllers\Features\BranchManagement\FinancialActionTypes\FinancialActionTypeQueryController.cs" />
     <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierController.cs" />
     <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Diagrams\V1\RiskDiagramsQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Diagrams\V1\ServiceDiagramsQueryController.cs" />
     <Compile Include="Controllers\Features\Notifications\Messages\MessagesController.cs" />
     <Compile Include="Controllers\Features\Notifications\Messages\MessagesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceCategories\V1\ConsequenceCategoriesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceCategories\V1\ConsequenceCategoriesQueryController.cs" />
     <Compile Include="Controllers\Features\TrustyDrafts\AgentBankWageShareStatuses\V1\AgentBankWageShareStatusController.cs" />
     <Compile Include="Controllers\Features\TrustyDrafts\AgentBankWageShareStatuses\V1\AgentBankWageShareStatusQueryController.cs" />
     <Compile Include="Controllers\Features\TrustyDrafts\BrokerInquiryStatuses\BrokerInquiryStatusController.cs" />

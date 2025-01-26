@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
-using SIMA.Application.Contract.Features.RiskManagers.ImpactScales;
-using SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Args;
+using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
-namespace SIMA.Application.Feaatures.RiskManagers.ImpactScales.Mapper;
+namespace SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels.Mappers;
 
-public class ImpactScaleMapper : Profile
+public class ConsequenceLevelMapper : Profile
 {
-    public ImpactScaleMapper()
+    public ConsequenceLevelMapper()
     {
-        CreateMap<CreateImpactScaleCommand, CreateImpactScaleArg>()
+        CreateMap<CreateConsequenceLevelCommand, CreateConsequenceLevelArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             //.ForMember(dest => dest.CreatedBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
-        CreateMap<ModifyImpactScaleCommand, ModifyImpactScaleArg>()
+        CreateMap<ModifyConsequenceLevelCommand, ModifyConsequenceLevelArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             //.ForMember(dest => dest.ModifyBy, act => act.MapFrom(source => simaIdentity.UserId))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())));
