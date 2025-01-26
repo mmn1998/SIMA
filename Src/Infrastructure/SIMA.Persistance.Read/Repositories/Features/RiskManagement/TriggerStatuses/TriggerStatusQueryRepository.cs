@@ -24,7 +24,7 @@ public class TriggerStatusQueryRepository: IThreatTypeQueryRepository
                       ,T.[ActiveStatusId]
                       ,T.[CreatedAt]
 	                  , S.[Name] as ActiveStatus
-                  FROM [RiskManagement].[ThreatType] T
+                  FROM [RiskManagement].[TriggerStatus] T
                   WHERE T.ActiveStatusId != 3";
     }
     public async Task<Result<IEnumerable<GetThreatTypesQueryResult>>> GetAll(GetAllThreatTypesQuery request)
