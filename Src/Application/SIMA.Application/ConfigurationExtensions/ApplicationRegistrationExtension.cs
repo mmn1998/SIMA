@@ -141,6 +141,7 @@ using SIMA.Application.Feaatures.TrustyDrafts.InquiryResponses.Mapper;
 using SIMA.Application.Feaatures.TrustyDrafts.AgentBankWageShareStatuses.Mappers;
 using SIMA.Application.Feaatures.TrustyDrafts.ReferralLetters.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.ConsequenceCategories.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels.Mappers;
 #endregion
 
 namespace SIMA.Application.ConfigurationExtensions;
@@ -245,6 +246,7 @@ public static class ApplicationRegistrationExtension
                 #region RiskManagement
                 conf.AddProfile(new ImpactScaleMapper());
                 conf.AddProfile(new ConsequenceCategoryMapper());
+                conf.AddProfile(new ConsequenceLevelMapper());
                 conf.AddProfile(new RiskDegreeMapper());
                 conf.AddProfile(new RiskImpactMapper());
                 conf.AddProfile(new RiskLevelMapper());
