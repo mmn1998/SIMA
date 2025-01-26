@@ -7,4 +7,12 @@ public class GetConsequenceLevelQueryResult
     public string? Code { get; set; }
     public float? NumericValue { get; set; }
     public string? ActiveStatus { get; set; }
+    public IEnumerable<GetConsequenceLevelCategoryQueryResult>? ConsequencLevelCategoryList { get; set; }
+}
+public class GetConsequenceLevelCategoryQueryResult
+{
+    public long Id { get; set; }
+    public long ConsequenceCategoryId { get; set; }
+    public string? ConsequenceCategoryName { get; set; }
+    public string? Description { get; set; }
 }

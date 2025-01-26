@@ -61,11 +61,23 @@ WHERE CC.ActiveStatusId <> 3
     {
         var query = $@"
           {_mainQuery} AND CL.Id = @Id
+
+select 
+CLG.Id,
+CLG.ConsequenceCategoryId,
+CC.Name ConsequenceCategoryName,
+CC.Description
+FROM [RiskManagement].[ConsequenceLevel] CL
+INNER JOIN RiskManagement.RiskConsequence CLG on CLG.ConsequenceLevelId = CL.Id AND CLG.ActiveStatusId<>3
+INNER JOIn RiskManagement.ConsequenceCategory CC on CC.Id = CLG.ConsequenceCategoryId AND CC.ActiveStatusId<>3
+WHERE CL.Id = @Id
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
-        var result = await connection.QueryFirstAsync<GetConsequenceLevelQueryResult>(query, new { request.Id });
+        var multi = await connection.QueryMultipleAsync(query, new { request.Id });
+        var result = await multi.ReadFirstOrDefaultAsync<GetConsequenceLevelQueryResult>() ?? throw SimaResultException.NotFound;
+        result.ConsequencLevelCategoryList = await multi.ReadAsync<GetConsequenceLevelCategoryQueryResult>();
         result.NullCheck();
-        return result ?? throw SimaResultException.NotFound;
+        return result;
     }
 }
