@@ -1,7 +1,9 @@
 ﻿using SIMA.Application.Query.Contract.Features.RiskManagement.EvaluationCriterias;
 using SIMA.Application.Query.Contract.Features.RiskManagement.TriggerStatuses;
+using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Contracts;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.RiskManagement.TriggerStatuses;
 
 namespace SIMA.Application.Query.Features.RiskManagement.TriggerStatuses;
 
@@ -9,16 +11,22 @@ public class TriggerStatusQueryHandler: IQueryHandler<GetAllTriggerStatusesQuery
     IQueryHandler<GetTriggerStatusesQuery, Result<GetTriggerStatusesQueryResult>>
 
 {
-   // private readonly ITriggerStatusRepository _repository;
+   private readonly ITriggerStatusQueryRepository _repository;
 
-    
-    public Task<Result<IEnumerable<GetTriggerStatusesQueryResult>>> Handle(GetAllTriggerStatusesQuery request, CancellationToken cancellationToken)
+   public TriggerStatusQueryHandler(ITriggerStatusQueryRepository repository)
+   {
+       _repository = repository;
+   }
+
+
+   public async Task<Result<IEnumerable<GetTriggerStatusesQueryResult>>> Handle(GetAllTriggerStatusesQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _repository.GetAll(request);
     }
 
-    public Task<Result<GetTriggerStatusesQueryResult>> Handle(GetTriggerStatusesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<GetTriggerStatusesQueryResult>> Handle(GetTriggerStatusesQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        var result = await _repository.GetById(request.Id);
+        return Result.Ok(result);
     }
 }
