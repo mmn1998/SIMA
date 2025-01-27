@@ -109,6 +109,8 @@
     <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Frequencies\V1\FrequencyController.cs" />
