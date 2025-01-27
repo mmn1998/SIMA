@@ -10,7 +10,7 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
 
 [ApiController]
 [Route("riskManagement/[controller]")]
-/*[Authorize]*/
+[Authorize]
 [ApiExplorerSettings(GroupName = "RiskManagement/Frequency")]
 public class FrequencyController : ControllerBase
 {
