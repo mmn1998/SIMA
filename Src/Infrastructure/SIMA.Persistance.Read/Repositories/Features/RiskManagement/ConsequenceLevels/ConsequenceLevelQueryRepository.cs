@@ -21,6 +21,7 @@ SELECT CL.[Id]
               ,CL.[Name]
               ,CL.[Code]
 			  ,CL.NumericValue
+			  ,CL.ValueTitle
 	          ,A.[Name] ActiveStatus
               ,CL.CreatedAt
           FROM [RiskManagement].[ConsequenceLevel] CL
