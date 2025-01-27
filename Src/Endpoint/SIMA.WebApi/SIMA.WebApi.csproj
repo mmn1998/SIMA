@@ -115,6 +115,8 @@
     <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Frequencies\V1\FrequencyController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Frequencies\V1\FrequencyQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAValues\V1\MatrixAValueController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAValues\V1\MatrixAValueQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Severities\V1\SeveritiesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\Severities\V1\SeveritiesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ScenarioHistories\V1\ScenarioHistoryController.cs" />
