@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.RiskManagement.EvaluationCriterias;
 using SIMA.Application.Query.Contract.Features.RiskManagement.Frequencies;
@@ -7,11 +8,15 @@ using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
 
-public class FrequenciesQueryController
+[ApiController]
+[Route("riskManagement/[controller]")]
+[Authorize]
+[ApiExplorerSettings(GroupName = "RiskManagement/Frequencu")]
+public class FrequencyQueryController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public FrequenciesQueryController(IMediator mediator)
+    public FrequencyQueryController(IMediator mediator)
     {
         _mediator = mediator;
     }

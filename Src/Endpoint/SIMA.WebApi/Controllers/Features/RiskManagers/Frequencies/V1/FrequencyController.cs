@@ -4,23 +4,22 @@ using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.EvaluationCriterias;
 using SIMA.Application.Contract.Features.RiskManagers.Frequencies;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
 
 [ApiController]
 [Route("riskManagement/[controller]")]
 [Authorize]
-[ApiExplorerSettings(GroupName = "RiskManagment/Frequency")]
-
-public class FrequenciesController
+[ApiExplorerSettings(GroupName = "RiskManagement/Frequency")]
+public class FrequencyController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public FrequenciesController(IMediator mediator)
+    public FrequencyController(IMediator mediator)
     {
         _mediator = mediator;
     }
-    
     [HttpPost]
     /*
     [SimaAuthorize(Permissions.EvaluationCriteriaPost)]
@@ -38,11 +37,12 @@ public class FrequenciesController
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    /*[SimaAuthorize(Permissions.EvaluationCriteriaDelete)]*/
+    /*
+    [SimaAuthorize(Permissions.EvaluationCriteriaDelete)]
+    */
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteFrequencyCommand { Id = id };
         return await _mediator.Send(command);
     }
-    
 }
