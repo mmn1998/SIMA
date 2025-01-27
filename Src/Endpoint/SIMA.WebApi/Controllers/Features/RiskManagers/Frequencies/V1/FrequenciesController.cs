@@ -11,12 +11,12 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
 [ApiController]
 [Route("riskManagement/[controller]")]
 [Authorize]
-[ApiExplorerSettings(GroupName = "RiskManagement/Frequency")]
-public class FrequencyController : ControllerBase
+[ApiExplorerSettings(GroupName = "RiskManagement/Frequencies")]
+public class FrequenciesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public FrequencyController(IMediator mediator)
+    public FrequenciesController(IMediator mediator) 
     {
         _mediator = mediator;
     }
