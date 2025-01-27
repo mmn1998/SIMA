@@ -148,6 +148,7 @@ using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
 using SIMA.Application.Feaatures.RiskManagers.AffectedHistories.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ScenarioHistories.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.SeverityValues.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.Severities.Mappers;
 
 #endregion
 
@@ -254,6 +255,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ImpactScaleMapper());
                 conf.AddProfile(new ConsequenceCategoryMapper());
                 conf.AddProfile(new AffectedHistoryMapper());
+                conf.AddProfile(new SeverityMapper());
                 conf.AddProfile(new SeverityValueMapper());
                 conf.AddProfile(new ConsequenceLevelMapper());
                 conf.AddProfile(new RiskDegreeMapper());

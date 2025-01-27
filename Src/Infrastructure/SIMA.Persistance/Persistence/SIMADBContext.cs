@@ -158,6 +158,7 @@ using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 
 #endregion
 
@@ -309,6 +310,7 @@ public class SIMADBContext : DbContext
     #region RiskManagement
     public DbSet<RiskDegree> RiskDegrees { get; set; }
     public DbSet<ScenarioHistory> ScenarioHistories { get; set; }
+    public DbSet<Severity> Severities { get; set; }
     public DbSet<UseVulnerability> UseVulnerabilities { get; set; }
     public DbSet<TriggerStatus> TriggerStatuses { get; set; }
     public DbSet<ConsequenceCategory> ConsequenceCategories { get; set; }
