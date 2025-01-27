@@ -71,9 +71,11 @@ public class TriggerStatusQueryRepository: ITriggerStatusQueryRepository
 		    await connection.OpenAsync();
 		    string query = @"
               SELECT DISTINCT T.[Id]
-                      ,T.[Name]
+                         ,T.[Name]
                       ,T.[Code]
                       ,T.[ActiveStatusId]
+					  ,T.[NumericValue]
+					  ,T.[ValueTitle]
 	                  , S.[Name] as ActiveStatus
                   FROM [RiskManagement].[TriggerStatus] T
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = T.ActiveStatusId

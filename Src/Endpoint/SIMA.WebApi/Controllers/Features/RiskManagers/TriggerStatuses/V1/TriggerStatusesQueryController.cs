@@ -9,7 +9,7 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.TriggerStatuses.V1;
 
 [ApiController]
 [Route("riskManagement/[controller]")]
-/*[Authorize]*/
+[Authorize]
 [ApiExplorerSettings(GroupName = "RiskManagement/TriggerStatus")]
 public class TriggerStatusesQueryController : ControllerBase
 {
