@@ -155,6 +155,7 @@ using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.AgentBankWageShareStatuses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.ReferralLetters.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
@@ -310,6 +311,7 @@ public class SIMADBContext : DbContext
 
     #region RiskManagement
     public DbSet<RiskDegree> RiskDegrees { get; set; }
+    public DbSet<Frequency> Frequencies { get; set; }
     public DbSet<ScenarioHistory> ScenarioHistories { get; set; }
     public DbSet<Severity> Severities { get; set; }
     public DbSet<MatrixA> MatrixAs { get; set; }
