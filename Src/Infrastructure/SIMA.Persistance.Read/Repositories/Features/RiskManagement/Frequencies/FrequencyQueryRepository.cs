@@ -73,7 +73,7 @@ public class FrequencyQueryRepository : IFrequencyQueryRepository
                       ,T.[Code]
                       ,T.[ActiveStatusId]
 	                  , S.[Name] as ActiveStatus
-                  FROM [RiskManagement].[ThreatType] T
+                  FROM [RiskManagement].[Frequency] T
                   INNER JOIN [Basic].[ActiveStatus] S on S.ID = T.ActiveStatusId
                   WHERE T.Id = @Id and T.ActiveStatusId != 3";
 		    var result = await connection.QueryFirstOrDefaultAsync<GetFrequencyQueryResult>(query, new { Id = id });

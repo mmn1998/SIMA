@@ -43,7 +43,7 @@ public class MatrixAValueQueryRepository : IMatrixAValueQueryRepository
                              ,T.[Code]
                              ,T.[ActiveStatusId]
        	                  , S.[Name] as ActiveStatus
-                         FROM [RiskManagement].[ThreatType] T
+                         FROM [RiskManagement].[MatrixAValue] T
                          INNER JOIN [Basic].[ActiveStatus] S on S.ID = T.ActiveStatusId
                          WHERE T.Id = @Id and T.ActiveStatusId != 3";
             var result = await connection.QueryFirstOrDefaultAsync<GetMatrixAValueQueryResult>(query, new { Id = request.Id });
