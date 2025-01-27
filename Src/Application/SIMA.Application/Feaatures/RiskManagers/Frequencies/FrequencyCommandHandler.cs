@@ -10,7 +10,7 @@ using Sima.Framework.Core.Repository;
 
 namespace SIMA.Application.Feaatures.RiskManagers.Frequencies;
 
-public class FrequencyCommandHandler: ICommandHandler<CreateFrequencyCommand, Result<long>>,
+public class FrequencyCommandHandler : ICommandHandler<CreateFrequencyCommand, Result<long>>,
     ICommandHandler<ModifyFrequencyCommand, Result<long>>, ICommandHandler<DeleteFrequencyCommand, Result<long>>
 {
     private readonly IFrequencyRepository _repository;
@@ -19,7 +19,7 @@ public class FrequencyCommandHandler: ICommandHandler<CreateFrequencyCommand, Re
     private readonly ISimaIdentity _simaIdentity;
     private readonly IMapper _mapper;
 
-    public  FrequencyCommandHandler(IFrequencyRepository repository, IFrequencyDomainService service, IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper)
+    public FrequencyCommandHandler(IFrequencyRepository repository, IFrequencyDomainService service, IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper)
     {
         _repository = repository;
         _service = service;
@@ -27,8 +27,8 @@ public class FrequencyCommandHandler: ICommandHandler<CreateFrequencyCommand, Re
         _simaIdentity = simaIdentity;
         _mapper = mapper;
     }
-    
-    
+
+
     public async Task<Result<long>> Handle(CreateFrequencyCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateFrequencyArg>(request);

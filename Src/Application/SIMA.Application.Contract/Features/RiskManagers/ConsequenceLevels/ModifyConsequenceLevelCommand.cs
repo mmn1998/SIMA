@@ -9,5 +9,6 @@ public class ModifyConsequenceLevelCommand : ICommand<Result<long>>
     public string Name { get; set; }
     public string Code { get; set; }
     public float NumericValue { get; set; }
+    public float ValueTitle { get; set; }
     public List<long>? ConsequenceCategoryList { get; set; }
 }

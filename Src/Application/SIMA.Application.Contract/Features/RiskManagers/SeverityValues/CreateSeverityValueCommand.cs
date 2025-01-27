@@ -8,5 +8,6 @@ public class CreateSeverityValueCommand : ICommand<Result<long>>
     public string Name { get; set; }
     public string Code { get; set; }
     public string Color { get; set; }
+    public string ValuingIntervalTitle { get; set; }
     public float NumericValue { get; set; }
 }
