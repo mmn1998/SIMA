@@ -6,7 +6,7 @@ using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 
-namespace SIMA.Persistance.Repositories.Features.RiskManagement.Severities;
+namespace SIMA.Persistance.Repositories.Features.RiskManagement.CurrentOccurrenceProbabilities;
 
 public class CurrentOccurrenceProbabilityRepository : Repository<CurrentOccurrenceProbability>, ICurrentOccurrenceProbabilityRepository
 {

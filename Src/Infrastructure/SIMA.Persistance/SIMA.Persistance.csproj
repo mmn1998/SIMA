@@ -25,7 +25,6 @@
   <ItemGroup>
     <Folder Include="EntityConfigurations\Features\BCP\Origins\" />
     <Folder Include="EntityConfigurations\Features\BCP\TimeMeasurements\" />
-    <Folder Include="Repositories\Features\RiskManagement\CurrentOccurrenceProbabilities\" />
   </ItemGroup>
 
 </Project>
