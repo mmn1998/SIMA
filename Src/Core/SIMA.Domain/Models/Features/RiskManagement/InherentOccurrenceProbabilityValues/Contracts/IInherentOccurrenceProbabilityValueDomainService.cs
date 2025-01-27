@@ -6,4 +6,5 @@ namespace SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabili
 public interface IInherentOccurrenceProbabilityValueDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, InherentOccurrenceProbabilityValueId? id = null);
+    Task<bool> IsNumericUnique(float value, InherentOccurrenceProbabilityValueId? id = null);
 }

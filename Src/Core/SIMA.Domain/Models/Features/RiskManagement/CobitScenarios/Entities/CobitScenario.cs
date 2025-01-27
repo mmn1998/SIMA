@@ -17,7 +17,24 @@ public class CobitScenario : Entity
     }
     private CobitScenario(CreateCobitScenarioArg arg)
     {
-        
+        Id = new(arg.Id);
+        ScenarioId = new(arg.ScenarioId);
+        CobitScenarioCategoryId = new(arg.CobitScenarioCategoryId);
+        ActiveStatusId = arg.ActiveStatusId;
+        CreatedAt = arg.CreatedAt;
+        CreatedBy = arg.CreatedBy;
+    }
+    public static CobitScenario Create(CreateCobitScenarioArg arg)
+    {
+        return new CobitScenario(arg);
+    }
+    public void Modify(ModifyCobitScenarioArg arg)
+    {
+        ScenarioId = new(arg.ScenarioId);
+        CobitScenarioCategoryId = new(arg.CobitScenarioCategoryId);
+        ActiveStatusId = arg.ActiveStatusId;
+        ModifiedAt = arg.ModifiedAt;
+        ModifiedBy = arg.ModifiedBy;
     }
     public CobitScenarioId Id { get; private set; }
     public CobitScenarioCategoryId CobitScenarioCategoryId { get; private set; }

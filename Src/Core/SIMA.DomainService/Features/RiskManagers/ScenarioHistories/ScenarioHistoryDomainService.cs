@@ -21,4 +21,12 @@ public class ScenarioHistoryDomainService : IScenarioHistoryDomainService
         else result = !await _context.ScenarioHistories.AnyAsync(x => x.Code == code && x.Id != id);
         return result;
     }
+
+    public async Task<bool> IsNumericUnique(float value, ScenarioHistoryId? id = null)
+    {
+        bool result = false;
+        if (id == null) result = !await _context.ScenarioHistories.AnyAsync(x => x.NumericValue == value);
+        else result = !await _context.ScenarioHistories.AnyAsync(x => x.NumericValue == value && x.Id != id);
+        return result;
+    }
 }

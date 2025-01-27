@@ -1,11 +1,11 @@
 ﻿namespace SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Args;
 
-public class CreateCobitScenarioArg
+public class ModifyCobitScenarioArg
 {
     public long Id { get; set; }
     public long CobitScenarioCategoryId { get; set; }
     public long ScenarioId { get; set; }
     public long ActiveStatusId { get; set; }
-    public DateTime? CreatedAt { get; set; }
-    public long CreatedBy { get; set; }
+    public byte[]? ModifiedAt { get; set; }
+    public long ModifiedBy { get; set; }
 }

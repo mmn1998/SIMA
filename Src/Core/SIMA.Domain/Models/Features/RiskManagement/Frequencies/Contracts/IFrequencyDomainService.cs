@@ -6,4 +6,5 @@ namespace SIMA.Domain.Models.Features.RiskManagement.Frequencies.Contracts;
 public interface IFrequencyDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, FrequencyId? id = null);
+    Task<bool> IsNumericUnique(float value, FrequencyId? id = null);
 }

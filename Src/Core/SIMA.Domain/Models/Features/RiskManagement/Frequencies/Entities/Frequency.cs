@@ -27,8 +27,9 @@ public class Frequency : Entity, IAggregateRoot
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public static async Task<Frequency> Create(CreateFrequencyArg arg)
+    public static async Task<Frequency> Create(CreateFrequencyArg arg, IFrequencyDomainService service)
     {
+        await CreateGuadrs(arg, service);
         return new Frequency(arg);
     }
     public async Task Modify(ModifyFrequencyArg arg, IFrequencyDomainService service)
@@ -63,6 +64,7 @@ public class Frequency : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsNumericUnique(arg.NumericValue)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     private async Task ModifyGuard(ModifyFrequencyArg arg, IFrequencyDomainService service)
     {
@@ -74,6 +76,7 @@ public class Frequency : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsNumericUnique(arg.NumericValue, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     #endregion
     public void Delete(long userId)
