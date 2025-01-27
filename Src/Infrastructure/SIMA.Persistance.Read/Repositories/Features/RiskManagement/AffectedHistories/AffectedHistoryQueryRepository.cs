@@ -22,6 +22,7 @@ SELECT AH.[Id]
               ,AH.[Name]
               ,AH.[Code]
 			  ,AH.NumericValue
+			  ,AH.ValueTitle
 	          ,A.[Name] ActiveStatus
               ,AH.CreatedAt
           FROM [RiskManagement].[AffectedHistory] AH
