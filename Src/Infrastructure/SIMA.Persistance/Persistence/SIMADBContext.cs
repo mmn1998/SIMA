@@ -161,6 +161,7 @@ using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
 
 #endregion
 
@@ -314,6 +315,7 @@ public class SIMADBContext : DbContext
     public DbSet<Frequency> Frequencies { get; set; }
     public DbSet<ScenarioHistory> ScenarioHistories { get; set; }
     public DbSet<Severity> Severities { get; set; }
+    public DbSet<InherentOccurrenceProbability> InherentOccurrenceProbabilities { get; set; }
     public DbSet<MatrixA> MatrixAs { get; set; }
     public DbSet<UseVulnerability> UseVulnerabilities { get; set; }
     public DbSet<TriggerStatus> TriggerStatuses { get; set; }

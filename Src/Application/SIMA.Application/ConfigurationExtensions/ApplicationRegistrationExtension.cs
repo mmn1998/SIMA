@@ -152,6 +152,7 @@ using SIMA.Application.Feaatures.RiskManagers.SeverityValues.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.Severities.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.MatrixAs.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.InherentOccurrenceProbabilityValues.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.InherentOccurrenceProbabilities.Mappers;
 
 #endregion
 
@@ -260,6 +261,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new FrequencyMapper());
                 conf.AddProfile(new AffectedHistoryMapper());
                 conf.AddProfile(new SeverityMapper());
+                conf.AddProfile(new InherentOccurrenceProbabilityMapper());
                 conf.AddProfile(new MatrixAMapper());
                 conf.AddProfile(new SeverityValueMapper());
                 conf.AddProfile(new InherentOccurrenceProbabilityValueMapper());
