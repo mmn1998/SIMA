@@ -3,10 +3,10 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using Sima.Framework.Core.Repository;
-using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 using SIMA.Application.Contract.Features.RiskManagers.InherentOccurrenceProbabilityValues;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Args;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 
 namespace SIMA.Application.Feaatures.RiskManagers.InherentOccurrenceProbabilityValues;
 

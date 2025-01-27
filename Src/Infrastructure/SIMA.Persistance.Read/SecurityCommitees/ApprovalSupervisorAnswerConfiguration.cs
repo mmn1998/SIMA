@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class ApprovalSupervisorAnswerConfiguration : IEntityTypeConfiguration<ApprovalSupervisorAnswer>
 {

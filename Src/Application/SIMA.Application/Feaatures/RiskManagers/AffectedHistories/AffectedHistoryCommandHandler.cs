@@ -3,10 +3,10 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using Sima.Framework.Core.Repository;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Application.Contract.Features.RiskManagers.AffectedHistories;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Args;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 
 namespace SIMA.Application.Feaatures.RiskManagers.AffectedHistories;
 

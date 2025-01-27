@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class ApprovalResponsibleAnswerDocumentConfiguration : IEntityTypeConfiguration<ApprovalResponsibleAnswerDocument>
 {

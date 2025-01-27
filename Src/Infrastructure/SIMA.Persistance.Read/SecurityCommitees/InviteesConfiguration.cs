@@ -7,7 +7,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class InviteesConfiguration : IEntityTypeConfiguration<Invitees>
 {
@@ -35,7 +35,7 @@ public class InviteesConfiguration : IEntityTypeConfiguration<Invitees>
         entity.HasOne(x => x.Staff)
             .WithMany(x => x.Invitees)
             .HasForeignKey(x => x.StaffId);
-        
+
         entity.Property(x => x.CompanyId)
             .HasConversion(x => x.Value, v => new CompanyId(v));
         entity.HasOne(x => x.Company)

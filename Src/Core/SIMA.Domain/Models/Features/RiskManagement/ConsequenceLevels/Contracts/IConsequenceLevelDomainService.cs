@@ -1,4 +1,4 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
+﻿using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
 using SIMA.Framework.Core.Domain;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;

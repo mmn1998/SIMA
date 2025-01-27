@@ -1,7 +1,7 @@
 ﻿using SIMA.Application.Query.Contract.Features.BCP.RecoveryPointObjectives;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
-using SIMA.Persistance.Read.Repositories.Features.BCP.Consequences;
+using SIMA.Persistance.Read.Repositories.Features.BCP.RecoveryPointObjectives;
 
 namespace SIMA.Application.Query.Features.BCP.RecoveryPointObjectives;
 

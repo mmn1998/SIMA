@@ -1,6 +1,7 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
+﻿using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.ValueObjects;
@@ -26,7 +27,7 @@ public class Severity : Entity, IAggregateRoot
         Code = arg.Code;
         SeverityValueId = new(arg.SeverityValueId);
         AffectedHistoryId = new(arg.AffectedHistoryId);
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
+        ConsequenceLevelId = new(arg.ConsequenceLevelId);
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -42,15 +43,15 @@ public class Severity : Entity, IAggregateRoot
         Code = arg.Code;
         SeverityValueId = new(arg.SeverityValueId);
         AffectedHistoryId = new(arg.AffectedHistoryId);
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
+        ConsequenceLevelId = new(arg.ConsequenceLevelId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
     public SeverityId Id { get; private set; }
     public string? Code { get; private set; }
-    public ConsequenceCategoryId ConsequenceCategoryId { get; private set; }
-    public virtual ConsequenceCategory ConsequenceCategory { get; private set; }
+    public ConsequenceLevelId ConsequenceLevelId { get; private set; }
+    public virtual ConsequenceLevel ConsequenceLevel { get; private set; }
     public AffectedHistoryId AffectedHistoryId { get; private set; }
     public virtual AffectedHistory AffectedHistory { get; private set; }
     public SeverityValueId SeverityValueId { get; private set; }

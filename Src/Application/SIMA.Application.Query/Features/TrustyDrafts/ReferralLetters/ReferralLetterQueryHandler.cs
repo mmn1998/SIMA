@@ -5,9 +5,9 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.TrustyDrafts.ReferralLetters;
 
-namespace SIMA.Application.Query.Features.ReferralLetters.ReferralLetters;
+namespace SIMA.Application.Query.Features.TrustyDrafts.ReferralLetters;
 
-public class ReferralLetterQueryHandler : 
+public class ReferralLetterQueryHandler :
 IQueryHandler<GetAllReferalLettersQuery, Result<IEnumerable<GetAllReferralLettersQueryResult>>>,
 IQueryHandler<GetAllReferralLetterToSecretariatQuery, Result<IEnumerable<GetAllReferralLettersQueryResult>>>,
 IQueryHandler<GetAllReferralLetterToExchangeQuery, Result<IEnumerable<GetAllReferralLettersQueryResult>>>,

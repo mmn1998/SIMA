@@ -14,7 +14,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
+namespace SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 
 public class InquiryResponse : Entity
 {
@@ -47,7 +47,7 @@ public class InquiryResponse : Entity
     private static async Task CreateGuards(CreateInquiryResponseArg arg, IInquiryResponseDomainService service)
     {
         arg.NullCheck();
-        if (!await service.CurrencyTypeIdEquals(arg.WageRateId, arg.InquiryRequestCurrencyId)) throw InquiryResponseExceptions.InvalidWageRateException; 
+        if (!await service.CurrencyTypeIdEquals(arg.WageRateId, arg.InquiryRequestCurrencyId)) throw InquiryResponseExceptions.InvalidWageRateException;
     }
     //private async Task ModifyGuards(ModifyInquiryRequestArg arg, IInquiryRequestDomainService service)
     //{

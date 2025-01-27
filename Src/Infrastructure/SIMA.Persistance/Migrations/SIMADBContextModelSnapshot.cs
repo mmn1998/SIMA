@@ -11206,7 +11206,7 @@ namespace SIMA.Persistance.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<long>("ConsequenceCategoryId")
+                    b.Property<long>("ConsequenceLevelId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -11235,7 +11235,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("ConsequenceCategoryId");
+                    b.HasIndex("ConsequenceLevelId");
 
                     b.HasIndex("SeverityValueId");
 
@@ -20852,9 +20852,9 @@ namespace SIMA.Persistance.Migrations
                         .HasForeignKey("AffectedHistoryId")
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceCategory", "ConsequenceCategory")
+                    b.HasOne("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceLevel", "ConsequenceLevel")
                         .WithMany("Severities")
-                        .HasForeignKey("ConsequenceCategoryId")
+                        .HasForeignKey("ConsequenceLevelId")
                         .IsRequired();
 
                     b.HasOne("SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities.SeverityValue", "SeverityValue")
@@ -20864,7 +20864,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("AffectedHistory");
 
-                    b.Navigation("ConsequenceCategory");
+                    b.Navigation("ConsequenceLevel");
 
                     b.Navigation("SeverityValue");
                 });
@@ -24019,13 +24019,13 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("RiskConsequences");
 
                     b.Navigation("Risks");
-
-                    b.Navigation("Severities");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ConsequenceLevel", b =>
                 {
                     b.Navigation("RiskConsequences");
+
+                    b.Navigation("Severities");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities.ScenarioHistory", b =>

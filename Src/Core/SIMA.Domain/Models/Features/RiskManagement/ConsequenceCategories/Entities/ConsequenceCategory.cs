@@ -79,9 +79,7 @@ public class ConsequenceCategory : Entity, IAggregateRoot
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
-    }
-    private List<Severity> _severities = new();
-    public ICollection<Severity> Severities => _severities;
+    }    
     private List<ConsequenceLevelCategory> _riskConsequences = new();
     public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
     private List<Risk> _risks = new();

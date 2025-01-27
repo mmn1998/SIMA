@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
-namespace SIMA.Application.Feaatures.AssetAndConfigurations.AssetTypes.Mappers;
+namespace SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemTypes.Mappers;
 
 public class ConfigurationItemTypeMapper : Profile
 {

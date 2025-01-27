@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 
 public class ModifyConsequenceLevelArg
 {

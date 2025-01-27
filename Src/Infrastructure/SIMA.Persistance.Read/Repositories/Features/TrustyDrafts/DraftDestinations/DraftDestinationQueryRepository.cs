@@ -1,7 +1,7 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using SIMA.Application.Contract.Features.TrustyDrafts.DraftDestinations;
+using SIMA.Application.Query.Contract.Features.TrustyDrafts.DraftDestinations;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;

@@ -1,5 +1,4 @@
-﻿using SIMA.Application.Contract.Features.IssueManagement.Issues;
-using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
+﻿using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 

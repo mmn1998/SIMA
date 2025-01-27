@@ -4,7 +4,7 @@ using SIMA.Application.Contract.Features.BCP.ImportanceDegrees;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.ServiceCatalog.ServiceTypes.V1;
+namespace SIMA.WebApi.Controllers.Features.BCP.ImportanceDegrees;
 
 [Route("bcp/[controller]")]
 [ApiController]

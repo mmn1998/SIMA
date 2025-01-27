@@ -1,4 +1,4 @@
-﻿namespace SIMA.Application.Query.Contract.Features.RiskManagement.ConsequenceCategories;
+﻿namespace SIMA.Application.Query.Contract.Features.RiskManagement.AffectedHistories;
 
 public class GetAffectedHistoryQueryResult
 {

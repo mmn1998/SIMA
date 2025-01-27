@@ -8,7 +8,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class ApprovalConfiguration : IEntityTypeConfiguration<Approval>
 {

@@ -1,12 +1,12 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Args;
+﻿using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Args;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

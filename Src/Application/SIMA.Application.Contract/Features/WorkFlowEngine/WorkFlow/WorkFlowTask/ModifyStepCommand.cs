@@ -1,5 +1,5 @@
 ﻿using Sima.Framework.Core.Mediator;
-using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.Steps;
+using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.StepApprovalOptions;
 using SIMA.Framework.Common.Response;
 
 namespace SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask

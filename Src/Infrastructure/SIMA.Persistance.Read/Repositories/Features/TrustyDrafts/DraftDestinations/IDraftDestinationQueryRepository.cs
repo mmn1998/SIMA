@@ -1,4 +1,4 @@
-﻿using SIMA.Application.Contract.Features.TrustyDrafts.DraftDestinations;
+﻿using SIMA.Application.Query.Contract.Features.TrustyDrafts.DraftDestinations;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 

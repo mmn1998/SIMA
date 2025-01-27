@@ -4,7 +4,7 @@ using SIMA.Application.Query.Contract.Features.TrustyDrafts.DraftOrigins;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.TrustyDrafts.V1.DraftOrigins;
+namespace SIMA.WebApi.Controllers.Features.TrustyDrafts.DraftOrigins.V1;
 
 [Route("trusty/[controller]")]
 [ApiController]

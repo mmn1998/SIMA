@@ -8,7 +8,7 @@ using SIMA.Domain.Models.Features.RiskManagement.Severities.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 
-namespace SIMA.Application.Feaatures.RiskManagers.AffectedHistories;
+namespace SIMA.Application.Feaatures.RiskManagers.Severities;
 
 public class SeverityCommandHandler : ICommandHandler<CreateSeverityCommand, Result<long>>, ICommandHandler<ModifySeverityCommand, Result<long>>
 , ICommandHandler<DeleteSeverityCommand, Result<long>>

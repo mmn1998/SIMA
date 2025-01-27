@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Contracts;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.ValueObjects;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Contracts;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.ValueObjects;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.TrustyDrafts.WageDeductionMethods;

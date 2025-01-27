@@ -1,4 +1,4 @@
-﻿namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.ImportanceDegrees;
+﻿namespace SIMA.Application.Query.Contract.Features.BCP.ImportanceDegrees;
 
 public class GetImportanceDegreeQueryResult
 {

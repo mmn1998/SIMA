@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.TrustyDrafts.DraftStatuses.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
-namespace SIMA.Application.Feaatures.TrustyDrafts.DraftValorStatuses.Mappers;
+namespace SIMA.Application.Feaatures.TrustyDrafts.DraftStatuses.Mappers;
 
 public class DraftStatusMapper : Profile
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Contracts;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;

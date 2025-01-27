@@ -385,6 +385,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فرمت شماره ثبت سفارش یا نام ذی نفع اشتباه است..
+        /// </summary>
+        public static string DraftOriginNumberAndBeneficiaryNameError {
+            get {
+                return ResourceManager.GetString("DraftOriginNumberAndBeneficiaryNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to مبلغ درخواستی درخواست با استعلام مطابقت ندارد.
         /// </summary>
         public static string DraftRequetAmountError {

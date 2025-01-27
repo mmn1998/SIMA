@@ -15,7 +15,7 @@ public class CreateInquiryRequestCommand : ICommand<Result<long>>
     public string? DraftOrderDate { get; set; }
     public DateTime? ProformaDate { get; set; }
     public decimal? ProformaAmount { get; set; }
-    public long? ProformaCurrencyTypeId { get; set; }
+    public long ProformaCurrencyTypeId { get; set; }
     public List<CreateInquiryRequestDocumentCommand>? InquiryRequestDocuments { get; set; }
     public List<CreateInquiryRequestCurrencyCommand>? InquiryRequestCurrencies { get; set; }
 }

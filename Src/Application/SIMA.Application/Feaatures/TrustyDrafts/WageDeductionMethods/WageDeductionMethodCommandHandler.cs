@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.TrustyDrafts.WageDeductionMethods;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Args;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Contracts;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Args;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Contracts;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;

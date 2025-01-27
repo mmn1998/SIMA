@@ -10,7 +10,7 @@ using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftTypes.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftTypes.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.ValueObjects;
 using SIMA.Framework.Common.Exceptions;

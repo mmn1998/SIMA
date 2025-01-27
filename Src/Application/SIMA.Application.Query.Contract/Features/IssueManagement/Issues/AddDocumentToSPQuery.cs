@@ -1,4 +1,4 @@
-﻿namespace SIMA.Application.Contract.Features.IssueManagement.Issues
+﻿namespace SIMA.Application.Query.Contract.Features.IssueManagement.Issues
 {
     public class AddDocumentToSPQuery
     {

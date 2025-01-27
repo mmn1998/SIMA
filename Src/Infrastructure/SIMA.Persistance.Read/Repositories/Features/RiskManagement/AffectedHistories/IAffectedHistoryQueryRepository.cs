@@ -1,5 +1,4 @@
 ﻿using SIMA.Application.Query.Contract.Features.RiskManagement.AffectedHistories;
-using SIMA.Application.Query.Contract.Features.RiskManagement.ConsequenceCategories;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 

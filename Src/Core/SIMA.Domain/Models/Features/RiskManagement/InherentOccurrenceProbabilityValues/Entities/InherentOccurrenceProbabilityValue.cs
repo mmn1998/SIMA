@@ -9,7 +9,7 @@ using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
+namespace SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 
 public class InherentOccurrenceProbabilityValue : Entity, IAggregateRoot
 {

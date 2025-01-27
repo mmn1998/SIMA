@@ -3,7 +3,7 @@ using SIMA.Resources;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
-namespace SIMA.Domain.Models.Features.Auths.Profiles.Entities;
+namespace SIMA.Application.Contract.Attributes;
 
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter,
         AllowMultiple = false)]

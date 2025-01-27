@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingHoldingStatuses.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class MeetingHoldingStatusConfiguration : IEntityTypeConfiguration<MeetingHoldingStatus>
 {
@@ -22,6 +22,6 @@ public class MeetingHoldingStatusConfiguration : IEntityTypeConfiguration<Meetin
         entity.HasIndex(x => x.Code).IsUnique();
         entity.Property(x => x.Name).HasMaxLength(200).IsUnicode();
         entity.Property(x => x.Code)
-                    .HasMaxLength(20).IsUnicode();        
+                    .HasMaxLength(20).IsUnicode();
     }
 }

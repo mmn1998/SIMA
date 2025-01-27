@@ -1,3 +1,3 @@
-﻿namespace SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
 
 public record ScenarioHistoryId(long Value);

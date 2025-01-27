@@ -3,7 +3,7 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.Logistics.GoodsQuorumPrices;
 
-namespace SIMA.Application.Query.Features.Logistics.GoodsTypes;
+namespace SIMA.Application.Query.Features.Logistics.GoodsQuorumPrices;
 
 public class GoodsQuorumPriceQueryHandler : IQueryHandler<GetGoodsQuorumPriceQuery, Result<GetGoodsQuorumPriceQueryResult>>,
     IQueryHandler<GetAllGoodsQuorumPriceQuery, Result<IEnumerable<GetGoodsQuorumPriceQueryResult>>>

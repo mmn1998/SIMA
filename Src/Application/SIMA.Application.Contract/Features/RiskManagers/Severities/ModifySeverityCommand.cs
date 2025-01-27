@@ -7,7 +7,7 @@ public class ModifySeverityCommand : ICommand<Result<long>>
 {
     public long Id { get; set; }
     public string Code { get; set; }
-    public long ConsequenceCategoryId { get; set; }
+    public long ConsequenceLevelId { get; set; }
     public long SeverityValueId { get; set; }
     public long AffectedHistoryId { get; set; }
 }

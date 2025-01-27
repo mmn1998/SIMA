@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
 {

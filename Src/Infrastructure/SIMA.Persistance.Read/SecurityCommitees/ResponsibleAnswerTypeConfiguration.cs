@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.ResponsibleAnswerTypes.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class ResponsibleAnswerTypeConfiguration : IEntityTypeConfiguration<ResponsibleAnswerType>
 {

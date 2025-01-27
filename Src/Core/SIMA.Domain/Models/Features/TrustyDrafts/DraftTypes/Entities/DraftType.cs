@@ -1,8 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.TrustyDrafts.DraftTypes.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftTypes.Contracts;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftTypes.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
 using SIMA.Framework.Common.Exceptions;

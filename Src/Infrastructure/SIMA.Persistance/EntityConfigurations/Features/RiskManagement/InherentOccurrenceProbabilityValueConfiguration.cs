@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement;
 

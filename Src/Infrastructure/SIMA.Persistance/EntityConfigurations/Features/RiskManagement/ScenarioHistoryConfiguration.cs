@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement;
 

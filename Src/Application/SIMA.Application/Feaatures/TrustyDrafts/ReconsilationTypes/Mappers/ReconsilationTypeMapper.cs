@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.TrustyDrafts.ReconsilationTypes.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
-namespace SIMA.Application.Feaatures.TrustyDrafts.DraftTypes.Mappers;
+namespace SIMA.Application.Feaatures.TrustyDrafts.ReconsilationTypes.Mappers;
 
 public class ReconsilationTypeMapper : Profile
 {

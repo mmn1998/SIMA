@@ -20,8 +20,8 @@ public class SeverityQueryRepository : ISeverityQueryRepository
 SELECT
 	S.[Id]
     ,S.[Code]
-	,S.ConsequenceCategoryId
-	,CC.Name ConsequenceCategoryName
+	,S.ConsequenceLevelId
+	,CC.Name ConsequenceLevelName
 	,S.AffectedHistoryId
 	,AH.Name AffectedHistoryName
 	,S.SeverityValueId
@@ -30,7 +30,7 @@ SELECT
     ,S.CreatedAt
 FROM [RiskManagement].[Severity] S
 INNER JOIN [Basic].[ActiveStatus] A ON S.ActiveStatusId = A.ID
-INNER JOIN RiskManagement.ConsequenceCategory CC on CC.Id = S.ConsequenceCategoryId AND S.ActiveStatusId<>3
+INNER JOIN RiskManagement.ConsequenceLevel CC on CC.Id = S.ConsequenceLevelId AND CC.ActiveStatusId<>3
 INNER JOIN RiskManagement.AffectedHistory AH on AH.Id = S.AffectedHistoryId AND AH.ActiveStatusId<>3
 INNER JOIN RiskManagement.SeverityValue SV on SV.Id = S.SeverityValueId AND SV.ActiveStatusId<>3
 WHERE S.ActiveStatusId <> 3

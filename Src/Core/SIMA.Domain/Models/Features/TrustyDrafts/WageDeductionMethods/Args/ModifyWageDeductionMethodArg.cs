@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Args;
+﻿namespace SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Args;
 
 public class ModifyWageDeductionMethodArg
 {

@@ -6,7 +6,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.ValueObjec
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class SubjectMeetingConfiguration : IEntityTypeConfiguration<SubjectMeeting>
 {
@@ -28,7 +28,7 @@ public class SubjectMeetingConfiguration : IEntityTypeConfiguration<SubjectMeeti
         entity.HasOne(x => x.Subject)
             .WithMany(x => x.SubjectMeetings)
             .HasForeignKey(x => x.SubjectId);
-        
+
         entity.Property(x => x.SubjectPriorityId)
             .HasConversion(x => x.Value, v => new SubjectPriorityId(v));
         entity.HasOne(x => x.SubjectPriority)
@@ -40,7 +40,7 @@ public class SubjectMeetingConfiguration : IEntityTypeConfiguration<SubjectMeeti
         entity.HasOne(x => x.Meeting)
             .WithMany(x => x.SubjectMeetings)
             .HasForeignKey(x => x.MeetingId);
-        
+
         entity.Property(x => x.ConfirmedBy)
             .HasConversion(x => x.Value, v => new UserId(v));
         entity.HasOne(x => x.Confirmer)

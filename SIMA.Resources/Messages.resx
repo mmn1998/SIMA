@@ -685,4 +685,8 @@
   <data name="NumericValueNotUniqueError" xml:space="preserve">
     <value>فیلد ارزش عددی باید تنها عدد یکتا باشد</value>
   </data>
+  <data name="DraftOriginNumberAndBeneficiaryNameError" xml:space="preserve">
+    <value>فرمت شماره ثبت سفارش یا نام ذی نفع اشتباه است.</value>
+    <comment>400</comment>
+  </data>
 </root>

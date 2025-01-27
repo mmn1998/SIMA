@@ -9,13 +9,13 @@ using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+namespace SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 
 public class AffectedHistory : Entity, IAggregateRoot
 {
     private AffectedHistory()
     {
-        
+
     }
     private AffectedHistory(CreateAffectedHistoryArg arg)
     {
@@ -43,7 +43,7 @@ public class AffectedHistory : Entity, IAggregateRoot
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
-    }    
+    }
     public AffectedHistoryId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }

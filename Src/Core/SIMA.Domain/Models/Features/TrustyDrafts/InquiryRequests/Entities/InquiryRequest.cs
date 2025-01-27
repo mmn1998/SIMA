@@ -12,7 +12,7 @@ using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Contracts;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Exceptions;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

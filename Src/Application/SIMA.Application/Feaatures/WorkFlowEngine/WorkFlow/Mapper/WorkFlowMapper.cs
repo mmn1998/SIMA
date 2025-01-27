@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.State;
-using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.Steps;
+using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.StepApprovalOptions;
 using SIMA.Application.Contract.Features.WorkFlowEngine.WorkFlow.WorkFlowTask;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Create;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Args.Modify;

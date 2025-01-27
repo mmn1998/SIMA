@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;

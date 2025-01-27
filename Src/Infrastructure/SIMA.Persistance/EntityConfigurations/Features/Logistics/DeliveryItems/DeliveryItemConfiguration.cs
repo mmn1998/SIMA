@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.Logistics.OrderingItems.ValueObjects;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.DeliveryItemConfiguration;
+namespace SIMA.Persistance.EntityConfigurations.Features.Logistics.DeliveryItems;
 
 public class DeliveryItemConfiguration : IEntityTypeConfiguration<DeliveryItem>
 {

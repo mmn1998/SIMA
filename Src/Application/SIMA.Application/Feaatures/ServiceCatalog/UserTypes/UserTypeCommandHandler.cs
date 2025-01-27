@@ -8,7 +8,7 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 
-namespace SIMA.Application.Feaatures.ServiceCatalog.ServiceUserTypes;
+namespace SIMA.Application.Feaatures.ServiceCatalog.UserTypes;
 
 public class UserTypeCommandHandler : ICommandHandler<CreateUserTypeCommand, Result<long>>,
     ICommandHandler<ModifyUserTypeCommand, Result<long>>, ICommandHandler<DeleteUserTypeCommand, Result<long>>
@@ -51,7 +51,7 @@ public class UserTypeCommandHandler : ICommandHandler<CreateUserTypeCommand, Res
     public async Task<Result<long>> Handle(DeleteUserTypeCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new UserTypeId(request.Id));
-        long userId = _simaIdentity.UserId;entity.Delete(userId);
+        long userId = _simaIdentity.UserId; entity.Delete(userId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

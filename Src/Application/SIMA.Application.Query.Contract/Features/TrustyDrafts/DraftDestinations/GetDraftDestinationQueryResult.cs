@@ -1,4 +1,4 @@
-﻿namespace SIMA.Application.Contract.Features.TrustyDrafts.DraftDestinations
+﻿namespace SIMA.Application.Query.Contract.Features.TrustyDrafts.DraftDestinations
 {
     public class GetDraftDestinationQueryResult
     {

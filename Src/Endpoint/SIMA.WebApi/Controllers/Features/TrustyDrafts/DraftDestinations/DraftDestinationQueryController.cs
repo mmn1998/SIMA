@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SIMA.Application.Contract.Features.TrustyDrafts.DraftDestinations;
+using SIMA.Application.Query.Contract.Features.TrustyDrafts.DraftDestinations;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 

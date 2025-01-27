@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.SecurityCommitees.Labels.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Labels.ValueObject;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class LabelConfiguration : IEntityTypeConfiguration<Label>
 {

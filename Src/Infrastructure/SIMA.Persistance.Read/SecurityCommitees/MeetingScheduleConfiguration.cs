@@ -5,7 +5,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.MeetingSchedules.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class MeetingScheduleConfiguration : IEntityTypeConfiguration<MeetingSchedule>
 {

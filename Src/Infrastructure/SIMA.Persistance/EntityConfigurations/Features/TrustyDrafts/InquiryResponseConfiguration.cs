@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.TrustyDrafts
 {

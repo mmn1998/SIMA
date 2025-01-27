@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.RiskManagers.ScenarioHistories;

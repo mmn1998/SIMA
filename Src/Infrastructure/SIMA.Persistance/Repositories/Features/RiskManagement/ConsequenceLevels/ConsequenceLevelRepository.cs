@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;

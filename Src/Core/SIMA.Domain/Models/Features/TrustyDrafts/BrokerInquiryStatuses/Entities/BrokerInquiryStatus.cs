@@ -1,7 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.Contarcts;
 using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

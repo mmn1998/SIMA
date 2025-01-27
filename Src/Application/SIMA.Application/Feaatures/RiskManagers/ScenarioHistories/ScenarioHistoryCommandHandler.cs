@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.RiskManagers.EvaluationCriterias;
 using SIMA.Application.Contract.Features.RiskManagers.ScenarioHistories;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Args;
@@ -10,6 +9,7 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using Sima.Framework.Core.Repository;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
 
 namespace SIMA.Application.Feaatures.RiskManagers.ScenarioHistories;
 

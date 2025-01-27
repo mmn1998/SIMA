@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.BCP.RecoveryPointObjectives;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
-using SIMA.Persistance.Read.Repositories.Features.BCP.Consequences;
 using System.Data.SqlClient;
 
 namespace SIMA.Persistance.Read.Repositories.Features.BCP.RecoveryPointObjectives;

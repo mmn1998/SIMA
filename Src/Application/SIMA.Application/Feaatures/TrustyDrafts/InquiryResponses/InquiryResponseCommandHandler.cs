@@ -3,7 +3,7 @@ using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.TrustyDrafts.InquiryResponses;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Contracts;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;

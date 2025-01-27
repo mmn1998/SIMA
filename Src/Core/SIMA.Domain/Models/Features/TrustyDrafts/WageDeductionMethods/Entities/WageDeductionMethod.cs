@@ -1,20 +1,20 @@
-﻿using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Args;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Contracts;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.ValueObjects;
-using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
+﻿using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Args;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Contracts;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Entities;
+namespace SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
 
 public class WageDeductionMethod : Entity, IAggregateRoot
 {
     private WageDeductionMethod()
     {
-        
+
     }
     private WageDeductionMethod(CreateWageDeductionMethodArg arg)
     {

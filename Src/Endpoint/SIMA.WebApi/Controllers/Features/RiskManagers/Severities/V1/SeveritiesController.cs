@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿    using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.Severities;
 using SIMA.Framework.Common.Response;

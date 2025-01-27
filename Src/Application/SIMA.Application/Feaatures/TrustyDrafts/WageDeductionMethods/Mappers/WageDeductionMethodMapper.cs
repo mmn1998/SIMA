@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.TrustyDrafts.WageDeductionMethods;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Args;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 

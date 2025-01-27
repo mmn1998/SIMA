@@ -1,4 +1,4 @@
-﻿using SIMA.Application.Query.Contract.Features.ServiceCatalog.ImportanceDegrees;
+﻿using SIMA.Application.Query.Contract.Features.BCP.ImportanceDegrees;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Repository;
 

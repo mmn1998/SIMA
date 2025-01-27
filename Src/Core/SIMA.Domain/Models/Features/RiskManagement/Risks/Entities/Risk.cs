@@ -1,5 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
@@ -9,6 +10,8 @@ using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Events;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Interfaces;
 using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;

@@ -1,22 +1,22 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+namespace SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
 
 public class ScenarioHistory : Entity, IAggregateRoot
 {
     private ScenarioHistory()
     {
-        
+
     }
     private ScenarioHistory(CreateScenarioHistoryArg arg)
     {
@@ -44,7 +44,7 @@ public class ScenarioHistory : Entity, IAggregateRoot
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
-    }    
+    }
     public ScenarioHistoryId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }

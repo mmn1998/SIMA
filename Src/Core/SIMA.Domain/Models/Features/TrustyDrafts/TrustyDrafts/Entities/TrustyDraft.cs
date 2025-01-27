@@ -50,6 +50,8 @@ using SIMA.Domain.Models.Features.TrustyDrafts.ResponsibilityWageTypes.ValueObje
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Events;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.ValueObjects;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;

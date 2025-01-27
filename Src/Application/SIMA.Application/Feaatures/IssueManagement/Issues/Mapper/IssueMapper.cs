@@ -16,6 +16,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Security;
 using System.Text;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Events;
+using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues.Mapper;
 

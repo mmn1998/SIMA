@@ -1,21 +1,20 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
+﻿using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 
 public class ConsequenceLevel : Entity, IAggregateRoot
 {
     private ConsequenceLevel()
     {
-        
+
     }
     private ConsequenceLevel(CreateConsequenceLevelArg arg)
     {
@@ -43,7 +42,7 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
-    }    
+    }
     public ConsequenceLevelId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
@@ -127,6 +126,8 @@ public class ConsequenceLevel : Entity, IAggregateRoot
             entity.Delete(userId);
         }
     }
+    private List<Severity> _severities = new();
+    public ICollection<Severity> Severities => _severities;
     private List<ConsequenceLevelCategory> _riskConsequences = new();
     public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
 }

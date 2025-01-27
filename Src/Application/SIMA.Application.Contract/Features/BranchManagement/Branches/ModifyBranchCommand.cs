@@ -1,5 +1,5 @@
 ﻿using Sima.Framework.Core.Mediator;
-using SIMA.Domain.Models.Features.Auths.Profiles.Entities;
+using SIMA.Application.Contract.Attributes;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 

@@ -2,7 +2,6 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using SIMA.Application.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow;
 using SIMA.Application.Query.Contract.Features.WorkFlowEngine.WorkFlow.grpc;

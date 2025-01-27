@@ -27,12 +27,12 @@ public class SeverityConfiguration : IEntityTypeConfiguration<Severity>
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.ConsequenceCategoryId)
+        entity.Property(x => x.ConsequenceLevelId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.ConsequenceCategory)
+        entity.HasOne(x => x.ConsequenceLevel)
             .WithMany(x => x.Severities)
-            .HasForeignKey(x => x.ConsequenceCategoryId)
+            .HasForeignKey(x => x.ConsequenceLevelId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.SeverityValueId)

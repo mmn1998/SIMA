@@ -1,5 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
 using SIMA.Framework.Core.Repository;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Contracts;

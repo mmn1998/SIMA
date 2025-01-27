@@ -1,4 +1,4 @@
-﻿namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 
 public class CreateConsequenceLevelArg
 {
@@ -10,4 +10,4 @@ public class CreateConsequenceLevelArg
     public string? ValueTitle { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
- }
+}

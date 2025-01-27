@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.Auths.UserTypes.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 
-namespace SIMA.Application.Feaatures.ServiceCatalog.ServiceUserTypes.Mappers;
+namespace SIMA.Application.Feaatures.ServiceCatalog.UserTypes.Mappers;
 
 public class UserTypeMapper : Profile
 {

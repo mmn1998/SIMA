@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;

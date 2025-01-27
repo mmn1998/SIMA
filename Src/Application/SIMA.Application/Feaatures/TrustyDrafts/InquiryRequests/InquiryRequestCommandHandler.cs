@@ -35,7 +35,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
     {
         var arg = _mapper.Map<CreateInquiryRequestArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        //arg.ReferenceNumber = await CalculateRefrenceNumber(request.CustomerId);
+        arg.ReferenceNumber = await CalculateRefrenceNumber(request.ProformaCurrencyTypeId, request.DraftOrderNumber, arg.BeneficiaryName);
         var entity = await InquiryRequest.Create(arg, _service);
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
@@ -110,9 +110,13 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         //return value;var value = string.Empty;
         #endregion
         #region Second Approach
+        // 2 digits
         var symbol = await _service.GetCurrencySymbol(currencyTypeId);
-
-        value = $"{symbol}{draftOrderNumber.Substring(0, 8)}";
+        if (string.IsNullOrEmpty(draftOrderNumber) || string.IsNullOrEmpty(beneficiaryName))
+            throw new SimaResultException(CodeMessges._400Code, Messages.DraftOriginNumberAndBeneficiaryNameError);
+        if (draftOrderNumber.Length < 8 || beneficiaryName.Length < 6)
+            throw new SimaResultException(CodeMessges._400Code, Messages.DraftOriginNumberAndBeneficiaryNameError);
+        value = $"{draftOrderNumber.Substring(0, 8)}{symbol}{beneficiaryName.Substring(0, 6).ToUpper()}";
         #endregion
         return value;
     }

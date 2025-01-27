@@ -3,11 +3,10 @@ using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
 using Sima.Framework.Core.Repository;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
 using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 
 namespace SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels;
 

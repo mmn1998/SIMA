@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.TrustyDrafts;
 

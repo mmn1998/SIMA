@@ -150,7 +150,6 @@ using SIMA.Domain.Models.Features.TrustyDrafts.ResponsibilityWageTypes.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.CancellationResaons.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.CurrencyPaymentChannels.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.BrokerSecondLevelAddressBooks.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.Responses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.AgentBankWageShareStatuses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.ReferralLetters.Entities;
@@ -164,6 +163,13 @@ using SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
 
 #endregion
 
@@ -327,6 +333,7 @@ public class SIMADBContext : DbContext
     public DbSet<AffectedHistory> AffectedHistories { get; set; }
     public DbSet<SeverityValue> SeverityValues { get; set; }
     public DbSet<InherentOccurrenceProbabilityValue> InherentOccurrenceProbabilityValues { get; set; }
+    public DbSet<CurrentOccurrenceProbabilityValue> CurrentOccurrenceProbabilityValues { get; set; }
     public DbSet<ConsequenceLevel> ConsequenceLevels { get; set; }
     public DbSet<RiskLevel> RiskLevels { get; set; }
     public DbSet<RiskImpact> RiskImpacts { get; set; }

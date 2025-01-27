@@ -4,7 +4,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.Labels.ValueObject;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Meetings.ValueObjects;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.SecurityCommitees;
+namespace SIMA.Persistance.Read.SecurityCommitees;
 
 public class MeetingLabelConfiguration : IEntityTypeConfiguration<MeetingLabel>
 {
@@ -21,14 +21,14 @@ public class MeetingLabelConfiguration : IEntityTypeConfiguration<MeetingLabel>
                     .IsRowVersion()
                     .IsConcurrencyToken();
 
-        entity.Property(x=>x.MeetingId)
-            .HasConversion(x=>x.Value, v => new MeetingId(v));
+        entity.Property(x => x.MeetingId)
+            .HasConversion(x => x.Value, v => new MeetingId(v));
         entity.HasOne(x => x.Meeting)
             .WithMany(x => x.MeetingLabels)
             .HasForeignKey(x => x.MeetingId);
-        
-        entity.Property(x=>x.LabelId)
-            .HasConversion(x=>x.Value, v => new LabelId(v));
+
+        entity.Property(x => x.LabelId)
+            .HasConversion(x => x.Value, v => new LabelId(v));
         entity.HasOne(x => x.Label)
             .WithMany(x => x.MeetingLabels)
             .HasForeignKey(x => x.LabelId);

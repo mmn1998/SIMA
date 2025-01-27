@@ -2,7 +2,6 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.RiskManagement.AffectedHistories;
-using SIMA.Application.Query.Contract.Features.RiskManagement.ConsequenceCategories;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
