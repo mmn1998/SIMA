@@ -2,21 +2,22 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.RiskManagement.EvaluationCriterias;
-using SIMA.Application.Query.Contract.Features.RiskManagement.Frequencies;
+using SIMA.Application.Query.Contract.Features.RiskManagement.MatrixAValues;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
+namespace SIMA.WebApi.Controllers.Features.RiskManagers.MatrixAValues.V1;
+
 
 [ApiController]
 [Route("riskManagement/[controller]")]
 [Authorize]
-[ApiExplorerSettings(GroupName = "RiskManagement/Frequency")]
-public class FrequencyQueryController : ControllerBase
-{
+[ApiExplorerSettings(GroupName = "RiskManagement/MatrixAValue")]
+public class MatrixAValueQueryController : ControllerBase
+{  
     private readonly IMediator _mediator;
 
-    public FrequencyQueryController(IMediator mediator)
+    public MatrixAValueQueryController(IMediator mediator)
     {
         _mediator = mediator;
     }
@@ -26,15 +27,16 @@ public class FrequencyQueryController : ControllerBase
     */
     public async Task<Result> Get([FromRoute] long id)
     {
-        var query = new GetFrequencyQuery { Id = id };
+        var query = new GetMatrixAValueQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
     /*
     [SimaAuthorize(Permissions.EvaluationCriteriaGetAll)]
     */
-    public async Task<Result> Get([FromBody] GetAllFrequenciesQuery query)
+    public async Task<Result> Get([FromBody] GetAllMatrixAValuesQuery query)
     {
         return await _mediator.Send(query);
     }
+    
 }

@@ -162,6 +162,7 @@ using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities;
 
 #endregion
 
@@ -312,6 +313,7 @@ public class SIMADBContext : DbContext
 
     #region RiskManagement
     public DbSet<RiskDegree> RiskDegrees { get; set; }
+    public DbSet<MatrixAValue> MatrixAValues { get; set; }
     public DbSet<Frequency> Frequencies { get; set; }
     public DbSet<ScenarioHistory> ScenarioHistories { get; set; }
     public DbSet<Severity> Severities { get; set; }

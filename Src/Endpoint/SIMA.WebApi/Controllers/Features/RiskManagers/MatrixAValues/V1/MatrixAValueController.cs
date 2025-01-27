@@ -2,29 +2,29 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.EvaluationCriterias;
-using SIMA.Application.Contract.Features.RiskManagers.Frequencies;
+using SIMA.Application.Contract.Features.RiskManagers.MatrixAValues;
 using SIMA.Framework.Common.Response;
-using SIMA.Framework.Common.Security;
 
-namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
+namespace SIMA.WebApi.Controllers.Features.RiskManagers.MatrixAValues.V1;
 
 [ApiController]
 [Route("riskManagement/[controller]")]
-/*[Authorize]*/
-[ApiExplorerSettings(GroupName = "RiskManagement/Frequency")]
-public class FrequencyController : ControllerBase
+[Authorize]
+[ApiExplorerSettings(GroupName = "RiskManagement/MatrixAValue")]
+public class MatrixAValueController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public FrequencyController(IMediator mediator)
+    public MatrixAValueController(IMediator mediator)
     {
         _mediator = mediator;
     }
+    
     [HttpPost]
     /*
     [SimaAuthorize(Permissions.EvaluationCriteriaPost)]
     */
-    public async Task<Result> Post([FromBody] CreateFrequencyCommand command)
+    public async Task<Result> Post([FromBody] CreateMatrixAValuesCommand command)
     {
         return await _mediator.Send(command);
     }
@@ -32,7 +32,7 @@ public class FrequencyController : ControllerBase
     /*
     [SimaAuthorize(Permissions.EvaluationCriteriaPut)]
     */
-    public async Task<Result> Put([FromBody] ModifyFrequencyCommand command)
+    public async Task<Result> Put([FromBody] ModifyMatrixAValuesCommand command)
     {
         return await _mediator.Send(command);
     }
@@ -42,7 +42,7 @@ public class FrequencyController : ControllerBase
     */
     public async Task<Result> Delete([FromRoute] long id)
     {
-        var command = new DeleteFrequencyCommand { Id = id };
+        var command = new DeleteMatrixAValuesCommand { Id = id };
         return await _mediator.Send(command);
     }
 }
