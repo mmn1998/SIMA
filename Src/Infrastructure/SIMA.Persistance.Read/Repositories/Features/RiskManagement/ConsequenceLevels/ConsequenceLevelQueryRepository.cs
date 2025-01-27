@@ -25,7 +25,7 @@ SELECT CL.[Id]
               ,CL.CreatedAt
           FROM [RiskManagement].[ConsequenceLevel] CL
           INNER JOIN [Basic].[ActiveStatus] A ON CL.ActiveStatusId = A.ID
-WHERE CC.ActiveStatusId <> 3
+WHERE CL.ActiveStatusId <> 3
 ";
     }
 
