@@ -8,4 +8,5 @@ public class CreateTriggerStatusCommand: ICommand<Result<long>>
     public string? Code { get; set; }
     public string? Name { get; set; }
     public float? NumericValue { get; set; }
+    public string ValueTitle { get; set; }
 }
