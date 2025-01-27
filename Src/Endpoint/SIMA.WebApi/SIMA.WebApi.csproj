@@ -115,6 +115,8 @@
     <Compile Include="Controllers\Features\RiskManagers\Severities\V1\SeveritiesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ScenarioHistories\V1\ScenarioHistoryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ScenarioHistories\V1\ScenarioHistoryQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilityValues\V1\InherentOccurrenceProbabilityValuesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilityValues\V1\InherentOccurrenceProbabilityValuesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\SeverityValues\V1\SeverityValuesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\SeverityValues\V1\SeverityValuesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsController.cs" />
