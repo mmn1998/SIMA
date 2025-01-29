@@ -109,6 +109,8 @@
     <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitCategories\V1\CobitCategoriesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitCategories\V1\CobitCategoriesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesController.cs" />
@@ -351,7 +353,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Features\RiskManagers\CobitCategories\" />
     <Folder Include="SeriLog_Logs\" />
   </ItemGroup>
 

@@ -29,8 +29,4 @@
     <ProjectReference Include="..\SIMA.Persistance\SIMA.Persistance.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Repositories\Features\RiskManagement\CobitCategories\" />
-  </ItemGroup>
-
 </Project>
