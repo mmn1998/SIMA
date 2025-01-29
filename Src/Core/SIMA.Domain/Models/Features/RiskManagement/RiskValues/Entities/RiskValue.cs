@@ -22,6 +22,7 @@ public class RiskValue : Entity, IAggregateRoot
         Code = arg.Code;
         Color = arg.Color;
         Condition = arg.Condition;
+        NumericValue = arg.NumericValue;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -37,6 +38,7 @@ public class RiskValue : Entity, IAggregateRoot
         Name = arg.Name;
         Code = arg.Code;
         Color = arg.Color;
+        NumericValue= arg.NumericValue;
         Condition = arg.Condition;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -47,6 +49,7 @@ public class RiskValue : Entity, IAggregateRoot
     public string? Code { get; private set; }
     public string? Color { get; private set; }
     public string? Condition { get; private set; }
+    public float NumericValue { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -65,6 +68,7 @@ public class RiskValue : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsNumericUnique(arg.NumericValue)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     private async Task ModifyGuard(ModifyRiskValueArg arg, IRiskValueDomainService service)
     {
@@ -78,6 +82,7 @@ public class RiskValue : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsNumericUnique(arg.NumericValue, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     #endregion
     public void Delete(long userId)

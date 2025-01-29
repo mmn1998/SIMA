@@ -6,4 +6,5 @@ namespace SIMA.Domain.Models.Features.RiskManagement.RiskValues.Contracts;
 public interface IRiskValueDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, RiskValueId? id = null);
+    Task<bool> IsNumericUnique(float value, RiskValueId? id = null);
 }

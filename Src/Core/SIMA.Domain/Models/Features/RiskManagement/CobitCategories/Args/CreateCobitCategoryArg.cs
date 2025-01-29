@@ -1,6 +1,6 @@
-﻿namespace SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Args;
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Args;
 
-public class CreateCobitScenarioCategoryArg
+public class CreateCobitCategoryArg
 {
     public long Id { get; set; }
     public string? Name { get; set; }

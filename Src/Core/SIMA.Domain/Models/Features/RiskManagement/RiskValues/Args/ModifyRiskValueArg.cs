@@ -6,6 +6,7 @@ public class ModifyRiskValueArg
     public string? Code { get; set; }
     public string? Color { get; set; }
     public string? Condition { get; set; }
+    public float NumericValue { get; set; }
     public long ActiveStatusId { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }

@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement;
 
-public class CobitScenarioCategoryConfiguration : IEntityTypeConfiguration<CobitScenarioCategory>
+public class CobitCategoryConfiguration : IEntityTypeConfiguration<CobitCategory>
 {
-    public void Configure(EntityTypeBuilder<CobitScenarioCategory> entity)
+    public void Configure(EntityTypeBuilder<CobitCategory> entity)
     {
-        entity.ToTable("CobitScenarioCategory", "RiskManagement");
+        entity.ToTable("CobitCategory", "RiskManagement");
 
         entity.HasIndex(e => e.Code).IsUnique();
 

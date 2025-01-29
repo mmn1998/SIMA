@@ -1,6 +1,6 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Args;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Contracts;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.ValueObjects;
+﻿using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Args;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -8,15 +8,15 @@ using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
 
-namespace SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Entities;
+namespace SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
 
-public class CobitScenarioCategory : Entity, IAggregateRoot
+public class CobitCategory : Entity, IAggregateRoot
 {
-    private CobitScenarioCategory()
+    private CobitCategory()
     {
 
     }
-    private CobitScenarioCategory(CreateCobitScenarioCategoryArg arg)
+    private CobitCategory(CreateCobitCategoryArg arg)
     {
         Id = new(arg.Id);
         Name = arg.Name;
@@ -25,12 +25,12 @@ public class CobitScenarioCategory : Entity, IAggregateRoot
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public static async Task<CobitScenarioCategory> Create(CreateCobitScenarioCategoryArg arg, ICobitScenarioCategoryDomainService service)
+    public static async Task<CobitCategory> Create(CreateCobitCategoryArg arg, ICobitCategoryDomainService service)
     {
         await CreateGuadrs(arg, service);
-        return new CobitScenarioCategory(arg);
+        return new CobitCategory(arg);
     }
-    public async Task Modify(ModifyCobitScenarioCategoryArg arg, ICobitScenarioCategoryDomainService service)
+    public async Task Modify(ModifyCobitCategoryArg arg, ICobitCategoryDomainService service)
     {
         await ModifyGuard(arg, service);
         Name = arg.Name;
@@ -39,7 +39,7 @@ public class CobitScenarioCategory : Entity, IAggregateRoot
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
-    public CobitScenarioCategoryId Id { get; private set; }
+    public CobitCategoryId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -48,7 +48,7 @@ public class CobitScenarioCategory : Entity, IAggregateRoot
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     #region Guards
-    private static async Task CreateGuadrs(CreateCobitScenarioCategoryArg arg, ICobitScenarioCategoryDomainService service)
+    private static async Task CreateGuadrs(CreateCobitCategoryArg arg, ICobitCategoryDomainService service)
     {
         arg.NullCheck();
         arg.Name.NullCheck();
@@ -58,7 +58,7 @@ public class CobitScenarioCategory : Entity, IAggregateRoot
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
-    private async Task ModifyGuard(ModifyCobitScenarioCategoryArg arg, ICobitScenarioCategoryDomainService service)
+    private async Task ModifyGuard(ModifyCobitCategoryArg arg, ICobitCategoryDomainService service)
     {
         arg.NullCheck();
         arg.Name.NullCheck();

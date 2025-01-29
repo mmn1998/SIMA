@@ -1,6 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarioCategories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Args;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.ValueObjects;
 using SIMA.Framework.Common.Helper;
@@ -37,8 +37,8 @@ public class CobitScenario : Entity
         ModifiedBy = arg.ModifiedBy;
     }
     public CobitScenarioId Id { get; private set; }
-    public CobitScenarioCategoryId CobitScenarioCategoryId { get; private set; }
-    public virtual CobitScenarioCategory CobitScenarioCategory { get; private set; }
+    public CobitCategoryId CobitScenarioCategoryId { get; private set; }
+    public virtual CobitCategory CobitScenarioCategory { get; private set; }
     public ScenarioId ScenarioId { get; private set; }
     public virtual Scenario Scenario { get; private set; }
     public long ActiveStatusId { get; private set; }
