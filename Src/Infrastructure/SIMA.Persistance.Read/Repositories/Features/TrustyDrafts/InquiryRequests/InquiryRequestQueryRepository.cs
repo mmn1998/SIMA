@@ -88,8 +88,11 @@ WHERE IR.ActiveStatusId<>3
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
 
+        ///
+        /// اضافه شدن شرط اینکه اگر ثبت کننده درخواست یا ثبت کننده حواله خود کاربر باشد، درخواست برای او نمایش داده شود.
+        ///
         string queryCount = $@" WITH Query as(
-						                    {_mainQuery}  AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
+						                    {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
@@ -98,7 +101,7 @@ WHERE IR.ActiveStatusId<>3
 
 
         string query = $@" WITH Query as(
-							                  {_mainQuery}  AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
+							                  {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
 							)
 								SELECT * FROM Query
 								 /**where**/
