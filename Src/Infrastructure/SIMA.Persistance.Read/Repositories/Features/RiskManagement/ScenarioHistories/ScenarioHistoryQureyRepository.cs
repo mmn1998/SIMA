@@ -17,22 +17,27 @@ public class ScenarioHistoryQureyRepository : IScenarioHistoryQureyRepository
     public ScenarioHistoryQureyRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
-        _mainQuery = @"SELECT DISTINCT T.[Id]
-                      ,T.[Name]
-                      ,T.[Code]
-                      ,T.[ActiveStatusId]
-                      ,T.[CreatedAt]
-	                  , S.[Name] as ActiveStatus
-                  FROM [RiskManagement].[ScenarioHistory] T
-                  WHERE T.ActiveStatusId != 3";
+        _mainQuery = @"
+SELECT
+	 SH.[Id]
+    ,SH.[Name]
+    ,SH.[Code]
+    ,SH.[ActiveStatusId]
+    ,SH.[CreatedAt]
+	,SH.NumericValue
+	,SH.ValueTitle
+	,A.[Name] as ActiveStatus
+FROM [RiskManagement].[ScenarioHistory] SH
+INNER JOIN Basic.ActiveStatus A ON A.ID = SH.ActiveStatusId
+WHERE SH.ActiveStatusId != 3
+";
     }
     public async Task<Result<IEnumerable<GetScenarioHistoryQueryResult>>> GetAll(GetAllScenarioHistoryQuery request)
     {
-        using (var connection = new SqlConnection(_connectionString))
-        {
-            await connection.OpenAsync();
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
 
-            string queryCount = $@" WITH Query as(
+        string queryCount = $@" WITH Query as(
 						                    {_mainQuery}
 							)
 								SELECT Count(*) FROM Query
@@ -41,40 +46,27 @@ public class ScenarioHistoryQureyRepository : IScenarioHistoryQureyRepository
 								 ; ";
 
 
-            string query = $@" WITH Query as(
+        string query = $@" WITH Query as(
 							                  {_mainQuery}
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-            var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
-            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
-            {
-                var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetScenarioHistoryQueryResult>();
-                return Result.Ok(response, request, count);
-            }
-        }
+        var dynaimcParameters = DapperHelperExtention.GenerateQuery(queryCount + query, request);
+        using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
+        var count = await multi.ReadFirstAsync<int>();
+        var response = await multi.ReadAsync<GetScenarioHistoryQueryResult>();
+        return Result.Ok(response, request, count);
     }
 
     public async Task<GetScenarioHistoryQueryResult> GetById(long id)
     {
-	    using (var connection = new SqlConnection(_connectionString))
-	    {
-		    await connection.OpenAsync();
-		    string query = @"
-              SELECT DISTINCT T.[Id]
-                      ,T.[Name]
-                      ,T.[Code]
-                      ,T.[ActiveStatusId]
-	                  , S.[Name] as ActiveStatus
-                  FROM [RiskManagement].[RiskType] T
-                  INNER JOIN [Basic].[ActiveStatus] S on S.ID = T.ActiveStatusId
-                  WHERE T.Id = @Id and T.ActiveStatusId != 3";
-		    var result = await connection.QueryFirstOrDefaultAsync<GetScenarioHistoryQueryResult>(query, new { Id = id });
-		    result.NullCheck();
-		    return result ?? throw SimaResultException.NotFound;
-	    }
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        string query = $@"{_mainQuery} AND SH.Id = @Id";
+        var result = await connection.QueryFirstOrDefaultAsync<GetScenarioHistoryQueryResult>(query, new { Id = id });
+        result.NullCheck();
+        return result ?? throw SimaResultException.NotFound;
     }
 }
