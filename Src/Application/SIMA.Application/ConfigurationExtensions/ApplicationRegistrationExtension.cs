@@ -104,6 +104,7 @@ using SIMA.Application.Feaatures.RiskManagers.RiskLevels.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskPossibilities.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.Risks.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskTypes.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskValues.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ScenarioHistories.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.Severities.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.SeverityValues.Mappers;
@@ -273,6 +274,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new SeverityValueMapper());
                 conf.AddProfile(new InherentOccurrenceProbabilityValueMapper());
                 conf.AddProfile(new CurrentOccurrenceProbabilityValueMapper());
+                conf.AddProfile(new RiskValueMapper());
                 conf.AddProfile(new ConsequenceLevelMapper());
                 conf.AddProfile(new RiskDegreeMapper());
                 conf.AddProfile(new RiskImpactMapper());

@@ -171,6 +171,7 @@ using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityVa
 using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
 
 #endregion
 
@@ -336,6 +337,7 @@ public class SIMADBContext : DbContext
     public DbSet<SeverityValue> SeverityValues { get; set; }
     public DbSet<InherentOccurrenceProbabilityValue> InherentOccurrenceProbabilityValues { get; set; }
     public DbSet<CurrentOccurrenceProbabilityValue> CurrentOccurrenceProbabilityValues { get; set; }
+    public DbSet<RiskValue> RiskValues { get; set; }
     public DbSet<ConsequenceLevel> ConsequenceLevels { get; set; }
     public DbSet<RiskLevel> RiskLevels { get; set; }
     public DbSet<RiskImpact> RiskImpacts { get; set; }
