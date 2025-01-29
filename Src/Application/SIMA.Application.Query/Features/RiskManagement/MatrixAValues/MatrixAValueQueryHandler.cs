@@ -2,6 +2,7 @@
 using SIMA.Application.Query.Contract.Features.RiskManagement.MatrixAValues;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Persistance.Read.Repositories.Features.RiskManagement.MatrixAValues;
 
 
 namespace SIMA.Application.Query.Features.RiskManagement.MatrixAValues;
@@ -9,13 +10,20 @@ namespace SIMA.Application.Query.Features.RiskManagement.MatrixAValues;
 public class MatrixAValueQueryHandler: IQueryHandler<GetMatrixAValueQuery, Result<GetMatrixAValueQueryResult>>,
     IQueryHandler<GetAllMatrixAValuesQuery, Result<IEnumerable<GetMatrixAValueQueryResult>>>
 {
-    public Task<Result<GetMatrixAValueQueryResult>> Handle(GetMatrixAValueQuery request, CancellationToken cancellationToken)
+    private readonly IMatrixAValueQueryRepository _repository;
+
+    public MatrixAValueQueryHandler(IMatrixAValueQueryRepository repository)
     {
-        throw new NotImplementedException();
+        _repository = repository;
+    }
+    public async Task<Result<GetMatrixAValueQueryResult>> Handle(GetMatrixAValueQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetById(request);
+        return Result.Ok(result);
     }
 
-    public Task<Result<IEnumerable<GetMatrixAValueQueryResult>>> Handle(GetAllMatrixAValuesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<GetMatrixAValueQueryResult>>> Handle(GetAllMatrixAValuesQuery request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return await _repository.GetAll(request);
     }
 }
