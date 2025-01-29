@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Features\Logistics\GoodsStatues\" />
+    <Folder Include="Features\RiskManagement\CobitCategories\" />
   </ItemGroup>
 
 </Project>

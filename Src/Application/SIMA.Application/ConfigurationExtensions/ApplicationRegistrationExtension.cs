@@ -85,6 +85,7 @@ using SIMA.Application.Feaatures.Logistics.LogisticsSupplies.Mappers;
 using SIMA.Application.Feaatures.Logistics.UnitMeasurements.Mappers;
 using SIMA.Application.Feaatures.Notifications.Messages.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.AffectedHistories.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.CobitCategories.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ConsequenceCategories.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.CurrentOccurrenceProbabilities.Mappers;
@@ -262,6 +263,7 @@ public static class ApplicationRegistrationExtension
                 #region RiskManagement
                 conf.AddProfile(new ImpactScaleMapper());
                 conf.AddProfile(new ConsequenceCategoryMapper());
+                conf.AddProfile(new CobitCategoryMapper());
                 conf.AddProfile(new FrequencyMapper());
                 conf.AddProfile(new AffectedHistoryMapper());
                 conf.AddProfile(new SeverityMapper());

@@ -351,6 +351,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Features\RiskManagers\CobitCategories\" />
     <Folder Include="SeriLog_Logs\" />
   </ItemGroup>
 

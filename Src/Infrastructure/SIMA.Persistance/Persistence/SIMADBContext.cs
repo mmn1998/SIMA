@@ -170,6 +170,7 @@ using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
 
 #endregion
 
@@ -330,6 +331,7 @@ public class SIMADBContext : DbContext
     public DbSet<UseVulnerability> UseVulnerabilities { get; set; }
     public DbSet<TriggerStatus> TriggerStatuses { get; set; }
     public DbSet<ConsequenceCategory> ConsequenceCategories { get; set; }
+    public DbSet<CobitCategory> CobitCategories { get; set; }
     public DbSet<AffectedHistory> AffectedHistories { get; set; }
     public DbSet<SeverityValue> SeverityValues { get; set; }
     public DbSet<InherentOccurrenceProbabilityValue> InherentOccurrenceProbabilityValues { get; set; }
