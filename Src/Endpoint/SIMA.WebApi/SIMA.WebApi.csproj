@@ -113,6 +113,8 @@
     <Compile Include="Controllers\Features\RiskManagers\CobitCategories\V1\CobitCategoriesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAs\V1\MatrixAsController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAs\V1\MatrixAsQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\RiskValues\V1\RiskValuesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\RiskValues\V1\RiskValuesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesController.cs" />
