@@ -63,7 +63,7 @@ public class MatrixAValue : Entity, IAggregateRoot
         arg.Code.NullCheck();
         arg.ValueTitle.NullCheck();
         if (arg.NumericValue == 0) throw SimaResultException.NullException;
-        if (arg.Code.Length > 10) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
+        if (arg.Color.Length > 10) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
         if (!await service.IsNumericUnique(arg.NumericValue)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
@@ -75,7 +75,7 @@ public class MatrixAValue : Entity, IAggregateRoot
         arg.Code.NullCheck();
         arg.ValueTitle.NullCheck();
         if (arg.NumericValue == 0) throw SimaResultException.NullException;
-        if (arg.Code.Length > 10) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
+        if (arg.Color.Length > 10) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
         if (!await service.IsNumericUnique(arg.NumericValue)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);

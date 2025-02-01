@@ -96,6 +96,7 @@ using SIMA.Application.Feaatures.RiskManagers.ImpactScales.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.InherentOccurrenceProbabilities.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.InherentOccurrenceProbabilityValues.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.MatrixAs.Mappers;
+using SIMA.Application.Feaatures.RiskManagers.MatrixAValues.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskCriterias.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskDegrees.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskImpacts.Mapper;
@@ -264,6 +265,7 @@ public static class ApplicationRegistrationExtension
                 #region RiskManagement
                 conf.AddProfile(new ImpactScaleMapper());
                 conf.AddProfile(new ConsequenceCategoryMapper());
+                conf.AddProfile(new MatrixAValueMapper());
                 conf.AddProfile(new CobitCategoryMapper());
                 conf.AddProfile(new FrequencyMapper());
                 conf.AddProfile(new AffectedHistoryMapper());
