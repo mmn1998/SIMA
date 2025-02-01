@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SIMA.Application.Contract.Features.RiskManagers.EvaluationCriterias;
 using SIMA.Application.Contract.Features.RiskManagers.Frequencies;
 using SIMA.Framework.Common.Response;
-using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.Frequencies.V1;
 
