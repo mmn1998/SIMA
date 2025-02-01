@@ -18,6 +18,7 @@ public class ConsequenceLevelMapper : Profile
         CreateMap<long, CreateConsequenceLevelCategoryArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.ConsequenceCategoryId, act => act.MapFrom(source => source))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now));
 
         CreateMap<ModifyConsequenceLevelCommand, ModifyConsequenceLevelArg>()
