@@ -39,7 +39,9 @@ public class MatrixAValueQueryRepository : IMatrixAValueQueryRepository
             await connection.OpenAsync();
             string query = @"
                      SELECT DISTINCT T.[Id]
-                             ,T.[Name]
+                           	 ,T.ValueTitle
+							 ,T.Color
+							 ,T.NumericValue
                              ,T.[Code]
                              ,T.[ActiveStatusId]
        	                  , S.[Name] as ActiveStatus
