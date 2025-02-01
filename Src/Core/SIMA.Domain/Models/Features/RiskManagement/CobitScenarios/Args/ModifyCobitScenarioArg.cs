@@ -6,6 +6,7 @@ public class ModifyCobitScenarioArg
     public long CobitScenarioCategoryId { get; set; }
     public long ScenarioId { get; set; }
     public long ActiveStatusId { get; set; }
+    public string CobitIdentifier { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long ModifiedBy { get; set; }
 }

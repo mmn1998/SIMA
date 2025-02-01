@@ -36,11 +36,24 @@ public class CobitScenario : Entity
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
+    #region Guards
+    private static void CreateGuards(CreateCobitScenarioArg arg)
+    {
+        arg.NullCheck();
+        arg.CobitIdentifier.NullCheck();
+    }
+    private void ModifyGuards(ModifyCobitScenarioArg arg)
+    {
+        arg.NullCheck();
+        arg.CobitIdentifier.NullCheck();
+    }
+    #endregion
     public CobitScenarioId Id { get; private set; }
     public CobitCategoryId CobitScenarioCategoryId { get; private set; }
     public virtual CobitCategory CobitScenarioCategory { get; private set; }
     public ScenarioId ScenarioId { get; private set; }
     public virtual Scenario Scenario { get; private set; }
+    public string CobitIdentifier { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
