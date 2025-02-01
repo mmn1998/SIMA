@@ -22,6 +22,7 @@ SELECT AH.[Id]
               ,AH.[Code]
 			  ,AH.NumericValue
 			  ,AH.Color
+              ,AH.ValuingIntervalTitle
 	          ,A.[Name] ActiveStatus
               ,AH.CreatedAt
           FROM [RiskManagement].[SeverityValue] AH

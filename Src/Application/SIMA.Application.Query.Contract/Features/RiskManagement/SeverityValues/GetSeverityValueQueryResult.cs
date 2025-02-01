@@ -8,4 +8,5 @@ public class GetSeverityValueQueryResult
     public string? Color { get; set; }
     public float? NumericValue { get; set; }
     public string? ActiveStatus { get; set; }
+    public string ValuingIntervalTitle { get; set; }
 }

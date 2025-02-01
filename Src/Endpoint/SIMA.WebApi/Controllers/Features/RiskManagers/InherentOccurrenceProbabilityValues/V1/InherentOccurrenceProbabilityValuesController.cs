@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.InherentOccurrenceProbabilityValues;
 using SIMA.Framework.Common.Response;
@@ -7,6 +8,7 @@ namespace SIMA.WebApi.Controllers.Features.RiskManagers.InherentOccurrenceProbab
 
 [Route("RiskManagement/[controller]")]
 [ApiController]
+[Authorize]
 [ApiExplorerSettings(GroupName = "RiskManagement/InherentOccurrenceProbabilityValues")]
 public class InherentOccurrenceProbabilityValuesController : ControllerBase
 {
