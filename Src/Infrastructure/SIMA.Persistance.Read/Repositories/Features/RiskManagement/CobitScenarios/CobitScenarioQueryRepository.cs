@@ -21,7 +21,6 @@ SELECT
 	CS.[Id]
     ,CS.Description
 	,CS.CobitIdentifier
-	,CS.CobitScenarioCategoryId
 	,CS.Name
 	,CS.ScenarioId
 	,S.Title ScenarioName
