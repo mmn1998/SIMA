@@ -20,18 +20,18 @@ public class CurrentOccurrenceProbabilityQueryRepository : ICurrentOccurrencePro
 SELECT
 	IOP.[Id]
     ,IOP.[Code]
-	,IOP.ScenarioHistoryId
-	,SH.Name ScenarioHistoryName
-	,IOP.MatrixAValueId
-	,MV.Color MatrixAValueNsme
+	,IOP.CurrentOccurrenceProbabilityValueId
+	,IOPV.Name CurrentOccurrenceProbabilityValueName
+	,IOP.FrequencyId
+	,F.Name FrequencyName
 	,IOP.InherentOccurrenceProbabilityValueId
 	,IOPV.Name InherentOccurrenceProbabilityValueName
 	,A.[Name] ActiveStatus
     ,IOP.CreatedAt
 FROM [RiskManagement].[CurrentOccurrenceProbability] IOP
 INNER JOIN [Basic].[ActiveStatus] A ON IOP.ActiveStatusId = A.ID
-INNER JOIN RiskManagement.ScenarioHistory SH on SH.Id = IOP.ScenarioHistoryId AND SH.ActiveStatusId<>3
-INNER JOIN RiskManagement.MatrixAValue MV on MV.Id = IOP.MatrixAValueId AND MV.ActiveStatusId<>3
+INNER JOIN RiskManagement.Frequency F on F.Id = IOP.FrequencyId AND F.ActiveStatusId<>3
+INNER JOIN RiskManagement.CurrentOccurrenceProbabilityValue COPV on COPV.Id = IOP.CurrentOccurrenceProbabilityValueId AND COPV.ActiveStatusId<>3
 INNER JOIN RiskManagement.InherentOccurrenceProbabilityValue IOPV on IOPV.Id = IOP.InherentOccurrenceProbabilityValueId AND IOPV.ActiveStatusId<>3
 WHERE IOP.ActiveStatusId <> 3
 ";

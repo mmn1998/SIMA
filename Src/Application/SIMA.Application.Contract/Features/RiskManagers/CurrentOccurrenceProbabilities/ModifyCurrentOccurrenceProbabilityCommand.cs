@@ -7,7 +7,7 @@ public class ModifyCurrentOccurrenceProbabilityCommand : ICommand<Result<long>>
 {
     public long Id { get; set; }
     public string Code { get; set; }
-    public long MatrixAValueId { get; set; }
+    public long CurrentOccurrenceProbabilityValueId { get; set; }
     public long InherentOccurrenceProbabilityValueId { get; set; }
-    public long ScenarioHistoryId { get; set; }
+    public long FrequencyId { get; set; }
 }
