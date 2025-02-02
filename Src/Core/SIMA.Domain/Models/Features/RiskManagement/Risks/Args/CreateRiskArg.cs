@@ -6,8 +6,8 @@ public class CreateRiskArg
     public string Name { get; set; }
     public string Code { get; set; }
     public string Description { get; set; }
-    public string? IsNeedCobit { get; set; }
     public long RiskTypeId { get; set; }
+    public string? IsNeedCobit { get; set; }
     public long AffectedHistoryId { get; set; }
     public long UseVulnerabilityId { get; set; }
     public long ConsequenceCategoryId { get; set; }

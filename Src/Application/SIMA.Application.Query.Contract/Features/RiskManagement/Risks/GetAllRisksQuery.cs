@@ -13,8 +13,21 @@ public class GetAllRisksQueryResult
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
+    public string? IsNeedCobit { get; set; }
     public long RiskTypeId { get; set; }
     public string? RiskTypeName { get; set; }
+    public long AffectedHistoryId { get; set; }
+    public string? AffectedHistoryName { get; set; }
+    public long UseVulnerabilityId { get; set; }
+    public string? UseVulnerabilityName { get; set; }
+    public long ScenarioHistoryId { get; set; }
+    public string? ScenarioHistoryName { get; set; }
+    public long FrequencyId { get; set; }
+    public string? FrequencyName { get; set; }
+    public long TriggerStatusId { get; set; }
+    public string? TriggerStatusName { get; set; }
+    public long ConsequenceCategoryId { get; set; }
+    public string? ConsequenceCategoryName { get; set; }
     public string? Description { get; set; }
     public string? ActiveStatus { get; set; }
     public long IssueId { get; set; }
@@ -47,8 +60,21 @@ public class GetRiskQueryResult
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
+    public string? IsNeedCobit { get; set; }
     public long RiskTypeId { get; set; }
     public string? RiskTypeName { get; set; }
+    public long AffectedHistoryId { get; set; }
+    public string? AffectedHistoryName { get; set; }
+    public long UseVulnerabilityId { get; set; }
+    public string? UseVulnerabilityName { get; set; }
+    public long ScenarioHistoryId { get; set; }
+    public string? ScenarioHistoryName { get; set; }
+    public long FrequencyId { get; set; }
+    public string? FrequencyName { get; set; }
+    public long TriggerStatusId { get; set; }
+    public string? TriggerStatusName { get; set; }
+    public long ConsequenceCategoryId { get; set; }
+    public string? ConsequenceCategoryName { get; set; }
     public string? Description { get; set; }
     public string? ActiveStatus { get; set; }
     public IEnumerable<GetCorrectiveActionQueryResult>? CorrectiveActionList { get; set; }

@@ -25,6 +25,19 @@ r.Code,
 r.Name,
 R.RiskTypeId,
 Rt.Name RiskTypeName,
+R.IsNeedCobit,
+R.AffectedHistoryId,
+AH.Name AffectedHistoryName,
+R.UseVulnerabilityId,
+UV.Name UseVulnerabilityName,
+R.ScenarioHistoryId,
+SH.Name ScenarioHistoryName,
+R.FrequencyId,
+F.Name FrequencyName,
+R.TriggerStatusId,
+TS.Name TriggerStatusName,
+R.ConsequenceCategoryId,
+CC.Name ConsequenceCategoryName,
 a.Name ActiveStatus,
 r.Description,
 r.CreatedAt
@@ -47,17 +60,23 @@ r.CreatedAt
 ,(p.FirstName + ' ' + p.LastName) CreatedBy
 from RiskManagement.Risk R
 inner join RiskManagement.RiskType RT on RT.Id = R.RiskTypeId and rt.ActiveStatusId<>3
-  Inner join RiskManagement.RiskRelatedIssue RRI on RRI.RiskId = R.Id and RRI.ActiveStatusId<>3
-  inner join IssueManagement.Issue I on I.Id = RRI.IssueId and I.MainAggregateId = 4 And i.ActiveStatusId<>3
-  left join Basic.ActiveStatus A on A.ID = R.ActiveStatusId
-  left join Project.WorkFlow W on w.Id = i.CurrentWorkflowId and w.ActiveStatusID<>3
-  left JOIN Authentication.Users U on R.CreatedBy = U.Id and U.ActiveStatusId<>3
-  left JOIN Authentication.Profile P on P.Id = U.ProfileID and P.ActiveStatusId<>3
-  left join Project.Step Step on I.CurrenStepId = Step.Id
-  left join Project.State ST on I.CurrentStateId = ST.Id
-  left join Project.Project project on project.Id = W.ProjectID
-  left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
-  left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId
+Inner join RiskManagement.RiskRelatedIssue RRI on RRI.RiskId = R.Id and RRI.ActiveStatusId<>3
+inner join IssueManagement.Issue I on I.Id = RRI.IssueId and I.MainAggregateId = 4 And i.ActiveStatusId<>3
+left join Basic.ActiveStatus A on A.ID = R.ActiveStatusId
+left join Project.WorkFlow W on w.Id = i.CurrentWorkflowId and w.ActiveStatusID<>3
+left JOIN Authentication.Users U on R.CreatedBy = U.Id and U.ActiveStatusId<>3
+left JOIN Authentication.Profile P on P.Id = U.ProfileID and P.ActiveStatusId<>3
+left join Project.Step Step on I.CurrenStepId = Step.Id
+left join Project.State ST on I.CurrentStateId = ST.Id
+left join Project.Project project on project.Id = W.ProjectID
+left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
+left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId
+LEFT JOIN RiskManagement.AffectedHistory AH on AH.Id = R.AffectedHistoryId and AH.ActiveStatusId<>3
+LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusId<>3
+LEFT JOIN RiskManagement.ScenarioHistory SH on SH.Id = R.ScenarioHistoryId and SH.ActiveStatusId<>3
+LEFT JOIN RiskManagement.TriggerStatus TS on TS.Id = R.TriggerStatusId and TS.ActiveStatusId<>3
+LEFT JOIN RiskManagement.UseVulnerability UV on UV.Id = R.UseVulnerabilityId and UV.ActiveStatusId<>3
+LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = R.ConsequenceCategoryId and CC.ActiveStatusId<>3
 Where R.ActiveStatusId<>3
 ";
         using var connection = new SqlConnection(_connectionString);
@@ -100,12 +119,31 @@ r.Code,
 r.Name,
 R.RiskTypeId,
 Rt.Name RiskTypeName,
+R.IsNeedCobit,
+R.AffectedHistoryId,
+AH.Name AffectedHistoryName,
+R.UseVulnerabilityId,
+UV.Name UseVulnerabilityName,
+R.ScenarioHistoryId,
+SH.Name ScenarioHistoryName,
+R.FrequencyId,
+F.Name FrequencyName,
+R.TriggerStatusId,
+TS.Name TriggerStatusName,
+R.ConsequenceCategoryId,
+CC.Name ConsequenceCategoryName,
 a.Name ActiveStatus,
 r.Description,
 r.CreatedAt
 from RiskManagement.Risk R
 inner join RiskManagement.RiskType RT on RT.Id = R.RiskTypeId and rt.ActiveStatusId<>3
 inner join Basic.ActiveStatus A on A.ID = R.ActiveStatusId and r.ActiveStatusId<>3
+LEFT JOIN RiskManagement.AffectedHistory AH on AH.Id = R.AffectedHistoryId and AH.ActiveStatusId<>3
+LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusId<>3
+LEFT JOIN RiskManagement.ScenarioHistory SH on SH.Id = R.ScenarioHistoryId and SH.ActiveStatusId<>3
+LEFT JOIN RiskManagement.TriggerStatus TS on TS.Id = R.TriggerStatusId and TS.ActiveStatusId<>3
+LEFT JOIN RiskManagement.UseVulnerability UV on UV.Id = R.UseVulnerabilityId and UV.ActiveStatusId<>3
+LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = R.ConsequenceCategoryId and CC.ActiveStatusId<>3
 Where R.ActiveStatusId<>3 AND R.Id = @Id
 
 ------------ CorrectiveActionList
