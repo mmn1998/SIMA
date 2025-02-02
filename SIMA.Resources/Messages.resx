@@ -689,4 +689,8 @@
     <value>فرمت شماره ثبت سفارش یا نام ذی نفع اشتباه است.</value>
     <comment>400</comment>
   </data>
+  <data name="CobitIdentifierASCIIError" xml:space="preserve">
+    <value>فرمت شناسه کوبیت اشتباه است.</value>
+    <comment>400</comment>
+  </data>
 </root>

@@ -89,8 +89,6 @@ public class ScenarioHistory : Entity, IAggregateRoot
     }
     private List<InherentOccurrenceProbability> _inherentOccurrenceProbabilities = new();
     public ICollection<InherentOccurrenceProbability> InherentOccurrenceProbabilities => _inherentOccurrenceProbabilities;
-    private List<CurrentOccurrenceProbability> _currentOccurrenceProbabilities = new();
-    public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;
     private List<Risk> _risks = new();
     public ICollection<Risk> Risks => _risks;
 }

@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Args;
+﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Args;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -91,4 +92,6 @@ public class CurrentOccurrenceProbabilityValue : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<CurrentOccurrenceProbability> _currentOccurrenceProbabilities = new();
+    public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;
 }

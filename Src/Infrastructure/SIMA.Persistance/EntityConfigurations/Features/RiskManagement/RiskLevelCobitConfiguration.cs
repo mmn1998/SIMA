@@ -1,20 +1,24 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.RiskManagement;
 
-public class CobitScenarioConfiguration : IEntityTypeConfiguration<CobitScenario>
+public class RiskLevelCobitConfiguration : IEntityTypeConfiguration<RiskLevelCobit>
 {
-    public void Configure(EntityTypeBuilder<CobitScenario> entity)
+    public void Configure(EntityTypeBuilder<RiskLevelCobit> entity)
     {
-        entity.ToTable("CobitScenario", "RiskManagement");
+        entity.ToTable("RiskLevelCobit", "RiskManagement");
+
+        entity.HasIndex(e => e.Code).IsUnique();
 
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
              v => new(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
+
+        entity.Property(e => e.Code).IsRequired().HasMaxLength(20);
 
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
@@ -23,23 +27,20 @@ public class CobitScenarioConfiguration : IEntityTypeConfiguration<CobitScenario
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.Name).HasMaxLength(200);
-        entity.Property(x => x.CobitIdentifier).HasMaxLength(20).IsUnicode(false);
-
-        entity.Property(x => x.CobitScenarioCategoryId)
+        entity.Property(x => x.SeverityId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.CobitScenarioCategory)
-            .WithMany(x => x.CobitScenarios)
-            .HasForeignKey(x => x.CobitScenarioCategoryId)
+        entity.HasOne(x => x.Severity)
+            .WithMany(x => x.RiskLevelCobits)
+            .HasForeignKey(x => x.SeverityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.ScenarioId)
+        entity.Property(x => x.InherentOccurrenceProbabilityValueId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.Scenario)
-            .WithMany(x => x.CobitScenarios)
-            .HasForeignKey(x => x.ScenarioId)
+        entity.HasOne(x => x.InherentOccurrenceProbabilityValue)
+            .WithMany(x => x.RiskLevelCobits)
+            .HasForeignKey(x => x.InherentOccurrenceProbabilityValueId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

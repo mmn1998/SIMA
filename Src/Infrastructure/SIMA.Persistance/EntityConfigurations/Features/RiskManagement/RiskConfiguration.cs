@@ -19,6 +19,7 @@ public class RiskConfiguration : IEntityTypeConfiguration<Risk>
         entity.HasKey(i => i.Id);
 
         entity.Property(e => e.Code).IsRequired().HasMaxLength(20);
+        entity.Property(e => e.IsNeedCobit).HasMaxLength(1).IsFixedLength();
         entity.Property(e => e.Name).IsRequired().HasMaxLength(2000);
 
         entity.Property(e => e.CreatedAt)

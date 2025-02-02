@@ -169,6 +169,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فرمت شناسه کوبیت اشتباه است..
+        /// </summary>
+        public static string CobitIdentifierASCIIError {
+            get {
+                return ResourceManager.GetString("CobitIdentifierASCIIError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کد وارد شده منقضی شده است لطفا مجدا تلاش نمایید.
         /// </summary>
         public static string CodeIsExpired {

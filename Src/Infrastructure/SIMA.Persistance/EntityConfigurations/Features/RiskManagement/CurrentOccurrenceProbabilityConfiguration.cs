@@ -27,20 +27,20 @@ public class CurrentOccurrenceProbabilityConfiguration : IEntityTypeConfiguratio
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.MatrixAValueId)
+        entity.Property(x => x.FrequencyId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.MatrixAValue)
+        entity.HasOne(x => x.Frequency)
             .WithMany(x => x.CurrentOccurrenceProbabilities)
-            .HasForeignKey(x => x.MatrixAValueId)
+            .HasForeignKey(x => x.FrequencyId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.ScenarioHistoryId)
+        entity.Property(x => x.CurrentOccurrenceProbabilityValueId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.ScenarioHistory)
+        entity.HasOne(x => x.CurrentOccurrenceProbabilityValue)
             .WithMany(x => x.CurrentOccurrenceProbabilities)
-            .HasForeignKey(x => x.ScenarioHistoryId)
+            .HasForeignKey(x => x.CurrentOccurrenceProbabilityValueId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.InherentOccurrenceProbabilityValueId)

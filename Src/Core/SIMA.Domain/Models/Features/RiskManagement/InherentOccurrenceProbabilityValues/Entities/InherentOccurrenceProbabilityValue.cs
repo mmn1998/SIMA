@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Args;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -92,4 +93,6 @@ public class InherentOccurrenceProbabilityValue : Entity, IAggregateRoot
     public ICollection<InherentOccurrenceProbability> InherentOccurrenceProbabilities => _inherentOccurrenceProbabilities;
     private List<CurrentOccurrenceProbability> _currentOccurrenceProbabilities = new();
     public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;
+    private List<RiskLevelCobit> _riskLevelCobits = new();
+    public ICollection<RiskLevelCobit> RiskLevelCobits => _riskLevelCobits;
 }
