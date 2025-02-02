@@ -57,11 +57,10 @@ where BIA.ActiveStatusId<>3 AND (@ServiceId is null OR S.Id = @ServiceId)
 
     public async Task<Result<IEnumerable<GetAllBusinessImpactAnalysisesQueryResult>>> GetAll(GetAllBusinessImpactAnalysisesQuery request)
     {
-        using (var connection = new SqlConnection(_connectionString))
-        {
-            await connection.OpenAsync();
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
 
-            string queryCount = $@" WITH Query as(
+        string queryCount = $@" WITH Query as(
 						                    {_mainQuery}
 							)
 								SELECT Count(*) FROM Query
@@ -70,22 +69,19 @@ where BIA.ActiveStatusId<>3 AND (@ServiceId is null OR S.Id = @ServiceId)
 								 ; ";
 
 
-            string query = $@" WITH Query as(
+        string query = $@" WITH Query as(
 							                  {_mainQuery}
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-            var dynaimcParameters = (queryCount + query).GenerateQuery(request);
-            dynaimcParameters.Item2.Add("ServiceId", request.ServiceId);
-            using (var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2))
-            {
-                var count = await multi.ReadFirstAsync<int>();
-                var response = await multi.ReadAsync<GetAllBusinessImpactAnalysisesQueryResult>();
-                return Result.Ok(response, request, count);
-            }
-        }
+        var dynaimcParameters = (queryCount + query).GenerateQuery(request);
+        dynaimcParameters.Item2.Add("ServiceId", request.ServiceId);
+        using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
+        var count = await multi.ReadFirstAsync<int>();
+        var response = await multi.ReadAsync<GetAllBusinessImpactAnalysisesQueryResult>();
+        return Result.Ok(response, request, count);
     }
 
     public async Task<GetBusinessImpactAnalysisQueryResult> GetById(GetBusinessImpactAnalysisQuery request)

@@ -35,12 +35,12 @@ public class RiskLevelCobitConfiguration : IEntityTypeConfiguration<RiskLevelCob
             .HasForeignKey(x => x.SeverityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.InherentOccurrenceProbabilityValueId)
+        entity.Property(x => x.CurrentOccurrenceProbabilityValueId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.InherentOccurrenceProbabilityValue)
+        entity.HasOne(x => x.CurrentOccurrenceProbabilityValue)
             .WithMany(x => x.RiskLevelCobits)
-            .HasForeignKey(x => x.InherentOccurrenceProbabilityValueId)
+            .HasForeignKey(x => x.CurrentOccurrenceProbabilityValueId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

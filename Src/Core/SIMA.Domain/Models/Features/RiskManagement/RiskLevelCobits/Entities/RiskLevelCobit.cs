@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.ValueObjects;
+﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Args;
@@ -23,7 +25,7 @@ public class RiskLevelCobit : Entity, IAggregateRoot
     {
         Id = new(arg.Id);
         Code = arg.Code;
-        InherentOccurrenceProbabilityValueId = new(arg.InherentOccurrenceProbabilityValueId);
+        CurrentOccurrenceProbabilityValueId = new(arg.CurrentOccurrenceProbabilityValueId);
         SeverityId = new(arg.SeverityId);
         NumericValue = arg.NumericValue;
         CreatedAt = arg.CreatedAt;
@@ -39,7 +41,7 @@ public class RiskLevelCobit : Entity, IAggregateRoot
     {
         await ModifyGuard(arg, service);
         Code = arg.Code;
-        InherentOccurrenceProbabilityValueId = new(arg.InherentOccurrenceProbabilityValueId);
+        CurrentOccurrenceProbabilityValueId = new(arg.CurrentOccurrenceProbabilityValueId);
         SeverityId = new(arg.SeverityId);
         NumericValue = arg.NumericValue;
         ModifiedAt = arg.ModifiedAt;
@@ -51,8 +53,8 @@ public class RiskLevelCobit : Entity, IAggregateRoot
     public float NumericValue { get; private set; }
     public SeverityId SeverityId { get; private set; }
     public virtual Severity Severity { get; private set; }
-    public InherentOccurrenceProbabilityValueId InherentOccurrenceProbabilityValueId { get; private set; }
-    public virtual InherentOccurrenceProbabilityValue InherentOccurrenceProbabilityValue { get; private set; }
+    public CurrentOccurrenceProbabilityValueId CurrentOccurrenceProbabilityValueId{ get; private set; }
+    public virtual CurrentOccurrenceProbabilityValue CurrentOccurrenceProbabilityValue { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

@@ -100,6 +100,7 @@ using SIMA.Application.Feaatures.RiskManagers.MatrixAValues.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskCriterias.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskDegrees.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskImpacts.Mapper;
+using SIMA.Application.Feaatures.RiskManagers.RiskLevelCobits.Mappers;
 using SIMA.Application.Feaatures.RiskManagers.RiskLevelMeasures.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskLevels.Mapper;
 using SIMA.Application.Feaatures.RiskManagers.RiskPossibilities.Mapper;
@@ -271,6 +272,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new AffectedHistoryMapper());
                 conf.AddProfile(new SeverityMapper());
                 conf.AddProfile(new InherentOccurrenceProbabilityMapper());
+                conf.AddProfile(new RiskLevelCobitMapper());
                 conf.AddProfile(new CurrentOccurrenceProbabilityMapper());
                 conf.AddProfile(new MatrixAMapper());
                 conf.AddProfile(new SeverityValueMapper());

@@ -92,7 +92,5 @@ public class InherentOccurrenceProbabilityValue : Entity, IAggregateRoot
     private List<InherentOccurrenceProbability> _inherentOccurrenceProbabilities = new();
     public ICollection<InherentOccurrenceProbability> InherentOccurrenceProbabilities => _inherentOccurrenceProbabilities;
     private List<CurrentOccurrenceProbability> _currentOccurrenceProbabilities = new();
-    public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;
-    private List<RiskLevelCobit> _riskLevelCobits = new();
-    public ICollection<RiskLevelCobit> RiskLevelCobits => _riskLevelCobits;
+    public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;    
 }
