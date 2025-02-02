@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -45,6 +47,8 @@ public class RiskValue : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
     }
     public RiskValueId Id { get; private set; }
+    public BusinessContinuityStrategyId StrategyId { get; private set; }
+    public virtual BusinessContinuityStrategy Strategy { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
     public string? Color { get; private set; }

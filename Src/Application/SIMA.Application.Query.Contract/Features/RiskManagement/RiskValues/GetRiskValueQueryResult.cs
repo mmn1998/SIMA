@@ -9,4 +9,6 @@ public class GetRiskValueQueryResult
     public string? Color { get; set; }
     public float? NumericValue { get; set; }
     public string? ActiveStatus { get; set; }
+    public long StrategyId { get; set; }
+    public string? StrategyName { get; set; }
 }

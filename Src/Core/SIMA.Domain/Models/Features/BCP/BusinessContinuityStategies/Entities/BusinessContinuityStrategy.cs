@@ -9,6 +9,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Enti
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
 using SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -291,5 +292,9 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
 
     private List<BusinessContinuityStratgySolution> _businessContinuityStratgySolution = new();
     public ICollection<BusinessContinuityStratgySolution> BusinessContinuityStratgySolutions => _businessContinuityStratgySolution;
+
+
+    private List<RiskValue> _riskValues = new();
+    public ICollection<RiskValue> RiskValues => _riskValues;
 
 }
