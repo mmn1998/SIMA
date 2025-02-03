@@ -20,7 +20,6 @@ public class ConsequenceLevelQueryRepository : IConsequenceLevelQueryRepository
 SELECT CL.[Id]
               ,CL.[Name]
               ,CL.[Code]
-              ,CL.[Description]
 			  ,CL.NumericValue
 			  ,CL.ValueTitle
 	          ,A.[Name] ActiveStatus
@@ -66,6 +65,7 @@ WHERE CL.ActiveStatusId <> 3
 
 select 
 CLG.Id,
+CC.Description,
 CLG.ConsequenceCategoryId,
 CC.Name ConsequenceCategoryName
 FROM [RiskManagement].[ConsequenceLevel] CL

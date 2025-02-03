@@ -23,7 +23,6 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         Code = arg.Code;
         ValueTitle = arg.ValueTitle;
         NumericValue = arg.NumericValue;
-        Description = arg.Description;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -39,7 +38,6 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         Name = arg.Name;
         Code = arg.Code;
         ValueTitle = arg.ValueTitle;
-        Description = arg.Description;
         NumericValue = arg.NumericValue;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -50,7 +48,6 @@ public class ConsequenceLevel : Entity, IAggregateRoot
     public string? Code { get; private set; }
     public float NumericValue { get; private set; }
     public string? ValueTitle { get; private set; }
-    public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
