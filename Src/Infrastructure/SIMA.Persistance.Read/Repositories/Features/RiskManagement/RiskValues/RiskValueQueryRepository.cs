@@ -22,14 +22,14 @@ SELECT   RV.[Id]
 		,RV.[Code]
 		,RV.[Condition]
 		,RV.StrategyId
-		,(Select BCS.Title from BCP.BusinessContinuityStrategy BCS where BCS.Id = BCPS.BusinessContinuityStratgyId and BCS.ActiveStatusId<>3) StrategyName
+		,BCS.Title StrategyName
 		,RV.NumericValue
 		,RV.Color
 		,A.[Name] ActiveStatus
 		,RV.CreatedAt
 FROM [RiskManagement].[RiskValue] RV
 INNER JOIN [Basic].[ActiveStatus] A ON RV.ActiveStatusId = A.ID
-INNER JOIN BCP.BusinessContinuityPlanStratgy BCPS on BCPS.Id = RV.StrategyId and BCPS.ActiveStatusId<>3
+INNER JOIN BCP.BusinessContinuityStrategy BCS on BCS.Id = RV.StrategyId and BCS.ActiveStatusId<>3
 WHERE RV.ActiveStatusId <> 3
 ";
     }
