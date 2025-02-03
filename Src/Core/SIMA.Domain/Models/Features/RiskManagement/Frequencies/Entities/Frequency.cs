@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Args;
+﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
@@ -87,4 +88,6 @@ public class Frequency : Entity, IAggregateRoot
     }
     private List<Risk> _risks = new();
     public ICollection<Risk> Risks => _risks;
+    private List<CurrentOccurrenceProbability> _currentOccurrenceProbabilities = new();
+    public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;
 }

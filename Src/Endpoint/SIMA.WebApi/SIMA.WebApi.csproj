@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
-	<InformationalVersion>4.5.7</InformationalVersion>
+	<InformationalVersion>4.6.9</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -113,6 +113,10 @@
     <Compile Include="Controllers\Features\RiskManagers\CobitCategories\V1\CobitCategoriesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitScenarios\V1\CobitScenariosController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitScenarios\V1\CobitScenariosQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelCobits\V1\RiskLevelCobitsController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelCobits\V1\RiskLevelCobitsQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\MatrixAs\V1\MatrixAsController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\MatrixAs\V1\MatrixAsQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\RiskValues\V1\RiskValuesController.cs" />

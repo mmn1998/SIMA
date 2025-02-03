@@ -26,7 +26,7 @@ public class RiskRepository : Repository<Risk>, IRiskRepository
             .Include(x => x.ServiceRisks)
                 .ThenInclude(x => x.ServiceRiskImpacts)
             .Include(x => x.Threats)
-            .Include(x=>x.RiskRelatedIssues)
+            .Include(x => x.RiskRelatedIssues)
             .FirstOrDefaultAsync(x => x.Id == id) ?? throw SimaResultException.NotFound;
 
     }

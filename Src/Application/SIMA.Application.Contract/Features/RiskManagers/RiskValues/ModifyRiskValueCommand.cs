@@ -11,4 +11,5 @@ public class ModifyRiskValueCommand : ICommand<Result<long>>
     public string Color { get; set; }
     public string Condition { get; set; }
     public float NumericValue { get; set; }
+    public long StrategyId { get; set; }
 }

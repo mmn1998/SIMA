@@ -20,7 +20,6 @@ public class ConsequenceCategoryQueryRepository : IConsequenceCategoryQueryRepos
 SELECT CC.[Id]
               ,CC.[Name]
               ,CC.[Code]
-              ,CC.[Description]
 	          ,A.[Name] ActiveStatus
               ,CC.CreatedAt
           FROM [RiskManagement].[ConsequenceCategory] CC

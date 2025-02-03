@@ -91,6 +91,4 @@ public class MatrixAValue : Entity, IAggregateRoot
     public ICollection<MatrixA> MatrixAs => _matrixAs;
     private List<InherentOccurrenceProbability> _inherentOccurrenceProbabilities = new();
     public ICollection<InherentOccurrenceProbability> InherentOccurrenceProbabilities => _inherentOccurrenceProbabilities;
-    private List<CurrentOccurrenceProbability> _currentOccurrenceProbabilities = new();
-    public ICollection<CurrentOccurrenceProbability> CurrentOccurrenceProbabilities => _currentOccurrenceProbabilities;
 }

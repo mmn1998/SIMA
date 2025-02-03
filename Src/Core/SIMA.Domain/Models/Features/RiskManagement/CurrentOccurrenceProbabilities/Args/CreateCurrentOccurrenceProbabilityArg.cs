@@ -6,8 +6,8 @@ public class CreateCurrentOccurrenceProbabilityArg
     public string? Code { get; set; }
     public long ActiveStatusId { get; set; }
     public long InherentOccurrenceProbabilityValueId { get; set; }
-    public long MatrixAValueId { get; set; }
-    public long ScenarioHistoryId { get; set; }
+    public long CurrentOccurrenceProbabilityValueId { get; set; }
+    public long FrequencyId { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
 }

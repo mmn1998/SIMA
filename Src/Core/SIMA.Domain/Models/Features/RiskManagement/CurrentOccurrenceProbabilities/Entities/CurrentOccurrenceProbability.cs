@@ -1,6 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Args;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities;
@@ -26,8 +30,8 @@ public class CurrentOccurrenceProbability : Entity, IAggregateRoot
         Id = new(arg.Id);
         Code = arg.Code;
         InherentOccurrenceProbabilityValueId = new(arg.InherentOccurrenceProbabilityValueId);
-        MatrixAValueId = new(arg.MatrixAValueId);
-        ScenarioHistoryId = new(arg.ScenarioHistoryId);
+        FrequencyId = new(arg.FrequencyId);
+        CurrentOccurrenceProbabilityValueId = new(arg.CurrentOccurrenceProbabilityValueId);
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
@@ -42,18 +46,18 @@ public class CurrentOccurrenceProbability : Entity, IAggregateRoot
         await ModifyGuard(arg, service);
         Code = arg.Code;
         InherentOccurrenceProbabilityValueId = new(arg.InherentOccurrenceProbabilityValueId);
-        MatrixAValueId = new(arg.MatrixAValueId);
-        ScenarioHistoryId = new(arg.ScenarioHistoryId);
+        FrequencyId = new(arg.FrequencyId);
+        CurrentOccurrenceProbabilityValueId = new(arg.CurrentOccurrenceProbabilityValueId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
     }
     public CurrentOccurrenceProbabilityId Id { get; private set; }
     public string? Code { get; private set; }
-    public MatrixAValueId MatrixAValueId { get; private set; }
-    public virtual MatrixAValue MatrixAValue { get; private set; }
-    public ScenarioHistoryId ScenarioHistoryId { get; private set; }
-    public virtual ScenarioHistory ScenarioHistory { get; private set; }
+    public CurrentOccurrenceProbabilityValueId CurrentOccurrenceProbabilityValueId { get; private set; }
+    public virtual CurrentOccurrenceProbabilityValue CurrentOccurrenceProbabilityValue { get; private set; }
+    public FrequencyId FrequencyId { get; private set; }
+    public virtual Frequency Frequency { get; private set; }
     public InherentOccurrenceProbabilityValueId InherentOccurrenceProbabilityValueId { get; private set; }
     public virtual InherentOccurrenceProbabilityValue InherentOccurrenceProbabilityValue { get; private set; }
     public long ActiveStatusId { get; private set; }

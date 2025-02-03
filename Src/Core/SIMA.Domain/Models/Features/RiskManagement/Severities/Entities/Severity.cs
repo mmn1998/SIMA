@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Args;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.ValueObjects;
@@ -83,4 +84,6 @@ public class Severity : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<RiskLevelCobit> _riskLevelCobits = new();
+    public ICollection<RiskLevelCobit> RiskLevelCobits => _riskLevelCobits;
 }

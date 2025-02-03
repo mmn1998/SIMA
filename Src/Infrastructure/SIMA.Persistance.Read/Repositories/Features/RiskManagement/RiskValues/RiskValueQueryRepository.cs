@@ -17,17 +17,20 @@ public class RiskValueQueryRepository : IRiskValueQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
         _mainQuery = @"
-SELECT AH.[Id]
-              ,AH.[Name]
-              ,AH.[Code]
-              ,AH.[Condition]
-			  ,AH.NumericValue
-			  ,AH.Color
-	          ,A.[Name] ActiveStatus
-              ,AH.CreatedAt
-          FROM [RiskManagement].[RiskValue] AH
-          INNER JOIN [Basic].[ActiveStatus] A ON AH.ActiveStatusId = A.ID
-WHERE AH.ActiveStatusId <> 3
+SELECT   RV.[Id]
+		,RV.[Name]
+		,RV.[Code]
+		,RV.[Condition]
+		,RV.StrategyId
+		,(Select BCS.Title from BCP.BusinessContinuityStrategy BCS where BCS.Id = BCPS.BusinessContinuityStratgyId and BCS.ActiveStatusId<>3) StrategyName
+		,RV.NumericValue
+		,RV.Color
+		,A.[Name] ActiveStatus
+		,RV.CreatedAt
+FROM [RiskManagement].[RiskValue] RV
+INNER JOIN [Basic].[ActiveStatus] A ON RV.ActiveStatusId = A.ID
+INNER JOIN BCP.BusinessContinuityPlanStratgy BCPS on BCPS.Id = RV.StrategyId and BCPS.ActiveStatusId<>3
+WHERE RV.ActiveStatusId <> 3
 ";
     }
 
@@ -62,7 +65,7 @@ WHERE AH.ActiveStatusId <> 3
     public async Task<GetRiskValueQueryResult> GetById(GetRiskValueQuery request)
     {
         var query = $@"
-          {_mainQuery} AND AH.Id = @Id
+          {_mainQuery} AND RV.Id = @Id
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();

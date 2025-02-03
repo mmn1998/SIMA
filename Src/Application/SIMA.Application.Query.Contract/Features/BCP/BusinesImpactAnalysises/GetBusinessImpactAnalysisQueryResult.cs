@@ -69,6 +69,7 @@ public class GetBusinessImpactAnalysisDisasterOriginQueryResult
 {
     public long Id { get; set; }
     public long OriginId { get; set; }
+    public string? OriginName { get; set; }
     public string? HappeningPossibilityName { get; set; }
     public long ConsequenceId { get; set; }
     public string? ConsequenceName { get; set; }

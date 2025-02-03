@@ -23,6 +23,9 @@ public class CobitScenarioConfiguration : IEntityTypeConfiguration<CobitScenario
             .IsRowVersion()
             .IsConcurrencyToken();
 
+        entity.Property(x => x.Name).HasMaxLength(200);
+        entity.Property(x => x.CobitIdentifier).HasMaxLength(20).IsUnicode(false);
+
         entity.Property(x => x.CobitScenarioCategoryId)
             .HasConversion(x => x.Value,
             x => new(x));

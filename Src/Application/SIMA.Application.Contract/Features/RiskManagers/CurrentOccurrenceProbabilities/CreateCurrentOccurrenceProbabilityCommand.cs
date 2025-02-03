@@ -6,7 +6,7 @@ namespace SIMA.Application.Contract.Features.RiskManagers.CurrentOccurrenceProba
 public class CreateCurrentOccurrenceProbabilityCommand : ICommand<Result<long>>
 {
     public string Code { get; set; }
-    public long MatrixAValueId { get; set; }
+    public long CurrentOccurrenceProbabilityValueId { get; set; }
     public long InherentOccurrenceProbabilityValueId { get; set; }
-    public long ScenarioHistoryId { get; set; }
+    public long FrequencyId { get; set; }
 }

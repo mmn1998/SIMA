@@ -43,7 +43,14 @@ public class Risk : Entity
         Code = arg.Code;
         Name = arg.Name;
         Description = arg.Description;
+        IsNeedCobit = arg.IsNeedCobit;
         RiskTypeId = new(arg.RiskTypeId);
+        FrequencyId = new(arg.FrequencyId);
+        TriggerStatusId = new(arg.TriggerStatusId);
+        ScenarioHistoryId = new(arg.ScenarioHistoryId);
+        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
+        UseVulnerabilityId = new(arg.UseVulnerabilityId);
+        AffectedHistoryId = new(arg.AffectedHistoryId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -60,7 +67,14 @@ public class Risk : Entity
         Code = arg.Code;
         Name = arg.Name;
         Description = arg.Description;
-        RiskTypeId = new RiskTypeId(arg.RiskTypeId);
+        IsNeedCobit = arg.IsNeedCobit;
+        RiskTypeId = new(arg.RiskTypeId);
+        FrequencyId = new(arg.FrequencyId);
+        TriggerStatusId = new(arg.TriggerStatusId);
+        ScenarioHistoryId = new(arg.ScenarioHistoryId);
+        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
+        UseVulnerabilityId = new(arg.UseVulnerabilityId);
+        AffectedHistoryId = new(arg.AffectedHistoryId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -397,6 +411,7 @@ public class Risk : Entity
     public string Name { get; private set; }
     public string Code { get; private set; }
     public string Description { get; private set; }
+    public string? IsNeedCobit { get; private set; }
     public RiskTypeId RiskTypeId { get; private set; }
     public virtual RiskType RiskType { get; private set; }
     public AffectedHistoryId? AffectedHistoryId { get; private set; }
