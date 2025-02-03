@@ -128,6 +128,7 @@ using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServicePriorities.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.Services.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceStatuses.Mapper;
+using SIMA.Application.Feaatures.ServiceCatalog.ServiceTypes.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.UserTypes.Mappers;
 using SIMA.Application.Feaatures.TrustyDrafts.AgentBankWageShareStatuses.Mappers;
 using SIMA.Application.Feaatures.TrustyDrafts.BrokerInquiryStatuses.Mapper;
@@ -303,6 +304,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ApiAuthenticationMethodMapper());
                 conf.AddProfile(new ServiceStatusMapper());
                 conf.AddProfile(new ApiTypeMapper());
+                conf.AddProfile(new ServiceTypeMapper());
                 conf.AddProfile(new ChannelMapper());
                 conf.AddProfile(new ServiceMapper());
                 conf.AddProfile(new ProductMapper());

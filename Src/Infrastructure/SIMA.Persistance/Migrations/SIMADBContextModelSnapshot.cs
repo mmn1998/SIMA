@@ -14082,6 +14082,50 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ServiceStatus", "ServiceCatalog");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities.ServiceType", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint")
+                        .HasColumnName("Id");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("ServiceType", "ServiceCatalog");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.PreRequisiteServices", b =>
                 {
                     b.Property<long>("Id")
@@ -14189,6 +14233,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ServiceStatusId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("ServiceTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("ServiceWorkflowBpmn")
                         .HasColumnType("nvarchar(max)");
 
@@ -14220,6 +14267,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("ServicePriorityId");
 
                     b.HasIndex("ServiceStatusId");
+
+                    b.HasIndex("ServiceTypeId");
 
                     b.HasIndex("StaffId");
 
@@ -21845,6 +21894,10 @@ namespace SIMA.Persistance.Migrations
                         .WithMany("Services")
                         .HasForeignKey("ServiceStatusId");
 
+                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities.ServiceType", "ServiceType")
+                        .WithMany("Services")
+                        .HasForeignKey("ServiceTypeId");
+
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", null)
                         .WithMany("ServiceTBusinessResponsibles")
                         .HasForeignKey("StaffId");
@@ -21872,6 +21925,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ServicePriority");
 
                     b.Navigation("ServiceStatus");
+
+                    b.Navigation("ServiceType");
 
                     b.Navigation("TechnicalSupervisorDepartment");
                 });
@@ -24442,6 +24497,11 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("Products");
 
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities.ServiceType", b =>
+                {
                     b.Navigation("Services");
                 });
 

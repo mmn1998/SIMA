@@ -1,10 +1,9 @@
 ﻿using SIMA.Framework.Common.Response;
 using Sima.Framework.Core.Mediator;
 
-namespace SIMA.Application.Contract.Features.ServiceCatalog.ApiTypes
+namespace SIMA.Application.Contract.Features.ServiceCatalog.ApiTypes;
+
+public class DeleteApiTypeCommand : ICommand<Result<long>>
 {
-    public class DeleteApiTypeCommand : ICommand<Result<long>>
-    {
-        public long Id { get; set; }
-    }
+    public long Id { get; set; }
 }

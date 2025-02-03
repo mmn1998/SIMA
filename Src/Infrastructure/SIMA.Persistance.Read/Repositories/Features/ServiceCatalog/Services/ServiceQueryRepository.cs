@@ -61,6 +61,8 @@ SELECT S.[Id]
 	  ,i.DueDate
       ,i.Weight IssueWeight
       ,(p.FirstName + ' ' + p.LastName) CreatedBy
+	  ,ST2.Id ServiceTypeId
+	  ,ST2.Name ServiceTypeName
   FROM [ServiceCatalog].[Service] S
   Inner join ServiceCatalog.ServiceRelatedIssue SRI on SRI.ServiceId = s.Id and SRI.ActiveStatusId<>3
   inner join IssueManagement.Issue I on I.Id = SRI.IssueId and I.MainAggregateId = 1 And i.ActiveStatusId<>3
@@ -78,7 +80,7 @@ SELECT S.[Id]
   left join Project.Project project on project.Id = W.ProjectID
   left join [IssueManagement].[IssueType] IT on  IT.Id=I.IssueTypeId 
   left join [IssueManagement].[IssuePriority] IPP on  IPP.Id=I.IssuePriorityId 
-
+  left join ServiceCatalog.ServiceType ST2 on ST2.Id = S.ServiceTypeId and ST2.ActiveStatusId<>3 
   where s.ActiveStatusId<>3
 ";
 
@@ -125,44 +127,48 @@ SELECT S.[Id]
             var response = new GetServiceQueryResult();
             string query = @"
                         SELECT S.[Id]
-                              ,S.[Name]
-                              ,S.[Code]
-                              ,S.[ServiceCategoryId]
-	                          ,SC.Name ServiceCategoryName
-	                          ,SC.Code ServiceCategoryCode
-	                          ,SC.ParentId ServiceCategoryParentId
-                              ,S.[IsCriticalService]
-                              ,S.[Description]
-                              ,S.[ServiceStatusId]
-	                          ,S.ServiceWorkflowBpmn WorkflowFileContent
-                              ,S.[FeedbackUrl]
-                              ,S.[ActiveStatusId]
-                              ,S.[CreatedAt]
-                              ,S.[IsInternalService]
-                              ,S.[ServiceCost]
-                              ,A.[Name] ActiveStatus
-	                          ,C.Name CompanyName
-	                          ,C.Id CompanyId
-                              ,S.[TechnicalSupervisorDepartmentId]
-	                          ,d.Name TechnicalSupervisorDepartmentName
-	                          ,d.Code TechnicalSupervisorDepartmentCode
-	                          ,s.IsInternalService
-	                          ,ss.Name ServiceStatusName
-	                          ,sp.Name ServicePriorityName
-	                          ,sp.Id ServicePriorityId
-	                          ,(p.FirstName + ' ' + P.LastName) CreatedBy
-                          FROM [ServiceCatalog].[Service] S
-                          Inner join Basic.ActiveStatus A on A.ID = S.ActiveStatusId
-                          inner join IssueManagement.Issue I on I.SourceId = S.Id and i.ActiveStatusId<>3
-                          inner join Project.WorkFlow W on w.Id = i.CurrentWorkflowId and w.ActiveStatusID<>3
-                          INNER JOIN Authentication.Users U on S.CreatedBy = U.Id and U.ActiveStatusId<>3
-                          INNER JOIN Authentication.Profile P on P.Id = U.ProfileID and P.ActiveStatusId<>3
-                          left join ServiceCatalog.ServiceCategory SC on SC.Id = S.ServiceCategoryId and SC.ActiveStatusID<>3
-                          left join Organization.Department D on d.Id =s.TechnicalSupervisorDepartmentId and d.ActiveStatusId<>3
-                          left join Organization.Company C on D.CompanyId = C.Id  and C.ActiveStatusId<>3
-                          left join ServiceCatalog.ServiceStatus SS on SS.Id =s.ServiceStatusId and ss.ActiveStatusId<>3
-                          left join ServiceCatalog.ServicePriority SP on sp.Id =s.ServicePriorityId and sp.ActiveStatusId<>3
-                          where s.Id = @Id and s.ActiveStatusId<>3;
+      ,S.[Name]
+      ,S.[Code]
+      ,S.[ServiceCategoryId]
+      ,SC.Name ServiceCategoryName
+      ,SC.Code ServiceCategoryCode
+      ,SC.ParentId ServiceCategoryParentId
+      ,S.[IsCriticalService]
+      ,S.[Description]
+      ,S.[ServiceStatusId]
+      ,S.ServiceWorkflowBpmn WorkflowFileContent
+      ,S.[FeedbackUrl]
+      ,S.[ActiveStatusId]
+      ,S.[CreatedAt]
+      ,S.[IsInternalService]
+      ,S.[ServiceCost]
+      ,A.[Name] ActiveStatus
+      ,C.Name CompanyName
+      ,C.Id CompanyId
+      ,S.[TechnicalSupervisorDepartmentId]
+      ,d.Name TechnicalSupervisorDepartmentName
+      ,d.Code TechnicalSupervisorDepartmentCode
+      ,s.IsInternalService
+      ,ss.Name ServiceStatusName
+      ,sp.Name ServicePriorityName
+      ,sp.Id ServicePriorityId
+      ,(p.FirstName + ' ' + P.LastName) CreatedBy
+	  ,ST2.Id ServiceTypeId
+	  ,ST2.Name ServiceTypeName
+  FROM [ServiceCatalog].[Service] S
+  Inner join Basic.ActiveStatus A on A.ID = S.ActiveStatusId
+  inner join IssueManagement.Issue I on I.SourceId = S.Id and i.ActiveStatusId<>3
+  inner join Project.WorkFlow W on w.Id = i.CurrentWorkflowId and w.ActiveStatusID<>3
+  INNER JOIN Authentication.Users U on S.CreatedBy = U.Id and U.ActiveStatusId<>3
+  INNER JOIN Authentication.Profile P on P.Id = U.ProfileID and P.ActiveStatusId<>3
+  left join ServiceCatalog.ServiceCategory SC on SC.Id = S.ServiceCategoryId and SC.ActiveStatusID<>3
+  left join Organization.Department D on d.Id =s.TechnicalSupervisorDepartmentId and d.ActiveStatusId<>3
+  left join Organization.Company C on D.CompanyId = C.Id  and C.ActiveStatusId<>3
+  left join ServiceCatalog.ServiceStatus SS on SS.Id =s.ServiceStatusId and ss.ActiveStatusId<>3
+  left join ServiceCatalog.ServicePriority SP on sp.Id =s.ServicePriorityId and sp.ActiveStatusId<>3
+  left join ServiceCatalog.ServiceType ST2 on ST2.Id = S.ServiceTypeId and ST2.ActiveStatusId<>3
+  where s.Id = @Id and s.ActiveStatusId<>3;
+	  
 
                         ------------ customerTypes
                             SELECT 

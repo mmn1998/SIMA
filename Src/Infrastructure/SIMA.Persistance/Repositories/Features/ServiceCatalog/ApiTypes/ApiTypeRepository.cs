@@ -7,11 +7,11 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Infrastructure.Data;
 using SIMA.Persistance.Persistence;
 
-namespace SIMA.Persistance.Repositories.Features.ServiceCatalog.ApiTypes
+namespace SIMA.Persistance.Repositories.Features.ServiceCatalog.ApiTypes;
+
+public class ApiTypeRepository : Repository<ApiType>, IApiTypeRepository
 {
-    public class ApiTypeRepository :Repository<ApiType>, IApiTypeRepository
-    {
-        private readonly SIMADBContext _context;
+    private readonly SIMADBContext _context;
 
     public ApiTypeRepository(SIMADBContext context) : base(context)
     {
@@ -24,5 +24,4 @@ namespace SIMA.Persistance.Repositories.Features.ServiceCatalog.ApiTypes
         entity.NullCheck();
         return entity ?? throw SimaResultException.NotFound;
     }
-}
 }

@@ -11,6 +11,8 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Contracts;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Events;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -34,6 +36,7 @@ public class Service : Entity, IAggregateRoot
         Name = arg.Name;
         Code = arg.Code;
         ServiceCost = arg.ServiceCost;
+        ServiceTypeId = new(arg.ServiceTypeId);
         Description = arg.Description;
         ServiceWorkflowBpmn = arg.ServiceWorkflowBpmn;
         ContinuousImprovement = arg.ContinuousImprovement;
@@ -74,6 +77,7 @@ public class Service : Entity, IAggregateRoot
         ModifiedBy = arg.ModifiedBy;
         IsInternalService = arg.IsInternalService;
         IsCriticalService = arg.IsCriticalService;
+        ServiceTypeId = new(arg.ServiceTypeId);
         //AddDomainEvent(new ModifyServiceEvent(issueId: _serviceRelatedIssues.First().IssueId.Value, mainAggregateType: MainAggregateEnums.CatalogService,
         //    name: arg.Name, sourceId: arg.Id, issuePriorityId: arg.IssuePriorityId, issueWeightCategoryId: arg.IssueWeightCategoryId));
     }
@@ -569,6 +573,10 @@ public class Service : Entity, IAggregateRoot
 
     public virtual ServiceStatus? ServiceStatus { get; private set; }
     public ServiceStatusId? ServiceStatusId { get; private set; }
+
+    public virtual ServiceType? ServiceType { get; private set; }
+    public ServiceTypeId? ServiceTypeId { get; private set; }
+
     public string? IsInternalService { get; private set; }
     public string? IsCriticalService { get; private set; }
 

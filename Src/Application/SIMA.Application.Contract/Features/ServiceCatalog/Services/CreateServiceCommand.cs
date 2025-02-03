@@ -14,6 +14,7 @@ public class CreateServiceCommand : ICommand<Result<long>>
     public string? Description { get; set; }
     public long? ServiceStatusId { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
+    public long ServiceTypeId { get; set; }
     public string? WorkflowFileContent { get; set; }
     public string? FeedbackUrl { get; set; }
     public List<long>? CustomerTypeList { get; set; }

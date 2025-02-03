@@ -174,6 +174,7 @@ using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
 
 #endregion
 
@@ -370,6 +371,7 @@ public class SIMADBContext : DbContext
     public DbSet<ServiceStatus> ServiceStatuses { get; set; }
     public DbSet<ApiAuthenticationMethod> ApiAuthenticationMethods { get; set; }
     public DbSet<ApiType> ApiTypes { get; set; }
+    public DbSet<ServiceType> ServiceTypes { get; set; }
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Service> Services { get; set; }
     #endregion

@@ -1,11 +1,10 @@
 ﻿using SIMA.Framework.Common.Response;
 using Sima.Framework.Core.Mediator;
 
-namespace SIMA.Application.Contract.Features.ServiceCatalog.ApiTypes
+namespace SIMA.Application.Contract.Features.ServiceCatalog.ApiTypes;
+
+public class CreateApiTypeCommand : ICommand<Result<long>>
 {
-    public class CreateApiTypeCommand : ICommand<Result<long>>
-    {
-        public string? Name { get; set; }
-        public string? Code { get; set; }
-    }
+    public string? Name { get; set; }
+    public string? Code { get; set; }
 }

@@ -55,5 +55,12 @@ public class ServiceConfiguration : IEntityTypeConfiguration<Service>
             .HasConversion(v => v.Value, v => new ServiceStatusId(v));
         entity.HasOne(d => d.ServiceStatus).WithMany(p => p.Services)
             .HasForeignKey(d => d.ServiceStatusId);
+
+        entity.Property(x => x.ServiceTypeId)
+            .HasConversion(v => v.Value, v => new(v));
+        entity.HasOne(d => d.ServiceType)
+            .WithMany(p => p.Services)
+            .HasForeignKey(d => d.ServiceTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

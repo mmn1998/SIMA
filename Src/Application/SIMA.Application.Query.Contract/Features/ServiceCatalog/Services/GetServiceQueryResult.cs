@@ -11,6 +11,8 @@ public class GetAllServicesQueryResult
     public string? IsInternalService { get; set; }
     public string? ServiceCategoryName { get; set; }
     public string? ServiceCategoryCode { get; set; }
+    public long? ServiceTypeId { get; set; }
+    public string? ServiceTypeName { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
     public string? TechnicalSupervisorDepartmentName { get; set; }
     public string? TechnicalSupervisorDepartmentCode { get; set; }
@@ -64,6 +66,8 @@ public class GetServiceQueryResult
     public string? Description { get; set; }
     public long? ServiceStatusId { get; set; }
     public string? ServiceStatusName { get; set; }
+    public long? ServiceTypeId { get; set; }
+    public string? ServiceTypeName { get; set; }
     public long? ServicePriorityId { get; set; }
     public string? ServicePriorityName { get; set; }
     public string? WorkflowFileContent { get; set; }
