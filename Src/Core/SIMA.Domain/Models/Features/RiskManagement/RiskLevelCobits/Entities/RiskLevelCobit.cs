@@ -1,8 +1,6 @@
 ﻿using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
