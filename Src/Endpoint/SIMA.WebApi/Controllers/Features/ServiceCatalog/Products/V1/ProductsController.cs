@@ -30,7 +30,9 @@ public class ProductsController :ControllerBase
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
+    /*
     [SimaAuthorize(Permissions.ProductsDelete)] 
+    */
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteProductCommand { Id = id };

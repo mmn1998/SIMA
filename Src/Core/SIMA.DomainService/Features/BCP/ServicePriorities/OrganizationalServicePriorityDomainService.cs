@@ -17,7 +17,7 @@ public class OrganizationalServicePriorityDomainService : IOrganizationalService
     {
         bool result = false;
         if (Id == null) result = !await _context.OrganizationalServicePriorities.AnyAsync(x => x.Code == code);
-        else result = !await _context.OrganizationalServicePriorities.AnyAsync(x => x.Code == code && x.Id != Id);
+        else result = !await _context.OrganizationalServicePriorities.AnyAsync(x => x.Code == code && x.Id != Id && x.ActiveStatusId != 3);
         return result;
     }
 }
