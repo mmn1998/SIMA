@@ -75,7 +75,6 @@ public class CobitScenario : Entity
     public long ActiveStatusId { get; private set; }
     public string Name { get; private set; }
     public string? Description { get; private set; }
-    public string CobitIdentifier { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }

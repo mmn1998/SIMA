@@ -9,7 +9,6 @@ public class ModifyCobitScenarioArg
     public string Name { get; set; }
     public string? Description { get; set; }
     public long ActiveStatusId { get; set; }
-    public string CobitIdentifier { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long ModifiedBy { get; set; }
 }
