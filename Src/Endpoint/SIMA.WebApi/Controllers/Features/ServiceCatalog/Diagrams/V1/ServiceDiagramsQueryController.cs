@@ -18,14 +18,14 @@ public class ServiceDiagramsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("getServiceTreeDiagram")]
-    //[SimaAuthorize(Permissions.getServiceTreeDiagram)]
+    [SimaAuthorize(Permissions.getServiceTreeDiagram)]
     public async Task<Result> GetServiceTreeDiagram([FromQuery] long? id = null, [FromQuery] int? type = null)
     {
         var query = new GetServiceTreeDiagramQuery { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     [HttpGet("getServiceNetworkDiagram")]
-    //[SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
     public async Task<Result> GetServiceNetworkDiagram([FromQuery] long? id = null, [FromQuery] int? type = null)
     {
         var query = new GetServiceNetworkDiagramQuery { Id = id, Type = type };

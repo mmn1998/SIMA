@@ -693,4 +693,11 @@
     <value>فرمت شناسه کوبیت اشتباه است.</value>
     <comment>400</comment>
   </data>
+  <data name="BeneficiaryNameNotValidError" xml:space="preserve">
+    <value>نام ذینفع باید لاتین باشد.</value>
+    <comment>400</comment>
+  </data>
+  <data name="BeneficiaryNameContainsSpaceMoreThanLimitError" xml:space="preserve">
+    <value> نام ذینفع باید بدون کاراکتر فاصله حداقل 6 کاراکتر باشد</value>
+  </data>
 </root>

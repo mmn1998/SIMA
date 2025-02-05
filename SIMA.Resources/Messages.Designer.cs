@@ -97,6 +97,24 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  نام ذینفع باید بدون کاراکتر فاصله حداقل 6 کاراکتر باشد.
+        /// </summary>
+        public static string BeneficiaryNameContainsSpaceMoreThanLimitError {
+            get {
+                return ResourceManager.GetString("BeneficiaryNameContainsSpaceMoreThanLimitError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to نام ذینفع باید لاتین باشد..
+        /// </summary>
+        public static string BeneficiaryNameNotValidError {
+            get {
+                return ResourceManager.GetString("BeneficiaryNameNotValidError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کد شعبه مورد نظر اشتباه است. لطفا با پشتیبانی تماس بگیرید.
         /// </summary>
         public static string BranchCodeError {

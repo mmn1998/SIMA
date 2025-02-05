@@ -9,6 +9,7 @@ using SIMA.Persistance.Persistence;
 using SIMA.Resources;
 using System;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace SIMA.DomainService.Features.TrustyDrafts.InquiryRequests;
 
@@ -86,6 +87,13 @@ where CT.Id = @Id
         await connection.OpenAsync();
         var response = await connection.QueryFirstOrDefaultAsync<string?>(query, new { Id = currencyTypeId }) ?? throw new SimaResultException(CodeMessges._400Code, Messages.WrongCurrencyTypeError);
         return response.Substring(0, 2);
+    }
+
+    public void CheckBeneficiaryName(string beneficiaryName)
+    {
+        var englishPattern = @"[A-Z/sa-z]";
+        if (!Regex.IsMatch(beneficiaryName, englishPattern))
+            throw new SimaResultException(CodeMessges._400Code, Messages.BeneficiaryNameNotValidError);
     }
 
     //public Task<bool> IsCodeUnique(string code, InquiryRequestId? id = null)

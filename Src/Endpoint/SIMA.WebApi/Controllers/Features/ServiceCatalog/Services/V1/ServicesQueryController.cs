@@ -20,7 +20,7 @@ public class ServicesQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.ServiceGet)]
+    [SimaAuthorize(Permissions.ServiceGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetServiceQuery { Id = id };

@@ -10,4 +10,5 @@ public interface IInquiryRequestDomainService : IDomainService
     Task<string?> GetLastRefrenceNumber();
     Task<string?> GetCustomerNumber(long customerId);
     Task<string?> GetCurrencySymbol(long currencyTypeId);
+    void CheckBeneficiaryName(string beneficiaryName);
 }

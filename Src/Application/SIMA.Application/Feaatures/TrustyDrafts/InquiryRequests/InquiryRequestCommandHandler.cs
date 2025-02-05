@@ -35,7 +35,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
     {
         var arg = _mapper.Map<CreateInquiryRequestArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        arg.ReferenceNumber = await CalculateRefrenceNumber(request.ProformaCurrencyTypeId, request.DraftOrderNumber, arg.BeneficiaryName);
+        arg.ReferenceNumber = await CalculateRefrenceNumber(request.ProformaCurrencyTypeId, request.DraftOrderNumber, arg.BeneficiaryName, _service);
         var entity = await InquiryRequest.Create(arg, _service);
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
@@ -82,7 +82,8 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-    private async Task<string> CalculateRefrenceNumber(/*long customerId*/long currencyTypeId, string? draftOrderNumber, string? beneficiaryName)
+    private async Task<string> CalculateRefrenceNumber(/*long customerId*/long currencyTypeId, string? draftOrderNumber,
+        string? beneficiaryName, IInquiryRequestDomainService service)
     {
         var value = string.Empty;
         #region Fisrt Approach
@@ -114,9 +115,12 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         var symbol = await _service.GetCurrencySymbol(currencyTypeId);
         if (string.IsNullOrEmpty(draftOrderNumber) || string.IsNullOrEmpty(beneficiaryName))
             throw new SimaResultException(CodeMessges._400Code, Messages.DraftOriginNumberAndBeneficiaryNameError);
+        _service.CheckBeneficiaryName(beneficiaryName);
         if (draftOrderNumber.Length < 8 || beneficiaryName.Length < 6)
             throw new SimaResultException(CodeMessges._400Code, Messages.DraftOriginNumberAndBeneficiaryNameError);
-        value = $"{draftOrderNumber.Substring(0, 8)}{symbol}{beneficiaryName.Substring(0, 6).ToUpper()}";
+        if (beneficiaryName.Length > 6 && beneficiaryName.Replace(" ", "").Length < 6)
+            throw new SimaResultException(CodeMessges._400Code, Messages.BeneficiaryNameContainsSpaceMoreThanLimitError);
+        value = $"{draftOrderNumber.Substring(0, 8)}{symbol}{beneficiaryName.Replace(" ", "").Substring(0, 6).ToUpper()}";
         #endregion
         return value;
     }

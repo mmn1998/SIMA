@@ -66,7 +66,7 @@ public class WorkflowsController : ControllerBase
         return result;
     }
 
-    [HttpDelete("DeleteStep/{id}/{workFlowId}")]
+    [HttpDelete("/DeleteStep/{id}/{workFlowId}")]
     [SimaAuthorize(Permissions.WorkFlowStepDelete)]
     public async Task<Result> Delete(long id, long workFlowId)
     {
