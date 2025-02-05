@@ -130,7 +130,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         _service.CheckBeneficiaryName(beneficiaryName);
         if (draftOrderNumber.Length < 8 || beneficiaryName.Length < 6)
             throw new SimaResultException(CodeMessges._400Code, Messages.DraftOriginNumberAndBeneficiaryNameError);
-        if (beneficiaryName.Length > 6 && beneficiaryName.Replace(" ", "").Length < 6)
+        if (beneficiaryName.Replace(" ", "").Length < 6)
             throw new SimaResultException(CodeMessges._400Code, Messages.BeneficiaryNameContainsSpaceMoreThanLimitError);
         value = $"{draftOrderNumber.Substring(0, 8)}{symbol}{beneficiaryName.Replace(" ", "").Substring(0, 6).ToUpper()}";
         #endregion

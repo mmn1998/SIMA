@@ -20,7 +20,7 @@ public class InquiryRequestController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    [SimaAuthorize(Permissions.InquiryRequestPost)]
+    //[SimaAuthorize(Permissions.InquiryRequestPost)]
     public async Task<Result> Post([FromBody] CreateInquiryRequestCommand command)
     {
         return await _mediator.Send(command);
