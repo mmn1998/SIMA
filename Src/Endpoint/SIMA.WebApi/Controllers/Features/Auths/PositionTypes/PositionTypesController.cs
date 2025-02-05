@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.Auths.PositionTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.Auths.PositionTypes;
 

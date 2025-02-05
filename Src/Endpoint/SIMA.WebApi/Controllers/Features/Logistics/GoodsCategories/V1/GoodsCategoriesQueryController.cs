@@ -34,6 +34,7 @@ public class GoodsCategoriesQueryController : ControllerBase
     }
 
     [HttpGet("GetByGoodsTypeId/{GoodsTypeId}")]
+    [SimaAuthorize(Permissions.GoodsCategoriesGetAll)]
     public async Task<Result> Get([FromRoute] GetAllGoodsCategoriesByGoodsType request)
     {
         var query = new GetAllGoodsCategoriesByGoodsType { GoodsTypeId = request.GoodsTypeId };

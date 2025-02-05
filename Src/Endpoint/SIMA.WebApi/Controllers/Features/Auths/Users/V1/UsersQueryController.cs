@@ -113,7 +113,7 @@ public class UsersQueryController : ControllerBase
     
 
     [HttpGet("GetUserAggregate/{userId}")]
-    [SimaAuthorize(Permissions.GetUserAggregate)]
+    [SimaAuthorize(Permissions.UserGetById)]
     public async Task<Result>? GetAggregate([FromRoute] long userId)
     {
         var query = new GetUserAggregateQuery { UserId = userId };

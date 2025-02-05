@@ -22,7 +22,7 @@ public class ProfilesQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    [SimaAuthorize(Permissions.ProfileGetAll)]
+    [SimaAuthorize(Permissions.ProfileGet)]
     public async Task<Result> Get(long id)
     {
         var query = new GetProfileQuery { Id = id };
@@ -31,7 +31,7 @@ public class ProfilesQueryController : ControllerBase
     }
 
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.ProfileGet)]
+    [SimaAuthorize(Permissions.ProfileGetAll)]
     public async Task<Result> Get(GetAllProfileQuery request)
     {
         var result = await _mediator.Send(request);
@@ -39,7 +39,7 @@ public class ProfilesQueryController : ControllerBase
     }
 
     [HttpGet("shortProfile")]
-    [SimaAuthorize(Permissions.UserGroupPut)]
+    [SimaAuthorize(Permissions.ShortProfileGet)]
     public async Task<Result> GetShortProfile()
     {
         var query = new GetAllShortProfileQuery();

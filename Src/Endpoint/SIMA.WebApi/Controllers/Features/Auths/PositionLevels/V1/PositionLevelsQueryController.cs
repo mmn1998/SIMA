@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Auths.PositionLevels;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.Auths.PositionLevels.V1;
 

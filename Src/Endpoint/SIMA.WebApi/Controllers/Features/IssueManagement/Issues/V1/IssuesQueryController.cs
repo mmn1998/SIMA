@@ -56,6 +56,7 @@ public class IssuesQueryController : ControllerBase
         return result;
     }
     [HttpGet("ComponentIssue/{issueId}/{sourceId}")]
+    [SimaAuthorize(Permissions.IssueGet)]
     public async Task<Result> ComponentIssue([FromRoute] long issueId, [FromRoute] long sourceId)
     {
         var query = new GetIssueComponentQuery { SourceId = sourceId, IssueId = issueId };
