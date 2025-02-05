@@ -16,7 +16,7 @@ public class InquiryRequestMapper : Profile
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.Description, act => act.MapFrom(source => source.RequestDescription))
-            //.ForMember(dest => dest.ProformaDate, act => act.MapFrom(source => source.ProformaDate.ToMiladiDate()))
+            .ForMember(dest => dest.ProformaDate, act => act.Ignore())
             .ForMember(dest => dest.DraftOrderDate, act => act.MapFrom(source => source.DraftOrderDate.ToMiladiDate()))
             ;
         CreateMap<CreateInquiryRequestDocumentCommand, CreateInquiryRequestDocumentArg>()
