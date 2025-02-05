@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Sima.Framework.Core.Repository;
 using SIMA.Application.Contract.Features.TrustyDrafts.InquiryRequests;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.ValueObjects;
@@ -37,6 +38,17 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         arg.CreatedBy = _simaIdentity.UserId;
         arg.ReferenceNumber = await CalculateRefrenceNumber(request.ProformaCurrencyTypeId, request.DraftOrderNumber, arg.BeneficiaryName, _service);
         var entity = await InquiryRequest.Create(arg, _service);
+        if (!string.IsNullOrEmpty(request.ProformaDate))
+        {
+            if (DateTime.TryParse(request.ProformaDate, out DateTime date))
+            {
+                arg.ProformaDate = date;
+            }
+            else
+            {
+                throw SimaResultException.PersianDateException;
+            }
+        }
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
             var docArgs = _mapper.Map<List<CreateInquiryRequestDocumentArg>>(request.InquiryRequestDocuments);
