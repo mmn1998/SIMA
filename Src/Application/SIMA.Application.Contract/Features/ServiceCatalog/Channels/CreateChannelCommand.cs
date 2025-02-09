@@ -21,6 +21,8 @@ public class CreateChannelResponsibleCommand
 {
     public long ResponsibleTypeId { get; set; }
     public long ResponsibleId { get; set; }
+    public long DepartmentId { get; set; }
+    public long branchId { get; set; }
 }
 public class CreateChannelAccessPointCommand
 {

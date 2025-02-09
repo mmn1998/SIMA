@@ -7,13 +7,13 @@ public class ModifyServiceCommand : ICommand<Result<long>>
 {
     public long Id { get; set; }
     public string? Name { get; set; }
-    public string? Code { get; set; }
     public long ServiceCategoryId { get; set; }
     public long ServicePriorityId { get; set; }
     public string? IsCriticalService { get; set; }
     public decimal? ServiceCost { get; set; }
     public string? IsInternalService { get; set; }
     public string? Description { get; set; }
+    public string? InServiceDate { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
     public long ServiceTypeId { get; set; }
     public string? WorkflowFileContent { get; set; }
