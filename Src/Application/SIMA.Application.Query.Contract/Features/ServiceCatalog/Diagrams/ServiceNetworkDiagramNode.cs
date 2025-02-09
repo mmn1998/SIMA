@@ -2,10 +2,8 @@
 
 public class ServiceNetworkDiagramNode
 {
-    public string? Id { get; set; }
-    public string? Name { get; set; }
-    public string? Type { get; set; }
-    public long RecordId { get; set; }
-    public long Size { get; set; }
-    public string? Color { get; set; }
+    public string? Key { get; set; }
+    public string? Label { get; set; }
+    public string? Tag { get; set; }
+    public long Score { get; set; }
 }
