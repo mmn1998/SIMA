@@ -11,6 +11,7 @@ public class CreateServiceCommand : ICommand<Result<long>>
     public string? IsCriticalService { get; set; }
     public decimal? ServiceCost { get; set; }
     public string? IsInternalService { get; set; }
+    public string? InServiceDate { get; set; }
     public string? Description { get; set; }
     public long? ServiceStatusId { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
