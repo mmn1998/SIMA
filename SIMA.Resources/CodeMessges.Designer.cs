@@ -529,15 +529,6 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 100111.
-        /// </summary>
-        public static string _100111Code {
-            get {
-                return ResourceManager.GetString("100111Code", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 100108.
         /// </summary>
         public static string _100108Code {
@@ -561,6 +552,24 @@ namespace SIMA.Resources {
         public static string _100110Code {
             get {
                 return ResourceManager.GetString("100110Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100111.
+        /// </summary>
+        public static string _100111Code {
+            get {
+                return ResourceManager.GetString("100111Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100112.
+        /// </summary>
+        public static string _100112Code {
+            get {
+                return ResourceManager.GetString("100112Code", resourceCulture);
             }
         }
         

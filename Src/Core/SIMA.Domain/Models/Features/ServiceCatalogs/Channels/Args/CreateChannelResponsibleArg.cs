@@ -5,6 +5,8 @@ public class CreateChannelResponsibleArg
     public long ChannelId { get; set; }
     public long ResponsibleTypeId { get; set; }
     public long ResponsibleId { get; set; }
+    public long? BranchId { get; set; }
+    public long? DepartmentId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }

@@ -37,6 +37,23 @@ public class ServiceAssignedStaffConfiguration : IEntityTypeConfiguration<Servic
         entity.HasOne(d => d.ResponsibleType).WithMany(p => p.ServiceAssignedStaffs)
                 .HasForeignKey(d => d.ResponsibleTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.DepartmentId)
+        .HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Department)
+            .WithMany(x => x.ServiceAssignedStaffs)
+            .HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+        entity.Property(x => x.BranchId)
+        .HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Branch)
+            .WithMany(x => x.ServiceAssignedStaffs)
+            .HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
 

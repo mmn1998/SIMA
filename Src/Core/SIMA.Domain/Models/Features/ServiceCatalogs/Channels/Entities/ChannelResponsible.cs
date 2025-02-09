@@ -10,6 +10,10 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
 using SIMA.Framework.Core.Entities;
+using SIMA.Domain.Models.Features.Auths.Departments.Entities;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 
@@ -26,7 +30,8 @@ public class ChannelResponsible :Entity
         Id = new ChannelResponsibleId(arg.Id);
         ChannelId = new ChannelId(arg.ChannelId);
         ResponsibleId = new StaffId(arg.ResponsibleId);
-        ResponsibleTypeId = new ResponsibleTypeId(arg.ResponsibleTypeId);
+        ResponsibleTypeId = new ResponsibleTypeId(arg.ResponsibleTypeId); if (arg.DepartmentId.HasValue) DepartmentId = new(arg.DepartmentId.Value);
+        if (arg.BranchId.HasValue) BranchId = new(arg.BranchId.Value);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;  
@@ -57,6 +62,10 @@ public class ChannelResponsible :Entity
     public ResponsibleTypeId? ResponsibleTypeId { get; private set; }
     public virtual Staff Responsible { get; private set; }
     public StaffId ResponsibleId { get; private set; }
+    public virtual Department? Department { get; private set; }
+    public DepartmentId? DepartmentId { get; private set; }
+    public virtual Branch? Branch { get; private set; }
+    public BranchId? BranchId { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public long CreatedBy { get; private set; }

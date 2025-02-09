@@ -73,6 +73,7 @@ public class RiskLevelMeasure : Entity
 
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, 0)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsUnique(new(arg.RiskPossibilityId), new(arg.RiskLevelId), new(arg.RiskImpactId))) throw new SimaResultException(CodeMessges._100112Code, Messages.RiskPossibilityRiskLevelRiskImpactNotUniqueError);
     }
 
     private async Task ModifyGuard(ModifyRiskLevelMeasureArg arg, IRiskLevelMeasureDomainService service)
@@ -82,6 +83,7 @@ public class RiskLevelMeasure : Entity
 
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code, arg.Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsUnique(new(arg.RiskPossibilityId), new(arg.RiskLevelId), new(arg.RiskImpactId), Id)) throw new SimaResultException(CodeMessges._100112Code, Messages.RiskPossibilityRiskLevelRiskImpactNotUniqueError);
     }
     #endregion
 }

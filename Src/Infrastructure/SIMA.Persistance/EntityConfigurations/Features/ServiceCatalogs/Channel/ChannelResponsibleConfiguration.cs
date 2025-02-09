@@ -52,6 +52,23 @@ public class ChannelResponsibleConfiguration : IEntityTypeConfiguration<ChannelR
             .WithMany(x => x.ChannelResponsibles)
             .HasForeignKey(x => x.ResponsibleTypeId);
 
+        entity.Property(x => x.DepartmentId)
+.HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Department)
+            .WithMany(x => x.ChannelResponsibles)
+            .HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+        entity.Property(x => x.BranchId)
+        .HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Branch)
+            .WithMany(x => x.ChannelResponsibles)
+            .HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
         ;
     }
 }

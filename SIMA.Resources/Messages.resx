@@ -664,7 +664,7 @@
     <comment>400</comment>
   </data>
   <data name="OrderingNotUniqueError" xml:space="preserve">
-    <value>مقدار اولویت بندی وارد شده موجود میباشد لطفا مقدار دیگری انتخاب کنید.</value>
+    <value>مقدار اولویت بندی وارد شده  تکراری میباشد لطفا مقدار دیگری انتخاب کنید.</value>
     <comment>400</comment>
   </data>
   <data name="UrlError" xml:space="preserve">
@@ -699,5 +699,12 @@
   </data>
   <data name="BeneficiaryNameContainsSpaceMoreThanLimitError" xml:space="preserve">
     <value> نام ذینفع باید بدون کاراکتر فاصله حداقل 6 کاراکتر باشد</value>
+  </data>
+  <data name="RiskPossibilityRiskLevelRiskImpactNotUniqueError" xml:space="preserve">
+    <value>در فیلد ثبت معیار سطح بندی، ترکیب تاثیر و احتمال نمیتواند تکراری باشد</value>
+    <comment>400</comment>
+  </data>
+  <data name="OrderingIsDeactivteError" xml:space="preserve">
+    <value>مقدار مرتب سازی وارد شده غیر فعال میباشد.</value>
   </data>
 </root>

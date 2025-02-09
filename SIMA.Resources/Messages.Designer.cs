@@ -916,7 +916,16 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to مقدار اولویت بندی وارد شده موجود میباشد لطفا مقدار دیگری انتخاب کنید..
+        ///   Looks up a localized string similar to مقدار مرتب سازی وارد شده غیر فعال میباشد..
+        /// </summary>
+        public static string OrderingIsDeactivteError {
+            get {
+                return ResourceManager.GetString("OrderingIsDeactivteError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to مقدار اولویت بندی وارد شده  تکراری میباشد لطفا مقدار دیگری انتخاب کنید..
         /// </summary>
         public static string OrderingNotUniqueError {
             get {
@@ -1146,6 +1155,15 @@ namespace SIMA.Resources {
         public static string RiskPossibilityIdRiskImpactIdRiskDegreeIdUniqueError {
             get {
                 return ResourceManager.GetString("RiskPossibilityIdRiskImpactIdRiskDegreeIdUniqueError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to در فیلد ثبت معیار سطح بندی، ترکیب تاثیر و احتمال نمیتواند تکراری باشد.
+        /// </summary>
+        public static string RiskPossibilityRiskLevelRiskImpactNotUniqueError {
+            get {
+                return ResourceManager.GetString("RiskPossibilityRiskLevelRiskImpactNotUniqueError", resourceCulture);
             }
         }
         

@@ -7,6 +7,6 @@
         public string Code { get; set; }
         public int Ordering { get; set; }
         public long ActiveStatsId { get; set; }
-        public string ActiveStatusName { get; set; }
+        public string ActiveStatus { get; set; }
     }
 }

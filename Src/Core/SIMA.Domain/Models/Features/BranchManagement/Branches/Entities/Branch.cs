@@ -10,8 +10,11 @@ using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.Reconsilations.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -125,6 +128,14 @@ public class Branch : Entity
 
     private List<InquiryRequest> _inquiryRequests = new();
     public ICollection<InquiryRequest> InquiryRequests => _inquiryRequests;
+    private List<CriticalActivityAssignedStaff> _criticalActivityAssignedStaffs = new();
+    public ICollection<CriticalActivityAssignedStaff> CriticalActivityAssignedStaffs => _criticalActivityAssignedStaffs;
+    private List<ServiceAssignedStaff> _serviceAssignedStaffs = new();
+    public ICollection<ServiceAssignedStaff> ServiceAssignedStaffs => _serviceAssignedStaffs;
+    private List<ChannelResponsible> _channelResponsibles = new();
+    public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsibles;
+    private List<ProductResponsible> _productResponsibles = new();
+    public ICollection<ProductResponsible> ProductResponsibles => _productResponsibles;
 
     public void Delete(long userId)
     {

@@ -41,6 +41,22 @@ public class ProductResponsibleConfiguration : IEntityTypeConfiguration<ProductR
         entity.HasOne(it => it.ResponsibleType).WithMany(it => it.ProductResponsibles)
             .HasForeignKey(it => it.ResponsibleTypeId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+        entity.Property(x => x.DepartmentId)
+.HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Department)
+            .WithMany(x => x.ProductResponsibles)
+            .HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+        entity.Property(x => x.BranchId)
+        .HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Branch)
+            .WithMany(x => x.ProductResponsibles)
+            .HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
     }
 }

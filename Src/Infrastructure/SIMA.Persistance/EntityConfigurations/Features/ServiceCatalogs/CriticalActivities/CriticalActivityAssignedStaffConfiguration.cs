@@ -49,6 +49,22 @@ public class CriticalActivityAssignedStaffConfiguration : IEntityTypeConfigurati
         entity.HasOne(x => x.ResponsilbeType)
             .WithMany(x => x.CriticalActivityAssignedStaffs)
             .HasForeignKey(x => x.ResponsilbeTypeId);
+
+        entity.Property(x => x.DepartmentId)
+        .HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Department)
+            .WithMany(x => x.CriticalActivityAssignedStaffs)
+            .HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.BranchId)
+        .HasConversion(x => x.Value, x => new(x));
+
+        entity.HasOne(x => x.Branch)
+            .WithMany(x => x.CriticalActivityAssignedStaffs)
+            .HasForeignKey(x => x.BranchId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }
 public class CriticalActivityConfigurationItemConfiguration : IEntityTypeConfiguration<CriticalActivityConfigurationItem>

@@ -10,7 +10,9 @@ using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -117,6 +119,14 @@ public class Department : Entity
     public ICollection<CriticalActivity> CriticalActivities => _criticalActivities;
     private List<Api> _apis = new();
     public ICollection<Api> OwnerApis => _apis;
+    private List<CriticalActivityAssignedStaff> _criticalActivityAssignedStaffs = new();
+    public ICollection<CriticalActivityAssignedStaff> CriticalActivityAssignedStaffs => _criticalActivityAssignedStaffs;
+    private List<ServiceAssignedStaff> _serviceAssignedStaffs = new();
+    public ICollection<ServiceAssignedStaff> ServiceAssignedStaffs => _serviceAssignedStaffs;
+    private List<ChannelResponsible> _channelResponsibles = new();
+    public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsibles;
+    private List<ProductResponsible> _productResponsibles = new();
+    public ICollection<ProductResponsible> ProductResponsibles => _productResponsibles;
 
     public void Delete(long userId)
     {

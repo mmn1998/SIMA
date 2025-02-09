@@ -26,6 +26,7 @@ public class CriticalActivity : Entity, IAggregateRoot
         Name = arg.Name;
         Code = arg.Code;
         if (arg.TechnicalSupervisorDepartmentId.HasValue) TechnicalSupervisorDepartmentId = new(arg.TechnicalSupervisorDepartmentId.Value);
+        Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -43,6 +44,7 @@ public class CriticalActivity : Entity, IAggregateRoot
         await ModifyGuards(arg, service);
         Name = arg.Name;
         if (arg.TechnicalSupervisorDepartmentId.HasValue) TechnicalSupervisorDepartmentId = new(arg.TechnicalSupervisorDepartmentId.Value);
+        Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -321,6 +323,7 @@ public class CriticalActivity : Entity, IAggregateRoot
     public CriticalActivityId Id { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
+    public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public long CreatedBy { get; private set; }
