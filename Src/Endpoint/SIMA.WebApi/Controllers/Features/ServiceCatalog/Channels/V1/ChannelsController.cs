@@ -18,7 +18,7 @@ public class ChannelsController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    [SimaAuthorize(Permissions.ChannelPost)]
+    //[SimaAuthorize(Permissions.ChannelPost)]
     public async Task<Result> Post([FromBody] CreateChannelCommand command)
     {
         return await _mediator.Send(command);
