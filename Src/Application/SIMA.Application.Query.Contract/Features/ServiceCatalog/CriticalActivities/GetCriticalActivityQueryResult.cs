@@ -10,6 +10,7 @@ public class GetCriticalActivityQueryResult
     public string? TechnicalSupervisorDepartmentCode { get; set; }
     public string? CreatedBy { get; set; }
     public string? Description { get; set; }
+    public string? IssueDescription { get; set; }
     public IEnumerable<GetCriticalActivityRelatedServiceResult>? RelatedServiceList { get; set; }
     public IEnumerable<GetCriticalActivityAssetQueryResult>? AssetList { get; set; }
     public IEnumerable<GetCriticalActivityConfigurationItemQueryResult>? ConfigurationItemList { get; set; }

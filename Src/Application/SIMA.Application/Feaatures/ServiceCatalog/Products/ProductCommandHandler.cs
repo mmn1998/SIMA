@@ -15,18 +15,18 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
 
 {
     private readonly IProductRepository _repository;
-    private readonly IProductDomainService _productDomainService;
+    private readonly IProductDomainService _service;
     private readonly ISimaIdentity _simaIdentity;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public ProductCommandHandler(IProductRepository repository, IUnitOfWork unitOfWork, IMapper mapper,
-        IProductDomainService productDomainService, ISimaIdentity simaIdentity)
+        IProductDomainService service, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
-        _productDomainService = productDomainService;
+        _service = service;
         _simaIdentity = simaIdentity;
     }
 
@@ -34,7 +34,8 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
     {
         var arg = _mapper.Map<CreateProductArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await Product.Create(arg);
+        arg.Code = await CalculateCode();
+        var entity = await Product.Create(arg, _service);
         if (request.Channels is not null && request.Channels.Count > 0)
         {
             var channelArg = _mapper.Map<List<CreateProductChannelArg>>(request.Channels);
@@ -98,5 +99,15 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
-
+    private async Task<string> CalculateCode()
+    {
+        var counter = "001";
+        var code = await _service.GetLastCode();
+        if (!string.IsNullOrEmpty(code) && code.StartsWith("PR") && code.Length == 5)
+        {
+            var temp = code.Substring(2, 3);
+            counter = (Convert.ToInt32(temp) + 1).ToString("000");
+        }
+        return $"PR{counter}";
+    }
 }

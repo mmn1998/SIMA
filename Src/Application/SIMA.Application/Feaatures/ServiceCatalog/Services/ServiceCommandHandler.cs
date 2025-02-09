@@ -38,13 +38,10 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
         {
             var arg = _mapper.Map<CreateServiceArg>(request);
             var userId = _simaIdentity.UserId;
-            var lastRequest = await _repository.GetLastService();
+            //var lastRequest = await _repository.GetLastService();
             arg.CreatedBy = userId;
 
-            if (lastRequest is not null)
-                arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
-            else
-                arg.Code = "101";
+            arg.Code = await CalculateCode();
             var entity = await Service.Create(arg, _service);
             #region isFullTimeSercice
 
@@ -179,7 +176,6 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
     {
         var entity = await _repository.GetById(new(request.Id));
         var arg = _mapper.Map<ModifyServiceArg>(request);
-        arg.Code = entity.Code;
         await entity.Modify(arg, _service);
         var userId = _simaIdentity.UserId;
         #region isFullTimeSercice
@@ -330,5 +326,16 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             list.Add(item);
         }
         return list;
+    }
+    private async Task<string> CalculateCode()
+    {
+        var counter = "001";
+        var code = await _service.GetLastCode();
+        if (!string.IsNullOrEmpty(code) && code.StartsWith("SE") && code.Length == 5)
+        {
+            var temp = code.Substring(2, 3);
+            counter = (Convert.ToInt32(temp) + 1).ToString("000");
+        }
+        return $"SE{counter}";
     }
 }

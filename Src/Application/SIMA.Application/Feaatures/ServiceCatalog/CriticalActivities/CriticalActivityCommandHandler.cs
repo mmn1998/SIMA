@@ -34,12 +34,8 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
         var arg = _mapper.Map<CreateCriticalActivityArg>(request);
         var userId = _simaIdentity.UserId;
         arg.CreatedBy = userId;
-        var lastRequest = await _repository.GetLastCriticalActivity();
 
-        if (lastRequest is not null)
-            arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
-        else
-            arg.Code = "101";
+        arg.Code = await CalculateCode();
         var entity = await CriticalActivity.Create(arg, _service);
 
         #region IsFullTimeExecution
@@ -237,5 +233,16 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
             list.Add(item);
         }
         return list;
+    }
+    private async Task<string> CalculateCode()
+    {
+        var counter = "001";
+        var code = await _service.GetLastCode();
+        if (!string.IsNullOrEmpty(code) && code.StartsWith("CR") && code.Length == 5)
+        {
+            var temp = code.Substring(2, 3);
+            counter = (Convert.ToInt32(temp) + 1).ToString("000");
+        }
+        return $"CR{counter}";
     }
 }

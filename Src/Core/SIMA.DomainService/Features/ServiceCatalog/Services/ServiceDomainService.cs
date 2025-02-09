@@ -23,6 +23,12 @@ public class ServiceDomainService : IServiceDomainService
         if (!isMatch) throw new SimaResultException(CodeMessges._400Code, Messages.UrlError);
     }
 
+    public async Task<string?> GetLastCode()
+    {
+        var entity = await _context.Services.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+        return entity?.Code;
+    }
+
     public async Task<bool> IsCodeUnique(string code, ServiceId? Id = null)
     {
         bool result = false;

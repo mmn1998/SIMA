@@ -12,6 +12,13 @@ public class ChannelDomainService : IChannelDomainService
     {
         _context = context;
     }
+
+    public async Task<string?> GetLastCode()
+    {
+        var entity = await _context.Channels.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+        return entity?.Code;
+    }
+
     public async Task<bool> IsCodeUnique(string code, ChannelId? Id = null)
     {
         bool result = false;

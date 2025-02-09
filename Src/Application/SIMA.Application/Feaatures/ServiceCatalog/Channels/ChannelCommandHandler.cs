@@ -35,6 +35,7 @@ public class ChannelCommandHandler : ICommandHandler<CreateChannelCommand, Resul
         {
             var arg = _mapper.Map<CreateChannelArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
+            arg.Code = await CalculateCode();
             var entity = await Channel.Create(arg, _service);
             if (request.ChannelResponsibleList is not null)
             {
@@ -162,5 +163,16 @@ public class ChannelCommandHandler : ICommandHandler<CreateChannelCommand, Resul
         entity.Delete(_simaIdentity.UserId);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
+    }
+    private async Task<string> CalculateCode()
+    {
+        var counter = "001";
+        var code = await _service.GetLastCode();
+        if (!string.IsNullOrEmpty(code) && code.StartsWith("CH") && code.Length == 5)
+        {
+            var temp = code.Substring(2, 3);
+            counter = (Convert.ToInt32(temp) + 1).ToString("000");
+        }
+        return $"CH{counter}";
     }
 }

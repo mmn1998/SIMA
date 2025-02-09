@@ -1,20 +1,15 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Domains.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Roles.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
-using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Args;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Contracts;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Args.Modify;
-using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Interface;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
@@ -39,8 +34,9 @@ public class Product : Entity, IAggregateRoot
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static async Task<Product> Create(CreateProductArg arg)
+    public static async Task<Product> Create(CreateProductArg arg, IProductDomainService service)
     {
+        await CreateGuards(arg, service);
         return new Product(arg);
     }
 
@@ -48,7 +44,6 @@ public class Product : Entity, IAggregateRoot
     {
         ServiceStatusId = arg.ServiceStatusId.HasValue ? new ServiceStatusId(arg.ServiceStatusId.Value) : null;
         Name = arg.Name;
-        Code = arg.Code;
         Description = arg.Description;
         Scope = arg.Scope;
         ProviderCompanyId = arg.ProviderCompanyId.HasValue ? new CompanyId(arg.ProviderCompanyId.Value) : null;
@@ -57,7 +52,25 @@ public class Product : Entity, IAggregateRoot
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
+    #region Guards
+    private static async Task CreateGuards(CreateProductArg arg, IProductDomainService service)
+    {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+    }
+    private async Task ModifyGuards(ModifyProductArg arg, IProductDomainService service)
+    {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+    }
+    #endregion
     public void CreateChannel(List<CreateProductChannelArg> args, long ProductId)
     {
         var previousProductChannels = _productChannels.Where(x => x.ProductId == new ProductId(ProductId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);

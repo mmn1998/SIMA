@@ -10,4 +10,6 @@ public class ProductResponsibleQuery
     public string? CompanyName { get; set; }
     public long? DepartmentId { get; set; }
     public string? DepartmentName { get; set; }
+    public long? BranchId { get; set; }
+    public string? BranchName { get; set; }
 }

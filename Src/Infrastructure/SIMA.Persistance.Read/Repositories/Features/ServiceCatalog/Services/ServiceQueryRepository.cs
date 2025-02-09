@@ -367,16 +367,20 @@ SELECT S.[Id]
                                     C.Id CompanyId,
                                     C.Name CompanyName,
                                     D.Id DepartmentId,
-                                    D.Name DepartmentName
+                                    D.Name DepartmentName,
+	                                C.Id CompanyId,
+	                                C.Name CompanyName,
+	                                ASA.BranchId,
+	                                Br.Name BranchName
                                     from ServiceCatalog.Service S
                                     inner join ServiceCatalog.ServiceAssignedStaff ASA on ASA.ServiceId = s.Id and ASA.ActiveStatusId<>3
                                     inner join Organization.Staff Ss on ss.Id = ASA.StaffId and ss.ActiveStatusId<>3
                                     inner join Authentication.Profile P on P.Id = Ss.ProfileId and P.ActiveStatusId<>3
-                                    inner join Authentication.Users U on U.ProfileID = P.Id and U.ActiveStatusId<>3
-                                    inner join Organization.Company C on C.Id = U.CompanyId and C.ActiveStatusId<>3
                                     inner join Organization.Position PO on PO.Id = SS.PositionId and Po.ActiveStatusId <> 3
                                     inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
+                                    inner join Organization.Company C on C.Id = D.CompanyId and C.ActiveStatusId<>3
                                     inner join Basic.ResponsibleType RT on RT.Id = ASA.ResponsibleTypeId and rt.ActiveStatusId<>3
+	                                LEFT join Bank.Branch Br on Br.Id = ASA.BranchId and Br.ActiveStatusId<>3
                                     where s.Id = @Id and s.ActiveStatusId<>3;
                         -------- service availablity
 

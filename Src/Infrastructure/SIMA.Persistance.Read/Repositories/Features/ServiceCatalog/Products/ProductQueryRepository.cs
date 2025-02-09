@@ -124,24 +124,26 @@ where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and 
             --ProductResponsible
 
           select 
-                pr.ResponsibleTypeId,
-                rt.Name ResponsibleTypeName,
-                s.Id ResponsibleId,
-			    C.Id CompanyId,
-			    C.Name CompanyName,
-			    D.Id DepartmentId,
-			    D.Name DepartmentName,
-                pro.FirstName + SPACE(1) + pro.LastName Responsible
-            from [ServiceCatalog].[Product] p
-            join [ServiceCatalog].[ProductResponsible] pr on pr.ProductId=p.Id
-            join [Organization].[Staff] s on pr.ResponsilbeId=s.Id
-			inner join Authentication.Profile Pro on Pro.Id = S.ProfileId and Pro.ActiveStatusId<>3
-			inner join Authentication.Users U on U.ProfileID = Pro.Id and U.ActiveStatusId<>3
-			inner join Organization.Company C on C.Id = U.CompanyId and C.ActiveStatusId<>3
-			inner join Organization.Position PO on PO.Id = S.PositionId and Po.ActiveStatusId <> 3
-			inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
-            join [Basic].[ResponsibleType] rt on rt.Id=pr.ResponsibleTypeId
-            where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and p.Id=@Id
+      pr.ResponsibleTypeId,
+      rt.Name ResponsibleTypeName,
+      s.Id ResponsibleId,
+		    C.Id CompanyId,
+		    C.Name CompanyName,
+		    D.Id DepartmentId,
+		    D.Name DepartmentName,
+      pro.FirstName + SPACE(1) + pro.LastName Responsible,
+	  PR.BranchId
+	,Br.Name BranchName
+  from [ServiceCatalog].[Product] p
+  join [ServiceCatalog].[ProductResponsible] pr on pr.ProductId=p.Id
+  join [Organization].[Staff] s on pr.ResponsilbeId=s.Id
+inner join Authentication.Profile Pro on Pro.Id = S.ProfileId and Pro.ActiveStatusId<>3
+inner join Organization.Position PO on PO.Id = S.PositionId and Po.ActiveStatusId <> 3
+inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
+inner join Organization.Company C on C.Id = D.CompanyId and C.ActiveStatusId<>3
+join [Basic].[ResponsibleType] rt on rt.Id=pr.ResponsibleTypeId
+LEFT join Bank.Branch Br on Br.Id = PR.BranchId and Br.ActiveStatusId<>3
+where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and p.Id=@Id
 ";
 
         using var multi = await connection.QueryMultipleAsync(query, new { request.Id });

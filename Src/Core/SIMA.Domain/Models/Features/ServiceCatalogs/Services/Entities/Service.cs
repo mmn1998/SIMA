@@ -65,7 +65,6 @@ public class Service : Entity, IAggregateRoot
         TechnicalSupervisorDepartmentId = arg.TechnicalSupervisorDepartmentId.HasValue ? new(arg.TechnicalSupervisorDepartmentId.Value) : null;
         ServiceStatusId = arg.ServiceStatusId.HasValue ? new(arg.ServiceStatusId.Value) : null;
         Name = arg.Name;
-        Code = arg.Code;
         ParentId = arg.ParentId.HasValue ? new(arg.ParentId.Value) : null;
         ServiceCost = arg.ServiceCost;
         Description = arg.Description;
@@ -97,12 +96,10 @@ public class Service : Entity, IAggregateRoot
     {
         arg.NullCheck();
         arg.Name.NullCheck();
-        arg.Code.NullCheck();
         if (!string.IsNullOrEmpty(arg.FeedbackUrl))
             service.CheckValidURL(arg.FeedbackUrl);
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public void Delete(long userId)

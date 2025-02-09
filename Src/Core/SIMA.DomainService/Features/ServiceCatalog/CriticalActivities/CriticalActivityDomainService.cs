@@ -12,6 +12,13 @@ public class CriticalActivityDomainService : ICriticalActivityDomainService
     {
         _context = context;
     }
+
+    public async Task<string?> GetLastCode()
+    {
+        var entity = await _context.CriticalActivities.OrderByDescending(x => x.CreatedAt).FirstOrDefaultAsync();
+        return entity?.Code;
+    }
+
     public async Task<bool> IsCodeUnique(string code, CriticalActivityId? Id = null)
     {
         bool result = false;

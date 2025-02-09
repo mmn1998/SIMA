@@ -8,10 +8,11 @@ public class GetAllCriticalActivitiesQueryResult
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
+    public string? Description { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
     public string? TechnicalSupervisorDepartmentName { get; set; }
     public string? TechnicalSupervisorDepartmentCode { get; set; }
-    public string? Description { get; set; }
+    public string? IssueDescription { get; set; }
     public long IssueId { get; set; }
     public string? IssueCode { get; set; }
     public long WorkflowId { get; set; }

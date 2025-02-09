@@ -131,17 +131,27 @@ SELECT
   inner join Basic.ActiveStatus A on c.ActiveStatusId = a.ID and C.ActiveStatusId <> 3
   where c.Id = @Id and c.ActiveStatusId<>3;
 
-SELECT 
-		cr.ResponsibleTypeId
-		,RT.[Name] ResponsibleTypeName
-		,CR.ResponsibleId
-		,(p.FirstName + ' ' + p.LastName) Responsible
-  FROM [ServiceCatalog].[Channel] C
-  inner join ServiceCatalog.ChannelResponsible CR on cr.ChannelId = c.Id and CR.ActiveStatusId <> 3
-  inner join Basic.ResponsibleType RT on RT.Id = CR.ResponsibleTypeId and rt.ActiveStatusId<>3
-  inner join Organization.Staff S on s.Id = cr.ResponsibleId and s.ActiveStatusId<>3
-  inner join Authentication.Profile P on s.ProfileId = p.Id and p.ActiveStatusId<>3
-  where c.Id = @Id and c.ActiveStatusId<>3;
+SELECT
+	cr.ResponsibleTypeId
+	,RT.[Name] ResponsibleTypeName
+	,CR.ResponsibleId
+	,(p.FirstName + ' ' + p.LastName) Responsible
+	,D.Id DepartmentId
+	,D.Name DepartmentName
+	,Com.Id CompanyId
+	,Com.Name CompanyName
+	,CR.BranchId
+	,Br.Name BranchName
+FROM [ServiceCatalog].[Channel] C
+inner join ServiceCatalog.ChannelResponsible CR on cr.ChannelId = c.Id and CR.ActiveStatusId <> 3
+inner join Basic.ResponsibleType RT on RT.Id = CR.ResponsibleTypeId and rt.ActiveStatusId<>3
+inner join Organization.Staff S on s.Id = cr.ResponsibleId and s.ActiveStatusId<>3
+inner join Organization.Position PO on PO.Id = S.PositionId and Po.ActiveStatusId <> 3
+inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
+INNER join Organization.Company Com on Com.Id = D.CompanyId and Com.ActiveStatusId<>3
+LEFT join Bank.Branch Br on Br.Id = CR.BranchId and Br.ActiveStatusId<>3
+inner join Authentication.Profile P on s.ProfileId = p.Id and p.ActiveStatusId<>3
+where c.Id = @Id and c.ActiveStatusId<>3;
 
 SELECT 
 		PC.ProductId

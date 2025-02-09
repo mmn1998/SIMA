@@ -1,11 +1,7 @@
 ﻿using ArmanIT.Investigation.Dapper.QueryBuilder;
 using Dapper;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
-using SIMA.Application.Query.Contract.Features.Logistics.LogisticsRequests;
 using SIMA.Application.Query.Contract.Features.ServiceCatalog.CriticalActivities;
-using SIMA.Application.Query.Contract.Features.ServiceCatalog.Services;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -54,7 +50,7 @@ SELECT CA.Id,
 	  ,d.code TechnicalSupervisorDepartmentCode
       ,(p.FirstName + ' ' + p.LastName) CreatedBy
 	  ,CA.CreatedAt
-	  ,i.Description
+	  ,i.Description IssueDescription
   FROM ServiceCatalog.CriticalActivity CA
   inner join IssueManagement.Issue I on I.Id = CA.IssueId and I.MainAggregateId = 6 And i.ActiveStatusId<>3
   left join Basic.ActiveStatus A on A.ID = CA.ActiveStatusId
@@ -107,6 +103,7 @@ SELECT CA.Id,
                             CA.Id,
                             CA.Name,
                             CA.Code,
+                            CA.Description,
                             CA.ActiveStatusId,
                             case when CA.CreatedBy = @userId then '1' else '0' end IsEditable,
                             A.Name ActiveStatus,
@@ -116,7 +113,7 @@ SELECT CA.Id,
                             ca.CreatedAt,
                             d.Name TechnicalSupervisorDepartmentName,
                             d.code TechnicalSupervisorDepartmentCode,
-                            i.Description
+                            i.Description IssueDescription
                             from ServiceCatalog.CriticalActivity CA
                             INNER JOIN Authentication.Users U on CA.CreatedBy = U.Id and U.ActiveStatusId<>3
                             INNER JOIN Authentication.Profile P on P.Id = U.ProfileID and P.ActiveStatusId<>3
@@ -260,16 +257,18 @@ SELECT CA.Id,
                                 C.Id CompanyId,
                                 C.Name CompanyName,
                                 D.Id DepartmentId,
-                                D.Name DepartmentName
+                                D.Name DepartmentName,
+                                CAS.BranchId,
+                                Br.Name BranchName
                                 from ServiceCatalog.CriticalActivity CA
                                 inner join ServiceCatalog.CriticalActivityAssignStaff CAS on CAS.CriticalActivityId = ca.Id and CAS.ActiveStatusId<>3
                                 inner join Organization.Staff S on s.Id = CAS.StaffId and s.ActiveStatusId<>3
                                 inner join Authentication.Profile P on P.Id = S.ProfileId and P.ActiveStatusId<>3
-                                inner join Authentication.Users U on U.ProfileID = P.Id and U.ActiveStatusId<>3
-                                inner join Organization.Company C on C.Id = U.CompanyId and C.ActiveStatusId<>3
                                 inner join Organization.Position PO on PO.Id = S.PositionId and Po.ActiveStatusId <> 3
                                 inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
+                                inner join Organization.Company C on C.Id = D.CompanyId and C.ActiveStatusId<>3
                                 inner join Basic.ResponsibleType RT on RT.Id = CAS.ResponsilbeTypeId and rt.ActiveStatusId<>3
+                                LEFT join Bank.Branch Br on Br.Id = CAS.BranchId and Br.ActiveStatusId<>3
                                 where CA.Id = @Id and ca.ActiveStatusId<>3
 
                             ----------executionPlans

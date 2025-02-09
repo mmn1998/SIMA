@@ -43,7 +43,6 @@ public class Channel : Entity, IAggregateRoot
         await ModifyGuards(arg, service);
         ServiceStatusId = arg.ServiceStatusId.HasValue ? new ServiceStatusId(arg.ServiceStatusId.Value) : null;
         Name = arg.Name;
-        Code = arg.Code;
         Scope = arg.Scope;
         Description = arg.Description;
         InServiceDate = arg.InServiceDate;
@@ -64,11 +63,8 @@ public class Channel : Entity, IAggregateRoot
     {
         arg.NullCheck();
         arg.Name.NullCheck();
-        arg.Code.NullCheck();
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public void Delete(long userId)

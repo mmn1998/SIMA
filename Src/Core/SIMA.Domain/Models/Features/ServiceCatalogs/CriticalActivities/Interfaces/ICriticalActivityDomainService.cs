@@ -5,4 +5,5 @@ namespace SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Interfa
 public interface ICriticalActivityDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, CriticalActivityId? id = null);
+    Task<string?> GetLastCode();
 }

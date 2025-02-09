@@ -67,7 +67,6 @@ public class CriticalActivity : Entity, IAggregateRoot
         arg.Name.NullCheck();
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
-        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     } 
     #endregion
     public void Delete(long userId)
