@@ -99,7 +99,6 @@ public class Service : Entity, IAggregateRoot
         if (!string.IsNullOrEmpty(arg.FeedbackUrl))
             service.CheckValidURL(arg.FeedbackUrl);
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
-        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
     }
     #endregion
     public void Delete(long userId)
