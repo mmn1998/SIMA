@@ -175,6 +175,7 @@ using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
+using SIMA.Domain.Models.Features.BCP.SolutionPeriorities.Entities;
 
 #endregion
 
@@ -379,6 +380,7 @@ public class SIMADBContext : DbContext
     #region BCP
     public DbSet<ImportanceDegree> ImportanceDegrees { get; set; }
     public DbSet<OrganizationalServicePriority> OrganizationalServicePriorities { get; set; }
+    //public DbSet<SolutionPeriority> SolutionPeriorities { get; set; }
     public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
     public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
     public DbSet<Consequence> Consequences { get; set; }

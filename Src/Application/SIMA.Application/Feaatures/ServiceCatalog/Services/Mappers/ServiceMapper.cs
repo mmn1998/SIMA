@@ -93,13 +93,13 @@ public class ServiceMapper : Profile
             .ForMember(dest => dest.IssueId, act => act.MapFrom(source => source.IssueId))
             .ForMember(dest => dest.ServiceId, act => act.MapFrom(source => source.Id))
             ;
-        //CreateMap<CreateserviceAvalibilityCommand, CreateServiceAvalibilityArg>()
-        //    .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
-        //    .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-        //    .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvalibilityStartTime.ToTimeOnly()))
-        //    .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvalibilityEndTime.ToTimeOnly()))
-        //    .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
-        //    ;
+        CreateMap<CreateserviceAvalibilityCommand, CreateServiceAvalibilityArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvalibilityStartTime.ToTimeOnly()))
+            .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvalibilityEndTime.ToTimeOnly()))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            ;
 
 
     }

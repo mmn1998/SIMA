@@ -53,6 +53,7 @@ using SIMA.Application.Feaatures.BCP.RecoveryPointObjectives.Mappers;
 using SIMA.Application.Feaatures.BCP.ScenarioExecutionHistories.Mapper;
 using SIMA.Application.Feaatures.BCP.Scenarios.Mappers;
 using SIMA.Application.Feaatures.BCP.ServicePriorities.Mapper;
+using SIMA.Application.Feaatures.BCP.SolutionPeriorities.Mappers;
 using SIMA.Application.Feaatures.BCP.StrategyTypes.Mappers;
 using SIMA.Application.Feaatures.BranchManagement.AccountTypes.Mappers;
 using SIMA.Application.Feaatures.BranchManagement.Branches.Mappers;
@@ -315,6 +316,7 @@ public static class ApplicationRegistrationExtension
                 #region BCP
                 conf.AddProfile(new ImportanceDegreeMapper());
                 conf.AddProfile(new OrganizationalServicePriorityMapper());
+                //conf.AddProfile(new SolutionPeriorityMapper());
                 conf.AddProfile(new HappeningPossibilityMapper());
                 conf.AddProfile(new ConsequenceMapper());
                 conf.AddProfile(new RecoveryPointObjectiveMapper());
