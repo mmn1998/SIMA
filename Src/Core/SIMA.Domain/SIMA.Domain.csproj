@@ -42,10 +42,6 @@
     <Folder Include="Models\Features\BCP\ConsequenceValues\Contracts\" />
     <Folder Include="Models\Features\BCP\ConsequenceValues\Entities\" />
     <Folder Include="Models\Features\BCP\ConsequenceValues\ValueObjects\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\Args\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\Contracts\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\Entities\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\ValueObjects\" />
     <Folder Include="Models\Features\BCP\BiaValues\Args\" />
     <Folder Include="Models\Features\BCP\BiaValues\Contracts\" />
     <Folder Include="Models\Features\BCP\BiaValues\Entities\" />

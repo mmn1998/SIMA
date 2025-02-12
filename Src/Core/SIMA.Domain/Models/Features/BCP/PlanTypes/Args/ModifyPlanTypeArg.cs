@@ -1,6 +1,6 @@
-﻿namespace SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Args;
+﻿namespace SIMA.Domain.Models.Features.BCP.PlanTypes.Args;
 
-public class ModifyBackupPeriodArg
+public class ModifyPlanTypeArg
 {
     public long Id { get; set; }
     public string? Name { get; set; }

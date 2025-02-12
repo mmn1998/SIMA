@@ -1,20 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
-using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Back_UpPeriods;
+namespace SIMA.Persistance.EntityConfigurations.Features.BCP.PlanTypes;
 
-public class BackupPeriodConfiguration : IEntityTypeConfiguration<BackupPeriod>
+public class PlanTypeConfiguration : IEntityTypeConfiguration<PlanType>
 {
-    public void Configure(EntityTypeBuilder<BackupPeriod> entity)
+    public void Configure(EntityTypeBuilder<PlanType> entity)
     {
-        entity.ToTable("BackupPeriod", "BCP");
+        entity.ToTable("PlanType", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new BackupPeriodId(v)).ValueGeneratedNever();
+             v => new(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(50);
         entity.Property(e => e.Name).HasMaxLength(200);

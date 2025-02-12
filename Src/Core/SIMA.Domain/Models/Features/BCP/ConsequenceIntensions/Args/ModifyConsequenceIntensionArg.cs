@@ -1,11 +1,11 @@
-﻿namespace SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Args;
+﻿namespace SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Args;
 
-public class ModifyBackupPeriodArg
+public class ModifyConsequenceIntensionArg
 {
-    public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
     public long ActiveStatusId { get; set; }
+    public float ValueNumber { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
 }
