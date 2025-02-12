@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BCP.PlanTypes.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.Args;
 using SIMA.Domain.Models.Features.BCP.PlanTypes.Contracts;
 using SIMA.Domain.Models.Features.BCP.PlanTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -74,4 +75,6 @@ public class PlanType : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<BusinessContinuityPlan> _businessContinuityPlans = new();
+    public ICollection<BusinessContinuityPlan> BusinessContinuityPlans => _businessContinuityPlans;
 }

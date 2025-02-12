@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.BCP.SolutionPriorities.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.BCP.SolutionPeriorities;
+namespace SIMA.Persistance.EntityConfigurations.Features.BCP.ConsequenceIntensions;
 
-public class SolutionPeriorityConfiguration : IEntityTypeConfiguration<SolutionPriority>
+public class ConsequenceIntensionConfiguration : IEntityTypeConfiguration<ConsequenceIntension>
 {
-    public void Configure(EntityTypeBuilder<SolutionPriority> entity)
+    public void Configure(EntityTypeBuilder<ConsequenceIntension> entity)
     {
-        entity.ToTable("SolutionPriority", "BCP");
+        entity.ToTable("ConsequenceIntension", "BCP");
         entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(

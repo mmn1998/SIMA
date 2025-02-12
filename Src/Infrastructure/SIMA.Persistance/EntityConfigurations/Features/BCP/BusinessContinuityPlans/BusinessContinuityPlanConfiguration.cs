@@ -26,7 +26,15 @@ public class BusinessContinuityPlanConfiguration : IEntityTypeConfiguration<Busi
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
+        entity.Property(x => x.PlanTypeId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.PlanType)
+            .WithMany(x => x.BusinessContinuityPlans)
+            .HasForeignKey(x => x.PlanTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
-   
     }
 }

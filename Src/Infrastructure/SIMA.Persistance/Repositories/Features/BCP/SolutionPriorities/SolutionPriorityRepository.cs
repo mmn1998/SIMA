@@ -9,11 +9,11 @@ using SIMA.Persistance.Persistence;
 
 namespace SIMA.Persistance.Repositories.Features.BCP.SolutionPeriorities;
 
-public class SolutionPeriorityRepository : Repository<SolutionPriority>, ISolutionPriorityRepository
+public class SolutionPriorityRepository : Repository<SolutionPriority>, ISolutionPriorityRepository
 {
     private readonly SIMADBContext _context;
 
-    public SolutionPeriorityRepository(SIMADBContext context) : base(context)
+    public SolutionPriorityRepository(SIMADBContext context) : base(context)
     {
         _context = context;
     }

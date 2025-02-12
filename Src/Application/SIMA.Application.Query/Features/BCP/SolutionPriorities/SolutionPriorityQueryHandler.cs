@@ -5,12 +5,12 @@ using SIMA.Persistance.Read.Repositories.Features.BCP.SolutionPeriorities;
 
 namespace SIMA.Application.Query.Features.BCP.SolutionPeriorities;
 
-public class SolutionPrioritiesQueryHandler : IQueryHandler<GetSolutionPriorityQuery, Result<GetSolutionPriorityQueryResult>>,
+public class SolutionPriorityQueryHandler : IQueryHandler<GetSolutionPriorityQuery, Result<GetSolutionPriorityQueryResult>>,
     IQueryHandler<GetAllSolutionPrioritiesQuery, Result<IEnumerable<GetSolutionPriorityQueryResult>>>
 {
     private readonly ISolutionPriorityQueryRepository _repository;
 
-    public SolutionPrioritiesQueryHandler(ISolutionPriorityQueryRepository repository)
+    public SolutionPriorityQueryHandler(ISolutionPriorityQueryRepository repository)
     {
         _repository = repository;
     }

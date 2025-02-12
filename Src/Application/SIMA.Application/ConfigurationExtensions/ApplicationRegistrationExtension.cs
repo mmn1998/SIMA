@@ -43,6 +43,7 @@ using SIMA.Application.Feaatures.BCP.Back_UpPeriods.Mappers;
 using SIMA.Application.Feaatures.BCP.BusinesImpactAnalysises.Mappers;
 using SIMA.Application.Feaatures.BCP.BusinessContinuityPlans.Mapper;
 using SIMA.Application.Feaatures.BCP.BusinessContinuityStrategies.Mappers;
+using SIMA.Application.Feaatures.BCP.ConsequenceIntensions.Mappers;
 using SIMA.Application.Feaatures.BCP.Consequences.Mappers;
 using SIMA.Application.Feaatures.BCP.HappeningPossiblities.Mappers;
 using SIMA.Application.Feaatures.BCP.ImportanceDegrees.Mappers;
@@ -317,6 +318,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ImportanceDegreeMapper());
                 conf.AddProfile(new OrganizationalServicePriorityMapper());
                 conf.AddProfile(new SolutionPriorityMapper());
+                conf.AddProfile(new ConsequenceIntensionMapper());
                 conf.AddProfile(new HappeningPossibilityMapper());
                 conf.AddProfile(new ConsequenceMapper());
                 conf.AddProfile(new RecoveryPointObjectiveMapper());

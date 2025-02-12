@@ -95,6 +95,8 @@
     <Compile Include="Controllers\Features\BCP\Back_UpPeriods\V1\BackupPeriodsQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\RecoveryOptionPriorities\V1\RecoveryOptionPrioritiesController.cs" />
     <Compile Include="Controllers\Features\BCP\RecoveryOptionPriorities\V1\RecoveryOptionPrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensions\V1\ConsequenceIntensionsController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensions\V1\ConsequenceIntensionsQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\SolutionPriorities\V1\SolutionPerioritiesController.cs" />
     <Compile Include="Controllers\Features\BCP\SolutionPriorities\V1\SolutionPerioritiesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\StrategyTypes\V1\StrategyTypesController.cs" />

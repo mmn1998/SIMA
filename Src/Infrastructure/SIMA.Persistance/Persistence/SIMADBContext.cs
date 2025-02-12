@@ -48,6 +48,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
 using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
@@ -381,6 +382,7 @@ public class SIMADBContext : DbContext
     public DbSet<ImportanceDegree> ImportanceDegrees { get; set; }
     public DbSet<OrganizationalServicePriority> OrganizationalServicePriorities { get; set; }
     public DbSet<SolutionPriority> SolutionPriorities { get; set; }
+    public DbSet<ConsequenceIntension> ConsequenceIntensions { get; set; }
     public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
     public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
     public DbSet<Consequence> Consequences { get; set; }
