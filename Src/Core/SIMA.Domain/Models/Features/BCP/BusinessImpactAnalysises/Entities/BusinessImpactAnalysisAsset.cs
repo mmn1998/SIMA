@@ -26,14 +26,6 @@ public class BusinessImpactAnalysisAsset : Entity
     {
         return new BusinessImpactAnalysisAsset(arg);
     }
-    public void Modify(ModifyBusinessImpactAnalysisAssetArg arg)
-    {
-        AssetId = new(arg.AssetId);
-        BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public BusinessImpactAnalysisAssetId Id { get; private set; }
 
     public AssetId AssetId { get; private set; }

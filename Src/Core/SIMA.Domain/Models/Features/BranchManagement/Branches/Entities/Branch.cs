@@ -5,6 +5,9 @@ using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Args;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
@@ -136,6 +139,12 @@ public class Branch : Entity
     public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsibles;
     private List<ProductResponsible> _productResponsibles = new();
     public ICollection<ProductResponsible> ProductResponsibles => _productResponsibles;
+    private List<BusinessImpactAnalysisStaff> _businessImpactAnalysisStaff = new();
+    public ICollection<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaff => _businessImpactAnalysisStaff;
+    private List<BusinessContinuityStratgyResponsible> _businessContinuityStratgyResponsibles = new();
+    public ICollection<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles => _businessContinuityStratgyResponsibles;
+    private List<BusinessContinuityPlanResponsible> _businessContinuityPlanResponsibles = new();
+    public ICollection<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles => _businessContinuityPlanResponsibles;
 
     public void Delete(long userId)
     {

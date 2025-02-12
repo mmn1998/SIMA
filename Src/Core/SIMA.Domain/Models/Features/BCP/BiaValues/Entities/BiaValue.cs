@@ -1,4 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BiaValues.Args;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities;
 using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
@@ -81,4 +82,6 @@ public class BiaValue : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
+    public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
 }

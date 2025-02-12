@@ -6,13 +6,8 @@ using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Events;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities;
-using SIMA.Domain.Models.Features.BCP.ServicePriorities.ValueObjects;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Events;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -244,13 +239,17 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     public BusinessImpactAnalysisId Id { get; private set; }
     public ServiceId ServiceId { get; private set; }
     public virtual Service Service { get; private set; }
-    public ImportanceDegreeId ImportanceDegreeId { get; private set; }
-    public virtual ImportanceDegree ImportanceDegree { get; private set; }
-    public ServicePriorityId ServicePriorityId { get; private set; }
-    public virtual ServicePriority ServicePriority { get; private set; }
-    public BackupPeriodId BackupPeriodId { get; private set; }
-    public virtual BackupPeriod BackupPeriod { get; private set; }
+    public ImportanceDegreeId? ImportanceDegreeId { get; private set; }
+    public virtual ImportanceDegree? ImportanceDegree { get; private set; }
+    public ServicePriorityId? ServicePriorityId { get; private set; }
+    public virtual ServicePriority? ServicePriority { get; private set; }
+    public BackupPeriodId? BackupPeriodId { get; private set; }
+    public virtual BackupPeriod? BackupPeriod { get; private set; }
     public string? RestartReason { get; private set; }
+    public float? RTO { get; set; }
+    public float? RPO { get; set; }
+    public float? WRT { get; set; }
+    public float? MTD { get; set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

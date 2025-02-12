@@ -24,14 +24,6 @@ public class BusinessContinuityPlanService : Entity
     {
         return new BusinessContinuityPlanService(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanServiceArg arg)
-    {
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-        ServiceId = new(arg.ServiceId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
 
     public void ChangeStatus(ActiveStatusEnum status)
     {

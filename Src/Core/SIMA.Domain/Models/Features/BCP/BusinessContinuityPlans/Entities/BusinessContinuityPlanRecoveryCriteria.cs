@@ -23,15 +23,6 @@ public class BusinessContinuityPlanRecoveryCriteria : Entity
     {
         return new BusinessContinuityPlanRecoveryCriteria(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanRecoveryCriteriaArg arg)
-    {
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
-        ActiveStatusId = arg.ActiveStatusId;
-        Title = arg.Title;
-        Code = arg.Code;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public BusinessContinuityPlanRecoveryCriteriaId Id { get; private set; }
     public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
     public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }

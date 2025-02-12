@@ -23,14 +23,6 @@ public class BusinessImpactAnalysisCriticalActivity : Entity
     {
         return new BusinessImpactAnalysisCriticalActivity(arg);
     }
-    public void Modify(ModifyBusinessImpactAnalysisCriticalActivityArg arg)
-    {
-        BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        CriticalActivityId = new(arg.CriticalActivityId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedAt = arg.ModifiedAt;
-        ModifiedBy = arg.ModifiedBy;
-    }
     public BusinessImpactAnalysisCriticalActivityId Id { get; set; }
     public BusinessImpactAnalysisId BusinessImpactAnalysisId { get; private set; }
     public virtual BusinessImpactAnalysis BusinessImpactAnalysis { get; private set; }

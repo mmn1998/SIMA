@@ -216,4 +216,6 @@ public class Scenario : Entity
     public ICollection<ScenarioPossibleAction> ScenarioPossibleActions => _scenarioPossibleActions;
     private List<CobitScenario> _cobitScenarios = new();
     public ICollection<CobitScenario> CobitScenarios => _cobitScenarios;
+    private List<BusinessContinuityPlanScenarioCobitScenario> _businessContinuityPlanScenarioCobitScenarios = new();
+    public ICollection<BusinessContinuityPlanScenarioCobitScenario> BusinessContinuityPlanScenarioCobitScenarios => _businessContinuityPlanScenarioCobitScenarios;
 }

@@ -25,14 +25,6 @@ public class BusinessContinuityPlanRelatedStaff : Entity
     {
         return new BusinessContinuityPlanRelatedStaff(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanRelatedStaffArg arg)
-    {
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-        StaffId = new(arg.StaffId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
 
     public void ChangeStatus(ActiveStatusEnum status)
     {

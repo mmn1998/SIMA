@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessImpactAnalysises;
 
@@ -18,7 +15,6 @@ public class BusinessImpactAnalysisDisasterOriginConfiguration : IEntityTypeConf
              v => v.Value,
              v => new BusinessImpactAnalysisDisasterOriginId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
-        entity.Property(i => i.Description).HasColumnType("nvarchar(MAX)").IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
@@ -63,6 +59,33 @@ public class BusinessImpactAnalysisDisasterOriginConfiguration : IEntityTypeConf
         entity.HasOne(x => x.RecoveryPointObjective)
             .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
             .HasForeignKey(x => x.RecoveryPointObjectiveId);
+
+        entity.Property(x => x.HappeningPossibilityId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.HappeningPossibility)
+            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
+            .HasForeignKey(x => x.HappeningPossibilityId);
+
+        entity.Property(x => x.ConsequenceValueId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.ConsequenceValue)
+            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
+            .HasForeignKey(x => x.ConsequenceValueId);
+
+        entity.Property(x => x.BiaValueId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.BiaValue)
+            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
+            .HasForeignKey(x => x.BiaValueId);
 
 
     }

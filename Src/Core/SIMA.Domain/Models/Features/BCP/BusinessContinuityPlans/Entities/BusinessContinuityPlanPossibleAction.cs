@@ -23,15 +23,6 @@ public class BusinessContinuityPlanPossibleAction : Entity
     {
         return new BusinessContinuityPlanPossibleAction(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanPossibleActionArg arg)
-    {
-        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
-        ActiveStatusId = arg.ActiveStatusId;
-        Title = arg.Title;
-        Code = arg.Code;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public BusinessContinuityPossibleActionId Id { get; private set; }
     public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
     public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }

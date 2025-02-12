@@ -1,10 +1,10 @@
 ﻿namespace SIMA.Domain.Models.Features.BCP.Scenarios.Args;
 
-public class CreateScenarioBusinessContinuityPlanAssumptionArg
+public class CreateBusinessContinuityPlanScenarioCobitScenarioArg
 {
     public long Id { get; set; }
     public long ScenarioId { get; set; }
-    public long BusinessContinuityPlanAssumptionId { get; set; }
+    public long CobitScenarioId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }

@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BCP.SolutionPeriorities.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
+using SIMA.Domain.Models.Features.BCP.SolutionPeriorities.Args;
 using SIMA.Domain.Models.Features.BCP.SolutionPriorities.Contracts;
 using SIMA.Domain.Models.Features.BCP.SolutionPriorities.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -77,4 +78,6 @@ public class SolutionPriority : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<BusinessContinuityStratgySolution> _businessContinuityStratgySolutions = new();
+    public ICollection<BusinessContinuityStratgySolution> BusinessContinuityStratgySolutions => _businessContinuityStratgySolutions;
 }

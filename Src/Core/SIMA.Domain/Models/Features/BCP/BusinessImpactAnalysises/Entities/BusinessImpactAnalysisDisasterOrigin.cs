@@ -1,7 +1,12 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceValues.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
+using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.Origins.Entities;
 using SIMA.Domain.Models.Features.BCP.Origins.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
@@ -26,7 +31,6 @@ public class BusinessImpactAnalysisDisasterOrigin : Entity, IAggregateRoot
         BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
         RecoveryPointObjectiveId = new(arg.RecoveryPointObjectivesId);
         OriginId = new(arg.OriginId);
-        Description = arg.Description ?? "";
         RTO = arg.RTO;
         MTD = arg.MTD;
         WRT = arg.WRT;
@@ -38,22 +42,6 @@ public class BusinessImpactAnalysisDisasterOrigin : Entity, IAggregateRoot
     {
         return new BusinessImpactAnalysisDisasterOrigin(arg);
     }
-    //public void Modify(ModifyBusinessImpactAnalysisDisasterOriginArg arg)
-    //{
-    //    ActiveStatusId = arg.ActiveStatusId;
-    //    ConsequenceId = new(arg.ConsequenceId);
-    //    HappeningPossibilityId = new(arg.HappeningPossibilityId);
-    //    BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-    //    RecoveryPointObjectiveId = new(arg.RecoveryPointObjectiveId);
-    //    OriginId = new(arg.OriginId);
-    //    Description = arg.Description ?? "";
-    //    RTO = arg.RTO;
-    //    MTD = arg.MTD;
-    //    WRT = arg.WRT;
-    //    RPO = arg.RPO;
-    //    ModifiedAt = arg.ModifiedAt;
-    //    ModifiedBy = arg.ModifiedBy;
-    //}
     public BusinessImpactAnalysisDisasterOriginId Id { get; private set; }
     public BusinessImpactAnalysisId BusinessImpactAnalysisId { get; private set; }
     public virtual BusinessImpactAnalysis BusinessImpactAnalysis { get; private set; }
@@ -63,7 +51,12 @@ public class BusinessImpactAnalysisDisasterOrigin : Entity, IAggregateRoot
     public virtual Origin Origin { get; private set; }
     public RecoveryPointObjectiveId RecoveryPointObjectiveId { get; private set; }
     public virtual RecoveryPointObjective RecoveryPointObjective { get; private set; }
-    public string Description { get; private set; }
+    public HappeningPossibilityId? HappeningPossibilityId { get; private set; }
+    public virtual HappeningPossibility? HappeningPossibility { get; private set; }
+    public ConsequenceValueId? ConsequenceValueId { get; private set; }
+    public virtual ConsequenceValue? ConsequenceValue { get; private set; }
+    public BiaValueId? BiaValueId { get; private set; }
+    public virtual BiaValue? BiaValue { get; private set; }
     public float? RTO { get; private set; }
     public float? RPO { get; private set; }
     public float? WRT { get; private set; }

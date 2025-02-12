@@ -1,9 +1,13 @@
-﻿using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Departments.Entities;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Args;
 using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -49,6 +53,10 @@ public class BusinessContinuityStratgyResponsible : Entity
     public virtual Staff Staff { get; private set; }
     public PlanResponsibilityId PlanResponsibilityId { get; private set; }
     public virtual PlanResponsibility PlanResponsibility { get; private set; }
+    public BranchId? BranchId { get; private set; }
+    public virtual Branch? Branch { get; private set; }
+    public DepartmentId? DepartmentId { get; private set; }
+    public virtual Department? Department { get; private set; }
     public string IsForBackup { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

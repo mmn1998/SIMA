@@ -24,13 +24,6 @@ public class BusinessContinuityPlanRisk : Entity
     {
         return new BusinessContinuityPlanRisk(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanRiskArg arg)
-    {
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
 
     public void Delete(long userId)
     {

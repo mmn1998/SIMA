@@ -1,9 +1,13 @@
-﻿using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Departments.Entities;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -28,16 +32,6 @@ namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities
         {
             return new BusinessContinuityPlanResponsible(arg);
         }
-        public void Modify(ModifyBusinessContinuityPlanResponsibleArg arg)
-        {
-            BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-            StaffId = new(arg.StaffId);
-            PlanResponsibilityId = new(arg.PlanResponsibilityId);
-            IsForBackup = arg.IsForBackup;
-            ActiveStatusId = arg.ActiveStatusId;
-            ModifiedBy = arg.ModifiedBy;
-            ModifiedAt = arg.ModifiedAt;
-        }
 
         public void ChangeStatus(ActiveStatusEnum status)
         {
@@ -51,6 +45,10 @@ namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities
         public virtual Staff Staff { get; private set; }
         public PlanResponsibilityId PlanResponsibilityId { get; private set; }
         public virtual PlanResponsibility PlanResponsibility { get; private set; }
+        public BranchId? BranchId { get; private set; }
+        public virtual Branch? Branch { get; private set; }
+        public DepartmentId? DepartmentId { get; private set; }
+        public virtual Department? Department { get; private set; }
         public string IsForBackup { get; private set; }
         public long ActiveStatusId { get; private set; }
         public DateTime? CreatedAt { get; private set; }

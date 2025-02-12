@@ -2,6 +2,8 @@
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Args;
+using SIMA.Domain.Models.Features.BCP.SolutionPriorities.Entities;
+using SIMA.Domain.Models.Features.BCP.SolutionPriorities.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -69,6 +71,8 @@ public class BusinessContinuityStratgySolution : Entity
     public string? Code { get; private set; }
     public BusinessContinuityStrategyId BusinessContinuityStratgyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStratgy { get; private set; }
+    public SolutionPriorityId? SolutionPriorityId { get; private set; }
+    public virtual SolutionPriority? SolutionPriority { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

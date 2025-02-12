@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
+﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Args;
 using SIMA.Domain.Models.Features.BCP.ConsequenceValues.ValueObjects;
@@ -79,4 +80,6 @@ public class ConsequenceValue : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
+    public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
 }

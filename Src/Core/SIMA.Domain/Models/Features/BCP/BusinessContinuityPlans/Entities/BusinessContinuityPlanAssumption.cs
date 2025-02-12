@@ -25,15 +25,6 @@ public class BusinessContinuityPlanAssumption : Entity
     {
         return new BusinessContinuityPlanAssumption(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanAssumptionArg arg)
-    {
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-        ActiveStatusId = arg.ActiveStatusId;
-        Title = arg.Title;
-        Code = arg.Code;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
 
     public void ChangeStatus(ActiveStatusEnum status)
     {

@@ -1,30 +1,31 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
-using SIMA.Domain.Models.Features.BCP.Scenarios.Args;
+﻿using SIMA.Domain.Models.Features.BCP.Scenarios.Args;
+using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 
-public class ScenarioBusinessContinuityPlanVersioning : Entity
+public class BusinessContinuityPlanScenarioCobitScenario : Entity
 {
-    private ScenarioBusinessContinuityPlanVersioning()
+    private BusinessContinuityPlanScenarioCobitScenario()
     {
 
     }
-    private ScenarioBusinessContinuityPlanVersioning(CreateScenarioBusinessContinuityPlanVersioningArg arg)
+    private BusinessContinuityPlanScenarioCobitScenario(CreateBusinessContinuityPlanScenarioCobitScenarioArg arg)
     {
         Id = new(arg.Id);
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
         ScenarioId = new(arg.ScenarioId);
+        CobitScenarioId = new(arg.CobitScenarioId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
 
-    public static ScenarioBusinessContinuityPlanVersioning Create(CreateScenarioBusinessContinuityPlanVersioningArg arg)
+    public static BusinessContinuityPlanScenarioCobitScenario Create(CreateBusinessContinuityPlanScenarioCobitScenarioArg arg)
     {
-        return new ScenarioBusinessContinuityPlanVersioning(arg);
+        return new BusinessContinuityPlanScenarioCobitScenario(arg);
     }
 
     public void Delete(long userId)
@@ -38,11 +39,11 @@ public class ScenarioBusinessContinuityPlanVersioning : Entity
     {
         ActiveStatusId = (long)status;
     }
-    public ScenarioBusinessContinuityPlanVersioningId Id { get; set; }
-    public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; set; }
-    public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; set; }
+    public BusinessContinuityPlanScenarioCobitScenarioId Id { get; set; }
     public ScenarioId ScenarioId { get; private set; }
-    public Scenario Scenario { get; private set; }
+    public virtual Scenario Scenario { get; private set; }
+    public CobitScenarioId CobitScenarioId { get; private set; }
+    public virtual CobitScenario CobitScenario { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
