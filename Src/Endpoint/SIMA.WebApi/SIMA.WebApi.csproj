@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
-	<InformationalVersion>4.6.11</InformationalVersion>
+	<InformationalVersion>4.7.12</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
