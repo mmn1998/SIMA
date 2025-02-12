@@ -51,6 +51,7 @@ using SIMA.Application.Feaatures.BCP.HappeningPossiblities.Mappers;
 using SIMA.Application.Feaatures.BCP.ImportanceDegrees.Mappers;
 using SIMA.Application.Feaatures.BCP.Origins.Mappers;
 using SIMA.Application.Feaatures.BCP.PlanResponsibilities.Mappers;
+using SIMA.Application.Feaatures.BCP.PlanTypes.Mappers;
 using SIMA.Application.Feaatures.BCP.RecoveryOptionPriorities.Mappers;
 using SIMA.Application.Feaatures.BCP.RecoveryPointObjectives.Mappers;
 using SIMA.Application.Feaatures.BCP.ScenarioExecutionHistories.Mapper;
@@ -330,6 +331,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new PlanResponsibilityMapper());
                 conf.AddProfile(new StrategyTypeMapper());
                 conf.AddProfile(new BackupPeriodMapper());
+                conf.AddProfile(new PlanTypeMapper());
                 conf.AddProfile(new RecoveryOptionPriorityMapper());
                 conf.AddProfile(new BusinessImpactAnalysisMapper());
                 conf.AddProfile(new BusinessContinuityStrategyMapper());

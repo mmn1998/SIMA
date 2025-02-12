@@ -56,6 +56,7 @@ using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
 using SIMA.Domain.Models.Features.BCP.Origins.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryOptionPriorities.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
 using SIMA.Domain.Models.Features.BCP.ScenarioExecutionHistories.Entities;
@@ -396,6 +397,7 @@ public class SIMADBContext : DbContext
     public DbSet<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles { get; set; }
     public DbSet<ServicePriority> ServicePriorities { get; set; }
     public DbSet<BackupPeriod> BackupPeriods { get; set; }
+    public DbSet<PlanType> PlanTypes { get; set; }
     public DbSet<BusinessContinuityPlan> BusinessContinuityPlans { get; set; }
     public DbSet<Scenario> Scenarios { get; set; }
     public DbSet<ScenarioExecutionHistory> ScenarioExecutionHistories { get; set; }

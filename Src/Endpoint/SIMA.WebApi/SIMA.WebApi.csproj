@@ -83,6 +83,8 @@
     <Compile Include="Controllers\Features\Auths\SysConfigs\V1\SysConfigsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Users\V1\UsersController.cs" />
     <Compile Include="Controllers\Features\Auths\Users\V1\UsersQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\PlanTypes\V1\PlanTypesController.cs" />
+    <Compile Include="Controllers\Features\BCP\PlanTypes\V1\PlanTypesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\BusinessContinuityStrategies\V1\BusinessContinuityStrategiesController.cs" />
     <Compile Include="Controllers\Features\BCP\BusinessContinuityStrategies\V1\BusinessContinuityStrategiesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\BusinesImpactAnalysises\V1\BusinessImpactAnalysisesQueryController.cs" />
