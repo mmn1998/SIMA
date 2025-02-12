@@ -5,9 +5,9 @@ using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.BCP.ConsequenceIntensions.V1;
 
-[Route("[controller]")]
+[Route("bcp/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "ConsequenceIntensions")]
+[ApiExplorerSettings(GroupName = "BCP/ConsequenceIntensions")]
 public class ConsequenceIntensionsController : ControllerBase
 {
     private readonly IMediator _mediator;

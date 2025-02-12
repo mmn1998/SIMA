@@ -5,9 +5,9 @@ using SIMA.Framework.Common.Response;
 
 namespace SIMA.WebApi.Controllers.Features.BCP.SolutionPeriorities.V1;
 
-[Route("[controller]")]
+[Route("bcp/[controller]")]
 [ApiController]
-[ApiExplorerSettings(GroupName = "SolutionPriorities")]
+[ApiExplorerSettings(GroupName = "BCP/SolutionPriorities")]
 public class SolutionPrioritiesController : ControllerBase
 {
     private readonly IMediator _mediator;

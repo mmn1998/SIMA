@@ -1,7 +1,9 @@
-﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+﻿using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Args;
 using SIMA.Domain.Models.Features.BCP.Consequences.Contracts;
 using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
+using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -77,4 +79,10 @@ public class Consequence : Entity, IAggregateRoot
     }
     private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
     public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
+
+    private List<ConsequenceValue> _consequenceValues = new();
+    public ICollection<ConsequenceValue>  ConsequenceValues => _consequenceValues;
+
+    private List<BiaValue> _biaValues = new();
+    public ICollection<BiaValue>  BiaValues => _biaValues;
 }

@@ -1,4 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities;
 using SIMA.Domain.Models.Features.BCP.Origins.Args;
 using SIMA.Domain.Models.Features.BCP.Origins.Contracts;
 using SIMA.Domain.Models.Features.BCP.Origins.ValueObjects;
@@ -77,4 +78,7 @@ public class Origin : Entity, IAggregateRoot
     }
     private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
     public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
+
+    private List<ConsequenceValue> _consequenceValues = new();
+    public ICollection<ConsequenceValue> ConsequenceValues => _consequenceValues;
 }

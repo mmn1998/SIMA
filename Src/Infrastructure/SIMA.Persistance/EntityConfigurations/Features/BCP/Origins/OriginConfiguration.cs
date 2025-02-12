@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.BCP.Origins.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessImpactAnalysises;
+namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Origins;
 
 public class OriginConfiguration : IEntityTypeConfiguration<Origin>
 {

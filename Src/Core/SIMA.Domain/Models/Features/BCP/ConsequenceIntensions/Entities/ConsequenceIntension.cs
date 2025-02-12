@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Args;
+﻿using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Args;
 using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Contracts;
 using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -77,4 +78,7 @@ public class ConsequenceIntension : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+
+    private List<BiaValue> _biaValues = new();
+    public ICollection<BiaValue> BiaValues => _biaValues;
 }

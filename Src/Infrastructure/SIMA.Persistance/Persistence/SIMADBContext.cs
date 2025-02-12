@@ -41,6 +41,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ViewLists.Entities;
 using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
+using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
@@ -50,6 +51,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entitie
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities;
 using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
 using SIMA.Domain.Models.Features.BCP.Origins.Entities;
@@ -383,6 +385,8 @@ public class SIMADBContext : DbContext
     public DbSet<OrganizationalServicePriority> OrganizationalServicePriorities { get; set; }
     public DbSet<SolutionPriority> SolutionPriorities { get; set; }
     public DbSet<ConsequenceIntension> ConsequenceIntensions { get; set; }
+    public DbSet<ConsequenceValue> ConsequenceValues { get; set; }
+    public DbSet<BiaValue> BiaValues { get; set; }
     public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
     public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
     public DbSet<Consequence> Consequences { get; set; }

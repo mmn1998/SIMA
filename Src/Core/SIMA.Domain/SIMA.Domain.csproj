@@ -38,14 +38,6 @@
   <ItemGroup>
     <Folder Include="Models\Features\AccessManagement\AccessRequests\Contracts\" />
     <Folder Include="Models\Features\Auths\ResponsibleTypes\Exceptions\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\Args\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\Contracts\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\Entities\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\ValueObjects\" />
-    <Folder Include="Models\Features\BCP\BiaValues\Args\" />
-    <Folder Include="Models\Features\BCP\BiaValues\Contracts\" />
-    <Folder Include="Models\Features\BCP\BiaValues\Entities\" />
-    <Folder Include="Models\Features\BCP\BiaValues\ValueObjects\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />

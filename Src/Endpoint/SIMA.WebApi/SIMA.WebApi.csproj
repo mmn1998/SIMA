@@ -89,6 +89,10 @@
     <Compile Include="Controllers\Features\BCP\BusinesImpactAnalysises\V1\BusinessImpactAnalysissController.cs" />
     <Compile Include="Controllers\Features\BCP\BusinessContinuityPlans\BusinessContinuityPlansController.cs" />
     <Compile Include="Controllers\Features\BCP\BusinessContinuityPlans\BusinessContinuityPlansQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\BiaValues\V1\BiaValuesController.cs" />
+    <Compile Include="Controllers\Features\BCP\BiaValues\V1\BiaValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceValues\V1\ConsequenceValuesController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceValues\V1\ConsequenceValuesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\PlanResponsibilities\V1\PlanResponsibilitiesController.cs" />
     <Compile Include="Controllers\Features\BCP\PlanResponsibilities\V1\PlanResponsibilitiesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\Back_UpPeriods\V1\BackupPeriodsController.cs" />
