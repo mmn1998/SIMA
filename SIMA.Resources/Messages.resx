@@ -711,4 +711,7 @@
     <value>انتخاب فایل در بخش استعلام حواله اجباری است!</value>
     <comment>100113</comment>
   </data>
+  <data name="CurrenciesAreRequiredInInquiryRequestError" xml:space="preserve">
+    <value>اضافه شدن مبلغ و نوع ارز اجباری میباشد</value>
+  </data>
 </root>

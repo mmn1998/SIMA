@@ -295,6 +295,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to اضافه شدن مبلغ و نوع ارز اجباری میباشد.
+        /// </summary>
+        public static string CurrenciesAreRequiredInInquiryRequestError {
+            get {
+                return ResourceManager.GetString("CurrenciesAreRequiredInInquiryRequestError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نوع ارز درخواست با استعلام مطابقت ندارد.
         /// </summary>
         public static string CurrencyTypeError {

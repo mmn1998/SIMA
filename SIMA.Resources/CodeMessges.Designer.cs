@@ -583,6 +583,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 100114.
+        /// </summary>
+        public static string _100114Code {
+            get {
+                return ResourceManager.GetString("100114Code", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 200.
         /// </summary>
         public static string _200Code {

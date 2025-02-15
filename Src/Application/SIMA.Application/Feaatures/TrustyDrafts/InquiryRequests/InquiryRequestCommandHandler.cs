@@ -49,6 +49,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
                 throw SimaResultException.PersianDateException;
             }
         }
+
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
             var docArgs = _mapper.Map<List<CreateInquiryRequestDocumentArg>>(request.InquiryRequestDocuments);
@@ -59,6 +60,8 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             }
             entity.AddDocuments(docArgs);
         }
+        else
+            throw new SimaResultException(CodeMessges._100114Code, Messages.CurrenciesAreRequiredInInquiryRequestError);
 
 
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 3)
@@ -77,6 +80,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         }
         else
             throw new SimaResultException(CodeMessges._100113Code, Messages.DocumentsAreRequiredInInquiryRequestError);
+
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(arg.Id);
