@@ -66,31 +66,31 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
                 }
                 entity.AddServiceCustomers(args);
             }
-            //if (request.ServiceAvalibilityList is not null)
-            //{
-            //    var args = new List<CreateServiceAvalibilityArg>();
-            //    foreach (var item in request.ServiceAvalibilityList)
-            //    {
-            //        for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
-            //        {
-            //            var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
-            //            var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;
-            //            var newArg = new CreateServiceAvalibilityArg
-            //            {
-            //                ActiveStatusId = (long)ActiveStatusEnum.Active,
-            //                CreatedAt = DateTime.Now,
-            //                CreatedBy = userId,
-            //                ServiceId = arg.Id,
-            //                Id = IdHelper.GenerateUniqueId(),
-            //                WeekDay = i,
-            //                ServiceAvalibilityEndTime = serviceEndTime,
-            //                ServiceAvalibilityStartTime = serviceStartTime
-            //            };
-            //            args.Add(newArg);
-            //        }
-            //    }
-            //    entity.AddServiceAvalibilities(args);
-            //}
+            if (request.ServiceAvalibilityList is not null)
+            {
+                var args = new List<CreateServiceAvalibilityArg>();
+                foreach (var item in request.ServiceAvalibilityList)
+                {
+                    for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
+                    {
+                        var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
+                        var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;
+                        var newArg = new CreateServiceAvalibilityArg
+                        {
+                            ActiveStatusId = (long)ActiveStatusEnum.Active,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = userId,
+                            ServiceId = arg.Id,
+                            Id = IdHelper.GenerateUniqueId(),
+                            WeekDay = i,
+                            ServiceAvalibilityEndTime = serviceEndTime,
+                            ServiceAvalibilityStartTime = serviceStartTime
+                        };
+                        args.Add(newArg);
+                    }
+                }
+                entity.AddServiceAvalibilities(args);
+            }
             if (request.UserTypeList is not null)
             {
                 var args = _mapper.Map<List<CreateServiceUserArg>>(request.UserTypeList);
@@ -171,16 +171,16 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
                 }
                 entity.AddServiceAssignedStaffs(args);
             }
-            if (request.ServiceAvalibilityList is not null)
-            {
-                var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);
-                foreach (var item in args)
-                {
-                    item.CreatedBy = _simaIdentity.UserId;
-                    item.ServiceId = arg.Id;
-                }
-                entity.AddServiceAvalibilities(args);
-            }
+            //if (request.ServiceAvalibilityList is not null)
+            //{
+            //    var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);
+            //    foreach (var item in args)
+            //    {
+            //        item.CreatedBy = _simaIdentity.UserId;
+            //        item.ServiceId = arg.Id;
+            //    }
+            //    entity.AddServiceAvalibilities(args);
+            //}
             #region ServiceIssues
             var serviceIssueArg = _mapper.Map<CreateServiceRelatedIssueArg>(arg);
             entity.AddServiceIssues(new List<CreateServiceRelatedIssueArg>

@@ -59,8 +59,12 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             }
             entity.AddDocuments(docArgs);
         }
+
+
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 3)
             throw new SimaResultException(CodeMessges._100110Code, Messages.CurrencyTypeOverCountError);
+
+
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 0)
         {
             var currencyArgs = _mapper.Map<List<CreateInquiryRequestCurrencyArg>>(request.InquiryRequestCurrencies);
@@ -71,6 +75,8 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             }
             entity.AddCurrencies(currencyArgs);
         }
+        else
+            throw new SimaResultException(CodeMessges._100113Code, Messages.DocumentsAreRequiredInInquiryRequestError);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(arg.Id);

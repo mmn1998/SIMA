@@ -385,6 +385,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to انتخاب فایل در بخش استعلام حواله اجباری است!.
+        /// </summary>
+        public static string DocumentsAreRequiredInInquiryRequestError {
+            get {
+                return ResourceManager.GetString("DocumentsAreRequiredInInquiryRequestError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to مقدار زیر سامانه نمیتواند خالی باشد.
         /// </summary>
         public static string DomainIsNotNull {

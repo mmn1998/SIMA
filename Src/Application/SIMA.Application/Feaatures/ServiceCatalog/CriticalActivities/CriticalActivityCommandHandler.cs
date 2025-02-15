@@ -4,7 +4,6 @@ using SIMA.Application.Contract.Features.ServiceCatalog.CriticalActivities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Interfaces;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -102,41 +101,41 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
             }
             entity.AddAssignedStaffs(args);
         }
-        //if (request.ExecutionPlanList is not null)
-        //{
-        //    var args = new List<CreateCriticalActivityExecutionPlanArg>();
-        //    foreach (var item in request.ExecutionPlanList)
-        //    {
-        //        for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
-        //        {
-        //            var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
-        //            var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;
-        //            var newArg = new CreateCriticalActivityExecutionPlanArg
-        //            {
-        //                ActiveStatusId = (long)ActiveStatusEnum.Active,
-        //                CreatedAt = DateTime.Now,
-        //                CreatedBy = userId,
-        //                CriticalActivityId = arg.Id,
-        //                Id = IdHelper.GenerateUniqueId(),
-        //                WeekDay = i,
-        //                ServiceAvalibilityEndTime = serviceEndTime,
-        //                ServiceAvalibilityStartTime = serviceStartTime
-        //            };
-        //            args.Add(newArg);
-        //        }
-        //    }
-        //    entity.AddCriticalActivityExrecutionPlans(args);
-        //}
         if (request.ExecutionPlanList is not null)
         {
-            var args = _mapper.Map<List<CreateCriticalActivityExecutionPlanArg>>(request.ExecutionPlanList);
-            foreach (var item in args)
+            var args = new List<CreateCriticalActivityExecutionPlanArg>();
+            foreach (var item in request.ExecutionPlanList)
             {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.CriticalActivityId = arg.Id;
+                for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
+                {
+                    var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
+                    var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;
+                    var newArg = new CreateCriticalActivityExecutionPlanArg
+                    {
+                        ActiveStatusId = (long)ActiveStatusEnum.Active,
+                        CreatedAt = DateTime.Now,
+                        CreatedBy = userId,
+                        CriticalActivityId = arg.Id,
+                        Id = IdHelper.GenerateUniqueId(),
+                        WeekDay = i,
+                        ServiceAvalibilityEndTime = serviceEndTime,
+                        ServiceAvalibilityStartTime = serviceStartTime
+                    };
+                    args.Add(newArg);
+                }
             }
             entity.AddCriticalActivityExrecutionPlans(args);
         }
+        //if (request.ExecutionPlanList is not null)
+        //{
+        //    var args = _mapper.Map<List<CreateCriticalActivityExecutionPlanArg>>(request.ExecutionPlanList);
+        //    foreach (var item in args)
+        //    {
+        //        item.CreatedBy = _simaIdentity.UserId;
+        //        item.CriticalActivityId = arg.Id;
+        //    }
+        //    entity.AddCriticalActivityExrecutionPlans(args);
+        //}
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);

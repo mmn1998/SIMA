@@ -707,4 +707,8 @@
   <data name="OrderingIsDeactivteError" xml:space="preserve">
     <value>مقدار مرتب سازی وارد شده غیر فعال میباشد.</value>
   </data>
+  <data name="DocumentsAreRequiredInInquiryRequestError" xml:space="preserve">
+    <value>انتخاب فایل در بخش استعلام حواله اجباری است!</value>
+    <comment>100113</comment>
+  </data>
 </root>
