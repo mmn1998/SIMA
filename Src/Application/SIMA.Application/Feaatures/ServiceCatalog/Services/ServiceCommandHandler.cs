@@ -71,7 +71,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
                 var args = new List<CreateServiceAvalibilityArg>();
                 foreach (var item in request.ServiceAvalibilityList)
                 {
-                    for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
+                    for (int i = item.WeekDayStart; i <= item.WeekDayEnd; i++)
                     {
                         var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
                         var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;

@@ -106,7 +106,7 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
             var args = new List<CreateCriticalActivityExecutionPlanArg>();
             foreach (var item in request.ExecutionPlanList)
             {
-                for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
+                for (int i = item.WeekDayStart; i <= item.WeekDayEnd; i++)
                 {
                     var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
                     var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;
