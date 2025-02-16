@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.RiskManagers.AffectedHistories;
@@ -24,8 +25,8 @@ public class AffectedHistoryDomainService : IAffectedHistoryDomainService
     public async Task<bool> IsNumericUnique(float value, AffectedHistoryId? id = null)
     {
         bool result = false;
-        if (id == null) result = !await _context.AffectedHistories.AnyAsync(x => x.NumericValue == value);
-        else result = !await _context.AffectedHistories.AnyAsync(x => x.NumericValue == value && x.Id != id);
+        if (id == null) result = !await _context.AffectedHistories.AnyAsync(x => x.NumericValue == value && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        else result = !await _context.AffectedHistories.AnyAsync(x => x.NumericValue == value && x.Id != id && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
         return result;
     }
 }

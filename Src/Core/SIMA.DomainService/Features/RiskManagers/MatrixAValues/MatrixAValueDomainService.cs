@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.RiskManagers.MatrixAValues;
@@ -25,8 +26,8 @@ public class MatrixAValueDomainService : IMatrixAValueDomainService
     public async Task<bool> IsNumericUnique(float value, MatrixAValueId? id = null)
     {
         bool result = false;
-        if (id == null) result = !await _context.MatrixAValues.AnyAsync(x => x.NumericValue == value);
-        else result = !await _context.MatrixAValues.AnyAsync(x => x.NumericValue == value && x.Id != id);
+        if (id == null) result = !await _context.MatrixAValues.AnyAsync(x => x.NumericValue == value && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        else result = !await _context.MatrixAValues.AnyAsync(x => x.NumericValue == value && x.Id != id && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
         return result;
     }
 }

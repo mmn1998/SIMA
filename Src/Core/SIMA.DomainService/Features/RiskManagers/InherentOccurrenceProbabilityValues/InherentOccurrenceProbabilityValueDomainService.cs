@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.RiskManagers.InherentOccurrenceProbabilityValues;
@@ -24,8 +25,8 @@ public class InherentOccurrenceProbabilityValueDomainService : IInherentOccurren
     public async Task<bool> IsNumericUnique(float value, InherentOccurrenceProbabilityValueId? id = null)
     {
         bool result = false;
-        if (id == null) result = !await _context.InherentOccurrenceProbabilityValues.AnyAsync(x => x.NumericValue == value);
-        else result = !await _context.InherentOccurrenceProbabilityValues.AnyAsync(x => x.NumericValue == value && x.Id != id);
+        if (id == null) result = !await _context.InherentOccurrenceProbabilityValues.AnyAsync(x => x.NumericValue == value && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        else result = !await _context.InherentOccurrenceProbabilityValues.AnyAsync(x => x.NumericValue == value && x.Id != id && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
         return result;
     }
 }
