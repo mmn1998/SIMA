@@ -24,6 +24,7 @@ public class AffectedHistoryDomainService : IAffectedHistoryDomainService
 
     public async Task<bool> IsNumericUnique(float value, AffectedHistoryId? id = null)
     {
+        // این مورد که در دیتابیس یونیک نباشه ولی در برنامه یونیک بودن چک بشه باعث باگ خواهد شد و واحد فنی بک اند هیچ مسئولیتی در این مورد نخواهد پذیرفت و این موضوع به تیم تحلیل که درخواست این موضوع را داشت، اطلاع داده شد
         bool result = false;
         if (id == null) result = !await _context.AffectedHistories.AnyAsync(x => x.NumericValue == value && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
         else result = !await _context.AffectedHistories.AnyAsync(x => x.NumericValue == value && x.Id != id && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
