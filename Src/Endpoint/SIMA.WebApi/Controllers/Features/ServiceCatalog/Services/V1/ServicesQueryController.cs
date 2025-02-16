@@ -27,9 +27,11 @@ public class ServicesQueryController : ControllerBase
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.ServiceGetAll)]
+  //  [SimaAuthorize(Permissions.ServiceGetAll)]
     public async Task<Result> Get([FromBody] GetAllServicesQuery query)
     {
-        return await _mediator.Send(query);
+        var result= await _mediator.Send(query);
+
+        return result;
     }
 }

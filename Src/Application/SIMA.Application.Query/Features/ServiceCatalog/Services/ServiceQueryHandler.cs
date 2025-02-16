@@ -1,7 +1,10 @@
 ﻿using SIMA.Application.Query.Contract.Features.ServiceCatalog.Services;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.Services;
+using System.Reflection;
 
 namespace SIMA.Application.Query.Features.ServiceCatalog.Services;
 
@@ -9,10 +12,12 @@ public class ServiceQueryHandler : IQueryHandler<GetServiceQuery, Result<GetServ
     IQueryHandler<GetAllServicesQuery, Result<IEnumerable<GetAllServicesQueryResult>>>
 {
     private readonly IServiceQueryRepository _repository;
+    private readonly ISimaReposrtService _reposrtService;
 
-    public ServiceQueryHandler(IServiceQueryRepository repository)
+    public ServiceQueryHandler(IServiceQueryRepository repository, ISimaReposrtService reposrtService)
     {
         _repository = repository;
+        _reposrtService = reposrtService;
     }
     public async Task<Result<GetServiceQueryResult>> Handle(GetServiceQuery request, CancellationToken cancellationToken)
     {
@@ -22,6 +27,19 @@ public class ServiceQueryHandler : IQueryHandler<GetServiceQuery, Result<GetServ
 
     public async Task<Result<IEnumerable<GetAllServicesQueryResult>>> Handle(GetAllServicesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        var res = await _repository.GetAll(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            var excelByte = _reposrtService.ExportToExcel(res.Data);
+            var exportResult = new ExportResult
+            {
+                Name = _reposrtService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+        return res;
     }
 }

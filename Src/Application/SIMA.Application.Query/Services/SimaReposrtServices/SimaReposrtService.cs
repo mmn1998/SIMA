@@ -63,4 +63,10 @@ public class SimaReposrtService : ISimaReposrtService
         workbook.SaveAs(memoryStream);
         return memoryStream.ToArray();
     }
+
+    public string GenerateFileName(string cartableName)
+    {
+        var guid = Guid.NewGuid().ToString();
+        return $"{guid} {cartableName}";
+    }
 }
