@@ -171,16 +171,16 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
                 }
                 entity.AddServiceAssignedStaffs(args);
             }
-            //if (request.ServiceAvalibilityList is not null)
-            //{
-            //    var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);
-            //    foreach (var item in args)
-            //    {
-            //        item.CreatedBy = _simaIdentity.UserId;
-            //        item.ServiceId = arg.Id;
-            //    }
-            //    entity.AddServiceAvalibilities(args);
-            //}
+            if (request.ServiceAvalibilityList is not null)
+            {
+                var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ServiceId = arg.Id;
+                }
+                entity.AddServiceAvalibilities(args);
+            }
             #region ServiceIssues
             var serviceIssueArg = _mapper.Map<CreateServiceRelatedIssueArg>(arg);
             entity.AddServiceIssues(new List<CreateServiceRelatedIssueArg>
