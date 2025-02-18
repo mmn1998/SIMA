@@ -24,8 +24,8 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
     private readonly IMapper _mapper;
     private readonly ISimaIdentity _simaIdentity;
 
-    public ServiceCommandHandler(IServiceRepository repository, IUnitOfWork unitOfWork
-        , IServiceDomainService service, IMapper mapper, ISimaIdentity simaIdentity)
+    public ServiceCommandHandler(IServiceRepository repository, IUnitOfWork unitOfWork,
+        IServiceDomainService service, IMapper mapper, ISimaIdentity simaIdentity)
     {
         _repository = repository;
         _unitOfWork = unitOfWork;
