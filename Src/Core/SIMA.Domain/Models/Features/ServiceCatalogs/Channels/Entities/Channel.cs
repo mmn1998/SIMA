@@ -207,7 +207,7 @@ public class Channel : Entity, IAggregateRoot
         }
         foreach (var entity in shouldDeleteEntities)
         {
-            entity.Delete(args[0].CreatedBy);
+            entity.Delete(shouldDeleteEntities.ToList()[0].CreatedBy);
         }
     }
     public void ModifyChannelUserTypes(List<CreateChannelUserTypeArg> args)
