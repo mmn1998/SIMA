@@ -87,88 +87,88 @@ public class UserQueryRepository : IUserQueryRepository
         var query = @"
                                          --user
 
-                            select distinct
-                                u.Id UserId,
-                                u.CompanyId,
-                                u.Username,
-                                u.IsFirstLogin,
-                                u.IsLocked,
-                                u.AccessFailedOverallCount,
-                                u.AccessFailedDate,
-                                u.ConfirmCode,
-                                u.IsSendOTP
-                             from Authentication.Users u
-                            where U.Id=@UserId  and U.ActiveStatusId<>3
+ select distinct
+       u.Id UserId,
+       u.CompanyId,
+       u.Username,
+       u.IsFirstLogin,
+       u.IsLocked,
+       u.AccessFailedOverallCount,
+       u.AccessFailedDate,
+       u.ConfirmCode,
+       u.IsSendOTP
+    from Authentication.Users u
+   where U.Id=@UserId  and U.ActiveStatusId<>3
 
-                             --Roles
-                             select distinct r.id RoleId
-                             from Authentication.Users u
-                             inner join Authentication.UserRole ur on u.Id = ur.UserId
-                             inner join Authentication.Role r on r.Id = ur.RoleId
-                             where U.Id=@UserId  and U.ActiveStatusId<>3
+    --Roles
+    select distinct r.id RoleId
+    from Authentication.Users u
+    inner join Authentication.UserRole ur on u.Id = ur.UserId
+    inner join Authentication.Role r on r.Id = ur.RoleId
+    where U.Id=@UserId  and U.ActiveStatusId<>3
 
-                             --groups
-                             select distinct g.id GroupId
-                             from Authentication.Users u
-                             inner  join Authentication.UserGroup ug on u.Id = ug.UserId
-                             inner join Authentication.Groups g on g.Id = ug.GroupId
-                             where U.Id=@UserId  and U.ActiveStatusId<>3
+    --groups
+    select distinct g.id GroupId
+    from Authentication.Users u
+    inner  join Authentication.UserGroup ug on u.Id = ug.UserId
+    inner join Authentication.Groups g on g.Id = ug.GroupId
+    where U.Id=@UserId  and U.ActiveStatusId<>3
 
-                             --permission
-                             select distinct p1.Code Code
-                             from Authentication.Users u
-                             inner  join Authentication.UserPermission up on u.Id = up.UserId
-                             inner join [Authentication].[Permission] P1 on P1.Id=up.PermissionId
-                             where U.Id=@UserId  and U.ActiveStatusId<>3 and up.ActiveStatusId != 3
+    --permission
+    select distinct p1.Code Code
+    from Authentication.Users u
+    inner  join Authentication.UserPermission up on u.Id = up.UserId
+    inner join [Authentication].[Permission] P1 on P1.Id=up.PermissionId
+    where U.Id=@UserId  and U.ActiveStatusId<>3 and up.ActiveStatusId != 3
 
-                             union 
+    union 
 
-                             select distinct p2.Code Code
-                             from Authentication.Users u
-                             inner join Authentication.UserRole ur on u.Id = ur.UserId
-                             inner join Authentication.Role r on r.Id = ur.RoleId
-                             inner join Authentication.RolePermission rp on r.Id = rp.RoleId
-                             inner join [Authentication].[Permission] P2 on P2.Id=rp.PermissionId
-                             where U.Id=@UserId and U.ActiveStatusId<>3
+    select distinct p2.Code Code
+    from Authentication.Users u
+    inner join Authentication.UserRole ur on u.Id = ur.UserId
+    inner join Authentication.Role r on r.Id = ur.RoleId
+    inner join Authentication.RolePermission rp on r.Id = rp.RoleId and rp.ActiveStatusId<>3
+    inner join [Authentication].[Permission] P2 on P2.Id=rp.PermissionId
+    where U.Id=@UserId and U.ActiveStatusId<>3
 
-                             union 
+    union 
 
-                             select distinct P3.Code Code
-                             from Authentication.Users u
-                             inner  join Authentication.UserGroup ug on u.Id = ug.UserId
-                             inner join Authentication.Groups g on g.Id = ug.GroupId
-                             inner join Authentication.GroupPermission gp on g.Id = gp.GroupId
-                             inner join [Authentication].[Permission] P3 on P3.Id=gp.PermissionId
-                             where U.Id=@UserId  and u.ActiveStatusId<>3
+    select distinct P3.Code Code
+    from Authentication.Users u
+    inner  join Authentication.UserGroup ug on u.Id = ug.UserId
+    inner join Authentication.Groups g on g.Id = ug.GroupId
+    inner join Authentication.GroupPermission gp on g.Id = gp.GroupId and gp.ActiveStatusId<>3
+    inner join [Authentication].[Permission] P3 on P3.Id=gp.PermissionId
+    where U.Id=@UserId  and u.ActiveStatusId<>3
 
-                             --Menus
-                          SELECT distinct f.Code Code    from 
-                          Authentication.Domain d 
-                          join Authentication.DomainForms df on d.Id=df.DomainId
-                          join Authentication.Form f on df.FormId=f.Id
-                          join Authentication.FormUser fu on f.Id=fu.FormId
-                          join Authentication.Users u on fu.UserId=u.Id
-                          where fu.UserId=@UserId  and fu.ActiveStatusId<>3 and u.ActiveStatusId <>3 and f.ActiveStatusId <>3
-                          union
-                          select distinct f.Code Code from 
-                         Authentication.Domain d
-                         join Authentication.DomainForms df on d.Id=df.DomainId and df.ActiveStatusId <>3
-                         join Authentication.Form f on df.FormId=f.Id and f.ActiveStatusId <>3
-                         join Authentication.FormGroup fg on f.Id=fg.FormId and fg.ActiveStatusId <>3
-                         join Authentication.Groups g on fg.GroupId=g.Id and g.ActiveStatusId <>3
-                         join Authentication.UserGroup ug on g.Id=ug.GroupId  and ug.ActiveStatusId <>3
-                         join Authentication.Users u on ug.UserId=u.Id and u.ActiveStatusId <>3
-                         where u.Id=@UserId  and u.ActiveStatusId<>3 and fg.ActiveStatusId <>3 and f.ActiveStatusId <>3
-                          union
-                          select distinct f.Code Code from 
-                            Authentication.Domain d
-                            join Authentication.DomainForms df on d.Id=df.DomainId and df.ActiveStatusId <>3
-                            join Authentication.Form f on df.FormId=f.Id and f.ActiveStatusId <>3
-                            join Authentication.FormRole fr on f.Id=fr.FormId and fr.ActiveStatusId <>3
-                            join Authentication.Role r on fr.RoleId=r.Id and R.ActiveStatusId <>3
-                            join Authentication.UserRole ur on r.Id=ur.RoleId and UR.ActiveStatusId <> 3
-                            join Authentication.Users u on ur.UserId=u.Id and u.ActiveStatusId <>3
-                            where u.Id=@UserId  and u.ActiveStatusId<>3 and fr.ActiveStatusId <>3 and f.ActiveStatusId <>3 ";
+    --Menus
+ SELECT distinct f.Code Code    from 
+ Authentication.Domain d 
+ join Authentication.DomainForms df on d.Id=df.DomainId
+ join Authentication.Form f on df.FormId=f.Id
+ join Authentication.FormUser fu on f.Id=fu.FormId
+ join Authentication.Users u on fu.UserId=u.Id
+ where fu.UserId=@UserId  and fu.ActiveStatusId<>3 and u.ActiveStatusId <>3 and f.ActiveStatusId <>3
+ union
+ select distinct f.Code Code from 
+Authentication.Domain d
+join Authentication.DomainForms df on d.Id=df.DomainId and df.ActiveStatusId <>3
+join Authentication.Form f on df.FormId=f.Id and f.ActiveStatusId <>3
+join Authentication.FormGroup fg on f.Id=fg.FormId and fg.ActiveStatusId <>3
+join Authentication.Groups g on fg.GroupId=g.Id and g.ActiveStatusId <>3
+join Authentication.UserGroup ug on g.Id=ug.GroupId  and ug.ActiveStatusId <>3
+join Authentication.Users u on ug.UserId=u.Id and u.ActiveStatusId <>3
+where u.Id=@UserId  and u.ActiveStatusId<>3 and fg.ActiveStatusId <>3 and f.ActiveStatusId <>3
+ union
+ select distinct f.Code Code from 
+   Authentication.Domain d
+   join Authentication.DomainForms df on d.Id=df.DomainId and df.ActiveStatusId <>3
+   join Authentication.Form f on df.FormId=f.Id and f.ActiveStatusId <>3
+   join Authentication.FormRole fr on f.Id=fr.FormId and fr.ActiveStatusId <>3
+   join Authentication.Role r on fr.RoleId=r.Id and R.ActiveStatusId <>3
+   join Authentication.UserRole ur on r.Id=ur.RoleId and UR.ActiveStatusId <> 3
+   join Authentication.Users u on ur.UserId=u.Id and u.ActiveStatusId <>3
+   where u.Id=@UserId  and u.ActiveStatusId<>3 and fr.ActiveStatusId <>3 and f.ActiveStatusId <>3 ";
         using (var connection = new SqlConnection(_connectionString))
         {
             using (var multi = await connection.QueryMultipleAsync(query, new { UserId = userId }))
