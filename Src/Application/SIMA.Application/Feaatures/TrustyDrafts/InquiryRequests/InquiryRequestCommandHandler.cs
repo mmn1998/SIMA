@@ -37,7 +37,6 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         var arg = _mapper.Map<CreateInquiryRequestArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
         arg.ReferenceNumber = await CalculateRefrenceNumber(request.ProformaCurrencyTypeId, request.DraftOrderNumber, arg.BeneficiaryName, _service);
-        var entity = await InquiryRequest.Create(arg, _service);
         if (!string.IsNullOrEmpty(request.ProformaDate))
         {
             if (DateTime.TryParse(request.ProformaDate, out DateTime date))
@@ -49,6 +48,8 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
                 throw SimaResultException.PersianDateException;
             }
         }
+        var entity = await InquiryRequest.Create(arg, _service);
+
 
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
@@ -62,7 +63,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         }
         else
             throw new SimaResultException(CodeMessges._100113Code, Messages.DocumentsAreRequiredInInquiryRequestError);
-        
+
 
 
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 3)
