@@ -123,7 +123,7 @@ public class Product : Entity, IAggregateRoot
 
         foreach (var document in deleteResponsible)
         {
-            document.Delete(args[0].CreatedBy);
+            document.Delete(deleteResponsible[0].CreatedBy);
         }
     }
 

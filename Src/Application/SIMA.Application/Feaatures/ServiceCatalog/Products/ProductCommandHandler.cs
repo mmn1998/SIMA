@@ -67,7 +67,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg);
 
-        if (request.Channels is not null && request.Channels.Count > 0)
+        if (request.Channels is not null)
         {
             var channelArg = _mapper.Map<List<CreateProductChannelArg>>(request.Channels);
             foreach (var item in channelArg)
@@ -77,7 +77,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
             }
             entity.CreateChannel(channelArg, entity.Id.Value);
         }
-        if (request.ProductResponsibles is not null && request.ProductResponsibles.Count > 0)
+        if (request.ProductResponsibles is not null)
         {
             var responsibleArg = _mapper.Map<List<CreateProductResponsibleArg>>(request.ProductResponsibles);
             foreach (var item in responsibleArg)

@@ -61,7 +61,8 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             entity.AddDocuments(docArgs);
         }
         else
-            throw new SimaResultException(CodeMessges._100114Code, Messages.CurrenciesAreRequiredInInquiryRequestError);
+            throw new SimaResultException(CodeMessges._100113Code, Messages.DocumentsAreRequiredInInquiryRequestError);
+        
 
 
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 3)
@@ -79,7 +80,7 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             entity.AddCurrencies(currencyArgs);
         }
         else
-            throw new SimaResultException(CodeMessges._100113Code, Messages.DocumentsAreRequiredInInquiryRequestError);
+            throw new SimaResultException(CodeMessges._100114Code, Messages.CurrenciesAreRequiredInInquiryRequestError);
 
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
