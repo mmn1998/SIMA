@@ -4,6 +4,8 @@ using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
@@ -424,6 +426,8 @@ public class Risk : Entity
     public virtual TriggerStatus? TriggerStatus { get; private set; }
     public ScenarioHistoryId? ScenarioHistoryId { get; private set; }
     public virtual ScenarioHistory? ScenarioHistory { get; private set; }
+    public ConsequenceLevelId? ConsequenceLevelId { get; private set; }
+    public virtual ConsequenceLevel? ConsequenceLevel { get; private set; }
     public FrequencyId? FrequencyId { get; private set; }
     public virtual Frequency? Frequency { get; private set; }
     public long ActiveStatusId { get; private set; }
