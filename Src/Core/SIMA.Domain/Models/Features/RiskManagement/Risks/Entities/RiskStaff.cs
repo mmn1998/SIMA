@@ -22,6 +22,7 @@ public class RiskStaff
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        ResponsilbeTypeId = new (arg.ResponsilbeTypeId);
     }
     public static RiskStaff Create(CreateRiskStaffArg arg)
     {

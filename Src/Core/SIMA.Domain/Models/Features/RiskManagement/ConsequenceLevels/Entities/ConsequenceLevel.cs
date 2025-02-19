@@ -7,6 +7,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 
@@ -128,6 +129,9 @@ public class ConsequenceLevel : Entity, IAggregateRoot
     }
     private List<Severity> _severities = new();
     public ICollection<Severity> Severities => _severities;
+    
     private List<ConsequenceLevelCategory> _riskConsequences = new();
     public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
+    private List<Risk> _risk = new();
+    public ICollection<Risk> Risks =>  _risk;
 }

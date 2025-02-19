@@ -10,6 +10,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 
 namespace SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
 
@@ -81,4 +82,6 @@ public class ResponsibleType : Entity
     public ICollection<CriticalActivityAssignedStaff> CriticalActivityAssignedStaffs => _criticalActivityAssignedStaffs;
     private List<ServiceAssignedStaff> _serviceAssignedStaffs = new();
     public ICollection<ServiceAssignedStaff> ServiceAssignedStaffs => _serviceAssignedStaffs;
+    private List<RiskStaff> _riskStaves = new();
+    public ICollection<RiskStaff> RiskStaves => _riskStaves;
 }

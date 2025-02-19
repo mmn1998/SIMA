@@ -109,6 +109,17 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                 }
                 entity.AddThreats(args);
             }
+            
+            if (request.ServiceAssignedStavesList is not null)
+            {
+                var args = _mapper.Map<List<CreateRiskStaffArg>>(request.ServiceAssignedStavesList);
+                foreach (var item in args)
+                {
+                    item.StaffId = arg.Id;
+                    item.CreatedBy = userId;
+                }
+                entity.AddStaffs(args);
+            }
             ////Add issue
 
             var relatedIssueArg = _mapper.Map<CreateRiskRelatedIssueArg>(request);
@@ -204,7 +215,16 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                 }
                 entity.ModifyThreats(args);
             }
-            
+            if (request.ServiceAssignedStavesList is not null)
+            {
+                var args = _mapper.Map<List<CreateRiskStaffArg>>(request.ServiceAssignedStavesList);
+                foreach (var item in args)
+                {
+                    item.StaffId = request.Id;
+                    item.CreatedBy = userId;
+                }
+                entity.ModifyStaffs(args);
+            }
 
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);

@@ -80,5 +80,11 @@ public class RiskConfiguration : IEntityTypeConfiguration<Risk>
             .WithMany(x => x.Risks)
             .HasForeignKey(x => x.FrequencyId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.ConsequenceLevelId )
+            .HasConversion(x => x.Value,
+                x => new(x));
+
+        entity.HasOne(f => f.ConsequenceLevel).WithMany().HasForeignKey(f => f.ConsequenceLevelId).OnDelete(DeleteBehavior.ClientSetNull);;
     }
 }

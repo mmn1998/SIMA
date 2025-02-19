@@ -56,6 +56,7 @@ public class Risk : Entity
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        ConsequenceLevelId =new (arg.ConsequenceLevelId);
     }
 
     public static async Task<Risk> Create(CreateRiskArg arg, IRiskDomainService service)
@@ -80,6 +81,7 @@ public class Risk : Entity
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        ConsequenceLevelId  =  new(arg.ConsequenceLevelId);
         //AddDomainEvent(new ModifyRiskCreateEvents(_riskRelatedIssues.First().IssueId.Value, MainAggregateEnums.RiskManagment, Name, Id.Value));
     }
     #region Guards
