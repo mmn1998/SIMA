@@ -28,15 +28,15 @@ public class ServicePriorityDomainService : IServicePriorityDomainService
         bool result = false;
         if (Id == null)
         {
-            result = !await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering);
-            if (await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering && x.ActiveStatusId != (long)ActiveStatusEnum.Active))
-                throw new SimaResultException(CodeMessges._400Code, Messages.OrderingIsDeactivteError);
+            result = !await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering  && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+            /*if (await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering && x.ActiveStatusId == (long)ActiveStatusEnum.Active))
+                throw new SimaResultException(CodeMessges._400Code, Messages.OrderingIsDeactivteError);*/
         }
         else
         {
-            if (await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering && x.Id != Id && x.ActiveStatusId != (long)ActiveStatusEnum.Active))
+            if (await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering && x.Id != Id && x.ActiveStatusId == (long)ActiveStatusEnum.Active))
                 throw new SimaResultException(CodeMessges._400Code, Messages.OrderingIsDeactivteError);
-            result = !await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering && x.Id != Id);
+            result = !await _context.ServicePriorities.AnyAsync(x => x.Ordering == ordering && x.Id != Id && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
         }
         return result;
     }
