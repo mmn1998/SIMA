@@ -26,31 +26,45 @@ public class ServiceCatalogeHelperQueryHandler : IQueryHandler<GetLastCodeQuery,
     public async Task<Result<GetLastCodeQueryResult>> Handle(GetLastCodeQuery request, CancellationToken cancellationToken)
     {
         var response = new GetLastCodeQueryResult();
+        var code = string.Empty;
         switch (request.Type?.ToLower())
         {
             case "se":
-            {
-                response.Code = await _serviceQueryRepository.GetLastCode();
-                break;
-            }
+                {
+                    code = await _serviceQueryRepository.GetLastCode();
+                    break;
+                }
             case "ch":
-            {
-                response.Code = await _channelQueryRepository.GetLastCode();
-                break;
-            }
+                {
+                    code = await _channelQueryRepository.GetLastCode();
+                    break;
+                }
             case "pr":
-            {
-                response.Code = await _productQueryRepository.GetLastCode();
-                break;
-            }
+                {
+                    code = await _productQueryRepository.GetLastCode();
+                    break;
+                }
             case "cr":
-            {
-                response.Code = await _criticalActivitiyQueryRepository.GetLastCode();
-                break;
-            }
+                {
+                    code = await _criticalActivitiyQueryRepository.GetLastCode();
+                    break;
+                }
             default:
                 break;
         }
+        response.Code = CalculateNext(code);
         return Result.Ok(response);
+    }
+    private string CalculateNext(string lastCode)
+    {
+        var newCode = string.Empty;
+        if (lastCode.Length == 5)
+        {
+            var prefix = lastCode.Substring(0, 2);
+            var counter = lastCode.Substring(2, 3);
+            var newCounter = (Convert.ToInt32(counter) + 1).ToString("000");
+            newCode = $"{prefix}{newCounter}";
+        }
+        return newCode;
     }
 }
