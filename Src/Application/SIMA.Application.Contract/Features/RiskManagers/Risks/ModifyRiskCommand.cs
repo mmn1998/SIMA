@@ -10,7 +10,7 @@ public class ModifyRiskCommand : ICommand<Result<long>>
     public string? Code { get; set; }
     public long AffectedHistoryId { get; set; }
     public long UseVulnerabilityId { get; set; }
-    public string ConsequenceLevel { get; set; }
+    public long ConsequenceLevelId { get; set; }
     public long ConsequenceCategoryId { get; set; }
     public long TriggerStatusId { get; set; }
     public long ScenarioHistoryId { get; set; }
