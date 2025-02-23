@@ -61,7 +61,9 @@ select
 	IR.ProformaAmount,
 	IR.ProformaCurrencyTypeId,
 	CT2.Name ProformaCurrencyTypeName,
-    TD.DraftNumber
+    TD.DraftNumber,
+	IRes.ExcessWageCurrencyTypeId,
+	CT3.Name ExcessWageCurrencyTypeName
 from TrustyDraft.InquiryRequest IR
 LEFT JOIN TrustyDraft.TrustyDraft TD on TD.InquiryRequestId = IR.Id and TD.ActiveStatusId<>3
 join Bank.Customer C on C.Id = IR.CustomerId and C.ActiveStatusId<>3
@@ -79,6 +81,7 @@ LEFT JOIN TrustyDraft.InquiryRequestCurrency IRC on IRC.Id = IRes.InquiryRequest
 LEFT JOIN Bank.CurrencyType CT on CT.Id = IRC.CurrencyTypeId and CT.ActiveStatusId<>3
 LEFT JOIN Bank.CurrencyType CT2 on CT2.Id = IR.ProformaCurrencyTypeId and CT2.ActiveStatusId<>3
 LEFT JOIN TrustyDraft.DraftOrigin DO on DO.Id = IR.DraftOriginId and DO.ActiveStatusId<>3
+LEFT JOIN Bank.CurrencyType CT3 ON CT3.Id = IRes.ExcessWageCurrencyTypeId and CT3.ActiveStatusId<>3
 WHERE IR.ActiveStatusId<>3
 ";
     }

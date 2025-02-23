@@ -6,6 +6,7 @@ public class CreateInquiryResponseArg
     public long BrokerInquiryStatusId { get; set; }
     public long InquiryRequestCurrencyId { get; set; }
     public long InquiryRequestId { get; set; }
+    public long? ExcessWageCurrencyTypeId { get; set; }
     public long BrokerId { get; set; }
     public long WageRateId { get; set; }
     public decimal CalculatedWage { get; set; }

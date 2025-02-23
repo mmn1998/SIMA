@@ -49,6 +49,8 @@ public class GetInquiryRequestQueryResult
     public decimal? ProformaAmount { get; set; }
     public long? ProformaCurrencyTypeId { get; set; }
     public string? ProformaCurrencyTypeName { get; set; }
+    public long? ExcessWageCurrencyTypeId { get; set; }
+    public string? ExcessWageCurrencyTypeName { get; set; }
 }
 public class GetInquiryRequestDocumentQueryResult
 {

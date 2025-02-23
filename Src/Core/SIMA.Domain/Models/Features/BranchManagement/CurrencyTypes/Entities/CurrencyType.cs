@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.Interfaces;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.Resources.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
@@ -84,6 +85,9 @@ public class CurrencyType : Entity
 
     private List<InquiryRequest> _inquiryRequests = new();
     public ICollection<InquiryRequest> InquiryRequests => _inquiryRequests;
+
+    private List<InquiryResponse> _inquiryResponses = new();
+    public ICollection<InquiryResponse> InquiryResponses => _inquiryResponses;
 
     #region Guards
     private static async Task CreateGuards(CreateCurrencyTypeArg arg, ICurrencyTypeDomainService currencyTypeDomainService)
