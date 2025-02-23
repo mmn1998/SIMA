@@ -50,7 +50,6 @@ public class Risk : Entity
         FrequencyId = new(arg.FrequencyId);
         TriggerStatusId = new(arg.TriggerStatusId);
         ScenarioHistoryId = new(arg.ScenarioHistoryId);
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
         UseVulnerabilityId = new(arg.UseVulnerabilityId);
         AffectedHistoryId = new(arg.AffectedHistoryId);
         ActiveStatusId = arg.ActiveStatusId;
@@ -75,7 +74,6 @@ public class Risk : Entity
         FrequencyId = new(arg.FrequencyId);
         TriggerStatusId = new(arg.TriggerStatusId);
         ScenarioHistoryId = new(arg.ScenarioHistoryId);
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
         UseVulnerabilityId = new(arg.UseVulnerabilityId);
         AffectedHistoryId = new(arg.AffectedHistoryId);
         ActiveStatusId = arg.ActiveStatusId;
@@ -422,8 +420,6 @@ public class Risk : Entity
     public virtual AffectedHistory? AffectedHistory { get; private set; }
     public UseVulnerabilityId? UseVulnerabilityId { get; private set; }
     public virtual UseVulnerability? UseVulnerability { get; private set; }
-    public ConsequenceCategoryId? ConsequenceCategoryId { get; private set; }
-    public virtual ConsequenceCategory? ConsequenceCategory { get; private set; }
     public TriggerStatusId? TriggerStatusId { get; private set; }
     public virtual TriggerStatus? TriggerStatus { get; private set; }
     public ScenarioHistoryId? ScenarioHistoryId { get; private set; }

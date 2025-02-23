@@ -26,10 +26,8 @@ public class GetAllRisksQueryResult
     public string? FrequencyName { get; set; }
     public long TriggerStatusId { get; set; }
     public string? TriggerStatusName { get; set; }
-    public long ConsequenceCategoryId { get; set; }
     public long? ConsequenceLevelId { get; set; }
     public string? ConsequenceLevelName { get; set; }
-    public string? ConsequenceCategoryName { get; set; }
     public string? Description { get; set; }
     public string? ActiveStatus { get; set; }
     public long IssueId { get; set; }
@@ -72,12 +70,11 @@ public class GetRiskQueryResult
     public long ScenarioHistoryId { get; set; }
     public string? ScenarioHistoryName { get; set; }
     public long FrequencyId { get; set; }
-    public string? ConsequenceLevel { get; set; }
+    public long? ConsequenceLevelId { get; set; }
+    public string? ConsequenceLevelName { get; set; }
     public string? FrequencyName { get; set; }
     public long TriggerStatusId { get; set; }
     public string? TriggerStatusName { get; set; }
-    public long ConsequenceCategoryId { get; set; }
-    public string? ConsequenceCategoryName { get; set; }
     public string? Description { get; set; }
     public string? ActiveStatus { get; set; }
     public IEnumerable<GetCorrectiveActionQueryResult>? CorrectiveActionList { get; set; }

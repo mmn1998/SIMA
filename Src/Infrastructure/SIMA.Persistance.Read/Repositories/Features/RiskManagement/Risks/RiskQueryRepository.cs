@@ -37,8 +37,6 @@ F.Name FrequencyName,
 R.TriggerStatusId,
 TS.Name TriggerStatusName,
 R.ConsequenceLevelId,
-R.ConsequenceCategoryId,
-CC.Name ConsequenceCategoryName,
 a.Name ActiveStatus,
 r.Description,
 r.CreatedAt
@@ -78,7 +76,6 @@ LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusI
 LEFT JOIN RiskManagement.ScenarioHistory SH on SH.Id = R.ScenarioHistoryId and SH.ActiveStatusId<>3
 LEFT JOIN RiskManagement.TriggerStatus TS on TS.Id = R.TriggerStatusId and TS.ActiveStatusId<>3
 LEFT JOIN RiskManagement.UseVulnerability UV on UV.Id = R.UseVulnerabilityId and UV.ActiveStatusId<>3
-LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = R.ConsequenceCategoryId and CC.ActiveStatusId<>3
 left join RiskManagement.ConsequenceLevel as cl on cl.Id =  R.ConsequenceLevelId AND cl.ActiveStatusId<>3
 Where R.ActiveStatusId<>3
 
