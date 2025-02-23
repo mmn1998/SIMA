@@ -35,7 +35,7 @@ public class ChannelCommandHandler : ICommandHandler<CreateChannelCommand, Resul
         {
             var arg = _mapper.Map<CreateChannelArg>(request);
             arg.CreatedBy = _simaIdentity.UserId;
-            arg.Code = await CalculateCode();
+            //arg.Code = await CalculateCode();
             var entity = await Channel.Create(arg, _service);
             if (request.ChannelResponsibleList is not null)
             {

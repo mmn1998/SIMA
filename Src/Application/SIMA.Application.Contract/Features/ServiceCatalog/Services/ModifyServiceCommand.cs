@@ -7,6 +7,7 @@ public class ModifyServiceCommand : ICommand<Result<long>>
 {
     public long Id { get; set; }
     public string? Name { get; set; }
+    public string? Code { get; set; }
     public long ServiceCategoryId { get; set; }
     public long ServicePriorityId { get; set; }
     public string? IsCriticalService { get; set; }

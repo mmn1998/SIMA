@@ -6,6 +6,7 @@ namespace SIMA.Application.Contract.Features.ServiceCatalog.Channels;
 public class CreateChannelCommand : ICommand<Result<long>>
 {
     public string? Name { get; set; }
+    public string? Code { get; set; }
     public string? Scope { get; set; }
     public string? Description { get; set; }
     public long? ServiceStatusId { get; set; }

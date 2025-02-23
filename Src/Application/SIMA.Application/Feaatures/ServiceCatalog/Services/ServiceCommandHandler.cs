@@ -42,7 +42,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             //var lastRequest = await _repository.GetLastService();
             arg.CreatedBy = userId;
 
-            arg.Code = await CalculateCode();
+            //arg.Code = await CalculateCode();
             var entity = await Service.Create(arg, _service);
             #region isFullTimeSercice
 

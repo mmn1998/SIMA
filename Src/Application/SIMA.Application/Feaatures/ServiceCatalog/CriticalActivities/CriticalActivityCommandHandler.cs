@@ -36,7 +36,7 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
         var userId = _simaIdentity.UserId;
         arg.CreatedBy = userId;
 
-        arg.Code = await CalculateCode();
+        //arg.Code = await CalculateCode();
         var entity = await CriticalActivity.Create(arg, _service);
 
         #region IsFullTimeExecution

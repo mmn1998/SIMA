@@ -34,7 +34,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
     {
         var arg = _mapper.Map<CreateProductArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        arg.Code = await CalculateCode();
+        //arg.Code = await CalculateCode();
         var entity = await Product.Create(arg, _service);
         if (request.Channels is not null && request.Channels.Count > 0)
         {
