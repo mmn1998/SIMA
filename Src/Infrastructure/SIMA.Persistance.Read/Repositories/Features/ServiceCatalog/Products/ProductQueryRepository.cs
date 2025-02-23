@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.ServiceCatalog.Products;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -152,5 +153,15 @@ where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and 
         response.ProductResponsibles = (await multi.ReadAsync<ProductResponsibleQuery>()).ToList();
 
         return response;
+    }
+    public async Task<string> GetLastCode()
+    {
+        var query = @"
+select top 1 Code from ServiceCatalog.Product
+order by CreatedAt desc
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        return await connection.QueryFirstOrDefaultAsync<string>(query) ?? throw SimaResultException.NotFound;
     }
 }

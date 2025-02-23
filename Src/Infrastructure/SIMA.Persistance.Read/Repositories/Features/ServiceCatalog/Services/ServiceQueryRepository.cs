@@ -420,4 +420,15 @@ SELECT S.[Id]
 
 
     }
+
+    public async Task<string> GetLastCode()
+    {
+        var query = @"
+select top 1 Code from ServiceCatalog.Service
+order by CreatedAt desc
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        return await connection.QueryFirstOrDefaultAsync<string>(query) ?? throw SimaResultException.NotFound;
+    }
 }

@@ -9,4 +9,5 @@ public interface ICriticalActivitiyQueryRepository : IQueryRepository
 {
     Task<Result<GetCriticalActivityQueryResult>> GetDetail(long id, long issueId);
     Task<Result<IEnumerable<GetAllCriticalActivitiesQueryResult>>> GetAll(GetAllCriticalActivitiesQuery request);
+    Task<string> GetLastCode();
 }

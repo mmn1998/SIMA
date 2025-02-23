@@ -8,4 +8,5 @@ public interface IServiceQueryRepository : IQueryRepository
 {
     Task<GetServiceQueryResult> GetById(long id, long issueId);
     Task<Result<IEnumerable<GetAllServicesQueryResult>>> GetAll(GetAllServicesQuery request);
+    Task<string> GetLastCode();
 }

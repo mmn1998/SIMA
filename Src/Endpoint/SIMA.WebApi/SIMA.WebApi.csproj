@@ -154,6 +154,7 @@
     <Compile Include="Controllers\Features\RiskManagers\TriggerStatuses\V1\TriggerStatusesQueryController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\UseVulnerabilities\V1\UseVulnerabilitiesController.cs" />
     <Compile Include="Controllers\Features\RiskManagers\UseVulnerabilities\V1\UseVulnerabilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Helpers\V1\ServiceCatalogeHelperQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesQueryController.cs" />
     <Compile Include="Controllers\Features\ServiceCatalog\Diagrams\V1\ServiceDiagramsQueryController.cs" />

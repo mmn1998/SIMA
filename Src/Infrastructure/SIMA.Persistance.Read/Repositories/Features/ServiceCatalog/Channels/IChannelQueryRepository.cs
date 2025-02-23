@@ -8,4 +8,5 @@ public interface IChannelQueryRepository : IQueryRepository
 {
     Task<GetChannelQueryResult> GetById(long id);
     Task<Result<IEnumerable<GetChannelQueryResult>>> GetAll(GetAllChannelsQuery request);
+    Task<string> GetLastCode();
 }
