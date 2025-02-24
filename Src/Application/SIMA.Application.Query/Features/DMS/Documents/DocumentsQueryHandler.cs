@@ -1,4 +1,6 @@
-﻿using SIMA.Application.Query.Contract.Features.DMS.Documents;
+﻿using Microsoft.AspNetCore.Hosting;
+using SIMA.Application.Query.Contract.Features.DMS.Documents;
+using SIMA.Application.Query.Contract.Features.Helpers;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Response;
@@ -12,16 +14,29 @@ public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, Get
 {
     private readonly IDocumentQueryRepository _repository;
     private readonly IFileService _fileService;
+    private readonly IWebHostEnvironment _webHost;
 
-    public DocumentsQueryHandler(IDocumentQueryRepository repository, IFileService fileService)
+    public DocumentsQueryHandler(IDocumentQueryRepository repository, IFileService fileService, IWebHostEnvironment webHost)
     {
         _repository = repository;
         _fileService = fileService;
+        _webHost = webHost;
     }
     public async Task<GetDownloadDocumentQueryResult> Handle(GetDownloadDocumentQuery request, CancellationToken cancellationToken)
     {
-        var documentResult = await _repository.GetForDownload(request.DocumetId);
         var response = new GetDownloadDocumentQueryResult();
+        if (request.DocumetId == -1)
+        {
+            var rootPath = _webHost.ContentRootPath;
+            var filePath = Path.Combine(rootPath, "wwwroot", "Help", "help.pdf");
+            var fileContentHelp = await _fileService.Download(filePath) ?? throw SimaResultException.AccessDeny;
+            response.ContentType = "application/pdf";
+            response.Extension = "pdf";
+            response.FileContent = fileContentHelp;
+            response.Name = "راهنمای کاربری تبادلات ارزی (بخش اول از فاز یک).pdf";
+            return response;
+        }
+        var documentResult = await _repository.GetForDownload(request.DocumetId);
         var fileContent = await _fileService.Download(documentResult.FileAddress);
         if (fileContent == null)
         {
