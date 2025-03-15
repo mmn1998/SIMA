@@ -1,0 +1,1 @@
+﻿public record OperationalStatusId(long Value);

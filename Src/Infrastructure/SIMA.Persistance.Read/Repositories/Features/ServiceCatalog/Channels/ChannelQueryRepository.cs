@@ -16,6 +16,102 @@ public class ChannelQueryRepository : IChannelQueryRepository
     {
         _connectionString = configuration.GetConnectionString();
     }
+
+    public async Task<GetChannelQueryResult> GetByCode(string code)
+    {
+	    var response = new GetChannelQueryResult();
+        var query = @"
+
+   
+SELECT 
+		c.[Id]
+      ,c.[Name]
+      ,c.[Code]
+      ,c.[Scope]
+      ,c.[Description]
+      ,c.[ServiceStatusId]
+      ,c.[InServiceDate]
+      ,c.[CreatedAt]
+	  ,a.[Name] ActiveStatus
+  FROM [ServiceCatalog].[Channel] C
+  inner join Basic.ActiveStatus A on c.ActiveStatusId = a.ID and C.ActiveStatusId <> 3
+  where c.Code = @Code and c.ActiveStatusId<>3;
+
+SELECT
+	cr.ResponsibleTypeId
+	,RT.[Name] ResponsibleTypeName
+	,CR.ResponsibleId
+	,(p.FirstName + ' ' + p.LastName) Responsible
+	,D.Id DepartmentId
+	,D.Name DepartmentName
+	,Com.Id CompanyId
+	,Com.Name CompanyName
+	,CR.BranchId
+	,Br.Name BranchName
+FROM [ServiceCatalog].[Channel] C
+inner join ServiceCatalog.ChannelResponsible CR on cr.ChannelId = c.Id and CR.ActiveStatusId <> 3
+inner join Basic.ResponsibleType RT on RT.Id = CR.ResponsibleTypeId and rt.ActiveStatusId<>3
+inner join Organization.Staff S on s.Id = cr.ResponsibleId and s.ActiveStatusId<>3
+inner join Organization.Position PO on PO.Id = S.PositionId and Po.ActiveStatusId <> 3
+inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
+INNER join Organization.Company Com on Com.Id = D.CompanyId and Com.ActiveStatusId<>3
+LEFT join Bank.Branch Br on Br.Id = CR.BranchId and Br.ActiveStatusId<>3
+inner join Authentication.Profile P on s.ProfileId = p.Id and p.ActiveStatusId<>3
+where c.Code = @Code and c.ActiveStatusId<>3;
+
+SELECT 
+		PC.ProductId
+		,p.[Name] ProductName
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ProductChannel PC on Pc.ChannelId = c.Id and pc.ActiveStatusId<>3
+  inner join ServiceCatalog.Product P on P.Id = Pc.ProductId
+  where c.Code = @Code and c.ActiveStatusId<>3;
+
+SELECT 
+
+		CUT.UserTypeId
+		,UT.[Name] UserTypeName
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ChannelUserType CUT on CUT.ChannelId = c.Id and CUT.ActiveStatusId<>3
+  inner join Basic.UserType UT on ut.Id = CUT.UserTypeId
+  where c.Code = @Code and c.ActiveStatusId<>3;
+
+SELECT 
+        cap.IpAddressFrom
+		,cap.PortFrom		
+        ,cap.IpAddressTo
+		,cap.PortTo
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ChannelAccessPoint CAP on CAP.ChannelId = c.Id and CAP.ActiveStatusId<>3
+  where c.Code = @Code and c.ActiveStatusId<>3
+
+SELECT 
+
+		CUT.ServiceId
+		,UT.[Name] ServiceName
+  FROM [ServiceCatalog].[Channel] C
+  inner join ServiceCatalog.ServiceChanel CUT on CUT.ChannelId = c.Id and CUT.ActiveStatusId<>3
+  inner join ServiceCatalog.Service UT on ut.Id = CUT.ServiceId
+  where c.Code = @Code and c.ActiveStatusId<>3;
+";
+        using (var connection = new SqlConnection(_connectionString))
+        {
+            await connection.OpenAsync();
+            using (var multi = await connection.QueryMultipleAsync(query, new { code = code}))
+            {
+                response = await multi.ReadFirstOrDefaultAsync<GetChannelQueryResult>();
+                response.NullCheck();
+                response.ChannelResponsibleList = await multi.ReadAsync<GetChannelResponsibleQuery>();
+                response.ProductChannelList = await multi.ReadAsync<GetProductChannelQuery>();
+                response.ChannelUserTypeList = await multi.ReadAsync<GetChannelUserTypeQuery>();
+                response.ChannelAccessPointList = await multi.ReadAsync<GetChannelAccessPointQuery>();
+                response.ServiceChannelList = await multi.ReadAsync<GetServiceChannelQuery>();
+            }
+
+        }
+        return response;
+    }
+
     public async Task<Result<IEnumerable<GetChannelQueryResult>>> GetAll(GetAllChannelsQuery request)
     {
         var mainQuery = @"

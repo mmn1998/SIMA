@@ -52,10 +52,10 @@ public class ServiceCatalogeHelperQueryHandler : IQueryHandler<GetLastCodeQuery,
             default:
                 break;
         }
-        response.Code = CalculateNext(code);
+        response.Code = CalculateNext(code, request.Type);
         return Result.Ok(response);
     }
-    private string CalculateNext(string lastCode)
+    private string CalculateNext(string lastCode, string? type)
     {
         var newCode = string.Empty;
         if (lastCode.Length == 5)
@@ -64,6 +64,10 @@ public class ServiceCatalogeHelperQueryHandler : IQueryHandler<GetLastCodeQuery,
             var counter = lastCode.Substring(2, 3);
             var newCounter = (Convert.ToInt32(counter) + 1).ToString("000");
             newCode = $"{prefix}{newCounter}";
+        }
+        else
+        {
+            return $"{type?.ToUpper()}001";
         }
         return newCode;
     }

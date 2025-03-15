@@ -1,13 +1,22 @@
 ﻿#region usings
 using Microsoft.EntityFrameworkCore;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Back_Up_Methods.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelationshipTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataCenters.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedureTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.OperationalStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.Entities;
@@ -143,8 +152,10 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entit
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.OrganizationalProjects.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceOrganizationalProjects.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
@@ -379,6 +390,8 @@ public class SIMADBContext : DbContext
     public DbSet<ServiceType> ServiceTypes { get; set; }
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Service> Services { get; set; }
+    public DbSet<OrganizationalProject> OrganizationalProjects { get; set; }
+    public DbSet<ServiceOrganizationalProject> ServiceOrganizationalProjects { get; set; }
     #endregion
 
     #region BCP
@@ -474,9 +487,19 @@ public class SIMADBContext : DbContext
     public DbSet<BusinessCriticality> BusinessCriticalities { get; set; }
     public DbSet<ConfigurationItemStatus> ConfigurationItemStatuses { get; set; }
     public DbSet<AssetType> AssetTypes { get; set; }
+    public DbSet<Asset> Assets { get; set; }
     public DbSet<ConfigurationItemType> ConfigurationItemTypes { get; set; }
     public DbSet<ConfigurationItemRelationshipType> ConfigurationItemRelationshipTypes { get; set; }
     public DbSet<LicenseType> LicenseTypes { get; set; }
+    public DbSet<DataCenter> DataCenters { get; set; }
+    public DbSet<DataProcedureType> DataProcedureTypes { get; set; }
+    public DbSet<DataProcedure> DataProcedures { get; set; }
+    public DbSet<BackupMethod> BackupMethods { get; set; }
+    public DbSet<OperationalStatus> OperationalStatuses { get; set; }
+    public DbSet<AssetCustomFieldValue> AssetCustomFieldValues { get; set; }
+    public DbSet<AssetAssignedStaff> AssetAssignedStaffs { get; set; }
+    public DbSet<AssetCustomFieldOption> AssetCustomFieldOption { get; set; }
+    public DbSet<ConfigurationItemCustomFieldOption> ConfigurationItemCustomFieldOption { get; set; }
     #endregion
 
     #region Notifications

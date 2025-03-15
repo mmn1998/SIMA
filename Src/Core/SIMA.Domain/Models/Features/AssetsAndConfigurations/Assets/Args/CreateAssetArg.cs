@@ -7,9 +7,15 @@ public class CreateAssetArg
     public long? SupplierId { get; set; }
     public long? OwnerId { get; set; }
     public long AssetTypeId { get; set; }
+    public long PhysicalLocationId { get; set; }
     public long? WarehouseId { get; set; }
     public string? Model { get; set; }
     public string? Title { get; set; }
+    public long? DataCenterId { get; set; }
+    public long? OperationalStatusId { get; set; }
+    public long? AssetCategoryId { get; set; }
+    public string? Code { get; set; }
+    public string? VersionNumber { get; set; }
     public string? Manufacturer { get; set; }
     public DateOnly? ManufactureDate { get; set; }
     public DateOnly? OwnershipDate { get; set; }
@@ -24,7 +30,6 @@ public class CreateAssetArg
     public decimal? OwnershipPaymentValue { get; set; }
     public long? UserTypeId { get; set; }
     public long? BusinessCriticalityId { get; set; }
-    public long? PhysicalLocationId { get; set; }
     public string? HasConfidentialInformation { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }

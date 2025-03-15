@@ -26,6 +26,13 @@ public class ProductsQueryController :ControllerBase
         var query = new GetProductQuery { Id = id };
         return await _mediator.Send(query);
     }
+    [HttpGet("GetByCode")]
+    [SimaAuthorize(Permissions.ProductsGet)]
+    public async Task<Result> Get([FromQuery] string code)
+    {
+        var query = new GetProductByCodeQuery { Code = code };
+        return await _mediator.Send(query);
+    }
     [HttpPost("GetAll")]
     //[SimaAuthorize(Permissions.ProductsGetAll)]
     public async Task<Result> Get([FromBody] GetAllProductQuery query)

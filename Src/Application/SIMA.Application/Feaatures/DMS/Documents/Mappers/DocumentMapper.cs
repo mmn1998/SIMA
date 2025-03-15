@@ -72,6 +72,8 @@ public class DocumentMapper : Profile
     private static async Task<string> UploadFileInFileServer(string base64, string fileName, long? extensionTypeId, IFileService fileService, string rootPath)
     {
         var fileContent = fileService.GetBytesFromBase64(base64);
+        var mimeType = fileService.GetMimeType(fileContent);
+
         if (fileContent is null || fileContent.Length == 0)
         {
             throw new SimaResultException(CodeMessges._400Code, Messages.FileContentNullError);
@@ -79,7 +81,7 @@ public class DocumentMapper : Profile
         var filePath = await fileService.Upload(fileContent, fileName, rootPath);
         try
         {
-            await FileValidations(filePath, extensionTypeId);
+            await FileValidations(filePath, extensionTypeId,mimeType);
         }
         catch (SimaException)
         {
@@ -89,9 +91,11 @@ public class DocumentMapper : Profile
         return filePath;
     }
     #region FileValidations
-    private static async Task FileValidations(string filePath, long? extensionTypeId)
+    private static async Task FileValidations(string filePath, long? extensionTypeId,string? mimeType)
     {
         var fileExtension = Path.GetExtension(filePath).Replace(".", "");
+        if (mimeType != fileExtension.GetContentType())
+            throw new SimaResultException(CodeMessges._400Code, Messages.MimeTypeNotValid);
         if (extensionTypeId == null)
         {
             throw new SimaResultException(CodeMessges._400Code, Messages.FileTypeNotSelect);

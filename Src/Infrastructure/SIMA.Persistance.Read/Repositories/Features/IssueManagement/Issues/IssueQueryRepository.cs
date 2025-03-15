@@ -711,19 +711,21 @@ LEFT JOIN  [Project].[State] ST on I.CurrentStateId = ST.Id
 
 
                     ///// در تاریخ 10 شهریور 1403، تیم تحلیل نظرش عوض شد و علی رغم داشتن متدی برای دریافت اطلاعات درخواست تدارکات و خرید برای کسی که ثبت کرده، دوباره این قسمت ریفکتور میشود
-                    #region DisableUploadForCreator
-                    //if (!string.IsNullOrEmpty(response.IssueInfo.IsEditable))
-                    //{
-                    //    if (string.Equals("1", response.IssueInfo.IsEditable, StringComparison.InvariantCultureIgnoreCase))
-                    //    {
-                    //        response.IssueInfo.HasDocument = "0";
-                    //        response.FormParams = Enumerable.Empty<StoreProcedureParams>();
-                    //        response.RelatedProgressList = Enumerable.Empty<GetRelatedProgressQueryResult>();
-                    //    }
-                    //}
-                    #endregion
-                    ///// 
-                    ///
+#region DisableUploadForCreator
+//if (!string.IsNullOrEmpty(response.IssueInfo.IsEditable))
+//{
+//    if (string.Equals("1", response.IssueInfo.IsEditable, StringComparison.InvariantCultureIgnoreCase))
+//    {
+//        response.IssueInfo.HasDocument = "0";
+//        response.FormParams = Enumerable.Empty<StoreProcedureParams>();
+//        response.RelatedProgressList = Enumerable.Empty<GetRelatedProgressQueryResult>();
+//    }
+//}
+#endregion
+///// 
+///
+#if DEBUG
+#else
                     foreach (var item in response.IssueApprovalList)
                     {
                         var documentResult = await _repository.GetForDownload(item.SignatureId, forIssueDetail: true);
@@ -741,7 +743,7 @@ LEFT JOIN  [Project].[State] ST on I.CurrentStateId = ST.Id
                             item.downloadedResult = docResponse;
                         }
                     }
-
+#endif
                     /// توضیحات
                     /// if related progresses is empty, approvals should be empty as well. Analysys team says it should sent empty in this time 2025/01/19
                     /// توضیحات

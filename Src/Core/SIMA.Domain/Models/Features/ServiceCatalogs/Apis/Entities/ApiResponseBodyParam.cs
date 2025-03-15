@@ -12,7 +12,7 @@ public class ApiResponseBodyParam : Entity
     private ApiResponseBodyParam(CreateApiResponseBodyParamArg arg)
     {
         Id = new ApiResponseBodyParamId(arg.Id);
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
+        ApiId = new(arg.ApiId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
@@ -25,20 +25,9 @@ public class ApiResponseBodyParam : Entity
     {
         return new ApiResponseBodyParam(arg);
     }
-    public void Modify(ModifyApiResponseBodyParamArg arg)
-    {
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
-        if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
-        Name = arg.Name;
-        DataType = arg.DataType;
-        Description = arg.Description;
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedAt = arg.ModifiedAt;
-        ModifiedBy = arg.ModifiedBy;
-    }
     public ApiResponseBodyParamId Id { get; private set; }
-    public ApiVersionId ApiVersionId { get; private set; }
-    public virtual ApiVersion ApiVersion  { get; private set; }
+    public ApiId ApiId { get; private set; }
+    public virtual Api Api  { get; private set; }
     public string Name { get; private set; }
     public string DataType { get; private set; }
     public string? Description { get; private set; }
@@ -50,6 +39,12 @@ public class ApiResponseBodyParam : Entity
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
     public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
     {
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());

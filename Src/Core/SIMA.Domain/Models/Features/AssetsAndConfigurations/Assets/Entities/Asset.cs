@@ -5,8 +5,14 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Contracts;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.ValueObjects;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Categories.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Categories.ValueObjects;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataCenters.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataCenters.ValueObjects;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.OperationalStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
@@ -25,6 +31,10 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities;
+using SIMA.Framework.Common.Exceptions;
+using SIMA.Resources;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 
@@ -35,6 +45,7 @@ public class Asset : Entity
     {
         Id = new(arg.Id);
         AssetTypeId = new(arg.AssetTypeId);
+        PhysicalLocationId = new(arg.PhysicalLocationId);
         if (arg.SupplierId.HasValue) SupplierId = new(arg.SupplierId.Value);
         if (arg.OwnerId.HasValue) OwnerId = new(arg.OwnerId.Value);
         if (arg.WarehouseId.HasValue) WarehouseId = new(arg.WarehouseId.Value);
@@ -43,6 +54,7 @@ public class Asset : Entity
         if (arg.OwnershipTypeId.HasValue) OwnershipTypeId = new(arg.OwnershipTypeId.Value);
         if (arg.UserTypeId.HasValue) UserTypeId = new(arg.UserTypeId.Value);
         if (arg.BusinessCriticalityId.HasValue) BusinessCriticalityId = new(arg.BusinessCriticalityId.Value);
+        if (arg.AssetCategoryId.HasValue) AssetCategoryId = new(arg.AssetCategoryId.Value);
         SerialNumber = arg.SerialNumber;
         Model = arg.Model;
         Manufacturer = arg.Manufacturer;
@@ -58,6 +70,10 @@ public class Asset : Entity
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        Code = arg.Code;
+        VersionNumber = arg.VersionNumber;
+        if (arg.DataCenterId.HasValue) DataCenterId = new(arg.DataCenterId.Value);
+        if (arg.OperationalStatusId.HasValue) OperationalStatusId = new(arg.OperationalStatusId.Value);
     }
     public static async Task<Asset> Create(CreateAssetArg arg, IAssetDomainService service)
     {
@@ -68,6 +84,7 @@ public class Asset : Entity
     {
         await ModifyGuards(arg, service);
         AssetTypeId = new(arg.AssetTypeId);
+        PhysicalLocationId = new(arg.PhysicalLocationId);
         if (arg.SupplierId.HasValue) SupplierId = new(arg.SupplierId.Value);
         if (arg.OwnerId.HasValue) OwnerId = new(arg.OwnerId.Value);
         if (arg.WarehouseId.HasValue) WarehouseId = new(arg.WarehouseId.Value);
@@ -76,6 +93,7 @@ public class Asset : Entity
         if (arg.OwnershipTypeId.HasValue) OwnershipTypeId = new(arg.OwnershipTypeId.Value);
         if (arg.UserTypeId.HasValue) UserTypeId = new(arg.UserTypeId.Value);
         if (arg.BusinessCriticalityId.HasValue) BusinessCriticalityId = new(arg.BusinessCriticalityId.Value);
+        if (arg.AssetCategoryId.HasValue) AssetCategoryId = new(arg.AssetCategoryId.Value);
         SerialNumber = arg.SerialNumber;
         Model = arg.Model;
         Manufacturer = arg.Manufacturer;
@@ -91,29 +109,47 @@ public class Asset : Entity
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        Code = arg.Code;
+        VersionNumber = arg.VersionNumber;
+        if (arg.DataCenterId.HasValue) DataCenterId = new(arg.DataCenterId.Value);
+        if (arg.OperationalStatusId.HasValue) OperationalStatusId = new(arg.OperationalStatusId.Value);
     }
     #region Guards
     private static async Task CreateGuards(CreateAssetArg arg, IAssetDomainService service)
     {
+        arg.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyAssetArg arg, IAssetDomainService service)
     {
+        arg.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public AssetId Id { get; private set; }
     public string? SerialNumber { get; private set; }
+    public string? Code { get; private set; }
     public SupplierId? SupplierId { get; private set; }
     public virtual Supplier? Supplier { get; private set; }
     public StaffId? OwnerId { get; private set; }
     public virtual Staff? Owner { get; private set; }
     public AssetTypeId AssetTypeId { get; private set; }
     public virtual AssetType AssetType { get; private set; }
+    public CategoryId? AssetCategoryId { get; private set; }
+    public virtual Category? AssetCategory { get; private set; }
     public WarehouseId? WarehouseId { get; private set; }
     public virtual Warehouse? Warehouse { get; private set; }
+    public DataCenterId? DataCenterId { get; private set; }
+    public virtual DataCenter? DataCenter { get; private set; }
     public string? Model { get; private set; }
     public string? Title { get; private set; }
+    public string? VersionNumber { get; private set; }
     public string? Manufacturer { get; private set; }
     public DateOnly? ManufactureDate { get; private set; }
     public DateOnly? OwnershipDate { get; private set; }
@@ -125,6 +161,8 @@ public class Asset : Entity
     public virtual AssetTechnicalStatus? AssetTechnicalStatus { get; private set; }
     public AssetPhysicalStatusId? AssetPhysicalStatusId { get; private set; }
     public virtual AssetPhysicalStatus? AssetPhysicalStatus { get; private set; }
+    public OperationalStatusId? OperationalStatusId { get; private set; }
+    public virtual OperationalStatus? OperationalStatus { get; private set; }
     public OwnershipTypeId? OwnershipTypeId { get; private set; }
     public virtual OwnershipType? OwnershipType { get; private set; }
     public decimal? OwnershipPrepaymentValue { get; private set; }
@@ -178,6 +216,14 @@ public class Asset : Entity
 
     private List<ComplexAsset> _parentAssets = new();
     public ICollection<ComplexAsset> ParentAssets => _parentAssets;
+    
+    private List<AssetCustomFieldValue> _assetCustomFieldValue = new();
+    public ICollection<AssetCustomFieldValue> AssetCustomFieldValue => _assetCustomFieldValue;   
+            
+    private List<AssetAssignedStaff> _assetAssignedStaffs = new();
+    public ICollection<AssetAssignedStaff> AssetAssignedStaffs => _assetAssignedStaffs;
 
+    private List<ConfigurationItemCustomFieldValue> _configurationItemCustomFieldValues = new();
+    public ICollection<ConfigurationItemCustomFieldValue> ConfigurationItemCustomFieldValues => _configurationItemCustomFieldValues;
 }
 

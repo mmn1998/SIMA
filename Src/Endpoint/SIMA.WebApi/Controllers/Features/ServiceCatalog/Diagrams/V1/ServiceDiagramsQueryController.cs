@@ -25,10 +25,84 @@ public class ServiceDiagramsQueryController : ControllerBase
         return await _mediator.Send(query);
     }
     [HttpGet("getServiceNetworkDiagram")]
+    /*
     [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
-    public async Task<Result> GetServiceNetworkDiagram([FromQuery] long? id = null, [FromQuery] int? type = null)
+    */
+    public async Task<Result> GetServiceNetworkDiagram([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
         var query = new GetServiceNetworkDiagramQuery { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+    
+    [HttpGet("getProdoctList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetProdoctList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetProductList() { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+    
+    
+    [HttpGet("getChannelList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetChannelList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetChannelList { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+    
+    [HttpGet("getAssetList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetAssetList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetAssetList { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+    
+    
+    [HttpGet("getAssignedStaffList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetAssignedStaffList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetAssignedStaffList { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+
+    [HttpGet("getApiList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetApiList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetApiList { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+    
+    [HttpGet("getProcedureList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetProcedureList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetProcedureList { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
+    
+    [HttpGet("getRiskList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetRiskList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetRiskList { Id = id, Type = type };
         return await _mediator.Send(query);
     }
 }

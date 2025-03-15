@@ -30,6 +30,8 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
 
 namespace SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 
@@ -205,6 +207,13 @@ public class Staff : Entity
 
     private List<RiskStaff> _riskStaffs = new();
     public ICollection<RiskStaff> RiskStaffs => _riskStaffs;
+    
+    
+    private List<AssetAssignedStaff> _assetAssignedStaffs = new();
+    public ICollection<AssetAssignedStaff> AssetAssignedStaffs => _assetAssignedStaffs;
+    
+    private List<DataProcedureSupportTeam> _dataProcedureSupportTeams = new();
+    public ICollection<DataProcedureSupportTeam> DataProcedureSupportTeams => _dataProcedureSupportTeams;
 
 
 

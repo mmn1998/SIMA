@@ -6,7 +6,8 @@ using SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.Products;
 namespace SIMA.Application.Query.Features.ServiceCatalog.Product;
 
 public class ProductQueryHandler : IQueryHandler<GetProductQuery, Result<GetProductQueryResult>>,
-    IQueryHandler<GetAllProductQuery, Result<IEnumerable<GetProductQueryResult>>>
+    IQueryHandler<GetAllProductQuery, Result<IEnumerable<GetProductQueryResult>>>,
+    IQueryHandler<GetProductByCodeQuery, Result<GetProductQueryResult>>
 
     {
     private readonly IProductQueryRepository _repository;
@@ -25,5 +26,11 @@ public class ProductQueryHandler : IQueryHandler<GetProductQuery, Result<GetProd
     {
         var result = await _repository.GetAll(request);
         return result;
+    }
+
+    public async Task<Result<GetProductQueryResult>> Handle(GetProductByCodeQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetByCode(request);
+        return Result.Ok(result);
     }
 }

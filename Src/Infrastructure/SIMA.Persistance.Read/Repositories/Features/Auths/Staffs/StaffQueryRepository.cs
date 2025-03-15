@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Staffs;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Persistance.Persistence;
@@ -193,5 +194,65 @@ WHERE S.[ActiveStatusID] <> 3 and D.Id = @departmentId
             result.NullCheck();
             return result;
         }
+    }
+
+    public async Task<GetStaffByStaffNumberQueryResult> FindByStaffNumber(string code)
+    {
+        var response = new GetStaffByStaffNumberQueryResult();
+        var query = @"
+SELECT 
+	S.Id
+	,P.FirstName
+	,P.LastName
+	,S.StaffNumber
+	,S.CreatedAt
+	,A.Name ActiveStatus
+FROM Organization.Staff S
+INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
+INNER JOIN Basic.ActiveStatus A on A.Id = S.ActiveStatusId
+WHERE S.StaffNumber = @StaffNumber and S.ActiveStatusId<>3
+
+-- branch
+SELECT 
+DC.Id,
+DC.Name,
+DC.Code
+FROM Organization.Staff S
+INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
+INNER JOIN Organization.Position Po on Po.ID = S.PositionId
+INNER JOIN Bank.Branch DC on DC.Id = Po.BranchId  and DC.ActiveStatusId<>3
+WHERE S.StaffNumber = @StaffNumber and S.ActiveStatusId<>3
+
+-- department
+SELECT 
+DC.Id,
+DC.Name,
+DC.Code
+FROM Organization.Staff S
+INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID and P.ActiveStatusId<>3
+INNER JOIN Organization.Position Po on Po.ID = S.PositionId	and Po.ActiveStatusId<>3
+INNER JOIN Organization.Department DC on DC.Id = Po.DepartmentId  and DC.ActiveStatusId<>3
+WHERE S.StaffNumber = @StaffNumber and S.ActiveStatusId<>3
+
+-- compnay
+SELECT 
+C.Id,
+C.Name,
+C.Code
+FROM Organization.Staff S
+INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID and P.ActiveStatusId<>3
+INNER JOIN Organization.Position Po on Po.ID = S.PositionId and Po.ActiveStatusId<>3
+INNER JOIN Organization.Department DC on DC.Id = Po.DepartmentId  and DC.ActiveStatusId<>3
+INNER JOIN Organization.Company C on C.Id = DC.CompanyId and C.ActiveStatusId<>3
+WHERE S.StaffNumber = @StaffNumber and S.ActiveStatusId<>3
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        using var multi = await connection.QueryMultipleAsync(query, new { Code = code });
+        response = await multi.ReadFirstOrDefaultAsync<GetStaffByStaffNumberQueryResult>() ?? throw SimaResultException.NotFound;
+        response.BranchInfo = await multi.ReadFirstOrDefaultAsync<BranchInfo>();
+        response.DepartmentInfo = await multi.ReadFirstOrDefaultAsync<DepartmentInfo>();
+        response.CompanyInfo = await multi.ReadFirstOrDefaultAsync<CompanyInfo>();
+        return response;
     }
 }

@@ -7,5 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.AssetsAndConfigurations.Co
 public interface IConfigurationItemQueryRepository : IQueryRepository
 {
     Task<Result<IEnumerable<GetConfigurationItemQueryResult>>> GetAll(GetAllConfigurationItemsQuery request);
-    Task<Result<GetConfigurationItemQueryResult>> GetById(long id);
+    Task<GetConfigurationItemQueryInfoResult> GetById(long id);
+    Task<Result<GetConfigurationItemQueryInfoResult>> GetByCode(GetConfigurationItemQuery request);
 }

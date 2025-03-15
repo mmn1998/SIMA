@@ -191,7 +191,16 @@ public class TrustyDraftCommandHandler : ICommandHandler<CreateTrustyDraftComman
                         if (accountType is not null) arg.AccountTypeId = accountType.Id.Value;
 
                         var draftOrign = await _draftOriginRepository.GetByCode(result.Data[0].draftFrom.ToString());
-                        if (draftOrign is not null) arg.DraftOriginId = draftOrign.Id.Value;
+                        if (draftOrign is not null)
+                        {
+                            arg.DraftOriginId = draftOrign.Id.Value;
+                            // عبارت ICE اگر حواله از محل گزینه سامانه مبادله طلا و ارز باشدبه انتهای شماره حواله اضافه گردد
+                            // شرط دوم هم به خاطر این است که فیلد شماره حواله 20 کاراکتر بیشتر نمیتواند بگیرد
+                            if (arg.DraftOriginId == 6120392622 && arg.DraftNumber.Length <= 17)
+                            {
+                                arg.DraftNumber = $"{arg.DraftNumber}ICE";
+                            }
+                        }
 
                         var brokerType = await _brokerTypeRepository.GetByCode(result.Data[0].issuanceSource.ToString());
                         if (result.Data[0].issuanceSource is not null && (result.Data[0].issuanceSource == 0 || result.Data[0].issuanceSource == 2 || result.Data[0].issuanceSource == 3))

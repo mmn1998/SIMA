@@ -22,6 +22,8 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
 
 namespace SIMA.Domain.Models.Features.Auths.Departments.Entities;
 
@@ -136,6 +138,15 @@ public class Department : Entity
     public ICollection<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles => _businessContinuityStratgyResponsibles;
     private List<BusinessContinuityPlanResponsible> _businessContinuityPlanResponsibles = new();
     public ICollection<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles => _businessContinuityPlanResponsibles;
+    
+    private List<AssetAssignedStaff> _assetAssignedStaffs = new();
+    public ICollection<AssetAssignedStaff> AssetAssignedStaffs => _assetAssignedStaffs;
+
+    private List<ApiSupportTeam> _apiSupportTeams = new();
+    public ICollection<ApiSupportTeam> ApiSupportTeams => _apiSupportTeams;
+
+    private List<DataProcedureSupportTeam> _dataProcedureSupportTeams = new();
+    public ICollection<DataProcedureSupportTeam> DataProcedureSupportTeams => _dataProcedureSupportTeams;
 
     public void Delete(long userId)
     {

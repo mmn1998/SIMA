@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using SIMA.Application.Query.Contract.Features.DMS.Documents;
-using SIMA.Application.Query.Contract.Features.Helpers;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper.FileHelper;
 using SIMA.Framework.Common.Response;
@@ -36,6 +35,17 @@ public class DocumentsQueryHandler : IQueryHandler<GetDownloadDocumentQuery, Get
             response.Name = "راهنمای کاربری تبادلات ارزی (بخش اول از فاز یک).pdf";
             return response;
         }
+        //else if (request.DocumetId == -2)
+        //{
+        //    var rootPath = _webHost.ContentRootPath;
+        //    var filePath = Path.Combine(rootPath, "wwwroot", "Help", "help_2.pdf");
+        //    var fileContentHelp = await _fileService.Download(filePath) ?? throw SimaResultException.AccessDeny;
+        //    response.ContentType = "application/pdf";
+        //    response.Extension = "pdf";
+        //    response.FileContent = fileContentHelp;
+        //    response.Name = "راهنمای کاربری تبادلات ارزی (بخش اول از فاز یک) (1).pdf";
+        //    return response;
+        //}
         var documentResult = await _repository.GetForDownload(request.DocumetId);
         var fileContent = await _fileService.Download(documentResult.FileAddress);
         if (fileContent == null)

@@ -38,6 +38,7 @@ public class ProductChannel:Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
+    
 
     public void ChangeStatus(ActiveStatusEnum status)
     {

@@ -25,7 +25,7 @@ SELECT
 	,S.UseVulnerabilityId
 	,UV.Name UseVulnerabilityName
 	,S.MatrixAValueId
-	,SV.Color MatrixAValueName
+	,SV.ValueTitle MatrixAValueName
 	,A.[Name] ActiveStatus
     ,S.CreatedAt
 FROM [RiskManagement].[MatrixA] S

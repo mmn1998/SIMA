@@ -12,7 +12,7 @@ public class ConfigurationItemAssetHistory : Entity
     {
         Id = new(arg.Id);
         AssetId = new(arg.AssetId);
-        ConfigurationItemVersioningId = new(arg.ConfigurationItemVersioningId);
+        ConfigurationItemId = new(arg.ConfigurationItemId);
         IsAssigned = arg.IsAssigned;
         AssignDate = arg.AssignDate;
         ActiveStatusId = arg.ActiveStatusId;
@@ -28,8 +28,8 @@ public class ConfigurationItemAssetHistory : Entity
     public virtual Asset Asset { get; private set; }
     public string? IsAssigned { get; private set; }
     public DateOnly? AssignDate { get; private set; }
-    public ConfigurationItemVersioningId ConfigurationItemVersioningId { get; private set; }
-    public virtual ConfigurationItemVersioning ConfigurationItemVersioning { get; private set; }
+    public ConfigurationItemId ConfigurationItemId { get; private set; }
+    public virtual ConfigurationItem ConfigurationItem { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

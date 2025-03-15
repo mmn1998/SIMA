@@ -5,6 +5,7 @@ public class CreateApiArg
     public string Name { get; set; }
     public string Code { get; set; }
     public string? Description { get; set; }
+    public string? IsInternalApi { get; set; }
     public string? Prerequisites { get; set; }
     public string? BaseUrl { get; set; }
     public string? ApiAddress { get; set; }

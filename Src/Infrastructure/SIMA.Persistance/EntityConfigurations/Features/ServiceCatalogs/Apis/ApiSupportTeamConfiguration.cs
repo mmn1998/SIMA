@@ -28,12 +28,28 @@ public class ApiSupportTeamConfiguration : IEntityTypeConfiguration<ApiSupportTe
             .HasConversion(x => x.Value, x => new ApiId(x));
         entity.HasOne(x=>x.Api)
             .WithMany(x=>x.ApiSupportTeams)
-            .HasForeignKey(x=>x.ApiId);
+            .HasForeignKey(x=>x.ApiId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.Property(x => x.StaffId)
             .HasConversion(x => x.Value, x => new StaffId(x));
         entity.HasOne(x=>x.Staff)
             .WithMany(x=>x.ApiSupportTeams)
-            .HasForeignKey(x=>x.StaffId);
+            .HasForeignKey(x=>x.StaffId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.DepartmentId)
+            .HasConversion(x => x.Value, x => new(x));
+        entity.HasOne(x=>x.Department)
+            .WithMany(x=>x.ApiSupportTeams)
+            .HasForeignKey(x=>x.DepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.BranchId)
+            .HasConversion(x => x.Value, x => new(x));
+        entity.HasOne(x=>x.Branch)
+            .WithMany(x=>x.ApiSupportTeams)
+            .HasForeignKey(x=>x.BranchId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

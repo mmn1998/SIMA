@@ -44,7 +44,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateChannel(channelArg, entity.Id.Value);
+            entity.AddChannel(channelArg);
         }
         if (request.ProductResponsibles is not null && request.ProductResponsibles.Count > 0)
         {
@@ -54,7 +54,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateResponsible(responsibleArg, entity.Id.Value);
+            entity.AddProductResponsible(responsibleArg);
         }
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -75,7 +75,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateChannel(channelArg, entity.Id.Value);
+            entity.ModifyChannel(channelArg);
         }
         if (request.ProductResponsibles is not null)
         {
@@ -85,7 +85,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateResponsible(responsibleArg, entity.Id.Value);
+            entity.ModifyResponsible(responsibleArg);
         }
 
         await _unitOfWork.SaveChangesAsync();

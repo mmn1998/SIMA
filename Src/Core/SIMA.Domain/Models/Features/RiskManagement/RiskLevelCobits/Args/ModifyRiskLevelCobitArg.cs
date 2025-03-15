@@ -8,6 +8,7 @@ public class ModifyRiskLevelCobitArg
     public long CurrentOccurrenceProbabilityValueId { get; set; }
     public float NumericValue { get; set; }
     public long SeverityId { get; set; }
+    public long RiskLevelId { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long ModifiedBy { get; set; }
 }

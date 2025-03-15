@@ -88,14 +88,16 @@ WHERE IR.ActiveStatusId<>3
 
     public async Task<Result<IEnumerable<GetInquiryRequestQueryResult>>> GetAll(GetAllInquiryRequestsQuery request)
     {
-        using var connection = new SqlConnection(_connectionString);
-        await connection.OpenAsync();
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
 
-        ///
-        /// اضافه شدن شرط اینکه اگر ثبت کننده درخواست یا ثبت کننده حواله خود کاربر باشد، درخواست برای او نمایش داده شود.
-        ///
-        string queryCount = $@" WITH Query as(
-						                    {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
+            ///
+            /// اضافه شدن شرط اینکه اگر ثبت کننده درخواست یا ثبت کننده حواله خود کاربر باشد، درخواست برای او نمایش داده شود.
+            ///
+            string queryCount = $@" WITH Query as(
+						                    {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId OR dbo.FN_GetBranchIdByUserId(@UserId) = ir.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
@@ -103,19 +105,25 @@ WHERE IR.ActiveStatusId<>3
 								 ; ";
 
 
-        string query = $@" WITH Query as(
-							                  {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
+            string query = $@" WITH Query as(
+							                  {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId  OR dbo.FN_GetBranchIdByUserId(@UserId) = ir.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-        var dynaimcParameters = (queryCount + query).GenerateQuery(request);
-        dynaimcParameters.Item2.Add("UserId", _simaIdentity.UserId);
-        using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
-        var count = await multi.ReadFirstAsync<int>();
-        var response = await multi.ReadAsync<GetInquiryRequestQueryResult>();
-        return Result.Ok(response, request, count);
+            var dynaimcParameters = (queryCount + query).GenerateQuery(request);
+            dynaimcParameters.Item2.Add("UserId", _simaIdentity.UserId);
+            using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
+            var count = await multi.ReadFirstAsync<int>();
+            var response = await multi.ReadAsync<GetInquiryRequestQueryResult>();
+            return Result.Ok(response, request, count);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+        
     }
 
     public async Task<GetInquiryRequestQueryResult> GetById(GetInquiryRequestQuery request)

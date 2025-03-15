@@ -6,10 +6,13 @@ using SIMA.Application.Feaatures.AssetAndConfigurations.AssetPhysicalStatuses.Ma
 using SIMA.Application.Feaatures.AssetAndConfigurations.Assets.Mapper;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetTechnicalStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.Back_UpMethods.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.BusinessCriticalities.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemRelationshipTypes.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.DataProcedures.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.DataProcedureTypes.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.LicenseTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.AccessTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.AddressTypes.Mappers;
@@ -128,6 +131,7 @@ using SIMA.Application.Feaatures.ServiceCatalog.ApiAuthenticationMethods.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ApiTypes.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.Channels.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.CriticalActivities.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.OrganizationalProjects.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.Products.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServicePriorities.Mapper;
@@ -315,6 +319,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ProductMapper());
                 conf.AddProfile(new CriticalActivityMapper());
                 conf.AddProfile(new ServicePriorityMapper());
+                conf.AddProfile(new OrganizationalProjectMapper());
                 #endregion
 
                 #region BCP
@@ -389,6 +394,9 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ConfigurationItemTypeMapper());
                 conf.AddProfile(new ConfigurationItemRelationshipTypeMapper());
                 conf.AddProfile(new LicenseTypeMapper());
+                conf.AddProfile(new DataProcedureTypeMapper());
+                conf.AddProfile(new BackupMethodMapper());
+                conf.AddProfile(new DataProcedureMapper());
                 #endregion
 
                 #region Notification

@@ -28,10 +28,11 @@ public class ApiResponseHeaderParamConfiguration : IEntityTypeConfiguration<ApiR
         entity.Property(x => x.ParentId)
             .HasConversion(x => x.Value, x => new ApiResponseHeaderParamId(x));
         
-        entity.Property(x => x.ApiVersionId)
-            .HasConversion(x => x.Value, x => new ApiVersionId(x));
-        entity.HasOne(x=>x.ApiVersion)
+        entity.Property(x => x.ApiId)
+            .HasConversion(x => x.Value, x => new(x));
+        entity.HasOne(x=>x.Api)
             .WithMany(x=>x.ApiResponseHeaderParams)
-            .HasForeignKey(x=>x.ApiVersionId);
+            .HasForeignKey(x=>x.ApiId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

@@ -9,5 +9,6 @@ public class ModifyRiskLevelCobitCommand : ICommand<Result<long>>
     public string Code { get; set; }
     public float NumericValue { get; set; }
     public long SeverityId { get; set; }
+    public long RiskLevelId { get; set; }
     public long CurrentOccurrenceProbabilityValueId { get; set; }
 }

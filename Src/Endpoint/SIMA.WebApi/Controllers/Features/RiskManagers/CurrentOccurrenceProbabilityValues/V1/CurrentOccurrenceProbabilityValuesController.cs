@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.CurrentOccurrenceProbabilityValues;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.CurrentOccurrenceProbabilityValues.V1;
 
@@ -17,19 +18,25 @@ public class CurrentOccurrenceProbabilityValuesController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    //[SimaAuthorize(Permissions.CurrentOccurrenceProbabilityValuePost)]
+    /*
+    [SimaAuthorize(Permissions.CurrentOccurrenceProbabilityValuePost)]
+    */
     public async Task<Result> Post([FromBody] CreateCurrentOccurrenceProbabilityValueCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    //[SimaAuthorize(Permissions.CurrentOccurrenceProbabilityValuePut)]
+    /*
+    [SimaAuthorize(Permissions.CurrentOccurrenceProbabilityValuePut)]
+    */
     public async Task<Result> Put([FromBody] ModifyCurrentOccurrenceProbabilityValueCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    //[SimaAuthorize(Permissions.CurrentOccurrenceProbabilityValueDelete)]
+    /*
+    [SimaAuthorize(Permissions.CurrentOccurrenceProbabilityValueDelete)]
+    */
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteCurrentOccurrenceProbabilityValueCommand { Id = id };

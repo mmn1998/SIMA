@@ -41,6 +41,13 @@ public class ProductResponsible : Entity
     {
         ActiveStatusId = (long)status;
     }
+    
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 
     public void Delete(long userId)
     {

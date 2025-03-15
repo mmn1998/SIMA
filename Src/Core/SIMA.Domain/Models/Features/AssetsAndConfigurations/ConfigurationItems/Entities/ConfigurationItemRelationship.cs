@@ -13,9 +13,9 @@ public class ConfigurationItemRelationship : Entity
     private ConfigurationItemRelationship(CreateConfigurationItemRelationshipArg arg)
     {
         Id = new(arg.Id);
-        ConfigurationItemVersioningId = new(arg.ConfigurationItemVersioningId);
+        ConfigurationItemId = new(arg.ConfigurationItemId);
         ConfigurationItemRelationshipTypeId = new(arg.ConfigurationItemRelationshipTypeId);
-        RelatedConfigurationItemVersioningId = new(arg.RelatedConfigurationItemVersioningId);
+        RelatedConfigurationItemId = new(arg.RelatedConfigurationItemId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -25,10 +25,10 @@ public class ConfigurationItemRelationship : Entity
         return new ConfigurationItemRelationship(arg);
     }
     public ConfigurationItemRelationshipId Id { get; private set; }
-    public ConfigurationItemVersioningId ConfigurationItemVersioningId { get; private set; }
-    public virtual ConfigurationItemVersioning ConfigurationItemVersioning { get; private set; }
-    public ConfigurationItemVersioningId RelatedConfigurationItemVersioningId { get; private set; }
-    public virtual ConfigurationItemVersioning RelatedConfigurationItemVersioning { get; private set; }
+    public ConfigurationItemId ConfigurationItemId { get; private set; }
+    public virtual ConfigurationItem ConfigurationItem { get; private set; }
+    public ConfigurationItemId RelatedConfigurationItemId { get; private set; }
+    public virtual ConfigurationItem RelatedConfigurationItem { get; private set; }
     public ConfigurationItemRelationshipTypeId ConfigurationItemRelationshipTypeId { get; private set; }
     public virtual ConfigurationItemRelationshipType ConfigurationItemRelationshipType { get; private set; }
     public long ActiveStatusId { get; private set; }

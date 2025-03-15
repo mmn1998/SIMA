@@ -112,8 +112,6 @@ Where R.ActiveStatusId<>3
     {
         var response = new GetRiskQueryResult();
         var query = @"
-
-
 select 
 R.Id,
 r.Code,
@@ -128,11 +126,11 @@ UV.Name UseVulnerabilityName,
 R.ScenarioHistoryId,
 SH.Name ScenarioHistoryName,
 R.FrequencyId,
-R.ConsequenceLevel,
+CC.Name,
 F.Name FrequencyName,
 R.TriggerStatusId,
 TS.Name TriggerStatusName,
-R.ConsequenceCategoryId,
+R.ConsequenceLevelId,
 CC.Name ConsequenceCategoryName,
 a.Name ActiveStatus,
 r.Description,
@@ -145,7 +143,7 @@ LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusI
 LEFT JOIN RiskManagement.ScenarioHistory SH on SH.Id = R.ScenarioHistoryId and SH.ActiveStatusId<>3
 LEFT JOIN RiskManagement.TriggerStatus TS on TS.Id = R.TriggerStatusId and TS.ActiveStatusId<>3
 LEFT JOIN RiskManagement.UseVulnerability UV on UV.Id = R.UseVulnerabilityId and UV.ActiveStatusId<>3
-LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = R.ConsequenceCategoryId and CC.ActiveStatusId<>3
+LEFT JOIN RiskManagement.ConsequenceLevel CC on CC.Id = R.ConsequenceLevelId and CC.ActiveStatusId<>3
 Where R.ActiveStatusId<>3 AND R.Id = @Id
 
 ------------ CorrectiveActionList

@@ -8,6 +8,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.Products;
 public interface IProductQueryRepository : IQueryRepository
 {
     Task<GetProductQueryResult> GetById(GetProductQuery request);
+    Task<GetProductQueryResult> GetByCode(GetProductByCodeQuery request);
     Task<Result<IEnumerable<GetProductQueryResult>>> GetAll(GetAllProductQuery request);
     Task<string> GetLastCode();
 }

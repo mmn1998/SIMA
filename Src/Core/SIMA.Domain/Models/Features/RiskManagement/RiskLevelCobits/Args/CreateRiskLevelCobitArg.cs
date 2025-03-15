@@ -8,6 +8,7 @@ public class CreateRiskLevelCobitArg
     public long CurrentOccurrenceProbabilityValueId { get; set; }
     public float NumericValue { get; set; }
     public long SeverityId { get; set; }
+    public long RiskLevelId { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
 }

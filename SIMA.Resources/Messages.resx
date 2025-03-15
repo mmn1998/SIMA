@@ -694,7 +694,7 @@
     <comment>400</comment>
   </data>
   <data name="BeneficiaryNameNotValidError" xml:space="preserve">
-    <value>نام ذینفع باید لاتین باشد.</value>
+    <value>نام ذینفع باید لاتین و بزرگ باشد.</value>
     <comment>400</comment>
   </data>
   <data name="BeneficiaryNameContainsSpaceMoreThanLimitError" xml:space="preserve">
@@ -713,5 +713,15 @@
   </data>
   <data name="CurrenciesAreRequiredInInquiryRequestError" xml:space="preserve">
     <value>اضافه شدن مبلغ و نوع ارز اجباری میباشد</value>
+  </data>
+  <data name="MimeTypeNotValid" xml:space="preserve">
+    <value>نوع فایل معتبر نمی باشد!!!</value>
+  </data>
+  <data name="ReferenceNumberIsDuplicated" xml:space="preserve">
+    <value>شماره مرجع  نمی تواند تکراری باشد</value>
+  </data>
+  <data name="UniqueVersionError" xml:space="preserve">
+    <value>شماره ورژن انتخاب شده تکراری است</value>
+    <comment>100115</comment>
   </data>
 </root>

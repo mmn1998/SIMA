@@ -10,9 +10,11 @@ public class ConfigurationItemAccessInfo : Entity
     private ConfigurationItemAccessInfo(CreateConfigurationItemAccessInfoArg arg)
     {
         Id = new(arg.Id);
-        ConfigurationItemVersioningId = new(arg.ConfigurationItemVersioningId);
-        IPAddress = arg.IPAddress;
-        Port = arg.Port;
+        ConfigurationItemId = new(arg.ConfigurationItemId);
+        IPAddressFrom = arg.IPAddressFrom;
+        IPAddressTo = arg.IPAddressTo;
+        PortFrom = arg.PortFrom;
+        PortTo = arg.PortTo;
         ActiveFrom = arg.ActiveFrom;
         ActiveTo = arg.ActiveTo;
         ActiveStatusId = arg.ActiveStatusId;
@@ -24,10 +26,12 @@ public class ConfigurationItemAccessInfo : Entity
         return new ConfigurationItemAccessInfo(arg);
     }
     public ConfigurationItemAccessInfoId Id { get; private set; }
-    public ConfigurationItemVersioningId ConfigurationItemVersioningId { get; private set; }
-    public virtual ConfigurationItemVersioning ConfigurationItemVersioning { get; private set; }
-    public string? IPAddress { get; private set; }
-    public string? Port { get; private set; }
+    public ConfigurationItemId ConfigurationItemId { get; private set; }
+    public virtual ConfigurationItem ConfigurationItem { get; private set; }
+    public string? IPAddressFrom { get; private set; }
+    public string? IPAddressTo { get; private set; }
+    public string? PortFrom { get; private set; }
+    public string? PortTo { get; private set; }
     public DateTime ActiveFrom { get; private set; }
     public DateTime? ActiveTo { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -36,4 +40,3 @@ public class ConfigurationItemAccessInfo : Entity
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
 }
-

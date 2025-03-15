@@ -54,6 +54,8 @@ public class GetServiceQueryResult
     public string? Code { get; set; }
     public long ServiceCategoryId { get; set; }
     public string? IsInternalService { get; set; }
+    public string? ServiceDataFlowDiagram { get; set; }
+    public string? ContinuousImprovement { get; set; }
     public string? ServiceCategoryName { get; set; }
     public string? ServiceCategoryCode { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
@@ -74,6 +76,9 @@ public class GetServiceQueryResult
     public decimal? ServiceCost { get; set; }
     public string? FeedbackUrl { get; set; }
     public string? ActiveStatus { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public string? CreatedAtPersian => CreatedAt.ToPersianDateTime();
     public IEnumerable<GetServiceCustomerQueryResult>? ServiceCustomerList { get; set; }
     public IEnumerable<GetServiceUserQueryResult>? ServiceUserList { get; set; }
     public IEnumerable<GetServiceChannelQueryResult>? ServiceChannelList { get; set; }
@@ -85,4 +90,5 @@ public class GetServiceQueryResult
     public IEnumerable<GetServiceAssignedStaffQueryResult>? ServiceAssignedSttafList { get; set; }
     public IEnumerable<GetServiceProductQueryResult>? ServiceProductList { get; set; }
     public IEnumerable<GetServiceAvalibilityQueryResult>? ServiceAvalibilityList { get; set; }
+    public IEnumerable<GetServiceOrganizationProjectQueryResult>? OrganizationProjectList { get; set; }
 }

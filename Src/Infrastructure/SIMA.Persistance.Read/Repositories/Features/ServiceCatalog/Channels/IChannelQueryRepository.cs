@@ -7,6 +7,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.Channels;
 public interface IChannelQueryRepository : IQueryRepository
 {
     Task<GetChannelQueryResult> GetById(long id);
+    Task<GetChannelQueryResult> GetByCode(string code);
     Task<Result<IEnumerable<GetChannelQueryResult>>> GetAll(GetAllChannelsQuery request);
     Task<string> GetLastCode();
 }

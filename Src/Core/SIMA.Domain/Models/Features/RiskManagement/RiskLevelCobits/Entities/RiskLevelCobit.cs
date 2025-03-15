@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityVal
 using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Contracts;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Severities.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -25,6 +26,7 @@ public class RiskLevelCobit : Entity, IAggregateRoot
         Code = arg.Code;
         CurrentOccurrenceProbabilityValueId = new(arg.CurrentOccurrenceProbabilityValueId);
         SeverityId = new(arg.SeverityId);
+        RiskLevelId = new(arg.RiskLevelId);
         NumericValue = arg.NumericValue;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -41,6 +43,7 @@ public class RiskLevelCobit : Entity, IAggregateRoot
         Code = arg.Code;
         CurrentOccurrenceProbabilityValueId = new(arg.CurrentOccurrenceProbabilityValueId);
         SeverityId = new(arg.SeverityId);
+        RiskLevelId = new(arg.RiskLevelId);
         NumericValue = arg.NumericValue;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
@@ -51,6 +54,8 @@ public class RiskLevelCobit : Entity, IAggregateRoot
     public float NumericValue { get; private set; }
     public SeverityId SeverityId { get; private set; }
     public virtual Severity Severity { get; private set; }
+    public RiskLevelId RiskLevelId { get; private set; }
+    public virtual RiskLevel RiskLevel { get; private set; }
     public CurrentOccurrenceProbabilityValueId CurrentOccurrenceProbabilityValueId{ get; private set; }
     public virtual CurrentOccurrenceProbabilityValue CurrentOccurrenceProbabilityValue { get; private set; }
     public long ActiveStatusId { get; private set; }

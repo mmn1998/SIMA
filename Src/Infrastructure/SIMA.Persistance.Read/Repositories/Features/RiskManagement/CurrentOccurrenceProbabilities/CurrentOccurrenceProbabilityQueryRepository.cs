@@ -22,6 +22,7 @@ SELECT
     ,IOP.[Code]
 	,IOP.CurrentOccurrenceProbabilityValueId
 	,IOPV.Name CurrentOccurrenceProbabilityValueName
+    ,F.ValueTitle
 	,IOP.FrequencyId
 	,F.Name FrequencyName
 	,IOP.InherentOccurrenceProbabilityValueId

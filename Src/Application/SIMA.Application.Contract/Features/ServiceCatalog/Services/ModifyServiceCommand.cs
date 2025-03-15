@@ -13,13 +13,17 @@ public class ModifyServiceCommand : ICommand<Result<long>>
     public string? IsCriticalService { get; set; }
     public decimal? ServiceCost { get; set; }
     public string? IsInternalService { get; set; }
-    public string? Description { get; set; }
     public string? InServiceDate { get; set; }
+    public string? Description { get; set; }
+    public long? ServiceStatusId { get; set; }
+    public long? ParentId { get; set; }
     public long TechnicalSupervisorDepartmentId { get; set; }
     public long ServiceTypeId { get; set; }
-    public string? WorkflowFileContent { get; set; }
+    public string? ServiceDataFlowDiagram { get; set; }
+    public string? ContinuousImprovement { get; set; }
     public string? FeedbackUrl { get; set; }
     public List<long>? CustomerTypeList { get; set; }
+    public List<long>? OrganizationalProjectList { get; set; }
     public List<long>? UserTypeList { get; set; }
     public List<long>? ChannelList { get; set; }
     public List<long>? PrerequisiteServiceList { get; set; }
@@ -30,5 +34,4 @@ public class ModifyServiceCommand : ICommand<Result<long>>
     public List<CreateServiceAssignedStaffCommand>? ServiceAssignedStaffList { get; set; }
     public string? isFullTimeSercice { get; set; }
     public List<CreateserviceAvalibilityCommand>? ServiceAvalibilityList { get; set; }
-    public long? ServiceStatusId { get; set; }
 }

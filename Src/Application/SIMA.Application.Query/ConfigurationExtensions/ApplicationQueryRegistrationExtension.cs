@@ -16,7 +16,7 @@ public static class ApplicationQueryRegistrationExtension
 {
     public static IServiceCollection RegisterQueryHandlerService(this IServiceCollection services)
     {
-        services.AddScoped<ISimaReposrtService, SimaReposrtService>();
+        services.AddScoped<ISimaReportService, SimaReportService>();
         return services.Scan(scan =>
                 scan.FromAssemblyOf<CompanyQueryHandler>()
                 .AddClasses(classes => classes.AssignableTo(typeof(IQueryHandler<,>)))

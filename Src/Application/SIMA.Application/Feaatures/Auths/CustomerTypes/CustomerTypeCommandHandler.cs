@@ -30,13 +30,12 @@ public class CustomerTypeCommandHandler : ICommandHandler<CreateCustomerTypeComm
     }
     public async Task<Result<long>> Handle(CreateCustomerTypeCommand request, CancellationToken cancellationToken)
     {
-       
-            var arg = _mapper.Map<CreateCustomerTypeArg>(request);
-            arg.CreatedBy = _simaIdentity.UserId;
-            var entity = await CustomerType.Create(arg, _service);
-            await _repository.Add(entity);
-            await _unitOfWork.SaveChangesAsync();
-            return Result.Ok(arg.Id);
+        var arg = _mapper.Map<CreateCustomerTypeArg>(request);
+        arg.CreatedBy = _simaIdentity.UserId;
+        var entity = await CustomerType.Create(arg, _service);
+        await _repository.Add(entity);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(arg.Id);
     }
 
     public async Task<Result<long>> Handle(ModifyCustomerTypeCommand request, CancellationToken cancellationToken)

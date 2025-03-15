@@ -8,6 +8,7 @@ public interface IStaffQueryRepository : IQueryRepository
 {
     Task<bool> IsStaffSatisfied(long profileId, long positionId);
     Task<GetStaffQueryResult> FindById(long id);
+    Task<GetStaffByStaffNumberQueryResult> FindByStaffNumber(string staffNumber);
     Task<Result<IEnumerable<GetStaffQueryResult>>> GetAll(GetAllStaffQuery? request = null);
     Task<IEnumerable<GetStaffQueryResult>> GetAllByDepartmentId(long? departmentId);
     Task<long> GetStaffIdByUserId(long userId);

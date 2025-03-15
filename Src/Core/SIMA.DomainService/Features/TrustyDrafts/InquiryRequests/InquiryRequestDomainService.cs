@@ -91,9 +91,16 @@ where CT.Id = @Id
 
     public void CheckBeneficiaryName(string beneficiaryName)
     {
-        var englishPattern = @"[A-Z/sa-z]";
+        var englishPattern = @"[A-Z]";
         if (!Regex.IsMatch(beneficiaryName, englishPattern))
             throw new SimaResultException(CodeMessges._400Code, Messages.BeneficiaryNameNotValidError);
+    }
+
+    public async Task<bool> CheckRefrenceNumber(string referenceNumber)
+    {
+        var result = false;
+        result = await _context.InquiryRequests.AnyAsync(x => x.ReferenceNumber == referenceNumber);
+        return result;
     }
 
     //public Task<bool> IsCodeUnique(string code, InquiryRequestId? id = null)

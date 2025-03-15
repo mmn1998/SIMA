@@ -1,4 +1,6 @@
 ﻿using SIMA.Application.Query.Contract.Features.BCP.BusinessContinuityPlans;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.BCP.BusinessContinuityPlans;
@@ -11,10 +13,12 @@ IQueryHandler<GetAllPlanVersioningsByPlanIdQuery, Result<IEnumerable<GetAllPlanV
 IQueryHandler<GetAllPlanAssumptionsByPlanIdQuery, Result<IEnumerable<GetAllPlanVersioningsByPlanIdQueryResult>>>
 {
     private readonly IBusinessContinuityPlanQueryRepository _repository;
+    private readonly ISimaReportService _reportService;
 
-    public BusinessContinuityPlanQueryHandler(IBusinessContinuityPlanQueryRepository repository)
+    public BusinessContinuityPlanQueryHandler(IBusinessContinuityPlanQueryRepository repository, ISimaReportService reportService)
     {
         _repository = repository;
+        _reportService = reportService;
     }
     public async Task<Result<GetBusinessContinuityPlanQueryResult>> Handle(GetBusinessContinuityPlanQuery request, CancellationToken cancellationToken)
     {
@@ -24,7 +28,22 @@ IQueryHandler<GetAllPlanAssumptionsByPlanIdQuery, Result<IEnumerable<GetAllPlanV
 
     public async Task<Result<IEnumerable<GetAllBusinessContinuityPlansQueryResult>>> Handle(GetAllBusinessContinuityPlansQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        var res = await _repository.GetAll(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            var excelByte = _reportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var exportResult = new ExportResult
+            {
+                Name = _reportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+
+        return res;
     }
 
     public async Task<Result<IEnumerable<GetAllPlanVersioningsByPlanIdQueryResult>>> Handle(GetAllPlanVersioningsByPlanIdQuery request, CancellationToken cancellationToken)

@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.AccessManagement.AccessRequests.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.Entities;
 using SIMA.Domain.Models.Features.Auths.Companies.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
@@ -154,6 +155,8 @@ public class Document : Entity
 
     private List<MessageAttachment> _messageAttachments = new();
     public ICollection<MessageAttachment> MessageAttachments => _messageAttachments;
+    private List<DataProcedureDocument> _dataProcedureDocuments = new();
+    public ICollection<DataProcedureDocument> DataProcedureDocuments => _dataProcedureDocuments;
 
     public virtual Staff? StaffSignature { get; set; }
     public StaffId? StaffSignatureId { get; set; }

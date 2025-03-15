@@ -43,4 +43,10 @@ public class StaffsQueryController : ControllerBase
         var result = await _mediator.Send(query);
         return result;
     }
+    [HttpGet("GetByStaffNumber/{staffNumber}")]
+    public async Task<Result> GetByStaffNumber([FromRoute] string staffNumber)
+    {
+        var query = new GetStaffByStaffNumberQuery { StaffNumber = staffNumber };
+        return await _mediator.Send(query);
+    }
 }

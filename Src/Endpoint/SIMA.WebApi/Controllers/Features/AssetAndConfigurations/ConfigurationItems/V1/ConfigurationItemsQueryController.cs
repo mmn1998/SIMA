@@ -23,4 +23,18 @@ public class ConfigurationItemsQueryController : Controller
     {
         return await _mediator.Send(query);
     }
+
+    [HttpGet("GetByCode/{code}")]
+    public async Task<Result> Get([FromRoute] string code)
+    {
+        var query = new GetConfigurationItemQuery { Code = code };
+        return await _mediator.Send(query);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<Result> Get([FromQuery] long id)
+    {
+        var query = new GetConfigurationItemByIdQuery { Id = id };
+        return await _mediator.Send(query);
+    }
 }

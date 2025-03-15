@@ -29,6 +29,7 @@ public class ApiVersionConfiguration : IEntityTypeConfiguration<ApiVersion>
             .HasConversion(x => x.Value, x => new ApiId(x));
         entity.HasOne(x=>x.Api)
             .WithMany(x=>x.ApiVersions)
-            .HasForeignKey(x=>x.ApiId);
+            .HasForeignKey(x=>x.ApiId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

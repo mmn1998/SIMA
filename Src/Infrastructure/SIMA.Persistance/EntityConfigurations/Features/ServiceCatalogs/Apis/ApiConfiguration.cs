@@ -33,42 +33,49 @@ public class ApiConfiguration : IEntityTypeConfiguration<Api>
         entity.Property(e => e.Name).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.Code)
                     .HasMaxLength(20).IsUnicode();
+        entity.Property(e => e.IsInternalApi).HasMaxLength(1).IsFixedLength();
         entity.HasIndex(e => e.Code).IsUnique();
 
         entity.Property(x => x.ApiTypeId)
             .HasConversion(x => x.Value, x => new ApiTypeId(x));
         entity.HasOne(x=>x.ApiType)
             .WithMany(x=>x.Apis)
-            .HasForeignKey(x=>x.ApiTypeId);
+            .HasForeignKey(x=>x.ApiTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.ApiAuthenticationMethodId)
             .HasConversion(x => x.Value, x => new ApiAuthenticationMethodId(x));
         entity.HasOne(x=>x.ApiAuthenticationMethod)
             .WithMany(x=>x.Apis)
-            .HasForeignKey(x=>x.ApiAuthenticationMethodId);
+            .HasForeignKey(x=>x.ApiAuthenticationMethodId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.NetworkProtocolId)
             .HasConversion(x => x.Value, x => new NetworkProtocolId(x));
         entity.HasOne(x=>x.NetworkProtocol)
             .WithMany(x=>x.Apis)
-            .HasForeignKey(x=>x.NetworkProtocolId);
+            .HasForeignKey(x=>x.NetworkProtocolId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
        
         entity.Property(x => x.OwnerDepartmentId)
             .HasConversion(x => x.Value, x => new DepartmentId(x));
         entity.HasOne(x=>x.OwnerDepartment)
             .WithMany(x=>x.OwnerApis)
-            .HasForeignKey(x=>x.OwnerDepartmentId);
+            .HasForeignKey(x=>x.OwnerDepartmentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.OwnerResponsibleId)
             .HasConversion(x => x.Value, x => new StaffId(x));
         entity.HasOne(x=>x.OwnerResponsible)
             .WithMany(x=>x.ResponsibleApis)
-            .HasForeignKey(x=>x.OwnerResponsibleId);
+            .HasForeignKey(x=>x.OwnerResponsibleId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.Property(x => x.ApiMethodActionId)
             .HasConversion(x => x.Value, x => new ApiMethodActionId(x));
         entity.HasOne(x=>x.ApiMethodAction)
             .WithMany(x=>x.Apis)
-            .HasForeignKey(x=>x.ApiMethodActionId);
+            .HasForeignKey(x=>x.ApiMethodActionId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

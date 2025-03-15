@@ -21,14 +21,14 @@ public class ConfigurationItemIssueConfiguration : IEntityTypeConfiguration<Conf
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-        entity.Property(x => x.ConfigurationItemVersioningId)
+        entity.Property(x => x.ConfigurationItemId)
           .HasConversion(
            v => v.Value,
-           v => new ConfigurationItemVersioningId(v));
+           v => new(v));
 
-        entity.HasOne(d => d.ConfigurationItemVersioning)
+        entity.HasOne(d => d.ConfigurationItem)
             .WithMany(d => d.ConfigurationItemIssues)
-            .HasForeignKey(d => d.ConfigurationItemVersioningId)
+            .HasForeignKey(d => d.ConfigurationItemId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.IssueId)

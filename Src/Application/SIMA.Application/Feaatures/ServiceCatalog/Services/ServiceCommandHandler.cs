@@ -4,6 +4,7 @@ using SIMA.Application.Contract.Features.ServiceCatalog.Services;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceOrganizationalProjects.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Contracts;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
@@ -66,6 +67,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
                 }
                 entity.AddServiceCustomers(args);
             }
+            #region second approach for service availablity
             //if (request.ServiceAvalibilityList is not null)
             //{
             //    var args = new List<CreateServiceAvalibilityArg>();
@@ -91,6 +93,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             //    }
             //    entity.AddServiceAvalibilities(args);
             //}
+            #endregion
             if (request.UserTypeList is not null)
             {
                 var args = _mapper.Map<List<CreateServiceUserArg>>(request.UserTypeList);
@@ -110,6 +113,16 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
                     item.ServiceId = arg.Id;
                 }
                 entity.AddServiceChannels(args);
+            }
+            if (request.OrganizationalProjectList is not null)
+            {
+                var args = _mapper.Map<List<CreateServiceOrganizationalProjectArg>>(request.OrganizationalProjectList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.ServiceId = arg.Id;
+                }
+                entity.AddServiceOrganizationProjects(args);
             }
             if (request.PrerequisiteServiceList is not null)
             {
@@ -245,6 +258,16 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             }
             entity.ModifyServiceChannels(args);
         }
+        if (request.OrganizationalProjectList is not null)
+        {
+            var args = _mapper.Map<List<CreateServiceOrganizationalProjectArg>>(request.OrganizationalProjectList);
+            foreach (var item in args)
+            {
+                item.CreatedBy = _simaIdentity.UserId;
+                item.ServiceId = arg.Id;
+            }
+            entity.ModifyServiceOrganizationProjects(args);
+        }
         if (request.PrerequisiteServiceList is not null)
         {
             var args = _mapper.Map<List<CreatePreRequisiteServicesArg>>(request.PrerequisiteServiceList);
@@ -305,6 +328,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
             }
             entity.ModifyServiceAssignedStaffs(args);
         }
+        #region second approach for service availablity
         //if (request.ServiceAvalibilityList is not null)
         //{
         //    var args = new List<CreateServiceAvalibilityArg>();
@@ -330,6 +354,7 @@ public class ServiceCommandHandler : ICommandHandler<CreateServiceCommand, Resul
         //    }
         //    entity.ModifyServiceAvalibilities(args);
         //}
+        #endregion
         if (request.ServiceAvalibilityList is not null)
         {
             var args = _mapper.Map<List<CreateServiceAvalibilityArg>>(request.ServiceAvalibilityList);

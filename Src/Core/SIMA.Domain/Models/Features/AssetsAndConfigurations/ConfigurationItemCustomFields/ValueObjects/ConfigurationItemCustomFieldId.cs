@@ -1,0 +1,3 @@
+﻿namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.ValueObjects;
+
+public record ConfigurationItemCustomFieldId(long Value);

@@ -6,6 +6,7 @@ using SIMA.Domain.Models.Features.BranchManagement.Customers.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Customers.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.PaymentTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Notifications.Messages.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Args;
@@ -14,8 +15,10 @@ using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Exceptions;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
@@ -57,6 +60,10 @@ public class InquiryRequest : Entity
     {
         if (arg.ProformaCurrencyTypeId == (long)PaymentTypeEnum.Deposit)
             if (string.IsNullOrEmpty(arg.ProformaNumber)) throw InquiryRequestExceptions.DepositProformaCurrencyTypeIdException;
+
+        if (await service.CheckRefrenceNumber(arg.ReferenceNumber))
+            throw new  SimaResultException(CodeMessges._400Code, Messages.ReferenceNumberIsDuplicated);
+
     }
     #endregion
     public async Task Modify(ModifyInquiryRequestArg arg, IInquiryRequestDomainService service)

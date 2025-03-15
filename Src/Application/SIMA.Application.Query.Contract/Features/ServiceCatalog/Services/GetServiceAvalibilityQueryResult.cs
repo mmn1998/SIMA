@@ -1,6 +1,4 @@
 ﻿using SIMA.Framework.Common.Helper;
-using SIMA.Framework.Core.Entities;
-using System.Globalization;
 
 namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.Services;
 

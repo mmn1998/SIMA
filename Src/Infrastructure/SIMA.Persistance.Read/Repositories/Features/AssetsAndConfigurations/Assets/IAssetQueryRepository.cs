@@ -7,4 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.AssetsAndConfigurations.As
 public interface IAssetQueryRepository : IQueryRepository
 {
     Task<Result<IEnumerable<GetAssetQueryResult>>> GetAll(GetAllAssetsQuery request);
+    Task<Result<GetAssetQueryInfoResult>> GetByCode(GetAssetByCodeQuery request);
+    Task<GetAssetQueryInfoResult> GetById(long id);
 }

@@ -48,19 +48,19 @@ public class ConfigurationItemVersioning : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<ConfigurationItemAccessInfo> _configurationItemAccessInfos;
-    public ICollection<ConfigurationItemAccessInfo> ConfigurationItemAccessInfos => _configurationItemAccessInfos;
-    private List<ConfigurationItemAsset> _configurationItemAssets;
-    public ICollection<ConfigurationItemAsset> ConfigurationItemAssets => _configurationItemAssets;
-    private List<ConfigurationItemRelationship> _configurationItemRelationships;
-    public ICollection<ConfigurationItemRelationship> ConfigurationItemRelationships => _configurationItemRelationships;
-    private List<ConfigurationItemRelationship> _relatedConfigurationItemRelationships;
-    public ICollection<ConfigurationItemRelationship> RelatedConfigurationItemRelationships => _relatedConfigurationItemRelationships;
-    private List<ConfigurationItemIssue> _configurationItemIssues;
-    public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;
-    private List<ConfigurationItemDocument> _configurationItemDocuments;
-    public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
-    private List<ConfigurationItemAssetHistory> _configurationItemAssetHistories;
-    public ICollection<ConfigurationItemAssetHistory> ConfigurationItemAssetHistories => _configurationItemAssetHistories;
+    //private List<ConfigurationItemAccessInfo> _configurationItemAccessInfos;
+    //public ICollection<ConfigurationItemAccessInfo> ConfigurationItemAccessInfos => _configurationItemAccessInfos;
+    //private List<ConfigurationItemAsset> _configurationItemAssets;
+    //public ICollection<ConfigurationItemAsset> ConfigurationItemAssets => _configurationItemAssets;
+    //private List<ConfigurationItemRelationship> _configurationItemRelationships;
+    //public ICollection<ConfigurationItemRelationship> ConfigurationItemRelationships => _configurationItemRelationships;
+    //private List<ConfigurationItemRelationship> _relatedConfigurationItemRelationships;
+    //public ICollection<ConfigurationItemRelationship> RelatedConfigurationItemRelationships => _relatedConfigurationItemRelationships;
+    //private List<ConfigurationItemIssue> _configurationItemIssues;
+    //public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;
+    //private List<ConfigurationItemDocument> _configurationItemDocuments;
+    //public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
+    //private List<ConfigurationItemAssetHistory> _configurationItemAssetHistories;
+    //public ICollection<ConfigurationItemAssetHistory> ConfigurationItemAssetHistories => _configurationItemAssetHistories;
 }
 
