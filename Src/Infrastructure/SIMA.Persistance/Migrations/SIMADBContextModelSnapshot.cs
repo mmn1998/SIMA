@@ -6972,54 +6972,6 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("ConsequenceIntension", "BCP");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities.ConsequenceValue", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ConsequenceId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<long>("OriginId")
-                        .HasColumnType("bigint");
-
-                    b.Property<float>("ValueNumber")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConsequenceId");
-
-                    b.HasIndex("OriginId");
-
-                    b.ToTable("ConsequenceValue", "BCP");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Consequences.Entities.Consequence", b =>
                 {
                     b.Property<long>("Id")
@@ -12434,7 +12386,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("ConsequenceLevelId");
+                    b.HasIndex("ConsequenceCategoryId");
 
                     b.HasIndex("ConsequenceLevelId1");
 
@@ -25888,16 +25840,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", b =>
                 {
-                    b.Navigation("ApiSupportTeams");
-
-                    b.Navigation("AssetAssignedStaffs");
-
-                    b.Navigation("BusinessContinuityPlanResponsibles");
-
-                    b.Navigation("BusinessContinuityStratgyResponsibles");
-
-                    b.Navigation("BusinessImpactAnalysisStaff");
-
                     b.Navigation("ChannelResponsibles");
 
                     b.Navigation("CriticalActivityAssignedStaffs");
