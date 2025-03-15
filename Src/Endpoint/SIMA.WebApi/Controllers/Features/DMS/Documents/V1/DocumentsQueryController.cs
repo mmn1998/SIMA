@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.DMS.Documents;
-using SIMA.Framework.Common.Helper.FileHelper;
-using SIMA.Framework.Common.Request;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
-using SIMA.WebApi.Extensions;
 
 namespace SIMA.WebApi.Controllers.Features.DMS.Documents.V1;
 

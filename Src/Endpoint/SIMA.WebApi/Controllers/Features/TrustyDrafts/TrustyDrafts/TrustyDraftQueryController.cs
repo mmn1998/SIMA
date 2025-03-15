@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.TrustyDrafts.TrustyDrafts;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
-using SIMA.WebApi.Extensions;
 
 namespace SIMA.WebApi.Controllers.Features.TrustyDrafts.TrustyDrafts;
 

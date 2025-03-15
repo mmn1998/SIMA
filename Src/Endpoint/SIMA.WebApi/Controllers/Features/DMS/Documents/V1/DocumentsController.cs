@@ -25,8 +25,8 @@ public class DocumentsController : ControllerBase
         return await _mediator.Send(command);
     }
     [HttpPost("multi")]
-    // 4MB
-    [RequestSizeLimit(4194304)]
+    // 6MB
+    [RequestSizeLimit(6291456)]
     public async Task<Result> Post([FromBody] MultiCreateDocumentCommand command)
     {
         return await _mediator.Send(command);

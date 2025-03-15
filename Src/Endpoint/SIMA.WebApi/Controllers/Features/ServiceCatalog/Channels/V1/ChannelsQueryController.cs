@@ -24,6 +24,16 @@ public class ChannelsQueryController : ControllerBase
         var query = new GetChannelQuery { Id = id };
         return await _mediator.Send(query);
     }
+    
+    [HttpGet("GetByCode")]
+    //[SimaAuthorize(Permissions.ChannelGet)]
+    public async Task<Result> Get([FromQuery] string code)
+    {
+        var query = new GetChannelByCodeQuery() { Code = code };
+        return await _mediator.Send(query);
+    }
+    
+    
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.ChannelGetAll)]
     public async Task<Result> Get([FromBody] GetAllChannelsQuery query)

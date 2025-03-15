@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.Assets;
+using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.ConfigurationItems;
 using SIMA.Framework.Common.Response;
 
-namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.Assets;
+namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.Assets.V1;
 
 [Route("[controller]")]
 [ApiController]
 [ApiExplorerSettings(GroupName = "Asset/Assets")]
-[Authorize]
+//[Authorize]
 public class AssetsQueryController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -21,6 +22,20 @@ public class AssetsQueryController : ControllerBase
     [HttpPost("GetAll")]
     public async Task<Result> Get([FromBody] GetAllAssetsQuery query)
     {
+        return await _mediator.Send(query);
+    }
+
+    [HttpGet("GetByCode/{code}")]
+    public async Task<Result> Get([FromRoute] string code)
+    {
+        var query = new GetAssetByCodeQuery { Code = code };
+        return await _mediator.Send(query);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<Result> Get([FromRoute] long id)
+    {
+        var query = new GetAssetByIdQuery { Id = id };
         return await _mediator.Send(query);
     }
 }

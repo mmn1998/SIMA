@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
-using SIMA.Framework.Common.Request;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
-using SIMA.WebApi.Extensions;
 
 namespace SIMA.WebApi.Controllers.Features.IssueManagement.Issues.V1;
 
