@@ -2,6 +2,7 @@
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.ServiceCatalog.Products;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Response;
 using System.Data.SqlClient;
 
@@ -13,6 +14,70 @@ public class ProductQueryRepository : IProductQueryRepository
     public ProductQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
+    }
+
+    public async Task<GetProductQueryResult> GetByCode(GetProductByCodeQuery request)
+    {
+          using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var query = @"
+       
+   select p.Id,
+                p.Name,
+                p.Code,
+                p.Scope,
+                p.Description,
+                p.ProviderCompanyId,
+                c.Name ProviderCompanyName,
+                p.ServiceStatusId,
+                ss.Name ServiceStatusName,
+                p.InServiceDate
+                from [ServiceCatalog].[Product] p
+                join [Organization].[Company] c on c.Id=p.ProviderCompanyId
+                join [ServiceCatalog].[ServiceStatus] ss on ss.Id=p.ServiceStatusId
+                where p.ActiveStatusId!=3 and p.Code= @Code
+
+            --ProductChannel
+
+            select c.Id ChannelId,
+            PC.Id,
+            c.name ChannelName
+            from [ServiceCatalog].[Product] p
+            join [ServiceCatalog].[ProductChannel] pc on pc.ProductId=p.Id
+            join [ServiceCatalog].[Channel] c on pc.ChannelId=c.Id
+            where p.ActiveStatusId!=3 and pc.ActiveStatusId!=3 and p.Code=@Code
+
+            --ProductResponsible
+
+          select 
+      pr.ResponsibleTypeId,
+      rt.Name ResponsibleTypeName,
+      s.Id ResponsibleId,
+		    C.Id CompanyId,
+		    C.Name CompanyName,
+		    D.Id DepartmentId,
+		    D.Name DepartmentName,
+      pro.FirstName + SPACE(1) + pro.LastName Responsible,
+	  PR.BranchId
+	,Br.Name BranchName
+  from [ServiceCatalog].[Product] p
+  join [ServiceCatalog].[ProductResponsible] pr on pr.ProductId=p.Id
+  join [Organization].[Staff] s on pr.ResponsilbeId=s.Id
+inner join Authentication.Profile Pro on Pro.Id = S.ProfileId and Pro.ActiveStatusId<>3
+inner join Organization.Position PO on PO.Id = S.PositionId and Po.ActiveStatusId <> 3
+inner join Organization.Department D on D.Id = PO.DepartmentId and D.ActiveStatusId<>3
+inner join Organization.Company C on C.Id = D.CompanyId and C.ActiveStatusId<>3
+join [Basic].[ResponsibleType] rt on rt.Id=pr.ResponsibleTypeId
+LEFT join Bank.Branch Br on Br.Id = PR.BranchId and Br.ActiveStatusId<>3
+where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and p.Code=@Code
+";
+
+        using var multi = await connection.QueryMultipleAsync(query, new { request.Code });
+        var response = await multi.ReadFirstAsync<GetProductQueryResult>();
+        response.ProductChannels = (await multi.ReadAsync<ChannelQuery>()).ToList();
+        response.ProductResponsibles = (await multi.ReadAsync<ProductResponsibleQuery>()).ToList();
+
+        return response;
     }
 
     public async Task<Result<IEnumerable<GetProductQueryResult>>> GetAll(GetAllProductQuery request)
@@ -152,5 +217,15 @@ where p.ActiveStatusId!=3 and pr.ActiveStatusId!=3 and rt.ActiveStatusId!=3 and 
         response.ProductResponsibles = (await multi.ReadAsync<ProductResponsibleQuery>()).ToList();
 
         return response;
+    }
+    public async Task<string> GetLastCode()
+    {
+        var query = @"
+select top 1 Code from ServiceCatalog.Product
+order by CreatedAt desc
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        return await connection.QueryFirstOrDefaultAsync<string>(query) ?? throw SimaResultException.NotFound;
     }
 }

@@ -57,14 +57,6 @@ public class RiskConfiguration : IEntityTypeConfiguration<Risk>
             .HasForeignKey(x => x.UseVulnerabilityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.ConsequenceCategoryId)
-            .HasConversion(x => x.Value,
-            x => new(x));
-        entity.HasOne(x => x.ConsequenceCategory)
-            .WithMany(x => x.Risks)
-            .HasForeignKey(x => x.ConsequenceCategoryId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
         entity.Property(x => x.TriggerStatusId)
             .HasConversion(x => x.Value,
             x => new(x));
@@ -80,5 +72,11 @@ public class RiskConfiguration : IEntityTypeConfiguration<Risk>
             .WithMany(x => x.Risks)
             .HasForeignKey(x => x.FrequencyId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.ConsequenceLevelId )
+            .HasConversion(x => x.Value,
+                x => new(x));
+
+        entity.HasOne(f => f.ConsequenceLevel).WithMany().HasForeignKey(f => f.ConsequenceLevelId).OnDelete(DeleteBehavior.ClientSetNull);;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities;
-using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 
@@ -16,7 +15,7 @@ public class LicenseTypeConfiguration : IEntityTypeConfiguration<LicenseType>
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
-             v => new LicenseTypeId(v)).ValueGeneratedNever();
+             v => new(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(50);
         entity.Property(e => e.CreatedAt)

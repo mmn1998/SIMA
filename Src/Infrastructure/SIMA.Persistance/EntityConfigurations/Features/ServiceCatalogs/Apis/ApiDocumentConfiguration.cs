@@ -28,12 +28,14 @@ public class ApiDocumentConfiguration : IEntityTypeConfiguration<ApiDocument>
             .HasConversion(x => x.Value, x => new ApiId(x));
         entity.HasOne(x=>x.Api)
             .WithMany(x=>x.ApiDocuments)
-            .HasForeignKey(x=>x.ApiId);
+            .HasForeignKey(x=>x.ApiId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.Property(x => x.DocumentId)
             .HasConversion(x => x.Value, x => new DocumentId(x));
         entity.HasOne(x=>x.Document)
             .WithMany(x=>x.ApiDocuments)
-            .HasForeignKey(x=>x.DocumentId);
+            .HasForeignKey(x=>x.DocumentId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

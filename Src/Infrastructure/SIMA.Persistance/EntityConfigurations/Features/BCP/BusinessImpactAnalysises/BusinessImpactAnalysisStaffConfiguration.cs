@@ -41,5 +41,23 @@ public class BusinessImpactAnalysisStaffConfiguration : IEntityTypeConfiguration
         entity.HasOne(x => x.Staff)
             .WithMany(x => x.BusinessImpactAnalysisStaff)
             .HasForeignKey(x => x.StaffId);
+        
+        entity.Property(x => x.DepartmentId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.Department)
+            .WithMany(x => x.BusinessImpactAnalysisStaff)
+            .HasForeignKey(x => x.DepartmentId);
+        
+        entity.Property(x => x.BranchId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.Branch)
+            .WithMany(x => x.BusinessImpactAnalysisStaff)
+            .HasForeignKey(x => x.BranchId);
     }
 }

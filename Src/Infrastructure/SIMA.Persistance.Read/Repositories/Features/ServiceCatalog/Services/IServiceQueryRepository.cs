@@ -7,5 +7,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.ServiceCatalog.Services;
 public interface IServiceQueryRepository : IQueryRepository
 {
     Task<GetServiceQueryResult> GetById(long id, long issueId);
+    Task<GetServiceQueryResult> GetByCode(string code, long issueId);
     Task<Result<IEnumerable<GetAllServicesQueryResult>>> GetAll(GetAllServicesQuery request);
+    Task<string> GetLastCode();
 }

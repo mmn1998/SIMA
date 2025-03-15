@@ -51,6 +51,24 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessContinuityP
             entity.HasOne(x => x.PlanResponsibility)
                 .WithMany(x => x.BusinessContinuityPlanResponsibles)
                 .HasForeignKey(x => x.PlanResponsibilityId);
+
+            entity.Property(x => x.DepartmentId)
+                .HasConversion(
+                x => x.Value,
+                x => new(x)
+                );
+            entity.HasOne(x => x.Department)
+                .WithMany(x => x.BusinessContinuityPlanResponsibles)
+                .HasForeignKey(x => x.DepartmentId);
+
+            entity.Property(x => x.BranchId)
+                .HasConversion(
+                x => x.Value,
+                x => new(x)
+                );
+            entity.HasOne(x => x.Branch)
+                .WithMany(x => x.BusinessContinuityPlanResponsibles)
+                .HasForeignKey(x => x.BranchId);
         }
     }
 }

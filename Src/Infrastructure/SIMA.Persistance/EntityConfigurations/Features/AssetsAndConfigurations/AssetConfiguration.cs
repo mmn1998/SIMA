@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.ValueObjects;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.ValueObjects;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.OwnershipTypes.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
@@ -54,11 +55,21 @@ public class AssetConfiguration : IEntityTypeConfiguration<Asset>
         entity.Property(x => x.AssetTypeId)
           .HasConversion(
            v => v.Value,
-           v => new AssetTypeId(v));
+           v => new(v));
 
         entity.HasOne(d => d.AssetType)
             .WithMany(d => d.Assets)
             .HasForeignKey(d => d.AssetTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.AssetCategoryId)
+          .HasConversion(
+           v => v.Value,
+           v => new(v));
+
+        entity.HasOne(d => d.AssetCategory)
+            .WithMany(d => d.Assets)
+            .HasForeignKey(d => d.AssetCategoryId)
             .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.Property(x => x.BusinessCriticalityId)
@@ -129,6 +140,26 @@ public class AssetConfiguration : IEntityTypeConfiguration<Asset>
         entity.HasOne(d => d.Warehouse)
             .WithMany(d => d.Assets)
             .HasForeignKey(d => d.WarehouseId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.DataCenterId)
+          .HasConversion(
+           v => v.Value,
+           v => new(v));
+
+        entity.HasOne(d => d.DataCenter)
+            .WithMany(d => d.Assets)
+            .HasForeignKey(d => d.DataCenterId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+        
+        entity.Property(x => x.OperationalStatusId)
+          .HasConversion(
+           v => v.Value,
+           v => new(v));
+
+        entity.HasOne(d => d.OperationalStatus)
+            .WithMany(d => d.Assets)
+            .HasForeignKey(d => d.OperationalStatusId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

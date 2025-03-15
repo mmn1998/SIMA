@@ -1,13 +1,22 @@
 ﻿#region usings
 using Microsoft.EntityFrameworkCore;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetPhysicalStatuses.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Back_Up_Methods.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelationshipTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataCenters.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedureTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.OperationalStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.AddressTypes.Entities;
@@ -41,6 +50,7 @@ using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ViewLists.Entities;
 using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
+using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
@@ -48,16 +58,20 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities;
 using SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities;
 using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
 using SIMA.Domain.Models.Features.BCP.Origins.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryOptionPriorities.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
 using SIMA.Domain.Models.Features.BCP.ScenarioExecutionHistories.Entities;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 using SIMA.Domain.Models.Features.BCP.ServicePriorities.Entities;
+using SIMA.Domain.Models.Features.BCP.SolutionPriorities.Entities;
 using SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.AccountTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.BranchTypes.Entities;
@@ -90,19 +104,38 @@ using SIMA.Domain.Models.Features.Logistics.LogisticsRequests.Entities;
 using SIMA.Domain.Models.Features.Logistics.LogisticsSupplies.Entities;
 using SIMA.Domain.Models.Features.Logistics.UnitMeasurements.Entities;
 using SIMA.Domain.Models.Features.Notifications.Messages.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.EvaluationCriterias.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ImpactScales.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskCriterias.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskDegrees.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskImpacts.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskPossibilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskTypes.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ServiceRiskImpacts.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Threats.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ThreatTypes.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Vulnerabilities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
@@ -119,20 +152,37 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entit
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.OrganizationalProjects.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceCategories.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceOrganizationalProjects.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceStatuses.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.DraftDestinations.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.AgentBankWageShareStatuses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.BrokerSecondLevelAddressBooks.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.CancellationResaons.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.CurrencyPaymentChannels.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftCurrencyOrigins.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.DraftDestinations.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftIssueTypes.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftOrigins.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftReviewResults.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftStatuses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftTypes.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.DraftValorStatuses.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.ReconsilationTypes.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.ReferralLetters.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.RequestValors.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.Resources.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.ResponsibilityWageTypes.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
+using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ActionType.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.ApprovalOptions.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.Progress.Entities;
@@ -141,41 +191,6 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Entities;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowCompany.Entities;
 using SIMA.Persistance.EntityConfigurations.Features.WorkFlowEngine.WorkFlowConfiguration;
-using SIMA.Domain.Models.Features.TrustyDrafts.RequestValors.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.Resources.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.ResponsibilityWageTypes.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.CancellationResaons.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.CurrencyPaymentChannels.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.BrokerSecondLevelAddressBooks.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.AgentBankWageShareStatuses.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.ReferralLetters.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.TriggerStatuses.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.UseVulnerabilities.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.MatrixAs.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilities.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilities.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.MatrixAValues.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.Entities;
-using SIMA.Domain.Models.Features.TrustyDrafts.WageDeductionMethods.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceTypes.Entities;
-using SIMA.Domain.Models.Features.BCP.SolutionPeriorities.Entities;
 
 #endregion
 
@@ -375,12 +390,17 @@ public class SIMADBContext : DbContext
     public DbSet<ServiceType> ServiceTypes { get; set; }
     public DbSet<Channel> Channels { get; set; }
     public DbSet<Service> Services { get; set; }
+    public DbSet<OrganizationalProject> OrganizationalProjects { get; set; }
+    public DbSet<ServiceOrganizationalProject> ServiceOrganizationalProjects { get; set; }
     #endregion
 
     #region BCP
     public DbSet<ImportanceDegree> ImportanceDegrees { get; set; }
     public DbSet<OrganizationalServicePriority> OrganizationalServicePriorities { get; set; }
-    //public DbSet<SolutionPeriority> SolutionPeriorities { get; set; }
+    public DbSet<SolutionPriority> SolutionPriorities { get; set; }
+    public DbSet<ConsequenceIntension> ConsequenceIntensions { get; set; }
+    public DbSet<ConsequenceValue> ConsequenceValues { get; set; }
+    public DbSet<BiaValue> BiaValues { get; set; }
     public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
     public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
     public DbSet<Consequence> Consequences { get; set; }
@@ -390,6 +410,7 @@ public class SIMADBContext : DbContext
     public DbSet<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles { get; set; }
     public DbSet<ServicePriority> ServicePriorities { get; set; }
     public DbSet<BackupPeriod> BackupPeriods { get; set; }
+    public DbSet<PlanType> PlanTypes { get; set; }
     public DbSet<BusinessContinuityPlan> BusinessContinuityPlans { get; set; }
     public DbSet<Scenario> Scenarios { get; set; }
     public DbSet<ScenarioExecutionHistory> ScenarioExecutionHistories { get; set; }
@@ -466,9 +487,19 @@ public class SIMADBContext : DbContext
     public DbSet<BusinessCriticality> BusinessCriticalities { get; set; }
     public DbSet<ConfigurationItemStatus> ConfigurationItemStatuses { get; set; }
     public DbSet<AssetType> AssetTypes { get; set; }
+    public DbSet<Asset> Assets { get; set; }
     public DbSet<ConfigurationItemType> ConfigurationItemTypes { get; set; }
     public DbSet<ConfigurationItemRelationshipType> ConfigurationItemRelationshipTypes { get; set; }
     public DbSet<LicenseType> LicenseTypes { get; set; }
+    public DbSet<DataCenter> DataCenters { get; set; }
+    public DbSet<DataProcedureType> DataProcedureTypes { get; set; }
+    public DbSet<DataProcedure> DataProcedures { get; set; }
+    public DbSet<BackupMethod> BackupMethods { get; set; }
+    public DbSet<OperationalStatus> OperationalStatuses { get; set; }
+    public DbSet<AssetCustomFieldValue> AssetCustomFieldValues { get; set; }
+    public DbSet<AssetAssignedStaff> AssetAssignedStaffs { get; set; }
+    public DbSet<AssetCustomFieldOption> AssetCustomFieldOption { get; set; }
+    public DbSet<ConfigurationItemCustomFieldOption> ConfigurationItemCustomFieldOption { get; set; }
     #endregion
 
     #region Notifications

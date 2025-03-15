@@ -36,8 +36,7 @@ R.FrequencyId,
 F.Name FrequencyName,
 R.TriggerStatusId,
 TS.Name TriggerStatusName,
-R.ConsequenceCategoryId,
-CC.Name ConsequenceCategoryName,
+R.ConsequenceLevelId,
 a.Name ActiveStatus,
 r.Description,
 r.CreatedAt
@@ -46,6 +45,7 @@ r.CreatedAt
 ,W.Id WorkflowId
 ,W.Code WorkflowCode
 ,i.MainAggregateId
+,cl.Name as ConsequenceLevelName
 ,I.IssuePriorityId
 ,IPP.Name IssuePriorityName
 ,I.IssueTypeId
@@ -76,8 +76,9 @@ LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusI
 LEFT JOIN RiskManagement.ScenarioHistory SH on SH.Id = R.ScenarioHistoryId and SH.ActiveStatusId<>3
 LEFT JOIN RiskManagement.TriggerStatus TS on TS.Id = R.TriggerStatusId and TS.ActiveStatusId<>3
 LEFT JOIN RiskManagement.UseVulnerability UV on UV.Id = R.UseVulnerabilityId and UV.ActiveStatusId<>3
-LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = R.ConsequenceCategoryId and CC.ActiveStatusId<>3
+left join RiskManagement.ConsequenceLevel as cl on cl.Id =  R.ConsequenceLevelId AND cl.ActiveStatusId<>3
 Where R.ActiveStatusId<>3
+
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -111,8 +112,6 @@ Where R.ActiveStatusId<>3
     {
         var response = new GetRiskQueryResult();
         var query = @"
-
-
 select 
 R.Id,
 r.Code,
@@ -127,10 +126,11 @@ UV.Name UseVulnerabilityName,
 R.ScenarioHistoryId,
 SH.Name ScenarioHistoryName,
 R.FrequencyId,
+CC.Name,
 F.Name FrequencyName,
 R.TriggerStatusId,
 TS.Name TriggerStatusName,
-R.ConsequenceCategoryId,
+R.ConsequenceLevelId,
 CC.Name ConsequenceCategoryName,
 a.Name ActiveStatus,
 r.Description,
@@ -143,7 +143,7 @@ LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusI
 LEFT JOIN RiskManagement.ScenarioHistory SH on SH.Id = R.ScenarioHistoryId and SH.ActiveStatusId<>3
 LEFT JOIN RiskManagement.TriggerStatus TS on TS.Id = R.TriggerStatusId and TS.ActiveStatusId<>3
 LEFT JOIN RiskManagement.UseVulnerability UV on UV.Id = R.UseVulnerabilityId and UV.ActiveStatusId<>3
-LEFT JOIN RiskManagement.ConsequenceCategory CC on CC.Id = R.ConsequenceCategoryId and CC.ActiveStatusId<>3
+LEFT JOIN RiskManagement.ConsequenceLevel CC on CC.Id = R.ConsequenceLevelId and CC.ActiveStatusId<>3
 Where R.ActiveStatusId<>3 AND R.Id = @Id
 
 ------------ CorrectiveActionList
@@ -202,6 +202,12 @@ from RiskManagement.Risk R
 inner join ServiceCatalog.ServiceRisk SR on SR.RiskId = R.Id and R.ActiveStatusId<>3
 inner join ServiceCatalog.Service S on SR.ServiceId = S.Id and S.ActiveStatusId<>3
 where R.Id = @Id and R.ActiveStatusId<>3
+
+----------- AssignedStaff
+
+
+select top 10 rs.ResponsibleTypeId, rs.StaffId from RiskManagement.RiskStaff as Rs
+inner join RiskManagement.Risk as R on rs.RiskId = r.Id
 
 ----------- RiskImpactList
 select

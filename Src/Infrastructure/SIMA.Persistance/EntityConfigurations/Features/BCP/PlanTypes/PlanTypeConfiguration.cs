@@ -1,22 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.BCP.Origins.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.Entities;
 
-namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessImpactAnalysises;
+namespace SIMA.Persistance.EntityConfigurations.Features.BCP.PlanTypes;
 
-public class OriginConfiguration : IEntityTypeConfiguration<Origin>
+public class PlanTypeConfiguration : IEntityTypeConfiguration<PlanType>
 {
-    public void Configure(EntityTypeBuilder<Origin> entity)
+    public void Configure(EntityTypeBuilder<PlanType> entity)
     {
-        entity.ToTable("Origin", "BCP");
+        entity.ToTable("PlanType", "BCP");
+        entity.HasIndex(e => e.Code).IsUnique();
         entity.Property(x => x.Id)
             .HasConversion(
              v => v.Value,
              v => new(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
-        entity.Property(i => i.Code).HasMaxLength(20);
-        entity.HasIndex(i => i.Code).IsUnique();
-        entity.Property(i => i.Name).HasMaxLength(200);
+        entity.Property(e => e.Code).HasMaxLength(50);
+        entity.Property(e => e.Name).HasMaxLength(200);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
@@ -24,6 +24,5 @@ public class OriginConfiguration : IEntityTypeConfiguration<Origin>
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-
     }
 }

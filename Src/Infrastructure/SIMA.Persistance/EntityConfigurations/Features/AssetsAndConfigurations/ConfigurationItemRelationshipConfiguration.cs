@@ -31,24 +31,24 @@ public class ConfigurationItemRelationshipConfiguration : IEntityTypeConfigurati
             .HasForeignKey(d => d.ConfigurationItemRelationshipTypeId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.ConfigurationItemVersioningId)
+        entity.Property(x => x.ConfigurationItemId)
           .HasConversion(
            v => v.Value,
-           v => new ConfigurationItemVersioningId(v));
+           v => new(v));
 
-        entity.HasOne(d => d.ConfigurationItemVersioning)
+        entity.HasOne(d => d.ConfigurationItem)
             .WithMany(d => d.ConfigurationItemRelationships)
-            .HasForeignKey(d => d.ConfigurationItemVersioningId)
+            .HasForeignKey(d => d.ConfigurationItemId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
-        entity.Property(x => x.RelatedConfigurationItemVersioningId)
+        entity.Property(x => x.RelatedConfigurationItemId)
           .HasConversion(
            v => v.Value,
-           v => new ConfigurationItemVersioningId(v));
+           v => new(v));
 
-        entity.HasOne(d => d.RelatedConfigurationItemVersioning)
+        entity.HasOne(d => d.RelatedConfigurationItem)
             .WithMany(d => d.RelatedConfigurationItemRelationships)
-            .HasForeignKey(d => d.RelatedConfigurationItemVersioningId)
+            .HasForeignKey(d => d.RelatedConfigurationItemId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

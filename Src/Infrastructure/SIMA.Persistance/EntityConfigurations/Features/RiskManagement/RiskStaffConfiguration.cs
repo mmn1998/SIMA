@@ -41,5 +41,15 @@ public class RiskStaffConfiguration : IEntityTypeConfiguration<RiskStaff>
             .WithMany(x => x.RiskStaffs)
             .HasForeignKey(x => x.StaffId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.ResponsilbeTypeId)
+            .HasConversion(
+            x => x.Value,
+            x => new(x)
+            );
+        entity.HasOne(x => x.ResponsilbeType)
+            .WithMany()
+            .HasForeignKey(x => x.ResponsilbeTypeId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

@@ -35,6 +35,14 @@ public class RiskLevelCobitConfiguration : IEntityTypeConfiguration<RiskLevelCob
             .HasForeignKey(x => x.SeverityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
+        entity.Property(x => x.RiskLevelId)
+            .HasConversion(x => x.Value,
+            x => new(x));
+        entity.HasOne(x => x.RiskLevel)
+            .WithMany(x => x.RiskLevelCobits)
+            .HasForeignKey(x => x.RiskLevelId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
         entity.Property(x => x.CurrentOccurrenceProbabilityValueId)
             .HasConversion(x => x.Value,
             x => new(x));

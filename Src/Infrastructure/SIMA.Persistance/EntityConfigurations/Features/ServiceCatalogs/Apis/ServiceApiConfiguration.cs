@@ -27,12 +27,14 @@ public class ServiceApiConfiguration : IEntityTypeConfiguration<ServiceApi>
             .HasConversion(x => x.Value, x => new ApiId(x));
         entity.HasOne(x=>x.Api)
             .WithMany(x=>x.ServiceApis)
-            .HasForeignKey(x=>x.ApiId);
+            .HasForeignKey(x=>x.ApiId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.Property(x => x.ServiceId)
             .HasConversion(x => x.Value, x => new ServiceId(x));
         entity.HasOne(x=>x.Service)
             .WithMany(x=>x.ServiceApis)
-            .HasForeignKey(x=>x.ServiceId);
+            .HasForeignKey(x=>x.ServiceId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

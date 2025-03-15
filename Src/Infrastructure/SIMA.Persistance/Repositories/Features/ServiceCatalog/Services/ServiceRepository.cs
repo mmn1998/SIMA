@@ -31,6 +31,7 @@ public class ServiceRepository : Repository<Service>, IServiceRepository
             .Include(x => x.ServiceConfigurationItems)
             .Include(x => x.ServiceAssignStaffes)
             .Include(x => x.ServiceRelatedIssues)
+            .Include(x => x.ServiceAvalibilities)
             .FirstOrDefaultAsync(x => x.Id == Id)
             ;
         entity.NullCheck();

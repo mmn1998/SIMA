@@ -61,7 +61,9 @@ select
 	IR.ProformaAmount,
 	IR.ProformaCurrencyTypeId,
 	CT2.Name ProformaCurrencyTypeName,
-    TD.DraftNumber
+    TD.DraftNumber,
+	IRes.ExcessWageCurrencyTypeId,
+	CT3.Name ExcessWageCurrencyTypeName
 from TrustyDraft.InquiryRequest IR
 LEFT JOIN TrustyDraft.TrustyDraft TD on TD.InquiryRequestId = IR.Id and TD.ActiveStatusId<>3
 join Bank.Customer C on C.Id = IR.CustomerId and C.ActiveStatusId<>3
@@ -79,20 +81,23 @@ LEFT JOIN TrustyDraft.InquiryRequestCurrency IRC on IRC.Id = IRes.InquiryRequest
 LEFT JOIN Bank.CurrencyType CT on CT.Id = IRC.CurrencyTypeId and CT.ActiveStatusId<>3
 LEFT JOIN Bank.CurrencyType CT2 on CT2.Id = IR.ProformaCurrencyTypeId and CT2.ActiveStatusId<>3
 LEFT JOIN TrustyDraft.DraftOrigin DO on DO.Id = IR.DraftOriginId and DO.ActiveStatusId<>3
+LEFT JOIN Bank.CurrencyType CT3 ON CT3.Id = IRes.ExcessWageCurrencyTypeId and CT3.ActiveStatusId<>3
 WHERE IR.ActiveStatusId<>3
 ";
     }
 
     public async Task<Result<IEnumerable<GetInquiryRequestQueryResult>>> GetAll(GetAllInquiryRequestsQuery request)
     {
-        using var connection = new SqlConnection(_connectionString);
-        await connection.OpenAsync();
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
 
-        ///
-        /// اضافه شدن شرط اینکه اگر ثبت کننده درخواست یا ثبت کننده حواله خود کاربر باشد، درخواست برای او نمایش داده شود.
-        ///
-        string queryCount = $@" WITH Query as(
-						                    {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
+            ///
+            /// اضافه شدن شرط اینکه اگر ثبت کننده درخواست یا ثبت کننده حواله خود کاربر باشد، درخواست برای او نمایش داده شود.
+            ///
+            string queryCount = $@" WITH Query as(
+						                    {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId OR dbo.FN_GetBranchIdByUserId(@UserId) = ir.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
@@ -100,19 +105,25 @@ WHERE IR.ActiveStatusId<>3
 								 ; ";
 
 
-        string query = $@" WITH Query as(
-							                  {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
+            string query = $@" WITH Query as(
+							                  {_mainQuery}   AND (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId  OR dbo.FN_GetBranchIdByUserId(@UserId) = ir.BranchId Or TD.CreatedBy = @UserId or IR.CreatedBy = @UserId)
 							)
 								SELECT * FROM Query
 								 /**where**/
 								 /**orderby**/
                                     OFFSET @Skip rows FETCH NEXT @PageSize rows only; ";
-        var dynaimcParameters = (queryCount + query).GenerateQuery(request);
-        dynaimcParameters.Item2.Add("UserId", _simaIdentity.UserId);
-        using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
-        var count = await multi.ReadFirstAsync<int>();
-        var response = await multi.ReadAsync<GetInquiryRequestQueryResult>();
-        return Result.Ok(response, request, count);
+            var dynaimcParameters = (queryCount + query).GenerateQuery(request);
+            dynaimcParameters.Item2.Add("UserId", _simaIdentity.UserId);
+            using var multi = await connection.QueryMultipleAsync(dynaimcParameters.Item1.RawSql, dynaimcParameters.Item2);
+            var count = await multi.ReadFirstAsync<int>();
+            var response = await multi.ReadAsync<GetInquiryRequestQueryResult>();
+            return Result.Ok(response, request, count);
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+        
     }
 
     public async Task<GetInquiryRequestQueryResult> GetById(GetInquiryRequestQuery request)

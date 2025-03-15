@@ -11,9 +11,22 @@ namespace SIMA.Persistance.Read.Repositories.Features.AssetsAndConfigurations.Li
 public class LicenseTypeQueryRepository : ILicenseTypeQueryRepository
 {
     private readonly string _connectionString;
+    private readonly string _mainQuery;
     public LicenseTypeQueryRepository(IConfiguration configuration)
     {
         _connectionString = configuration.GetConnectionString();
+        _mainQuery = @"
+Select
+     l.[Id]
+    ,l.[Name]
+    ,l.[Code]
+    ,l.CreatedAt
+    ,l.[ActiveStatusId]
+    ,A.[Name] ActiveStatus
+From AssetAndConfiguration.LicenseType l
+join Basic.ActiveStatus A on l.ActiveStatusId = A.Id
+WHERE l.ActiveStatusId <> 3
+";
     }
 
     public async Task<Result<IEnumerable<GetLicenseTypeQueryResult>>> GetAll(GetAllLicenseTypeQuery request)
@@ -21,26 +34,14 @@ public class LicenseTypeQueryRepository : ILicenseTypeQueryRepository
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();
-            var mainQuery = @"
-                            Select
-                            	 l.[Id]
-	                    		,l.[Name]
-	                    		,l.[Code]
-                                ,l.CreatedAt
-	                    		,l.[ActiveStatusId]
-	                    		,A.[Name] ActiveStatus
-	                    		From AssetAndConfiguration.LicenseType l
-	                    		join Basic.ActiveStatus A on l.ActiveStatusId = A.Id
-                              WHERE l.ActiveStatusId <> 3
-							";
             var queryCount = $@"
-                             WITH Query as(	{mainQuery}	)
+                             WITH Query as(	{_mainQuery}	)
 								SELECT Count(*) FROM Query
 								 /**where**/
 								 ;";
 
             string query = $@"WITH Query as(
-							 {mainQuery}
+							 {_mainQuery}
 							)
 								SELECT * FROM Query
 								 /**where**/
@@ -59,17 +60,8 @@ public class LicenseTypeQueryRepository : ILicenseTypeQueryRepository
 
     public async Task<GetLicenseTypeQueryResult> GetById(GetLicenseTypeQuery request)
     {
-        var query = @"
-          Select 
-			 l.[Id]
-			,l.[Name]
-			,l.[Code]
-            ,l.CreatedAt
-			,l.[ActiveStatusId]
-			,A.[Name] ActiveStatus
-			From AssetAndConfiguration.LicenseType l
-			join Basic.ActiveStatus A on l.ActiveStatusId = A.Id
-          WHERE l.[Id] = @Id AND l.ActiveStatusId <> 3";
+        var query = $@"
+         {_mainQuery} AND l.[Id] = @Id";
         using (var connection = new SqlConnection(_connectionString))
         {
             await connection.OpenAsync();

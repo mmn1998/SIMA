@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
 

@@ -22,6 +22,7 @@ public class ConfigurationItemConfiguration : IEntityTypeConfiguration<Configura
              v => new ConfigurationItemId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(50);
+        entity.Property(e => e.VersionNumber).HasMaxLength(20);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
             .HasColumnType("datetime");
@@ -97,6 +98,16 @@ public class ConfigurationItemConfiguration : IEntityTypeConfiguration<Configura
         entity.HasOne(d => d.Owner)
             .WithMany(d => d.ConfigurationItemOwners)
             .HasForeignKey(d => d.OwnerId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.DataCenterId)
+          .HasConversion(
+           v => v.Value,
+           v => new(v));
+
+        entity.HasOne(d => d.DataCenter)
+            .WithMany(d => d.ConfigurationItems)
+            .HasForeignKey(d => d.DataCenterId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

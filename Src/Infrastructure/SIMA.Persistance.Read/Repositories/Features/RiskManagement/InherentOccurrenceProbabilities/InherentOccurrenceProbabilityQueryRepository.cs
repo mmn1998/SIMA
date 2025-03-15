@@ -23,7 +23,7 @@ SELECT
 	,IOP.ScenarioHistoryId
 	,SH.Name ScenarioHistoryName
 	,IOP.MatrixAValueId
-	,MV.Color MatrixAValueName
+	,MV.ValueTitle MatrixAValueName
 	,IOP.InherentOccurrenceProbabilityValueId
 	,IOPV.Name InherentOccurrenceProbabilityValueName
 	,A.[Name] ActiveStatus
