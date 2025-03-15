@@ -11,6 +11,8 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Products.Entities;
 
@@ -71,15 +73,54 @@ public class Product : Entity, IAggregateRoot
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
     }
     #endregion
-    public void CreateChannel(List<CreateProductChannelArg> args, long ProductId)
+
+    public void AddChannel(List<CreateProductChannelArg> args)
     {
+        foreach (var arg in args)
+        {
+            var entity = ProductChannel.Create(arg);
+            _productChannels.Add(entity);
+        }
+    }
+    public void ModifyChannel(List<CreateProductChannelArg> args)
+    {
+        var activeEntities = _productChannels.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);  
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ChannelId == x.ChannelId.Value)).ToList();
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ChannelId.Value == x.ChannelId));
+
+        
+        
+        /*
         var previousProductChannels = _productChannels.Where(x => x.ProductId == new ProductId(ProductId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
         var addChannel = args.Where(x => !previousProductChannels.Any(c => c.ChannelId.Value == x.ChannelId)).ToList();
         var deleteChannel = previousProductChannels.Where(x => !args.Any(c => c.ChannelId == x.ChannelId.Value)).ToList();
+        */
+
+        foreach (var item in ShouldAddedArgs)
+        {
+
+            
+            
+            var entity = _productChannels.FirstOrDefault(x =>
+                (x.ChannelId == new ChannelId(item.ChannelId) && x.ProductId == new ProductId(item.ProductId)) &&
+                x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+
+            if (entity is not null)
+            {
+                entity.Active(item.CreatedBy);
+            }
+            else
+            {
+                entity = ProductChannel.Create(item);
+                _productChannels.Add(entity);
+            }
+        }
 
 
-        foreach (var item in addChannel)
+
+
+        /*foreach (var item in ShouldAddedArgs)
         {
             var entity = _productChannels.Where(x => (x.ChannelId == new ChannelId(item.ChannelId) && x.ProductId == new ProductId(ProductId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
             if (entity is not null)
@@ -93,24 +134,65 @@ public class Product : Entity, IAggregateRoot
             }
         }
 
-        foreach (var document in deleteChannel)
+        foreach (var document in shouldDeleteEntities)
         {
             document.Delete(args[0].CreatedBy);
+        }*/
+    }
+    
+    
+
+    public void AddProductResponsible(List<CreateProductResponsibleArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ProductResponsible.Create(arg);
+            _productResponsibles.Add(entity);
         }
     }
-
-    public void CreateResponsible(List<CreateProductResponsibleArg> args, long ProductId)
+    
+    public void ModifyResponsible(List<CreateProductResponsibleArg> args)
     {
+        var activeEntities = _productResponsibles.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);  
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ResponsibleId == x.ResponsilbeId.Value && c.ResponsibleTypeId == x.ResponsibleTypeId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ResponsilbeId.Value == x.ResponsibleId && c.ResponsibleTypeId.Value == x.ResponsibleTypeId));
+
+        /*
         var previousProductResponsibles = _productResponsibles.Where(x => x.ProductId == new ProductId(ProductId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
         var addResponsible = args.Where(x => !previousProductResponsibles.Any(c => c.ResponsilbeId.Value == x.ResponsibleId && c.ResponsibleTypeId.Value == x.ResponsibleTypeId)).ToList();
         var deleteResponsible = previousProductResponsibles.Where(x => !args.Any(c => c.ResponsibleId == x.ResponsilbeId.Value && c.ResponsibleTypeId == x.ResponsibleTypeId.Value)).ToList();
+        */
 
 
-        foreach (var item in addResponsible)
+        foreach (var item in ShouldAddedArgs)
         {
-            var entity = _productResponsibles.Where(x => (x.ResponsilbeId == new StaffId(item.ResponsibleId) && x.ResponsibleTypeId == new Auths.ResponsibleTypes.ValueObjects.ResponsibleTypeId(item.ResponsibleTypeId) && x.ProductId == new ProductId(ProductId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+            var entity = _productResponsibles.FirstOrDefault(x => x.ResponsilbeId.Value == item.ResponsibleId && (item.BranchId == null || x.BranchId == new BranchId(item.BranchId.Value)) &&
+                                                                  (item.DepartmentId == null || x.DepartmentId == new DepartmentId(item.DepartmentId.Value)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            
             if (entity is not null)
+            {
+                entity.Active(item.CreatedBy);
+            }
+            else
+            {
+                entity = ProductResponsible.Create(item);
+                _productResponsibles.Add(entity);
+            }
+            
+            
+            
+            /*var entity = _productResponsibles
+                .FirstOrDefault(x =>
+                    x.ResponsilbeId == new StaffId(item.ResponsibleId) &&
+                    x.ResponsibleTypeId ==
+                    new Auths.ResponsibleTypes.ValueObjects.ResponsibleTypeId(item.ResponsibleTypeId) &&
+                    x.ProductId == new ProductId(ProductId) &&
+                    (item.BranchId == null || x.BranchId == new BranchId(item.BranchId.Value)) &&
+                    (item.DepartmentId == null || x.DepartmentId == new DepartmentId(item.DepartmentId.Value)) &&
+                    x.ActiveStatusId != (long)ActiveStatusEnum.Active
+                );*/
+            /*if (entity is not null)
             {
                 entity.ChangeStatus(ActiveStatusEnum.Active);
             }
@@ -118,12 +200,12 @@ public class Product : Entity, IAggregateRoot
             {
                 entity = ProductResponsible.Create(item);
                 _productResponsibles.Add(entity);
-            }
+            }*/
         }
 
-        foreach (var document in deleteResponsible)
+        foreach (var entity in shouldDeleteEntities)
         {
-            document.Delete(args[0].CreatedBy);
+            entity.Delete(args[0].CreatedBy);
         }
     }
 

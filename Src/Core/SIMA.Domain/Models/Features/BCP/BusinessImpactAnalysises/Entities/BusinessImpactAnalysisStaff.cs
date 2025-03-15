@@ -1,7 +1,11 @@
-﻿using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.Departments.Entities;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -27,19 +31,15 @@ public class BusinessImpactAnalysisStaff : Entity
     {
         return new BusinessImpactAnalysisStaff(arg);
     }
-    public void Modify(ModifyBusinessImpactAnalysisStaffArg arg)
-    {
-        StaffId = new(arg.StaffId);
-        BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public BusinessImpactAnalysisStaffId Id { get; private set; }
     public StaffId StaffId { get; private set; }
     public virtual Staff Staff { get; private set; }
     public BusinessImpactAnalysisId BusinessImpactAnalysisId { get; private set; }
     public virtual BusinessImpactAnalysis BusinessImpactAnalysis { get; private set; }
+    public BranchId? BranchId { get; private set; }
+    public virtual Branch? Branch { get; private set; }
+    public DepartmentId? DepartmentId { get; private set; }
+    public virtual Department? Department { get; private set; }
     public long ActiveStatusId { get; private set; }
 
     public DateTime? CreatedAt { get; private set; }

@@ -12,7 +12,7 @@ public class ApiRequestQueryStringParam : Entity
     private ApiRequestQueryStringParam(CreateApiRequestQueryStringParamArg arg)
     {
         Id = new ApiRequestQueryStringParamId(arg.Id);
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
+        ApiId = new(arg.ApiId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
@@ -26,21 +26,9 @@ public class ApiRequestQueryStringParam : Entity
     {
         return new ApiRequestQueryStringParam(arg);
     }
-    public void Modify(ModifyApiRequestQueryStringParamArg arg)
-    {
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
-        if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
-        Name = arg.Name;
-        DataType = arg.DataType;
-        IsMandatory = arg.IsMandatory;
-        Description = arg.Description;
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedAt = arg.ModifiedAt;
-        ModifiedBy = arg.ModifiedBy;
-    }
     public ApiRequestQueryStringParamId Id { get; private set; }
-    public ApiVersionId ApiVersionId { get; private set; }
-    public virtual ApiVersion ApiVersion  { get; private set; }
+    public ApiId ApiId { get; private set; }
+    public virtual Api Api  { get; private set; }
     public string Name { get; private set; }
     public string DataType { get; private set; }
     public string? IsMandatory { get; private set; }

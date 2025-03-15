@@ -7,16 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Features\AssetsAndConfigurations\Categories - Copy %283%29\**" />
+    <Compile Remove="Models\Features\AssetsAndConfigurations\DataProcedureDocuments\**" />
     <Compile Remove="Models\Features\RiskManagement\RiskValueStrategies\**" />
     <Compile Remove="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\**" />
     <Compile Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
     <Compile Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
     <Compile Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+    <EmbeddedResource Remove="Models\Features\AssetsAndConfigurations\Categories - Copy %283%29\**" />
+    <EmbeddedResource Remove="Models\Features\AssetsAndConfigurations\DataProcedureDocuments\**" />
     <EmbeddedResource Remove="Models\Features\RiskManagement\RiskValueStrategies\**" />
     <EmbeddedResource Remove="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\**" />
     <EmbeddedResource Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
     <EmbeddedResource Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
     <EmbeddedResource Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+    <None Remove="Models\Features\AssetsAndConfigurations\Categories - Copy %283%29\**" />
+    <None Remove="Models\Features\AssetsAndConfigurations\DataProcedureDocuments\**" />
     <None Remove="Models\Features\RiskManagement\RiskValueStrategies\**" />
     <None Remove="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\**" />
     <None Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
@@ -26,7 +32,7 @@
 
   
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="2.6.3" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.5.24" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
   </ItemGroup>
 
@@ -37,19 +43,11 @@
 
   <ItemGroup>
     <Folder Include="Models\Features\AccessManagement\AccessRequests\Contracts\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Args\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Contracts\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Entities\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\ValueObjects\" />
     <Folder Include="Models\Features\Auths\ResponsibleTypes\Exceptions\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\Args\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\Contracts\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\Entities\" />
-    <Folder Include="Models\Features\BCP\ConsequenceValues\ValueObjects\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\Args\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\Contracts\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\Entities\" />
-    <Folder Include="Models\Features\BCP\ConsequenceIntensions\ValueObjects\" />
-    <Folder Include="Models\Features\BCP\BiaValues\Args\" />
-    <Folder Include="Models\Features\BCP\BiaValues\Contracts\" />
-    <Folder Include="Models\Features\BCP\BiaValues\Entities\" />
-    <Folder Include="Models\Features\BCP\BiaValues\ValueObjects\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />

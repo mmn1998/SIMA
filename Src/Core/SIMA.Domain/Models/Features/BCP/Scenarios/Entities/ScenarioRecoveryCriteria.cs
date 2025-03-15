@@ -25,14 +25,6 @@ public class ScenarioRecoveryCriteria : Entity
     {
         return new ScenarioRecoveryCriteria(arg);
     }
-    public async Task Modify(ModifyScenarioRecoveryCriteriaArg arg)
-    {
-        ScenarioId = new(arg.ScenarioId);
-        Description = arg.Description;
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public ScenarioRecoveryCriteriaId Id { get; set; }
     public ScenarioId ScenarioId { get; private set; }
     public Scenario Scenario { get; private set; }

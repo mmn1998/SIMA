@@ -3,7 +3,7 @@
 public class CreateApiRequestHeaderParamArg
 {
     public long Id { get; set; }
-    public long ApiVersionId { get; set; }
+    public long ApiId { get; set; }
     public long? ParentId { get; set; }
     public string Name { get; set; }
     public string? DataType { get; set; }

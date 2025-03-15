@@ -51,18 +51,18 @@ public class ApiVersion : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<ApiRequestHeaderParam> _apiRequestHeaderParams = new();
-    public ICollection<ApiRequestHeaderParam> ApiRequestHeaderParams => _apiRequestHeaderParams;
-    private List<ApiRequestBodyParam> _apiRequestBodyParams = new();
-    public ICollection<ApiRequestBodyParam> ApiRequestBodyParams => _apiRequestBodyParams;
-    private List<ApiRequestUrlParam> _apiRequestUrlParams = new();
-    public ICollection<ApiRequestUrlParam> ApiRequestUrlParams => _apiRequestUrlParams;
-    private List<ApiRequestQueryStringParam> _apiRequestQueryStringParams = new();
-    public ICollection<ApiRequestQueryStringParam> ApiRequestQueryStringParams => _apiRequestQueryStringParams;
+    //private List<ApiRequestHeaderParam> _apiRequestHeaderParams = new();
+    //public ICollection<ApiRequestHeaderParam> ApiRequestHeaderParams => _apiRequestHeaderParams;
+    //private List<ApiRequestBodyParam> _apiRequestBodyParams = new();
+    //public ICollection<ApiRequestBodyParam> ApiRequestBodyParams => _apiRequestBodyParams;
+    //private List<ApiRequestUrlParam> _apiRequestUrlParams = new();
+    //public ICollection<ApiRequestUrlParam> ApiRequestUrlParams => _apiRequestUrlParams;
+    //private List<ApiRequestQueryStringParam> _apiRequestQueryStringParams = new();
+    //public ICollection<ApiRequestQueryStringParam> ApiRequestQueryStringParams => _apiRequestQueryStringParams;
 
-    private List<ApiResponseHeaderParam> _apiResponseHeaderParams = new();
-    public ICollection<ApiResponseHeaderParam> ApiResponseHeaderParams => _apiResponseHeaderParams;
+    //private List<ApiResponseHeaderParam> _apiResponseHeaderParams = new();
+    //public ICollection<ApiResponseHeaderParam> ApiResponseHeaderParams => _apiResponseHeaderParams;
 
-    private List<ApiResponseBodyParam> _apiResponseBodyParams = new();
-    public ICollection<ApiResponseBodyParam> ApiResponseBodyParams => _apiResponseBodyParams;
+    //private List<ApiResponseBodyParam> _apiResponseBodyParams = new();
+    //public ICollection<ApiResponseBodyParam> ApiResponseBodyParams => _apiResponseBodyParams;
 }

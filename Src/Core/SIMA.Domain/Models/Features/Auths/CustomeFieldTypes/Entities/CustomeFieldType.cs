@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.CustomeFields.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
+using SIMA.Domain.Models.Features.Auths.CustomeFields.Entities;
 using SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.Args;
 using SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.Contracts;
 using SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.ValueObjects;
@@ -85,4 +87,8 @@ public class CustomeFieldType : Entity, IAggregateRoot
     }
     private List<CustomeField> _customeFields = new();
     public ICollection<CustomeField> CustomeFields => _customeFields;
+    private List<ConfigurationItemCustomField> _configurationItemCustomFields = new();
+    public ICollection<ConfigurationItemCustomField> ConfigurationItemCustomFields => _configurationItemCustomFields;
+    private List<AssetCustomField> _assetCustomFields = new();
+    public ICollection<AssetCustomField> AssetCustomFields => _assetCustomFields;
 }

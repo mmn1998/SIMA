@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+using SIMA.Domain.Models.Features.Auths.ApiMethodActions.Entities;
 using SIMA.Domain.Models.Features.Auths.ApiMethodActions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Departments.Entities;
 using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
@@ -13,8 +14,10 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Contracts;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
@@ -38,7 +41,7 @@ public class Api : Entity, IAggregateRoot
         AuthenticationWorkflow = arg.AuthenticationWorkflow;
         RulesAndConditions = arg.RulesAndConditions;
         if (arg.ApiTypeId.HasValue) ApiTypeId = new(arg.ApiTypeId.Value);
-
+        IsInternalApi = arg.IsInternalApi;
         if (arg.ApiAuthenticationMethodId.HasValue) ApiAuthenticationMethodId = new(arg.ApiAuthenticationMethodId.Value);
         if (arg.NetworkProtocolId.HasValue) NetworkProtocolId = new(arg.NetworkProtocolId.Value);
         if (arg.OwnerResponsibleId.HasValue) OwnerResponsibleId = new(arg.OwnerResponsibleId.Value);
@@ -59,6 +62,7 @@ public class Api : Entity, IAggregateRoot
         Code = arg.Code;
         Description = arg.Description;
         Prerequisites = arg.Prerequisites;
+        IsInternalApi = arg.IsInternalApi;
         ApiAddress = arg.ApiAddress;
         PortNumber = arg.PortNumber;
         IpAddress = arg.IpAddress;
@@ -77,16 +81,29 @@ public class Api : Entity, IAggregateRoot
     #region Guards
     private static async Task CreateGuards(CreateApiArg arg, IApiDomainService service)
     {
-
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
+        arg.IsInternalApi.NullCheck();
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
-    private static async Task ModifyGuards(ModifyApiArg arg, IApiDomainService service)
+    private async Task ModifyGuards(ModifyApiArg arg, IApiDomainService service)
     {
-
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
+        arg.IsInternalApi.NullCheck();
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public ApiId Id { get; private set; }
     public string Name { get; private set; }
     public string Code { get; private set; }
+    public string? IsInternalApi { get; private set; }
     public string? Description { get; private set; }
     public string? Prerequisites { get; private set; }
     public string? BaseUrl { get; private set; }
@@ -139,4 +156,8 @@ public class Api : Entity, IAggregateRoot
     public ICollection<ApiResponseBodyParam> ApiResponseBodyParams => _apiResponseBodyParams;
     private List<ApiResponseHeaderParam> _apiResponseHeaderParams = new();
     public ICollection<ApiResponseHeaderParam> ApiResponseHeaderParams => _apiResponseHeaderParams;
+    private List<ConfigurationItemApi> _configurationItemApis = new();
+    public ICollection<ConfigurationItemApi> ConfigurationItemApis => _configurationItemApis;
+    private List<ApiRequestHeaderParam> _apiRequestHeaderParams = new();
+    public ICollection<ApiRequestHeaderParam> ApiRequestHeaderParams => _apiRequestHeaderParams;
 }

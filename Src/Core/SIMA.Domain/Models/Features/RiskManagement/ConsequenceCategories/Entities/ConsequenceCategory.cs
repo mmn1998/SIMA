@@ -82,6 +82,4 @@ public class ConsequenceCategory : Entity, IAggregateRoot
     }    
     private List<ConsequenceLevelCategory> _riskConsequences = new();
     public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
-    private List<Risk> _risks = new();
-    public ICollection<Risk> Risks => _risks;
 }

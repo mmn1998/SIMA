@@ -12,7 +12,7 @@ public class ApiRequestHeaderParam : Entity
     private ApiRequestHeaderParam(CreateApiRequestHeaderParamArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
+        ApiId = new(arg.ApiId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
@@ -26,22 +26,10 @@ public class ApiRequestHeaderParam : Entity
     {
         return new ApiRequestHeaderParam(arg);
     }
-    public void Modify(ModifyApiRequestHeaderParamArg arg)
-    {
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
-        if (arg.ParentId.HasValue) ParentId = new ApiRequestHeaderParamId(arg.ParentId.Value);
-        Name = arg.Name;
-        DataType = arg.DataType;
-        IsMandatory = arg.IsMandatory;
-        Description = arg.Description;
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedAt = arg.ModifiedAt;
-        ModifiedBy = arg.ModifiedBy;
-    }
     public ApiRequestHeaderParamId Id { get; private set; }
 
-    public ApiVersionId ApiVersionId { get; private set; }
-    public virtual ApiVersion ApiVersion  { get; private set; }
+    public ApiId ApiId { get; private set; }
+    public virtual Api Api  { get; private set; }
     public string Name { get; private set; }
     public string DataType { get; private set; }
     public string? IsMandatory { get; private set; }

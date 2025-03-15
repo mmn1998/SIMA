@@ -4,6 +4,8 @@ using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
@@ -48,12 +50,12 @@ public class Risk : Entity
         FrequencyId = new(arg.FrequencyId);
         TriggerStatusId = new(arg.TriggerStatusId);
         ScenarioHistoryId = new(arg.ScenarioHistoryId);
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
         UseVulnerabilityId = new(arg.UseVulnerabilityId);
         AffectedHistoryId = new(arg.AffectedHistoryId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        ConsequenceLevelId =new (arg.ConsequenceLevelId);
     }
 
     public static async Task<Risk> Create(CreateRiskArg arg, IRiskDomainService service)
@@ -72,12 +74,12 @@ public class Risk : Entity
         FrequencyId = new(arg.FrequencyId);
         TriggerStatusId = new(arg.TriggerStatusId);
         ScenarioHistoryId = new(arg.ScenarioHistoryId);
-        ConsequenceCategoryId = new(arg.ConsequenceCategoryId);
         UseVulnerabilityId = new(arg.UseVulnerabilityId);
         AffectedHistoryId = new(arg.AffectedHistoryId);
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        ConsequenceLevelId  =  new(arg.ConsequenceLevelId);
         //AddDomainEvent(new ModifyRiskCreateEvents(_riskRelatedIssues.First().IssueId.Value, MainAggregateEnums.RiskManagment, Name, Id.Value));
     }
     #region Guards
@@ -418,12 +420,12 @@ public class Risk : Entity
     public virtual AffectedHistory? AffectedHistory { get; private set; }
     public UseVulnerabilityId? UseVulnerabilityId { get; private set; }
     public virtual UseVulnerability? UseVulnerability { get; private set; }
-    public ConsequenceCategoryId? ConsequenceCategoryId { get; private set; }
-    public virtual ConsequenceCategory? ConsequenceCategory { get; private set; }
     public TriggerStatusId? TriggerStatusId { get; private set; }
     public virtual TriggerStatus? TriggerStatus { get; private set; }
     public ScenarioHistoryId? ScenarioHistoryId { get; private set; }
     public virtual ScenarioHistory? ScenarioHistory { get; private set; }
+    public ConsequenceLevelId? ConsequenceLevelId { get; private set; }
+    public virtual ConsequenceLevel? ConsequenceLevel { get; private set; }
     public FrequencyId? FrequencyId { get; private set; }
     public virtual Frequency? Frequency { get; private set; }
     public long ActiveStatusId { get; private set; }

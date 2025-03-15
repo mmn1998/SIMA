@@ -27,15 +27,6 @@ public class ScenarioBusinessContinuityPlanVersioning : Entity
         return new ScenarioBusinessContinuityPlanVersioning(arg);
     }
 
-    public void Modify(ModifyScenarioBusinessContinuityPlanVersioningArg arg)
-    {
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-        ScenarioId = new(arg.ScenarioId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
-
     public void Delete(long userId)
     {
         ModifiedBy = userId;

@@ -27,14 +27,6 @@ public class BusinessImpactAnalysisAnnouncement : Entity
     {
         return new BusinessImpactAnalysisAnnouncement(arg);
     }
-    public void Modify(ModifyBusinessImpactAnalysisAnnouncementArg arg)
-    {
-        StaffId = new(arg.StaffId);
-        BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public BusinessImpactAnalysisAnnouncementId Id { get; private set; }
     public StaffId StaffId { get; private set; }
     public virtual Staff Staff { get; private set; }

@@ -3,7 +3,7 @@
 public class CreateConfigurationItemAssetArg
 {
     public long Id { get; set; }
-    public long ConfigurationItemVersioningId { get; set; }
+    public long ConfigurationItemId { get; set; }
     public long AssetId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }

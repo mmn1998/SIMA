@@ -12,7 +12,7 @@ public class ApiResponseHeaderParam : Entity
     private ApiResponseHeaderParam(CreateApiResponseHeaderParamArg arg)
     {
         Id = new ApiResponseHeaderParamId(arg.Id);
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
+        ApiId = new(arg.ApiId);
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         Name = arg.Name;
         DataType = arg.DataType;
@@ -25,20 +25,9 @@ public class ApiResponseHeaderParam : Entity
     {
         return new ApiResponseHeaderParam(arg);
     }
-    public void Modify(ModifyApiResponseHeaderParamArg arg)
-    {
-        ApiVersionId = new ApiVersionId(arg.ApiVersionId);
-        if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
-        Name = arg.Name;
-        DataType = arg.DataType;
-        Description = arg.Description;
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedAt = arg.ModifiedAt;
-        ModifiedBy = arg.ModifiedBy;
-    }
     public ApiResponseHeaderParamId Id { get; private set; }
-    public ApiVersionId ApiVersionId { get; private set; }
-    public virtual ApiVersion ApiVersion { get; private set; }
+    public ApiId ApiId { get; private set; }
+    public virtual Api Api { get; private set; }
     public string Name { get; private set; }
     public string DataType { get; private set; }
     public string? Description { get; private set; }

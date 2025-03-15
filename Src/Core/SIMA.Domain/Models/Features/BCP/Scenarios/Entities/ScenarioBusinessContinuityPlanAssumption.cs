@@ -27,14 +27,6 @@ public class ScenarioBusinessContinuityPlanAssumption : Entity
     {
         return new ScenarioBusinessContinuityPlanAssumption(arg);
     }
-    public void Modify(ModifyScenarioBusinessContinuityPlanAssumptionArg arg)
-    {
-        ScenarioId = new(arg.ScenarioId);
-        BusinessContinuityPlanAssumptionId = new(arg.BusinessContinuityPlanAssumptionId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
 
     public void Delete(long userId)
     {

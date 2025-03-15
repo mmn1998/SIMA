@@ -3,9 +3,11 @@
 public class CreateConfigurationItemAccessInfoArg
 {
     public long Id { get; set; }
-    public long ConfigurationItemVersioningId { get; set; }
-    public string? IPAddress { get; set; }
-    public string? Port { get; set; }
+    public long ConfigurationItemId { get; set; }
+    public string? IPAddressFrom { get; set; }
+    public string? IPAddressTo { get; set; }
+    public string? PortFrom { get; set; }
+    public string? PortTo { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime ActiveFrom { get; set; }
     public DateTime? ActiveTo { get; set; }

@@ -69,6 +69,7 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     public virtual StrategyType StrategyType { get; private set; }
     public string? Code { get; private set; }
     public string? Title { get; private set; }
+    public string? IsStableStrategy { get; private set; }
     public string? Description { get; private set; }
     public DateTime? ExpireDate { get; private set; }
     public DateTime? ReviewDate { get; private set; }

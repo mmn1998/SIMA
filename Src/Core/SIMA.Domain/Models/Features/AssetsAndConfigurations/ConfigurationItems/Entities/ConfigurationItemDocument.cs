@@ -15,7 +15,7 @@ public class ConfigurationItemDocument : Entity
     {
         Id = new(arg.Id);
         DocumentId = new(arg.DocumentId);
-        ConfigurationItemVersioningId = new(arg.ConfigurationItemVersionId);
+        ConfigurationItemId = new(arg.ConfigurationItemId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -23,8 +23,8 @@ public class ConfigurationItemDocument : Entity
     public ConfigurationItemDocumentId Id { get; private set; }
     public DocumentId DocumentId { get; private set; }
     public virtual Document Document { get; private set; }
-    public ConfigurationItemVersioningId ConfigurationItemVersioningId { get; private set; }
-    public virtual ConfigurationItemVersioning ConfigurationItemVersioning { get; private set; }
+    public ConfigurationItemId ConfigurationItemId { get; private set; }
+    public virtual ConfigurationItem ConfigurationItem { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

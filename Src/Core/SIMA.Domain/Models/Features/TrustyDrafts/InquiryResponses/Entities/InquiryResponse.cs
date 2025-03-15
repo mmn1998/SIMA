@@ -1,5 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Brokers.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.Entities;
+using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.BrokerInquiryStatuses.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryRequests.Entities;
@@ -30,6 +32,7 @@ public class InquiryResponse : Entity
         InquiryRequestId = new(arg.InquiryRequestId);
         BrokerId = new(arg.BrokerId);
         WageRateId = new(arg.WageRateId);
+        if (arg.ExcessWageCurrencyTypeId.HasValue) ExcessWageCurrencyTypeId = new(arg.ExcessWageCurrencyTypeId.Value);
         CalculatedWage = arg.CalculatedWage;
         ExcessWage = arg.ExcessWage;
         ValidityPeriod = arg.ValidityPeriod;
@@ -84,6 +87,8 @@ public class InquiryResponse : Entity
     public virtual Broker Broker { get; private set; }
     public WageRateId WageRateId { get; private set; }
     public virtual WageRate WageRate { get; private set; }
+    public CurrencyTypeId? ExcessWageCurrencyTypeId { get; private set; }
+    public virtual CurrencyType? ExcessWageCurrencyType { get; private set; }
     public decimal CalculatedWage { get; private set; }
     public decimal? ExcessWage { get; private set; }
     public string? Description { get; private set; }

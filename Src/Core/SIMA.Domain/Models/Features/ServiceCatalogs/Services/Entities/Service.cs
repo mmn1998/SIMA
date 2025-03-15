@@ -18,6 +18,9 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceOrganizationalProjects.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceOrganizationalProjects.Args;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 public class Service : Entity, IAggregateRoot
@@ -38,7 +41,7 @@ public class Service : Entity, IAggregateRoot
         ServiceCost = arg.ServiceCost;
         ServiceTypeId = new(arg.ServiceTypeId);
         Description = arg.Description;
-        ServiceWorkflowBpmn = arg.ServiceWorkflowBpmn;
+        ServiceDataFlowDiagram = arg.ServiceDataFlowDiagram;
         ContinuousImprovement = arg.ContinuousImprovement;
         FeedbackUrl = arg.FeedbackUrl;
         ActiveStatusId = arg.ActiveStatusId;
@@ -68,7 +71,7 @@ public class Service : Entity, IAggregateRoot
         ParentId = arg.ParentId.HasValue ? new(arg.ParentId.Value) : null;
         ServiceCost = arg.ServiceCost;
         Description = arg.Description;
-        ServiceWorkflowBpmn = arg.ServiceWorkflowBpmn;
+        ServiceDataFlowDiagram = arg.ServiceDataFlowDiagram;
         ContinuousImprovement = arg.ContinuousImprovement;
         FeedbackUrl = arg.FeedbackUrl;
         ActiveStatusId = arg.ActiveStatusId;
@@ -128,6 +131,14 @@ public class Service : Entity, IAggregateRoot
         {
             var entity = ServiceUser.Create(arg);
             _serviceUsers.Add(entity);
+        }
+    }
+    public void AddServiceOrganizationProjects(List<CreateServiceOrganizationalProjectArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ServiceOrganizationalProject.Create(arg);
+            _serviceOrganizationalProjects.Add(entity);
         }
     }
     public void AddServiceCustomers(List<CreateServiceCustomerArg> args)
@@ -215,6 +226,13 @@ public class Service : Entity, IAggregateRoot
     public void DeleteServiceUsers(long userId)
     {
         foreach (var item in _serviceUsers)
+        {
+            item.Delete(userId);
+        }
+    }
+    public void DeleteServiceOrganizationProjects(long userId)
+    {
+        foreach (var item in _serviceOrganizationalProjects)
         {
             item.Delete(userId);
         }
@@ -308,6 +326,29 @@ public class Service : Entity, IAggregateRoot
             {
                 entity = ServiceUser.Create(arg);
                 _serviceUsers.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void ModifyServiceOrganizationProjects(List<CreateServiceOrganizationalProjectArg> args)
+    {
+        var activeEntities = _serviceOrganizationalProjects.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.OrganizationalProjectId == x.OrganizationalProjectId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.OrganizationalProjectId.Value == x.OrganizationalProjectId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _serviceOrganizationalProjects.FirstOrDefault(x => x.OrganizationalProjectId.Value == arg.OrganizationalProjectId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ServiceOrganizationalProject.Create(arg);
+                _serviceOrganizationalProjects.Add(entity);
             }
         }
         foreach (var entity in shouldDeleteEntities)
@@ -483,7 +524,8 @@ public class Service : Entity, IAggregateRoot
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StaffId.Value == x.StaffId && c.ResponsibleTypeId.Value == x.ResponsibleTypeId));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _serviceAssignStaffes.FirstOrDefault(x => x.StaffId.Value == arg.StaffId && x.ResponsibleTypeId.Value == arg.ResponsibleTypeId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _serviceAssignStaffes.FirstOrDefault(x => x.StaffId.Value == arg.StaffId && x.ResponsibleTypeId.Value == arg.ResponsibleTypeId && (arg.BranchId == null || x.BranchId == new BranchId(arg.BranchId.Value)) &&
+                                                                   (arg.DepartmentId == null || x.DepartmentId == new DepartmentId(arg.DepartmentId.Value)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);
@@ -553,7 +595,7 @@ public class Service : Entity, IAggregateRoot
     public virtual Service? Parent { get; private set; }
     public decimal? ServiceCost { get; private set; }
     public string? Description { get; private set; }
-    public string? ServiceWorkflowBpmn { get; private set; }
+    public string? ServiceDataFlowDiagram { get; private set; }
     public string? ContinuousImprovement { get; private set; }
     public string? FeedbackUrl { get; private set; }
     public long ActiveStatusId { get; private set; }
@@ -599,8 +641,8 @@ public class Service : Entity, IAggregateRoot
     private List<ServiceRisk> _serviceRisks = new();
     public ICollection<ServiceRisk> ServiceRisks => _serviceRisks;
 
-    private List<ServiceContract> _serviceCantracts = new();
-    public ICollection<ServiceContract> ServiceCantracts => _serviceCantracts;
+    //private List<ServiceContract> _serviceCantracts = new();
+    //public ICollection<ServiceContract> ServiceCantracts => _serviceCantracts;
 
     private List<ServiceCustomer> _serviceCustomers = new();
     public ICollection<ServiceCustomer> ServiceCustomers => _serviceCustomers;
@@ -631,5 +673,8 @@ public class Service : Entity, IAggregateRoot
     public ICollection<BusinessContinuityStrategyService> BusinessContinuityStrategyServices => _businessContinuityStrategyServices;
     private List<BusinessContinuityPlanService> _businessContinuityPlanServices = new();
     public ICollection<BusinessContinuityPlanService> BusinessContinuityPlanServices => _businessContinuityPlanServices;
+    
+    private List<ServiceOrganizationalProject> _serviceOrganizationalProjects = new();
+    public ICollection<ServiceOrganizationalProject> ServiceOrganizationalProjects => _serviceOrganizationalProjects;
 
 }

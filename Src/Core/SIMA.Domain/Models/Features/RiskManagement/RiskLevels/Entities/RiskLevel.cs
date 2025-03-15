@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelMeasures.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Interfaces;
 using SIMA.Framework.Common.Exceptions;
@@ -59,6 +60,9 @@ public class RiskLevel : Entity
 
     private List<RiskLevelMeasure> _riskLevelMeasures = new();
     public ICollection<RiskLevelMeasure> RiskLevelMeasures => _riskLevelMeasures;
+
+    private List<RiskLevelCobit> _riskLevelCobits = new();
+    public ICollection<RiskLevelCobit> RiskLevelCobits => _riskLevelCobits;
 
     #region Guards
     private static async Task CreateGuard(CreateRiskLevelArgs arg, IRiskLevelDomainService service)

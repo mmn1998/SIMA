@@ -3,7 +3,7 @@
 public class CreateConfigurationItemAssetHistoryArg
 {
     public long Id { get; set; }
-    public long ConfigurationItemVersioningId { get; set; }
+    public long ConfigurationItemId { get; set; }
     public long AssetId { get; set; }
     public string? IsAssigned { get; set; }
     public DateOnly? AssignDate { get; set; }

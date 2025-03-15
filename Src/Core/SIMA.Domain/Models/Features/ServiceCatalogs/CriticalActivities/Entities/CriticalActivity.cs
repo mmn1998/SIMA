@@ -11,6 +11,7 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 
@@ -187,7 +188,8 @@ public class CriticalActivity : Entity, IAggregateRoot
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ResponsilbeTypeId.Value == x.ResponsibleTypeId && c.StaffId.Value == x.StaffId));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _criticalActivityAssignStaffs.FirstOrDefault(x => x.ResponsilbeTypeId.Value == arg.ResponsibleTypeId && x.StaffId.Value == arg.StaffId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _criticalActivityAssignStaffs.FirstOrDefault(x => x.ResponsilbeTypeId.Value == arg.ResponsibleTypeId && x.StaffId.Value == arg.StaffId && (arg.BranchId == null || x.BranchId == new BranchId(arg.BranchId.Value)) &&
+                                                                           (arg.DepartmentId == null || x.DepartmentId == new DepartmentId(arg.DepartmentId.Value)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);

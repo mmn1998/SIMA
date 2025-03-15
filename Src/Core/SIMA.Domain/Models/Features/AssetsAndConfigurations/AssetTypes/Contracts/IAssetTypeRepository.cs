@@ -1,4 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
 using SIMA.Framework.Core.Repository;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Contracts;

@@ -1,6 +1,8 @@
-﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Contracts;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -77,4 +79,6 @@ public class AssetType : Entity
     }
     private List<Asset> _assets = new();
     public ICollection<Asset> Assets => _assets;
+    private List<AssetCustomField> _assetCustomFields = new();
+    public ICollection<AssetCustomField> AssetCustomFields => _assetCustomFields;
 }

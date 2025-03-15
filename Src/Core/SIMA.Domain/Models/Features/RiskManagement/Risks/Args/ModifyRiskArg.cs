@@ -8,9 +8,9 @@ public class ModifyRiskArg
     public string? IsNeedCobit { get; set; }
     public string Description { get; set; }
     public long RiskTypeId { get; set; }
+    public long ConsequenceLevelId { get; set; }
     public long AffectedHistoryId { get; set; }
     public long UseVulnerabilityId { get; set; }
-    public long ConsequenceCategoryId { get; set; }
     public long ScenarioHistoryId { get; set; }
     public long TriggerStatusId { get; set; }
     public long FrequencyId { get; set; }

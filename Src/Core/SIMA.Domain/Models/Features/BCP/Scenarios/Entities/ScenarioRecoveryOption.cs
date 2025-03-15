@@ -27,15 +27,6 @@ public class ScenarioRecoveryOption : Entity
     {
         return new ScenarioRecoveryOption(arg);
     }
-    public void Modify(ModifyScenarioRecoveryOptionArg arg)
-    {
-        RecoveryOptionPriorityId = new(arg.RecoveryOptionPriorityId);
-        ScenarioId = new(arg.ScenarioId);
-        Description = arg.Description;
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public ScenarioRecoveryOptionId Id { get; set; }
     public ScenarioId ScenarioId { get; private set; }
     public virtual Scenario Scenario { get; private set; }

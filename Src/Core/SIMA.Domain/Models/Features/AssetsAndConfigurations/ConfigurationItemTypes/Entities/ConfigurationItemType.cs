@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Contracts;
 using SIMA.Framework.Common.Exceptions;
@@ -77,4 +78,6 @@ public class ConfigurationItemType : Entity
     }
     private List<ConfigurationItem> _configurationItems = new();
     public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
+    private List<ConfigurationItemCustomField> _configurationItemCustomFields = new();
+    public ICollection<ConfigurationItemCustomField> ConfigurationItemCustomFields => _configurationItemCustomFields;
 }

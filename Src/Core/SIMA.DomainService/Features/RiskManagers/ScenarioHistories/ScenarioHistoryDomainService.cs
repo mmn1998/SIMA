@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.ScenarioHistories.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.RiskManagers.ScenarioHistories;
@@ -24,9 +25,10 @@ public class ScenarioHistoryDomainService : IScenarioHistoryDomainService
 
     public async Task<bool> IsNumericUnique(float value, ScenarioHistoryId? id = null)
     {
+        // این مورد که در دیتابیس یونیک نباشه ولی در برنامه یونیک بودن چک بشه باعث باگ خواهد شد و واحد فنی بک اند هیچ مسئولیتی در این مورد نخواهد پذیرفت و این موضوع به تیم تحلیل که درخواست این موضوع را داشت، اطلاع داده شد
         bool result = false;
-        if (id == null) result = !await _context.ScenarioHistories.AnyAsync(x => x.NumericValue == value);
-        else result = !await _context.ScenarioHistories.AnyAsync(x => x.NumericValue == value && x.Id != id);
+        if (id == null) result = !await _context.ScenarioHistories.AnyAsync(x => x.NumericValue == value && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        else result = !await _context.ScenarioHistories.AnyAsync(x => x.NumericValue == value && x.Id != id && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
         return result;
     }
 }

@@ -6,6 +6,9 @@ using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Approvals.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Inviteeses.Entities;
@@ -19,6 +22,8 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
 
 namespace SIMA.Domain.Models.Features.Auths.Departments.Entities;
 
@@ -127,6 +132,21 @@ public class Department : Entity
     public ICollection<ChannelResponsible> ChannelResponsibles => _channelResponsibles;
     private List<ProductResponsible> _productResponsibles = new();
     public ICollection<ProductResponsible> ProductResponsibles => _productResponsibles;
+    private List<BusinessImpactAnalysisStaff> _businessImpactAnalysisStaff = new();
+    public ICollection<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaff => _businessImpactAnalysisStaff;
+    private List<BusinessContinuityStratgyResponsible> _businessContinuityStratgyResponsibles = new();
+    public ICollection<BusinessContinuityStratgyResponsible> BusinessContinuityStratgyResponsibles => _businessContinuityStratgyResponsibles;
+    private List<BusinessContinuityPlanResponsible> _businessContinuityPlanResponsibles = new();
+    public ICollection<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles => _businessContinuityPlanResponsibles;
+    
+    private List<AssetAssignedStaff> _assetAssignedStaffs = new();
+    public ICollection<AssetAssignedStaff> AssetAssignedStaffs => _assetAssignedStaffs;
+
+    private List<ApiSupportTeam> _apiSupportTeams = new();
+    public ICollection<ApiSupportTeam> ApiSupportTeams => _apiSupportTeams;
+
+    private List<DataProcedureSupportTeam> _dataProcedureSupportTeams = new();
+    public ICollection<DataProcedureSupportTeam> DataProcedureSupportTeams => _dataProcedureSupportTeams;
 
     public void Delete(long userId)
     {

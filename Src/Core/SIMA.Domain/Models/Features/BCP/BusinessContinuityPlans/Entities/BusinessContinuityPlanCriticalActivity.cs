@@ -24,14 +24,6 @@ public class BusinessContinuityPlanCriticalActivity : Entity
     {
         return new BusinessContinuityPlanCriticalActivity(arg);
     }
-    public void Modify(ModifyBusinessContinuityPlanCriticalActivityArg arg)
-    {
-        CriticalActivityId = new(arg.CriticalActivityId);
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
 
     public void Delete(long userId)
     {

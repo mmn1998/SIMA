@@ -27,14 +27,6 @@ public class BusinessImpactAnalysisDocument : Entity
     {
         return new BusinessImpactAnalysisDocument(arg);
     }
-    public void Modify(ModifyBusinessImpactAnalysisDocumentArg arg)
-    {
-        DocumentId = new(arg.DocumentId);
-        BusinessImpactAnalysisId = new(arg.BusinessImpactAnalysisId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedBy = arg.ModifiedBy;
-        ModifiedAt = arg.ModifiedAt;
-    }
     public BusinessImpactAnalysisDocumentId Id { get; private set; }
     public DocumentId DocumentId { get; private set; }
     public virtual Document Document { get; private set; }

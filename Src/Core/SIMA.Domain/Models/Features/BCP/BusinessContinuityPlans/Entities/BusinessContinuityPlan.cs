@@ -5,6 +5,8 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.Entities;
+using SIMA.Domain.Models.Features.BCP.PlanTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -194,6 +196,8 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
     public string Code { get; private set; }
     public string Title { get; private set; }
     public string Scope { get; private set; }
+    public PlanTypeId? PlanTypeId { get; private set; }
+    public virtual PlanType? PlanType { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

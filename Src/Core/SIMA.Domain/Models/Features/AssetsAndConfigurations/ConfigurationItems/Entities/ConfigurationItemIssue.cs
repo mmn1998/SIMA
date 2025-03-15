@@ -14,7 +14,7 @@ public class ConfigurationItemIssue : Entity
     {
         Id = new(arg.Id);
         IssueId = new(arg.IssueId);
-        ConfigurationItemVersioningId = new(arg.ConfigurationItemVersionId);
+        ConfigurationItemId = new(arg.ConfigurationItemId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -26,8 +26,8 @@ public class ConfigurationItemIssue : Entity
     public ConfigurationItemIssueId Id { get; private set; }
     public IssueId IssueId { get; private set; }
     public virtual Issue Issue { get; private set; }
-    public ConfigurationItemVersioningId ConfigurationItemVersioningId { get; private set; }
-    public virtual ConfigurationItemVersioning ConfigurationItemVersioning { get; private set; }
+    public ConfigurationItemId ConfigurationItemId { get; private set; }
+    public virtual ConfigurationItem ConfigurationItem { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

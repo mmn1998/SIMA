@@ -10,6 +10,8 @@ using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
+using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
 
 namespace SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 
@@ -194,7 +196,8 @@ public class Channel : Entity, IAggregateRoot
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ResponsibleId.Value == x.ResponsibleId && c.ResponsibleTypeId.Value == x.ResponsibleTypeId));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _channelResponsibles.FirstOrDefault(x => x.ResponsibleId.Value == arg.ResponsibleId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _channelResponsibles.FirstOrDefault(x => x.ResponsibleId.Value == arg.ResponsibleId && (arg.BranchId == null || x.BranchId == new BranchId(arg.BranchId.Value)) &&
+                                                                  (arg.DepartmentId == null || x.DepartmentId == new DepartmentId(arg.DepartmentId.Value)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);
@@ -207,7 +210,7 @@ public class Channel : Entity, IAggregateRoot
         }
         foreach (var entity in shouldDeleteEntities)
         {
-            entity.Delete(args[0].CreatedBy);
+            entity.Delete(shouldDeleteEntities.ToList()[0].CreatedBy);
         }
     }
     public void ModifyChannelUserTypes(List<CreateChannelUserTypeArg> args)

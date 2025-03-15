@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Contracts;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
 using SIMA.Persistance.Persistence;
 
 namespace SIMA.DomainService.Features.AssetAndConfigurations.AssetTypes;

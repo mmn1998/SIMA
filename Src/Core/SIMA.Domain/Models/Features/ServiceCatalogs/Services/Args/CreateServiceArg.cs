@@ -9,7 +9,7 @@ public class CreateServiceArg
     public long ServiceTypeId { get;  set; }
     public decimal? ServiceCost { get;  set; }
     public string? Description { get;  set; }
-    public string? ServiceWorkflowBpmn { get;  set; }
+    public string? ServiceDataFlowDiagram { get;  set; }
     public string? ContinuousImprovement { get;  set; }
     public string? FeedbackUrl { get;  set; }
     public long TechnicalSupervisorDepartmentId { get; set; }

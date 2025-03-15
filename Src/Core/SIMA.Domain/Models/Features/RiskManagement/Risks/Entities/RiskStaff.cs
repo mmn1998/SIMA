@@ -1,4 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
+﻿using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.Entities;
+using SIMA.Domain.Models.Features.Auths.ResponsibleTypes.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Risks.Args;
 using SIMA.Framework.Common.Helper;
@@ -20,6 +22,7 @@ public class RiskStaff
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        ResponsilbeTypeId = new (arg.ResponsilbeTypeId);
     }
     public static RiskStaff Create(CreateRiskStaffArg arg)
     {
@@ -30,6 +33,8 @@ public class RiskStaff
     public virtual Staff Staff { get; private set; }
     public RiskId RiskId { get; private set; }
     public virtual Risk Risk { get; private set; }
+    public ResponsibleTypeId? ResponsilbeTypeId { get; private set; }
+    public virtual ResponsibleType? ResponsilbeType { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

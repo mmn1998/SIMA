@@ -25,6 +25,7 @@ using SIMA.Domain.Models.Features.WorkFlowEngine.Project.Entites;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlowActor.Entites;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
 using System.Text;
@@ -132,8 +133,29 @@ public class User : Entity, IAggregateRoot
 
         var addPermission = request.Where(x => !previousUsers.Any(c => c.PermissionId.Value == x.PermissionId)).ToList();
         var deleteMember = previousUsers.Where(x => !request.Any(c => c.PermissionId == x.PermissionId.Value)).ToList();
-
-
+        Func<CreateUserPermissionArg, bool> condition = 
+            x => x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.ServicePost ||
+            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.CriticalActivityPost ||
+            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.TrustyDraftsPost ||
+            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.RisksPost ||
+            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.businessContinuityPlanPost ||
+            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.businessContinuityStratgyPost ||
+            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.businessImpactAnalysisPost;
+        if (addPermission.Any(condition))
+        {
+            var firstItem = addPermission.First();
+            addPermission.Add(new CreateUserPermissionArg
+            {
+                ActiveFrom = firstItem.ActiveFrom,
+                ActiveStatusId = firstItem.ActiveStatusId,
+                ActiveTo = firstItem.ActiveTo,
+                CreatedAt = firstItem.CreatedAt,
+                CreatedBy = firstItem.CreatedBy,
+                Id = IdHelper.GenerateUniqueId(),
+                UserId = firstItem.UserId,
+                PermissionId = (long)SIMA.Framework.Common.Security.Permissions.IssuePost
+            });
+        }
         foreach (var permission in addPermission)
         {
             var entity = _userPermission.Where(x => (x.PermissionId == new PermissionId(permission.PermissionId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
