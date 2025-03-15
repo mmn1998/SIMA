@@ -106,7 +106,7 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to نام ذینفع باید لاتین باشد..
+        ///   Looks up a localized string similar to نام ذینفع باید لاتین و بزرگ باشد..
         /// </summary>
         public static string BeneficiaryNameNotValidError {
             get {
@@ -295,6 +295,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to اضافه شدن مبلغ و نوع ارز اجباری میباشد.
+        /// </summary>
+        public static string CurrenciesAreRequiredInInquiryRequestError {
+            get {
+                return ResourceManager.GetString("CurrenciesAreRequiredInInquiryRequestError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نوع ارز درخواست با استعلام مطابقت ندارد.
         /// </summary>
         public static string CurrencyTypeError {
@@ -381,6 +390,15 @@ namespace SIMA.Resources {
         public static string DepositProformaCurrencyTypeIdException {
             get {
                 return ResourceManager.GetString("DepositProformaCurrencyTypeIdException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to انتخاب فایل در بخش استعلام حواله اجباری است!.
+        /// </summary>
+        public static string DocumentsAreRequiredInInquiryRequestError {
+            get {
+                return ResourceManager.GetString("DocumentsAreRequiredInInquiryRequestError", resourceCulture);
             }
         }
         
@@ -763,6 +781,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to نوع فایل معتبر نمی باشد!!!.
+        /// </summary>
+        public static string MimeTypeNotValid {
+            get {
+                return ResourceManager.GetString("MimeTypeNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to مقدار حداقل وارد شده از مقدار حداکثر وارد شده بیشتر میباشد..
         /// </summary>
         public static string MinNumberBiggerThanMaxNumber {
@@ -1123,6 +1150,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to شماره مرجع  نمی تواند تکراری باشد.
+        /// </summary>
+        public static string ReferenceNumberIsDuplicated {
+            get {
+                return ResourceManager.GetString("ReferenceNumberIsDuplicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to برای این حواله نمی توانید نامه ای ثبت کنید.
         /// </summary>
         public static string RefferalLetterNotAllowCreate {
@@ -1317,6 +1353,15 @@ namespace SIMA.Resources {
         public static string UniqueOrderingError {
             get {
                 return ResourceManager.GetString("UniqueOrderingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شماره ورژن انتخاب شده تکراری است.
+        /// </summary>
+        public static string UniqueVersionError {
+            get {
+                return ResourceManager.GetString("UniqueVersionError", resourceCulture);
             }
         }
         
