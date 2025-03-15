@@ -4,7 +4,6 @@ using SIMA.Application.Contract.Features.ServiceCatalog.CriticalActivities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Interfaces;
-using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
@@ -37,7 +36,7 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
         var userId = _simaIdentity.UserId;
         arg.CreatedBy = userId;
 
-        arg.Code = await CalculateCode();
+        //arg.Code = await CalculateCode();
         var entity = await CriticalActivity.Create(arg, _service);
 
         #region IsFullTimeExecution
@@ -107,7 +106,7 @@ public class CriticalActivityCommandHandler : ICommandHandler<CreateCriticalActi
         //    var args = new List<CreateCriticalActivityExecutionPlanArg>();
         //    foreach (var item in request.ExecutionPlanList)
         //    {
-        //        for (int i = item.WeekDayStart; i < item.WeekDayEnd; i++)
+        //        for (int i = item.WeekDayStart; i <= item.WeekDayEnd; i++)
         //        {
         //            var serviceEndTime = item.ServiceAvalibilityEndTime.ToTimeOnly() ?? throw SimaResultException.NullException;
         //            var serviceStartTime = item.ServiceAvalibilityStartTime.ToTimeOnly() ?? throw SimaResultException.NullException;

@@ -37,7 +37,6 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
         var arg = _mapper.Map<CreateInquiryRequestArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
         arg.ReferenceNumber = await CalculateRefrenceNumber(request.ProformaCurrencyTypeId, request.DraftOrderNumber, arg.BeneficiaryName, _service);
-        var entity = await InquiryRequest.Create(arg, _service);
         if (!string.IsNullOrEmpty(request.ProformaDate))
         {
             if (DateTime.TryParse(request.ProformaDate, out DateTime date))
@@ -49,6 +48,9 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
                 throw SimaResultException.PersianDateException;
             }
         }
+        var entity = await InquiryRequest.Create(arg, _service);
+
+
         if (request.InquiryRequestDocuments is not null && request.InquiryRequestDocuments.Count > 0)
         {
             var docArgs = _mapper.Map<List<CreateInquiryRequestDocumentArg>>(request.InquiryRequestDocuments);
@@ -59,8 +61,15 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             }
             entity.AddDocuments(docArgs);
         }
+        else
+            throw new SimaResultException(CodeMessges._100113Code, Messages.DocumentsAreRequiredInInquiryRequestError);
+
+
+
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 3)
             throw new SimaResultException(CodeMessges._100110Code, Messages.CurrencyTypeOverCountError);
+
+
         if (request.InquiryRequestCurrencies is not null && request.InquiryRequestCurrencies.Count > 0)
         {
             var currencyArgs = _mapper.Map<List<CreateInquiryRequestCurrencyArg>>(request.InquiryRequestCurrencies);
@@ -71,6 +80,9 @@ ICommandHandler<ModifyInquiryRequestCommand, Result<long>>, ICommandHandler<Dele
             }
             entity.AddCurrencies(currencyArgs);
         }
+        else
+            throw new SimaResultException(CodeMessges._100114Code, Messages.CurrenciesAreRequiredInInquiryRequestError);
+
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(arg.Id);

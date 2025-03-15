@@ -6,10 +6,13 @@ using SIMA.Application.Feaatures.AssetAndConfigurations.AssetPhysicalStatuses.Ma
 using SIMA.Application.Feaatures.AssetAndConfigurations.Assets.Mapper;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetTechnicalStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.Back_UpMethods.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.BusinessCriticalities.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemRelationshipTypes.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.DataProcedures.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.DataProcedureTypes.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.LicenseTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.AccessTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.AddressTypes.Mappers;
@@ -40,20 +43,24 @@ using SIMA.Application.Feaatures.Auths.TimeMeasurements.Mappers;
 using SIMA.Application.Feaatures.Auths.UIInputElements.Mappers;
 using SIMA.Application.Feaatures.Auths.Users.Mappers;
 using SIMA.Application.Feaatures.BCP.Back_UpPeriods.Mappers;
+using SIMA.Application.Feaatures.BCP.BiaValues.Mappers;
 using SIMA.Application.Feaatures.BCP.BusinesImpactAnalysises.Mappers;
 using SIMA.Application.Feaatures.BCP.BusinessContinuityPlans.Mapper;
 using SIMA.Application.Feaatures.BCP.BusinessContinuityStrategies.Mappers;
+using SIMA.Application.Feaatures.BCP.ConsequenceIntensions.Mappers;
 using SIMA.Application.Feaatures.BCP.Consequences.Mappers;
+using SIMA.Application.Feaatures.BCP.ConsequenceValues.Mappers;
 using SIMA.Application.Feaatures.BCP.HappeningPossiblities.Mappers;
 using SIMA.Application.Feaatures.BCP.ImportanceDegrees.Mappers;
 using SIMA.Application.Feaatures.BCP.Origins.Mappers;
 using SIMA.Application.Feaatures.BCP.PlanResponsibilities.Mappers;
+using SIMA.Application.Feaatures.BCP.PlanTypes.Mappers;
 using SIMA.Application.Feaatures.BCP.RecoveryOptionPriorities.Mappers;
 using SIMA.Application.Feaatures.BCP.RecoveryPointObjectives.Mappers;
 using SIMA.Application.Feaatures.BCP.ScenarioExecutionHistories.Mapper;
 using SIMA.Application.Feaatures.BCP.Scenarios.Mappers;
 using SIMA.Application.Feaatures.BCP.ServicePriorities.Mapper;
-using SIMA.Application.Feaatures.BCP.SolutionPeriorities.Mappers;
+using SIMA.Application.Feaatures.BCP.SolutionPriorities.Mappers;
 using SIMA.Application.Feaatures.BCP.StrategyTypes.Mappers;
 using SIMA.Application.Feaatures.BranchManagement.AccountTypes.Mappers;
 using SIMA.Application.Feaatures.BranchManagement.Branches.Mappers;
@@ -124,6 +131,7 @@ using SIMA.Application.Feaatures.ServiceCatalog.ApiAuthenticationMethods.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ApiTypes.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.Channels.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.CriticalActivities.Mappers;
+using SIMA.Application.Feaatures.ServiceCatalog.OrganizationalProjects.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.Products.Mapper;
 using SIMA.Application.Feaatures.ServiceCatalog.ServiceCategories.Mappers;
 using SIMA.Application.Feaatures.ServiceCatalog.ServicePriorities.Mapper;
@@ -311,12 +319,16 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ProductMapper());
                 conf.AddProfile(new CriticalActivityMapper());
                 conf.AddProfile(new ServicePriorityMapper());
+                conf.AddProfile(new OrganizationalProjectMapper());
                 #endregion
 
                 #region BCP
                 conf.AddProfile(new ImportanceDegreeMapper());
                 conf.AddProfile(new OrganizationalServicePriorityMapper());
-                //conf.AddProfile(new SolutionPeriorityMapper());
+                conf.AddProfile(new SolutionPriorityMapper());
+                conf.AddProfile(new ConsequenceIntensionMapper());
+                conf.AddProfile(new ConsequenceValueMapper());
+                conf.AddProfile(new BiaValueMapper());
                 conf.AddProfile(new HappeningPossibilityMapper());
                 conf.AddProfile(new ConsequenceMapper());
                 conf.AddProfile(new RecoveryPointObjectiveMapper());
@@ -324,6 +336,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new PlanResponsibilityMapper());
                 conf.AddProfile(new StrategyTypeMapper());
                 conf.AddProfile(new BackupPeriodMapper());
+                conf.AddProfile(new PlanTypeMapper());
                 conf.AddProfile(new RecoveryOptionPriorityMapper());
                 conf.AddProfile(new BusinessImpactAnalysisMapper());
                 conf.AddProfile(new BusinessContinuityStrategyMapper());
@@ -381,6 +394,9 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ConfigurationItemTypeMapper());
                 conf.AddProfile(new ConfigurationItemRelationshipTypeMapper());
                 conf.AddProfile(new LicenseTypeMapper());
+                conf.AddProfile(new DataProcedureTypeMapper());
+                conf.AddProfile(new BackupMethodMapper());
+                conf.AddProfile(new DataProcedureMapper());
                 #endregion
 
                 #region Notification

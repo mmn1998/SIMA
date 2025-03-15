@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SIMA.Application.Contract.Features.ServiceCatalog.Services;
+using SIMA.Domain.Models.Features.ServiceCatalogs.ServiceOrganizationalProjects.Args;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Helper;
 using System.Text;
@@ -13,18 +14,15 @@ public class ServiceMapper : Profile
         CreateMap<CreateServiceCommand, CreateServiceArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-            .ForMember(dest => dest.ServiceWorkflowBpmn, act => act.MapFrom(source => source.WorkflowFileContent))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
         CreateMap<ModifyServiceCommand, ModifyServiceArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
-            .ForMember(dest => dest.ServiceWorkflowBpmn, act => act.MapFrom(source => source.WorkflowFileContent))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
-
         CreateMap<long, CreateServiceUserArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
@@ -62,6 +60,12 @@ public class ServiceMapper : Profile
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.RiskId, act => act.MapFrom(source => source))
             ;
+        CreateMap<long, CreateServiceOrganizationalProjectArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.OrganizationalProjectId, act => act.MapFrom(source => source))
+            ;
         CreateMap<long, CreateServiceAssetArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
@@ -96,8 +100,8 @@ public class ServiceMapper : Profile
         CreateMap<CreateserviceAvalibilityCommand, CreateServiceAvalibilityArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
-            .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvalibilityStartTime.ToTimeOnly()))
-            .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvalibilityEndTime.ToTimeOnly()))
+            .ForMember(dest => dest.ServiceAvalibilityStartTime, act => act.MapFrom(source => source.ServiceAvailabilityStartTime.ToTimeOnly()))
+            .ForMember(dest => dest.ServiceAvalibilityEndTime, act => act.MapFrom(source => source.ServiceAvailabilityEndTime.ToTimeOnly()))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
 

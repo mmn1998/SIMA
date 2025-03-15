@@ -26,8 +26,8 @@ public class GetAllRisksQueryResult
     public string? FrequencyName { get; set; }
     public long TriggerStatusId { get; set; }
     public string? TriggerStatusName { get; set; }
-    public long ConsequenceCategoryId { get; set; }
-    public string? ConsequenceCategoryName { get; set; }
+    public long? ConsequenceLevelId { get; set; }
+    public string? ConsequenceLevelName { get; set; }
     public string? Description { get; set; }
     public string? ActiveStatus { get; set; }
     public long IssueId { get; set; }
@@ -70,11 +70,11 @@ public class GetRiskQueryResult
     public long ScenarioHistoryId { get; set; }
     public string? ScenarioHistoryName { get; set; }
     public long FrequencyId { get; set; }
+    public long? ConsequenceLevelId { get; set; }
+    public string? ConsequenceLevelName { get; set; }
     public string? FrequencyName { get; set; }
     public long TriggerStatusId { get; set; }
     public string? TriggerStatusName { get; set; }
-    public long ConsequenceCategoryId { get; set; }
-    public string? ConsequenceCategoryName { get; set; }
     public string? Description { get; set; }
     public string? ActiveStatus { get; set; }
     public IEnumerable<GetCorrectiveActionQueryResult>? CorrectiveActionList { get; set; }
@@ -82,6 +82,7 @@ public class GetRiskQueryResult
     public IEnumerable<GetEffectedAssetQueryResult>? EffectedAssetList { get; set; }
     public IEnumerable<GetServiceRiskImpactQueryResult>? ServiceRiskImpactList { get; set; }
     public IEnumerable<GetThreatQueryResult>? ThreatList { get; set; }
+    public IEnumerable<GetServiceAssignedStaff>? ServiceAssignedStavesList { get; set; }
 }
 public class GetPreventiveActionQueryResult
 {
@@ -135,4 +136,9 @@ public class GetThreatQueryResult
     public long RiskPossibilityId { get; set; }
     public string? RiskPossibilityName { get; set; }
     public string? Description { get; set; }
+}
+public class GetServiceAssignedStaff
+{
+    public long serviceAssignedStaff { get; set; }
+    public long staffId { get; set; }
 }

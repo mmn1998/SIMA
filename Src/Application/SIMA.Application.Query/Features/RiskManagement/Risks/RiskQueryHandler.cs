@@ -1,4 +1,6 @@
 ﻿using SIMA.Application.Query.Contract.Features.RiskManagement.Risks;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.RiskManagement.Risks;
@@ -10,10 +12,12 @@ public class RiskQueryHandler : IQueryHandler<GetAllRisksQuery, Result<IEnumerab
 
 {
     private readonly IRiskQueryRepository _repository;
+    private readonly ISimaReportService _reportService;
 
-    public RiskQueryHandler(IRiskQueryRepository repository)
+    public RiskQueryHandler(IRiskQueryRepository repository, ISimaReportService reportService)
     {
         _repository = repository;
+        _reportService = reportService;
     }
     public async Task<Result<GetRiskQueryResult>> Handle(GetRiskQuery request, CancellationToken cancellationToken)
     {
@@ -23,6 +27,20 @@ public class RiskQueryHandler : IQueryHandler<GetAllRisksQuery, Result<IEnumerab
 
     public async Task<Result<IEnumerable<GetAllRisksQueryResult>>> Handle(GetAllRisksQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        var res = await _repository.GetAll(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var excelByte = _reportService.ExportToExcel(res.Data);
+            var exportResult = new ExportResult
+            {
+                Name = _reportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+        return res;
     }
 }

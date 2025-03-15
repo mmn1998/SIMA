@@ -6,6 +6,7 @@ public class GetCurrentOccurrenceProbabilityQueryResult
     public string? Code { get; set; }
     public long? FrequencyId { get; set; }
     public string? FrequencyName { get; set; }
+    public string? ValueTitle { get; set; }
     public long? InherentOccurrenceProbabilityValueId { get; set; }
     public string? InherentOccurrenceProbabilityValueName { get; set; }
     public long? CurrentOccurrenceProbabilityValueId { get; set; }

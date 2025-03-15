@@ -1,4 +1,6 @@
 ﻿using SIMA.Application.Query.Contract.Features.BCP.BusinesImpactAnalysises;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.BCP.BusinesImpactAnalysises;
@@ -9,10 +11,12 @@ public class BusinessImpactAnalysisQueryHandler : IQueryHandler<GetBusinessImpac
     IQueryHandler<GetAllBusinessImpactAnalysisesQuery, Result<IEnumerable<GetAllBusinessImpactAnalysisesQueryResult>>>
 {
     private readonly IBusinessImpactAnalysisQueryRepository _repository;
+    private readonly ISimaReportService _reportService;
 
-    public BusinessImpactAnalysisQueryHandler(IBusinessImpactAnalysisQueryRepository repository)
+    public BusinessImpactAnalysisQueryHandler(IBusinessImpactAnalysisQueryRepository repository, ISimaReportService reportService)
     {
         _repository = repository;
+        _reportService = reportService;
     }
     public async Task<Result<GetBusinessImpactAnalysisQueryResult>> Handle(GetBusinessImpactAnalysisQuery request, CancellationToken cancellationToken)
     {
@@ -22,6 +26,21 @@ public class BusinessImpactAnalysisQueryHandler : IQueryHandler<GetBusinessImpac
 
     public async Task<Result<IEnumerable<GetAllBusinessImpactAnalysisesQueryResult>>> Handle(GetAllBusinessImpactAnalysisesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        var res = await _repository.GetAll(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            var excelByte = _reportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var exportResult = new ExportResult
+            {
+                Name = _reportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+
+        return res;
     }
 }

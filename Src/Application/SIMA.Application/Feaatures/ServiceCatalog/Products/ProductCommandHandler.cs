@@ -34,7 +34,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
     {
         var arg = _mapper.Map<CreateProductArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        arg.Code = await CalculateCode();
+        //arg.Code = await CalculateCode();
         var entity = await Product.Create(arg, _service);
         if (request.Channels is not null && request.Channels.Count > 0)
         {
@@ -44,7 +44,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateChannel(channelArg, entity.Id.Value);
+            entity.AddChannel(channelArg);
         }
         if (request.ProductResponsibles is not null && request.ProductResponsibles.Count > 0)
         {
@@ -54,7 +54,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateResponsible(responsibleArg, entity.Id.Value);
+            entity.AddProductResponsible(responsibleArg);
         }
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
@@ -67,7 +67,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg);
 
-        if (request.Channels is not null && request.Channels.Count > 0)
+        if (request.Channels is not null)
         {
             var channelArg = _mapper.Map<List<CreateProductChannelArg>>(request.Channels);
             foreach (var item in channelArg)
@@ -75,9 +75,9 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateChannel(channelArg, entity.Id.Value);
+            entity.ModifyChannel(channelArg);
         }
-        if (request.ProductResponsibles is not null && request.ProductResponsibles.Count > 0)
+        if (request.ProductResponsibles is not null)
         {
             var responsibleArg = _mapper.Map<List<CreateProductResponsibleArg>>(request.ProductResponsibles);
             foreach (var item in responsibleArg)
@@ -85,7 +85,7 @@ public class ProductCommandHandler : ICommandHandler<CreateProductCommand, Resul
                 item.CreatedBy = _simaIdentity.UserId;
                 item.ProductId = entity.Id.Value;
             }
-            entity.CreateResponsible(responsibleArg, entity.Id.Value);
+            entity.ModifyResponsible(responsibleArg);
         }
 
         await _unitOfWork.SaveChangesAsync();

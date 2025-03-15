@@ -1,4 +1,6 @@
 ﻿using SIMA.Application.Query.Contract.Features.TrustyDrafts.TrustyDrafts;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.TrustyDrafts.TrustyDrafts;
@@ -14,10 +16,12 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
     IQueryHandler<GetAllTrustyDraftByBrokerQuery, Result<IEnumerable<GetAllTrustyDraftRequestedResult>>>
 {
     private readonly ITrustyDraftQueryRepository _repository;
+    private readonly ISimaReportService _simaReportService;
 
-    public TrustyDraftQueryHandler(ITrustyDraftQueryRepository repository)
+    public TrustyDraftQueryHandler(ITrustyDraftQueryRepository repository, ISimaReportService simaReportService)
     {
         _repository = repository;
+        _simaReportService = simaReportService;
     }
     public async Task<Result<IEnumerable<GetAllTrustyDraftsQueryResult>>> Handle(GetAllTrustyDraftsQuery request, CancellationToken cancellationToken)
     {
@@ -32,17 +36,60 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
 
     public async Task<Result<IEnumerable<GetAllTrustyDraftRequestedResult>>> Handle(GetAllTrustyDraftRequested request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllRequested(request);
+        var res = await _repository.GetAllRequested(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var excelByte = _simaReportService.ExportToExcel(res.Data);
+            var exportResult = new ExportResult
+            {
+                Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+        return res;
     }
 
     public async Task<Result<IEnumerable<GetAllDraftForPaymentResult>>> Handle(GetAllDraftForPayment request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllDraftForPayment(request);
+        var res = await _repository.GetAllDraftForPayment(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var excelByte = _simaReportService.ExportToExcel(res.Data);
+            var exportResult = new ExportResult
+            {
+                Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+        return res;
     }
 
     public async Task<Result<IEnumerable<GetAllReconcilliationResult>>> Handle(GetAllReconcilliation request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllReconcilliation(request);
+        
+        var res = await _repository.GetAllReconcilliation(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var excelByte = _simaReportService.ExportToExcel(res.Data);
+            var exportResult = new ExportResult
+            {
+                Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+        return res;
     }
 
     public async Task<Result<IEnumerable<GetAllTrustyDraftRequestedResult>>> Handle(GetAllTrustyDraftByBrokerQuery request, CancellationToken cancellationToken)

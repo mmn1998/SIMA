@@ -5,6 +5,6 @@ namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.Diagrams;
 
 public class GetServiceNetworkDiagramQuery : IQuery<Result<List<GetServiceNetworkDiagramQueryResult>>>
 {
-    public int? Type { get; set; }
+    public string? Type { get; set; }
     public long? Id { get; set; }
 }

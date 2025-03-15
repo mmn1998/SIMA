@@ -18,6 +18,8 @@ public class AssetPhysicalStatusCommandHandler : ICommandHandler<CreateAssetPhys
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISimaIdentity _simaIdentity;
     private readonly IMapper _mapper;
+    
+    
 
     public AssetPhysicalStatusCommandHandler(IAssetPhysicalStatusRepository repository, IAssetPhysicalStatusDomainService service,
         IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper)

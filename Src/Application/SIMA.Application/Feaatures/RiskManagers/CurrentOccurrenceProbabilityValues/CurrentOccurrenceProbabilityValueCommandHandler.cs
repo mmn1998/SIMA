@@ -28,8 +28,7 @@ public class CurrentOccurrenceProbabilityValueCommandHandler : ICommandHandler<C
         _service = service;
         _simaIdentity = simaIdentity;
     }
-    public async Task<Result<long>> Handle(CreateCurrentOccurrenceProbabilityValueCommand request, CancellationToken cancellationToken)
-    {
+    public async Task<Result<long>> Handle(CreateCurrentOccurrenceProbabilityValueCommand request, CancellationToken cancellationToken) {
         var arg = _mapper.Map<CreateCurrentOccurrenceProbabilityValueArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
         var entity = await CurrentOccurrenceProbabilityValue.Create(arg, _service);

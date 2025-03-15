@@ -1,5 +1,7 @@
 ﻿using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
 using SIMA.Application.Query.Features.IssueManagement.Issues.Mappers;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.IssueManagement.Issues;
@@ -16,18 +18,50 @@ public class IssueQueryHandler :
     IQueryHandler<GetIssueComponentQuery, Result<GetIssueComponentQueryResult>>
 {
     private readonly IIssueQueryRepository _repository;
+    private readonly ISimaReportService _reportService;
 
-    public IssueQueryHandler(IIssueQueryRepository repository)
+    public IssueQueryHandler(IIssueQueryRepository repository, ISimaReportService reportService)
     {
         _repository = repository;
+        _reportService = reportService;
     }
     public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> Handle(GetMyIssueListQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllMyIssue(request);
+        var res = await _repository.GetAllMyIssue(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            var excelByte = _reportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var exportResult = new ExportResult
+            {
+                Name = _reportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+
+        return res;
     }
     public async Task<Result<IEnumerable<GetAllIssueQueryResult>>> Handle(GetAllIssuesQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        var res = await _repository.GetAll(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            var excelByte = _reportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var exportResult = new ExportResult
+            {
+                Name = _reportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+
+        return res;
     }
 
     public async Task<Result<GetIssueQueryResult>> Handle(GetIssuesQuery request, CancellationToken cancellationToken)

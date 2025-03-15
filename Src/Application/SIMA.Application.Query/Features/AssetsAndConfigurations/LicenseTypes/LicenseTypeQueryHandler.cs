@@ -19,11 +19,8 @@ public class LicenseTypeQueryHandler : IQueryHandler<GetLicenseTypeQuery, Result
         var result = await _repository.GetById(request);
         return Result.Ok(result);
     }
-
     public async Task<Result<IEnumerable<GetLicenseTypeQueryResult>>> Handle(GetAllLicenseTypeQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAll(request);
-    }
-
-  
+    }  
 }
