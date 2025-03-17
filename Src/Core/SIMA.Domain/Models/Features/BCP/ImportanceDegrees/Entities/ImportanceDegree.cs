@@ -78,6 +78,5 @@ public class ImportanceDegree : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<BusinessImpactAnalysis> _businessImpactAnalyses = new();
-    public ICollection<BusinessImpactAnalysis> BusinessImpactAnalyses => _businessImpactAnalyses;
+
 }

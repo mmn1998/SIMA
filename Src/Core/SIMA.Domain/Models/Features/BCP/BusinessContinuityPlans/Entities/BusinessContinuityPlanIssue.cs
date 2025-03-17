@@ -1,7 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Args;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;

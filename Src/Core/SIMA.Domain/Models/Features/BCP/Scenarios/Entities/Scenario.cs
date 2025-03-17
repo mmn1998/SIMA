@@ -1,11 +1,6 @@
-﻿using SIMA.Domain.Models.Features.Auths.Permissions.ValueObjects;
-using SIMA.Domain.Models.Features.Auths.Users.Entities;
-using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.ScenarioExecutionHistories.Entities;
+﻿using SIMA.Domain.Models.Features.BCP.ScenarioExecutionHistories.Entities;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Args;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Contracts;
-using SIMA.Domain.Models.Features.IssueManagement.Issues.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -56,65 +51,65 @@ public class Scenario : Entity
 
     #region OtherMethod
 
-    public async Task AddScenarioBusinessContinuityPlanVersioning(List<CreateScenarioBusinessContinuityPlanVersioningArg> request, long scenarioId)
-    {
-        scenarioId.NullCheck();
+    //public async Task AddScenarioBusinessContinuityPlanVersioning(List<CreateScenarioBusinessContinuityPlanVersioningArg> request, long scenarioId)
+    //{
+    //    scenarioId.NullCheck();
 
-        var previousEntity = _scenarioBusinessContinuityPlanVersioning.Where(x => x.ScenarioId == new ScenarioId(scenarioId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+    //    var previousEntity = _scenarioBusinessContinuityPlanVersioning.Where(x => x.ScenarioId == new ScenarioId(scenarioId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
-        var addEntity = request.Where(x => !previousEntity.Any(c => c.BusinessContinuityPlanVersioningId.Value == x.BusinessContinuityPlanVersioningId)).ToList();
-        var deleteEntity = previousEntity.Where(x => !request.Any(c => c.BusinessContinuityPlanVersioningId == x.BusinessContinuityPlanVersioningId.Value)).ToList();
-
-
-        foreach (var item in addEntity)
-        {
-            var entity = _scenarioBusinessContinuityPlanVersioning.Where(x => (x.BusinessContinuityPlanVersioningId == new BusinessContinuityPlanVersioningId(item.BusinessContinuityPlanVersioningId) && x.ScenarioId == new ScenarioId(scenarioId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
-            if (entity is not null)
-            {
-                entity.ChangeStatus(ActiveStatusEnum.Active);
-            }
-            else
-            {
-                entity = ScenarioBusinessContinuityPlanVersioning.Create(item);
-                _scenarioBusinessContinuityPlanVersioning.Add(entity);
-            }
-        }
-
-        foreach (var item in deleteEntity)
-        {
-            item.Delete((long)request[0].CreatedBy);
-        }
-    }
-
-    public async Task AddScenarioBusinessContinuityPlanAssumption(List<CreateScenarioBusinessContinuityPlanAssumptionArg> request, long scenarioId)
-    {
-        scenarioId.NullCheck();
-
-        var previousEntity = _scenarioBusinessContinuityPlanAssumption.Where(x => x.ScenarioId == new ScenarioId(scenarioId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
-
-        var addEntity = request.Where(x => !previousEntity.Any(c => c.BusinessContinuityPlanAssumptionId.Value == x.BusinessContinuityPlanAssumptionId)).ToList();
-        var deleteEntity = previousEntity.Where(x => !request.Any(c => c.BusinessContinuityPlanAssumptionId == x.BusinessContinuityPlanAssumptionId.Value)).ToList();
+    //    var addEntity = request.Where(x => !previousEntity.Any(c => c.BusinessContinuityPlanVersioningId.Value == x.BusinessContinuityPlanVersioningId)).ToList();
+    //    var deleteEntity = previousEntity.Where(x => !request.Any(c => c.BusinessContinuityPlanVersioningId == x.BusinessContinuityPlanVersioningId.Value)).ToList();
 
 
-        foreach (var item in addEntity)
-        {
-            var entity = _scenarioBusinessContinuityPlanAssumption.Where(x => (x.BusinessContinuityPlanAssumptionId == new BusinessContinuityPlanAssumptionId(item.BusinessContinuityPlanAssumptionId) && x.ScenarioId == new ScenarioId(scenarioId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
-            if (entity is not null)
-            {
-                entity.ChangeStatus(ActiveStatusEnum.Active);
-            }
-            else
-            {
-                entity = ScenarioBusinessContinuityPlanAssumption.Create(item);
-                _scenarioBusinessContinuityPlanAssumption.Add(entity);
-            }
-        }
+    //    foreach (var item in addEntity)
+    //    {
+    //        var entity = _scenarioBusinessContinuityPlanVersioning.Where(x => (x.BusinessContinuityPlanVersioningId == new BusinessContinuityPlanVersioningId(item.BusinessContinuityPlanVersioningId) && x.ScenarioId == new ScenarioId(scenarioId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+    //        if (entity is not null)
+    //        {
+    //            entity.ChangeStatus(ActiveStatusEnum.Active);
+    //        }
+    //        else
+    //        {
+    //            entity = ScenarioBusinessContinuityPlanVersioning.Create(item);
+    //            _scenarioBusinessContinuityPlanVersioning.Add(entity);
+    //        }
+    //    }
 
-        foreach (var item in deleteEntity)
-        {
-            item.Delete((long)request[0].CreatedBy);
-        }
-    }
+    //    foreach (var item in deleteEntity)
+    //    {
+    //        item.Delete((long)request[0].CreatedBy);
+    //    }
+    //}
+
+    //public async Task AddScenarioBusinessContinuityPlanAssumption(List<CreateScenarioBusinessContinuityPlanAssumptionArg> request, long scenarioId)
+    //{
+    //    scenarioId.NullCheck();
+
+    //    var previousEntity = _scenarioBusinessContinuityPlanAssumption.Where(x => x.ScenarioId == new ScenarioId(scenarioId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+
+    //    var addEntity = request.Where(x => !previousEntity.Any(c => c.BusinessContinuityPlanAssumptionId.Value == x.BusinessContinuityPlanAssumptionId)).ToList();
+    //    var deleteEntity = previousEntity.Where(x => !request.Any(c => c.BusinessContinuityPlanAssumptionId == x.BusinessContinuityPlanAssumptionId.Value)).ToList();
+
+
+    //    foreach (var item in addEntity)
+    //    {
+    //        var entity = _scenarioBusinessContinuityPlanAssumption.Where(x => (x.BusinessContinuityPlanAssumptionId == new BusinessContinuityPlanAssumptionId(item.BusinessContinuityPlanAssumptionId) && x.ScenarioId == new ScenarioId(scenarioId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
+    //        if (entity is not null)
+    //        {
+    //            entity.ChangeStatus(ActiveStatusEnum.Active);
+    //        }
+    //        else
+    //        {
+    //            entity = ScenarioBusinessContinuityPlanAssumption.Create(item);
+    //            _scenarioBusinessContinuityPlanAssumption.Add(entity);
+    //        }
+    //    }
+
+    //    foreach (var item in deleteEntity)
+    //    {
+    //        item.Delete((long)request[0].CreatedBy);
+    //    }
+    //}
 
     public async Task AddScenarioPlanRecoveryCriteria(List<CreateScenarioRecoveryCriteriaArg> request)
     {
@@ -203,11 +198,11 @@ public class Scenario : Entity
     private List<ScenarioRecoveryCriteria> _scenarioRecoveryCriteria = new();
     public ICollection<ScenarioRecoveryCriteria> ScenarioRecoveryCriterias => _scenarioRecoveryCriteria;
 
-    private List<ScenarioBusinessContinuityPlanAssumption> _scenarioBusinessContinuityPlanAssumption = new();
-    public ICollection<ScenarioBusinessContinuityPlanAssumption> ScenarioBusinessContinuityPlanAssumptions => _scenarioBusinessContinuityPlanAssumption;
+    //private List<ScenarioBusinessContinuityPlanAssumption> _scenarioBusinessContinuityPlanAssumption = new();
+    //public ICollection<ScenarioBusinessContinuityPlanAssumption> ScenarioBusinessContinuityPlanAssumptions => _scenarioBusinessContinuityPlanAssumption;
 
-    private List<ScenarioBusinessContinuityPlanVersioning> _scenarioBusinessContinuityPlanVersioning = new();
-    public ICollection<ScenarioBusinessContinuityPlanVersioning> ScenarioBusinessContinuityPlanVersionings => _scenarioBusinessContinuityPlanVersioning;
+    //private List<ScenarioBusinessContinuityPlanVersioning> _scenarioBusinessContinuityPlanVersioning = new();
+    //public ICollection<ScenarioBusinessContinuityPlanVersioning> ScenarioBusinessContinuityPlanVersionings => _scenarioBusinessContinuityPlanVersioning;
 
     private List<ScenarioExecutionHistory> _scenarioExecutionHistories = new();
     public ICollection<ScenarioExecutionHistory> ScenarioExecutionHistories => _scenarioExecutionHistories;

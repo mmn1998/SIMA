@@ -10,7 +10,9 @@ using SIMA.Application.Services;
 using SIMA.Application.Services.BehsazanServices;
 using SIMA.DomainService.ConfigurationExtensions;
 using SIMA.Framework.Common.Cachings;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper.FileHelper;
+using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Common.Services;
 using SIMA.Framework.Infrastructure.Cachings;
@@ -24,8 +26,10 @@ using SIMA.WebApi.Dtos;
 using SIMA.WebApi.Extensions;
 using SIMA.WebApi.Middlwares;
 using SIMA.WebApi.Settings;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection;
+using System.Text.Json;
 
 #region AddConfigurationFiles
 var configuration = new ConfigurationBuilder()
@@ -191,4 +195,73 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
+}
+public class ExceptionMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    private readonly ILogger<ExceptionMiddleware> _logger;
+
+    public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+
+    public async Task InvokeAsync(HttpContext httpContext)
+    {
+        Stream body = httpContext.Response.Body;
+        try
+        {
+            await _next(httpContext);
+        }
+        catch (Exception ex)
+        {
+            httpContext.Response.Body = body;
+            await HandleExceptionAsync(httpContext, ex);
+        }
+    }
+
+    public virtual int ExceptionStatusCodeMapping(Exception ex)
+    {
+        if (1 == 0)
+        {
+        }
+
+        int result = ((ex is InvalidCastException) ? 400 : ((ex is InvalidOperationException) ? 201 : ((ex is ValidationException) ? 401 : ((!(ex is SimaException)) ? 500 : 200))));
+        if (1 == 0)
+        {
+        }
+
+        return result;
+    }
+
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        int status = ExceptionStatusCodeMapping(exception);
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = status;
+        await HttpResponseWritingExtensions.WriteAsync(text: JsonSerializer.Serialize(GetException(exception), new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        }), response: context.Response);
+        if (status >= 500)
+        {
+            _logger.LogError(exception, "خطای سرور رخ داده است");
+        }
+        else
+        {
+            _logger.LogInformation(exception, "Handled exception occurred");
+        }
+    }
+
+    private Result GetException(Exception exception)
+    {
+        if (exception is SimaException ex)
+        {
+            return ex.Error;
+        }
+
+        return SimaResultException.ServerError;
+    }
 }

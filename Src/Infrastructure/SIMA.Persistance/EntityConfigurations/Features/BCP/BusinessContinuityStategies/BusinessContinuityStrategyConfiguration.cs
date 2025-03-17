@@ -15,9 +15,6 @@ public class BusinessContinuityStrategyConfiguration : IEntityTypeConfiguration<
              v => v.Value,
              v => new BusinessContinuityStrategyId(v)).ValueGeneratedNever();
         entity.HasKey(i => i.Id);
-        entity.HasIndex(e => e.Code).IsUnique();
-        entity.Property(e => e.Code).HasMaxLength(20);
-        entity.Property(e => e.IsStableStrategy).HasMaxLength(1).IsFixedLength();
         entity.Property(e => e.Title).HasMaxLength(200).IsUnicode();
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
@@ -26,16 +23,6 @@ public class BusinessContinuityStrategyConfiguration : IEntityTypeConfiguration<
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-
-
-        entity.Property(x => x.StrategyTypeId)
-           .HasConversion(
-           x => x.Value,
-           x => new StrategyTypeId(x)
-           );
-        entity.HasOne(x => x.StrategyType)
-            .WithMany(x => x.BusinessContinuityStrategys)
-            .HasForeignKey(x => x.StrategyTypeId);
 
     }
 }

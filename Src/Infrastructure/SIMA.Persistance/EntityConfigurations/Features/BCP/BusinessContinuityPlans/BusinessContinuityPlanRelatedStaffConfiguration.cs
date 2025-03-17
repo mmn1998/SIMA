@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessContinuityPlans;
 
@@ -24,14 +22,14 @@ public class BusinessContinuityPlanRelatedStaffConfiguration : IEntityTypeConfig
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.BusinessContinuityPlanVersioningId)
+        entity.Property(x => x.BusinessContinuityPlanId)
             .HasConversion(
             x => x.Value,
             x => new(x)
             );
-        entity.HasOne(x => x.BusinessContinuityPlanVersioning)
+        entity.HasOne(x => x.BusinessContinuityPlan)
             .WithMany(x => x.BusinessContinuityPlanRelatedStaff)
-            .HasForeignKey(x => x.BusinessContinuityPlanVersioningId)
+            .HasForeignKey(x => x.BusinessContinuityPlanId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.StaffId)

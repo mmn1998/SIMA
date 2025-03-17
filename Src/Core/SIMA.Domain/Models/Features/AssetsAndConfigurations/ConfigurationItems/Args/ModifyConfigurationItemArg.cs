@@ -8,7 +8,9 @@ public class ModifyConfigurationItemArg
     public long ConfigurationItemStatusId { get; set; }
     public long LicenseTypeId { get; set; }
     public long? SupplierId { get; set; }
+    public long? BusinessCriticalityId { get; set; }
     public string? Title { get;  set; }
+    public string? UpdateSubject { get;  set; }
     public string? VersionNumber { get;  set; }
     public long CompanyBuildingLocationId { get; set; }
     public string? Code { get; set; }
@@ -16,5 +18,6 @@ public class ModifyConfigurationItemArg
     public long ActiveStatusId { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public DateTime? ReleaseDate { get; set; }
+    public DateTime? LastUpdateDate { get; set; }
     public long? ModifiedBy { get; set; }
 }

@@ -53,7 +53,6 @@ using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
 using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
@@ -418,7 +417,7 @@ public class SIMADBContext : DbContext
     public DbSet<ScenarioRecoveryOption> ScenarioRecoveryOptions { get; set; }
     public DbSet<ScenarioRecoveryCriteria> ScenarioRecoveryCriterias { get; set; }
     public DbSet<ScenarioBusinessContinuityPlanAssumption> ScenarioBusinessContinuityPlanAssumptions { get; set; }
-    public DbSet<BusinessContinuityPlanVersioning> BusinessContinuityPlanVersionings { get; set; }
+    //public DbSet<BusinessContinuityPlanVersioning> BusinessContinuityPlanVersionings { get; set; }
     public DbSet<BusinessContinuityStrategy> BusinessContinuityStrategies { get; set; }
     public DbSet<BusinessImpactAnalysis> BusinessImpactAnalysis { get; set; }
     public DbSet<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins { get; set; }
@@ -433,7 +432,7 @@ public class SIMADBContext : DbContext
     public DbSet<BusinessContinuityPlanService> BusinessContinuityPlanServices { get; set; }
     public DbSet<BusinessContinuityPlanRisk> BusinessContinuityPlanRisks { get; set; }
     public DbSet<BusinessContinuityPlanAssumption> BusinessContinuityPlanAssumptions { get; set; }
-    public DbSet<ScenarioBusinessContinuityPlanVersioning> ScenarioBusinessContinuityPlanVersionings { get; set; }
+    //public DbSet<ScenarioBusinessContinuityPlanVersioning> ScenarioBusinessContinuityPlanVersionings { get; set; }
     public DbSet<BusinessContinuityPlanRelatedStaff> BusinessContinuityPlanRelatedStaffs { get; set; }
     public DbSet<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles { get; set; }
     public DbSet<BusinessImpactAnalysisStaff> BusinessImpactAnalysisStaffs { get; set; }

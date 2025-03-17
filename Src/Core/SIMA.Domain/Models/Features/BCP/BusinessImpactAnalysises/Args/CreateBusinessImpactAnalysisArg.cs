@@ -6,12 +6,10 @@ public class CreateBusinessImpactAnalysisArg
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }
-    public long ImportanceDegreeId { get; set; }
-    public long ServicePriorityId { get; set; }
-    public long BackupPeriodId { get; set; }
     public long ServiceId { get; set; }
-    public string? RestartReason { get; set; }
-    public long IssueWeightCategoryId { get; set; }
-    public long IssuePriorityId { get; set; }
-    public long IssueId { get; set; }
+    public long RecoveryPointObjectiveId { get; set; }
+    public long TimeMeasurementId { get; set; }
+    public long RTO { get; set; }
+    public long WRT { get; set; }
+    public long MTPD { get; set; }
 }

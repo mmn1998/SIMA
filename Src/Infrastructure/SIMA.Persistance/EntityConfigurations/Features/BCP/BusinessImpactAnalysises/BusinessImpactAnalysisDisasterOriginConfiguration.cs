@@ -43,49 +43,17 @@ public class BusinessImpactAnalysisDisasterOriginConfiguration : IEntityTypeConf
             .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.BusinessImpactAnalysisId)
-            .HasConversion(
-            x => x.Value,
-            x => new(x)
-            );
+            .HasConversion(x => x.Value, x => new(x));
         entity.HasOne(x => x.BusinessImpactAnalysis)
             .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
             .HasForeignKey(x => x.BusinessImpactAnalysisId);
+        
+        entity.Property(x => x.ConsequenceIntensionId)
+            .HasConversion(x => x.Value, x => new(x));
+        entity.HasOne(x => x.ConsequenceIntension)
+            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins);
 
-        entity.Property(x => x.RecoveryPointObjectiveId)
-            .HasConversion(
-            x => x.Value,
-            x => new(x)
-            );
-        entity.HasOne(x => x.RecoveryPointObjective)
-            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
-            .HasForeignKey(x => x.RecoveryPointObjectiveId);
 
-        entity.Property(x => x.HappeningPossibilityId)
-            .HasConversion(
-            x => x.Value,
-            x => new(x)
-            );
-        entity.HasOne(x => x.HappeningPossibility)
-            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
-            .HasForeignKey(x => x.HappeningPossibilityId);
-
-        entity.Property(x => x.ConsequenceValueId)
-            .HasConversion(
-            x => x.Value,
-            x => new(x)
-            );
-        entity.HasOne(x => x.ConsequenceValue)
-            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
-            .HasForeignKey(x => x.ConsequenceValueId);
-
-        entity.Property(x => x.BiaValueId)
-            .HasConversion(
-            x => x.Value,
-            x => new(x)
-            );
-        entity.HasOne(x => x.BiaValue)
-            .WithMany(x => x.BusinessImpactAnalysisDisasterOrigins)
-            .HasForeignKey(x => x.BiaValueId);
 
 
     }

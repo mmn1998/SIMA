@@ -1,12 +1,11 @@
-﻿using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
-using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.ValueObjects;
+﻿using SIMA.Domain.Models.Features.Auths.TimeMeasurements.Entities;
+using SIMA.Domain.Models.Features.Auths.TimeMeasurements.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Contracts;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Events;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities;
-using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
-using SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities;
+using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
+using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.ValueObjects;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -24,16 +23,19 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     {
         Id = new(arg.Id);
         ActiveStatusId = arg.ActiveStatusId;
-        ImportanceDegreeId = new(arg.ImportanceDegreeId);
-        ServicePriorityId = new(arg.ServicePriorityId);
-        BackupPeriodId = new(arg.BackupPeriodId);
+        RecoveryPointObjectiveId = new(arg.RecoveryPointObjectiveId);
+        TimeMeasurementId = new(arg.TimeMeasurementId);
         ServiceId = new(arg.ServiceId);
-        RestartReason = arg.RestartReason;
+        RecoveryPointObjectiveId = new(arg.RecoveryPointObjectiveId);
+        RTO = arg.RTO;
+        WRT = arg.WRT;
+        MTPD = arg.MTPD;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
-        AddDomainEvent(new CreateBusinessImpactAnalysisEvent
-            (issueId: arg.IssueId, mainAggregateType: MainAggregateEnums.BusinessImpactAnalysis,
-            name: arg.RestartReason, sourceId: arg.Id, issuePriorityId: arg.IssuePriorityId, issueWeightCategoryId: arg.IssueWeightCategoryId));
+        ///todo:get Mahyar new Api
+        //AddDomainEvent(new CreateBusinessImpactAnalysisEvent
+        //    (issueId: arg.IssueId, mainAggregateType: MainAggregateEnums.BusinessImpactAnalysis,
+        //    name: arg.RestartReason, sourceId: arg.Id, issuePriorityId: arg.IssuePriorityId, issueWeightCategoryId: arg.IssueWeightCategoryId));
     }
     public static async Task<BusinessImpactAnalysis> Create(CreateBusinessImpactAnalysisArg arg, IBusinessImpactAnalysisDomainService service)
     {
@@ -43,11 +45,13 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     public async Task Modify(ModifyBusinessImpactAnalysisArg arg, IBusinessImpactAnalysisDomainService service)
     {
         await ModifyGuards(arg, service);
+        ServiceId = new(arg.ServiceId);
+        RecoveryPointObjectiveId = new(arg.RecoveryPointObjectiveId);
+        TimeMeasurementId = new(arg.TimeMeasurementId);
+        RTO = arg.RTO;
+        WRT = arg.WRT;
+        MTPD = arg.MTPD;
         ActiveStatusId = arg.ActiveStatusId;
-        ImportanceDegreeId = new(arg.ImportanceDegreeId);
-        ServicePriorityId = new(arg.ServicePriorityId);
-        BackupPeriodId = new(arg.BackupPeriodId);
-        RestartReason = arg.RestartReason;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
@@ -239,17 +243,15 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
     public BusinessImpactAnalysisId Id { get; private set; }
     public ServiceId ServiceId { get; private set; }
     public virtual Service Service { get; private set; }
-    public ImportanceDegreeId? ImportanceDegreeId { get; private set; }
-    public virtual ImportanceDegree? ImportanceDegree { get; private set; }
-    public ServicePriorityId? ServicePriorityId { get; private set; }
-    public virtual ServicePriority? ServicePriority { get; private set; }
-    public BackupPeriodId? BackupPeriodId { get; private set; }
-    public virtual BackupPeriod? BackupPeriod { get; private set; }
-    public string? RestartReason { get; private set; }
-    public float? RTO { get; set; }
-    public float? RPO { get; set; }
-    public float? WRT { get; set; }
-    public float? MTD { get; set; }
+    public RecoveryPointObjectiveId RecoveryPointObjectiveId { get; private set; }
+    public virtual RecoveryPointObjective RecoveryPointObjective { get; private set; }
+    public TimeMeasurementId TimeMeasurementId { get; private set; }
+    public virtual TimeMeasurement TimeMeasurement { get; private set; }
+
+
+    public float RTO { get; set; }
+    public float WRT { get; set; }
+    public float? MTPD { get; set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -268,7 +270,7 @@ public class BusinessImpactAnalysis : Entity, IAggregateRoot
         DeleteBusinessImpactAnalysisDisasterOrigins(userId);
         DeleteBusinessImpactAnalysisIssues(userId);
         #endregion
-        
+
 
     }
     private List<BusinessImpactAnalysisDocument> _businessImpactAnalysisDocuments = new();

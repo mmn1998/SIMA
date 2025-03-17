@@ -32,34 +32,53 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
 
     public async Task<List<GetServiceTreeDiagramQueryResult>> GetTreeDiagrams(GetServiceTreeDiagramQuery query)
     {
-        //using var connection = new SqlConnection(_connectionString);
-        //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
-        //await connection.OpenAsync();
-        //return await connection.QueryAsync<GetServiceTreeDiagramQueryResult>(spName, param: new { id = query.Id, type = query.Type }, commandType: CommandType.StoredProcedure);
-        using var connection = new SqlConnection(_connectionString);
-        var id = query.Id.HasValue ? query.Id.Value.ToString() : "NULL";
-        var type = query.Type.HasValue ? query.Type.Value.ToString() : "NULL";
-        string spName = $"Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram] {id},{type}";
-        await connection.OpenAsync();
-        var result = await connection.QueryFirstOrDefaultAsync<string>(spName) ?? throw SimaResultException.NotFound;
-        var test = JsonConvert.DeserializeObject<List<GetServiceTreeDiagramQueryResultWrapper>>(result);
-        return test[0].data;
+        try
+        {
+            //using var connection = new SqlConnection(_connectionString);
+            //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
+            //await connection.OpenAsync();
+            //return await connection.QueryAsync<GetServiceTreeDiagramQueryResult>(spName, param: new { id = query.Id, type = query.Type }, commandType: CommandType.StoredProcedure);
+            using var connection = new SqlConnection(_connectionString);
+            var id = query.Id.HasValue ? query.Id.Value.ToString() : "NULL";
+            var type = query.Type.HasValue ? query.Type.Value.ToString() : "NULL";
+            string spName = $"Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram] {id},{type}";
+            await connection.OpenAsync();
+            var result = await connection.QueryFirstOrDefaultAsync<string>(spName) ?? throw SimaResultException.NotFound;
+            var test = JsonConvert.DeserializeObject<List<GetServiceTreeDiagramQueryResultWrapper>>(result);
+            return test[0].data;
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+      
     }
 
     public async Task<List<GetProductListResult>> GetProductDiagrams(GetProductList query)
     {
-        //using var connection = new SqlConnection(_connectionString);
-        //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
-        //await connection.OpenAsync();
-        //return await connection.QueryAsync<GetServiceTreeDiagramQueryResult>(spName, param: new { id = query.Id, type = query.Type }, commandType: CommandType.StoredProcedure);
-        using var connection = new SqlConnection(_connectionString);
+        try
+        {
+             using var connection = new SqlConnection(_connectionString);
         var id = query.Id.HasValue ? query.Id.Value.ToString() : "NULL";
         var type =!string.IsNullOrEmpty(query.Type) ? query.Type.ToString() : "NULL";
         string spName = $"Exec [dbo].[SP_ServiceCatalog_GetProdoctList] {id},{type}";
         await connection.OpenAsync();
         var result = await connection.QueryFirstOrDefaultAsync<string>(spName) ?? throw SimaResultException.NotFound;
-        var test = JsonConvert.DeserializeObject<List<GetProductListResultWrapper>>(result);
-        return test[0].Data;
+        string json = "{\r\n            \"\"data\"\": [\r\n                {\r\n                    \"\"id\"\": 1794466611,\r\n                    \"\"name\"\": \"\"test2\"\",\r\n                    \"\"code\"\": \"\"138200584263\"\",\r\n                    \"\"scope\"\": \"\"1234\"\",\r\n                    \"\"description\"\": \"\"test\"\",\r\n                    \"\"ProviderCompanyId\"\": 1623452081,\r\n                    \"\"providerCompanyName\"\": \"\"به پرداخت ملت\"\",\r\n                    \"\"serviceStatusId\"\": 4658969395,\r\n                    \"\"inServiceDate\"\": \"\"2024-11-17\"\",\r\n                    \"\"serviceStatusName\"\": \"\"بازنشسته\"\",\r\n                    \"\"ActiveStatus\"\": \"\"غیر فعال دائم\"\",\r\n                    \"\"createdAt\"\": \"\"2024-11-16T18:33:37.283\"\"\r\n                }\r\n            ]\r\n        }";
+        var test = JsonConvert.DeserializeObject<GetProductListResultWrapper>(result);
+        return test.Data;
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+        //using var connection = new SqlConnection(_connectionString);
+        //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
+        //await connection.OpenAsync();
+        //return await connection.QueryAsync<GetServiceTreeDiagramQueryResult>(spName, param: new { id = query.Id, type = query.Type }, commandType: CommandType.StoredProcedure);
+       
     }
 
     public async Task<List<GetChannelListResult>> GetChannelDiagrams(GetChannelList query)
@@ -155,6 +174,22 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         await connection.OpenAsync();
         var result = await connection.QueryFirstOrDefaultAsync<string>(spName) ?? throw SimaResultException.NotFound;
         var test = JsonConvert.DeserializeObject<List<GetRiskListResultWrapper>>(result);
+        return test[0].Data;
+    }
+
+    public async Task<List<GetConfigurationItemListResult>> GetConfigurationItemList(GetConfigurationItemList query)
+    {
+        //using var connection = new SqlConnection(_connectionString);
+        //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
+        //await connection.OpenAsync();
+        //return await connection.QueryAsync<GetServiceTreeDiagramQueryResult>(spName, param: new { id = query.Id, type = query.Type }, commandType: CommandType.StoredProcedure);
+        using var connection = new SqlConnection(_connectionString);
+        var id = query.Id.HasValue ? query.Id.Value.ToString() : "NULL";
+        var type =!string.IsNullOrEmpty(query.Type) ? query.Type.ToString() : "NULL";
+        string spName = $"Exec [dbo].[SP_ServiceCatalog_GetConfigurationItemList] {id},{type}";
+        await connection.OpenAsync();
+        var result = await connection.QueryFirstOrDefaultAsync<string>(spName) ?? throw SimaResultException.NotFound;
+        var test = JsonConvert.DeserializeObject<List<GetConfigurationItemListWrapperResult>>(result);
         return test[0].Data;
     }
 }

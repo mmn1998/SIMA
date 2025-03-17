@@ -4,7 +4,6 @@ using SIMA.Domain.Models.Features.Auths.Staffs.Entities;
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanResponsibilities.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Branches.ValueObjects;
@@ -20,7 +19,7 @@ namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities
         private BusinessContinuityPlanResponsible(CreateBusinessContinuityPlanResponsibleArg arg)
         {
             Id = new(IdHelper.GenerateUniqueId());
-            BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
+            BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
             StaffId = new(arg.StaffId);
             PlanResponsibilityId = new(arg.PlanResponsibilityId);
             IsForBackup = arg.IsForBackup;
@@ -39,8 +38,8 @@ namespace SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities
         }
 
         public BusinessContinuityPlanResponsibleId Id { get; private set; }
-        public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
-        public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
+        public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
+        public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
         public StaffId StaffId { get; private set; }
         public virtual Staff Staff { get; private set; }
         public PlanResponsibilityId PlanResponsibilityId { get; private set; }

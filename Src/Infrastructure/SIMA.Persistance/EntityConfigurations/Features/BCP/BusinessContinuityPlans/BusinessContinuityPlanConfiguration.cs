@@ -18,6 +18,7 @@ public class BusinessContinuityPlanConfiguration : IEntityTypeConfiguration<Busi
         entity.HasKey(i => i.Id);
         entity.Property(e => e.Code).HasMaxLength(20);
         entity.Property(e => e.Title).HasMaxLength(200);
+        entity.Property(e => e.VersionNumber).HasMaxLength(20);
         entity.Property(e => e.Scope);
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")

@@ -31,10 +31,9 @@ public class RecoveryPointObjectiveConfiguration : IEntityTypeConfiguration<Reco
         entity.Property(x => x.TimeMeasurementId)
             .HasConversion
             (x => x.Value,
-            x => new(x)
-            );
-        entity.HasOne(x=>x.TimeMeasurement)
-            .WithMany(x=>x.RecoveryPointObjectives)
+            x => new(x));
+        entity.HasOne(x => x.TimeMeasurement)
+            .WithMany(x => x.RecoveryPointObjectives)
             .HasForeignKey(x => x.TimeMeasurementId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }

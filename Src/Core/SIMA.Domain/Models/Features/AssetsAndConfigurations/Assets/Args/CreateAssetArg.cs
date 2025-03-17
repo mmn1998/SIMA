@@ -34,4 +34,7 @@ public class CreateAssetArg
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long? CreatedBy { get; set; }
+    public long IssueId { get; set; }
+    public long IssueWeightCategoryId { get; set; }
+    public long IssuePriorityId { get; set; }
 }

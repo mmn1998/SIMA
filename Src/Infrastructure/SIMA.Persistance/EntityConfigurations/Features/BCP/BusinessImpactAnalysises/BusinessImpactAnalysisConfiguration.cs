@@ -1,10 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.ImportanceDegrees.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.ServicePriorities.ValueObjects;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessImpactAnalysises;
 
@@ -26,41 +23,24 @@ public class BusinessImpactAnalysisConfiguration : IEntityTypeConfiguration<Busi
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.ImportanceDegreeId)
-            .HasConversion(
-            x => x.Value,
-            x => new ImportanceDegreeId(x)
-            );
-        entity.HasOne(x => x.ImportanceDegree)
-            .WithMany(x => x.BusinessImpactAnalyses)
-            .HasForeignKey(x => x.ImportanceDegreeId);
-        
-        entity.Property(x => x.ServicePriorityId)
-            .HasConversion(
-            x => x.Value,
-            x => new(x)
-            );
-        entity.HasOne(x => x.ServicePriority)
-            .WithMany(x => x.BusinessImpactAnalyses)
-            .HasForeignKey(x => x.ServicePriorityId);
-        
-        entity.Property(x => x.BackupPeriodId)
-            .HasConversion(
-            x => x.Value,
-            x => new BackupPeriodId(x)
-            );
-        entity.HasOne(x => x.BackupPeriod)
-            .WithMany(x => x.BusinessImpactAnalyses)
-            .HasForeignKey(x => x.BackupPeriodId);
-        
-        
+
         entity.Property(x => x.ServiceId)
-            .HasConversion(
-            x => x.Value,
-            x => new ServiceId(x)
-            );
+            .HasConversion(x => x.Value, x => new ServiceId(x));
         entity.HasOne(x => x.Service)
             .WithMany(x => x.BusinessImpactAnalyses)
             .HasForeignKey(x => x.ServiceId);
+
+        entity.Property(x => x.RecoveryPointObjectiveId)
+            .HasConversion(x => x.Value, x => new(x));
+        entity.HasOne(x => x.RecoveryPointObjective)
+            .WithMany(x => x.BusinessImpactAnalyses)
+            .HasForeignKey(x => x.RecoveryPointObjectiveId);
+
+        entity.Property(x => x.TimeMeasurementId)
+            .HasConversion(x => x.Value, x => new(x));
+        entity.HasOne(x => x.TimeMeasurement)
+            .WithMany(x => x.BusinessImpactAnalyses)
+            .HasForeignKey(x => x.TimeMeasurementId);
+           
     }
 }

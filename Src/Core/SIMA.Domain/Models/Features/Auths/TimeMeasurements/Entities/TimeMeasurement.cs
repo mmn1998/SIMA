@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.Auths.TimeMeasurements.Arg;
 using SIMA.Domain.Models.Features.Auths.TimeMeasurements.Contracts;
 using SIMA.Domain.Models.Features.Auths.TimeMeasurements.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
@@ -85,4 +86,7 @@ public class TimeMeasurement : Entity
     public ICollection<RecoveryPointObjective> RecoveryPointObjectives => _recoveryPointObjectives;
     private List<ConfigurationItemBackupSchedule> _configurationItemBackupSchedules = new();
     public ICollection<ConfigurationItemBackupSchedule> ConfigurationItemBackupSchedules => _configurationItemBackupSchedules;
+
+    private List<BusinessImpactAnalysis> _businessImpactAnalyses = new();
+    public ICollection<BusinessImpactAnalysis> BusinessImpactAnalyses => _businessImpactAnalyses;
 }

@@ -16,7 +16,7 @@ public class ScenarioBusinessContinuityPlanAssumption : Entity
     private ScenarioBusinessContinuityPlanAssumption(CreateScenarioBusinessContinuityPlanAssumptionArg arg)
     {
         Id = new(arg.Id);
-        ScenarioId = new(arg.ScenarioId);
+        BusinessContinuityPlanScenarioCobitScenarioId = new(arg.BusinessContinuityPlanScenarioCobitScenarioId);
         BusinessContinuityPlanAssumptionId = new(arg.BusinessContinuityPlanAssumptionId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -40,8 +40,8 @@ public class ScenarioBusinessContinuityPlanAssumption : Entity
         ActiveStatusId = (long)status;
     }
     public ScenarioBusinessContinuityPlanAssumptionId Id { get; set; }
-    public ScenarioId ScenarioId { get; private set; }
-    public virtual Scenario Scenario { get; private set; }
+    public BusinessContinuityPlanScenarioCobitScenarioId BusinessContinuityPlanScenarioCobitScenarioId { get; private set; }
+    public virtual BusinessContinuityPlanScenarioCobitScenario BusinessContinuityPlanScenarioCobitScenario { get; private set; }
     public BusinessContinuityPlanAssumptionId BusinessContinuityPlanAssumptionId { get; private set; }
     public virtual BusinessContinuityPlanAssumption BusinessContinuityPlanAssumption { get; private set; }
     public long ActiveStatusId { get; private set; }

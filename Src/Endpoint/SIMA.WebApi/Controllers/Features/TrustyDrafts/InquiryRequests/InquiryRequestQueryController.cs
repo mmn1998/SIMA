@@ -37,7 +37,7 @@ public class InquiryRequestQueryController : ControllerBase
         return result;
     }
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.InquiryRequestGetAll)]
+    //[SimaAuthorize(Permissions.InquiryRequestGetAll)]
     public async Task<Result> Get([FromBody] GetAllInquiryRequestsQuery query)
     {
         return await _mediator.Send(query);

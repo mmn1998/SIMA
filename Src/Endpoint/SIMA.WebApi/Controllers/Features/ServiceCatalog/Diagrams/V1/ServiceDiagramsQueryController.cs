@@ -105,4 +105,14 @@ public class ServiceDiagramsQueryController : ControllerBase
         var query = new GetRiskList { Id = id, Type = type };
         return await _mediator.Send(query);
     }
+    
+    [HttpGet("getConfigurationItemList")]
+    /*
+    [SimaAuthorize(Permissions.getServiceNetworkDiagram)]
+    */
+    public async Task<Result> GetConfigurationItemList([FromQuery] long? id = null, [FromQuery] string? type = null)
+    {
+        var query = new GetConfigurationItemList { Id = id, Type = type };
+        return await _mediator.Send(query);
+    }
 }

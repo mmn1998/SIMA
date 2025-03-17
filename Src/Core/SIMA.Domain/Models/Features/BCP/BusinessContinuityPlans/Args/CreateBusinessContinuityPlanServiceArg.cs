@@ -2,7 +2,7 @@
 
 public class CreateBusinessContinuityPlanServiceArg
 {
-    public long BusinessContinuityPlanVersioningId { get; set; }
+    public long BusinessContinuityPlanId { get; set; }
     public long ServiceId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }

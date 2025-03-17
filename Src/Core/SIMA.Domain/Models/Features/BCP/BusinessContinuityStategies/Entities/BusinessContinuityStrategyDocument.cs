@@ -24,14 +24,6 @@ public class BusinessContinuityStrategyDocument : Entity
     {
         return new BusinessContinuityStrategyDocument(arg);
     }
-    public void Modify(ModifyBusinessContinuityStrategyDocumentArg arg)
-    {
-        BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        DocumentId = new(arg.DocumentId);
-        ActiveStatusId = arg.ActiveStatusId;
-        ModifiedAt = arg.ModifiedAt;
-        ModifiedBy = arg.ModifiedBy;
-    }
     public BusinessContinuityStrategyDocumentId Id { get; set; }
     public BusinessContinuityStrategyId BusinessContinuityStategyId { get; private set; }
     public virtual BusinessContinuityStrategy BusinessContinuityStategy { get; private set; }

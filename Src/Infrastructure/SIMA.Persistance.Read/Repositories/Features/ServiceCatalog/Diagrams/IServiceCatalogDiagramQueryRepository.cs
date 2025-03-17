@@ -15,4 +15,5 @@ public interface IServiceCatalogDiagramQueryRepository : IQueryRepository
     Task<List<GetApiListResult>> GetApiList(GetApiList query);
     Task<List<GetProcedureListResult>> GetProcedureList(GetProcedureList query);
     Task<List<GetRiskListResult>> GetRiskLis(GetRiskList query);
+    Task<List<GetConfigurationItemListResult>> GetConfigurationItemList(GetConfigurationItemList query);
 }

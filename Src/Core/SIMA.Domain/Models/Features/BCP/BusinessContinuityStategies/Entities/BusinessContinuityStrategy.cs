@@ -8,7 +8,6 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Args
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
-using SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -22,13 +21,9 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     private BusinessContinuityStrategy(CreateBusinessContinuityStategyArg arg)
     {
         Id = new(arg.Id);
-        StrategyTypeId = new(arg.StrategyTypeId);
         Title = arg.Title;
-        Code = arg.Code;
-        Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         ExpireDate = arg.ExpireDate;
-        ReviewDate = arg.ReviewDate;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         AddDomainEvent(new CreateBusinessContinuityStrategyEvent
@@ -44,12 +39,8 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     {
         await ModifyGuards(arg, service);
         Title = arg.Title;
-        Code = arg.Code;
-        StrategyTypeId = new(arg.StrategyTypeId);
-        Description = arg.Description;
         ActiveStatusId = arg.ActiveStatusId;
         ExpireDate = arg.ExpireDate;
-        ReviewDate = arg.ReviewDate;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
@@ -65,14 +56,9 @@ public class BusinessContinuityStrategy : Entity, IAggregateRoot
     #endregion
     #region Properties
     public BusinessContinuityStrategyId Id { get; private set; }
-    public StrategyTypeId StrategyTypeId { get; private set; }
-    public virtual StrategyType StrategyType { get; private set; }
-    public string? Code { get; private set; }
+
     public string? Title { get; private set; }
-    public string? IsStableStrategy { get; private set; }
-    public string? Description { get; private set; }
     public DateTime? ExpireDate { get; private set; }
-    public DateTime? ReviewDate { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }

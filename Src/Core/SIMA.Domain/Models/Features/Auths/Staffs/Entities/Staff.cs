@@ -214,6 +214,12 @@ public class Staff : Entity
     
     private List<DataProcedureSupportTeam> _dataProcedureSupportTeams = new();
     public ICollection<DataProcedureSupportTeam> DataProcedureSupportTeams => _dataProcedureSupportTeams;
+    
+    private List<ConfigurationItemSupportTeam> _mainConfigurationItemSupportTeams = new();
+    public ICollection<ConfigurationItemSupportTeam> MainConfigurationItemSupportTeams => _mainConfigurationItemSupportTeams;
+    
+    private List<ConfigurationItemSupportTeam> _subsitutedConfigurationItemSupportTeams = new();
+    public ICollection<ConfigurationItemSupportTeam> SubsitutedConfigurationItemSupportTeams => _subsitutedConfigurationItemSupportTeams;
 
 
 

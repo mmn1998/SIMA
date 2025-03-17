@@ -2,7 +2,6 @@
 using SIMA.Domain.Models.Features.Auths.Staffs.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Args;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
@@ -15,7 +14,7 @@ public class BusinessContinuityPlanRelatedStaff : Entity
     private BusinessContinuityPlanRelatedStaff(CreateBusinessContinuityPlanRelatedStaffArg arg)
     {
         Id = new(IdHelper.GenerateUniqueId());
-        BusinessContinuityPlanVersioningId = new(arg.BusinessContinuityPlanVersioningId);
+        BusinessContinuityPlanId = new(arg.BusinessContinuityPlanId);
         StaffId = new(arg.StaffId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
@@ -31,8 +30,8 @@ public class BusinessContinuityPlanRelatedStaff : Entity
         ActiveStatusId = (long)status;
     }
     public BusinessContinuityPlanRelatedStaffId Id { get; private set; }
-    public BusinessContinuityPlanVersioningId BusinessContinuityPlanVersioningId { get; private set; }
-    public virtual BusinessContinuityPlanVersioning BusinessContinuityPlanVersioning { get; private set; }
+    public BusinessContinuityPlanId BusinessContinuityPlanId { get; private set; }
+    public virtual BusinessContinuityPlan BusinessContinuityPlan { get; private set; }
     public StaffId StaffId { get; private set; }
     public virtual Staff Staff { get; private set; }
     public long ActiveStatusId { get; private set; }

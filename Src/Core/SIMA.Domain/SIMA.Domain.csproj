@@ -32,7 +32,7 @@
 
   
   <ItemGroup>
-    <PackageReference Include="SIMA.Framework.Common" Version="2.5.24" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.5.25" />
     <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
   </ItemGroup>
 
@@ -48,6 +48,7 @@
     <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Entities\" />
     <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\ValueObjects\" />
     <Folder Include="Models\Features\Auths\ResponsibleTypes\Exceptions\" />
+    <Folder Include="Models\Features\BCP\BusinessContinuityPlanStratgies\Contracts\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
     <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />

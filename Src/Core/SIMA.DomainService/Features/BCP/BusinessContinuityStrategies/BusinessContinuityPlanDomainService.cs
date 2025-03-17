@@ -21,4 +21,12 @@ public class BusinessContinuityPlanDomainService : IBusinessContinuityPlanDomain
         else result = !await _context.BusinessContinuityPlans.AnyAsync(x => x.Code == code && x.Id != id);
         return result;
     }
+
+    public async Task<bool> IsVersionUnique(string versionNumber, BusinessContinuityPlanId? id = null)
+    {
+        bool result = false;
+        if (id == null) result = !await _context.BusinessContinuityPlans.AnyAsync(x => x.VersionNumber == versionNumber);
+        else result = !await _context.BusinessContinuityPlans.AnyAsync(x => x.VersionNumber == versionNumber && x.Id != id);
+        return result;
+    }
 }

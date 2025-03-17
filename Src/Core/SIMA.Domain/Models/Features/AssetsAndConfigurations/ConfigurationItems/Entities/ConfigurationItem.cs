@@ -22,6 +22,7 @@ using SIMA.Resources;
 using System.Text;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 
@@ -36,6 +37,7 @@ public class ConfigurationItem : Entity, IAggregateRoot
         ConfigurationItemStatusId = new(arg.ConfigurationItemStatusId);
         LicenseTypeId = new(arg.LicenseTypeId);
         if (arg.SupplierId.HasValue) SupplierId = new(arg.SupplierId.Value);
+        if (arg.BusinessCriticalityId.HasValue) BusinessCriticalityId = new(arg.BusinessCriticalityId.Value);
         CompanyBuildingLocationId = new(arg.CompanyBuildingLocationId);
         Code = arg.Code;
         Title = arg.Title;
@@ -45,6 +47,8 @@ public class ConfigurationItem : Entity, IAggregateRoot
         CreatedAt = arg.CreatedAt;
         ReleaseDate = arg.ReleaseDate;
         CreatedBy = arg.CreatedBy;
+        LastUpdateDate = arg.LastUpdateDate;
+        UpdateSubject = arg.UpdateSubject;
     }
     public static async Task<ConfigurationItem> Create(CreateConfigurationItemArg arg, IConfigurationItemDomainService service)
     {
@@ -59,6 +63,7 @@ public class ConfigurationItem : Entity, IAggregateRoot
         ConfigurationItemStatusId = new(arg.ConfigurationItemStatusId);
         LicenseTypeId = new(arg.LicenseTypeId);
         if (arg.SupplierId.HasValue) SupplierId = new(arg.SupplierId.Value);
+        if (arg.BusinessCriticalityId.HasValue) BusinessCriticalityId = new(arg.BusinessCriticalityId.Value);
         CompanyBuildingLocationId = new(arg.CompanyBuildingLocationId);
         Code = arg.Code;
         Title = arg.Title;
@@ -68,6 +73,8 @@ public class ConfigurationItem : Entity, IAggregateRoot
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        LastUpdateDate = arg.LastUpdateDate;
+        UpdateSubject = arg.UpdateSubject;
     }
     #region Guards
     private static async Task CreateGuards(CreateConfigurationItemArg arg, IConfigurationItemDomainService service)
@@ -103,6 +110,8 @@ public class ConfigurationItem : Entity, IAggregateRoot
     public LicenseTypeId LicenseTypeId { get; private set; }
     public virtual LicenseType LicenseType { get; private set; }
     public SupplierId? SupplierId { get; private set; }
+    public BusinessCriticalityId? BusinessCriticalityId { get; private set; }
+    public virtual BusinessCriticality? BusinessCriticality { get; private set; }
     public virtual Supplier? Supplier { get; private set; }
     public DataCenterId? DataCenterId { get; private set; }
     public virtual DataCenter? DataCenter { get; private set; }
@@ -114,7 +123,9 @@ public class ConfigurationItem : Entity, IAggregateRoot
     public string? Title { get; private set; }
     public string? VersionNumber { get; private set; }
     public DateTime? ReleaseDate { get; private set; }
+    public DateTime? LastUpdateDate { get; private set; }
     public string? Description { get; private set; }
+    public string? UpdateSubject { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -167,10 +178,12 @@ public class ConfigurationItem : Entity, IAggregateRoot
     private List<ConfigurationItemDocument> _configurationItemDocuments = new();
     public ICollection<ConfigurationItemDocument> ConfigurationItemDocuments => _configurationItemDocuments;
     private List<ConfigurationItemCustomFieldOption> _configurationItemCustomFieldOption = new();
-    public ICollection<ConfigurationItemCustomFieldOption> ConfigurationItemCustomFieldOption => _configurationItemCustomFieldOption;
-    
+    public ICollection<ConfigurationItemCustomFieldOption> ConfigurationItemCustomFieldOption => _configurationItemCustomFieldOption;    
     
     private List<ConfigurationItemIssue> _configurationItemIssues = new();
-    public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;
+    public ICollection<ConfigurationItemIssue> ConfigurationItemIssues => _configurationItemIssues;    
+    
+    private List<ConfigurationItemSupportTeam> _configurationItemSupportTeams = new();
+    public ICollection<ConfigurationItemSupportTeam> ConfigurationItemSupportTeams => _configurationItemSupportTeams;
     
 }

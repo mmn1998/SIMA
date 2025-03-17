@@ -14,7 +14,7 @@ public class BusinessContinuityStrategyRisk : Entity
     {
         Id = new(IdHelper.GenerateUniqueId());
         BusinessContinuityStategyId = new(arg.BusinessContinuityStategyId);
-        //RiskId = new(arg.RiskId);
+        RiskId = new(arg.RiskId);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;

@@ -6,12 +6,7 @@ public class CreateBusinessImpactAnalysisDisasterOriginArg
     public long BusinessImpactAnalysisId { get; set; }
     public long ConsequenceId { get; set; }
     public long OriginId { get; set; }
-    public long RecoveryPointObjectivesId { get; set; }
-    public string? Description { get; set; }
-    public float? RTO { get; set; }
-    public float? RPO { get; set; }
-    public float? WRT { get; set; }
-    public float? MTD { get; set; }
+    public long ConsequenceIntensionId { get; set; }   
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
     public long CreatedBy { get; set; }

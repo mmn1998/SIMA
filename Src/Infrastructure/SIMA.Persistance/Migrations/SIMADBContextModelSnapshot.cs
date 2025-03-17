@@ -1294,6 +1294,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("BusinessCriticalityId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Code")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -1321,6 +1324,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("LastUpdateDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<long?>("LicenseSupplierId")
                         .HasColumnType("bigint");
 
@@ -1347,11 +1353,16 @@ namespace SIMA.Persistance.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UpdateSubject")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("VersionNumber")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BusinessCriticalityId");
 
                     b.HasIndex("Code")
                         .IsUnique()
@@ -1906,6 +1917,70 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("RelatedConfigurationItemId");
 
                     b.ToTable("ConfigurationItemRelationship", "AssetAndConfiguration");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemSupportTeam", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConfigurationItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("MainBranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("MainDepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MainStaffId")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SubsitutedBranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("SubsitutedDepartmentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SubsitutedStaffId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConfigurationItemId");
+
+                    b.HasIndex("MainBranchId");
+
+                    b.HasIndex("MainDepartmentId");
+
+                    b.HasIndex("MainStaffId");
+
+                    b.HasIndex("SubsitutedBranchId");
+
+                    b.HasIndex("SubsitutedDepartmentId");
+
+                    b.HasIndex("SubsitutedStaffId");
+
+                    b.ToTable("ConfigurationItemSupportTeam", "AssetAndConfiguration");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", b =>
@@ -5429,6 +5504,55 @@ namespace SIMA.Persistance.Migrations
                     b.ToTable("Warehouse", "Authentication");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.AnalysisValues.Entities.AnalysisValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConsequenceId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConsequenceIntensionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsequenceId");
+
+                    b.HasIndex("ConsequenceIntensionId");
+
+                    b.ToTable("AnalysisValue", "BCP");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities.BackupPeriod", b =>
                 {
                     b.Property<long>("Id")
@@ -5528,7 +5652,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("BusinessContinuityStratgyId")
@@ -5552,54 +5676,11 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
+                    b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("BusinessContinuityStratgyId");
 
                     b.ToTable("BusinessContinuityPlanStratgy", "BCP");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessContinuityPlanId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("VersionNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessContinuityPlanId");
-
-                    b.ToTable("BusinessContinuityPlanVersioning", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
@@ -5637,6 +5718,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("PlanTypeId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Scope")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -5657,6 +5741,10 @@ namespace SIMA.Persistance.Migrations
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("VersionNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -5686,10 +5774,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("BusinessContinuityPlanId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Code")
@@ -5722,8 +5807,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasIndex("BusinessContinuityPlanId");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
-
                     b.HasIndex("Code")
                         .IsUnique();
 
@@ -5738,7 +5821,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -5762,7 +5845,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
+                    b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("CriticalActivityId");
 
@@ -5957,7 +6040,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -5981,7 +6064,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
+                    b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("StaffId");
 
@@ -5999,7 +6082,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("BranchId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -6036,7 +6119,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
+                    b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("DepartmentId");
 
@@ -6055,7 +6138,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -6079,7 +6162,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
+                    b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("RiskId");
 
@@ -6094,7 +6177,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
+                    b.Property<long>("BusinessContinuityPlanId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -6118,7 +6201,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
+                    b.HasIndex("BusinessContinuityPlanId");
 
                     b.HasIndex("ServiceId");
 
@@ -6133,10 +6216,6 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Code")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -6145,16 +6224,8 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("ExpireDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("IsStableStrategy")
-                        .HasMaxLength(1)
-                        .HasColumnType("nchar(1)")
-                        .IsFixedLength();
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -6164,24 +6235,12 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("ReviewDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("StrategyTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Title")
                         .HasMaxLength(200)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
-
-                    b.HasIndex("StrategyTypeId");
 
                     b.ToTable("BusinessContinuityStrategy", "BCP");
                 });
@@ -6550,9 +6609,6 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("BackupPeriodId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -6561,10 +6617,7 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("CreatedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ImportanceDegreeId")
-                        .HasColumnType("bigint");
-
-                    b.Property<float?>("MTD")
+                    b.Property<float?>("MTPD")
                         .HasColumnType("real");
 
                     b.Property<byte[]>("ModifiedAt")
@@ -6575,33 +6628,28 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long?>("ModifiedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<float?>("RPO")
+                    b.Property<float>("RTO")
                         .HasColumnType("real");
 
-                    b.Property<float?>("RTO")
-                        .HasColumnType("real");
-
-                    b.Property<string>("RestartReason")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long>("RecoveryPointObjectiveId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ServiceId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ServicePriorityId")
+                    b.Property<long>("TimeMeasurementId")
                         .HasColumnType("bigint");
 
-                    b.Property<float?>("WRT")
+                    b.Property<float>("WRT")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BackupPeriodId");
-
-                    b.HasIndex("ImportanceDegreeId");
+                    b.HasIndex("RecoveryPointObjectiveId");
 
                     b.HasIndex("ServiceId");
 
-                    b.HasIndex("ServicePriorityId");
+                    b.HasIndex("TimeMeasurementId");
 
                     b.ToTable("BusinessImpactAnalysis", "BCP");
                 });
@@ -6731,16 +6779,13 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("ActiveStatusId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("BiaValueId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("BusinessImpactAnalysisId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ConsequenceId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("ConsequenceValueId")
+                    b.Property<long>("ConsequenceIntensionId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -6750,12 +6795,6 @@ namespace SIMA.Persistance.Migrations
 
                     b.Property<long>("CreatedBy")
                         .HasColumnType("bigint");
-
-                    b.Property<long?>("HappeningPossibilityId")
-                        .HasColumnType("bigint");
-
-                    b.Property<float?>("MTD")
-                        .HasColumnType("real");
 
                     b.Property<byte[]>("ModifiedAt")
                         .IsConcurrencyToken()
@@ -6768,33 +6807,15 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("OriginId")
                         .HasColumnType("bigint");
 
-                    b.Property<float?>("RPO")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("RTO")
-                        .HasColumnType("real");
-
-                    b.Property<long>("RecoveryPointObjectiveId")
-                        .HasColumnType("bigint");
-
-                    b.Property<float?>("WRT")
-                        .HasColumnType("real");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BiaValueId");
 
                     b.HasIndex("BusinessImpactAnalysisId");
 
                     b.HasIndex("ConsequenceId");
 
-                    b.HasIndex("ConsequenceValueId");
-
-                    b.HasIndex("HappeningPossibilityId");
+                    b.HasIndex("ConsequenceIntensionId");
 
                     b.HasIndex("OriginId");
-
-                    b.HasIndex("RecoveryPointObjectiveId");
 
                     b.ToTable("BusinessImpactAnalysisDisasterOrigin", "BCP");
                 });
@@ -6970,6 +6991,54 @@ namespace SIMA.Persistance.Migrations
                         .IsUnique();
 
                     b.ToTable("ConsequenceIntension", "BCP");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities.ConsequenceValue", b =>
+                {
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ActiveStatusId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ConsequenceId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime")
+                        .HasDefaultValueSql("(getdate())");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ModifiedAt")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<long?>("ModifiedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<long>("OriginId")
+                        .HasColumnType("bigint");
+
+                    b.Property<float>("ValueNumber")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConsequenceId");
+
+                    b.HasIndex("OriginId");
+
+                    b.ToTable("ConsequenceValue", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Consequences.Entities.Consequence", b =>
@@ -7479,6 +7548,9 @@ namespace SIMA.Persistance.Migrations
                     b.Property<long>("BusinessContinuityPlanAssumptionId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("BusinessContinuityPlanScenarioCobitScenarioId")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime?>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -7493,57 +7565,15 @@ namespace SIMA.Persistance.Migrations
                         .HasColumnType("rowversion");
 
                     b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ScenarioId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessContinuityPlanAssumptionId");
 
-                    b.HasIndex("ScenarioId");
+                    b.HasIndex("BusinessContinuityPlanScenarioCobitScenarioId");
 
                     b.ToTable("ScenarioBusinessContinuityPlanAssumption", "BCP");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.ScenarioBusinessContinuityPlanVersioning", b =>
-                {
-                    b.Property<long>("Id")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ActiveStatusId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("BusinessContinuityPlanVersioningId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime")
-                        .HasDefaultValueSql("(getdate())");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<byte[]>("ModifiedAt")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("rowversion");
-
-                    b.Property<long?>("ModifiedBy")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ScenarioId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessContinuityPlanVersioningId");
-
-                    b.HasIndex("ScenarioId");
-
-                    b.ToTable(" ScenarioBusinessContinuityPlanVersioning", "BCP");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.ScenarioPossibleAction", b =>
@@ -12386,7 +12416,7 @@ namespace SIMA.Persistance.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
-                    b.HasIndex("ConsequenceCategoryId");
+                    b.HasIndex("ConsequenceLevelId");
 
                     b.HasIndex("ConsequenceLevelId1");
 
@@ -19729,6 +19759,10 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", b =>
                 {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities.BusinessCriticality", "BusinessCriticality")
+                        .WithMany("ConfigurationItems")
+                        .HasForeignKey("BusinessCriticalityId");
+
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Locations.Entities.Location", "CompanyBuildingLocation")
                         .WithMany("ConfigurationItems")
                         .HasForeignKey("CompanyBuildingLocationId")
@@ -19765,6 +19799,8 @@ namespace SIMA.Persistance.Migrations
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Suppliers.Entities.Supplier", "Supplier")
                         .WithMany("ConfigurationItems")
                         .HasForeignKey("SupplierId");
+
+                    b.Navigation("BusinessCriticality");
 
                     b.Navigation("CompanyBuildingLocation");
 
@@ -20019,6 +20055,54 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ConfigurationItemRelationshipType");
 
                     b.Navigation("RelatedConfigurationItem");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemSupportTeam", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItem", "ConfigurationItem")
+                        .WithMany("ConfigurationItemSupportTeams")
+                        .HasForeignKey("ConfigurationItemId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", "MainBranch")
+                        .WithMany("MainConfigurationItemSupportTeams")
+                        .HasForeignKey("MainBranchId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "MainDepartment")
+                        .WithMany("MainConfigurationItemSupportTeams")
+                        .HasForeignKey("MainDepartmentId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "MainStaff")
+                        .WithMany("MainConfigurationItemSupportTeams")
+                        .HasForeignKey("MainStaffId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", "SubsitutedBranch")
+                        .WithMany("SubsitutedConfigurationItemSupportTeams")
+                        .HasForeignKey("SubsitutedBranchId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Departments.Entities.Department", "SubsitutedDepartment")
+                        .WithMany("SubsitutedConfigurationItemSupportTeams")
+                        .HasForeignKey("SubsitutedDepartmentId");
+
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "SubsitutedStaff")
+                        .WithMany("SubsitutedConfigurationItemSupportTeams")
+                        .HasForeignKey("SubsitutedStaffId")
+                        .IsRequired();
+
+                    b.Navigation("ConfigurationItem");
+
+                    b.Navigation("MainBranch");
+
+                    b.Navigation("MainDepartment");
+
+                    b.Navigation("MainStaff");
+
+                    b.Navigation("SubsitutedBranch");
+
+                    b.Navigation("SubsitutedDepartment");
+
+                    b.Navigation("SubsitutedStaff");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities.ConfigurationItemVersioning", b =>
@@ -20804,6 +20888,23 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("CompanyBuildingLocation");
                 });
 
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.AnalysisValues.Entities.AnalysisValue", b =>
+                {
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Consequences.Entities.Consequence", "Consequence")
+                        .WithMany("AnalysisValues")
+                        .HasForeignKey("ConsequenceId")
+                        .IsRequired();
+
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities.ConsequenceIntension", "ConsequenceIntension")
+                        .WithMany("AnalysisValues")
+                        .HasForeignKey("ConsequenceIntensionId")
+                        .IsRequired();
+
+                    b.Navigation("Consequence");
+
+                    b.Navigation("ConsequenceIntension");
+                });
+
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BiaValues.Entities.BiaValue", b =>
                 {
                     b.HasOne("SIMA.Domain.Models.Features.BCP.Consequences.Entities.Consequence", "Consequence")
@@ -20823,9 +20924,9 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities.BusinessContinuityPlanStratgy", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanStratgies")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -20835,20 +20936,9 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
 
                     b.Navigation("BusinessContinuityStrategy");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
-                        .WithMany("BusinessContinuityPlanVersionings")
-                        .HasForeignKey("BusinessContinuityPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BusinessContinuityPlan");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
@@ -20882,24 +20972,20 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanAssumption", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", null)
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanAssumptions")
-                        .HasForeignKey("BusinessContinuityPlanId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
-                        .WithMany("BusinessContinuityPlanAssumptions")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanCriticalActivity", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanCriticalActivities")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -20909,7 +20995,7 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
 
                     b.Navigation("CriticalActivity");
                 });
@@ -20966,9 +21052,9 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRelatedStaff", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanRelatedStaff")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .IsRequired();
 
                     b.HasOne("SIMA.Domain.Models.Features.Auths.Staffs.Entities.Staff", "Staff")
@@ -20976,7 +21062,7 @@ namespace SIMA.Persistance.Migrations
                         .HasForeignKey("StaffId")
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
 
                     b.Navigation("Staff");
                 });
@@ -20987,9 +21073,9 @@ namespace SIMA.Persistance.Migrations
                         .WithMany("BusinessContinuityPlanResponsibles")
                         .HasForeignKey("BranchId");
 
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanResponsibles")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -21011,7 +21097,7 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("Branch");
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
 
                     b.Navigation("Department");
 
@@ -21022,9 +21108,9 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanRisk", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanRisks")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -21034,16 +21120,16 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
 
                     b.Navigation("Risk");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanService", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", "BusinessContinuityPlan")
                         .WithMany("BusinessContinuityPlanServices")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
+                        .HasForeignKey("BusinessContinuityPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -21053,20 +21139,9 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("BusinessContinuityPlanVersioning");
+                    b.Navigation("BusinessContinuityPlan");
 
                     b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategy", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities.StrategyType", "StrategyType")
-                        .WithMany("BusinessContinuityStrategys")
-                        .HasForeignKey("StrategyTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("StrategyType");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities.BusinessContinuityStrategyDocument", b =>
@@ -21231,13 +21306,11 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysis", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities.BackupPeriod", "BackupPeriod")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities.RecoveryPointObjective", "RecoveryPointObjective")
                         .WithMany("BusinessImpactAnalyses")
-                        .HasForeignKey("BackupPeriodId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities.ImportanceDegree", "ImportanceDegree")
-                        .WithMany("BusinessImpactAnalyses")
-                        .HasForeignKey("ImportanceDegreeId");
+                        .HasForeignKey("RecoveryPointObjectiveId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities.Service", "Service")
                         .WithMany("BusinessImpactAnalyses")
@@ -21245,17 +21318,17 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities.ServicePriority", "ServicePriority")
+                    b.HasOne("SIMA.Domain.Models.Features.Auths.TimeMeasurements.Entities.TimeMeasurement", "TimeMeasurement")
                         .WithMany("BusinessImpactAnalyses")
-                        .HasForeignKey("ServicePriorityId");
+                        .HasForeignKey("TimeMeasurementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("BackupPeriod");
-
-                    b.Navigation("ImportanceDegree");
+                    b.Navigation("RecoveryPointObjective");
 
                     b.Navigation("Service");
 
-                    b.Navigation("ServicePriority");
+                    b.Navigation("TimeMeasurement");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysisAnnouncement", b =>
@@ -21317,10 +21390,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysisDisasterOrigin", b =>
                 {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BiaValues.Entities.BiaValue", "BiaValue")
-                        .WithMany("BusinessImpactAnalysisDisasterOrigins")
-                        .HasForeignKey("BiaValueId");
-
                     b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysis", "BusinessImpactAnalysis")
                         .WithMany("BusinessImpactAnalysisDisasterOrigins")
                         .HasForeignKey("BusinessImpactAnalysisId")
@@ -21333,38 +21402,24 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities.ConsequenceValue", "ConsequenceValue")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities.ConsequenceIntension", "ConsequenceIntension")
                         .WithMany("BusinessImpactAnalysisDisasterOrigins")
-                        .HasForeignKey("ConsequenceValueId");
-
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities.HappeningPossibility", "HappeningPossibility")
-                        .WithMany("BusinessImpactAnalysisDisasterOrigins")
-                        .HasForeignKey("HappeningPossibilityId");
+                        .HasForeignKey("ConsequenceIntensionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SIMA.Domain.Models.Features.BCP.Origins.Entities.Origin", "Origin")
                         .WithMany("BusinessImpactAnalysisDisasterOrigins")
                         .HasForeignKey("OriginId")
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities.RecoveryPointObjective", "RecoveryPointObjective")
-                        .WithMany("BusinessImpactAnalysisDisasterOrigins")
-                        .HasForeignKey("RecoveryPointObjectiveId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BiaValue");
-
                     b.Navigation("BusinessImpactAnalysis");
 
                     b.Navigation("Consequence");
 
-                    b.Navigation("ConsequenceValue");
-
-                    b.Navigation("HappeningPossibility");
+                    b.Navigation("ConsequenceIntension");
 
                     b.Navigation("Origin");
-
-                    b.Navigation("RecoveryPointObjective");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities.BusinessImpactAnalysisDocument", b =>
@@ -21498,34 +21553,15 @@ namespace SIMA.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
+                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.BusinessContinuityPlanScenarioCobitScenario", "BusinessContinuityPlanScenarioCobitScenario")
                         .WithMany("ScenarioBusinessContinuityPlanAssumptions")
-                        .HasForeignKey("ScenarioId")
+                        .HasForeignKey("BusinessContinuityPlanScenarioCobitScenarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BusinessContinuityPlanAssumption");
 
-                    b.Navigation("Scenario");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.ScenarioBusinessContinuityPlanVersioning", b =>
-                {
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", "BusinessContinuityPlanVersioning")
-                        .WithMany("ScenarioBusinessContinuityPlanVersionings")
-                        .HasForeignKey("BusinessContinuityPlanVersioningId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", "Scenario")
-                        .WithMany("ScenarioBusinessContinuityPlanVersionings")
-                        .HasForeignKey("ScenarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BusinessContinuityPlanVersioning");
-
-                    b.Navigation("Scenario");
+                    b.Navigation("BusinessContinuityPlanScenarioCobitScenario");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.ScenarioPossibleAction", b =>
@@ -25044,6 +25080,8 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities.BusinessCriticality", b =>
                 {
                     b.Navigation("Assets");
+
+                    b.Navigation("ConfigurationItems");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.AssetsAndConfigurations.Categories.Entities.Category", b =>
@@ -25101,6 +25139,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ConfigurationItemIssues");
 
                     b.Navigation("ConfigurationItemRelationships");
+
+                    b.Navigation("ConfigurationItemSupportTeams");
 
                     b.Navigation("ConfigurationItemVersionings");
 
@@ -25271,6 +25311,8 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("Invitees");
 
+                    b.Navigation("MainConfigurationItemSupportTeams");
+
                     b.Navigation("OwnerApis");
 
                     b.Navigation("Positions");
@@ -25280,6 +25322,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ResponsibleApprovals");
 
                     b.Navigation("ServiceAssignedStaffs");
+
+                    b.Navigation("SubsitutedConfigurationItemSupportTeams");
 
                     b.Navigation("SupervisorApprovals");
 
@@ -25513,6 +25557,8 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("Invitees");
 
+                    b.Navigation("MainConfigurationItemSupportTeams");
+
                     b.Navigation("MessageSeenStatisticses");
 
                     b.Navigation("ProductResponsibles");
@@ -25534,6 +25580,8 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("ServiceTechnicalSupports");
 
                     b.Navigation("Signature");
+
+                    b.Navigation("SubsitutedConfigurationItemSupportTeams");
 
                     b.Navigation("SupervisorApprovals");
 
@@ -25579,6 +25627,8 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.Auths.TimeMeasurements.Entities.TimeMeasurement", b =>
                 {
+                    b.Navigation("BusinessImpactAnalyses");
+
                     b.Navigation("ConfigurationItemBackupSchedules");
 
                     b.Navigation("RecoveryPointObjectives");
@@ -25643,26 +25693,24 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("Assets");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities.BackupPeriod", b =>
-                {
-                    b.Navigation("BusinessImpactAnalyses");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BiaValues.Entities.BiaValue", b =>
-                {
-                    b.Navigation("BusinessImpactAnalysisDisasterOrigins");
-                });
-
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities.BusinessContinuityPlanStratgy", b =>
                 {
                     b.Navigation("RiskValueStrategies");
                 });
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities.BusinessContinuityPlanVersioning", b =>
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
                 {
                     b.Navigation("BusinessContinuityPlanAssumptions");
 
                     b.Navigation("BusinessContinuityPlanCriticalActivities");
+
+                    b.Navigation("BusinessContinuityPlanIssues");
+
+                    b.Navigation("BusinessContinuityPlanPossibleActions");
+
+                    b.Navigation("BusinessContinuityPlanRecoveryCriterias");
+
+                    b.Navigation("BusinessContinuityPlanRecoveryOptions");
 
                     b.Navigation("BusinessContinuityPlanRelatedStaff");
 
@@ -25673,23 +25721,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessContinuityPlanServices");
 
                     b.Navigation("BusinessContinuityPlanStratgies");
-
-                    b.Navigation("ScenarioBusinessContinuityPlanVersionings");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlan", b =>
-                {
-                    b.Navigation("BusinessContinuityPlanAssumptions");
-
-                    b.Navigation("BusinessContinuityPlanIssues");
-
-                    b.Navigation("BusinessContinuityPlanPossibleActions");
-
-                    b.Navigation("BusinessContinuityPlanRecoveryCriterias");
-
-                    b.Navigation("BusinessContinuityPlanRecoveryOptions");
-
-                    b.Navigation("BusinessContinuityPlanVersionings");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities.BusinessContinuityPlanAssumption", b =>
@@ -25741,31 +25772,22 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities.ConsequenceIntension", b =>
                 {
-                    b.Navigation("BiaValues");
-                });
+                    b.Navigation("AnalysisValues");
 
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities.ConsequenceValue", b =>
-                {
+                    b.Navigation("BiaValues");
+
                     b.Navigation("BusinessImpactAnalysisDisasterOrigins");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Consequences.Entities.Consequence", b =>
                 {
+                    b.Navigation("AnalysisValues");
+
                     b.Navigation("BiaValues");
 
                     b.Navigation("BusinessImpactAnalysisDisasterOrigins");
 
                     b.Navigation("ConsequenceValues");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.HappeningPossiblities.Entities.HappeningPossibility", b =>
-                {
-                    b.Navigation("BusinessImpactAnalysisDisasterOrigins");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.ImportanceDegrees.Entities.ImportanceDegree", b =>
-                {
-                    b.Navigation("BusinessImpactAnalyses");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Origins.Entities.Origin", b =>
@@ -25794,7 +25816,12 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.RecoveryPointObjectives.Entities.RecoveryPointObjective", b =>
                 {
-                    b.Navigation("BusinessImpactAnalysisDisasterOrigins");
+                    b.Navigation("BusinessImpactAnalyses");
+                });
+
+            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.BusinessContinuityPlanScenarioCobitScenario", b =>
+                {
+                    b.Navigation("ScenarioBusinessContinuityPlanAssumptions");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.Scenarios.Entities.Scenario", b =>
@@ -25802,10 +25829,6 @@ namespace SIMA.Persistance.Migrations
                     b.Navigation("BusinessContinuityPlanScenarioCobitScenarios");
 
                     b.Navigation("CobitScenarios");
-
-                    b.Navigation("ScenarioBusinessContinuityPlanAssumptions");
-
-                    b.Navigation("ScenarioBusinessContinuityPlanVersionings");
 
                     b.Navigation("ScenarioExecutionHistories");
 
@@ -25819,11 +25842,6 @@ namespace SIMA.Persistance.Migrations
             modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.SolutionPriorities.Entities.SolutionPriority", b =>
                 {
                     b.Navigation("BusinessContinuityStratgySolutions");
-                });
-
-            modelBuilder.Entity("SIMA.Domain.Models.Features.BCP.StrategyTypes.Entities.StrategyType", b =>
-                {
-                    b.Navigation("BusinessContinuityStrategys");
                 });
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.AccountTypes.Entities.AccountType", b =>
@@ -25840,6 +25858,16 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.BranchManagement.Branches.Entities.Branch", b =>
                 {
+                    b.Navigation("ApiSupportTeams");
+
+                    b.Navigation("AssetAssignedStaffs");
+
+                    b.Navigation("BusinessContinuityPlanResponsibles");
+
+                    b.Navigation("BusinessContinuityStratgyResponsibles");
+
+                    b.Navigation("BusinessImpactAnalysisStaff");
+
                     b.Navigation("ChannelResponsibles");
 
                     b.Navigation("CriticalActivityAssignedStaffs");
@@ -25848,11 +25876,15 @@ namespace SIMA.Persistance.Migrations
 
                     b.Navigation("InquiryRequests");
 
+                    b.Navigation("MainConfigurationItemSupportTeams");
+
                     b.Navigation("Positions");
 
                     b.Navigation("ProductResponsibles");
 
                     b.Navigation("ServiceAssignedStaffs");
+
+                    b.Navigation("SubsitutedConfigurationItemSupportTeams");
 
                     b.Navigation("TrustyDrafts");
                 });
@@ -26538,8 +26570,6 @@ namespace SIMA.Persistance.Migrations
 
             modelBuilder.Entity("SIMA.Domain.Models.Features.ServiceCatalogs.ServicePriorities.Entities.ServicePriority", b =>
                 {
-                    b.Navigation("BusinessImpactAnalyses");
-
                     b.Navigation("Services");
                 });
 

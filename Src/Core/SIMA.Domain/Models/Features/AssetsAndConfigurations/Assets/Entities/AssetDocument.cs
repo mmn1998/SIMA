@@ -19,6 +19,11 @@ public class AssetDocument : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
+    
+    public static AssetDocument Create(CreateAssetDocumentArg arg)
+    {
+        return new AssetDocument(arg);
+    }
     public AssetDocumentId Id { get; private set; }
     public AssetId AssetId { get; private set; }
     public virtual Asset Asset { get; private set; }
@@ -34,6 +39,14 @@ public class AssetDocument : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    
+    
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 }
 

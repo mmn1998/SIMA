@@ -23,14 +23,14 @@ namespace SIMA.Persistance.EntityConfigurations.Features.BCP.BusinessContinuityP
                 .IsRowVersion()
                 .IsConcurrencyToken();
 
-            entity.Property(x => x.BusinessContinuityPlanVersioningId)
+            entity.Property(x => x.BusinessContinuityPlanId)
                 .HasConversion(
                 x => x.Value,
                 x => new(x)
                 );
-            entity.HasOne(x => x.BusinessContinuityPlanVersioning)
+            entity.HasOne(x => x.BusinessContinuityPlan)
                 .WithMany(x => x.BusinessContinuityPlanStratgies)
-                .HasForeignKey(x => x.BusinessContinuityPlanVersioningId);
+                .HasForeignKey(x => x.BusinessContinuityPlanId);
 
             entity.Property(x => x.BusinessContinuityStratgyId)
             .HasConversion(

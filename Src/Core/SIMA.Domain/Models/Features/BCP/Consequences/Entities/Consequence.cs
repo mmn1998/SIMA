@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
+﻿using SIMA.Domain.Models.Features.BCP.AnalysisValues.Entities;
+using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Args;
 using SIMA.Domain.Models.Features.BCP.Consequences.Contracts;
@@ -85,4 +86,7 @@ public class Consequence : Entity, IAggregateRoot
 
     private List<BiaValue> _biaValues = new();
     public ICollection<BiaValue>  BiaValues => _biaValues;
+
+    private List<AnalysisValue> _analysisValues = new();
+    public ICollection<AnalysisValue> AnalysisValues => _analysisValues;
 }

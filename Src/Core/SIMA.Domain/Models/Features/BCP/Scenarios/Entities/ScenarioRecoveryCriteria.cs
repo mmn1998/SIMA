@@ -27,7 +27,7 @@ public class ScenarioRecoveryCriteria : Entity
     }
     public ScenarioRecoveryCriteriaId Id { get; set; }
     public ScenarioId ScenarioId { get; private set; }
-    public Scenario Scenario { get; private set; }
+    public virtual Scenario Scenario { get; private set; }
     public string? Description { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }

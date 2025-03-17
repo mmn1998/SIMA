@@ -1,0 +1,1 @@
+﻿public record ConfigurationItemSupportTeamId(long Value);

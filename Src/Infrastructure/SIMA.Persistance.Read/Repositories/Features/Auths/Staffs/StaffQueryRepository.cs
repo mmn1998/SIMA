@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.Auths.Staffs;
+using SIMA.Domain.Models.Features.Auths.Departments.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Profiles.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -254,5 +255,46 @@ WHERE S.StaffNumber = @StaffNumber and S.ActiveStatusId<>3
         response.DepartmentInfo = await multi.ReadFirstOrDefaultAsync<DepartmentInfo>();
         response.CompanyInfo = await multi.ReadFirstOrDefaultAsync<CompanyInfo>();
         return response;
+    }
+
+    public async Task<IEnumerable<GetStaffQueryResult>> GetAllByBranchId(long branchId)
+    {
+        var query = @"
+SELECT DISTINCT S.ID as Id
+      		,S.StaffNumber
+      		,(P.FirstName + ' ' + P.LastName) as FullName
+      		,D.Name as DepartmentName
+            ,D.Id as DepartmentId
+      		,C.Name as CompanyName
+            ,C.Id as CompanyId
+             ,Po.Name PositionName
+             ,Po.Id PositionId
+      		,S.[ActiveStatusID]
+      		,A.[Name] as ActiveStatus
+            ,P.Id ProfileId
+      		,s.[CreatedAt]
+            ,S.ManagerId
+            ,(PP.FirstName + ' ' + PP.LastName) as ManagerFullName
+            ,B.Id BranchId
+            ,B.Name BranchName
+            ,PL.Id PositionLevelId
+            ,PL.Name PositionLevelName
+FROM [Organization].[Staff] S
+INNER JOIN [Authentication].[Profile] P on P.ID = S.ProfileID
+INNER JOIN [Authentication].[Users] U on U.ProfileID = P.ID
+INNER JOIN [Organization].[Company] C on C.ID = U.CompanyID
+INNER JOIN [Organization].[Department] D on D.CompanyID = C.ID
+Inner Join [Organization].[Position] Po on Po.Id = S.PositionId
+LEFT JOIN Bank.Branch B ON Po.BranchId = B.Id and B.ActiveStatusId<>3
+left join Organization.PositionLevel PL on pl.Id = po.PositionLevelId and PL.ActiveStatusId<>3
+join [Basic].[ActiveStatus] A on A.Id = S.ActiveStatusID
+LEFT JOIN [Organization].[Staff] SP On SP.Id = S.ManagerId and SP.ActiveStatusId<>3
+LEFT JOIN [Authentication].[Profile] PP on PP.ID = SP.ProfileID
+WHERE S.[ActiveStatusID] <> 3 and B.Id = @branchId
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var result = await connection.QueryAsync<GetStaffQueryResult>(query, new { branchId });
+        return result;
     }
 }

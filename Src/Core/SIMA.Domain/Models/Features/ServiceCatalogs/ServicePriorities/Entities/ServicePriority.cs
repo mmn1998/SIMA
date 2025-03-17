@@ -84,6 +84,4 @@ public class ServicePriority : Entity
     public long? ModifiedBy { get; private set; }
     private List<Service> _services = new();
     public ICollection<Service> Services => _services;
-    private List<BusinessImpactAnalysis> _businessImpactAnalyses = new();
-    public ICollection<BusinessImpactAnalysis> BusinessImpactAnalyses => _businessImpactAnalyses;
 }

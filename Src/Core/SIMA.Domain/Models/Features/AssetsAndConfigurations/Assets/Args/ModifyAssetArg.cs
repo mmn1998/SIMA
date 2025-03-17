@@ -2,6 +2,7 @@
 
 public class ModifyAssetArg
 {
+    public long Id { get; set; }
     public string? SerialNumber { get; set; }
     public long? SupplierId { get; set; }
     public long? OwnerId { get; set; }

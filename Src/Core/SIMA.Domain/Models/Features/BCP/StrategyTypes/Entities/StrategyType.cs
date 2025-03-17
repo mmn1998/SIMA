@@ -69,9 +69,6 @@ public class StrategyType : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-
-    private List<BusinessContinuityStrategy> _businessContinuityStrategy = new();
-    public ICollection<BusinessContinuityStrategy> BusinessContinuityStrategys => _businessContinuityStrategy;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

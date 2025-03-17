@@ -49,4 +49,6 @@ public class BusinessContinuityPlanScenarioCobitScenario : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    private List<ScenarioBusinessContinuityPlanAssumption> _scenarioBusinessContinuityPlanAssumptions = new();
+    public ICollection<ScenarioBusinessContinuityPlanAssumption> ScenarioBusinessContinuityPlanAssumptions => _scenarioBusinessContinuityPlanAssumptions;
 }

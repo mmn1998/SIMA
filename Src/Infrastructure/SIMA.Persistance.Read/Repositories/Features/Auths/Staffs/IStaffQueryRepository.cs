@@ -11,5 +11,6 @@ public interface IStaffQueryRepository : IQueryRepository
     Task<GetStaffByStaffNumberQueryResult> FindByStaffNumber(string staffNumber);
     Task<Result<IEnumerable<GetStaffQueryResult>>> GetAll(GetAllStaffQuery? request = null);
     Task<IEnumerable<GetStaffQueryResult>> GetAllByDepartmentId(long? departmentId);
+    Task<IEnumerable<GetStaffQueryResult>> GetAllByBranchId(long branchId);
     Task<long> GetStaffIdByUserId(long userId);
 }

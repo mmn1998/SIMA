@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Contracts;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -76,4 +77,6 @@ public class BusinessCriticality : Entity
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
+    private List<ConfigurationItem> _configurationItems = new();
+    public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
 }

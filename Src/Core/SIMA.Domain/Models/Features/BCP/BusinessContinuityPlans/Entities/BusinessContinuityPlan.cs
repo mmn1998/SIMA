@@ -2,9 +2,7 @@
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Contracts;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Events;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Args;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Args;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Entities;
+using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanStratgies.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanTypes.Entities;
 using SIMA.Domain.Models.Features.BCP.PlanTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -24,9 +22,11 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
         Code = arg.Code;
         Title = arg.Title;
         Scope = arg.Scope;
+        VersionNumber = arg.VersionNumber;
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
+        ReleaseDate = arg.ReleaseDate;
     }
     public static BusinessContinuityPlan CreateEmpty()
     {
@@ -43,9 +43,11 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
         Code = arg.Code;
         Title = arg.Title;
         Scope = arg.Scope;
+        VersionNumber = arg.VersionNumber;
         ActiveStatusId = arg.ActiveStatusId;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
+        ReleaseDate = arg.ReleaseDate;
     }
     #region Guards
     private static async Task CreateGuards(CreateBusinessContinuityPlanArg arg, IBusinessContinuityPlanDomainService service)
@@ -54,10 +56,12 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
         arg.Title.NullCheck();
         arg.Code.NullCheck();
         arg.Scope.NullCheck();
+        arg.VersionNumber.NullCheck();
 
         if (arg.Title.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsVersionUnique(arg.VersionNumber)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueVersionError);
     }
     private async Task ModifyGuards(ModifyBusinessContinuityPlanArg arg, IBusinessContinuityPlanDomainService service)
     {
@@ -68,59 +72,60 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
 
         if (arg.Title.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
-        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsVersionUnique(arg.VersionNumber, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueVersionError);
     }
     #endregion
 
     #region OtherMethod
 
-    public void AddBusinessContinuityPlanVersioning(CreateBusinessContinuityPlanVersioningArg request)
-    {
-        var entity = BusinessContinuityPlanVersioning.Create(request);
-        _businessContinuityPlanVersioning.Add(entity);
-    }
+    //public void AddBusinessContinuityPlanVersioning(CreateBusinessContinuityPlanVersioningArg request)
+    //{
+    //    var entity = BusinessContinuityPlanVersioning.Create(request);
+    //    _businessContinuityPlanVersioning.Add(entity);
+    //}
 
-    public void AddBusinessContinuityPlanStratgy(List<CreateBusinessContinuityPlanStratgyArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanStratgy(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanStratgy(List<CreateBusinessContinuityPlanStratgyArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanStratgy(request, versionId);
+    //}
 
-    public void AddBusinessContinuityPlanService(List<CreateBusinessContinuityPlanServiceArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanService(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanService(List<CreateBusinessContinuityPlanServiceArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanService(request, versionId);
+    //}
 
-    public void AddBusinessContinuityPlanRisk(List<CreateBusinessContinuityPlanRiskArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanRisk(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanRisk(List<CreateBusinessContinuityPlanRiskArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanRisk(request, versionId);
+    //}
 
-    public void AddBusinessContinuityPlanRelatedStaff(List<CreateBusinessContinuityPlanRelatedStaffArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanStaff(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanRelatedStaff(List<CreateBusinessContinuityPlanRelatedStaffArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanStaff(request, versionId);
+    //}
 
-    public void AddBusinessContinuityPlanCriticalActivity(List<CreateBusinessContinuityPlanCriticalActivityArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanCriticalActivity(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanCriticalActivity(List<CreateBusinessContinuityPlanCriticalActivityArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanCriticalActivity(request, versionId);
+    //}
 
-    public void AddBusinessContinuityPlanResponsible(List<CreateBusinessContinuityPlanResponsibleArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanResponsible(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanResponsible(List<CreateBusinessContinuityPlanResponsibleArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanResponsible(request, versionId);
+    //}
 
-    public void AddBusinessContinuityPlanAssumption(List<CreateBusinessContinuityPlanAssumptionArg> request, long versionId)
-    {
-        var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
-        entity.AddBusinessContinuityPlanAssumption(request, versionId);
-    }
+    //public void AddBusinessContinuityPlanAssumption(List<CreateBusinessContinuityPlanAssumptionArg> request, long versionId)
+    //{
+    //    var entity = _businessContinuityPlanVersioning.Where(x => x.Id.Value == versionId).FirstOrDefault();
+    //    entity.AddBusinessContinuityPlanAssumption(request, versionId);
+    //}
 
     public void AddBusinessContinuityPlanIssue(CreateBusinessContinuityPlanIssueArg request, long planId, string title)
     {
@@ -196,10 +201,12 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
     public string Code { get; private set; }
     public string Title { get; private set; }
     public string Scope { get; private set; }
+    public string? VersionNumber { get; private set; }
     public PlanTypeId? PlanTypeId { get; private set; }
     public virtual PlanType? PlanType { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
+    public DateTime? ReleaseDate { get; private set; }
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
@@ -215,11 +222,11 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
 
-    public void DeleteVersion(long userId, long versionid)
-    {
-        var version = _businessContinuityPlanVersioning.Where(x => x.Id == new BusinessContinuityPlanVersioningId(versionid)).FirstOrDefault();
-        version.Delete(userId);
-    }
+    //public void DeleteVersion(long userId, long versionid)
+    //{
+    //    var version = _businessContinuityPlanVersioning.Where(x => x.Id == new BusinessContinuityPlanVersioningId(versionid)).FirstOrDefault();
+    //    version.Delete(userId);
+    //}
 
 
     private List<BusinessContinuityPlanAssumption> _businessContinuityPlanDetailPlanningAssumptions = new();
@@ -234,11 +241,24 @@ public class BusinessContinuityPlan : Entity, IAggregateRoot
     private List<BusinessContinuityPlanRecoveryOption> _businessContinuityPlanRecoveryOptions = new();
     public ICollection<BusinessContinuityPlanRecoveryOption> BusinessContinuityPlanRecoveryOptions => _businessContinuityPlanRecoveryOptions;
 
-    private List<BusinessContinuityPlanVersioning> _businessContinuityPlanVersioning = new();
-    public ICollection<BusinessContinuityPlanVersioning> BusinessContinuityPlanVersionings => _businessContinuityPlanVersioning;
-
-
-
     private List<BusinessContinuityPlanIssue> _businessContinuityPlanIssues = new();
     public ICollection<BusinessContinuityPlanIssue> BusinessContinuityPlanIssues => _businessContinuityPlanIssues;
+
+    private List<BusinessContinuityPlanStratgy> _businessContinuityPlanStratgies = new();
+    public ICollection<BusinessContinuityPlanStratgy> BusinessContinuityPlanStratgies => _businessContinuityPlanStratgies;
+
+    private List<BusinessContinuityPlanResponsible> _businessContinuityPlanResponsibles = new();
+    public ICollection<BusinessContinuityPlanResponsible> BusinessContinuityPlanResponsibles => _businessContinuityPlanResponsibles;
+
+    private List<BusinessContinuityPlanService> _businessContinuityPlanServices = new();
+    public ICollection<BusinessContinuityPlanService> BusinessContinuityPlanServices => _businessContinuityPlanServices;
+
+    private List<BusinessContinuityPlanRisk> _businessContinuityPlanRisks = new();
+    public ICollection<BusinessContinuityPlanRisk> BusinessContinuityPlanRisks => _businessContinuityPlanRisks;
+
+    private List<BusinessContinuityPlanCriticalActivity> _businessContinuityPlanCriticalActivities = new();
+    public ICollection<BusinessContinuityPlanCriticalActivity> BusinessContinuityPlanCriticalActivities => _businessContinuityPlanCriticalActivities;
+
+    private List<BusinessContinuityPlanRelatedStaff> _businessContinuityPlanRelatedStaff = new();
+    public ICollection<BusinessContinuityPlanRelatedStaff> BusinessContinuityPlanRelatedStaff => _businessContinuityPlanRelatedStaff;
 }

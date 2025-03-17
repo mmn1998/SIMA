@@ -70,12 +70,12 @@ public class RecoveryPointObjective : Entity, IAggregateRoot
     }
     #endregion
     public RecoveryPointObjectiveId Id { get; private set; }
+    public string Name { get; private set; }
+    public string Code { get; private set; }
     public TimeMeasurementId TimeMeasurementId { get; private set; }
     public virtual TimeMeasurement TimeMeasurement { get; private set; }
     public int RpoFrom { get; set; }
     public int RpoTo { get; set; }
-    public string Name { get; private set; }
-    public string Code { get; private set; }
     public long ActiveStatusId { get; private set; }
     public DateTime? CreatedAt { get; private set; }
     public long? CreatedBy { get; private set; }
@@ -87,6 +87,7 @@ public class RecoveryPointObjective : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }
-    private List<BusinessImpactAnalysisDisasterOrigin> _businessImpactAnalysisDisasterOrigins = new();
-    public ICollection<BusinessImpactAnalysisDisasterOrigin> BusinessImpactAnalysisDisasterOrigins => _businessImpactAnalysisDisasterOrigins;
+    
+    private List<BusinessImpactAnalysis> _businessImpactAnalyses = new();
+    public ICollection<BusinessImpactAnalysis> BusinessImpactAnalyses => _businessImpactAnalyses;
 }

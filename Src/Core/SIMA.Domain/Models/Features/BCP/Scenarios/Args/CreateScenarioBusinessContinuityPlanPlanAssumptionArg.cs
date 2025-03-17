@@ -3,7 +3,7 @@
 public class CreateScenarioBusinessContinuityPlanAssumptionArg
 {
     public long Id { get; set; }
-    public long ScenarioId { get; set; }
+    public long BusinessContinuityPlanScenarioCobitScenarioId { get; set; }
     public long BusinessContinuityPlanAssumptionId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }

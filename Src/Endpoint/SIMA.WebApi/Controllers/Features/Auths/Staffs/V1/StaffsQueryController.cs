@@ -49,4 +49,10 @@ public class StaffsQueryController : ControllerBase
         var query = new GetStaffByStaffNumberQuery { StaffNumber = staffNumber };
         return await _mediator.Send(query);
     }
+    [HttpGet("GetByBranch/{staffNumber}")]
+    public async Task<Result> GetByBranchId([FromRoute] long branchId)
+    {
+        var query = new GetStaffByBranchQuery { BranchId = branchId };
+        return await _mediator.Send(query);
+    }
 }

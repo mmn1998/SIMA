@@ -31,8 +31,13 @@ using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Entities;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using System.Text;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Events;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Args;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Services.Args;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Resources;
 
@@ -74,6 +79,9 @@ public class Asset : Entity
         VersionNumber = arg.VersionNumber;
         if (arg.DataCenterId.HasValue) DataCenterId = new(arg.DataCenterId.Value);
         if (arg.OperationalStatusId.HasValue) OperationalStatusId = new(arg.OperationalStatusId.Value);
+        AddDomainEvent(new CreateAssetEvent
+        (issueId: arg.IssueId, mainAggregateType: MainAggregateEnums.Asset,
+            name: arg.Title, sourceId: arg.Id, issuePriorityId: arg.IssuePriorityId, issueWeightCategoryId: arg.IssueWeightCategoryId));
     }
     public static async Task<Asset> Create(CreateAssetArg arg, IAssetDomainService service)
     {
@@ -132,6 +140,64 @@ public class Asset : Entity
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
+    
+    
+    public void AddAssignedStaffs(List<CreateAssetAssignedStaffArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = AssetAssignedStaff.Create(arg);
+            _assetAssignedStaffs.Add(entity);
+        }
+    }
+    
+    
+    public void AddAssetService(List<CreateServiceAssetArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ServiceAsset.Create(arg);
+            _serviceAssets.Add(entity);
+        }
+    }
+    
+    public void AddAssetDocument(List<CreateAssetDocumentArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = AssetDocument.Create(arg);
+            _assetDocuments.Add(entity);
+        }
+    }
+    
+    public void AddConfigurationItemAsset(List<CreateConfigurationItemAssetArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ConfigurationItemAsset.Create(arg);
+            _configurationItemAssets.Add(entity);
+        }
+    }
+
+    public void AddComplexAssetAsset(List<CreateComplexAssetArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ComplexAsset.Create(arg);
+            _assets.Add(entity);
+        }
+    }
+
+    public void AddAssetCustomFieldValueAsset(List<CreateAssetCustomFieldValueArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities.AssetCustomFieldValue.Create(arg);
+            _assetCustomFieldValue.Add(entity);
+        }
+    }
+
+    
     public AssetId Id { get; private set; }
     public string? SerialNumber { get; private set; }
     public string? Code { get; private set; }
@@ -184,6 +250,7 @@ public class Asset : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        DeleteAssetIssues(userId);
     }
     private List<AssetIssue> _assetIssues = new();
     public ICollection<AssetIssue> AssetIssues => _assetIssues;
@@ -225,5 +292,179 @@ public class Asset : Entity
 
     private List<ConfigurationItemCustomFieldValue> _configurationItemCustomFieldValues = new();
     public ICollection<ConfigurationItemCustomFieldValue> ConfigurationItemCustomFieldValues => _configurationItemCustomFieldValues;
+    
+    
+    
+    
+    public void DeleteAssetIssues(long userId)
+    {
+        foreach (var item in _assetIssues)
+        {
+            AddDomainEvent(new DeleteAssetEvent(issueId: item.IssueId.Value));
+            item.Delete(userId);
+        }
+    }
+    
+    
+    public void AddAssetIssues(List<CreateAssetIssueArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = AssetIssue.Create(arg);
+            _assetIssues.Add(entity);
+        }
+    }
+    
+    
+    
+    
+    public void ModifyCreateAssetCustomFieldValues(List<CreateAssetCustomFieldValueArg> args)
+    {
+        var activeEntities = _assetCustomFieldValue.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.AssetCustomFieldId == x.AssetCustomFieldId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.AssetCustomFieldId.Value == x.AssetCustomFieldId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _assetCustomFieldValue.FirstOrDefault(x => x.AssetCustomFieldId.Value == arg.AssetCustomFieldId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Entities.AssetCustomFieldValue.Create(arg);
+                _assetCustomFieldValue.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+
+    
+    public void ModifyServiceAssets(List<CreateServiceAssetArg> args)
+    {
+        var activeEntities = _serviceAssets.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ServiceId == x.ServiceId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ServiceId.Value == x.ServiceId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _serviceAssets.FirstOrDefault(x => x.ServiceId.Value == arg.ServiceId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ServiceAsset.Create(arg);
+                _serviceAssets.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    
+    
+    public void ModifyAssignedStaffs(List<CreateAssetAssignedStaffArg> args)
+    {
+        var activeEntities = _assetAssignedStaffs.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.StaffId == x.StaffId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StaffId.Value == x.StaffId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _assetAssignedStaffs.FirstOrDefault(x => x.StaffId.Value == arg.StaffId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = AssetAssignedStaff.Create(arg);
+                _assetAssignedStaffs.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    
+    public void ModifyAssetDocuments(List<CreateAssetDocumentArg> args)
+    {
+        var activeEntities = _assetDocuments.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.DocumentId == x.DocumentId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.DocumentId.Value == x.DocumentId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _assetDocuments.FirstOrDefault(x => x.DocumentId.Value == arg.DocumentId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = AssetDocument.Create(arg);
+                _assetDocuments.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    
+    
+    public void ModifyConfigurationItemAssets(List<CreateConfigurationItemAssetArg> args)
+    {
+        var activeEntities = _configurationItemAssets.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ConfigurationItemId == x.ConfigurationItemId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ConfigurationItemId.Value == x.ConfigurationItemId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _configurationItemAssets.FirstOrDefault(x => x.ConfigurationItemId.Value == arg.ConfigurationItemId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ConfigurationItemAsset.Create(arg);
+                _configurationItemAssets.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    
+    public void ModifyComplexAssets(List<CreateComplexAssetArg> args)
+    {
+        var activeEntities = _assets.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ParentAssetId == x.ParentAssetId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ParentAssetId.Value == x.ParentAssetId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _assets.FirstOrDefault(x => x.ParentAssetId.Value == arg.ParentAssetId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ComplexAsset.Create(arg);
+                _assets.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+
+    
 }
 

@@ -24,6 +24,7 @@ using SIMA.Resources;
 using System.Text;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetAssignedStaffs.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 
 namespace SIMA.Domain.Models.Features.Auths.Departments.Entities;
 
@@ -147,7 +148,11 @@ public class Department : Entity
 
     private List<DataProcedureSupportTeam> _dataProcedureSupportTeams = new();
     public ICollection<DataProcedureSupportTeam> DataProcedureSupportTeams => _dataProcedureSupportTeams;
+    private List<ConfigurationItemSupportTeam> _mainConfigurationItemSupportTeams = new();
+    public ICollection<ConfigurationItemSupportTeam> MainConfigurationItemSupportTeams => _mainConfigurationItemSupportTeams;
 
+    private List<ConfigurationItemSupportTeam> _subsitutedConfigurationItemSupportTeams = new();
+    public ICollection<ConfigurationItemSupportTeam> SubsitutedConfigurationItemSupportTeams => _subsitutedConfigurationItemSupportTeams;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

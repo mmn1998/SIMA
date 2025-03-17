@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 
 namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios;
@@ -23,19 +22,19 @@ public class ScenarioBusinessContinuityPlanAssumptionConfiguration : IEntityType
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.Property(x => x.ScenarioId)
+        entity.Property(x => x.BusinessContinuityPlanScenarioCobitScenarioId)
       .HasConversion(
       x => x.Value,
-      x => new ScenarioId(x)
+      x => new(x)
       );
-        entity.HasOne(x => x.Scenario)
+        entity.HasOne(x => x.BusinessContinuityPlanScenarioCobitScenario)
             .WithMany(x => x.ScenarioBusinessContinuityPlanAssumptions)
-            .HasForeignKey(x => x.ScenarioId);
+            .HasForeignKey(x => x.BusinessContinuityPlanScenarioCobitScenarioId);
 
         entity.Property(x => x.BusinessContinuityPlanAssumptionId)
       .HasConversion(
       x => x.Value,
-      x => new BusinessContinuityPlanAssumptionId(x)
+      x => new(x)
       );
         entity.HasOne(x => x.BusinessContinuityPlanAssumption)
             .WithMany(x => x.ScenarioBusinessContinuityPlanAssumptions)
