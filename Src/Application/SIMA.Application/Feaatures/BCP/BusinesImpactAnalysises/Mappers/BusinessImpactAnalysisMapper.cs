@@ -14,7 +14,7 @@ public class BusinessImpactAnalysisMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
-            .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            //.ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
         CreateMap<CreateBusinessImpactAnalysisArg, CreateBusinessImpactAnalysisIssueArg> ()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

@@ -56,7 +56,7 @@ public class BusinessContinuityStrategyMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
             .ForMember(dest => dest.ExpireDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.ExpireDate)))
-            .ForMember(dest => dest.ReviewDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.ReviewDate)))
+            
             ;
     }
 }

@@ -34,25 +34,25 @@ ICommandHandler<ModifySenarioCommand, Result<long>>, ICommandHandler<DeleteScena
         arg.CreatedBy = _simaIdentity.UserId;
         var entity = await Scenario.Create(arg, _service);
 
-        if(request.ScenarioBusinessContinuityPlanVersionings is not null && request.ScenarioBusinessContinuityPlanVersionings.Count() > 0)
-        {
-            var scenarioBusinessContinuityPlanVersioningArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanVersioningArg>>(request.ScenarioBusinessContinuityPlanVersionings);
-            foreach (var permission in scenarioBusinessContinuityPlanVersioningArg)
-            {
-                permission.CreatedBy = _simaIdentity.UserId;
-            }
-            await entity.AddScenarioBusinessContinuityPlanVersioning(scenarioBusinessContinuityPlanVersioningArg, entity.Id.Value);
-        }
+        //if(request.ScenarioBusinessContinuityPlanVersionings is not null && request.ScenarioBusinessContinuityPlanVersionings.Count() > 0)
+        //{
+        //    var scenarioBusinessContinuityPlanVersioningArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanVersioningArg>>(request.ScenarioBusinessContinuityPlanVersionings);
+        //    foreach (var permission in scenarioBusinessContinuityPlanVersioningArg)
+        //    {
+        //        permission.CreatedBy = _simaIdentity.UserId;
+        //    }
+        //    await entity.AddScenarioBusinessContinuityPlanVersioning(scenarioBusinessContinuityPlanVersioningArg, entity.Id.Value);
+        //}
 
-        if (request.ScenarioBusinessContinuityPlanAssumptions is not null && request.ScenarioBusinessContinuityPlanAssumptions.Count() > 0)
-        {
-            var scenarioBusinessContinuityPlanAssumptionsArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanAssumptionArg>>(request.ScenarioBusinessContinuityPlanAssumptions);
-            foreach (var permission in scenarioBusinessContinuityPlanAssumptionsArg)
-            {
-                permission.CreatedBy = _simaIdentity.UserId;
-            }
-            await entity.AddScenarioBusinessContinuityPlanAssumption(scenarioBusinessContinuityPlanAssumptionsArg, entity.Id.Value);
-        }
+        //if (request.ScenarioBusinessContinuityPlanAssumptions is not null && request.ScenarioBusinessContinuityPlanAssumptions.Count() > 0)
+        //{
+        //    var scenarioBusinessContinuityPlanAssumptionsArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanAssumptionArg>>(request.ScenarioBusinessContinuityPlanAssumptions);
+        //    foreach (var permission in scenarioBusinessContinuityPlanAssumptionsArg)
+        //    {
+        //        permission.CreatedBy = _simaIdentity.UserId;
+        //    }
+        //    await entity.AddScenarioBusinessContinuityPlanAssumption(scenarioBusinessContinuityPlanAssumptionsArg, entity.Id.Value);
+        //}
 
         if (request.ScenarioPlanRecoveryCriterias is not null && request.ScenarioPlanRecoveryCriterias.Count() > 0)
         {
@@ -95,25 +95,25 @@ ICommandHandler<ModifySenarioCommand, Result<long>>, ICommandHandler<DeleteScena
         arg.ModifiedBy = _simaIdentity.UserId;
         await entity.Modify(arg, _service);
 
-        if (request.ScenarioBusinessContinuityPlanVersionings is not null || request.ScenarioBusinessContinuityPlanVersionings.Count() > 0)
-        {
-            var scenarioBusinessContinuityPlanVersioningArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanVersioningArg>>(request.ScenarioBusinessContinuityPlanVersionings);
-            foreach (var permission in scenarioBusinessContinuityPlanVersioningArg)
-            {
-                permission.CreatedBy = _simaIdentity.UserId;
-            }
-            await entity.AddScenarioBusinessContinuityPlanVersioning(scenarioBusinessContinuityPlanVersioningArg, entity.Id.Value);
-        }
+        //if (request.ScenarioBusinessContinuityPlanVersionings is not null || request.ScenarioBusinessContinuityPlanVersionings.Count() > 0)
+        //{
+        //    var scenarioBusinessContinuityPlanVersioningArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanVersioningArg>>(request.ScenarioBusinessContinuityPlanVersionings);
+        //    foreach (var permission in scenarioBusinessContinuityPlanVersioningArg)
+        //    {
+        //        permission.CreatedBy = _simaIdentity.UserId;
+        //    }
+        //    await entity.AddScenarioBusinessContinuityPlanVersioning(scenarioBusinessContinuityPlanVersioningArg, entity.Id.Value);
+        //}
 
-        if (request.ScenarioBusinessContinuityPlanAssumptions is not null || request.ScenarioBusinessContinuityPlanAssumptions.Count() > 0)
-        {
-            var scenarioBusinessContinuityPlanAssumptionsArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanAssumptionArg>>(request.ScenarioBusinessContinuityPlanAssumptions);
-            foreach (var permission in scenarioBusinessContinuityPlanAssumptionsArg)
-            {
-                permission.CreatedBy = _simaIdentity.UserId;
-            }
-            await entity.AddScenarioBusinessContinuityPlanAssumption(scenarioBusinessContinuityPlanAssumptionsArg, entity.Id.Value);
-        }
+        //if (request.ScenarioBusinessContinuityPlanAssumptions is not null || request.ScenarioBusinessContinuityPlanAssumptions.Count() > 0)
+        //{
+        //    var scenarioBusinessContinuityPlanAssumptionsArg = _mapper.Map<List<CreateScenarioBusinessContinuityPlanAssumptionArg>>(request.ScenarioBusinessContinuityPlanAssumptions);
+        //    foreach (var permission in scenarioBusinessContinuityPlanAssumptionsArg)
+        //    {
+        //        permission.CreatedBy = _simaIdentity.UserId;
+        //    }
+        //    await entity.AddScenarioBusinessContinuityPlanAssumption(scenarioBusinessContinuityPlanAssumptionsArg, entity.Id.Value);
+        //}
 
         if (request.ScenarioPlanRecoveryCriterias is not null || request.ScenarioPlanRecoveryCriterias.Count() > 0)
         {

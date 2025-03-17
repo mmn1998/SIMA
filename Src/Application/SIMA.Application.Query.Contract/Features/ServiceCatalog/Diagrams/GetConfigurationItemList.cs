@@ -5,6 +5,6 @@ namespace SIMA.Application.Query.Contract.Features.ServiceCatalog.Diagrams;
 
 public class GetConfigurationItemList: IQuery<Result<List<GetConfigurationItemListResult>>>
 {
-    public int? Type { get; set; }
+    public string? Type { get; set; }
     public long? Id { get; set; }
 }

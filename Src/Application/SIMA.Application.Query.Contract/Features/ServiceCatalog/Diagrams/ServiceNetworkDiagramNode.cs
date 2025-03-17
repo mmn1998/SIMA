@@ -6,4 +6,5 @@ public class ServiceNetworkDiagramNode
     public string? Label { get; set; }
     public string? Tag { get; set; }
     public long Score { get; set; }
+    public string Cluster{ get; set; }
 }

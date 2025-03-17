@@ -33,6 +33,7 @@ public class CreateAssetCommand : ICommand<Result<long>>
     public decimal? OwnershipPrepaymentValue { get; set; }
     public decimal? OwnershipPaymentValue { get; set; }
     public ICollection<CreateAssetCustomFeildValueCommand>? AssetCustomFeildValueList { get; set; }
+    // ToDo Remove
     public ICollection<CreateAssetCustomFeildOptionCommand>? AssetCustomFeildOptionList { get; set; }
     public ICollection<CreateAssetAssignedStaffCommand>? AssetAssignedStaffList { get; set; }
     public ICollection<long>? ServiceAssetList { get; set; }

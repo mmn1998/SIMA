@@ -34,14 +34,7 @@ public class BusinessContinuityStrategyCommandHandler : ICommandHandler<CreateBu
     {
         var arg = _mapper.Map<CreateBusinessContinuityStategyArg>(request);
         arg.CreatedBy = _simaIdentity.UserId;
-        #region GenerateCode
-        var lastRequest = await _repository.GetLast();
-
-        if (lastRequest is not null)
-            arg.Code = (Convert.ToInt32(lastRequest.Code) + 1).ToString();
-        else
-            arg.Code = "101";
-        #endregion
+        
         var entity = await BusinessContinuityStrategy.Create(arg, _service);
         #region RelatedEntities
 

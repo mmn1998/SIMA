@@ -9,7 +9,8 @@ public class ServiceCatalogDiagramQueryHandler : IQueryHandler<GetServiceNetwork
     IQueryHandler<GetServiceTreeDiagramQuery, Result<List<GetServiceTreeDiagramQueryResult>>>, IQueryHandler<GetProductList, Result<List<GetProductListResult>>>,
     IQueryHandler<GetChannelList, Result<List<GetChannelListResult>>>,IQueryHandler<GetAssetList, Result<List<GetAssetListResult>>>,
     IQueryHandler<GetAssignedStaffList, Result<List<GetAssignedStaffListResult>>>,IQueryHandler<GetRiskList, Result<List<GetRiskListResult>>>,
-    IQueryHandler<GetApiList, Result<List<GetApiListResult>>>,IQueryHandler<GetProcedureList, Result<List<GetProcedureListResult>>>
+    IQueryHandler<GetApiList, Result<List<GetApiListResult>>>,IQueryHandler<GetProcedureList, Result<List<GetProcedureListResult>>>,
+    IQueryHandler<GetConfigurationItemList, Result<List<GetConfigurationItemListResult>>>
     
 {
     private readonly IServiceCatalogDiagramQueryRepository _repository;
@@ -69,6 +70,12 @@ public class ServiceCatalogDiagramQueryHandler : IQueryHandler<GetServiceNetwork
     public async Task<Result<List<GetProcedureListResult>>> Handle(GetProcedureList request, CancellationToken cancellationToken)
     {
         var result = await _repository.GetProcedureList(request);
+        return Result.Ok(result);
+    }
+
+    public async Task<Result<List<GetConfigurationItemListResult>>> Handle(GetConfigurationItemList request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetConfigurationItemList(request);
         return Result.Ok(result);
     }
 }

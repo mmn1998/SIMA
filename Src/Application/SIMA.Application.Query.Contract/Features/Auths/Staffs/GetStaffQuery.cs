@@ -10,4 +10,7 @@ public class GetStaffQuery : IQuery<Result<GetStaffQueryResult>>
 public class GetStaffByDepartmentQuery : IQuery<Result<IEnumerable<GetStaffQueryResult>>>
 {
     public long? DepartmentId { get; set; }
+}public class GetStaffByBranchQuery : IQuery<Result<IEnumerable<GetStaffQueryResult>>>
+{
+    public long BranchId { get; set; }
 }

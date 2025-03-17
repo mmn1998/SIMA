@@ -8,7 +8,8 @@ namespace SIMA.Application.Query.Features.Auths.Staffs;
 public class StaffQueryhandler : IQueryHandler<GetStaffQuery, Result<GetStaffQueryResult>>,
     IQueryHandler<GetAllStaffQuery, Result<IEnumerable<GetStaffQueryResult>>>,
     IQueryHandler<GetStaffByDepartmentQuery, Result<IEnumerable<GetStaffQueryResult>>>,
-    IQueryHandler<GetStaffByStaffNumberQuery, Result<GetStaffByStaffNumberQueryResult>>
+    IQueryHandler<GetStaffByStaffNumberQuery, Result<GetStaffByStaffNumberQueryResult>>,
+    IQueryHandler<GetStaffByBranchQuery, Result<IEnumerable<GetStaffQueryResult>>>
 {
     private readonly IStaffQueryRepository _repository;
 
@@ -36,6 +37,12 @@ public class StaffQueryhandler : IQueryHandler<GetStaffQuery, Result<GetStaffQue
     public async Task<Result<GetStaffByStaffNumberQueryResult>> Handle(GetStaffByStaffNumberQuery request, CancellationToken cancellationToken)
     {
         var result = await _repository.FindByStaffNumber(request.StaffNumber);
+        return Result.Ok(result);
+    }
+
+    public async Task<Result<IEnumerable<GetStaffQueryResult>>> Handle(GetStaffByBranchQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetAllByBranchId(request.BranchId);
         return Result.Ok(result);
     }
 }
