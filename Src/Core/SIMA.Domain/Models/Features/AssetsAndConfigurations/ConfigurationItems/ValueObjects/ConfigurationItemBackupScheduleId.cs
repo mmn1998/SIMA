@@ -1,1 +1,0 @@
-﻿public record ConfigurationItemBackupScheduleId(long Value);

@@ -1,1 +1,0 @@
-﻿public record BusinessContinuityPlanScenarioCobitScenarioId(long Value);

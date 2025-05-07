@@ -1,1 +1,0 @@
-﻿public record IssuePriorityId(long Value);

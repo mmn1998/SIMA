@@ -1,1 +1,0 @@
-﻿public record AssetCustomFieldValueId(long Value);

@@ -1,9 +1,0 @@
-﻿using Sima.Framework.Core.Mediator;
-using SIMA.Framework.Common.Response;
-
-namespace SIMA.Application.Contract.Features.AssetAndConfigurations.AssetTechnicalStatuses;
-
-public class DeleteAssetTechnicalStatusCommand : ICommand<Result<long>>
-{
-    public long Id { get; set; }
-}

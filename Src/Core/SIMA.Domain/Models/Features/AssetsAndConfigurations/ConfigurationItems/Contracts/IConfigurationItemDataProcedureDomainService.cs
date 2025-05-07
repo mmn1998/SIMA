@@ -1,8 +1,0 @@
-﻿using SIMA.Framework.Core.Domain;
-
-namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Contracts;
-
-public interface IConfigurationItemDataProcedureDomainService : IDomainService
-{
-    
-}
