@@ -1,0 +1,330 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="100002Code" xml:space="preserve">
+    <value>100002</value>
+  </data>
+  <data name="100003Code" xml:space="preserve">
+    <value>100003</value>
+  </data>
+  <data name="100007Code" xml:space="preserve">
+    <value>100007</value>
+  </data>
+  <data name="100008Code" xml:space="preserve">
+    <value>100008</value>
+  </data>
+  <data name="100009Code" xml:space="preserve">
+    <value>100009</value>
+  </data>
+  <data name="100011Code" xml:space="preserve">
+    <value>100011</value>
+  </data>
+  <data name="100015Code" xml:space="preserve">
+    <value>100015</value>
+  </data>
+  <data name="100016Code" xml:space="preserve">
+    <value>100016</value>
+  </data>
+  <data name="100017Code" xml:space="preserve">
+    <value>100017</value>
+  </data>
+  <data name="100018Code" xml:space="preserve">
+    <value>100018</value>
+  </data>
+  <data name="100022Code" xml:space="preserve">
+    <value>100022</value>
+  </data>
+  <data name="100027Code" xml:space="preserve">
+    <value>100027</value>
+  </data>
+  <data name="100028Code" xml:space="preserve">
+    <value>100028</value>
+  </data>
+  <data name="100031Code" xml:space="preserve">
+    <value>100031</value>
+  </data>
+  <data name="100033Code" xml:space="preserve">
+    <value>100033</value>
+  </data>
+  <data name="100035Code" xml:space="preserve">
+    <value>100035</value>
+  </data>
+  <data name="100039Code" xml:space="preserve">
+    <value>100039</value>
+  </data>
+  <data name="100040Code" xml:space="preserve">
+    <value>100040</value>
+  </data>
+  <data name="100041Code" xml:space="preserve">
+    <value>100041</value>
+  </data>
+  <data name="100042Code" xml:space="preserve">
+    <value>100042</value>
+  </data>
+  <data name="100047Code" xml:space="preserve">
+    <value>100047</value>
+  </data>
+  <data name="100048Code" xml:space="preserve">
+    <value>100048</value>
+  </data>
+  <data name="100051Code" xml:space="preserve">
+    <value>100051</value>
+  </data>
+  <data name="100052Code" xml:space="preserve">
+    <value>100052</value>
+  </data>
+  <data name="100053Code" xml:space="preserve">
+    <value>100053</value>
+  </data>
+  <data name="100054Code" xml:space="preserve">
+    <value>100054</value>
+  </data>
+  <data name="100055Code" xml:space="preserve">
+    <value>100055</value>
+  </data>
+  <data name="100056Code" xml:space="preserve">
+    <value>100056</value>
+  </data>
+  <data name="100057Code" xml:space="preserve">
+    <value>100057</value>
+  </data>
+  <data name="100058Code" xml:space="preserve">
+    <value>100058</value>
+  </data>
+  <data name="100059Code" xml:space="preserve">
+    <value>100059</value>
+  </data>
+  <data name="100060Code" xml:space="preserve">
+    <value>100060</value>
+  </data>
+  <data name="100061Code" xml:space="preserve">
+    <value>100061</value>
+  </data>
+  <data name="100062Code" xml:space="preserve">
+    <value>100062</value>
+  </data>
+  <data name="100063Code" xml:space="preserve">
+    <value>100063</value>
+  </data>
+  <data name="100064Code" xml:space="preserve">
+    <value>100064</value>
+  </data>
+  <data name="100065Code" xml:space="preserve">
+    <value>100065</value>
+  </data>
+  <data name="100066Code" xml:space="preserve">
+    <value>100066</value>
+  </data>
+  <data name="100067Code" xml:space="preserve">
+    <value>100067</value>
+  </data>
+  <data name="100068Code" xml:space="preserve">
+    <value>100068</value>
+  </data>
+  <data name="100069Code" xml:space="preserve">
+    <value>100069</value>
+  </data>
+  <data name="100070Code" xml:space="preserve">
+    <value>100070</value>
+  </data>
+  <data name="200Code" xml:space="preserve">
+    <value>200</value>
+  </data>
+  <data name="400Code" xml:space="preserve">
+    <value>400</value>
+  </data>
+  <data name="401Code" xml:space="preserve">
+    <value>401</value>
+  </data>
+  <data name="404Code" xml:space="preserve">
+    <value>404</value>
+  </data>
+  <data name="500Code" xml:space="preserve">
+    <value>500</value>
+  </data>
+  <data name="MobileRegex" xml:space="preserve">
+    <value>(0|\+98)?([ ]|-|[()]){0,2}9[1|2|3|4]([ ]|-|[()]){0,2}(?:[0-9]([ ]|-|[()]){0,2}){8}</value>
+  </data>
+  <data name="PhoneRegex" xml:space="preserve">
+    <value>^(0|\+98)[1-9]{2}[0-9]{8}$</value>
+  </data>
+  <data name="PostalCodeRegex" xml:space="preserve">
+    <value>\b(?!(\d)\1{3})[13-9]{4}[1346-9][013-9]{5}\b</value>
+  </data>
+  <data name="100071Code" xml:space="preserve">
+    <value>100071</value>
+  </data>
+  <data name="100072Code" xml:space="preserve">
+    <value>100072</value>
+  </data>
+  <data name="NationalIdError" xml:space="preserve">
+    <value>شناسه ملی وارد شده نامعتبر میباشد.</value>
+  </data>
+  <data name="100100Code" xml:space="preserve">
+    <value>100100</value>
+  </data>
+  <data name="1001001Code" xml:space="preserve">
+    <value>1001001</value>
+  </data>
+  <data name="100102Code" xml:space="preserve">
+    <value>100102</value>
+  </data>
+  <data name="100103Code" xml:space="preserve">
+    <value>100103</value>
+  </data>
+  <data name="BrokerNotValid" xml:space="preserve">
+    <value>کارگزار انتخابی با کارگزار پاسخ استعلام مطابقت ندارد</value>
+  </data>
+  <data name="100104Code" xml:space="preserve">
+    <value>100104</value>
+  </data>
+  <data name="100105Code" xml:space="preserve">
+    <value>100105</value>
+  </data>
+  <data name="100107Code" xml:space="preserve">
+    <value>100107</value>
+  </data>
+  <data name="100106Code" xml:space="preserve">
+    <value>100106</value>
+  </data>
+  <data name="100111Code" xml:space="preserve">
+    <value>100111</value>
+  </data>
+  <data name="100108Code" xml:space="preserve">
+    <value>100108</value>
+  </data>
+  <data name="100109Code" xml:space="preserve">
+    <value>100109</value>
+  </data>
+  <data name="100110Code" xml:space="preserve">
+    <value>100110</value>
+  </data>
+  <data name="100112Code" xml:space="preserve">
+    <value>100112</value>
+  </data>
+  <data name="100113Code" xml:space="preserve">
+    <value>100113</value>
+  </data>
+  <data name="100114Code" xml:space="preserve">
+    <value>100114</value>
+  </data>
+  <data name="100115Code" xml:space="preserve">
+    <value>100115</value>
+  </data>
+</root>

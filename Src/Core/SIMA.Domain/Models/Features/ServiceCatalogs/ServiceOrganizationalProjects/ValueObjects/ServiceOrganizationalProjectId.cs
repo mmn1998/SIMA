@@ -1,0 +1,1 @@
+﻿public record ServiceOrganizationalProjectId(long Value);

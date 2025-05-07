@@ -1,0 +1,3 @@
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.InherentOccurrenceProbabilityValues.ValueObjects;
+
+public record InherentOccurrenceProbabilityValueId(long Value);

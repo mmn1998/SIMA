@@ -1,0 +1,100 @@
+﻿namespace SIMA.Application.Services.BehsazanServices.Response
+{
+    public class GetTrustCurrencyDraftMansha
+    {
+        public DateTime Timestamp { get; set; }
+        public int Status { get; set; }
+        public string? Error { get; set; }
+        public string? Message { get; set; }
+        public string? Path { get; set; }
+        public string? Exp { get; set; }
+        public List<ResponseDate> Data { get; set; }
+    }
+}
+public class ResponseDate
+{
+    public string? orderingName { get; set; }
+    public string? orderingExtAccNo { get; set; }
+    public long? orderId { get; set; }
+    public string? draftId { get; set; }
+    public decimal? instructedAmnt { get; set; }
+    public int? instructedArzCd { get; set; }
+    public decimal? settelmentAmnt { get; set; }
+    public decimal? bSettelmentAmnt { get; set; }
+    public decimal? bInstructedAmnt { get; set; }
+    public int regDate { get; set; }
+    public int settelmentArzCd { get; set; }
+    public int draftFrom { get; set; }
+    public string? draftFromMsg { get; set; }
+    public decimal exchngChrgAmnt { get; set; }
+    public long extCustCd { get; set; }
+    public int blockAdeNo { get; set; }
+    public int agentShareSts { get; set; }
+    public string? agentShareStsMsg { get; set; }
+    public int crspndntAccTyp { get; set; }
+    public string? crspndntAccTypMsg { get; set; }
+    public decimal chrgAmnt { get; set; }
+    public int chrgTyp { get; set; }
+    public string? chrgTypMsg { get; set; }
+    public int rvwrslt { get; set; }
+    public string? rvwrsltMsg { get; set; }
+    public int? issuanceSource { get; set; }
+    public string? issuanceSourceMsg { get; set; }
+    public string? usrCd { get; set; }
+    public int? regBranchCd { get; set; }
+    public string? titlex { get; set; }
+    public int valueDate { get; set; }
+    public string? crspndntBank { get; set; }
+    public string? typex { get; set; }
+    public decimal? detailAmnt { get; set; }
+    public string? benExtAccNo { get; set; }
+    public string? detailBic { get; set; }
+    public int? draftSts { get; set; }
+    public string? draftStsMsg { get; set; }
+    public int? draftDestTyp { get; set; }
+    public string? draftDestTypMsg { get; set; }
+    public string? interMedBank { get; set; }
+    public string? payerBank { get; set; }
+    public string? benIban { get; set; }
+    public string? orderingIBAN { get; set; }
+    public string? benName { get; set; }
+    public string? benTel { get; set; }
+    public string? benAddress { get; set; }
+    public long? benAccNo { get; set; }
+    public decimal? setelmentAmntUoro { get; set; }
+    public decimal? instructedAmntUoro { get; set; }
+    public string? benPassport { get; set; }
+    public decimal blockedAmnt { get; set; }
+    public decimal? bSettlementAmnt { get; set; }
+    public int confirmDate { get; set; }
+    public int confirmTime { get; set; }
+    public string? crspndntBic { get; set; }
+    public int disapprovalReasonCd { get; set; }
+    public string? disapprovalReasonDesc { get; set; }
+    public decimal? draftNo { get; set; }
+    public string? draftReasonDesc { get; set; }
+    public string? draftRmk { get; set; }
+    public int facilityType { get; set; }
+    public string? facilityTypeMsg { get; set; }
+    public string? interMedBankBic { get; set; }
+    public string? interMedBankName { get; set; }
+    public long nationalCode { get; set; }
+    public string? orderingAddress { get; set; }
+    public string? orderingTel { get; set; }
+    public string? payerBankBic { get; set; }
+    public int? payTyp { get; set; }
+    public int? remittanceInfoCd { get; set; }
+    public string? remittanceInfoDesc { get; set; }
+    public int reqValueTyp { get; set; }
+    public string? reqValueTypMsg { get; set; }
+    public decimal? revokeArzAmnt { get; set; }
+    public int? revokeArzCd { get; set; }
+    public string? revokeDraftRefNo { get; set; }
+    public int? revokeDt { get; set; }
+    public int? revokeReason { get; set; }
+    public string? revokeReasonMsg { get; set; }
+    public int? revokeValueDt { get; set; }
+    public string? rvwRmk { get; set; }
+    public float? settlementAmnt { get; set; }
+    public int? settlementArzCd { get; set; }
+}

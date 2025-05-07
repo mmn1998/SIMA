@@ -1,0 +1,3 @@
+﻿namespace SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.ValueObjects;
+
+public record CurrentOccurrenceProbabilityValueId(long Value);

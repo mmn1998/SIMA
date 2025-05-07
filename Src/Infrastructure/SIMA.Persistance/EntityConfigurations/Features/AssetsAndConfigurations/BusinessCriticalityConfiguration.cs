@@ -1,0 +1,28 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities;
+
+namespace SIMA.Persistance.EntityConfigurations.Features.AssetsAndConfigurations;
+
+public class BusinessCriticalityConfiguration : IEntityTypeConfiguration<BusinessCriticality>
+{
+    public void Configure(EntityTypeBuilder<BusinessCriticality> entity)
+    {
+        entity.ToTable("BusinessCriticality", "AssetAndConfiguration");
+
+        entity.HasIndex(e => e.Code).IsUnique();
+        entity.Property(x => x.Id)
+            .HasConversion(
+             v => v.Value,
+             v => new BusinessCriticalityId(v)).ValueGeneratedNever();
+        entity.HasKey(i => i.Id);
+        entity.Property(e => e.Code).HasMaxLength(50);
+        entity.Property(e => e.CreatedAt)
+            .HasDefaultValueSql("(getdate())")
+            .HasColumnType("datetime");
+        entity.Property(e => e.ModifiedAt)
+            .IsRowVersion()
+            .IsConcurrencyToken();
+        entity.Property(e => e.Name).HasMaxLength(200);
+    }
+}

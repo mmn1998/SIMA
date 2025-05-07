@@ -1,0 +1,44 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
+
+namespace SIMA.Persistance.EntityConfigurations.Features.BCP.Scenarios;
+
+public class ScenarioBusinessContinuityPlanAssumptionConfiguration : IEntityTypeConfiguration<ScenarioBusinessContinuityPlanAssumption>
+{
+    public void Configure(EntityTypeBuilder<ScenarioBusinessContinuityPlanAssumption> entity)
+    {
+        entity.ToTable("ScenarioBusinessContinuityPlanAssumption", "BCP");
+        entity.Property(x => x.Id)
+            .HasConversion(
+             v => v.Value,
+             v => new ScenarioBusinessContinuityPlanAssumptionId(v)).ValueGeneratedNever();
+        entity.HasKey(i => i.Id);
+        entity.Property(e => e.CreatedAt)
+            .HasDefaultValueSql("(getdate())")
+            .HasColumnType("datetime");
+
+        entity.Property(e => e.ModifiedAt)
+            .IsRowVersion()
+            .IsConcurrencyToken();
+
+        entity.Property(x => x.BusinessContinuityPlanScenarioCobitScenarioId)
+      .HasConversion(
+      x => x.Value,
+      x => new(x)
+      );
+        entity.HasOne(x => x.BusinessContinuityPlanScenarioCobitScenario)
+            .WithMany(x => x.ScenarioBusinessContinuityPlanAssumptions)
+            .HasForeignKey(x => x.BusinessContinuityPlanScenarioCobitScenarioId);
+
+        entity.Property(x => x.BusinessContinuityPlanAssumptionId)
+      .HasConversion(
+      x => x.Value,
+      x => new(x)
+      );
+        entity.HasOne(x => x.BusinessContinuityPlanAssumption)
+            .WithMany(x => x.ScenarioBusinessContinuityPlanAssumptions)
+            .HasForeignKey(x => x.BusinessContinuityPlanAssumptionId);
+
+    }
+}

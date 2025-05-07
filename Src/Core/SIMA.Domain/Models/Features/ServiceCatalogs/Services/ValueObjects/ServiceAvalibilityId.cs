@@ -1,0 +1,1 @@
+﻿public record ServiceAvalibilityId(long Value);

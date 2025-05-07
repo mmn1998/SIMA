@@ -1,0 +1,90 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Features\AssetsAndConfigurations\Categories - Copy %283%29\**" />
+    <Compile Remove="Models\Features\AssetsAndConfigurations\DataProcedureDocuments\**" />
+    <Compile Remove="Models\Features\RiskManagement\RiskValueStrategies\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
+    <Compile Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+    <EmbeddedResource Remove="Models\Features\AssetsAndConfigurations\Categories - Copy %283%29\**" />
+    <EmbeddedResource Remove="Models\Features\AssetsAndConfigurations\DataProcedureDocuments\**" />
+    <EmbeddedResource Remove="Models\Features\RiskManagement\RiskValueStrategies\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
+    <EmbeddedResource Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+    <None Remove="Models\Features\AssetsAndConfigurations\Categories - Copy %283%29\**" />
+    <None Remove="Models\Features\AssetsAndConfigurations\DataProcedureDocuments\**" />
+    <None Remove="Models\Features\RiskManagement\RiskValueStrategies\**" />
+    <None Remove="Models\Features\ServiceCatalogs\ServicePriorities\Exceptions\**" />
+    <None Remove="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\**" />
+    <None Remove="Models\Features\ServiceCatalogs\Services\Exceptions\**" />
+    <None Remove="Models\Features\ServiceCatalogs\Services\Interfaces\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <PackageReference Include="SIMA.Framework.Common" Version="2.5.31" />
+    <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.2.3" />
+    <PackageReference Include="SIMA.Framework.WebApi" Version="1.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\SIMA.Resources\SIMA.Resources.csproj" />
+    <ProjectReference Include="..\..\Application\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Features\AccessManagement\AccessRequests\Contracts\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Args\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Contracts\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\Entities\" />
+    <Folder Include="Models\Features\AssetsAndConfigurations\ConfigurationItemCustomFieldValues\ValueObjects\" />
+    <Folder Include="Models\Features\Auths\ResponsibleTypes\Exceptions\" />
+    <Folder Include="Models\Features\BCP\BusinessContinuityPlanStratgies\Contracts\" />
+    <Folder Include="Models\Features\IssueManagement\IssueApprovals\Args\" />
+    <Folder Include="Models\Features\IssueManagement\IssueApprovals\Entities\" />
+    <Folder Include="Models\Features\IssueManagement\IssueApprovals\ValueObjects\" />
+    <Folder Include="Models\Features\Logistics\OrderingItems\Contracts\" />
+    <Folder Include="Models\Features\Logistics\Orderings\Args\" />
+    <Folder Include="Models\Features\Logistics\PaymentCommands\Args\" />
+    <Folder Include="Models\Features\Logistics\PaymentCommands\Contracts\" />
+    <Folder Include="Models\Features\Logistics\PriceEstimations\Args\" />
+    <Folder Include="Models\Features\Logistics\PriceEstimations\Contracts\" />
+    <Folder Include="Models\Features\ServiceCatalogs\CriticalActivities\Exceptions\" />
+    <Folder Include="Models\Features\Auths\CustomerTypes\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Exceptions\" />
+    <Folder Include="Models\Features\ServiceCatalogs\ServiceStatuses\Interfaces\" />
+    <Folder Include="Models\Features\Auths\UserTypes\Exceptions\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftDestinations\Args\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftDestinations\Contrcts\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftDestinations\Entities\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftDestinations\ValueObjects\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftCurrencyOrigins\Args\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftCurrencyOrigins\Contrcts\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftCurrencyOrigins\Entities\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftCurrencyOrigins\ValueObjects\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftReviewResults\Args\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftReviewResults\Contrcts\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftReviewResults\Entities\" />
+    <Folder Include="Models\Features\TrustyDrafts\DraftReviewResults\ValueObjects\" />
+    <Folder Include="Models\Features\TrustyDrafts\CancellationResaons\Entities\" />
+    <Folder Include="Models\Features\TrustyDrafts\CancellationResaons\Contrcts\" />
+    <Folder Include="Models\Features\TrustyDrafts\CancellationResaons\ValueObjects\" />
+    <Folder Include="Models\Features\TrustyDrafts\CancellationResaons\Args\" />
+    <Folder Include="Models\Features\TrustyDrafts\Reconsilations\Args\" />
+    <Folder Include="Models\Features\TrustyDrafts\Reconsilations\Contracts\" />
+    <Folder Include="Models\Features\TrustyDrafts\TransactionHistories\Args\" />
+    <Folder Include="Models\Features\TrustyDrafts\TransactionHistories\Contracts\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,1 @@
+﻿public record ServiceCategoryId(long Value);

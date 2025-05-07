@@ -1,0 +1,9 @@
+﻿using SIMA.Framework.Common.Request;
+using SIMA.Framework.Common.Response;
+using SIMA.Framework.Core.Mediator;
+
+namespace SIMA.Application.Query.Contract.Features.SecurityCommitees.Cartables;
+
+public class GetAllCartableQuery : BaseRequest, IQuery<Result<IEnumerable<GetAllCartableQueryResult>>>
+{
+}

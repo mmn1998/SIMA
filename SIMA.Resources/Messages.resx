@@ -1,0 +1,742 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessDeny" xml:space="preserve">
+    <value>شما مجاز به دسترسی به این بخش نمی باشید</value>
+  </data>
+  <data name="AccessDeny1" xml:space="preserve">
+    <value>شما مجاز به دسترسی به این بخش نمی باشید</value>
+  </data>
+  <data name="AddressTypeCodeIsNotNullable" xml:space="preserve">
+    <value>کد آدرس اجباری است</value>
+  </data>
+  <data name="AddressTypeNameIsNotNullable" xml:space="preserve">
+    <value>نام اجباری است</value>
+  </data>
+  <data name="BranchDistanceException" xml:space="preserve">
+    <value>شعبه ها نباید نزدیک هم باشند!</value>
+  </data>
+  <data name="BranchLocationHasOverlapError" xml:space="preserve">
+    <value>محل انتخاب شده برای شعبه با یک شعبه دیگر همپوشانی دارد</value>
+    <comment>10006</comment>
+  </data>
+  <data name="CaptchaError" xml:space="preserve">
+    <value>عبارت امنیتی اشتباه است</value>
+    <comment>10003</comment>
+  </data>
+  <data name="ChiefAndDeputyAreSameException" xml:space="preserve">
+    <value>رئیس شعبه و معاون آن نمی تواند یک نفر باشند.</value>
+  </data>
+  <data name="CodeIsExpired" xml:space="preserve">
+    <value>کد وارد شده منقضی شده است لطفا مجدا تلاش نمایید</value>
+  </data>
+  <data name="CodeNotValid" xml:space="preserve">
+    <value>کد وارد شده اشتباه می باشد</value>
+  </data>
+  <data name="ColorHexCodeIsInorrectError" xml:space="preserve">
+    <value>کد رنگ اعالم شده صحیح نمی باشد.</value>
+    <comment>10039</comment>
+  </data>
+  <data name="ComapnyDeactiveError" xml:space="preserve">
+    <value>شرکت غیرفعال شده است.</value>
+    <comment>10030</comment>
+  </data>
+  <data name="ComapnyDeleteError" xml:space="preserve">
+    <value>شرکت حذف شده است.</value>
+    <comment>10031</comment>
+  </data>
+  <data name="CompanyNotFoundError" xml:space="preserve">
+    <value>شرکت مورد نظر یافت نشد.</value>
+    <comment>10052</comment>
+  </data>
+  <data name="ConfirmNewPasswordIsNull" xml:space="preserve">
+    <value> لطفا تکرار کلمه عبور جدید را وارد نمایید</value>
+  </data>
+  <data name="ConfirmPasswordNotValid" xml:space="preserve">
+    <value>تکرار کلمه عبور با کلمه عبور جدید مغایرت دارد</value>
+  </data>
+  <data name="CreateIssueWithChechActorException" xml:space="preserve">
+    <value>شما دسترسی ایجاد مورد برای این فرایند را ندارید</value>
+  </data>
+  <data name="DeadlineIsOverDueWarning" xml:space="preserve">
+    <value>زمان ختمه وظیفه گذشته است</value>
+    <comment>20002</comment>
+  </data>
+  <data name="DepartmentDeactiveError" xml:space="preserve">
+    <value>دپارتمان غیرفعال شده است.</value>
+    <comment>10032</comment>
+  </data>
+  <data name="DepartmentDeleteError" xml:space="preserve">
+    <value>دپارتمان حذف شده است.</value>
+    <comment>10033</comment>
+  </data>
+  <data name="DepartmentNotFoundError" xml:space="preserve">
+    <value>دپارتمان مورد نظر یافت نشد.</value>
+    <comment>10053</comment>
+  </data>
+  <data name="DomainIsNotNull" xml:space="preserve">
+    <value>مقدار زیر سامانه نمیتواند خالی باشد</value>
+  </data>
+  <data name="DownloadError" xml:space="preserve">
+    <value>دانلود با خطا مواجه شد، فایل مورد نظر یافت نشد.</value>
+  </data>
+  <data name="DueDateError" xml:space="preserve">
+    <value>تاریخ وارد شده باید بیشتر از تاریخ امروز باشد</value>
+  </data>
+  <data name="ExecStoreProcedureError" xml:space="preserve">
+    <value>عملیات ثبت یا به روزرسانی در فرایند شما با خطا مواجه شده است.</value>
+  </data>
+  <data name="ExpireDateIsCloseWarning" xml:space="preserve">
+    <value>تاریخ انتقضاء رو به اتمام است</value>
+    <comment>20001</comment>
+  </data>
+  <data name="ExternalServiceException" xml:space="preserve">
+    <value>برقراری ارتباط با سرویس خارجی امکان پذیر نمی باشد</value>
+  </data>
+  <data name="FailedSendSMS" xml:space="preserve">
+    <value>خطا در ارسال پیامک</value>
+  </data>
+  <data name="FileContentNullError" xml:space="preserve">
+    <value>محتوی فایل خالی است.</value>
+  </data>
+  <data name="FileNotFoundError" xml:space="preserve">
+    <value>فایل مورد نظر یافت نشد.</value>
+    <comment>10044</comment>
+  </data>
+  <data name="FileSizeError" xml:space="preserve">
+    <value>حجم فایل بیش از حد مجاز است.</value>
+    <comment>10043</comment>
+  </data>
+  <data name="FileTypeError" xml:space="preserve">
+    <value>نوع فایل نامعتبر است!</value>
+    <comment>10042</comment>
+  </data>
+  <data name="FileTypeNotSelect" xml:space="preserve">
+    <value>جنس فایل انتخاب نشده است</value>
+  </data>
+  <data name="FileTypeNotSuppurtedError" xml:space="preserve">
+    <value>نوع فایل مورد نظر پشتیبانی نمی شود.</value>
+    <comment>10046</comment>
+  </data>
+  <data name="FileUploadError" xml:space="preserve">
+    <value>فایل صحیح بارگذاری نشده است.</value>
+    <comment>10045</comment>
+  </data>
+  <data name="FileUploadException" xml:space="preserve">
+    <value>بارگذاری فایل با خطا مواجه شد.لطفا دوباره سعی کنید</value>
+    <comment>500</comment>
+  </data>
+  <data name="GoodsConfigMustBeTheSame" xml:space="preserve">
+    <value>کالاها باید از نظر ویژگی و تنظیمات یکسان باشند.</value>
+  </data>
+  <data name="GoodsIsNull" xml:space="preserve">
+    <value>محصولی یافت نشد</value>
+  </data>
+  <data name="GroupActorDuplicateError" xml:space="preserve">
+    <value>گروه مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است.</value>
+    <comment>10026</comment>
+  </data>
+  <data name="GroupMemberShipIsDeactiveError" xml:space="preserve">
+    <value>عضویت کاربر در گروه مورد نظر غیر فعال شده است.</value>
+    <comment>10016</comment>
+  </data>
+  <data name="GroupMemberShipIsExpiredError" xml:space="preserve">
+    <value>عضویت کاربر در گروه مورد نظر منقضی شده است</value>
+    <comment>10015</comment>
+  </data>
+  <data name="GroupPermoissionDuplicateError" xml:space="preserve">
+    <value>گروه مورد نظر از پیش دارای دسترسی انتخاب شده است.</value>
+    <comment>10029</comment>
+  </data>
+  <data name="IbanIsIncorrectError" xml:space="preserve">
+    <value>شماره شبا اشتباه است.</value>
+    <comment>10038</comment>
+  </data>
+  <data name="IbanIsNotValid" xml:space="preserve">
+    <value>شماره شبا نامعتبر است</value>
+  </data>
+  <data name="InvalidUsernameOrPasswordError" xml:space="preserve">
+    <value>نام کاربری یا کلمه عبور اشتباه است</value>
+    <comment>10002</comment>
+  </data>
+  <data name="IssueCodeIsNotUnique" xml:space="preserve">
+    <value>کد مورد یکتا نمی باشد</value>
+  </data>
+  <data name="IssueDueDateError" xml:space="preserve">
+    <value>تاریخ تحویل اشتباه می باشد</value>
+  </data>
+  <data name="IssueErrorException" xml:space="preserve">
+    <value>خطا در ثبت مورد!</value>
+  </data>
+  <data name="IssueTypeDeactiveError" xml:space="preserve">
+    <value>نوع مورد غیرفعال شده است.</value>
+    <comment>10040</comment>
+  </data>
+  <data name="IssueTypeDeleteError" xml:space="preserve">
+    <value>نوع مورد حذف شده است.</value>
+    <comment>10041</comment>
+  </data>
+  <data name="IssueWeightErrorException" xml:space="preserve">
+    <value>وزن وارد شده اشتباه می باشد!</value>
+  </data>
+  <data name="LengthCodeException" xml:space="preserve">
+    <value>کد نباید از 20 کاراکتر تجاوز نماید.</value>
+  </data>
+  <data name="LengthNameException" xml:space="preserve">
+    <value>عنوان نباید از 200 کاراکتر تجاوز نماید.</value>
+  </data>
+  <data name="LengthPaymentTypeNameException" xml:space="preserve">
+    <value>عنوان نباید بیش از 200 کاراکتر باشد</value>
+  </data>
+  <data name="LocationNotFoundError" xml:space="preserve">
+    <value>منطقه جغرافیایی مورد نظر یافت نشد.</value>
+    <comment>10060</comment>
+  </data>
+  <data name="LocationTypeNotFoundError" xml:space="preserve">
+    <value>نوع منطقه جغرافیایی مورد نظر یافت نشد.</value>
+    <comment>10059</comment>
+  </data>
+  <data name="MinNumberBiggerThanMaxNumber" xml:space="preserve">
+    <value>مقدار حداقل وارد شده از مقدار حداکثر وارد شده بیشتر میباشد.</value>
+    <comment>400</comment>
+  </data>
+  <data name="MobileNumberRegexError" xml:space="preserve">
+    <value>فرمت شماره همراه وارد شده اشتباه است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="NationalCodeIsInvalidError" xml:space="preserve">
+    <value>کد ملی نا معتبر است .</value>
+    <comment>10007</comment>
+  </data>
+  <data name="NationalCodeIsNotUniqueError" xml:space="preserve">
+    <value>کد ملی مورد نظر قبلا ثبت شده است.</value>
+    <comment>100067</comment>
+  </data>
+  <data name="NationalCodeIsNotValid" xml:space="preserve">
+    <value>کد ملی نامعتبر است</value>
+  </data>
+  <data name="NewPasswordIsNull" xml:space="preserve">
+    <value>لطفا کلمه عبور جدید را وارد نمایید</value>
+  </data>
+  <data name="NoConditionWasCorrect" xml:space="preserve">
+    <value>عدم انطباق داده های فرایند.</value>
+  </data>
+  <data name="NoMiddleIssueWeightFound" xml:space="preserve">
+    <value>وزن وارد شده در بازه های موجود یافت نشد.</value>
+  </data>
+  <data name="NoMobileFoundError" xml:space="preserve">
+    <value>برای کاربر موردنظر، شماره همراه فعالی ثبت نشده است</value>
+    <comment>100068</comment>
+  </data>
+  <data name="NotAllowtoChangePassword" xml:space="preserve">
+    <value>در این بازه زمانی شما اجازه تغییر کلمه عبور را ندارید</value>
+  </data>
+  <data name="NotFound" xml:space="preserve">
+    <value>اطلاعات خواسته شده یافت نشد</value>
+  </data>
+  <data name="NotSelectViewList" xml:space="preserve">
+    <value>لطفا یک ویو انتخاب کنید!</value>
+  </data>
+  <data name="NullCodeException" xml:space="preserve">
+    <value>کد وارد شده نمیتواند خالی باشد</value>
+  </data>
+  <data name="NullException" xml:space="preserve">
+    <value>داده وارد شده نمیتواند خالی باشد</value>
+  </data>
+  <data name="OrderingAllocatedError" xml:space="preserve">
+    <value>شماره مرتبسازی مورد نظر پیش تر تخصیص یافته است.</value>
+    <comment>10049</comment>
+  </data>
+  <data name="OverNightJobIsRunningError" xml:space="preserve">
+    <value>عملیات شبانه در حال اجرا است.</value>
+    <comment>10020</comment>
+  </data>
+  <data name="ParentCompaniesCannotDefinedAsChildError" xml:space="preserve">
+    <value>شرکت های راس هرم نمی توانند مجددا به عنوان یک زیر مجموعه تعریف شوند.</value>
+    <comment>10022</comment>
+  </data>
+  <data name="PasswordNotValidException" xml:space="preserve">
+    <value>کلمه عبور معتبر نیست!</value>
+  </data>
+  <data name="PermissionIsDeactiveError" xml:space="preserve">
+    <value>دسترسی مورد نظر غیر فعال شده است</value>
+    <comment>10014</comment>
+  </data>
+  <data name="PermissionIsExpiredError" xml:space="preserve">
+    <value>دسترسی مورد نظر منقضی شده است.</value>
+    <comment>10013</comment>
+  </data>
+  <data name="PersonHasDuplicatePositionError" xml:space="preserve">
+    <value>شخص مورد نظر دارای یک سمت در دپارتمان انتخاب شده است.</value>
+    <comment>10011</comment>
+  </data>
+  <data name="PhoneNumberRegexError" xml:space="preserve">
+    <value>فرمت شماره تلفن وارد شده اشتباه است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="PositionAlreadyTakenError" xml:space="preserve">
+    <value>ظرفیت سمت مورد نظر در سازمان تکمیل شده است.</value>
+    <comment>10036</comment>
+  </data>
+  <data name="PositionDeactiveError" xml:space="preserve">
+    <value>سمت غیرفعال شده است.</value>
+    <comment>10034</comment>
+  </data>
+  <data name="PositionDeleteError" xml:space="preserve">
+    <value>سمت حذف شده است.</value>
+    <comment>10035</comment>
+  </data>
+  <data name="PositionNotFoundError" xml:space="preserve">
+    <value>سمت مورد نظر یافت نشد.</value>
+    <comment>10054</comment>
+  </data>
+  <data name="PostalCodeRegexError" xml:space="preserve">
+    <value>فرمت کد پستی وارد شده اشتباه است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="ProfileNotFoundError" xml:space="preserve">
+    <value>پروفایل مورد نظر یافت نشد.</value>
+    <comment>10055</comment>
+  </data>
+  <data name="ProgressNameRequiredException" xml:space="preserve">
+    <value>نام جریان اجباری است !</value>
+  </data>
+  <data name="ProjectAlreadyHasWorkflowWarning" xml:space="preserve">
+    <value>پروژه مورد نظر پیش تر دارای فرآیند بوده است. فرآیند جدید در کنار فرآیند)های( قبلی بروی پروژه مورد \r\nنظر تعریف شده است</value>
+    <comment>20004</comment>
+  </data>
+  <data name="ProjectMemberIsManagerError" xml:space="preserve">
+    <value>فقط یک کاربر به عنوان مدیر پروژه میتواند در نظر گرفته شود  !</value>
+  </data>
+  <data name="ProjectNotFoundError" xml:space="preserve">
+    <value>پروژه مورد نظر یافت نشد.</value>
+    <comment>10056</comment>
+  </data>
+  <data name="RangeAlreadyAllocatedError" xml:space="preserve">
+    <value>محدوده مورد نظر پیش تر تخصیص یافته است.</value>
+    <comment>10048</comment>
+  </data>
+  <data name="RangeNotValidError" xml:space="preserve">
+    <value>حداقل و حداکثر محدوده انتخاب ش ده با یکدیگر مطابقت ندارند.</value>
+    <comment>10047</comment>
+  </data>
+  <data name="RedisConnectionError" xml:space="preserve">
+    <value>خطا در برقراری ارتباط.لطفا با پشتیبانی تماس بگیرید.</value>
+    <comment>100068</comment>
+  </data>
+  <data name="RegisterNumberIsNotValid" xml:space="preserve">
+    <value>شناسه ملی نامعتبر است</value>
+  </data>
+  <data name="RequiredProp" xml:space="preserve">
+    <value>لطفا {0} تکمیل نمایید </value>
+  </data>
+  <data name="RoleActorDuplicateError" xml:space="preserve">
+    <value>نقش مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است.</value>
+    <comment>10025</comment>
+  </data>
+  <data name="RolePermoissionDuplicateError" xml:space="preserve">
+    <value>نقش مورد نظر از پیش دارای دسترسی انتخاب شده است.</value>
+    <comment>10027</comment>
+  </data>
+  <data name="ServerError" xml:space="preserve">
+    <value>خطای ناشناخته ای رخ داده است لطفا با پشتیبانی تماس بگیرید</value>
+    <comment>10004</comment>
+  </data>
+  <data name="SessionTimeoutError" xml:space="preserve">
+    <value>نشست کاربری منقضی شده است.</value>
+    <comment>10050</comment>
+  </data>
+  <data name="SomeTasksAreInteractiveInNewUpdateWarning" xml:space="preserve">
+    <value>برخی از فعالیت ها در بروزرسانی جدید غیرفعال شده اند. لذا پرونده های موجود در این فعالیت ها نیز \r\nغیرفعال می گردند</value>
+    <comment>20003</comment>
+  </data>
+  <data name="StaffCantHaveRoleInTwoBranchesException" xml:space="preserve">
+    <value>یک فرد نمی تواند به صورت همزمان در دو شعبه متفاوت سمت داشته باشند.</value>
+  </data>
+  <data name="StaffShouldBeInSelectedException" xml:space="preserve">
+    <value>پرسنل خارج از دایره شهر انتخاب شده، نمی توانند به ریاست یا معاونت آن شعبه برگزیده شوند.</value>
+  </data>
+  <data name="StateNotFoundError" xml:space="preserve">
+    <value>وضعیت مورد نظر یافت نشد.</value>
+    <comment>10058</comment>
+  </data>
+  <data name="StepNotAllowedAddApproval" xml:space="preserve">
+    <value>برای این گام امکان افزودن گزینه پذیرش وجود ندارد</value>
+  </data>
+  <data name="WorkFlowActorNameError" xml:space="preserve">
+    <value>نام بازیگران فرآیند نمیتواند بیشتر از 200 حرف باشد</value>
+  </data>
+  <data name="TimeIsOverError" xml:space="preserve">
+    <value>زمان اقدام به پایان رسید است.</value>
+    <comment>10019</comment>
+  </data>
+  <data name="TimoutError" xml:space="preserve">
+    <value>سامانه هم اکنون از دسترس خارج است. لطفا بعدا تلاش فرمایید.</value>
+    <comment>10001</comment>
+  </data>
+  <data name="TokenIsExpiredError" xml:space="preserve">
+    <value>توکن منقضی شده است.</value>
+    <comment>10012</comment>
+  </data>
+  <data name="UnAuthorize" xml:space="preserve">
+    <value>شما دسترسی به این بخش ندارید و یا نیاز به ورود مجدد دارید</value>
+  </data>
+  <data name="UniqueCodeError" xml:space="preserve">
+    <value>کد انتخاب شده تکراری است</value>
+    <comment>10005</comment>
+  </data>
+  <data name="UniqueOrderingError" xml:space="preserve">
+    <value>مقدار رتبه بندی تکراری می باشد</value>
+  </data>
+  <data name="UserActorDuplicateError" xml:space="preserve">
+    <value>کاربر مورد نظر پیش تر در محدوده این بازیگر فرآیند تعریف شده است.</value>
+    <comment>10024</comment>
+  </data>
+  <data name="UserCompanyIsMatchWithPersonCompanyError" xml:space="preserve">
+    <value>شرکت تخصیص یافته به کاربر با فهرست شرکت های فرد مالک آن کاربر منطبق نمی باشد.</value>
+    <comment>10037</comment>
+  </data>
+  <data name="UserGroupDuplicateError" xml:space="preserve">
+    <value>کاربر از پیش دارای این گروه می باشد.</value>
+    <comment>10018</comment>
+  </data>
+  <data name="UserIsDeactiveError" xml:space="preserve">
+    <value>کاربر غیر فعال شده است</value>
+    <comment>10009</comment>
+  </data>
+  <data name="UserIsDeletedError" xml:space="preserve">
+    <value>کاربر حذف شده است .</value>
+    <comment>10008</comment>
+  </data>
+  <data name="UserIsLocked" xml:space="preserve">
+    <value>کاربری شما به دلیل بیش از اندازه اشتباه وارد کردن  کلمه عبور قفل شده است لطفا با پشتیبانی سایت تماس حاصل فرمایید</value>
+  </data>
+  <data name="UserIsNotAuthorizedError" xml:space="preserve">
+    <value>کاربر مجاز نمیباشد</value>
+    <comment>10010</comment>
+  </data>
+  <data name="UserIsNotValidInActorScopeError" xml:space="preserve">
+    <value>کاربر در محدوده بازیگر مجاز برای اجرای این فعالیت نیست.</value>
+    <comment>10023</comment>
+  </data>
+  <data name="UsernameNotUniqueException" xml:space="preserve">
+    <value>نام کاربری تکراری است!</value>
+  </data>
+  <data name="UsernameNotValidException" xml:space="preserve">
+    <value>نام کاربری معتبر نیست!</value>
+  </data>
+  <data name="UserNotFoundError" xml:space="preserve">
+    <value>کاربر مورد نظر یافت نشد.</value>
+    <comment>10051</comment>
+  </data>
+  <data name="UserPermoissionDuplicateError" xml:space="preserve">
+    <value>کاربر مورد نظر از پیش دارای دسترسی انتخاب شده است.</value>
+    <comment>10028</comment>
+  </data>
+  <data name="UserRoleDuplicateError" xml:space="preserve">
+    <value>کاربر از پیش دارای این نقش می باشد</value>
+    <comment>10017</comment>
+  </data>
+  <data name="WorkFlowActorNotAccessForIsEveryOne" xml:space="preserve">
+    <value>بازیگر موردنظر اجازه دسترسی به همه کاربران را ندارد</value>
+  </data>
+  <data name="WorkFlowBpmnIsChangedError" xml:space="preserve">
+    <value>نمودار جدید جریان کاری با ساختار نمودار قبلی همخوانی ندارد.</value>
+    <comment>10021</comment>
+  </data>
+  <data name="WorkFlowCodeIsUniqueException" xml:space="preserve">
+    <value>کد فرایند نمی تواند تکراری باشد!</value>
+  </data>
+  <data name="WorkFlowNameRequiredException" xml:space="preserve">
+    <value>نام فرایند اجباری است!</value>
+  </data>
+  <data name="WorkflowNotFoundError" xml:space="preserve">
+    <value>جریان کاری مورد نظر یافت نشد.</value>
+    <comment>10057</comment>
+  </data>
+  <data name="DateOnlyError" xml:space="preserve">
+    <value>روز شروع نمیتواند بعد از روز پایان باشد.</value>
+  </data>
+  <data name="TimeOnlyError" xml:space="preserve">
+    <value>زمان شروع نمیتواند عقب تر زمان پایان باشد.</value>
+  </data>
+  <data name="QuantityNullError" xml:space="preserve">
+    <value>تعداد نمیتواند خالی باشد.</value>
+  </data>
+  <data name="UsageDurationError" xml:space="preserve">
+    <value>مدت زمان دوره مصرف برای کالا های مصرفی نمیتواند خالی باشد</value>
+  </data>
+  <data name="ServiceDuration" xml:space="preserve">
+    <value>مدت زمان دوره خدمت برای خدمات نمیتواند خالی باشد</value>
+  </data>
+  <data name="ErrorFromBehsazanService" xml:space="preserve">
+    <value>خطا در فراخوانی سرویس بهسازان</value>
+  </data>
+  <data name="ContinueForAddDraft" xml:space="preserve">
+    <value>لطفا ثبت حواحه خود را تکمیل نمایید</value>
+  </data>
+  <data name="DraftInProgress" xml:space="preserve">
+    <value>حواله مورد نظر در جریان می باشد</value>
+  </data>
+  <data name="InvalidWageRateException" xml:space="preserve">
+    <value>نوع ارز تعرفه انتخاب شده و نوع ارز استعلام انجام شده یکسان نیست.</value>
+    <comment>1001001</comment>
+  </data>
+  <data name="BranchIsNotDefinedWithUserId" xml:space="preserve">
+    <value>برای این کاربر شعبه ای تعریف نشده است!</value>
+  </data>
+  <data name="WageRateNotMatchCurrencyType" xml:space="preserve">
+    <value>نوع ارز با الگوی کارمزد مطابقت ندارد!</value>
+    <comment>100103</comment>
+  </data>
+  <data name="BrokerNotValid" xml:space="preserve">
+    <value>کارگزار انتخابی با کارگزار پاسخ استعلام مطابقت ندارد</value>
+  </data>
+  <data name="WagePercentageError" xml:space="preserve">
+    <value>کارمزد باید بین 0.01 تا 100 باشد!</value>
+    <comment>100104</comment>
+  </data>
+  <data name="NoBrokerTypeForBrokerIdError" xml:space="preserve">
+    <value>برای کارگذار ارسالی نوع کارگذاری مشخص نشده است!</value>
+    <comment>100105</comment>
+  </data>
+  <data name="RefferalLetterNotAllowCreate" xml:space="preserve">
+    <value>برای این حواله نمی توانید نامه ای ثبت کنید</value>
+    <comment>برای این حواله نمی توانید نامه ای ثبت کنید</comment>
+  </data>
+  <data name="DraftRequetAmountError" xml:space="preserve">
+    <value>مبلغ درخواستی درخواست با استعلام مطابقت ندارد</value>
+  </data>
+  <data name="CurrencyTypeError" xml:space="preserve">
+    <value>نوع ارز درخواست با استعلام مطابقت ندارد</value>
+  </data>
+  <data name="DraftTypeError" xml:space="preserve">
+    <value>نوع حواله درخواست با استعلام مطابقت ندارد</value>
+  </data>
+  <data name="UserIsNotInSameBranch" xml:space="preserve">
+    <value>ثبت کننده باید با شعبه انتخاب شده تطابق داشته باشد.</value>
+    <comment>100107</comment>
+  </data>
+  <data name="BrokerTypeErrorInTrustyDraftFinal" xml:space="preserve">
+    <value>نوع کارگزار انتخاب شده با حواله استعلام شده مطابقت ندارد.</value>
+  </data>
+  <data name="EFError" xml:space="preserve">
+    <value>میزان درصد از دست دادن دارایی در زمان وقوع تهدید نمیتواند بیشتر از 100 باشد</value>
+  </data>
+  <data name="ALEError" xml:space="preserve">
+    <value>میزان احتمال از دست دادن ارزش دارایی نمی تواند بیشتر از 100 باشد</value>
+  </data>
+  <data name="RiskPossibilityIdRiskImpactIdRiskDegreeIdUniqueError" xml:space="preserve">
+    <value>ترکیب 3 فیلد درجه، احتمال ووقع و تاثیر ریسک را نباید تکراری باشد.</value>
+    <comment>100111</comment>
+  </data>
+  <data name="BranchCodeError" xml:space="preserve">
+    <value>کد شعبه مورد نظر اشتباه است. لطفا با پشتیبانی تماس بگیرید</value>
+    <comment>100108</comment>
+  </data>
+  <data name="CustomerNumberNotValidError" xml:space="preserve">
+    <value>کد مشتزی اشتباه است!</value>
+    <comment>100109</comment>
+  </data>
+  <data name="CurrencyTypeOverCountError" xml:space="preserve">
+    <value>کاربر قادر است حداکثر سه نوع ارز را در یک استعلام درخواست نماید</value>
+    <comment>100110</comment>
+  </data>
+  <data name="CustomerIsNull" xml:space="preserve">
+    <value>مشتری وجود ندارد</value>
+    <comment>400</comment>
+  </data>
+  <data name="DepositProformaCurrencyTypeIdException" xml:space="preserve">
+    <value>درصورت انتخاب نوع پرداخت واریز به حساب، شماره پروفرما اجباری است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="OrderingNotUniqueError" xml:space="preserve">
+    <value>مقدار اولویت بندی وارد شده  تکراری میباشد لطفا مقدار دیگری انتخاب کنید.</value>
+    <comment>400</comment>
+  </data>
+  <data name="UrlError" xml:space="preserve">
+    <value>فرمت تارنمای وارد شده اشتبا است.</value>
+  </data>
+  <data name="WrongCustomerError" xml:space="preserve">
+    <value>مشتری انتخاب شده اشتباه است</value>
+    <comment>400</comment>
+  </data>
+  <data name="WrongCurrencyTypeError" xml:space="preserve">
+    <value>نوع ارز انتخاب شده اشتباه است</value>
+    <comment>400</comment>
+  </data>
+  <data name="ColorMaxLengthError" xml:space="preserve">
+    <value>رنگ بیشتر از 10 کاراکتر نمیتواند باشد!</value>
+    <comment>400</comment>
+  </data>
+  <data name="NumericValueNotUniqueError" xml:space="preserve">
+    <value>فیلد ارزش عددی باید تنها عدد یکتا باشد</value>
+  </data>
+  <data name="DraftOriginNumberAndBeneficiaryNameError" xml:space="preserve">
+    <value>فرمت شماره ثبت سفارش یا نام ذی نفع اشتباه است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="CobitIdentifierASCIIError" xml:space="preserve">
+    <value>فرمت شناسه کوبیت اشتباه است.</value>
+    <comment>400</comment>
+  </data>
+  <data name="BeneficiaryNameNotValidError" xml:space="preserve">
+    <value>نام ذینفع باید لاتین و بزرگ باشد.</value>
+    <comment>400</comment>
+  </data>
+  <data name="BeneficiaryNameContainsSpaceMoreThanLimitError" xml:space="preserve">
+    <value> نام ذینفع باید بدون کاراکتر فاصله حداقل 6 کاراکتر باشد</value>
+  </data>
+  <data name="RiskPossibilityRiskLevelRiskImpactNotUniqueError" xml:space="preserve">
+    <value>در فیلد ثبت معیار سطح بندی، ترکیب تاثیر و احتمال نمیتواند تکراری باشد</value>
+    <comment>400</comment>
+  </data>
+  <data name="OrderingIsDeactivteError" xml:space="preserve">
+    <value>مقدار مرتب سازی وارد شده غیر فعال میباشد.</value>
+  </data>
+  <data name="DocumentsAreRequiredInInquiryRequestError" xml:space="preserve">
+    <value>انتخاب فایل در بخش استعلام حواله اجباری است!</value>
+    <comment>100113</comment>
+  </data>
+  <data name="CurrenciesAreRequiredInInquiryRequestError" xml:space="preserve">
+    <value>اضافه شدن مبلغ و نوع ارز اجباری میباشد</value>
+  </data>
+  <data name="MimeTypeNotValid" xml:space="preserve">
+    <value>نوع فایل معتبر نمی باشد!!!</value>
+  </data>
+  <data name="ReferenceNumberIsDuplicated" xml:space="preserve">
+    <value>شماره مرجع  نمی تواند تکراری باشد</value>
+  </data>
+  <data name="UniqueVersionError" xml:space="preserve">
+    <value>شماره ورژن انتخاب شده تکراری است</value>
+    <comment>100115</comment>
+  </data>
+  <data name="ValidityPeriodAndCalculatedWageAndInquiryRequestCurrencyIdIsRequired" xml:space="preserve">
+    <value>فیلد های کارمزدکارگزار ، تاریخ انقضا استعلام ، مبلغ کارمزد الزامی می باشد</value>
+  </data>
+  <data name="EmptyProformaAmountError" xml:space="preserve">
+    <value>مبلغ پروفرما را وارد نمایید</value>
+  </data>
+  <data name="NumberProformaIsRequried" xml:space="preserve">
+    <value>فیلد شماره پروفرما اجباری می باشد</value>
+  </data>
+  <data name="CombinationOfFieldsError" xml:space="preserve">
+    <value>ترکیب فیلد های مورد نظر تکراری میباشد!</value>
+  </data>
+</root>

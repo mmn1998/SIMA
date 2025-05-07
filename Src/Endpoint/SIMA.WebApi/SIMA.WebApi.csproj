@@ -1,0 +1,426 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>false</InvariantGlobalization>
+	<InformationalVersion>4.7.21</InformationalVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetCustomFields\AssetCustomFieldsController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetCustomFields\AssetCustomFieldsQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Assets\V1\AssetController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Assets\V1\AssetsQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTechnicalStatuses\V1\AssetTechnicalStatusesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTechnicalStatuses\V1\AssetTechnicalStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\BusinessCriticalities\V1\BusinessCriticalitiesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\BusinessCriticalities\V1\BusinessCriticalitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Categories\V1\CategoryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Categories\V1\CategoryQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemCustomFields\ConfigurationItemCustomFieldQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemCustomFields\ConfigurationItemCustomFieldsController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemStatuses\V1\ConfigurationItemStatusesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemStatuses\V1\ConfigurationItemStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTypes\V1\AssetTypesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTypes\V1\AssetTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItems\V1\ConfigurationItemsController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemTypes\V1\ConfigurationItemTypesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemTypes\V1\ConfigurationItemTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemRelationshipTypes\V1\ConfigurationItemRelationshipTypesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemRelationshipTypes\V1\ConfigurationItemRelationshipTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItems\V1\ConfigurationItemsQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Apis\V1\ApisController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Apis\V1\ApisQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\CustomeFieldTypes\CustomeFieldTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedures\V1\DataProceduresController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedures\V1\DataProceduresQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\DataCenters\V1\DataCentersController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\DataCenters\V1\DataCentersQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Back_UpMethods\V1\BackupMethodsController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Back_UpMethods\V1\BackupMethodsQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedureTypes\V1\DataProcedureTypesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedureTypes\V1\DataProcedureTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseStatuses\V1\LicenseStatusesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseStatuses\V1\LicenseStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseTypes\V1\LicenseTypeController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseTypes\V1\LicenseTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\OperationalStatuses\V1\OperationalStatusController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\OperationalStatuses\V1\OperationalStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\NetworkProtocol\V1\NetworkProtocolQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\OwnershipTypes\V1\OwnershipTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\OwnershipTypes\V1\OwnershipTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\AccessTypes\V1\AccessTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\AccessTypes\V1\AccessTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ApiMethodActions\V1\ApiMethodActionsController.cs" />
+    <Compile Include="Controllers\Features\Auths\BusinessEntities\V1\BusinessEntitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesController.cs" />
+    <Compile Include="Controllers\Features\Auths\Companies\V1\CompaniesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesController.cs" />
+    <Compile Include="Controllers\Features\Auths\ConfigurationAttributes\V1\ConfigurationAttributesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ApiMethodActions\V1\ApiMethodActionsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionTypes\PositionTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionTypes\PositionTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionLevels\V1\PositionLevelsController.cs" />
+    <Compile Include="Controllers\Features\Auths\PositionLevels\V1\PositionLevelsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\DataTypes\V1\DataTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Departments\V1\DepartmentsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Domains\V1\DomainsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Forms\V1\FormsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Forms\V1\FormsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Genders\V1\GenderController.cs" />
+    <Compile Include="Controllers\Features\Auths\Genders\V1\GenderQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Groups\V1\GroupsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Groups\V1\GroupsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Helpers\V1\CaptchaController.cs" />
+    <Compile Include="Controllers\Features\Auths\Helpers\V1\HelperController.cs" />
+    <Compile Include="Controllers\Features\Auths\Helpers\V1\SystemConfigsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Loactions\V1\LocationsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Loactions\V1\LocationsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\LoactionTypes\V1\LocationTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\LoactionTypes\V1\LocationTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\MainAggregates\V1\MainAggregatesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Permisions\V1\PermisionsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Permisions\V1\PermissionsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\PhoneTypes\V1\PhoneTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\PhoneTypes\V1\PhoneTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Positions\V1\PositionsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Positions\V1\PositionsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Profiles\V1\ProfilesController.cs" />
+    <Compile Include="Controllers\Features\Auths\Profiles\V1\ProfilesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ResponsibleTypes\V1\ResponsibleTypeController.cs" />
+    <Compile Include="Controllers\Features\Auths\ResponsibleTypes\V1\ResponsibleTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Roles\V1\RolesController.cs" />
+    <Compile Include="Controllers\Features\Auths\Roles\V1\RolesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Staffs\V1\StaffsController.cs" />
+    <Compile Include="Controllers\Features\Auths\Staffs\V1\StaffsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\SysConfigs\V1\SysConfigsController.cs" />
+    <Compile Include="Controllers\Features\Auths\SysConfigs\V1\SysConfigsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Users\V1\UsersController.cs" />
+    <Compile Include="Controllers\Features\Auths\Users\V1\UsersQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Warehouses\V1\WarehousesController.cs" />
+    <Compile Include="Controllers\Features\Auths\Warehouses\V1\WarehousesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensionDescriptions\V1\ConsequenceIntensionDescriptionsController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensionDescriptions\V1\ConsequenceIntensionDescriptionsQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\PlanTypes\V1\PlanTypesController.cs" />
+    <Compile Include="Controllers\Features\BCP\PlanTypes\V1\PlanTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\BusinessContinuityStrategies\V1\BusinessContinuityStrategiesController.cs" />
+    <Compile Include="Controllers\Features\BCP\BusinessContinuityStrategies\V1\BusinessContinuityStrategiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\BusinesImpactAnalysises\V1\BusinessImpactAnalysisesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\BusinesImpactAnalysises\V1\BusinessImpactAnalysissController.cs" />
+    <Compile Include="Controllers\Features\BCP\BusinessContinuityPlans\BusinessContinuityPlansController.cs" />
+    <Compile Include="Controllers\Features\BCP\BusinessContinuityPlans\BusinessContinuityPlansQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\BiaValues\V1\BiaValuesController.cs" />
+    <Compile Include="Controllers\Features\BCP\BiaValues\V1\BiaValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceValues\V1\ConsequenceValuesController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceValues\V1\ConsequenceValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\PlanResponsibilities\V1\PlanResponsibilitiesController.cs" />
+    <Compile Include="Controllers\Features\BCP\PlanResponsibilities\V1\PlanResponsibilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\Back_UpPeriods\V1\BackupPeriodsController.cs" />
+    <Compile Include="Controllers\Features\BCP\Back_UpPeriods\V1\BackupPeriodsQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\RecoveryOptionPriorities\V1\RecoveryOptionPrioritiesController.cs" />
+    <Compile Include="Controllers\Features\BCP\RecoveryOptionPriorities\V1\RecoveryOptionPrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensions\V1\ConsequenceIntensionsController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensions\V1\ConsequenceIntensionsQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\SolutionPriorities\V1\SolutionPerioritiesController.cs" />
+    <Compile Include="Controllers\Features\BCP\SolutionPriorities\V1\SolutionPerioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\StrategyTypes\V1\StrategyTypesController.cs" />
+    <Compile Include="Controllers\Features\BCP\StrategyTypes\V1\StrategyTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\LoanTypes\V1\LoanTypesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\LoanTypes\V1\LoanTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\CurrencyOprationTypes\CurrencyOprationTypeController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\CurrencyOprationTypes\CurrencyOprationTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\Customers\V1\CustomersController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\Customers\V1\CustomersQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\FinancialActionTypes\FinancialActionTypeController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\FinancialActionTypes\FinancialActionTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\FinancialSuppliers\FinancialSupplierQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\AffectedHistories\V1\AffectedHistoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitCategories\V1\CobitCategoriesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitCategories\V1\CobitCategoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilities\V1\CurrentOccurrenceProbabilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitScenarios\V1\CobitScenariosController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CobitScenarios\V1\CobitScenariosQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelCobits\V1\RiskLevelCobitsController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelCobits\V1\RiskLevelCobitsQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAs\V1\MatrixAsController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAs\V1\MatrixAsQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskValues\V1\RiskValuesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskValues\V1\RiskValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilities\V1\InherentOccurrenceProbabilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Frequencies\V1\FrequenciesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Frequencies\V1\FrequenciesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilityValues\V1\CurrentOccurrenceProbabilityValuesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\CurrentOccurrenceProbabilityValues\V1\CurrentOccurrenceProbabilityValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAValues\V1\MatrixAValueController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\MatrixAValues\V1\MatrixAValueQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Severities\V1\SeveritiesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Severities\V1\SeveritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ScenarioHistories\V1\ScenarioHistoryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ScenarioHistories\V1\ScenarioHistoryQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilityValues\V1\InherentOccurrenceProbabilityValuesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\InherentOccurrenceProbabilityValues\V1\InherentOccurrenceProbabilityValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\SeverityValues\V1\SeverityValuesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\SeverityValues\V1\SeverityValuesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceLevels\V1\ConsequenceLevelsQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Diagrams\V1\RiskDiagramsQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\TriggerStatuses\V1\TriggerStatusesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\TriggerStatuses\V1\TriggerStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\UseVulnerabilities\V1\UseVulnerabilitiesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\UseVulnerabilities\V1\UseVulnerabilitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Helpers\V1\ServiceCatalogeHelperQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\OrganizationalProjects\V1\OrganizationalProjectsController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\OrganizationalProjects\V1\OrganizationalProjectsQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceTypes\V1\ServiceTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Diagrams\V1\ServiceDiagramsQueryController.cs" />
+    <Compile Include="Controllers\Features\Notifications\Messages\MessagesController.cs" />
+    <Compile Include="Controllers\Features\Notifications\Messages\MessagesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceCategories\V1\ConsequenceCategoriesController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ConsequenceCategories\V1\ConsequenceCategoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\AgentBankWageShareStatuses\V1\AgentBankWageShareStatusController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\AgentBankWageShareStatuses\V1\AgentBankWageShareStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\BrokerInquiryStatuses\BrokerInquiryStatusController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\BrokerInquiryStatuses\BrokerInquiryStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftDestinations\DraftDestinationController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftDestinations\DraftDestinationQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftIssueTypes\V1\DraftIssueTypesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftIssueTypes\V1\DraftIssueTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetPhysicalStatuses\V1\AssetPhysicalStatusesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetPhysicalStatuses\V1\AssetPhysicalStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftCurrencyOrigins\V1\DraftCurrencyOriginsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftCurrencyOrigins\V1\DraftCurrencyOriginsQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\CancellationResaons\V1\CancellationResaonsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\CancellationResaons\V1\CancellationResaonsQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\CurrencyPaymentChannels\V1\CurrencyPaymentChannelsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\CurrencyPaymentChannels\V1\CurrencyPaymentChannelsQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\BrokerSecondLevelAddressBooks\V1\BrokerSecondLevelAddressBooksController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\BrokerSecondLevelAddressBooks\V1\BrokerSecondLevelAddressBooksQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftOrigins\V1\DraftOriginsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftOrigins\V1\DraftOriginsQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\Origins\V1\OriginsController.cs" />
+    <Compile Include="Controllers\Features\BCP\Origins\V1\OriginsQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\ViewLists\ViewListQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\TimeMeasurements\V1\TimeMeasurementsController.cs" />
+    <Compile Include="Controllers\Features\Auths\TimeMeasurements\V1\TimeMeasurementsQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\RecoveryPointObjectives\RecoveryPointObjectivesController.cs" />
+    <Compile Include="Controllers\Features\BCP\RecoveryPointObjectives\RecoveryPointObjectivesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\HappeningPossiblities\V1\HappeningPossiblitiesController.cs" />
+    <Compile Include="Controllers\Features\BCP\HappeningPossiblities\V1\HappeningPossiblitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\Consequences\ConsequencesController.cs" />
+    <Compile Include="Controllers\Features\BCP\Consequences\ConsequencesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ScenarioExecutionHistories\ScenarioExecutionHistoriesController.cs" />
+    <Compile Include="Controllers\Features\BCP\ScenarioExecutionHistories\ScenarioExecutionHistoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\Scenarios\ScenariosController.cs" />
+    <Compile Include="Controllers\Features\BCP\Scenarios\ScenariosQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ServicePriorities\V1\OrganizationalServicePrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ServicePriorities\V1\OrganizationalServicePrioritiesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\Branches\V1\BranchesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\Branches\V1\BranchesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\BranchTypes\V1\BranchTypesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\BranchTypes\V1\BranchTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\Brokers\V1\BrokersController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\Brokers\V1\BrokersQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\BrokerTypes\V1\BrokerTypesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\BrokerTypes\V1\BrokerTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\CurencyTypes\V1\CurrencyTypesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\CurencyTypes\V1\CurrencyTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\PaymentTypes\V1\PaymentTypesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\PaymentTypes\V1\PaymentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\DMS\DocumentExtensions\V1\DocumentExtensionsController.cs" />
+    <Compile Include="Controllers\Features\DMS\DocumentExtensions\V1\DocumentExtensionsQueryController.cs" />
+    <Compile Include="Controllers\Features\DMS\Documents\V1\DocumentsController.cs" />
+    <Compile Include="Controllers\Features\DMS\Documents\V1\DocumentsQueryController.cs" />
+    <Compile Include="Controllers\Features\DMS\DocumentTypes\V1\DocumentTypesController.cs" />
+    <Compile Include="Controllers\Features\DMS\DocumentTypes\V1\DocumentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\DMS\WorkFlowDocumentExtentions\V1\WorkFlowDocumentExtentionsController.cs" />
+    <Compile Include="Controllers\Features\DMS\WorkFlowDocumentExtentions\V1\WorkFlowDocumentExtentionsQueryController.cs" />
+    <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesController.cs" />
+    <Compile Include="Controllers\Features\DMS\WorkFlowDocumentTypes\V1\WorkFlowDocumentTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\Orderings\V1\OrderingsQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\Cartables\LogisticCartableQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsCategories\V1\GoodsCategoriesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsCategories\V1\GoodsCategoriesQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\UIInputElements\V1\UIInputElementsController.cs" />
+    <Compile Include="Controllers\Features\Auths\UIInputElements\V1\UIInputElementsQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\CandidatedSuppliers\V1\CandidatedSuppliersQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsStatues\GoodsStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\Goods\V1\GoodsesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\Goods\V1\GoodsesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsQuorumPrices\V1\GoodsQuorumPricesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsQuorumPrices\V1\GoodsQuorumPricesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsTypes\V1\GoodsTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\GoodsStatues\GoodsStatusController.cs" />
+    <Compile Include="Controllers\Features\Logistics\LogisticsRequest\LogisticsRequestController.cs" />
+    <Compile Include="Controllers\Features\Logistics\LogisticsRequest\LogisticsRequestQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Suppliers\V1\SuppliersController.cs" />
+    <Compile Include="Controllers\Features\Auths\Suppliers\V1\SuppliersQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\SupplierRanks\V1\SupplierRanksController.cs" />
+    <Compile Include="Controllers\Features\Auths\SupplierRanks\V1\SupplierRanksQueryController.cs" />
+    <Compile Include="Controllers\Features\Logistics\LogisticsSupplies\V1\LogisticsSuppliesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\LogisticsSupplies\V1\LogisticsSuppliesQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\EvaluationCriterias\V1\EvaluationCriteriasController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\EvaluationCriterias\V1\EvaluationCriteriasQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ImpactScales\ImpactScaleQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskCriterias\RiskCriteriaController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskCriterias\RiskCriteriaQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskDegrees\RiskDegreeController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskDegrees\RiskDegreeQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskImpacts\RiskImpactController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskImpacts\RiskImpactQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelMeasures\RiskLevelMeasureController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevelMeasures\RiskLevelMeasureQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevels\RiskLevelController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskLevels\RiskLevelQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskPossibilities\RiskPossibilityController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskPossibilities\RiskPossibilityQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Risks\RiskController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\Risks\RiskQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskTypes\RiskTypeController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\RiskTypes\RiskTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ThreatTypes\ThreatTypeController.cs" />
+    <Compile Include="Controllers\Features\RiskManagers\ThreatTypes\ThreatTypeQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\Cartables\V1\CartablesQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\Cartables\V1\CartablesController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingReasons\V1\MeetingHoldingReasonsController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingReasons\V1\MeetingHoldingReasonsQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingStatus\MeetingHoldingStatusController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\MeetingHoldingStatus\MeetingHoldingStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\Meetings\MeetingController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\SecurityCommitees\SubjectPriorities\V1\SubjectPrioritiesController.cs" />
+    <Compile Include="Controllers\Features\Logistics\UnitMeasurements\V1\UnitMeasurementsController.cs" />
+    <Compile Include="Controllers\Features\Logistics\UnitMeasurements\V1\UnitMeasurementsQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ApiAuthenticationMethods\ApiAuthenticationMethodsController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ApiAuthenticationMethods\ApiAuthenticationMethodsQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ApiTypes\ApiTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ApiTypes\ApiTypesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Channels\V1\ChannelsController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Channels\V1\ChannelsQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\CriticalActivities\V1\CriticalActivitiesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\CriticalActivities\V1\CriticalActivitiesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServicePriorities\ServicePrioritiesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServicePriorities\ServicePrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Services\V1\ServicesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Services\V1\ServicesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Products\V1\ProductsController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\Products\V1\ProductsQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategoriesController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceCategories\V1\ServiceCategorysQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\CustomerTypes\V1\CustomerTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\CustomerTypes\V1\CustomerTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ImportanceDegrees\ImportanceDegreesController.cs" />
+    <Compile Include="Controllers\Features\BCP\ImportanceDegrees\ImportanceDegreesQueryController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceStatuses\ServiceStatusController.cs" />
+    <Compile Include="Controllers\Features\ServiceCatalog\ServiceStatuses\ServiceStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\UserTypes\V1\UserTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\UserTypes\V1\UserTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\AccountTypes\V1\AccountTypesController.cs" />
+    <Compile Include="Controllers\Features\BranchManagement\AccountTypes\V1\AccountTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\InquiryRequests\InquiryRequestController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\InquiryRequests\InquiryRequestQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\InquiryResponses\InquiryResponseController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\InquiryResponses\InquiryResponseQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\WageDeductionMethods\V1\WageDeductionMethodsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\WageDeductionMethods\V1\WageDeductionMethodsQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\WageRates\V1\WageRatesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\WageRates\V1\WageRatesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\Resources\V1\ResourcesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\Resources\V1\ResourcesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\ReferralLetters\ReferralLettersController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\ReferralLetters\ReferralLettersQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\RequestValors\V1\RequestValorsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\RequestValors\V1\RequestValorsQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\ResponsibilityWageTypes\V1\ResponsibilityWageTypesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\ResponsibilityWageTypes\V1\ResponsibilityWageTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftReviewResults\V1\DraftReviewResultsController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftReviewResults\V1\DraftReviewResultsQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftTypes\V1\DraftTypesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftTypes\V1\DraftTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftStatuses\V1\DraftStatusesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftStatuses\V1\DraftStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\ReconsilationTypes\V1\ReconsilationTypesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\ReconsilationTypes\V1\ReconsilationTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftValorStatuses\V1\DraftValorStatusesController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\DraftValorStatuses\V1\DraftValorStatusesQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\TrustyDrafts\TrustyDraftController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\TrustyDrafts\TrustyDraftQueryController.cs" />
+    <Compile Include="Controllers\Features\TrustyDrafts\TrustyServices\TrustyServicesController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\ApprovalOptions\ApprovalOptionController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\ApprovalOptions\ApprovalOptionQueryController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\BPMSes\BPMSController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\Progress\ProgressQueryController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\Projects\ProjectController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\Projects\ProjectQueryController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\WorkFlowActors\V1\WorkFlowActorsController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\WorkFlowActors\V1\WorkFlowActorsQueryController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\WorkflowServer\V1\WorkflowServerController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\WorkFlows\V1\WorkFlowsController.cs" />
+    <Compile Include="Controllers\Features\WorkFlowEngine\WorkFlows\V1\WorkFlowsQueryController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssueLinkReason\V1\IssueLinkReasonController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssueLinkReason\V1\IssueLinkReasonQueryController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssuePrioroties\V1\IssuePrioritiesController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssuePrioroties\V1\IssuePrioritiesQueryController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\Issues\V1\IssuesController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\Issues\V1\IssuesQueryController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssueTypes\V1\IssueTypesController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssueTypes\V1\IssueTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssueWeightCategories\V1\IssueWeightCategoriesController.cs" />
+    <Compile Include="Controllers\Features\IssueManagement\IssueWeightCategories\V1\IssueWeightCategoriesQueryController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Portable.Licensing" Version="1.1.0" />
+    <PackageReference Include="Scrutor" Version="5.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
+    <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
+    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.5.31" />
+    <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.2.3" />
+    <PackageReference Include="SIMA.Framework.WebApi" Version="1.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SeriLog_Logs\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Application\SIMA.Application.Contract\SIMA.Application.Contract.csproj" />
+    <ProjectReference Include="..\..\Application\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />
+    <ProjectReference Include="..\..\Application\SIMA.Application.Query\SIMA.Application.Query.csproj" />
+    <ProjectReference Include="..\..\Application\SIMA.Application\SIMA.Application.csproj" />
+    <ProjectReference Include="..\..\Core\SIMA.DomainService\SIMA.DomainService.csproj" />
+    <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj" />
+  </ItemGroup>
+
+</Project>
