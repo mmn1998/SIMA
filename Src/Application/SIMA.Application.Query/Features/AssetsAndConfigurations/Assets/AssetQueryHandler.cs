@@ -7,7 +7,8 @@ namespace SIMA.Application.Query.Features.AssetsAndConfigurations.Assets;
 
 public class AssetQueryHandler : IQueryHandler<GetAllAssetsQuery, Result<IEnumerable<GetAssetQueryResult>>>,
     IQueryHandler<GetAssetByCodeQuery, Result<GetAssetQueryInfoResult>>,
-    IQueryHandler<GetAssetByIdQuery, Result<GetAssetQueryInfoResult>>
+    IQueryHandler<GetAssetByIdQuery, Result<GetAssetQueryInfoResult>>,
+    IQueryHandler<GetAssetComboQuery,Result<IEnumerable<GetAssetComboQueryResult>>>
 {
     private readonly IAssetQueryRepository _repository;
 
@@ -30,5 +31,10 @@ public class AssetQueryHandler : IQueryHandler<GetAllAssetsQuery, Result<IEnumer
     {
         var result = await _repository.GetById(request.Id);
         return Result.Ok(result);
+    }
+
+    public async Task<Result<IEnumerable<GetAssetComboQueryResult>>> Handle(GetAssetComboQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetAssetCombo(request);
     }
 }

@@ -17,6 +17,8 @@ using SIMA.Framework.Common.Security;
 using System.Text;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Events;
 using SIMA.Application.Query.Contract.Features.IssueManagement.Issues;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Events;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Events;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues.Mapper;
 
@@ -114,6 +116,28 @@ public class IssueMapper : Profile
            ;
 
         CreateMap<CreateCriticalActivityEvent, CreateIssueArg>()
+           .ForMember(x => x.Id, act => act.MapFrom(src => src.issueId))
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+           .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
+           .ForMember(dest => dest.IssueDate, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.Summery, act => act.MapFrom(source => source.name))
+           .ForMember(dest => dest.Description, act => act.MapFrom(source => source.name))
+           .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.mainAggregateType))
+           ;
+
+        CreateMap<CreateConfigurationItemEvent, CreateIssueArg>()
+           .ForMember(x => x.Id, act => act.MapFrom(src => src.issueId))
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+           .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))
+           .ForMember(dest => dest.IssueDate, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.Summery, act => act.MapFrom(source => source.name))
+           .ForMember(dest => dest.Description, act => act.MapFrom(source => source.name))
+           .ForMember(dest => dest.MainAggregateId, act => act.MapFrom(source => (long)source.mainAggregateType))
+           ;
+
+        CreateMap<CreateAssetEvent, CreateIssueArg>()
            .ForMember(x => x.Id, act => act.MapFrom(src => src.issueId))
            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
            .ForMember(dest => dest.CompanyId, act => act.MapFrom(source => simaIdentity.CompanyId))

@@ -80,8 +80,9 @@ public class AffectedHistory : Entity, IAggregateRoot
         if (!await service.IsNumericUnique(arg.NumericValue, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     #endregion
-    public void Delete(long userId)
+    public async Task Delete(long userId, IAffectedHistoryDomainService service)
     {
+        //await service.CanBeDeleted(Id);
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;

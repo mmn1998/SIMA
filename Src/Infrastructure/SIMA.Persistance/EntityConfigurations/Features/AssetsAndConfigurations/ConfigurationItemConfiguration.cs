@@ -49,6 +49,26 @@ public class ConfigurationItemConfiguration : IEntityTypeConfiguration<Configura
             .WithMany(d => d.ConfigurationItems)
             .HasForeignKey(d => d.BusinessCriticalityId)
             .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.LicenseStatusId)
+          .HasConversion(
+           v => v.Value,
+           v => new(v));
+
+        entity.HasOne(d => d.LicenseStatus)
+            .WithMany(d => d.ConfigurationItems)
+            .HasForeignKey(d => d.LicenseStatusId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
+        entity.Property(x => x.TimeMeasurementId)
+          .HasConversion(
+           v => v.Value,
+           v => new(v));
+
+        entity.HasOne(d => d.TimeMeasurement)
+            .WithMany(d => d.ConfigurationItems)
+            .HasForeignKey(d => d.TimeMeasurementId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
         
         entity.Property(x => x.LicenseTypeId)
           .HasConversion(

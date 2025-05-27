@@ -1,8 +1,11 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.ValueObjects;
+using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.ValueObjects;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 
@@ -32,4 +35,17 @@ public class ConfigurationItemApi : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
 }

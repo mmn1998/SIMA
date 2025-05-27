@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
+﻿using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Severities.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Args;
 using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.SeverityValues.ValueObjects;
@@ -56,6 +57,9 @@ public class SeverityValue : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+    private List<RiskLevel> _riskLevels = new();
+    public ICollection<RiskLevel> RiskLevels => _riskLevels;
     #region Guards
     private static async Task CreateGuadrs(CreateSeverityValueArg arg, ISeverityValueDomainService service)
     {

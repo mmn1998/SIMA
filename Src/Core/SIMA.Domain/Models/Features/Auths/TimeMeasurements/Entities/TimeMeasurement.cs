@@ -84,6 +84,8 @@ public class TimeMeasurement : Entity
     }
     private List<RecoveryPointObjective> _recoveryPointObjectives = new();
     public ICollection<RecoveryPointObjective> RecoveryPointObjectives => _recoveryPointObjectives;
+    private List<ConfigurationItem> _configurationItems = new();
+    public ICollection<ConfigurationItem> ConfigurationItems => _configurationItems;
     private List<ConfigurationItemBackupSchedule> _configurationItemBackupSchedules = new();
     public ICollection<ConfigurationItemBackupSchedule> ConfigurationItemBackupSchedules => _configurationItemBackupSchedules;
 

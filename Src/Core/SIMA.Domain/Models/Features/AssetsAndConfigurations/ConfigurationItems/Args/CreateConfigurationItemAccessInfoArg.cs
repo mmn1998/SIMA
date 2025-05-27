@@ -12,5 +12,5 @@ public class CreateConfigurationItemAccessInfoArg
     public DateTime ActiveFrom { get; set; }
     public DateTime? ActiveTo { get; set; }
     public DateTime? CreatedAt { get; set; }
-    public long? CreatedBy { get; set; }
+    public long CreatedBy { get; set; }
 }

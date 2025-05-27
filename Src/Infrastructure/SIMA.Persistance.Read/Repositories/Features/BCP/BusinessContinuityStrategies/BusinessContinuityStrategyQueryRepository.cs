@@ -18,13 +18,8 @@ public class BusinessContinuityStrategyQueryRepository : IBusinessContinuityStra
         _mainQuery = @"
                         select
      BCS.Id, 
-     BCS.Code,
-     BCS.StrategyTypeId,
-     ST.Name StrategyType‌Name,
      BCS.Title,
-     BCS.Description,
      BCS.ExpireDate,
-     BCS.ReviewDate,
      BCS.CreatedAt,
      I.Id IssueId,
      I.Code IssueCode,
@@ -36,7 +31,6 @@ public class BusinessContinuityStrategyQueryRepository : IBusinessContinuityStra
      S.Name CurrentStepName,
 	 (p.FirstName + ' ' + p.LastName) IssueCreatedBy
 from BCP.BusinessContinuityStrategy BCS
-inner join BCP.StrategyType ST on ST.Id = BCS.StrategyTypeId and ST.ActiveStatusId<>3
 inner join BCP.BusinessContinuityStrategyIssue BI on BI.BusinessContinuityStrategyId = BCS.Id and BI.ActiveStatusId <>3
 inner join IssueManagement.Issue I on I.Id = BI.IssueId  and I.ActiveStatusId <>3
 inner join Project.WorkFlow W on W.Id = I.CurrentWorkflowId and W.ActiveStatusId <>3
@@ -96,32 +90,8 @@ inner join BCP.StrategyType ST on ST.Id = BCS.StrategyTypeId and ST.ActiveStatus
 inner join Basic.ActiveStatus A on a.ID = BCS.ActiveStatusId and BCS.ActiveStatusId<>3
 where BCS.Id = @Id
 
----------- businessContinuityStratgyObjective
-select
-BCSO.Id,
-BCSO.Title,
-BCSO.CreatedAt
-from BCP.BusinessContinuityStrategy BCS
-inner join BCP.BusinessContinuityStrategyObjective BCSO on BCSO.BusinessContinuityStategyId = BCS.Id and BCSO.ActiveStatusId<>3
-where BCS.Id = @Id
----------- businessContinuityStratgySolution
-select
-BCSS.Id,
-BCSS.Title,
-BCSS.CreatedAt
-from BCP.BusinessContinuityStrategy BCS
-inner join BCP.BusinessContinuityStratgySolution BCSS on BCSS.BusinessContinuityStratgyId = BCS.Id and BCSS.ActiveStatusId<>3
-where BCS.Id = @Id
----------- businessContinuityStratgyIssue
-select
-BCSI.Id,
-i.Code,
-i.Description,
-BCSI.CreatedAt
-from BCP.BusinessContinuityStrategy BCS
-inner join BCP.BusinessContinuityStrategyIssue BCSI on BCSI.BusinessContinuityStrategyId = BCS.Id and BCSI.ActiveStatusId<>3
-inner join IssueManagement.Issue I on I.Id = BCSI.IssueId and I.ActiveStatusId<>3
-where BCS.Id = @Id
+
+
 ---------- businessContinuityStratgyDocument
 select
 BCSD.Id,
@@ -147,27 +117,15 @@ order by D.CreatedAt desc
 ---------- businessContinuityStratgyResponsible
 select
 BCSR.Id,
-BCSR.CreatedAt,
-BCSR.IsForBackup,
-BCSR.PlanResponsibilityId,
-PR.Name PlanResponsibilityName,
-s.PositionId,
-Po.Name PositionName,
-Po.DepartmentId,
-d.Name DepartmentName,
-(P.FirstName + ' ' + P.LastName) FullName,
-U.CompanyId,
-Com.Name CompanyName
-from BCP.BusinessContinuityStrategy BCS
-inner join BCP.BusinessContinuityStratgyResponsible BCSR on BCSR.BusinessContinuityStrategyId = BCS.Id and BCSR.ActiveStatusId<>3
-inner join BCP.PlanResponsibility PR on PR.Id = BCSR.PlanResponsibilityId and PR.ActiveStatusId<>3
-inner join Organization.Staff S on s.Id = BCSR.StaffId and s.ActiveStatusId<>3
-inner join Authentication.Profile P on P.Id = S.ProfileId and P.ActiveStatusId<>3
-inner join Authentication.Users U on U.ProfileID = P.Id and U.ActiveStatusId<>3
-inner join Organization.Company Com on Com.Id = U.CompanyId and Com.ActiveStatusId<>3
-inner join Organization.Position Po on Po.Id = s.PositionId and po.ActiveStatusId<>3
-inner join Organization.Department D on d.Id = po.DepartmentId and d.ActiveStatusId<>3
+R.Name,
+r.RiskCategoryId,
+RT.Name RiskCategoryName,
+BCSR.CreatedAt
+from BCP.BusinessContinuityStrategyRisk BCSR
+inner join RiskManagement.Risk R on R.Id =  BCSR.RiskId
+inner join RiskManagement.RiskCategory RT on  RT.Id = R.RiskCategoryId
 where BCS.Id = @Id
+
 
 ";
         using var connection = new SqlConnection(_connectionString);
@@ -175,11 +133,11 @@ where BCS.Id = @Id
 
         using var multi = await connection.QueryMultipleAsync(query, new { request.Id });
         var result = await multi.ReadFirstOrDefaultAsync<GetBusinessContinuityStrategyQueryResult>() ?? throw SimaResultException.NotFound;
-        result.BusinessContinuityStrategyObjectiveList = await multi.ReadAsync<GetBusinessContinuityStratgyObjectiveQueryResult>();
-        result.BusinessContinuityStrategySolutionList = await multi.ReadAsync<GetBusinessContinuityStratgySolutionQueryResult>();
-        result.BusinessContinuityStrategyRelatedIssueList = await multi.ReadAsync<GetBusinessContinuityStratgyRelatedIssuQueryResult>();
+
         result.BusinessContinuityStrategyDocumentList = await multi.ReadAsync<GetBusinessContinuityStratgyDocumentQueryResult>();
-        result.BusinessContinuityStrategyResponsibleList = await multi.ReadAsync<GetBusinessContinuityStratgyResponsibleQueryResult>();
+        result.BusinessContinuityStratgyRiskQueryResult = await multi.ReadAsync<GetBusinessContinuityStratgyRiskQueryResult>();
+
+//ToDo Add 
         return result;
 
     }

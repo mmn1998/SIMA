@@ -16,6 +16,7 @@ public class ModifyApiArg
     public long? ApiTypeId { get; set; }
     public long? ApiMethodCallId { get; set; }
     public long? ApiAuthenticationMethodId { get; set; }
+    public long? ApiMethodActionId { get; set; }
     public long? NetworkProtocolId { get; set; }
     public string? AuthenticationWorkflow { get; set; }
     public long? OwnerDepartmentId { get; set; }

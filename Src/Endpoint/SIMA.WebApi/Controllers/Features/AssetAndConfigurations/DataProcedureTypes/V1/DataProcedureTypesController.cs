@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.AssetAndConfigurations.DataProcedureTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.DataProcedureTypes.V1;
 
@@ -19,19 +20,19 @@ public class DataProcedureTypesController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    // [SimaAuthorize(Permissions.DataProcedureTypePost)]
+    [SimaAuthorize(Permissions.DataProcedureTypePost)]
     public async Task<Result> Post([FromBody] CreateDataProcedureTypeCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    // [SimaAuthorize(Permissions.DataProcedureTypePut)]
+    [SimaAuthorize(Permissions.DataProcedureTypePut)]
     public async Task<Result> Put([FromBody] ModifyDataProcedureTypeCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    //[SimaAuthorize(Permissions.DataProcedureTypeDelete)]
+    [SimaAuthorize(Permissions.DataProcedureTypeDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteDataProcedureTypeCommand { Id = id };

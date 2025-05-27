@@ -64,6 +64,7 @@ namespace SIMA.DomainService.Features.WorkFlowEngine.WorkFlows
 
         public async Task<bool> CheckCreateIssueWithActor(long workflowId)
         {
+            bool res = false;
             var userid = _simaIdentity.UserId;
             var groups = _simaIdentity.GroupId;
             var roles = _simaIdentity.RoleIds;
@@ -80,7 +81,12 @@ namespace SIMA.DomainService.Features.WorkFlowEngine.WorkFlows
             {
                 await connection.OpenAsync();
                 var result = await connection.QueryFirstOrDefaultAsync<int>(queryString, new { workflowId, userid, roles, groups });
-                return result != 0;
+                if (result <= 0)
+                    return res;
+                else
+                    res = true;
+                        
+                return res;
             }
         }
 

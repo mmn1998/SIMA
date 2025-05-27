@@ -18,13 +18,13 @@ public class RisksQueryController : ControllerBase
     }
 
     [HttpPost("GetAll")]
-    [SimaAuthorize(Permissions.RisksGetAll)]
+    //[SimaAuthorize(Permissions.RisksGetAll)]
     public async Task<Result> Post([FromBody] GetAllRisksQuery query)
     {
         return await _mediator.Send(query);
     }
     [HttpGet("{id}")]
-    [SimaAuthorize(Permissions.RisksGet)]
+  //  [SimaAuthorize(Permissions.RisksGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetRiskQuery { Id = id };

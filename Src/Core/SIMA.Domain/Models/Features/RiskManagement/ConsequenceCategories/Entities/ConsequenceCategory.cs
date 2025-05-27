@@ -80,6 +80,6 @@ public class ConsequenceCategory : Entity, IAggregateRoot
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
     }    
-    private List<ConsequenceLevelCategory> _riskConsequences = new();
-    public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
+    private List<ConsequenceLevelCategory> _consequenceLevelCategories = new();
+    public ICollection<ConsequenceLevelCategory> ConsequenceLevelCategories => _consequenceLevelCategories;
 }

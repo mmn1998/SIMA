@@ -33,6 +33,25 @@ public class BusinessImpactAnalysisesQueryController : ControllerBase
         }
         return result;
     }
+    
+    
+    [HttpGet("FinalBusinessImpactAnalysis/{id}")]
+    //[SimaAuthorize(Permissions.businessImpactAnalysisGet)]
+    public async Task<Result> FinalBusinessImpactAnalysis([FromRoute] long id)
+    {
+        var query = new GetFinalBusinessImpactAnalysisQuery { ServiceId = id };
+        var result = await _mediator.Send(query);
+        if (result.Data.BusinessImpactAnalysisDocumemntList is not null)
+        {
+            foreach (var document in result.Data.BusinessImpactAnalysisDocumemntList)
+            {
+                document.DocumentContentType = document.DocumentExtensionName?.GetContentType();
+            }
+        }
+        return result;
+    }
+    
+    
     [HttpPost("GetAll")]
     [SimaAuthorize(Permissions.businessImpactAnalysisGetAll)]
     public async Task<Result> Get([FromBody] GetAllBusinessImpactAnalysisesQuery query)

@@ -23,6 +23,6 @@ public class ConfigurationItemCustomFieldOptionConfiguration : IEntityTypeConfig
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-        entity.HasOne(f=>f.ConfigurationItem).WithMany(f=>f.ConfigurationItemCustomFieldOption).HasForeignKey(f=>f.ConfigurationItemId).OnDelete(DeleteBehavior.Restrict);
+        entity.HasOne(f=>f.ConfigurationItemCustomField).WithMany(f=>f.ConfigurationItemCustomFieldOptions).HasForeignKey(f=>f.ConfigurationItemCustomFieldId).OnDelete(DeleteBehavior.Restrict);
     }
 }

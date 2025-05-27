@@ -284,7 +284,6 @@ where u.Id=@UserId  and u.ActiveStatusId<>3 and fg.ActiveStatusId <>3 and f.Acti
     }
     public async Task<GetProfileByProfileIdQueryResult> GetProfileByProfileId(long profileId)
     {
-        ///todo sanaz
         var response = new GetProfileByProfileIdQueryResult();
         using (var connection = new SqlConnection(_connectionString))
         {

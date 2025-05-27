@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Helpers;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper.FileHelper;
@@ -7,7 +8,8 @@ using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Features.Auths.Helpers;
 
-public class HelpDownloadQueryHandler : IQueryHandler<GetHelpDocumentQuery, Result<GetHelpDocumentQueryResult>>
+public class HelpDownloadQueryHandler : IQueryHandler<GetHelpDocumentQuery, Result<GetHelpDocumentQueryResult>>,
+    IQueryHandler<GetHelpVideoQuery, FileStream>
 {
     private readonly IFileService _fileService;
     private readonly IWebHostEnvironment _webHost;
@@ -30,5 +32,13 @@ public class HelpDownloadQueryHandler : IQueryHandler<GetHelpDocumentQuery, Resu
             Name = "راهنمای کاربری تبادلات ارزی (بخش اول از فاز یک).pdf"
         };
         return Result.Ok(response);
+    }
+
+    public async Task<FileStream> Handle(GetHelpVideoQuery request, CancellationToken cancellationToken)
+    {
+        var rootPath = _webHost.ContentRootPath;
+        var filePath = Path.Combine(rootPath, "wwwroot", "Help", "TrustyDraftFinalVideo.mp4");
+        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        return fileStream;           
     }
 }

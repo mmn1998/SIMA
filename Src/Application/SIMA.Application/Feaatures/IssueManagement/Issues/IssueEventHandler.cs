@@ -24,6 +24,8 @@ using SIMA.Resources;
 using SIMA.Domain.Models.Features.TrustyDrafts.TrustyDrafts.Events;
 using SIMA.Domain.Models.Features.WorkFlowEngine.WorkFlow.Events;
 using SIMA.Domain.Models.Features.Auths.Users.ValueObjects;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Assets.Events;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Events;
 
 namespace SIMA.Application.Feaatures.IssueManagement.Issues;
 
@@ -50,8 +52,12 @@ public class IssueEventHandler :
     INotificationHandler<ModifyBusinessContinuityStrategyEvent>,
     INotificationHandler<DeleteBusinessContinuityStrategyEvent>,
     INotificationHandler<CreateCriticalActivityEvent>,
-    INotificationHandler<ModifyCriticalActivityEvent>,
     INotificationHandler<DeleteCriticalActivityEvent>,
+    INotificationHandler<CreateAssetEvent>,
+    INotificationHandler<DeleteAssetEvent>,
+    INotificationHandler<CreateConfigurationItemEvent>,
+    INotificationHandler<DeleteConfigurationItemEvent>,
+    INotificationHandler<ModifyCriticalActivityEvent>,
     INotificationHandler<CreateBusinessContinuityPlanEvent>,
     INotificationHandler<CreateTrustyDraftEvent>,
     INotificationHandler<ModifyTrustyDraftEvent>,
@@ -1094,5 +1100,169 @@ public class IssueEventHandler :
         {
             issue.Delete(notification.userId);
         }
+    }
+
+    public async Task Handle(CreateConfigurationItemEvent notification, CancellationToken cancellationToken)
+    {
+        var workFlowEnity = await _workFlowRepository.GetWorkFlowByAggregateId(notification.mainAggregateType);
+
+        if (!await _workFlowDomainService.CheckCreateIssueWithActor(workFlowEnity.Id.Value))
+            throw new SimaResultException(CodeMessges._400Code, Messages.CreateIssueWithChechActorException);
+
+        var workflow = await _workFlowQueryRepository.GetWorkflowInfoByIdAsync(workFlowEnity.Id.Value);
+        var issuePriorityId = await _repository.GetHighestPriority();
+        var issueTypeId = await _repository.GetIssueTypeRequest();
+        var issueweight = await _repository.GetIssueMiddleWeight();
+        var arg = _mapper.Map<CreateIssueArg>(notification);
+        arg.CreatedBy = _simaIdentity.UserId;
+        arg.CurrenStepId = workflow.TargetStepId;
+        arg.CurrentStateId = workflow.TargetStateId;
+        arg.CurrentWorkflowId = workflow.Id;
+        arg.IssueTypeId = issueTypeId;
+
+
+        arg.IssuePriorityId = issuePriorityId;
+
+
+        arg.IssueWeightCategoryd = issueweight.Item1;
+        arg.Weight = issueweight.Item2;
+
+
+        #region GenerateCode
+
+        var project = await _projectRepository.GetById(workflow.ProjectId);
+        var lastIsuue = await _repository.GetLastIssue();
+        string codde = "";
+        if (lastIsuue == null)
+        {
+            codde = "356";
+        }
+        else
+        {
+            codde = lastIsuue.Code;
+        }
+        var code = Convert.ToInt32(codde.Substring(codde.IndexOf("-") + 1)) + 1;
+        arg.Code = project.Code + "-" + code.ToString();
+
+        #endregion
+
+        var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
+        historyArg.CreatedBy = _simaIdentity.UserId;
+        var entity = await Issue.Create(arg, _service);
+
+        #region AddIssueManager
+        if (workFlowEnity.WorkFlowActors.Any(x => x.IsDirectManagerOfIssueCreator == "1"))
+        {
+            var userManager = await _issueQueryRepository.GetIssueManager(_simaIdentity.UserId);
+            if (userManager != null && userManager.Count > 0)
+            {
+                var issueManagerArg = _mapper.Map<List<CreateIssueManagerArg>>(userManager);
+                issueManagerArg.ForEach(x => x.CreatedBy = _simaIdentity.UserId);
+                entity.AddIssueManagers(issueManagerArg);
+            }
+        }
+        #endregion
+
+
+        #region IssueHistory
+        var history = _mapper.Map<CreateIssueHistoryArg>(arg);
+        history.CreatedBy = _simaIdentity.UserId;
+        history.SourceStateId = workflow.SourceStateId;
+        history.TargetStateId = workflow.TargetStateId;
+        history.SourceStepId = workflow.SourceStepId;
+        history.TargetStepId = workflow.TargetStepId;
+        entity.AddHistory(history);
+        #endregion
+        entity.AddIssueChangeHistory(historyArg);
+        await _repository.Add(entity);
+    }
+
+    public async Task Handle(DeleteConfigurationItemEvent notification, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(notification.issueId);
+        long userId = _simaIdentity.UserId;
+        entity.Delete(userId);
+    }
+
+    public async Task Handle(CreateAssetEvent notification, CancellationToken cancellationToken)
+    {
+        var workFlowEnity = await _workFlowRepository.GetWorkFlowByAggregateId(notification.mainAggregateType);
+
+        if (!await _workFlowDomainService.CheckCreateIssueWithActor(workFlowEnity.Id.Value))
+            throw new SimaResultException(CodeMessges._400Code, Messages.CreateIssueWithChechActorException);
+
+        var workflow = await _workFlowQueryRepository.GetWorkflowInfoByIdAsync(workFlowEnity.Id.Value);
+        var issuePriorityId = await _repository.GetHighestPriority();
+        var issueTypeId = await _repository.GetIssueTypeRequest();
+        var issueweight = await _repository.GetIssueMiddleWeight();
+        var arg = _mapper.Map<CreateIssueArg>(notification);
+        arg.CreatedBy = _simaIdentity.UserId;
+        arg.CurrenStepId = workflow.TargetStepId;
+        arg.CurrentStateId = workflow.TargetStateId;
+        arg.CurrentWorkflowId = workflow.Id;
+        arg.IssueTypeId = issueTypeId;
+
+
+        arg.IssuePriorityId = issuePriorityId;
+
+
+        arg.IssueWeightCategoryd = issueweight.Item1;
+        arg.Weight = issueweight.Item2;
+
+
+        #region GenerateCode
+
+        var project = await _projectRepository.GetById(workflow.ProjectId);
+        var lastIsuue = await _repository.GetLastIssue();
+        string codde = "";
+        if (lastIsuue == null)
+        {
+            codde = "356";
+        }
+        else
+        {
+            codde = lastIsuue.Code;
+        }
+        var code = Convert.ToInt32(codde.Substring(codde.IndexOf("-") + 1)) + 1;
+        arg.Code = project.Code + "-" + code.ToString();
+
+        #endregion
+
+        var historyArg = _mapper.Map<CreateIssueChangeHistoryArg>(arg);
+        historyArg.CreatedBy = _simaIdentity.UserId;
+        var entity = await Issue.Create(arg, _service);
+
+        #region AddIssueManager
+        if (workFlowEnity.WorkFlowActors.Any(x => x.IsDirectManagerOfIssueCreator == "1"))
+        {
+            var userManager = await _issueQueryRepository.GetIssueManager(_simaIdentity.UserId);
+            if (userManager != null && userManager.Count > 0)
+            {
+                var issueManagerArg = _mapper.Map<List<CreateIssueManagerArg>>(userManager);
+                issueManagerArg.ForEach(x => x.CreatedBy = _simaIdentity.UserId);
+                entity.AddIssueManagers(issueManagerArg);
+            }
+        }
+        #endregion
+
+
+        #region IssueHistory
+        var history = _mapper.Map<CreateIssueHistoryArg>(arg);
+        history.CreatedBy = _simaIdentity.UserId;
+        history.SourceStateId = workflow.SourceStateId;
+        history.TargetStateId = workflow.TargetStateId;
+        history.SourceStepId = workflow.SourceStepId;
+        history.TargetStepId = workflow.TargetStepId;
+        entity.AddHistory(history);
+        #endregion
+        entity.AddIssueChangeHistory(historyArg);
+        await _repository.Add(entity);
+    }
+
+    public async Task Handle(DeleteAssetEvent notification, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetById(notification.issueId);
+        long userId = _simaIdentity.UserId;
+        entity.Delete(userId);
     }
 }

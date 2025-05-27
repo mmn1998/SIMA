@@ -30,8 +30,8 @@ public class RiskQueryHandler : IQueryHandler<GetAllRisksQuery, Result<IEnumerab
         var res = await _repository.GetAll(request);
         if (!string.IsNullOrEmpty(request.FormatType))
         {
-            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var excelByte = _reportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var exportResult = new ExportResult
             {
                 Name = _reportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,

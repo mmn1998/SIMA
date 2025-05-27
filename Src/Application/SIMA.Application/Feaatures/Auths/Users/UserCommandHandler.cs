@@ -128,8 +128,9 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
             var result = UserMapper.MapToToken(permissions, _tokenService);
 
             //insert refreshToken in Redis
+#if !DEBUG
             await _redisService.InsertAsync(permissions.UserInfoLogin.Username, result.RefreshToken, TimeSpan.FromHours(_securitySettings.RefreshTokenLifeTime));
-
+#endif
              return Result.Ok(result);
         }
         catch (Exception ex)
@@ -175,7 +176,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
 
             await entity.AddFormUser(formUserArg, entity.Id.Value, _service);
         }
-
+        // todo: sanaz for test
         if (request.UserPermissions != null && request.UserPermissions.Count != 0)
         {
             var userPermissionsArgs = _mapper.Map<List<CreateUserPermissionArg>>(request.UserPermissions);
@@ -293,6 +294,7 @@ public class UserCommandHandler : ICommandHandler<DeleteUserCommand, Result<long
 
             await entity.AddFormUser(formUserArg, entity.Id.Value, _service);
         }
+        // todo: sanaz for test
         if (request.UserPermissions != null && request.UserPermissions.Count != 0)
         {
             var userPermissionsArgs = _mapper.Map<List<CreateUserPermissionArg>>(request.UserPermissions);

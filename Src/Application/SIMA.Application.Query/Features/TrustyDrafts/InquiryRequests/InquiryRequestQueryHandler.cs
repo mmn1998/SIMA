@@ -29,8 +29,8 @@ IQueryHandler<GetAllInquiryRequestsQuery, Result<IEnumerable<GetInquiryRequestQu
         var res = await _repository.GetAll(request);
         if (!string.IsNullOrEmpty(request.FormatType))
         {
-            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var excelByte = _simaReportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var exportResult = new ExportResult
             {
                 Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,

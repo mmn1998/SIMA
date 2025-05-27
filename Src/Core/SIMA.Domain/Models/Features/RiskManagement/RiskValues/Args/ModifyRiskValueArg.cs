@@ -10,4 +10,6 @@ public class ModifyRiskValueArg
     public long ActiveStatusId { get; set; }
     public byte[]? ModifiedAt { get; set; }
     public long? ModifiedBy { get; set; }
+    //public long StrategyId { get; set; }
+
 }

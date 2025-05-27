@@ -27,13 +27,13 @@ public class InquiryRequestDomainService : IInquiryRequestDomainService
     public async Task<long> GetBranchIdByUserId(long userId)
     {
         var query = @"
-select b.Id from
-Authentication.users U
-Inner join Authentication.Profile P on U.ProfileID = P.Id
-inner join Organization.Staff S on S.ProfileId = P.Id
-inner join Organization.Position Po on po.Id = S.PositionId
-inner join Bank.Branch B on B.Id = Po.BranchId
-where U.Id = @UserId
+            select b.Id from
+            Authentication.users U
+            Inner join Authentication.Profile P on U.ProfileID = P.Id
+            inner join Organization.Staff S on S.ProfileId = P.Id
+            inner join Organization.Position Po on po.Id = S.PositionId
+            inner join Bank.Branch B on B.Id = Po.BranchId
+            where U.Id = @UserId
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -49,13 +49,13 @@ where U.Id = @UserId
     public async Task<string> GetBranchCodeByUserId(long userId)
     {
         var query = @"
-select B.Code from
-Authentication.users U
-Inner join Authentication.Profile P on U.ProfileID = P.Id
-inner join Organization.Staff S on S.ProfileId = P.Id
-inner join Organization.Position Po on Po.Id = S.PositionId
-inner join Bank.Branch B on B.Id = Po.BranchId
-where U.Id = @UserId
+                    select B.Code from
+                    Authentication.users U
+                    Inner join Authentication.Profile P on U.ProfileID = P.Id
+                    inner join Organization.Staff S on S.ProfileId = P.Id
+                    inner join Organization.Position Po on Po.Id = S.PositionId
+                    inner join Bank.Branch B on B.Id = Po.BranchId
+                    where U.Id = @UserId
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -66,9 +66,9 @@ where U.Id = @UserId
     public async Task<string?> GetCustomerNumber(long customerId)
     {
         var query = @"
-select C.CustomerNumber from
-Bank.Customer C
-where C.Id = @CustomerId
+            select C.CustomerNumber from
+            Bank.Customer C
+            where C.Id = @CustomerId
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();

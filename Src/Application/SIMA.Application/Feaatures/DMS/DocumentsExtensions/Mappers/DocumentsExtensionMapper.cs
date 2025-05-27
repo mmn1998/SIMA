@@ -9,7 +9,7 @@ namespace SIMA.Application.Feaatures.DMS.DocumentsExtensions.Mappers;
 
 internal class DocumentsExtensionMapper : Profile
 {
-    public DocumentsExtensionMapper(ISimaIdentity simaIdentity)
+    public DocumentsExtensionMapper()
     {
         CreateMap<CreateDocumentExtensionCommand, CreateDocumentExtensionArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

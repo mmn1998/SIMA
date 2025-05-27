@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.LicenseTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.LicenseTypes.V1;
 
@@ -19,14 +20,14 @@ public class LicenseTypeQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.LicenseTypeGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetLicenseTypeQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-   //[SimaAuthorize(Permissions.)]
+   [SimaAuthorize(Permissions.LicenseTypeGetAll)]
     public async Task<Result> Get([FromBody] GetAllLicenseTypeQuery query)
     {
         return await _mediator.Send(query);

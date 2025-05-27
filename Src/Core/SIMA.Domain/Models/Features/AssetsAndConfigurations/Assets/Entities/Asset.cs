@@ -63,6 +63,7 @@ public class Asset : Entity
         SerialNumber = arg.SerialNumber;
         Model = arg.Model;
         Manufacturer = arg.Manufacturer;
+        Title = arg.Title;
         ManufactureDate = arg.ManufactureDate;
         OwnershipDate = arg.OwnershipDate;
         InServiceDate = arg.InServiceDate;
@@ -104,6 +105,7 @@ public class Asset : Entity
         if (arg.AssetCategoryId.HasValue) AssetCategoryId = new(arg.AssetCategoryId.Value);
         SerialNumber = arg.SerialNumber;
         Model = arg.Model;
+        Title = arg.Title;
         Manufacturer = arg.Manufacturer;
         ManufactureDate = arg.ManufactureDate;
         OwnershipDate = arg.OwnershipDate;

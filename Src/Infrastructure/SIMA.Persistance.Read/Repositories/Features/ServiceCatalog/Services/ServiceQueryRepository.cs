@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using SIMA.Application.Query.Contract.Features.ServiceCatalog.Services;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
+using SIMA.Framework.Common.Request;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using System.Data.SqlClient;
@@ -747,3 +748,5 @@ order by CreatedAt desc
         return await connection.QueryFirstOrDefaultAsync<string>(query) ?? throw SimaResultException.NotFound;
     }
 }
+
+

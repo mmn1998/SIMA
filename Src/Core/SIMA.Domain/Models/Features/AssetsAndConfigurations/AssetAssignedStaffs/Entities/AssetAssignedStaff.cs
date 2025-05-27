@@ -26,9 +26,9 @@ public class AssetAssignedStaff : Entity
         Id = new(arg.Id);
         AssetId = new (arg.AssetId);
         StaffId = new (arg.StaffId);
-        DepartmentId = new (arg.DepartmentId);
-        BranchId = new (arg.BranchId);
-        ResponsibleTypeId = new (arg.ResponsibleTypeId);
+        if(arg.DepartmentId is not null && arg.DepartmentId > 0) DepartmentId = new (arg.DepartmentId.Value);
+        if (arg.BranchId is not null && arg.BranchId > 0) BranchId = new (arg.BranchId.Value);
+        ResponsibleTypeId = new (arg.ResponsilbeTypeId);
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
@@ -42,9 +42,9 @@ public class AssetAssignedStaff : Entity
         ModifyGuards(arg);
         AssetId = new (arg.AssetId);
         StaffId = new (arg.StaffId);
-        DepartmentId = new (arg.DepartmentId);
-        BranchId = new (arg.BranchId);
-        ResponsibleTypeId = new (arg.ResponsibleTypeId);
+        if (arg.DepartmentId is not null && arg.DepartmentId > 0) DepartmentId = new(arg.DepartmentId.Value);
+        if (arg.BranchId is not null && arg.BranchId > 0) BranchId = new(arg.BranchId.Value);
+        ResponsibleTypeId = new (arg.ResponsilbeTypeId);
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
@@ -64,10 +64,10 @@ public class AssetAssignedStaff : Entity
     public virtual Asset Asset { get; private set; }
     public StaffId StaffId { get; private set; }
     public virtual Staff Staff { get; private set; }
-    public DepartmentId DepartmentId { get; private set; }
-    public virtual Department Department { get; private set; }
-    public BranchId BranchId { get; private set; }
-    public virtual Branch Branch { get; private set; }
+    public DepartmentId? DepartmentId { get; private set; }
+    public virtual Department? Department { get; private set; }
+    public BranchId? BranchId { get; private set; }
+    public virtual Branch? Branch { get; private set; }
     public ResponsibleTypeId ResponsibleTypeId { get; private set; }
     public virtual ResponsibleType ResponsibleType { get; private set; }
     public long ActiveStatusId { get; private set; }

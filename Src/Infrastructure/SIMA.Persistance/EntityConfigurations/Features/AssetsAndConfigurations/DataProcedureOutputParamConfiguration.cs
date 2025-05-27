@@ -9,7 +9,7 @@ public class DataProcedureOutputParamConfiguration : IEntityTypeConfiguration<Da
 {
     public void Configure(EntityTypeBuilder<DataProcedureOutputParam> entity)
     {
-        entity.ToTable("DataCenter", "DataProcedureOutputParam");
+        entity.ToTable("DataProcedureOutputParam", "AssetAndConfiguration");
 
         entity.HasKey(e => e.Id);
         entity.Property(x => x.Id)

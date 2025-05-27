@@ -27,4 +27,5 @@ public class SeverityAffectedHistoryValueTitle
     public string? y { get; set; }
     public int isSelected { get; set; }
     public string Color { get; set; }
+    public double ahNumericValue { get; set; }
 }

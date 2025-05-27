@@ -7,6 +7,14 @@ public class GetBusinessImpactAnalysisQueryResult
     public long Id { get; set; }
     public long ServiceId { get; set; }
     public string? ServiceName { get; set; }
+    public long RecoveryPointObjectiveId { get; set; }
+    public string? RecoveryPointObjectiveName { get; set; }
+    public long TimeMeasurementId { get; set; }
+    public string? TimeMeasurementName { get; set; }
+    public float? MTPD { get; set; }
+    public float? WRT { get; set; }
+    public float? RTO { get; set; }
+    public DateTime? CreatedAt { get; set; }
     public long ImportanceDegreeId { get; set; }
     public string? ImportanceDegreeName { get; set; }
     public long ServicePriorityId { get; set; }
@@ -15,7 +23,7 @@ public class GetBusinessImpactAnalysisQueryResult
     public string? BackupPeriodName { get; set; }
     public string? RestartReason { get; set; }
     public string? ActiveStatus { get; set; }
-    public DateTime? CreatedAt { get; set; }
+
     public string? CreatedAtPersian => CreatedAt.ToPersianDateTime();
     public IEnumerable<GetBusinessImpactAnalysisAssetQueryResult>? BusinessImpactAnalysisAssetList { get; set; }
     public IEnumerable<GetBusinessImpactAnalysisStaffQueryResult>? BusinessImpactAnalysisStaffList { get; set; }
@@ -26,8 +34,8 @@ public class GetBusinessImpactAnalysisQueryResult
 public class GetBusinessImpactAnalysisAssetQueryResult
 {
     public long Id { get; set; }
+    public string Name { get; set; }
     public string? AssetName { get; set; }
-    public string? AssetCode { get; set; }
     public DateTime? CreatedAt { get; set; }
     public string? CreatedAtPersian => CreatedAt.ToPersianDateTime();
 }
@@ -68,18 +76,14 @@ public class GetBusinessImpactAnalysisIssueQueryResult
 public class GetBusinessImpactAnalysisDisasterOriginQueryResult
 {
     public long Id { get; set; }
+    public long ConsequenceIntensionId { get; set; }
+    public string ConsequenceIntensionName { get; set; }
+    public float ValueNumber { get; set; }
     public long OriginId { get; set; }
     public string? OriginName { get; set; }
-    public string? HappeningPossibilityName { get; set; }
     public long ConsequenceId { get; set; }
     public string? ConsequenceName { get; set; }
-    public long RecoveryPointObjectiveId { get; set; }
-    public string? RecoveryPointObjectiveName { get; set; }
-    public long TimeMeasurementId { get; set; }
-    public string? TimeMeasurementName { get; set; }
-    public float? MTD { get; set; }
-    public float? WRT { get; set; }
-    public float? RTO { get; set; }
     public DateTime? CreatedAt { get; set; }
+
     public string? CreatedAtPersian => CreatedAt.ToPersianDateTime();
 }

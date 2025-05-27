@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Persistance.Persistence;
+using SIMA.Resources;
 
 namespace SIMA.DomainService.Features.RiskManagers.ConsequenceLevels;
 
@@ -14,6 +16,16 @@ public class ConsequenceLevelDomainService : IConsequenceLevelDomainService
     {
         _context = context;
     }
+
+    public async Task CanBeDeleted(ConsequenceLevelId id)
+    {
+        var predict = await _context.Severities.AnyAsync(x => x.ConsequenceLevelId == id && x.SeverityValueId != null && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
+        if (predict)
+        {
+            throw new SimaResultException(CodeMessges._100117Code, Messages.AffectedHistoryAndConsequenceLevelAllocatedError);
+        }
+    }
+
     public async Task<bool> IsCodeUnique(string code, ConsequenceLevelId? id = null)
     {
         bool result = false;

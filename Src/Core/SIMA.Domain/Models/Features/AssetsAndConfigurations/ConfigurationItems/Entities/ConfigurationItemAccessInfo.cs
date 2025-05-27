@@ -1,6 +1,10 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 
@@ -23,8 +27,21 @@ public class ConfigurationItemAccessInfo : Entity
     }
     public static ConfigurationItemAccessInfo Create(CreateConfigurationItemAccessInfoArg arg)
     {
+        CreateGuards(arg);
         return new ConfigurationItemAccessInfo(arg);
     }
+    #region Guards
+    private static void CreateGuards(CreateConfigurationItemAccessInfoArg arg)
+    {
+        arg.IPAddressFrom.NullCheck();
+
+        if (!IPHelper.IsValidIPv4(arg.IPAddressFrom)) throw new SimaResultException(CodeMessges._100116Code, Messages.InvalidIpv4Error);
+
+        arg.IPAddressTo.NullCheck();
+
+        if (!IPHelper.IsValidIPv4(arg.IPAddressTo)) throw new SimaResultException(CodeMessges._100116Code, Messages.InvalidIpv4Error);
+    }
+    #endregion
     public ConfigurationItemAccessInfoId Id { get; private set; }
     public ConfigurationItemId ConfigurationItemId { get; private set; }
     public virtual ConfigurationItem ConfigurationItem { get; private set; }
@@ -39,4 +56,16 @@ public class ConfigurationItemAccessInfo : Entity
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    public void Delete(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
+    }
 }

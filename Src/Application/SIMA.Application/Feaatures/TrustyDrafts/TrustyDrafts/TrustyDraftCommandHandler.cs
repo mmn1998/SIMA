@@ -256,6 +256,8 @@ public class TrustyDraftCommandHandler : ICommandHandler<CreateTrustyDraftComman
             var inquiryResponse = inqueryRequest.InquiryResponses.FirstOrDefault() ?? throw SimaResultException.NotFound;
             var validCurrency = inqueryRequest.InquiryRequestCurrencies.FirstOrDefault(x => x.Id == inquiryResponse.InquiryRequestCurrencyId) ?? throw SimaResultException.NotFound;
 
+            
+
             if (entity.DraftRequestAmount != validCurrency.Amount)
                 throw new SimaResultException(CodeMessges._400Code, Messages.DraftRequetAmountError);
 
@@ -264,6 +266,10 @@ public class TrustyDraftCommandHandler : ICommandHandler<CreateTrustyDraftComman
 
             var arg = _mapper.Map<CreateFinalTrustyDraftArg>(request);
             arg.DraftNumber = entity.DraftNumber;
+
+            if (inqueryRequest.DraftOriginId is not null && inqueryRequest.DraftOriginId.Value == 6120392622)
+               arg.DraftNumber = "ICE - " + entity.DraftNumber;
+
             arg.BranchLetterNumber = await GetBranchLetterNumber();
             if (request.TrustDraftDocumentList is not null && request.TrustDraftDocumentList.Count > 0)
             {

@@ -36,179 +36,198 @@ public class AssetCommandHandler : ICommandHandler<CreateAssetCommand, Result<lo
 
     public async Task<Result<long>> Handle(CreateAssetCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateAssetArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await Asset.Create(arg, _service);
-        
-        
-        if (request.AssetCustomFeildOptionList is not null)
+        try
         {
-            var args = _mapper.Map<List<CreateAssetCustomFieldValueArg>>(request.AssetCustomFeildOptionList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.AddAssetCustomFieldValueAsset(args);
-        }
-        
-        
-        
-        if (request.AssetAssignedStaffList is not null)
-        {
-            var args = _mapper.Map<List<CreateAssetAssignedStaffArg>>(request.AssetAssignedStaffList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.AddAssignedStaffs(args);
-        }
-        
-        
-        if (request.ServiceAssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateServiceAssetArg>>(request.ServiceAssetList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-                
-            }
-            entity.AddAssetService(args);
-        }
-        
-        
-        if (request.AssetDocumentList is not null)
-        {
-            var args = _mapper.Map<List<CreateAssetDocumentArg>>(request.AssetDocumentList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.AddAssetDocument(args);
-        }
-        
-        if (request.ConfigurationItemAssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateConfigurationItemAssetArg>>(request.ConfigurationItemAssetList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.AddConfigurationItemAsset(args);
-        }
+            var arg = _mapper.Map<CreateAssetArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
+            var entity = await Asset.Create(arg, _service);
 
-        if (request.ComplexAssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateComplexAssetArg>>(request.ComplexAssetList);
-            foreach (var item in args)
+
+            if (request.AssetCustomFeildOptionList is not null)
             {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
+                var args = _mapper.Map<List<CreateAssetCustomFieldValueArg>>(request.AssetCustomFeildOptionList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.AddAssetCustomFieldValueAsset(args);
             }
-            entity.AddComplexAssetAsset(args);
+
+
+
+            if (request.AssetAssignedStaffList is not null)
+            {
+                var args = _mapper.Map<List<CreateAssetAssignedStaffArg>>(request.AssetAssignedStaffList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.AddAssignedStaffs(args);
+            }
+
+
+            if (request.ServiceAssetList is not null)
+            {
+                var args = _mapper.Map<List<CreateServiceAssetArg>>(request.ServiceAssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+
+                }
+                entity.AddAssetService(args);
+            }
+
+
+            if (request.AssetDocumentList is not null)
+            {
+                var args = _mapper.Map<List<CreateAssetDocumentArg>>(request.AssetDocumentList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.AddAssetDocument(args);
+            }
+
+            if (request.ConfigurationItemAssetList is not null)
+            {
+                var args = _mapper.Map<List<CreateConfigurationItemAssetArg>>(request.ConfigurationItemAssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.AddConfigurationItemAsset(args);
+            }
+
+            if (request.ComplexAssetList is not null)
+            {
+                var args = _mapper.Map<List<CreateComplexAssetArg>>(request.ComplexAssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.AddComplexAssetAsset(args);
+            }
+
+            #region AssetIssues
+
+            var assetIssueArg = _mapper.Map<CreateAssetIssueArg>(arg);
+            assetIssueArg.AssetId = arg.Id;
+            entity.AddAssetIssues(new List<CreateAssetIssueArg>
+
+                {
+                    assetIssueArg
+                });
+            #endregion
+
+
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(arg.Id);
         }
-        
-        #region AssetIssues
-        var assetIssueArg = _mapper.Map<CreateAssetIssueArg>(arg);
-        entity.AddAssetIssues(new List<CreateAssetIssueArg>
+        catch(Exception ex)
         {
-            assetIssueArg
-        });
-        #endregion
-        
-        
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(arg.Id);
+            throw;
+        }
+       
     }
 
     public async Task<Result<long>> Handle(ModifyAssetCommand request, CancellationToken cancellationToken)
     {
-        var entity = await _repository.GetById(new(request.Id));
-        var arg = _mapper.Map<ModifyAssetArg>(request);
-        
-            
-        if (request.AssetCustomFeildOptionList is not null)
+        try
         {
-            var args = _mapper.Map<List<CreateAssetCustomFieldValueArg>>(request.AssetCustomFeildOptionList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.ModifyCreateAssetCustomFieldValues(args);
-        }
-        
-        
-        
-        if (request.AssetAssignedStaffList is not null)
-        {
-            var args = _mapper.Map<List<CreateAssetAssignedStaffArg>>(request.AssetAssignedStaffList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.ModifyAssignedStaffs(args);
-        }
-        
-        
-        if (request.ServiceAssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateServiceAssetArg>>(request.ServiceAssetList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-                
-            }
-            entity.ModifyServiceAssets(args);
-        }
-        
-        
-        if (request.AssetDocumentList is not null)
-        {
-            var args = _mapper.Map<List<CreateAssetDocumentArg>>(request.AssetDocumentList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.ModifyAssetDocuments(args);
-        }
-        
-     
-        if (request.ConfigurationItemAssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateConfigurationItemAssetArg>>(request.ConfigurationItemAssetList);
-            foreach (var item in args)
-            {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
-            }
-            entity.ModifyConfigurationItemAssets(args);
-        }
+            var entity = await _repository.GetById(new(request.Id));
+            var arg = _mapper.Map<ModifyAssetArg>(request);
 
-        if (request.ComplexAssetList is not null)
-        {
-            var args = _mapper.Map<List<CreateComplexAssetArg>>(request.ComplexAssetList);
-            foreach (var item in args)
+
+            if (request.AssetCustomFeildOptionList is not null)
             {
-                item.CreatedBy = _simaIdentity.UserId;
-                item.AssetId = arg.Id;
+                var args = _mapper.Map<List<CreateAssetCustomFieldValueArg>>(request.AssetCustomFeildOptionList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.ModifyCreateAssetCustomFieldValues(args);
             }
-            entity.ModifyComplexAssets(args);
+
+
+
+            if (request.AssetAssignedStaffList is not null)
+            {
+                var args = _mapper.Map<List<CreateAssetAssignedStaffArg>>(request.AssetAssignedStaffList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.ModifyAssignedStaffs(args);
+            }
+
+
+            if (request.ServiceAssetList is not null)
+            {
+                var args = _mapper.Map<List<CreateServiceAssetArg>>(request.ServiceAssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+
+                }
+                entity.ModifyServiceAssets(args);
+            }
+
+
+            if (request.AssetDocumentList is not null)
+            {
+                var args = _mapper.Map<List<CreateAssetDocumentArg>>(request.AssetDocumentList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.ModifyAssetDocuments(args);
+            }
+
+
+            if (request.ConfigurationItemAssetList is not null)
+            {
+                var args = _mapper.Map<List<CreateConfigurationItemAssetArg>>(request.ConfigurationItemAssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.ModifyConfigurationItemAssets(args);
+            }
+
+            if (request.ComplexAssetList is not null)
+            {
+                var args = _mapper.Map<List<CreateComplexAssetArg>>(request.ComplexAssetList);
+                foreach (var item in args)
+                {
+                    item.CreatedBy = _simaIdentity.UserId;
+                    item.AssetId = arg.Id;
+                }
+                entity.ModifyComplexAssets(args);
+            }
+
+
+
+            await entity.Modify(arg, _service);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(request.Id);
+        }
+        catch(Exception ex)
+        {
+            throw;
         }
         
-        
-        
-        await entity.Modify(arg, _service);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(request.Id);
     }
 
     public async Task<Result<long>> Handle(DeleteAssetCommand request, CancellationToken cancellationToken)

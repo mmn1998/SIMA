@@ -517,7 +517,10 @@ LEFT JOIN  [Project].[State] ST on I.CurrentStateId = ST.Id
                                     order by IC.CreatedAt desc
                                     
                                   ------ IssueApproval
-                                       select 
+                                       
+                                       select  
+
+									     S.ProfileId,
                                            SAO.Id StepApprovalOptionId
                                            ,IAP.Description
                                            ,Step2.Name StepName
@@ -528,11 +531,8 @@ LEFT JOIN  [Project].[State] ST on I.CurrentStateId = ST.Id
                                            ,(p2.FirstName + ' ' + P2.LastName) CreatedBy
                                            ,(p3.FirstName + ' ' + P3.LastName) ApprovedBy
                                            ,IAP.CreatedAt
-	                                       ,(select isnull(SignatureId,0) from Organization.Staff S
-	   
-	                                       where p3.id=S.ProfileId
-	    
-	                                       ) as SignatureId
+					                       ,TRY_CAST(SignatureId AS BIGINT) SignatureId
+	                                      
                                       from 
                                        IssueManagement.Issue I 
                                       INNER JOIN IssueManagement.IssueApproval IAP on IAP.IssueId = I.Id
@@ -545,6 +545,8 @@ LEFT JOIN  [Project].[State] ST on I.CurrentStateId = ST.Id
                                       INNER JOIN Authentication.Profile P2 on P2.Id = U2.ProfileID
                                       INNER JOIN Authentication.Users U3 on IAP.ApprovedBy = U3.Id
                                       INNER JOIN Authentication.Profile P3 on P3.Id = U3.ProfileID
+				      INNER JOIN Organization.Staff S ON p3.id=S.ProfileId AND s.ActiveStatusId<>3
+
                                       WHERE I.Id = @issueId AND I.ActiveStatusId <> 3
                                       order by CreatedAt
                                      ------ Progress

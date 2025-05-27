@@ -51,7 +51,8 @@ public class AffectedHistoryCommandHandler : ICommandHandler<CreateAffectedHisto
     public async Task<Result<long>> Handle(DeleteAffectedHistoryCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new(request.Id));
-        long userId = _simaIdentity.UserId; entity.Delete(userId);
+        long userId = _simaIdentity.UserId;
+        await entity.Delete(userId, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

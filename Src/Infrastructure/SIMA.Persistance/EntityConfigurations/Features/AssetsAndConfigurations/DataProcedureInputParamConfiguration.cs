@@ -9,7 +9,8 @@ public class DataProcedureInputParamConfiguration : IEntityTypeConfiguration<Dat
 {
     public void Configure(EntityTypeBuilder<DataProcedureInputParam> entity)
     {
-        entity.ToTable("DataCenter", "DataProcedureInputParams");
+        
+        entity.ToTable("DataProcedureInputParam", "AssetAndConfiguration");
 
         entity.HasKey(e => e.Id);
         entity.Property(x => x.Id)

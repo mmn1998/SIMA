@@ -54,10 +54,11 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
         if (user.ActiveStatusId == 3) throw new SimaResultException(CodeMessges._100008Code, Messages.UserIsDeletedError);
         var allPermissions = await _context.Permissions/*.Where(p => p.Id != new PermissionId(32767))*/.ToListAsync();
         var thisUserPermissions = await _context.UserPermissions.Where(up => up.UserId == new UserId(userId)).ToListAsync();
-        foreach (var item in thisUserPermissions)
-        {
-            allPermissions = allPermissions.Where(i => i.Id != item.PermissionId).ToList();
-        }
+        //foreach (var item in thisUserPermissions)
+        //{
+        //    allPermissions = allPermissions.Where(i => i.Id != item.PermissionId).ToList();
+        //}
+        allPermissions = allPermissions.Where(it => thisUserPermissions.All(q => q.PermissionId != it.Id)).ToList();
         var createUserPermissionArgs = allPermissions.Select(i => new CreateUserPermissionArg
         {
             UserId = userId,
@@ -76,7 +77,7 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
         var AddPermissionList = new List<CreatePermissionArg>();
         foreach (var enumValue in enumList)
         {
-            
+
             var enumField = typeof(PermissionForAddEnum).GetField(enumValue.ToString());
             var eunmCode = Convert.ToInt32(enumValue);
             var displayAttribute = enumField.GetCustomAttribute<DisplayAttribute>();
@@ -93,13 +94,13 @@ public class PermissionRepository : Repository<Permission>, IPermissionRepositor
                 arg.Name = description;
                 arg.Code = eunmCode.ToString();
                 arg.EnglishKey = name;
-                arg.DomainId = 17;
+                arg.DomainId = 8;
                 arg.CreatedAt = DateTime.Now;
                 arg.CreatedBy = 9999;
                 arg.ActiveStatusId = 1;
                 AddPermissionList.Add(arg);
             }
-            
+
         }
         return AddPermissionList;
     }

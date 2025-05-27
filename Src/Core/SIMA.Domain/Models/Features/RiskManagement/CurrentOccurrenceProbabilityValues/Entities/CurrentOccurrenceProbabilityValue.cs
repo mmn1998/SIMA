@@ -3,6 +3,7 @@ using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityVal
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.CurrentOccurrenceProbabilityValues.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -57,6 +58,10 @@ public class CurrentOccurrenceProbabilityValue : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+    private List<RiskLevel> _riskLevels = new();
+    public ICollection<RiskLevel> RiskLevels => _riskLevels;
+
     #region Guards
     private static async Task CreateGuadrs(CreateCurrentOccurrenceProbabilityValueArg arg, ICurrentOccurrenceProbabilityValueDomainService service)
     {

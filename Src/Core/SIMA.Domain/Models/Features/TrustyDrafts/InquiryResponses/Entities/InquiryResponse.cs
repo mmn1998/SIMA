@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
+﻿using Newtonsoft.Json;
+using SIMA.Domain.Models.Features.BranchManagement.Brokers.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.Brokers.ValueObjects;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.Entities;
 using SIMA.Domain.Models.Features.BranchManagement.CurrencyTypes.ValueObjects;
@@ -12,8 +13,10 @@ using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Exceptions;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.ValueObjects;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.Entities;
 using SIMA.Domain.Models.Features.TrustyDrafts.WageRates.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Entities;
@@ -28,7 +31,7 @@ public class InquiryResponse : Entity
     {
         Id = new(arg.Id);
         BrokerInquiryStatusId = new(arg.BrokerInquiryStatusId);
-        InquiryRequestCurrencyId = new(arg.InquiryRequestCurrencyId);
+        if (arg.InquiryRequestCurrencyId.HasValue) InquiryRequestCurrencyId = new(arg.InquiryRequestCurrencyId.Value);
         InquiryRequestId = new(arg.InquiryRequestId);
         BrokerId = new(arg.BrokerId);
         WageRateId = new(arg.WageRateId);
@@ -50,7 +53,15 @@ public class InquiryResponse : Entity
     private static async Task CreateGuards(CreateInquiryResponseArg arg, IInquiryResponseDomainService service)
     {
         arg.NullCheck();
-        if (!await service.CurrencyTypeIdEquals(arg.WageRateId, arg.InquiryRequestCurrencyId)) throw InquiryResponseExceptions.InvalidWageRateException;
+
+        if (!await service.CheckInqueryStatus(arg))
+            throw new SimaResultException(CodeMessges._400Code, Messages.ValidityPeriodAndCalculatedWageAndInquiryRequestCurrencyIdIsRequired);
+
+        if (arg.BrokerInquiryStatusId != 3)
+        {
+            if (!await service.CurrencyTypeIdEquals(arg.WageRateId, arg.InquiryRequestCurrencyId.Value)) throw InquiryResponseExceptions.InvalidWageRateException;
+        }
+
     }
     //private async Task ModifyGuards(ModifyInquiryRequestArg arg, IInquiryRequestDomainService service)
     //{
@@ -81,15 +92,15 @@ public class InquiryResponse : Entity
     public virtual InquiryRequest InquiryRequest { get; private set; }
     public BrokerInquiryStatusId BrokerInquiryStatusId { get; private set; }
     public virtual BrokerInquiryStatus BrokerInquiryStatus { get; private set; }
-    public InquiryRequestCurrencyId InquiryRequestCurrencyId { get; private set; }
-    public virtual InquiryRequestCurrency InquiryRequestCurrency { get; private set; }
+    public InquiryRequestCurrencyId? InquiryRequestCurrencyId { get; private set; }
+    public virtual InquiryRequestCurrency? InquiryRequestCurrency { get; private set; }
     public BrokerId BrokerId { get; private set; }
     public virtual Broker Broker { get; private set; }
     public WageRateId WageRateId { get; private set; }
     public virtual WageRate WageRate { get; private set; }
     public CurrencyTypeId? ExcessWageCurrencyTypeId { get; private set; }
     public virtual CurrencyType? ExcessWageCurrencyType { get; private set; }
-    public decimal CalculatedWage { get; private set; }
+    public decimal? CalculatedWage { get; private set; }
     public decimal? ExcessWage { get; private set; }
     public string? Description { get; private set; }
     public DateTime? ValidityPeriod { get; private set; }

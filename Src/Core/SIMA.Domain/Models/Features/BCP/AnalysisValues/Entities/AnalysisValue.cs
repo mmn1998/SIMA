@@ -54,7 +54,7 @@ public class AnalysisValue : Entity, IAggregateRoot
 
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
     }
-    private async Task ModifyGuards(ModifyAnalysisValueArg arg)
+    private void ModifyGuards(ModifyAnalysisValueArg arg)
     {
         arg.NullCheck();
         arg.Name.NullCheck();

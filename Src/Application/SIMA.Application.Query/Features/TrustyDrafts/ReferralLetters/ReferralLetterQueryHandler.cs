@@ -1,6 +1,8 @@
 ﻿using SIMA.Application.Query.Contract.Features.DMS.Documents;
 using SIMA.Application.Query.Contract.Features.TrustyDrafts.ReferalLetters;
 using SIMA.Application.Query.Services.ReportServices;
+using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.TrustyDrafts.ReferralLetters;
@@ -16,11 +18,13 @@ IQueryHandler<GetReferalLetterQuery, Result<GetReferalLetterQueryResult>>,
 {
     private readonly IReferralLetterQueryRepository _repository;
     private readonly IBankReportService _reportService;
+    private readonly ISimaReportService _simaReportService;
 
-    public ReferralLetterQueryHandler(IReferralLetterQueryRepository repository, IBankReportService reportService)
+    public ReferralLetterQueryHandler(IReferralLetterQueryRepository repository, IBankReportService reportService, ISimaReportService simaReportService)
     {
         _repository = repository;
         _reportService = reportService;
+        _simaReportService = simaReportService;
     }
     public async Task<Result<IEnumerable<GetAllReferralLettersQueryResult>>> Handle(GetAllReferalLettersQuery request, CancellationToken cancellationToken)
     {
@@ -45,6 +49,20 @@ IQueryHandler<GetReferalLetterQuery, Result<GetReferalLetterQueryResult>>,
 
     public async Task<Result<IEnumerable<GetAllReferralLettersQueryResult>>> Handle(GetAllReferralLetterToExchangeQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAllToExchange(request);
+        var res = await _repository.GetAllToExchange(request);
+        if (!string.IsNullOrEmpty(request.FormatType))
+        {
+            var excelByte = _simaReportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
+            var exportResult = new ExportResult
+            {
+                Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
+                ContentType = ExportContentTypes.ExcelContentType,
+                Extension = ExportExtensions.ExcelExtension,
+                FileContent = excelByte,
+            };
+            res.ExportResult = exportResult;
+        }
+        return res;
     }
 }

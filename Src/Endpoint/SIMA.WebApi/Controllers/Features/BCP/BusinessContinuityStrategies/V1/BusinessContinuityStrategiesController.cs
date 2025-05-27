@@ -18,7 +18,9 @@ public class BusinessContinuityStrategiesController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
+    /*
     [SimaAuthorize(Permissions.businessContinuityStratgyPost)]
+    */
     public async Task<Result> Post([FromBody] CreateBusinessContinuityStrategyCommand command)
     {
         return await _mediator.Send(command);

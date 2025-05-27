@@ -13,22 +13,21 @@ public class GetAllRisksQueryResult
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
-    public string? IsNeedCobit { get; set; }
-    public long RiskTypeId { get; set; }
-    public string? RiskTypeName { get; set; }
     public long AffectedHistoryId { get; set; }
-    public string? AffectedHistoryName { get; set; }
+    public string AffectedHistoryName { get; set; }
     public long UseVulnerabilityId { get; set; }
-    public string? UseVulnerabilityName { get; set; }
-    public long ScenarioHistoryId { get; set; }
-    public string? ScenarioHistoryName { get; set; }
-    public long FrequencyId { get; set; }
-    public string? FrequencyName { get; set; }
-    public long TriggerStatusId { get; set; }
-    public string? TriggerStatusName { get; set; }
+    public string UseVulnerabilityName { get; set; }
     public long? ConsequenceLevelId { get; set; }
-    public string? ConsequenceLevelName { get; set; }
-    public string? Description { get; set; }
+    public string ConsequenceLevelName { get; set; }
+    public long TriggerStatusId { get; set; }
+    public string TriggerStatusName { get; set; }
+    public long ScenarioHistoryId { get; set; }
+    public string ScenarioHistoryName { get; set; }
+    public long FrequencyId { get; set; }
+    public string FrequencyName { get; set; }
+
+
+    public string? RiskTypeName { get; set; }
     public string? ActiveStatus { get; set; }
     public long IssueId { get; set; }
     public string? IssueCode { get; set; }
@@ -60,34 +59,47 @@ public class GetRiskQueryResult
     public long Id { get; set; }
     public string? Name { get; set; }
     public string? Code { get; set; }
-    public string? IsNeedCobit { get; set; }
-    public long RiskTypeId { get; set; }
-    public string? RiskTypeName { get; set; }
     public long AffectedHistoryId { get; set; }
     public string? AffectedHistoryName { get; set; }
     public long UseVulnerabilityId { get; set; }
     public string? UseVulnerabilityName { get; set; }
-    public long ScenarioHistoryId { get; set; }
-    public string? ScenarioHistoryName { get; set; }
-    public long FrequencyId { get; set; }
     public long? ConsequenceLevelId { get; set; }
     public string? ConsequenceLevelName { get; set; }
-    public string? FrequencyName { get; set; }
     public long TriggerStatusId { get; set; }
     public string? TriggerStatusName { get; set; }
+    public long ScenarioHistoryId { get; set; }
+    public string? ScenarioHistoryName { get; set; }
+    public IEnumerable<CobitRiskCategoryScenarioQueryResult>? CobitRiskCategoryScenarioList { get; set; } //
+    public long FrequencyId { get; set; }
+    public string? FrequencyName { get; set; }
+    public string? IsNeedCobit { get; set; }
     public string? Description { get; set; }
-    public string? ActiveStatus { get; set; }
-    public IEnumerable<GetCorrectiveActionQueryResult>? CorrectiveActionList { get; set; }
     public IEnumerable<GetPreventiveActionQueryResult>? PreventiveActionList { get; set; }
+    public IEnumerable<GetCorrectiveActionQueryResult>? CorrectiveActionList { get; set; }
     public IEnumerable<GetEffectedAssetQueryResult>? EffectedAssetList { get; set; }
     public IEnumerable<GetServiceRiskImpactQueryResult>? ServiceRiskImpactList { get; set; }
     public IEnumerable<GetThreatQueryResult>? ThreatList { get; set; }
-    public IEnumerable<GetServiceAssignedStaff>? ServiceAssignedStavesList { get; set; }
+    public IEnumerable<GetRiskValueStrategyQueryResult>? RiskValueStrategyList { get; set; }
+
+}
+public class CobitRiskCategoryScenarioQueryResult
+{
+    public long Id { get; set; }
+    public long RiskCategoryId { get; set; }
+    public string RiskCategoryName { get; set; }
+    public long CobitScenarioId { get; set; }
+    public string CobitScenarioName { get; set; }
 }
 public class GetPreventiveActionQueryResult
 {
     public long Id { get; set; }
     public string? ActionDescription { get; set; }
+}
+public class GetRiskValueStrategyQueryResult
+{
+    public long Id { get; set; }
+    public long StrategyId { get; set; }
+    public string? StrategyName { get; set; }
 }
 public class GetCorrectiveActionQueryResult
 {

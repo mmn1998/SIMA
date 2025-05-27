@@ -27,5 +27,15 @@ namespace SIMA.Persistance.Repositories.Features.BCP.BusinessContinuityPlans
             entity.NullCheck();
             return entity ?? throw SimaResultException.NotFound;
         }
+
+        public async Task<BusinessContinuityPlan> GetByVersionNumber(string VersionNumber)
+        {
+            var entity = await _context.BusinessContinuityPlans
+                
+
+                .FirstOrDefaultAsync(x => x.VersionNumber == VersionNumber);
+            entity.NullCheck();
+            return entity ?? throw SimaResultException.NotFound;
+        }
     }
 }

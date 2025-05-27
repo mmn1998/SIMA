@@ -2,6 +2,7 @@
 using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.CobitCategories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.CobitScenarios.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.Risks.Entities;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
@@ -10,6 +11,8 @@ using System.Text;
 
 namespace SIMA.Domain.Models.Features.RiskManagement.CobitCategories.Entities;
 
+
+// table name is !!!!CobitRiskCategory!!!!
 public class CobitCategory : Entity, IAggregateRoot
 {
     private CobitCategory()
@@ -77,4 +80,7 @@ public class CobitCategory : Entity, IAggregateRoot
     }
     private List<CobitScenario> _cobitScenarios = new();
     public ICollection<CobitScenario> CobitScenarios => _cobitScenarios;
+
+    private List<CobitRiskCategoryScenario> _cobitRiskCategoryScenarios = new();
+    public ICollection<CobitRiskCategoryScenario> CobitRiskCategoryScenarios => _cobitRiskCategoryScenarios;
 }

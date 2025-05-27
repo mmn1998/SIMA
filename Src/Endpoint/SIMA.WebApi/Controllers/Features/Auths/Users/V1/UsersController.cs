@@ -68,7 +68,7 @@ public class UsersController : ControllerBase
         return result;
     }
     [HttpPut]
-    [SimaAuthorize(Permissions.UserPut)]
+    //[SimaAuthorize(Permissions.UserPut)]
     public async Task<Result> Put([FromBody] UpdateUserCommand command)
     {
         var result = await _mediator.Send(command);

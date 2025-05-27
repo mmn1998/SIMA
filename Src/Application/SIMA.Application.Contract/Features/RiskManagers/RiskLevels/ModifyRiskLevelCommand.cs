@@ -6,8 +6,10 @@ namespace SIMA.Application.Contract.Features.RiskManagers.RiskLevels
     public class ModifyRiskLevelCommand : ICommand<Result<long>>
     {
         public long Id { get; set; }
-        public string Name { get; set; }
+        public long RiskValueId { get; set; }
+        public long SeverityValueId { get; set; }
+        public long CurrentOccurrenceProbabilityValueId { get; set; }
         public string Code { get; set; }
-        public float Level { get; set; }
+
     }
 }

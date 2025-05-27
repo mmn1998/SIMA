@@ -120,6 +120,9 @@
   <data name="AccessDeny" xml:space="preserve">
     <value>شما مجاز به دسترسی به این بخش نمی باشید</value>
   </data>
+  <data name="AccessDeny1" xml:space="preserve">
+    <value>شما مجاز به دسترسی به این بخش نمی باشید</value>
+  </data>
   <data name="AddressTypeCodeIsNotNullable" xml:space="preserve">
     <value>کد آدرس اجباری است</value>
   </data>
@@ -723,5 +726,27 @@
   <data name="UniqueVersionError" xml:space="preserve">
     <value>شماره ورژن انتخاب شده تکراری است</value>
     <comment>100115</comment>
+  </data>
+  <data name="ValidityPeriodAndCalculatedWageAndInquiryRequestCurrencyIdIsRequired" xml:space="preserve">
+    <value>فیلد های کارمزدکارگزار ، تاریخ انقضا استعلام ، مبلغ کارمزد الزامی می باشد</value>
+  </data>
+  <data name="EmptyProformaAmountError" xml:space="preserve">
+    <value>مبلغ پروفرما را وارد نمایید</value>
+  </data>
+  <data name="NumberProformaIsRequried" xml:space="preserve">
+    <value>فیلد شماره پروفرما اجباری می باشد</value>
+  </data>
+  <data name="CombinationOfFieldsError" xml:space="preserve">
+    <value>ترکیب فیلد های مورد نظر تکراری میباشد!</value>
+  </data>
+  <data name="InvalidIpv4Error" xml:space="preserve">
+    <value>آدرس آی پی وارد شده اشتباه است</value>
+  </data>
+  <data name="ConsequenceCategoryIsNull" xml:space="preserve">
+    <value>دسته‌بندی اجباری می باشد</value>
+  </data>
+  <data name="AffectedHistoryAndConsequenceLevelAllocatedError" xml:space="preserve">
+    <value>به علت تخصیص خانه نمودار، امکان حذف وجود ندارد</value>
+    <comment>100117</comment>
   </data>
 </root>

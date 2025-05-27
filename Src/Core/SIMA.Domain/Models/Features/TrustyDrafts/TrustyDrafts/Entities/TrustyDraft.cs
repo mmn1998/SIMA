@@ -168,6 +168,7 @@ public class TrustyDraft : Entity
         CreatedAt = arg.CreatedAt;
         MainShareFromWage = arg.MainShareFromWage;
         BuyShareFromWage = arg.BuyShareFromWage;
+        DraftNumber = arg.DraftNumber;
         AddDomainEvent(new CreateTrustyDraftEvent(issueId: arg.IssueId, MainAggregateType: MainAggregateEnums.TrustyDraft,
             Name: arg.DraftNumber, SourceId: arg.Id, IssuePriority: null, DueDate: null, null));
 

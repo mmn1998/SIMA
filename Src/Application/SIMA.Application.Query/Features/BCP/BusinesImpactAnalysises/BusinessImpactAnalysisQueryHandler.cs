@@ -8,7 +8,7 @@ using SIMA.Persistance.Read.Repositories.Features.BCP.BusinesImpactAnalysises;
 namespace SIMA.Application.Query.Features.BCP.BusinesImpactAnalysises;
 
 public class BusinessImpactAnalysisQueryHandler : IQueryHandler<GetBusinessImpactAnalysisQuery, Result<GetBusinessImpactAnalysisQueryResult>>,
-    IQueryHandler<GetAllBusinessImpactAnalysisesQuery, Result<IEnumerable<GetAllBusinessImpactAnalysisesQueryResult>>>
+    IQueryHandler<GetAllBusinessImpactAnalysisesQuery, Result<IEnumerable<GetAllBusinessImpactAnalysisesQueryResult>>>,IQueryHandler<GetFinalBusinessImpactAnalysisQuery, Result<GetBusinessImpactAnalysisQueryResult>>
 {
     private readonly IBusinessImpactAnalysisQueryRepository _repository;
     private readonly ISimaReportService _reportService;
@@ -42,5 +42,11 @@ public class BusinessImpactAnalysisQueryHandler : IQueryHandler<GetBusinessImpac
         }
 
         return res;
+    }
+
+    public async Task<Result<GetBusinessImpactAnalysisQueryResult>> Handle(GetFinalBusinessImpactAnalysisQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetByServcieId(request);
+        return Result.Ok(result);
     }
 }

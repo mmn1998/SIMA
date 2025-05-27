@@ -8,7 +8,7 @@ public class CobitCategoryConfiguration : IEntityTypeConfiguration<CobitCategory
 {
     public void Configure(EntityTypeBuilder<CobitCategory> entity)
     {
-        entity.ToTable("CobitCategory", "RiskManagement");
+        entity.ToTable("CobitRiskCategory", "RiskManagement");
 
         entity.HasIndex(e => e.Code).IsUnique();
 

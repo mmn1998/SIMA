@@ -21,6 +21,8 @@ public class BusinessCriticalityRepository : Repository<BusinessCriticality>, IB
     {
         var entity = await _context.BusinessCriticalities.FirstOrDefaultAsync(x => x.Id == Id);
         entity.NullCheck();
+        
+        
         return entity ?? throw SimaResultException.NotFound;
     }
 }

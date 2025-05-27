@@ -21,14 +21,13 @@ public class BiaValueQueryRepository : IBiaValueQueryRepository
 	,BV.[Name]
 	,BV.[ConsequenceIntensionId]
 	,BV.[ConsequenceId]
-	,BI.Name ConsequenceIntensionName
+	,CI.Name ConsequenceIntensionName
     ,C.Name ConsequenceName
     ,BV.CreatedAt
-    ,BV.[ValueNumber]
 	,A.[Name] ActiveStatus
 From [BCP].BiaValue BV
 join Basic.ActiveStatus A on BV.ActiveStatusId = A.Id
-INNER JOIN BCP.ConsequenceIntension CI ON BV.OriginId = CI.Id AND CI.ActiveStatusId<>3
+INNER JOIN BCP.ConsequenceIntension CI ON BV.ConsequenceId = CI.Id AND CI.ActiveStatusId<>3
 INNER JOIN BCP.Consequence C ON BV.ConsequenceId = C.Id AND C.ActiveStatusId<>3
 WHERE BV.[ActiveStatusID] <> 3
 ";

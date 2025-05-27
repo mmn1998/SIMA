@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.DataCenters;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.DataCenters.V1;
 
@@ -19,14 +20,14 @@ public class DataCentersQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.DataCenterGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetDataCenterQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.DataCenterGetAll)]
     public async Task<Result> Get([FromBody] GetAllDataCentersQuery query)
     {
         return await _mediator.Send(query);

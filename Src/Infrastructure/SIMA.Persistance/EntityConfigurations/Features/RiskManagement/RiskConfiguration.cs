@@ -29,9 +29,9 @@ public class RiskConfiguration : IEntityTypeConfiguration<Risk>
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        entity.HasOne(d => d.RiskType).WithMany(p => p.Risks)
-          .HasForeignKey(d => d.RiskTypeId)
-            .HasConstraintName("FK_Risk_RiskType");
+        entity.HasOne(d => d.RiskCategory).WithMany(p => p.Risks)
+          .HasForeignKey(d => d.RiskCategoryId)
+            .OnDelete(DeleteBehavior.ClientSetNull);
 
         entity.Property(x => x.ScenarioHistoryId)
             .HasConversion(x => x.Value,

@@ -7,4 +7,3 @@ public class GetAccessTypeQuery : IQuery<Result<GetAccessTypeQueryResult>>
 {
     public long Id { get; set; }
 }
-

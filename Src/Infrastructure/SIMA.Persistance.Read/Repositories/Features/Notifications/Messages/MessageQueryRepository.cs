@@ -81,6 +81,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Notifications.Messages
                                         M.Id,
                                         M.Subject,
                                         M.Description,
+                                        M.IsEveryOne,
                                         M.ExpireDate,
                                         M.CreatedAt,
                                         P.FirstName + ' ' + P.LastName AS CreatedBy,
@@ -98,7 +99,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Notifications.Messages
                                     left join Organization.Staff S on S.PositionId = Po.Id
                                     left JOIN Authentication.Profile PP ON PP.Id = S.ProfileId
                                     left join Authentication.Users UU on UU.ProfileID = PP.Id
-                                    WHERE M.ActiveStatusId <> 3 and( UU.Id = @userId or MGD.GroupId in @groupId)
+                                    WHERE M.ActiveStatusId <> 3 and( M.IsEveryOne = '1' or UU.Id = @userId or MGD.GroupId in @groupId)
 							)
 								SELECT Count(*) FROM Query
 								 /**where**/
@@ -112,6 +113,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Notifications.Messages
                                             M.Id,
                                             M.Subject,
                                             M.Description,
+                                            M.IsEveryOne,
                                             M.ExpireDate,
                                             M.CreatedAt,
                                             P.FirstName + ' ' + P.LastName AS CreatedBy,
@@ -129,7 +131,7 @@ namespace SIMA.Persistance.Read.Repositories.Features.Notifications.Messages
                                         left join Organization.Staff S on S.PositionId = Po.Id
                                         left JOIN Authentication.Profile PP ON PP.Id = S.ProfileId
                                         left join Authentication.Users UU on UU.ProfileID = PP.Id
-                                        WHERE M.ActiveStatusId <> 3 and( UU.Id = @userId or MGD.GroupId in @groupId)
+                                        WHERE M.ActiveStatusId <> 3 and(M.IsEveryOne = '1' or UU.Id = @userId or MGD.GroupId in @groupId)
 							)
 								SELECT * FROM Query
 								 /**where**/

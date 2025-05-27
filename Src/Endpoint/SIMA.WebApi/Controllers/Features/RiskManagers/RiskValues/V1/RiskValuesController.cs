@@ -20,7 +20,8 @@ public class RiskValuesController : ControllerBase
     //[SimaAuthorize(Permissions.RiskValuePost)]
     public async Task<Result> Post([FromBody] CreateRiskValueCommand command)
     {
-        return await _mediator.Send(command);
+        var code = await _mediator.Send(command);
+        return code;
     }
     [HttpPut]
     //[SimaAuthorize(Permissions.RiskValuePut)]

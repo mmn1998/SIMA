@@ -61,6 +61,12 @@ public class InquiryRequest : Entity
         if (arg.ProformaCurrencyTypeId == (long)PaymentTypeEnum.Deposit)
             if (string.IsNullOrEmpty(arg.ProformaNumber)) throw InquiryRequestExceptions.DepositProformaCurrencyTypeIdException;
 
+        if(arg.ProformaAmount is null || arg.ProformaAmount ==0)
+            throw new  SimaResultException(CodeMessges._400Code, Messages.EmptyProformaAmountError);
+
+        if (string.IsNullOrEmpty(arg.ProformaNumber))
+            throw new SimaResultException(CodeMessges._400Code, Messages.NumberProformaIsRequried);
+
         if (await service.CheckRefrenceNumber(arg.ReferenceNumber))
             throw new  SimaResultException(CodeMessges._400Code, Messages.ReferenceNumberIsDuplicated);
 

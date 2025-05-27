@@ -9,7 +9,7 @@ namespace SIMA.WebApi.Controllers.Features.Auths.Helpers.V1;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+/*[Authorize]*/
 public class SystemConfigsController : ControllerBase
 {
     [HttpGet("GetSystemParamters")]

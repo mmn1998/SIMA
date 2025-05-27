@@ -66,11 +66,11 @@ public class ServiceMapper : Profile
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.OrganizationalProjectId, act => act.MapFrom(source => source))
             ;
-        CreateMap<long, CreateServiceAssetArg>()
+        CreateMap<AssetListCommand, CreateServiceAssetArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
-            .ForMember(dest => dest.AssetId, act => act.MapFrom(source => source))
+            .ForMember(dest => dest.AssetId, act => act.MapFrom(source => source.AssetId))
             ;
         CreateMap<long, CreateServiceConfigurationItemArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

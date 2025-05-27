@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.DataProcedures;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.DataProcedures.V1;
 
@@ -19,14 +20,14 @@ public class DataProceduresQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.DataProcedureGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetDataProcedureQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.DataProcedureGetAll)]
     public async Task<Result> Get([FromBody] GetAllDataProceduresQuery query)
     {
         return await _mediator.Send(query);

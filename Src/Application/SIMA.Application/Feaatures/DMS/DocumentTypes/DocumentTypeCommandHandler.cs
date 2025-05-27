@@ -31,12 +31,21 @@ public class DocumentTypeCommandHandler : ICommandHandler<CreateDocumentTypeComm
 
     public async Task<Result<long>> Handle(CreateDocumentTypeCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateDocumentTypeArg>(request);
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await DocumentType.Create(arg, _domainService);
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
+        try
+        {
+            var arg = _mapper.Map<CreateDocumentTypeArg>(request);
+            arg.CreatedBy = _simaIdentity.UserId;
+            var entity = await DocumentType.Create(arg, _domainService);
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(entity.Id.Value);
+        }
+        catch (Exception exeption)
+        {
+
+            throw ;
+        }
+
     }
     public async Task<Result<long>> Handle(ModifyDocumentTypeCommand request, CancellationToken cancellationToken)
     {

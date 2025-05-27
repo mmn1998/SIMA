@@ -29,6 +29,12 @@ public class RiskMapper : Profile
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             .ForMember(dest => dest.StaffId, act => act.MapFrom(source => source))
             ;
+        CreateMap<long, CreateRiskValueStrategyArg>()
+            .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+            .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.StrategyId, act => act.MapFrom(source => source))
+            ;
         CreateMap<string, CreateCorrectiveActionArg>()
         .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
         .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
@@ -47,6 +53,13 @@ public class RiskMapper : Profile
         .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
         .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
         .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+        ;
+        CreateMap<CreateCobitRiskCategoryScenarioCommand, CreateCobitRiskCategoryScenarioArg>()
+        .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+        .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+        .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+        .ForMember(dest => dest.Code, act => act.MapFrom(source => IdHelper.GenerateUniqueId().ToString()))
+        .ForMember(dest => dest.CobitCategoryId, act => act.MapFrom(source => source.CobitRiskCategoryId))
         ;
 
         CreateMap<CreateEffectedAssetCommand, ModifyEffectedAssetArgs>()

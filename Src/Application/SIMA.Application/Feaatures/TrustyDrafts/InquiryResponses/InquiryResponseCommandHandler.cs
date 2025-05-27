@@ -32,19 +32,31 @@ ICommandHandler<ModifyInquiryResponseCommand, Result<long>>, ICommandHandler<Del
     }
     public async Task<Result<long>> Handle(CreateInquiryResponseCommand request, CancellationToken cancellationToken)
     {
-        var arg = _mapper.Map<CreateInquiryResponseArg>(request);
-        if (string.IsNullOrEmpty(request.ValidityPeriod))
-            arg.ValidityPeriod = DateTime.Now.AddMonths(1);
-        else
+        try 
         {
-            var georgianDate = request.ValidityPeriod.ToMiladiDate();
-            arg.ValidityPeriod = georgianDate.Value;
+            var arg = _mapper.Map<CreateInquiryResponseArg>(request);
+            if(request.BrokerInquiryStatusId != 3)
+            {
+                if (string.IsNullOrEmpty(request.ValidityPeriod))
+                    arg.ValidityPeriod = DateTime.Now.AddMonths(1);
+                else
+                {
+                    var georgianDate = request.ValidityPeriod.ToMiladiDate();
+                    arg.ValidityPeriod = georgianDate.Value;
+                }
+            }
+           
+            arg.CreatedBy = _simaIdentity.UserId;
+            var entity = await InquiryResponse.Create(arg, _service);
+            await _repository.Add(entity);
+            await _unitOfWork.SaveChangesAsync();
+            return Result.Ok(arg.Id);
         }
-        arg.CreatedBy = _simaIdentity.UserId;
-        var entity = await InquiryResponse.Create(arg, _service);
-        await _repository.Add(entity);
-        await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(arg.Id);
+        catch(Exception ex)
+        {
+            throw;
+        }
+        
     }
 
     public async Task<Result<long>> Handle(ModifyInquiryResponseCommand request, CancellationToken cancellationToken)

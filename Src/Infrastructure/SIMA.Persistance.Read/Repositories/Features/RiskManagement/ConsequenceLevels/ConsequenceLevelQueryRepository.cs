@@ -69,9 +69,9 @@ CC.Description,
 CLG.ConsequenceCategoryId,
 CC.Name ConsequenceCategoryName
 FROM [RiskManagement].[ConsequenceLevel] CL
-INNER JOIN RiskManagement.RiskConsequence CLG on CLG.ConsequenceLevelId = CL.Id AND CLG.ActiveStatusId<>3
+INNER JOIN RiskManagement.ConsequenceLevelCategory CLG on CLG.ConsequenceLevelId = CL.Id AND CLG.ActiveStatusId<>3
 INNER JOIn RiskManagement.ConsequenceCategory CC on CC.Id = CLG.ConsequenceCategoryId AND CC.ActiveStatusId<>3
-WHERE CL.Id = @Id
+WHERE CL.Id = @Id and CLG.ActiveStatusId <> 3 and cc.ActiveStatusId <> 3
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();

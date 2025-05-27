@@ -8,13 +8,16 @@ using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTechnicalStatuses
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.Back_Up_Methods.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.BusinessCriticalities.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.Categories.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemRelationshipTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataCenters.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedureTypes.Entities;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseStatuses.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.LicenseTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.OperationalStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.AccessTypes.Entities;
@@ -32,6 +35,7 @@ using SIMA.Domain.Models.Features.Auths.Groups.Entities;
 using SIMA.Domain.Models.Features.Auths.Locations.Entities;
 using SIMA.Domain.Models.Features.Auths.LocationTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.MainAggregates.Entities;
+using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.Permissions.Entities;
 using SIMA.Domain.Models.Features.Auths.PhoneTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.PositionLevels.Entities;
@@ -49,6 +53,7 @@ using SIMA.Domain.Models.Features.Auths.UIInputElements.Entities;
 using SIMA.Domain.Models.Features.Auths.Users.Entities;
 using SIMA.Domain.Models.Features.Auths.UserTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.ViewLists.Entities;
+using SIMA.Domain.Models.Features.Auths.Warehouses.Entities;
 using SIMA.Domain.Models.Features.BCP.Back_UpPeriods.Entities;
 using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
@@ -57,6 +62,7 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgyResponsibles.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStratgySolutions.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceIntensionDescriptions.Entities;
 using SIMA.Domain.Models.Features.BCP.ConsequenceIntensions.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Entities;
 using SIMA.Domain.Models.Features.BCP.ConsequenceValues.Entities;
@@ -148,6 +154,7 @@ using SIMA.Domain.Models.Features.SecurityCommitees.SubjectPriorities.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.Subjects.Entities;
 using SIMA.Domain.Models.Features.SecurityCommitees.SupervisorAnswerTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiAuthenticationMethods.Entities;
+using SIMA.Domain.Models.Features.ServiceCatalogs.Apis.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.ApiTypes.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.Channels.Entities;
 using SIMA.Domain.Models.Features.ServiceCatalogs.CriticalActivities.Entities;
@@ -247,6 +254,7 @@ public class SIMADBContext : DbContext
 
     public virtual DbSet<Form> Forms { get; set; }
     public DbSet<UserType> UserTypes { get; set; }
+    public DbSet<Warehouse> Warehouses { get; set; }
     public virtual DbSet<FormRole> FormRoles { get; set; }
     public virtual DbSet<FormGroup> FormGroups { get; set; }
     public virtual DbSet<FormUser> FormUsers { get; set; }
@@ -288,6 +296,7 @@ public class SIMADBContext : DbContext
     public virtual DbSet<PositionLevel> PositionLevels { get; set; }
     public virtual DbSet<PositionType> PositionTypes { get; set; }
     public virtual DbSet<AccessType> AccessTypes { get; set; }
+    public virtual DbSet<OwnershipType> OwnershipTypes { get; set; }
     public virtual DbSet<TimeMeasurement> TimeMeasurements { get; set; }
 
     #endregion
@@ -400,6 +409,7 @@ public class SIMADBContext : DbContext
     public DbSet<ConsequenceIntension> ConsequenceIntensions { get; set; }
     public DbSet<ConsequenceValue> ConsequenceValues { get; set; }
     public DbSet<BiaValue> BiaValues { get; set; }
+    public DbSet<ConsequenceIntensionDescription> ConsequenceIntensionDescriptions { get; set; }
     public DbSet<RecoveryPointObjective> RecoveryPointObjectives { get; set; }
     public DbSet<HappeningPossibility> HappeningPossibilities { get; set; }
     public DbSet<Consequence> Consequences { get; set; }
@@ -482,23 +492,29 @@ public class SIMADBContext : DbContext
 
     #region AssetAndConfigurations
     public DbSet<AssetPhysicalStatus> AssetPhysicalStatuses { get; set; }
+    public DbSet<LicenseStatus> LicenseStatuses { get; set; }
     public DbSet<AssetTechnicalStatus> AssetTechnicalStatuses { get; set; }
     public DbSet<BusinessCriticality> BusinessCriticalities { get; set; }
     public DbSet<ConfigurationItemStatus> ConfigurationItemStatuses { get; set; }
     public DbSet<AssetType> AssetTypes { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Asset> Assets { get; set; }
+    public DbSet<ConfigurationItem> ConfigurationItems { get; set; }
     public DbSet<ConfigurationItemType> ConfigurationItemTypes { get; set; }
     public DbSet<ConfigurationItemRelationshipType> ConfigurationItemRelationshipTypes { get; set; }
     public DbSet<LicenseType> LicenseTypes { get; set; }
     public DbSet<DataCenter> DataCenters { get; set; }
     public DbSet<DataProcedureType> DataProcedureTypes { get; set; }
     public DbSet<DataProcedure> DataProcedures { get; set; }
+    public DbSet<Api> Apis { get; set; }
     public DbSet<BackupMethod> BackupMethods { get; set; }
     public DbSet<OperationalStatus> OperationalStatuses { get; set; }
     public DbSet<AssetCustomFieldValue> AssetCustomFieldValues { get; set; }
     public DbSet<AssetAssignedStaff> AssetAssignedStaffs { get; set; }
     public DbSet<AssetCustomFieldOption> AssetCustomFieldOption { get; set; }
     public DbSet<ConfigurationItemCustomFieldOption> ConfigurationItemCustomFieldOption { get; set; }
+    public DbSet<ConfigurationItemCustomField> ConfigurationItemCustomFields { get; set; }
+    public DbSet<AssetCustomField> AssetCustomFields { get; set; }
     #endregion
 
     #region Notifications

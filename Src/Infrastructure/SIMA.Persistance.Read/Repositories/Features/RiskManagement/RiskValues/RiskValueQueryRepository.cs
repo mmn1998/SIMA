@@ -21,15 +21,12 @@ SELECT   RV.[Id]
 		,RV.[Name]
 		,RV.[Code]
 		,RV.[Condition]
-		,RV.StrategyId
-		,BCS.Title StrategyName
 		,RV.NumericValue
 		,RV.Color
 		,A.[Name] ActiveStatus
 		,RV.CreatedAt
 FROM [RiskManagement].[RiskValue] RV
 INNER JOIN [Basic].[ActiveStatus] A ON RV.ActiveStatusId = A.ID
-INNER JOIN BCP.BusinessContinuityStrategy BCS on BCS.Id = RV.StrategyId and BCS.ActiveStatusId<>3
 WHERE RV.ActiveStatusId <> 3
 ";
     }

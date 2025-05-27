@@ -21,7 +21,7 @@ SELECT
 	IOP.[Id]
     ,IOP.[Code]
 	,IOP.ScenarioHistoryId
-	,SH.Name ScenarioHistoryName
+	,SH.ValueTitle ScenarioHistoryName
 	,IOP.MatrixAValueId
 	,MV.ValueTitle MatrixAValueName
 	,IOP.InherentOccurrenceProbabilityValueId

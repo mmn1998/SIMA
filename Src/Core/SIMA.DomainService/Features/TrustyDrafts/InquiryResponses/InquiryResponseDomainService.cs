@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using Microsoft.Extensions.Configuration;
+using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Args;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.Contracts;
 using SIMA.Domain.Models.Features.TrustyDrafts.InquiryResponses.ValueObjects;
+using SIMA.Framework.Common.Response;
 using SIMA.Persistance.Persistence;
 using System.Data.SqlClient;
 
@@ -37,8 +39,21 @@ where IRC.Id = @Id
         return wageRateCurrencyTypeId == currencyTypeId;
     }
 
+
     public Task<bool> IsCodeUnique(string code, InquiryResponseId? id = null)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<bool> CheckInqueryStatus(CreateInquiryResponseArg arg)
+    {
+        bool result = true;
+        if(arg.BrokerInquiryStatusId != 3)
+        {
+            if((arg.InquiryRequestCurrencyId == null || arg.InquiryRequestCurrencyId <=0 ) || arg.ValidityPeriod == null || arg.CalculatedWage == null)
+                result = false;
+            
+        }
+        return result;
     }
 }

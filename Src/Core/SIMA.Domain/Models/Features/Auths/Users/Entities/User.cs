@@ -126,48 +126,46 @@ public class User : Entity, IAggregateRoot
     #endregion
 
     public async Task AddUserPermission(List<CreateUserPermissionArg> request, long userId)
-    {
+     {
         userId.NullCheck();
 
         var previousUsers = _userPermission.Where(x => x.UserId == new UserId(userId) && x.ActiveStatusId == (long)ActiveStatusEnum.Active);
 
         var addPermission = request.Where(x => !previousUsers.Any(c => c.PermissionId.Value == x.PermissionId)).ToList();
+
         var deleteMember = previousUsers.Where(x => !request.Any(c => c.PermissionId == x.PermissionId.Value)).ToList();
-        Func<CreateUserPermissionArg, bool> condition = 
-            x => x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.ServicePost ||
-            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.CriticalActivityPost ||
-            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.TrustyDraftsPost ||
-            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.RisksPost ||
-            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.businessContinuityPlanPost ||
-            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.businessContinuityStratgyPost ||
-            x.PermissionId == (long)SIMA.Framework.Common.Security.Permissions.businessImpactAnalysisPost;
-        if (addPermission.Any(condition))
-        {
-            var firstItem = addPermission.First();
-            addPermission.Add(new CreateUserPermissionArg
-            {
-                ActiveFrom = firstItem.ActiveFrom,
-                ActiveStatusId = firstItem.ActiveStatusId,
-                ActiveTo = firstItem.ActiveTo,
-                CreatedAt = firstItem.CreatedAt,
-                CreatedBy = firstItem.CreatedBy,
-                Id = IdHelper.GenerateUniqueId(),
-                UserId = firstItem.UserId,
-                PermissionId = (long)SIMA.Framework.Common.Security.Permissions.IssuePost
-            });
-        }
+
+
+        //var toBeDeleted = previousUsers.Select(x => x.PermissionId.Value).Except(request.Select(x => x.PermissionId));
+
+        //var xxx = toBeDeleted.Count();
+
+        //var deeee = _userPermission.Where(x => x.UserId.Value == userId && toBeDeleted.Contains(x.PermissionId.Value)).ToList();
+        //var demo = request;
+
+        //var deleted = new List<UserPermission>();
+        //foreach (var item in previousUsers.OrderBy(f=>f.PermissionId.Value))
+        //{
+        //    foreach (var item1 in demo.OrderBy(f=>f.PermissionId))
+        //    {
+        //        if(item.PermissionId.Value == item1.PermissionId)
+        //        {
+        //            break;
+        //        }
+        //        else
+        //        {
+        //            deleted.Add(item);
+        //        }
+        //    }
+        //} 
+
+
+
         foreach (var permission in addPermission)
         {
-            var entity = _userPermission.Where(x => (x.PermissionId == new PermissionId(permission.PermissionId) && x.UserId == new UserId(userId)) && x.ActiveStatusId != (long)ActiveStatusEnum.Active).FirstOrDefault();
-            if (entity is not null)
-            {
-                await entity.ChangeStatus(ActiveStatusEnum.Active);
-            }
-            else
-            {
-                entity = await UserPermission.Create(permission);
-                _userPermission.Add(entity);
-            }
+
+            var entity = await UserPermission.Create(permission);
+            _userPermission.Add(entity);
         }
 
         foreach (var permission in deleteMember)

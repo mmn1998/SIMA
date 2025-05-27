@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.AssetAndConfigurations.LicenseTypes;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.LicenseTypes.V1;
 
@@ -19,19 +20,19 @@ public class LicenseTypeController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-   // [SimaAuthorize(Permissions.LicenseTypePost)]
+   [SimaAuthorize(Permissions.LicenseTypePost)]
     public async Task<Result> Post([FromBody] CreateLicenseTypeCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-   // [SimaAuthorize(Permissions.LicenseTypePut)]
+   [SimaAuthorize(Permissions.LicenseTypePut)]
     public async Task<Result> Put([FromBody] ModifyLicenseTypeCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    //[SimaAuthorize(Permissions.LicenseTypeDelete)]
+    [SimaAuthorize(Permissions.LicenseTypeDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteLicenseTypeCommand { Id = id };

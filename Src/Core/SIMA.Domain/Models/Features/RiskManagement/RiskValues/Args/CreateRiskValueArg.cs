@@ -11,4 +11,5 @@ public class CreateRiskValueArg
     public long ActiveStatusId { get; set; }
     public DateTime CreatedAt { get; set; }
     public long CreatedBy { get; set; }
+    //public long StrategyId { get; set; }
 }

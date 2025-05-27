@@ -31,6 +31,13 @@ namespace SIMA.WebApi.Controllers.Features.BCP.BusinessContinuityPlans
         {
             return await _mediator.Send(command);
         }
+        
+        [HttpPut("/version")]
+        [SimaAuthorize(Permissions.businessContinuityPlanPut)]
+        public async Task<Result> UpdateByVersionNumber([FromBody] ModifyBusinessContinuityPlanByVersionCommand command)
+        {
+            return await _mediator.Send(command);
+        }
         [HttpDelete("{id}")]
         [SimaAuthorize(Permissions.businessContinuityPlanDelete)]
         public async Task<Result> Delete([FromRoute] long id)

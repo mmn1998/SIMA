@@ -8,7 +8,7 @@ public class RiskTypeConfiguration : IEntityTypeConfiguration<RiskType>
 {
     public void Configure(EntityTypeBuilder<RiskType> entity)
     {
-        entity.ToTable("RiskType", "RiskManagement");
+        entity.ToTable("RiskCategory", "RiskManagement");
 
         entity.HasIndex(e => e.Code).IsUnique();
 

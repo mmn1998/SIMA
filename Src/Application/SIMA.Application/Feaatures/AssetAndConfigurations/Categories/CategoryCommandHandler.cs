@@ -15,13 +15,22 @@ namespace SIMA.Application.Feaatures.AssetAndConfigurations.Categories;
 public class CategoryCommandHandler : ICommandHandler<CreateCategoryCommand, Result<long>>,
     ICommandHandler<ModifyCategoryCommand, Result<long>>, ICommandHandler<DeleteCategoryCommand, Result<long>>
 {
-    
     private readonly ICategoryRepository _repository;
     private readonly ICategoryDomainService _service;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISimaIdentity _simaIdentity;
     private readonly IMapper _mapper;
-    
+
+    public CategoryCommandHandler(ICategoryRepository repository, ICategoryDomainService service,
+        IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper)
+    {
+        _repository = repository;
+        _service = service;
+        _unitOfWork = unitOfWork;
+        _simaIdentity = simaIdentity;
+        _mapper = mapper;
+    }
+
     public  async Task<Result<long>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateCategoryArg>(request);

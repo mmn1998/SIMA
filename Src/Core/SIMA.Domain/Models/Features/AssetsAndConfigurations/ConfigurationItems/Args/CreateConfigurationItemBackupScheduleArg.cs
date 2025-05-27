@@ -13,5 +13,5 @@ public class CreateConfigurationItemBackupScheduleArg
     public DateTime? LastTestDate { get; set; }
     public float? Duration { get; set; }
     public TimeOnly? StartTime { get; set; }
-    public long? CreatedBy { get; set; }
+    public long CreatedBy { get; set; }
 }

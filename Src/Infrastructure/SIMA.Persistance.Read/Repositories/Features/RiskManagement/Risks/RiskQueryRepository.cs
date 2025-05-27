@@ -23,7 +23,7 @@ select
 R.Id,
 r.Code,
 r.Name,
-R.RiskTypeId,
+R.RiskCategoryId,
 Rt.Name RiskTypeName,
 R.IsNeedCobit,
 R.AffectedHistoryId,
@@ -59,7 +59,7 @@ r.CreatedAt
 ,i.Weight IssueWeight
 ,(p.FirstName + ' ' + p.LastName) CreatedBy
 from RiskManagement.Risk R
-inner join RiskManagement.RiskType RT on RT.Id = R.RiskTypeId and rt.ActiveStatusId<>3
+inner join RiskManagement.RiskCategory RT on RT.Id = R.RiskCategoryId and rt.ActiveStatusId<>3
 Inner join RiskManagement.RiskRelatedIssue RRI on RRI.RiskId = R.Id and RRI.ActiveStatusId<>3
 inner join IssueManagement.Issue I on I.Id = RRI.IssueId and I.MainAggregateId = 4 And i.ActiveStatusId<>3
 left join Basic.ActiveStatus A on A.ID = R.ActiveStatusId
@@ -112,11 +112,12 @@ Where R.ActiveStatusId<>3
     {
         var response = new GetRiskQueryResult();
         var query = @"
+
 select 
 R.Id,
 r.Code,
 r.Name,
-R.RiskTypeId,
+R.RiskCategoryId,
 Rt.Name RiskTypeName,
 R.IsNeedCobit,
 R.AffectedHistoryId,
@@ -136,7 +137,7 @@ a.Name ActiveStatus,
 r.Description,
 r.CreatedAt
 from RiskManagement.Risk R
-inner join RiskManagement.RiskType RT on RT.Id = R.RiskTypeId and rt.ActiveStatusId<>3
+inner join RiskManagement.RiskCategory RT on RT.Id = R.RiskCategoryId and rt.ActiveStatusId<>3
 inner join Basic.ActiveStatus A on A.ID = R.ActiveStatusId and r.ActiveStatusId<>3
 LEFT JOIN RiskManagement.AffectedHistory AH on AH.Id = R.AffectedHistoryId and AH.ActiveStatusId<>3
 LEFT JOIN RiskManagement.Frequency F on F.Id = R.FrequencyId and F.ActiveStatusId<>3
@@ -235,6 +236,29 @@ where R.Id = @Id and R.ActiveStatusId<>3
   inner join RiskManagement.RiskPossibility RP on Rp.Id = T.RiskPossibilityId and RP.ActiveStatusId<>3
   inner join RiskManagement.ThreatType TT on TT.Id = t.ThreatTypeId and TT.ActiveStatusId<>3
   where R.Id = @Id and R.ActiveStatusId<>3
+
+  ----------- CobitRiskCategoryScenarioList
+  select 
+  cs.Id,
+  --c.Id RiskCategoryId,
+  --c.Name RiskCategoryName,
+  s.Id CobitScenarioId,
+  s.Name CobitScenarioName
+  from    RiskManagement.Risk R
+  inner join RiskManagement.CobitRiskCategoryScenario cs on r.Id=cs.RiskId
+  --inner join RiskManagement.CobitRiskCategory c on cs.RiskCategoryId=c.Id
+  inner join RiskManagement.CobitScenario s on cs.CobitScenarioId=s.Id
+  where r.ActiveStatusId <>3 and cs.ActiveStatusId<>3  and s.ActiveStatusId<>3 and R.Id = @Id
+
+  ----------- RiskValueStrategyList
+  select 
+  RVS.Id,
+  RVS.StrategyId,
+  BCS.Title StrategyName
+  from  RiskManagement.Risk R
+  inner join RiskManagement.RiskValueStrategy RVS on r.Id=RVS.RiskId and RVS.ActiveStatusId<>3
+  inner join BCP.BusinessContinuityStrategy BCS on BCS.Id = RVS.StrategyId and BCS.ActiveStatusId<>3
+  WHERE R.Id = @Id
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -246,6 +270,8 @@ where R.Id = @Id and R.ActiveStatusId<>3
         response.CorrectiveActionList = await multi.ReadAsync<GetCorrectiveActionQueryResult>();
         response.PreventiveActionList = await multi.ReadAsync<GetPreventiveActionQueryResult>();
         response.EffectedAssetList = await multi.ReadAsync<GetEffectedAssetQueryResult>();
+
+
         var vulnerabilities = await multi.ReadAsync<GetVulnerabilityQueryResult>();
         foreach (var item in response.EffectedAssetList)
         {
@@ -258,6 +284,8 @@ where R.Id = @Id and R.ActiveStatusId<>3
             item.RiskImpactList = riskImpacts.Where(x => x.ServiceRiskId == item.Id);
         }
         response.ThreatList = await multi.ReadAsync<GetThreatQueryResult>();
+        response.CobitRiskCategoryScenarioList = await multi.ReadAsync<CobitRiskCategoryScenarioQueryResult>();
+        response.RiskValueStrategyList = await multi.ReadAsync<GetRiskValueStrategyQueryResult>();
         return response;
     }
 }

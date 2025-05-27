@@ -12,7 +12,7 @@ namespace SIMA.Application.Feaatures.DMS.WorkFlowDocumentTypes.Mappers;
 
 public class WorkFlowDocumentTypesMapper : Profile
 {
-    public WorkFlowDocumentTypesMapper(ISimaIdentity simaIdentity)
+    public WorkFlowDocumentTypesMapper()
     {
         CreateMap<CreateWorkflowDocumentTypeCommand, CreateWorkFlowDocumentTypeArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))

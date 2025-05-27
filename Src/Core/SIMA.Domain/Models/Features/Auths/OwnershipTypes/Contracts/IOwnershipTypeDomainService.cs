@@ -1,7 +1,9 @@
-﻿using SIMA.Framework.Core.Domain;
+﻿using SIMA.Domain.Models.Features.Auths.OwnershipTypes.ValueObjects;
+using SIMA.Framework.Core.Domain;
 
 namespace SIMA.Domain.Models.Features.Auths.OwnershipTypes.Contracts;
 
 public interface IOwnershipTypeDomainService : IDomainService
 {
+    Task<bool> IsCodeUnique(string code, OwnershipTypeId? id = null);
 }

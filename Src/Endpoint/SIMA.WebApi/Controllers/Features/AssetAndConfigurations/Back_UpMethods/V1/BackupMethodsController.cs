@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.AssetAndConfigurations.Back_UpMethods;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.Back_UpMethods.V1;
 
@@ -19,19 +20,19 @@ public class BackupMethodsController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    // [SimaAuthorize(Permissions.BackupMethodPost)]
+    [SimaAuthorize(Permissions.BackupMethodPost)]
     public async Task<Result> Post([FromBody] CreateBackupMethodCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    // [SimaAuthorize(Permissions.BackupMethodPut)]
+    [SimaAuthorize(Permissions.BackupMethodPut)]
     public async Task<Result> Put([FromBody] ModifyBackupMethodCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    //[SimaAuthorize(Permissions.BackupMethodDelete)]
+    [SimaAuthorize(Permissions.BackupMethodDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteBackupMethodCommand { Id = id };

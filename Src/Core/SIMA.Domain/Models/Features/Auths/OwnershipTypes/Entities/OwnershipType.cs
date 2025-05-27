@@ -2,8 +2,10 @@
 using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Args;
 using SIMA.Domain.Models.Features.Auths.OwnershipTypes.Contracts;
 using SIMA.Domain.Models.Features.Auths.OwnershipTypes.ValueObjects;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
+using SIMA.Resources;
 using System.Text;
 
 namespace SIMA.Domain.Models.Features.Auths.OwnershipTypes.Entities;
@@ -40,11 +42,23 @@ public class OwnershipType : Entity, IAggregateRoot
     #region Guards
     private static async Task CreateGuards(CreateOwnershipTypeArg arg, IOwnershipTypeDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     private async Task ModifyGuards(ModifyOwnershipTypeArg arg, IOwnershipTypeDomainService service)
     {
+        arg.NullCheck();
+        arg.Name.NullCheck();
+        arg.Code.NullCheck();
 
+        if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
+        if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
+        if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
     }
     #endregion
     public OwnershipTypeId Id { get; private set; }

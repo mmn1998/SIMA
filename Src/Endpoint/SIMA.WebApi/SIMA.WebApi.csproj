@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>false</InvariantGlobalization>
-	<InformationalVersion>4.7.19</InformationalVersion>
+	<InformationalVersion>4.7.23</InformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetCustomFields\AssetCustomFieldsController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\AssetCustomFields\AssetCustomFieldsQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Assets\V1\AssetController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\Assets\V1\AssetsQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTechnicalStatuses\V1\AssetTechnicalStatusesController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTechnicalStatuses\V1\AssetTechnicalStatusesQueryController.cs" />
@@ -23,15 +26,21 @@
     <Compile Include="Controllers\Features\AssetAndConfigurations\BusinessCriticalities\V1\BusinessCriticalitiesQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\Categories\V1\CategoryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\Categories\V1\CategoryQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemCustomFields\ConfigurationItemCustomFieldQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemCustomFields\ConfigurationItemCustomFieldsController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemStatuses\V1\ConfigurationItemStatusesController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemStatuses\V1\ConfigurationItemStatusesQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTypes\V1\AssetTypesController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\AssetTypes\V1\AssetTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItems\V1\ConfigurationItemsController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemTypes\V1\ConfigurationItemTypesController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemTypes\V1\ConfigurationItemTypesQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemRelationshipTypes\V1\ConfigurationItemRelationshipTypesController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItemRelationshipTypes\V1\ConfigurationItemRelationshipTypesQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\ConfigurationItems\V1\ConfigurationItemsQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Apis\V1\ApisController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\Apis\V1\ApisQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\CustomeFieldTypes\CustomeFieldTypesQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedures\V1\DataProceduresController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedures\V1\DataProceduresQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\DataCenters\V1\DataCentersController.cs" />
@@ -40,10 +49,15 @@
     <Compile Include="Controllers\Features\AssetAndConfigurations\Back_UpMethods\V1\BackupMethodsQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedureTypes\V1\DataProcedureTypesController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\DataProcedureTypes\V1\DataProcedureTypesQueryController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseStatuses\V1\LicenseStatusesController.cs" />
+    <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseStatuses\V1\LicenseStatusesQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseTypes\V1\LicenseTypeController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\LicenseTypes\V1\LicenseTypeQueryController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\OperationalStatuses\V1\OperationalStatusController.cs" />
     <Compile Include="Controllers\Features\AssetAndConfigurations\OperationalStatuses\V1\OperationalStatusQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\NetworkProtocol\V1\NetworkProtocolQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\OwnershipTypes\V1\OwnershipTypesController.cs" />
+    <Compile Include="Controllers\Features\Auths\OwnershipTypes\V1\OwnershipTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesController.cs" />
     <Compile Include="Controllers\Features\Auths\AddressTypes\V1\AddressTypesQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\AccessTypes\V1\AccessTypesController.cs" />
@@ -95,6 +109,10 @@
     <Compile Include="Controllers\Features\Auths\SysConfigs\V1\SysConfigsQueryController.cs" />
     <Compile Include="Controllers\Features\Auths\Users\V1\UsersController.cs" />
     <Compile Include="Controllers\Features\Auths\Users\V1\UsersQueryController.cs" />
+    <Compile Include="Controllers\Features\Auths\Warehouses\V1\WarehousesController.cs" />
+    <Compile Include="Controllers\Features\Auths\Warehouses\V1\WarehousesQueryController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensionDescriptions\V1\ConsequenceIntensionDescriptionsController.cs" />
+    <Compile Include="Controllers\Features\BCP\ConsequenceIntensionDescriptions\V1\ConsequenceIntensionDescriptionsQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\PlanTypes\V1\PlanTypesController.cs" />
     <Compile Include="Controllers\Features\BCP\PlanTypes\V1\PlanTypesQueryController.cs" />
     <Compile Include="Controllers\Features\BCP\BusinessContinuityStrategies\V1\BusinessContinuityStrategiesController.cs" />
@@ -383,6 +401,9 @@
     <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="9.0.3" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="SIMA.Framework.Common" Version="2.5.33" />
+    <PackageReference Include="SIMA.Framework.Core" Version="1.1.6" />
+    <PackageReference Include="SIMA.Framework.Infrastructure" Version="1.2.3" />
     <PackageReference Include="SIMA.Framework.WebApi" Version="1.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>

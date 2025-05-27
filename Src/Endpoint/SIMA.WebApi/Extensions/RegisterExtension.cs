@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.IdentityModel.Tokens;
 using SIMA.Application.Feaatures.Auths.Companies.Mappers;
-using SIMA.Application.Feaatures.Auths.ResponsibleTypes.Mappers;
 using SIMA.Framework.Common.Security;
 using SIMA.WebApi.Controllers.Features.Auths.Users.V1;
 using SIMA.WebApi.Conventions;

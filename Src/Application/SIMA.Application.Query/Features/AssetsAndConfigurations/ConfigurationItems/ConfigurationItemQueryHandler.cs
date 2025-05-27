@@ -1,4 +1,5 @@
-﻿using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.ConfigurationItems;
+﻿using MediatR;
+using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.ConfigurationItems;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 using SIMA.Persistance.Read.Repositories.Features.AssetsAndConfigurations.ConfigurationItems;
@@ -7,8 +8,10 @@ namespace SIMA.Application.Query.Features.AssetsAndConfigurations.ConfigurationI
 
 public class ConfigurationItemQueryHandler :
     IQueryHandler<GetAllConfigurationItemsQuery, Result<IEnumerable<GetConfigurationItemQueryResult>>>,
+    IQueryHandler<GetAllDataBaseConfigurationItemQuery, Result<IEnumerable<GetConfigurationItemQueryResult>>>,
     IQueryHandler<GetConfigurationItemQuery, Result<GetConfigurationItemQueryInfoResult>>,
-    IQueryHandler<GetConfigurationItemByIdQuery, Result<GetConfigurationItemQueryInfoResult>>
+    IQueryHandler<GetConfigurationItemByIdQuery, Result<GetConfigurationItemQueryInfoResult>>,
+    IQueryHandler<GetConfigurationItemComboQuery, Result<IEnumerable<GetConfigurationItemComboQueryResult>>>
 {
     private readonly IConfigurationItemQueryRepository _repository;
 
@@ -29,7 +32,26 @@ public class ConfigurationItemQueryHandler :
 
     public async Task<Result<GetConfigurationItemQueryInfoResult>> Handle(GetConfigurationItemByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _repository.GetById(request.Id);
-        return Result.Ok(result);
+        try
+        {
+            var result = await _repository.GetById(request.Id);
+            return Result.Ok(result);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+        
+    }
+
+    public async Task<Result<IEnumerable<GetConfigurationItemQueryResult>>> Handle(GetAllDataBaseConfigurationItemQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetAllDataBase(request);
+    }
+    public async Task<Result<IEnumerable<GetConfigurationItemComboQueryResult>>> Handle(GetConfigurationItemComboQuery request, CancellationToken cancellationToken)
+    {
+        return await _repository.GetConfigurationItemCombo(request);
+
     }
 }

@@ -2,8 +2,6 @@
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.AffectedHistories.ValueObjects;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.Entities;
-using SIMA.Domain.Models.Features.RiskManagement.ConsequenceCategories.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.ValueObjects;
 using SIMA.Domain.Models.Features.RiskManagement.Frequencies.Entities;
@@ -46,7 +44,7 @@ public class Risk : Entity
         Name = arg.Name;
         Description = arg.Description;
         IsNeedCobit = arg.IsNeedCobit;
-        RiskTypeId = new(arg.RiskTypeId);
+        RiskCategoryId = new(arg.RiskCategoryId);
         FrequencyId = new(arg.FrequencyId);
         TriggerStatusId = new(arg.TriggerStatusId);
         ScenarioHistoryId = new(arg.ScenarioHistoryId);
@@ -70,7 +68,7 @@ public class Risk : Entity
         Name = arg.Name;
         Description = arg.Description;
         IsNeedCobit = arg.IsNeedCobit;
-        RiskTypeId = new(arg.RiskTypeId);
+        RiskCategoryId = new(arg.RiskCategoryId);
         FrequencyId = new(arg.FrequencyId);
         TriggerStatusId = new(arg.TriggerStatusId);
         ScenarioHistoryId = new(arg.ScenarioHistoryId);
@@ -134,6 +132,11 @@ public class Risk : Entity
         var correctives = args.Select(CorrectiveAction.Create);
         _correctiveActions.AddRange(correctives);
     }
+    public void AddCobitRiskCategoryScenarios(List<CreateCobitRiskCategoryScenarioArg> args)
+    {
+        var correctives = args.Select(CobitRiskCategoryScenario.Create);
+        _cobitRiskCategoryScenarios.AddRange(correctives);
+    }
     public void AddStaffs(List<CreateRiskStaffArg> args)
     {
         var staffs = args.Select(RiskStaff.Create);
@@ -159,6 +162,14 @@ public class Risk : Entity
         {
             var entity = Threat.Create(arg);
             _threats.Add(entity);
+        }
+    }
+    public void AddRiskValueStrategies(List<CreateRiskValueStrategyArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = RiskValueStrategy.Create(arg);
+            _riskValueStrategies.Add(entity);
         }
     }
     #endregion
@@ -274,6 +285,29 @@ public class Risk : Entity
             entity.Delete(args[0].CreatedBy.Value);
         }
     }
+    public void ModifyCobitRiskCategoryScenarios(List<CreateCobitRiskCategoryScenarioArg> args)
+    {
+        var activeEntities = _cobitRiskCategoryScenarios.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.CobitCategoryId == x.CobitCategoryId.Value && c.CobitScenarioId == x.CobitScenarioId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.CobitCategoryId.Value == x.CobitCategoryId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _cobitRiskCategoryScenarios.FirstOrDefault(x => x.CobitCategoryId.Value == arg.CobitCategoryId && x.CobitScenarioId.Value == arg.CobitScenarioId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = CobitRiskCategoryScenario.Create(arg);
+                _cobitRiskCategoryScenarios.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
     public void ModifyStaffs(List<CreateRiskStaffArg> args)
     {
         var activeEntities = _riskStaffs.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
@@ -320,6 +354,29 @@ public class Risk : Entity
             entity.Delete(args[0].CreatedBy.Value);
         }
     }
+    public void ModifyRiskValueStrategies(List<CreateRiskValueStrategyArg> args)
+    {
+        var activeEntities = _riskValueStrategies.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.StrategyId == x.StrategyId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StrategyId.Value == x.StrategyId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _riskValueStrategies.FirstOrDefault(x => x.StrategyId.Value == arg.StrategyId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = RiskValueStrategy.Create(arg);
+                _riskValueStrategies.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
     public void ModifyThreats(List<CreateThreatArg> args)
     {
         var activeEntities = _threats.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
@@ -348,6 +405,20 @@ public class Risk : Entity
     public void DeleteEffectedAssets(long userId)
     {
         foreach (var item in _effectedAssets)
+        {
+            item.Delete(userId);
+        }
+    }
+    public void DeleteRiskValueStrategies(long userId)
+    {
+        foreach (var item in _riskValueStrategies)
+        {
+            item.Delete(userId);
+        }
+    }
+    public void DeleteCobitRiskCategoryScenarios(long userId)
+    {
+        foreach (var item in _cobitRiskCategoryScenarios)
         {
             item.Delete(userId);
         }
@@ -408,14 +479,15 @@ public class Risk : Entity
         DeleteStaffs(userId);
         AddDomainEvent(new DeleteRiskCreateEvents(_riskRelatedIssues.First().IssueId.Value));
         DeleteIssues(userId);
+        DeleteCobitRiskCategoryScenarios(userId);
     }
     public RiskId Id { get; private set; }
     public string Name { get; private set; }
     public string Code { get; private set; }
     public string Description { get; private set; }
     public string? IsNeedCobit { get; private set; }
-    public RiskTypeId RiskTypeId { get; private set; }
-    public virtual RiskType RiskType { get; private set; }
+    public RiskTypeId RiskCategoryId { get; private set; }
+    public virtual RiskType RiskCategory { get; private set; }
     public AffectedHistoryId? AffectedHistoryId { get; private set; }
     public virtual AffectedHistory? AffectedHistory { get; private set; }
     public UseVulnerabilityId? UseVulnerabilityId { get; private set; }
@@ -456,4 +528,6 @@ public class Risk : Entity
     public ICollection<RiskStaff> RiskStaffs => _riskStaffs;
     private List<RiskValueStrategy> _riskValueStrategies = new();
     public ICollection<RiskValueStrategy> RiskValueStrategies => _riskValueStrategies;
+    private List<CobitRiskCategoryScenario> _cobitRiskCategoryScenarios = new();
+    public ICollection<CobitRiskCategoryScenario> CobitRiskCategoryScenarios => _cobitRiskCategoryScenarios;
 }

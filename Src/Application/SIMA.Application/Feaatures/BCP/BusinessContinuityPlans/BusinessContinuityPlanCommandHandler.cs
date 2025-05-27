@@ -6,17 +6,20 @@ using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Contracts;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlans.ValueObjects;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityPlanVersionings.Args;
+using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Core.Mediator;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.BCP.BusinessContinuityPlans;
 
 public class BusinessContinuityPlanCommandHandler :
 ICommandHandler<CreateBusinessContinuityPlanCommand, Result<long>>,
 ICommandHandler<ModifyBusinessContinuityPlanCommand, Result<long>>,
-ICommandHandler<DeleteBusinessContinuityPlanCommand, Result<long>>//,
+ICommandHandler<DeleteBusinessContinuityPlanCommand, Result<long>>,
+ICommandHandler<ModifyBusinessContinuityPlanByVersionCommand,Result<string>>
 //ICommandHandler<DeleteBusinessContinuityPlanVersioningCommand, Result<long>>
 {
     private readonly IBusinessContinuityPlanRepository _repository;
@@ -223,10 +226,12 @@ ICommandHandler<DeleteBusinessContinuityPlanCommand, Result<long>>//,
         return Result.Ok(request.Id);
     }
 
+
     public async Task<Result<long>> Handle(DeleteBusinessContinuityPlanCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new BusinessContinuityPlanId(request.Id));
         long userId = _simaIdentity.UserId; entity.Delete(userId);
+
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -239,4 +244,14 @@ ICommandHandler<DeleteBusinessContinuityPlanCommand, Result<long>>//,
     //    await _unitOfWork.SaveChangesAsync();
     //    return Result.Ok(request.Id);
     //}
+    public async Task<Result<string>> Handle(ModifyBusinessContinuityPlanByVersionCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await _repository.GetByVersionNumber(request.VersionNumber);
+        //var version = await _repository.GetBusinessContinuityPlanVersioningById(new BusinessContinuityPlanId(request.Id));
+        var arg = _mapper.Map<ModifyBusinessContinuityPlanArg>(request);
+        arg.ModifiedBy = _simaIdentity.UserId;
+        await entity.Modify(arg, _service);
+        await _unitOfWork.SaveChangesAsync();
+        return Result.Ok(request.VersionNumber);
+    }
 }

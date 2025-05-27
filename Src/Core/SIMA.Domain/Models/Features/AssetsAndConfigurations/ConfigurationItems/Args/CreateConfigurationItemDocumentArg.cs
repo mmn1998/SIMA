@@ -6,6 +6,6 @@ public class CreateConfigurationItemDocumentArg
     public long ActiveStatusId { get; set; }
     public long ConfigurationItemId { get; set; }
     public long DocumentId { get; set; }
-    public long? CreatedBy { get; set; }
+    public long CreatedBy { get; set; }
     public DateTime? CreatedAt { get; set; }
 }

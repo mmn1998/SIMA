@@ -7,6 +7,7 @@ namespace SIMA.Domain.Models.Features.Notifications.Messages.Args
         public long Id { get;  set; }
         public string? Subject { get;  set; }
         public string? Description { get;  set; }
+        public string? IsEveryOne { get;  set; }
         public DateTime? ExpireDate { get;  set; }
         public long ActiveStatusId { get;  set; }
         public DateTime CreatedAt { get;  set; }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.RiskManagers.ConsequenceLevels.V1;
 
@@ -17,13 +18,13 @@ public class ConsequenceLevelsController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    //[SimaAuthorize(Permissions.ConsequenceLevelPost)]
+    [SimaAuthorize(Permissions.ConsequenceLevelPost)]
     public async Task<Result> Post([FromBody] CreateConsequenceLevelCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    //[SimaAuthorize(Permissions.ConsequenceLevelPut)]
+    [SimaAuthorize(Permissions.ConsequenceLevelPut)]
     public async Task<Result> Put([FromBody] ModifyConsequenceLevelCommand command)
     {
         return await _mediator.Send(command);

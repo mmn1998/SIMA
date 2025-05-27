@@ -1,7 +1,11 @@
 ﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Args;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.Contracts;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetCustomFields.ValueObjects;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.AssetTypes.ValueObjects;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Args;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
+using SIMA.Domain.Models.Features.Auths.ActiveStatuses.Entities;
 using SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.Entities;
 using SIMA.Domain.Models.Features.Auths.CustomeFieldTypes.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
@@ -25,40 +29,50 @@ public class AssetCustomField : Entity, IAggregateRoot
         DisplayName = arg.DisplayName;
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         AssetTypeId = new(arg.AssetTypeId);
-        CustomeFieldTypeId = new(arg.AssetTypeId);
-        IsMandetory = arg.IsMandetory;
+        CustomeFieldTypeId = new(arg.CustomFieldTypeId);
+        IsMandetory = arg.IsMandatory;
         BoundingViewName = arg.BoundingViewName;
         ValueBoundingFeild = arg.ValueBoundingFeild;
         TextBoundingFeild = arg.TextBoundingFeild;
+        ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
-    public static AssetCustomField Create(CreateAssetCustomFieldArg arg)
+    public static AssetCustomField Create(CreateAssetCustomFieldArg arg , IAssetCustomFieldDomainService service)
     {
         CreateGuards(arg);
         return new AssetCustomField(arg);
     }
-    public void Modify(ModifyAssetCustomFieldArg arg)
+    public void Modify(ModifyAssetCustomFieldArg arg, IAssetCustomFieldDomainService service)
     {
         ModifyGuards(arg);
         Name = arg.Name;
         DisplayName = arg.DisplayName;
         if (arg.ParentId.HasValue) ParentId = new(arg.ParentId.Value);
         AssetTypeId = new(arg.AssetTypeId);
-        CustomeFieldTypeId = new(arg.AssetTypeId);
-        IsMandetory = arg.IsMandetory;
+        CustomeFieldTypeId = new(arg.CustomFieldTypeId);
+        IsMandetory = arg.IsMandatory;
         BoundingViewName = arg.BoundingViewName;
         ValueBoundingFeild = arg.ValueBoundingFeild;
         TextBoundingFeild = arg.TextBoundingFeild;
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
     }
+
+    public void AddAssetCustomFieldOption(List<CreateAssetCustomFieldOptionArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = AssetCustomFieldOption.Create(arg);
+            _assetCustomFieldOption.Add(entity);
+        }
+    }
     #region Guards
     private static void CreateGuards(CreateAssetCustomFieldArg arg)
     {
         arg.Name.NullCheck();
         arg.DisplayName.NullCheck();
-        arg.IsMandetory.NullCheck();
+        arg.IsMandatory.NullCheck();
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.DisplayName.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!string.IsNullOrEmpty(arg.TextBoundingFeild) && arg.TextBoundingFeild.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
@@ -69,7 +83,7 @@ public class AssetCustomField : Entity, IAggregateRoot
     {
         arg.Name.NullCheck();
         arg.DisplayName.NullCheck();
-        arg.IsMandetory.NullCheck();
+        arg.IsMandatory.NullCheck();
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.DisplayName.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!string.IsNullOrEmpty(arg.TextBoundingFeild) && arg.TextBoundingFeild.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
@@ -100,7 +114,7 @@ public class AssetCustomField : Entity, IAggregateRoot
     public ICollection<AssetCustomFieldValue> AssetCustomFieldValue => _assetCustomFieldValue;
     
     private List<AssetCustomFieldOption> _assetCustomFieldOption = new();
-    public ICollection<AssetCustomFieldOption> AssetCustomFieldOption => _assetCustomFieldOption;
+    public ICollection<AssetCustomFieldOption> AssetCustomFieldOptions => _assetCustomFieldOption;
     public void Delete(long userId)
     {
         ModifiedBy = userId;

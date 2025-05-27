@@ -5,12 +5,7 @@ namespace SIMA.Application.Query.Contract.Features.BCP.BusinessContinuityStrateg
 public class GetAllBusinessContinuityStrategiesQueryResult
 {
     public long Id { get; set; }
-    public long StrategyTypeId { get; set; }
-    public string? StrategyType‌Name { get; set; }
-    public string? Code { get; set; }
     public string? Title { get; set; }
-    public string? Description { get; set; }
-    public string? IsStableStratgy { get; set; }
     public DateTime? ExpireDate { get; set; }
     public string? ExpireDatePersian => ExpireDate.ToPersianDateTime();
     public DateTime? ReviewDate { get; set; }

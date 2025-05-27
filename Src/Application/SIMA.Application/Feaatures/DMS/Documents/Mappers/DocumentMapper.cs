@@ -19,7 +19,7 @@ public class DocumentMapper : Profile
     private static IServiceProvider _serviceProvider;
     private static string _root;
 
-    public DocumentMapper(ISimaIdentity simaIdentity, IWebHostEnvironment webHost, IFileService fileService, IServiceProvider serviceProvider)
+    public DocumentMapper( IWebHostEnvironment webHost, IFileService fileService, IServiceProvider serviceProvider)
     {
         try
         {

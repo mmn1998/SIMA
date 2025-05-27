@@ -20,8 +20,8 @@ public class ApiSupportTeam : Entity
         Id = new(arg.Id);
         ApiId = new(arg.ApiId);
         StaffId = new(arg.StaffId);
-        if (arg.BranchId.HasValue) BranchId = new(arg.BranchId.Value);
-        if (arg.DepartmentId.HasValue) DepartmentId = new(arg.DepartmentId.Value);
+        if (arg.BranchId.HasValue && arg.BranchId > 0) BranchId = new(arg.BranchId.Value);
+        if (arg.DepartmentId.HasValue && arg.DepartmentId > 0 ) DepartmentId = new(arg.DepartmentId.Value);
         ActiveStatusId = arg.ActiveStatusId;
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
@@ -49,5 +49,11 @@ public class ApiSupportTeam : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 }

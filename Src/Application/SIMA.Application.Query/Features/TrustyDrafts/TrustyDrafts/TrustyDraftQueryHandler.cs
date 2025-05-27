@@ -1,5 +1,6 @@
 ﻿using SIMA.Application.Query.Contract.Features.TrustyDrafts.TrustyDrafts;
 using SIMA.Application.Query.Services.SimaReposrtServices;
+using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Common.Helper.ExportHelpers;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
@@ -13,7 +14,8 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
     IQueryHandler<GetAllDraftForPayment, Result<IEnumerable<GetAllDraftForPaymentResult>>>,
     IQueryHandler<GetAllReconcilliation, Result<IEnumerable<GetAllReconcilliationResult>>>,
     IQueryHandler<GetAllFrorEachDepartment, Result<IEnumerable<GetAllTrustyDraftRequestedResult>>>,
-    IQueryHandler<GetAllTrustyDraftByBrokerQuery, Result<IEnumerable<GetAllTrustyDraftRequestedResult>>>
+    IQueryHandler<GetAllTrustyDraftByBrokerQuery, Result<IEnumerable<GetAllTrustyDraftRequestedResult>>>,
+    IQueryHandler<GetTrustyDraftReportQuery , Result<IEnumerable<GetTrustyDraftReportQueryResult>> >
 {
     private readonly ITrustyDraftQueryRepository _repository;
     private readonly ISimaReportService _simaReportService;
@@ -36,11 +38,13 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
 
     public async Task<Result<IEnumerable<GetAllTrustyDraftRequestedResult>>> Handle(GetAllTrustyDraftRequested request, CancellationToken cancellationToken)
     {
+
+
         var res = await _repository.GetAllRequested(request);
         if (!string.IsNullOrEmpty(request.FormatType))
         {
-            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var excelByte = _simaReportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var exportResult = new ExportResult
             {
                 Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
@@ -58,8 +62,8 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
         var res = await _repository.GetAllDraftForPayment(request);
         if (!string.IsNullOrEmpty(request.FormatType))
         {
-            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var excelByte = _simaReportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var exportResult = new ExportResult
             {
                 Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
@@ -78,8 +82,8 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
         var res = await _repository.GetAllReconcilliation(request);
         if (!string.IsNullOrEmpty(request.FormatType))
         {
-            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var excelByte = _simaReportService.ExportToExcel(res.Data);
+            res.Data = res.Data.Skip(request.Page).Take(request.PageSize);
             var exportResult = new ExportResult
             {
                 Name = _simaReportService.GenerateFileName(this.GetType().Name.Replace("QueryHandler", "")) + "." + ExportExtensions.ExcelExtension,
@@ -107,5 +111,12 @@ public class TrustyDraftQueryHandler : IQueryHandler<GetAllTrustyDraftsQuery, Re
     public async Task<Result<IEnumerable<GetAllTrustyDraftsQueryResult>>> Handle(GetAllMyTrustyDraftsQuery request, CancellationToken cancellationToken)
     {
         return await _repository.GetAllMy(request);
+    }
+
+    public async Task<Result<IEnumerable<GetTrustyDraftReportQueryResult>>> Handle(GetTrustyDraftReportQuery request, CancellationToken cancellationToken)
+    {
+        request.FromDateMiladi = request.FromDate.ToMiladiDate();
+        request.ToDateMiladi = request.ToDate.ToMiladiDate();
+        return await _repository.GetReport(request);
     }
 }

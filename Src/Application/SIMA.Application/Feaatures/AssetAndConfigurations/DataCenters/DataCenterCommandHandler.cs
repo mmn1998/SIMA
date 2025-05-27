@@ -22,8 +22,7 @@ public class DataCenterCommandHandler : ICommandHandler<CreateDataCenterCommand,
     public DataCenterCommandHandler(IDataCenterRepository repository, IDataCenterDomainService service,
         IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper)
     {
-        _repository = repository;
-        _service = service;
+        _repository = repository;_service = service;
         _unitOfWork = unitOfWork;
         _simaIdentity = simaIdentity;
         _mapper = mapper;

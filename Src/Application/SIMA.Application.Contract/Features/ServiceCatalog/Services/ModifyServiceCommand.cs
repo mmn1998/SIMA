@@ -29,7 +29,7 @@ public class ModifyServiceCommand : ICommand<Result<long>>
     public List<long>? PrerequisiteServiceList { get; set; }
     public List<long>? ProviderList { get; set; }
     public List<long>? RiskList { get; set; }
-    public List<long>? AssetList { get; set; }
+    public List<AssetListCommand>? AssetList { get; set; }
     public List<long>? ConfigurationItemList { get; set; }
     public List<CreateServiceAssignedStaffCommand>? ServiceAssignedStaffList { get; set; }
     public string? isFullTimeSercice { get; set; }

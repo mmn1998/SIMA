@@ -18,12 +18,20 @@ public class AssetMapper : Profile
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
-            .ForMember(dest => dest.ExpireDate, act => act.MapFrom(source => DateHelper.ToMiladiDate(source.ExpireDate)))
+            .ForMember(dest => dest.ExpireDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.ExpireDate)))
             .ForMember(dest => dest.IssueId, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.ManufactureDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.ManufactureDate)))
+            .ForMember(dest => dest.OwnershipDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.OwnershipDate)))
+            .ForMember(dest => dest.RetiredDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.RetiredDate)))
             ;
         CreateMap<ModifyAssetCommand, ModifyAssetArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.ModifiedAt, act => act.MapFrom(source => Encoding.UTF8.GetBytes(DateTime.Now.ToString())))
+            .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+            .ForMember(dest => dest.ExpireDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.ExpireDate)))
+            .ForMember(dest => dest.ManufactureDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.ManufactureDate)))
+            .ForMember(dest => dest.OwnershipDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.OwnershipDate)))
+            .ForMember(dest => dest.RetiredDate, act => act.MapFrom(source => DateHelper.ConvertPersianToDateOnly(source.RetiredDate)))
             ;
         CreateMap<long, CreateServiceAssetArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
@@ -54,10 +62,17 @@ public class AssetMapper : Profile
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
-        CreateMap<CreateAssetCustomFeildValueCommand, CreateAssetCustomFieldValueArg>()
+        CreateMap<CreateAssetArg, CreateAssetIssueArg>()
             .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
             .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
             .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
             ;
+
+
+        CreateMap<CreateAssetCustomFeildValueCommand, CreateAssetCustomFieldValueArg>()
+           .ForMember(dest => dest.ActiveStatusId, act => act.MapFrom(source => (long)ActiveStatusEnum.Active))
+           .ForMember(dest => dest.CreatedAt, act => act.MapFrom(source => DateTime.Now))
+           .ForMember(dest => dest.Id, act => act.MapFrom(source => IdHelper.GenerateUniqueId()))
+           ;
     }
 }

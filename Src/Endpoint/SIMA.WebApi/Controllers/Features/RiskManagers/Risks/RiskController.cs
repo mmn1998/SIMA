@@ -19,7 +19,7 @@ public class RisksController : ControllerBase
     }
 
     [HttpPost]
-    [SimaAuthorize(Permissions.RisksPost)]
+    //[SimaAuthorize(Permissions.RisksPost)]
     public async Task<Result> Post([FromBody] CreateRiskCommand command)
     {
         try

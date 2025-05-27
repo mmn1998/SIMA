@@ -78,7 +78,7 @@ public class MatrixAValue : Entity, IAggregateRoot
         if (arg.Color.Length > 10) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
-        if (!await service.IsNumericUnique(arg.NumericValue)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
+        if (!await service.IsNumericUnique(arg.NumericValue,Id)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     #endregion
     public void Delete(long userId)

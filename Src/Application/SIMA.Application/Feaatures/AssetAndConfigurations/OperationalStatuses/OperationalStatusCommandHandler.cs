@@ -20,8 +20,17 @@ public class OperationalStatusCommandHandler: ICommandHandler<CreateOperationalS
     private readonly IUnitOfWork _unitOfWork;
     private readonly ISimaIdentity _simaIdentity;
     private readonly IMapper _mapper;
-    
-    
+
+    public OperationalStatusCommandHandler(IOperationalStatusRepository repository, IOperationalStatusDomainService service,
+        IUnitOfWork unitOfWork, ISimaIdentity simaIdentity, IMapper mapper)
+    {
+        _repository = repository;
+        _service = service;
+        _unitOfWork = unitOfWork;
+        _simaIdentity = simaIdentity;
+        _mapper = mapper;
+    }
+
     public async Task<Result<long>> Handle(CreateOperationalStatusCommand request, CancellationToken cancellationToken)
     {
         var arg = _mapper.Map<CreateOperationalStatusArg>(request);

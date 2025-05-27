@@ -20,6 +20,10 @@ public class ConfigurationItemDocument : Entity
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
     }
+    public static ConfigurationItemDocument Create(CreateConfigurationItemDocumentArg arg)
+    {
+        return new ConfigurationItemDocument(arg);
+    }
     public ConfigurationItemDocumentId Id { get; private set; }
     public DocumentId DocumentId { get; private set; }
     public virtual Document Document { get; private set; }
@@ -35,6 +39,12 @@ public class ConfigurationItemDocument : Entity
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+    }
+    public void Active(long userId)
+    {
+        ModifiedBy = userId;
+        ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
+        ActiveStatusId = (long)ActiveStatusEnum.Active;
     }
 }
 

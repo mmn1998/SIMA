@@ -35,7 +35,8 @@ public class RiskValueCommandHandler : ICommandHandler<CreateRiskValueCommand, R
         var entity = await RiskValue.Create(arg, _service);
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
-        return Result.Ok(entity.Id.Value);
+        var res = entity.Id.Value;
+        return Result.Ok(res);
     }
 
     public async Task<Result<long>> Handle(ModifyRiskValueCommand request, CancellationToken cancellationToken)

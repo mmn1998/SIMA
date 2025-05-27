@@ -9,4 +9,5 @@ public interface IAssetQueryRepository : IQueryRepository
     Task<Result<IEnumerable<GetAssetQueryResult>>> GetAll(GetAllAssetsQuery request);
     Task<Result<GetAssetQueryInfoResult>> GetByCode(GetAssetByCodeQuery request);
     Task<GetAssetQueryInfoResult> GetById(long id);
+    Task<Result<IEnumerable<GetAssetComboQueryResult>>> GetAssetCombo(GetAssetComboQuery request);
 }

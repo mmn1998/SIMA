@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.Helpers;
 using SIMA.Framework.Common.Response;
-using SIMA.Persistance.Migrations;
 using SIMA.WebApi.Dtos.Helpers;
 using System.Text;
 
@@ -34,5 +33,12 @@ public class HelperController : ControllerBase
     {
         var query = new GetHelpDocumentQuery();
         return await _mediator.Send(query);
+    }
+    [HttpGet("GetHelpVideo")]
+    public async Task<IActionResult> GetHelpVideo()
+    {
+        var query = new GetHelpVideoQuery();
+        var result = await _mediator.Send(query);
+        return File(result, "video/mp4", enableRangeProcessing: true);
     }
 }

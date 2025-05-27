@@ -14,4 +14,9 @@ public class ModifyDataProcedureCommand : ICommand<Result<long>>
     public string? IsInternalApi { get; set; }
     public long DataProcedureTypeId { get; set; }
     public long DatabaseId { get; set; }
+    public ICollection<CreateDataProcedureSupportTeamCommand>? DataProcedureSupportTeamList { get; set; }
+    public ICollection<CreateDataProcedureConfigurationItemCommand>? ConfigurationItemDataProcedureList { get; set; }
+    public ICollection<CreateDataProcedureDocumentCommand>? DataProcedureDocumentList { get; set; }
+    public ICollection<CreateDataProcedureInputParamCommand>? DataDataProcedureInputParamList { get; set; }
+    public ICollection<CreateDataProcedureOutputParamCommand>? DataProcedureOutputParamList { get; set; }
 }

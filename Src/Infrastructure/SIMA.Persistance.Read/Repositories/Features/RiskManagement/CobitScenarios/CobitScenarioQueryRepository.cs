@@ -20,19 +20,15 @@ public class CobitScenarioQueryRepository : ICobitScenarioQueryRepository
 SELECT
 	CS.[Id]
     ,CS.Description
-	,CS.CobitIdentifier
 	,CS.Name
-	,CS.ScenarioId
-	,S.Title ScenarioName
-	,CS.CobitScenarioCategoryId
+	,CS.CobitRiskCategoryId
+	,CS.CobitIdentifier
 	,CC.Name CobitScenarioCategoryName
-	,S.Code SeverityName
 	,A.[Name] ActiveStatus
     ,CS.CreatedAt
 FROM [RiskManagement].[CobitScenario] CS
 INNER JOIN [Basic].[ActiveStatus] A ON CS.ActiveStatusId = A.ID
-INNER JOIN RiskManagement.CobitCategory CC on CC.Id = CS.CobitScenarioCategoryId AND CC.ActiveStatusId<>3
-INNER JOIN BCP.Scenario S on S.Id = CS.ScenarioId AND S.ActiveStatusId<>3
+INNER JOIN RiskManagement.CobitRiskCategory CC on CC.Id = CS.CobitRiskCategoryId AND CC.ActiveStatusId<>3
 WHERE CS.ActiveStatusId <> 3
 ";
     }
@@ -63,6 +59,19 @@ WHERE CS.ActiveStatusId <> 3
         var count = await multi.ReadFirstAsync<int>();
         var response = await multi.ReadAsync<GetCobitScenarioQueryResult>();
         return Result.Ok(response, request, count);
+    }
+
+    public async Task<IEnumerable<GetCobitScenarioQueryResult>> GetAllByCategory(GetCobitScenariosByCategoryQuery request)
+    {
+        var query = $@"
+          {_mainQuery} AND CS.CobitRiskCategoryId = @CategoryId
+";
+        using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        var result = await connection.QueryAsync<GetCobitScenarioQueryResult>(query, new { request.CategoryId });
+        result.NullCheck();
+        return result ?? throw SimaResultException.NotFound;
+
     }
 
     public async Task<GetCobitScenarioQueryResult> GetById(GetCobitScenarioQuery request)

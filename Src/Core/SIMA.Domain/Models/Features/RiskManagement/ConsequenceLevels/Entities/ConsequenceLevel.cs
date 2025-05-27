@@ -82,8 +82,9 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         if (!await service.IsNumericUnique(arg.NumericValue, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.NumericValueNotUniqueError);
     }
     #endregion
-    public void Delete(long userId)
+    public async Task Delete(long userId, IConsequenceLevelDomainService service)
     {
+        //await service.CanBeDeleted(Id);
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
@@ -91,12 +92,12 @@ public class ConsequenceLevel : Entity, IAggregateRoot
     }
     public void ModifyCategories(List<CreateConsequenceLevelCategoryArg> args)
     {
-        var activeEntities = _riskConsequences.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var activeEntities = _consequenceLevelCategories.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
         var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ConsequenceCategoryId == x.ConsequenceCategoryId.Value));
         var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ConsequenceCategoryId.Value == x.ConsequenceCategoryId));
         foreach (var arg in ShouldAddedArgs)
         {
-            var entity = _riskConsequences.FirstOrDefault(x => x.ConsequenceCategoryId.Value == arg.ConsequenceCategoryId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            var entity = _consequenceLevelCategories.FirstOrDefault(x => x.ConsequenceCategoryId.Value == arg.ConsequenceCategoryId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
             if (entity is not null)
             {
                 entity.Active(arg.CreatedBy);
@@ -104,7 +105,7 @@ public class ConsequenceLevel : Entity, IAggregateRoot
             else
             {
                 entity = ConsequenceLevelCategory.Create(arg);
-                _riskConsequences.Add(entity);
+                _consequenceLevelCategories.Add(entity);
             }
         }
         foreach (var entity in shouldDeleteEntities)
@@ -117,21 +118,21 @@ public class ConsequenceLevel : Entity, IAggregateRoot
         foreach (var arg in args)
         {
             var entity = ConsequenceLevelCategory.Create(arg);
-            _riskConsequences.Add(entity);
+            _consequenceLevelCategories.Add(entity);
         }
     }
     public void DeleteCategories(long userId)
     {
-        foreach (var entity in _riskConsequences)
+        foreach (var entity in _consequenceLevelCategories)
         {
             entity.Delete(userId);
         }
     }
     private List<Severity> _severities = new();
     public ICollection<Severity> Severities => _severities;
-    
-    private List<ConsequenceLevelCategory> _riskConsequences = new();
-    public ICollection<ConsequenceLevelCategory> RiskConsequences => _riskConsequences;
+
+    private List<ConsequenceLevelCategory> _consequenceLevelCategories = new();
+    public ICollection<ConsequenceLevelCategory> ConsequenceLevelCategories => _consequenceLevelCategories;
     private List<Risk> _risk = new();
-    public ICollection<Risk> Risks =>  _risk;
+    public ICollection<Risk> Risks => _risk;
 }

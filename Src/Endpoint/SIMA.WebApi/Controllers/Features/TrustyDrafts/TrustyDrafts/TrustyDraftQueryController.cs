@@ -21,7 +21,7 @@ public class TrustyDraftQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost("GetAllTrustyDraftRequested")]
-    //[SimaAuthorize(Permissions.TrustyDraftsGetAll)]
+    [SimaAuthorize(Permissions.TrustyDraftsGetAll)]
     public async Task<Result> Get([FromBody] GetAllTrustyDraftRequested query)
     {
         return await _mediator.Send(query);
@@ -54,6 +54,13 @@ public class TrustyDraftQueryController : ControllerBase
         return await _mediator.Send(query);
     }
 
+    [HttpPost("GetReport")]
+    [SimaAuthorize(Permissions.GetAllReport)]
+    public async Task<Result> Get([FromBody] GetTrustyDraftReportQuery query)
+    {
+        return await _mediator.Send(query);
+    }
+    
     [HttpGet("GetAllByBroker/{brokerId}")]
     [SimaAuthorize(Permissions.TrustyDraftsGetAll)]
     public async Task<Result> GetAllByBroker([FromRoute] long? brokerId)

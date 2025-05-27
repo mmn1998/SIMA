@@ -62,6 +62,11 @@ public class Severity : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+    //public void UpdateSeverityValue(SeverityValueId severityValueId, long userId)
+    //{
+    //    ModifiedBy = userId;
+    //    SeverityValueId = severityValueId;
+    //}
     #region Guards
     private static async Task CreateGuadrs(CreateSeverityArg arg, ISeverityDomainService service)
     {
@@ -69,6 +74,7 @@ public class Severity : Entity, IAggregateRoot
         arg.Code.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsRelationsUnique(new (arg.AffectedHistoryId),new (arg.ConsequenceLevelId))) throw new SimaResultException(CodeMessges._400Code, Messages.CombinationOfFieldsError);
     }
     private async Task ModifyGuard(ModifySeverityArg arg, ISeverityDomainService service)
     {
@@ -76,6 +82,8 @@ public class Severity : Entity, IAggregateRoot
         arg.Code.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsRelationsUnique(new (arg.AffectedHistoryId),new (arg.ConsequenceLevelId),Id)) throw new SimaResultException(CodeMessges._400Code, Messages.CombinationOfFieldsError);
+
     }
     #endregion
     public void Delete(long userId)

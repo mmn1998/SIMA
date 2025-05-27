@@ -1,12 +1,10 @@
-﻿using System.Text;
-using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Args;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.ValueObjects;
-using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
-using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.ValueObjects;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper;
 using SIMA.Framework.Core.Entities;
 using SIMA.Resources;
+using System.Text;
 
 namespace SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItemCustomFields.Entities;
 
@@ -20,7 +18,7 @@ public class ConfigurationItemCustomFieldOption : Entity
     private ConfigurationItemCustomFieldOption(CreateConfigurationItemCustomFieldOptionArg arg)
     {
         Id = new(arg.Id);
-        ConfigurationItemId = new (arg.ConfigurationItemId.Value);
+        ConfigurationItemCustomFieldId = new (arg.ConfigurationItemCustomFieldId.Value);
         OptionValue = arg.OptionValue;
         OptionText = arg.OptionText;
         CreatedAt = arg.CreatedAt;
@@ -36,7 +34,7 @@ public class ConfigurationItemCustomFieldOption : Entity
     public void Modify(ModifyConfigurationItemCustomFieldOptionArg arg)
     {
         ModifyGuards(arg);
-        ConfigurationItemId = new (arg.ConfigurationItemId.Value);
+        ConfigurationItemCustomFieldId = new (arg.ConfigurationItemCustomFieldId.Value);
         OptionValue = arg.OptionValue;
         OptionText = arg.OptionText;
         ModifiedAt = arg.ModifiedAt;
@@ -59,8 +57,8 @@ public class ConfigurationItemCustomFieldOption : Entity
     }
     #endregion
     public ConfigurationItemCustomFieldOptionId Id { get; private set; }
-    public ConfigurationItemId ConfigurationItemId { get; private set; }
-    public virtual ConfigurationItem ConfigurationItem { get; private set; }
+    public ConfigurationItemCustomFieldId ConfigurationItemCustomFieldId { get; private set; }
+    public virtual ConfigurationItemCustomField ConfigurationItemCustomField { get; private set; }
     public string OptionValue { get; private set; }
     public string OptionText { get; private set; }
     public long ActiveStatusId { get; private set; }

@@ -5,9 +5,9 @@ namespace SIMA.Application.Contract.Features.RiskManagers.CobitScenarios;
 
 public class CreateCobitScenarioCommand : ICommand<Result<long>>
 {
-    public long CobitScenarioCategoryId { get; set; }
-    public long ScenarioId { get; set; }
-    public string CobitIdentifier { get; set; }
+    public long CobitRiskCategoryId { get; set; }
+   // public long ScenarioId { get; set; }
     public string Name { get; set; }
     public string? Description { get; set; }
+    public string? CobitIdentifier { get; set; }
 }

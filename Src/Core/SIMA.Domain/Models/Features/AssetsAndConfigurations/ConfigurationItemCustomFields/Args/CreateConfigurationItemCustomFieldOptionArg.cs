@@ -3,7 +3,7 @@
 public class CreateConfigurationItemCustomFieldOptionArg
 {
     public long Id { get; set; }
-    public long? ConfigurationItemId { get; set; }
+    public long? ConfigurationItemCustomFieldId { get; set; }
     public string? OptionValue { get; set; }
     public string? OptionText { get; set; }
     public long ActiveStatusId { get; set; }

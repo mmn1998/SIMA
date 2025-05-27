@@ -19,6 +19,173 @@ public class BusinessContinuityPlanQueryRepository : IBusinessContinuityPlanQuer
         _connectionString = configuration.GetConnectionString();
     }
 
+    public async Task<GetBusinessContinuityPlanQueryResult> GetByIdAndVersionNumber(GetBusinessContinuityPlanByVersionQuery request)
+    {
+            try
+        {
+            var response = new GetBusinessContinuityPlanQueryResult();
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            string query = @"
+                     Select 
+                        BCP.Id,
+                        BCP.Code,
+                        BCP.Title,
+                        BCP.Scope
+                        from BCP.BusinessContinuityPlan BCP
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+                        ----businessContinuityStratgyIssue
+                        Select 
+                        I.Id,
+                        I.Code,
+                        I.Description,
+                        I.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanIssue BCPI on BCP.Id = BCPI.BusinessContinuityPlanId and BCPI.ActiveStatusId<> 3
+                        join IssueManagement.Issue I on I.Id = BCPI.IssueId and I.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+                        ----BusinessContinuityPlanVersioning
+                        Select 
+                        BCPV.Id,
+                        BCPV.VersionNumber,
+                        BCPV.ReleaseDate,
+                        BCPV.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+                        ----businessContinuityPlanStratgy
+                        Select 
+                        BCS.Id ,
+                        BCS.Title,
+                        BCS.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                        join BCP.BusinessContinuityPlanStratgy BCPS on BCPV.Id = BCPS.BusinessContinuityPlanVersioningId and BCPS.ActiveStatusId<> 3
+                        join BCP.BusinessContinuityStrategy BCS on BCPS.BusinessContinuityStratgyId = BCS.Id and BCS.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+
+                        ----businessContinuityPlanService
+                        Select 
+                        S.Id,
+                        S.Name,
+                        S.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                        join BCP.BusinessContinuityPlanService BCPS on BCPS.BusinessContinuityPlanVersioningId = BCPV.Id and BCPS.ActiveStatusId<> 3
+                        join ServiceCatalog.Service S on S.Id = BCPS.ServiceId and s.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+                        ----businessContinuityPlanRisk
+                        Select 
+                        R.Id,
+                        R.Description,
+                        R.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                        join BCP.BusinessContinuityPlanRisk BCPR on BCPR.BusinessContinuityPlanVersioningId = BCPV.Id and BCPR.ActiveStatusId<> 3
+                        join RiskManagement.Risk R on R.Id = BCPR.RiskId and R.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+                        ----businessContinuityPlanCriticalActivity
+                        Select 
+                        CA.Id,
+                        CA.Name,
+                        CA.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                        join BCP.BusinessContinuityPlanCriticalActivity BCPCA on BCPCA.BusinessContinuityPlanVersioningId = BCPV.Id and BCPCA.ActiveStatusId<> 3
+                        join ServiceCatalog.CriticalActivity CA  on CA.Id = BCPCA.CriticalActivityId and CA.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+                        ----businessContinuityPlanAssumption
+                        Select 
+                        BCPA.Id,
+                        BCPA.Title,
+                        BCPA.Code,
+                        BCPA.CreatedAt
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3 
+                        join BCP.BusinessContinuityPlanAssumption BCPA on BCPA.BusinessContinuityPlanVersioningId = BCPV.Id and BCPA.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+
+                        ----businessContinuityPlanRelatedStaff
+                         Select 
+                             S.Id,
+                             Pro.FirstName,
+                             Pro.LastName,
+                             P.Id PositionId,
+                             p.Name PositionName,
+                             D.Id DepartmentId,
+                             D.Name DepartmentName,
+                             C.Name CompanyName,
+                             C.Id CompanyId,
+                             S.CreatedAt
+                             from BCP.BusinessContinuityPlan BCP
+                              join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                              join BCP.BusinessContinuityPlanRelatedStaff BCPRS on BCPRS.BusinessContinuityPlanVersioningId = BCPV.Id and BCPRS.ActiveStatusId<> 3
+                              join Organization.Staff S on BCPRS.StaffId =  S.Id and S.ActiveStatusId<> 3
+                              join Organization.Position P on S.PositionId = p.Id and P.ActiveStatusId<> 3
+                              join Organization.Department D on P.DepartmentId = D.Id and D.ActiveStatusId<> 3
+                              join Organization.Company C on C.Id = D.CompanyId and C.ActiveStatusId <> 3
+                             join Authentication.Profile Pro on Pro.Id = S.ProfileId and Pro.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+
+                        ----businessContinuityPlanResponsible
+                        Select 
+                        BCPR.Id,
+                        Pro.FirstName,
+                        Pro.LastName,
+                        PR.Id PlanResponsibilityId,
+                        PR.Name planResponsibilityName,
+                        BCPR.IsForBackup,
+                        P.Id PositionId,
+                        p.Name PositionName,
+                        D.Id DepartmentId,
+                        D.Name DepartmentName,
+                        S.CreatedAt,
+                        C.Id CompanyId,
+                        C.Name CompanyName
+                        from BCP.BusinessContinuityPlan BCP
+                        join BCP.BusinessContinuityPlanVersioning BCPV on BCP.Id = BCPV.BusinessContinuityPlanId and BCPV.ActiveStatusId<> 3
+                        join BCP.BusinessContinuityPlanResponsible BCPR on BCPR.BusinessContinuityPlanVersioningId = BCPV.Id  and BCPR.ActiveStatusId<> 3
+                        join Organization.Staff S on BCPR.StaffId =  S.Id  and S.ActiveStatusId<> 3
+                        join Authentication.Profile Pro on Pro.Id = S.ProfileId   and Pro.ActiveStatusId<> 3
+                        join Organization.Position P on S.PositionId = p.Id  and P.ActiveStatusId<> 3
+                        join Organization.Department D on P.DepartmentId = D.Id  and D.ActiveStatusId<> 3
+                        join Organization.Company C on C.Id = D.CompanyId and C.ActiveStatusId<>3
+                        join BCP.PlanResponsibility PR on PR.Id = BCPR.PlanResponsibilityId  and PR.ActiveStatusId<> 3
+                        where BCP.ActiveStatusId <> 3 and BCP.Id = @Id and BCP.VersionNumber = @VersionNumber
+
+
+        ";
+
+            using var multi = await connection.QueryMultipleAsync(query, new { Id = request.BusinessContinuityPlanId , request.VersionNumber });
+            response = await multi.ReadFirstOrDefaultAsync<GetBusinessContinuityPlanQueryResult>() ?? throw SimaResultException.NotFound;
+            response.BusinessContinuityStratgyIssueList = await multi.ReadAsync<GetBusinessContinuityStratgyIssue>();
+            response.BusinesscontinuityplanVersionList = await multi.ReadAsync<GetBusinesscontinuityplanversioning>();
+            response.BusinesscontinuityplanStratgyList = await multi.ReadAsync<GetBusinesscontinuityplanstratgy>();
+            response.BusinesscontinuityplanServiceList = await multi.ReadAsync<GetBusinesscontinuityplanservice>();
+            response.BusinesscontinuityplanRiskList = await multi.ReadAsync<GetBusinesscontinuityplanrisk>();
+            response.BusinesscontinuityplanCriticalActivityList = await multi.ReadAsync<GetBusinesscontinuityplancriticalactivity>();
+            response.BusinesscontinuityplanAssumptionList = await multi.ReadAsync<GetBusinesscontinuityplanassumption>();
+            response.BusinesscontinuityplanRelatedstaffList = await multi.ReadAsync<GetBusinesscontinuityplanrelatedstaff>();
+            response.BusinesscontinuityplanResponsibleList = await multi.ReadAsync<GetBusinesscontinuityplanresponsible>();
+
+            response.NullCheck();
+            return response;
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+    }
+
     public async Task<Result<IEnumerable<GetAllBusinessContinuityPlansQueryResult>>> GetAll(GetAllBusinessContinuityPlansQuery request)
     {
         using var connection = new SqlConnection(_connectionString);

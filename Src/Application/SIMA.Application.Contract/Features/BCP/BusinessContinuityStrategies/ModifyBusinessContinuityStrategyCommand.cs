@@ -6,7 +6,6 @@ namespace SIMA.Application.Contract.Features.BCP.BusinessContinuityStrategies;
 public class ModifyBusinessContinuityStrategyCommand : ICommand<Result<long>>
 {
     public long Id { get; set; }
-    public long StrategyTypeId { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? ExpireDate { get; set; }

@@ -1,5 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessContinuityStategies.ValueObjects;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevelCobits.Entities;
+using SIMA.Domain.Models.Features.RiskManagement.RiskLevels.Entities;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Args;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.Contracts;
 using SIMA.Domain.Models.Features.RiskManagement.RiskValues.ValueObjects;
@@ -28,6 +30,7 @@ public class RiskValue : Entity, IAggregateRoot
         CreatedAt = arg.CreatedAt;
         CreatedBy = arg.CreatedBy;
         ActiveStatusId = arg.ActiveStatusId;
+       // StrategyId = new(arg.StrategyId);
     }
     public static async Task<RiskValue> Create(CreateRiskValueArg arg, IRiskValueDomainService service)
     {
@@ -45,10 +48,12 @@ public class RiskValue : Entity, IAggregateRoot
         ModifiedAt = arg.ModifiedAt;
         ModifiedBy = arg.ModifiedBy;
         ActiveStatusId = arg.ActiveStatusId;
+       // StrategyId = new(arg.StrategyId);
+
     }
     public RiskValueId Id { get; private set; }
-    public BusinessContinuityStrategyId StrategyId { get; private set; }
-    public virtual BusinessContinuityStrategy Strategy { get; private set; }
+    //public BusinessContinuityStrategyId? StrategyId { get; private set; }
+    //public virtual BusinessContinuityStrategy Strategy { get; private set; }
     public string? Name { get; private set; }
     public string? Code { get; private set; }
     public string? Color { get; private set; }
@@ -59,6 +64,10 @@ public class RiskValue : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
+
+    private List<RiskLevel> _riskLevels = new();
+    public ICollection<RiskLevel> RiskLevels => _riskLevels;
+
     #region Guards
     private static async Task CreateGuadrs(CreateRiskValueArg arg, IRiskValueDomainService service)
     {
@@ -66,7 +75,7 @@ public class RiskValue : Entity, IAggregateRoot
         arg.Name.NullCheck();
         arg.Code.NullCheck();
         arg.Color.NullCheck();
-        arg.Condition.NullCheck();
+      //  arg.Condition.NullCheck();
 
         if (arg.Color.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
@@ -80,7 +89,7 @@ public class RiskValue : Entity, IAggregateRoot
         arg.Name.NullCheck();
         arg.Code.NullCheck();
         arg.Color.NullCheck();
-        arg.Condition.NullCheck();
+       // arg.Condition.NullCheck();
 
         if (arg.Color.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.ColorMaxLengthError);
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);

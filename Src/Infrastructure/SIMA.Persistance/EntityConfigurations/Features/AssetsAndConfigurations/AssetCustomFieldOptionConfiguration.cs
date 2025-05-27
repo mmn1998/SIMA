@@ -23,6 +23,6 @@ public class AssetCustomFieldOptionConfiguration :IEntityTypeConfiguration<Asset
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-        entity.HasOne(f=>f.AssetCustomField).WithMany(f=>f.AssetCustomFieldOption).HasForeignKey(f=>f.AssetCustomFieldId).OnDelete(DeleteBehavior.Restrict);
+        entity.HasOne(f=>f.AssetCustomField).WithMany(f=>f.AssetCustomFieldOptions).HasForeignKey(f=>f.AssetCustomFieldId).OnDelete(DeleteBehavior.Restrict);
     }
 }

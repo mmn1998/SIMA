@@ -1,4 +1,5 @@
-﻿using SIMA.Framework.Common.Response;
+﻿using Newtonsoft.Json;
+using SIMA.Framework.Common.Response;
 using SIMA.Framework.Core.Mediator;
 
 namespace SIMA.Application.Query.Contract.Features.RiskManagement.Diagrams;
@@ -26,4 +27,8 @@ public class RiskLevelCobitChartCurrentOccurrenceProbabilityValueValueTitle
     public string? y { get; set; }
     public int isSelected { get; set; }
     public string? Color { get; set; }
+
+    [JsonProperty("TNumericValue")]
+    public double ahNumericValue { get; set; }
+
 }

@@ -2,18 +2,26 @@
 using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using SIMA.Application.Feaatures.AssetAndConfigurations.Apis.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.AssetCustomFields.Mapper;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetPhysicalStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.Assets.Mapper;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetTechnicalStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.AssetTypes.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.Back_UpMethods.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.BusinessCriticalities.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.Categories.Mapper;
+using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemCustomFields.Mapper;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemRelationshipTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItems.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.ConfigurationItemTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.DataCenters.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.DataProcedures.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.DataProcedureTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.LicenseStatuses.Mappers;
 using SIMA.Application.Feaatures.AssetAndConfigurations.LicenseTypes.Mappers;
+using SIMA.Application.Feaatures.AssetAndConfigurations.OperationalStatuses.Mapper;
 using SIMA.Application.Feaatures.Auths.AccessTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.AddressTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.ApiMethodActions.Mappers;
@@ -27,6 +35,7 @@ using SIMA.Application.Feaatures.Auths.Genders.Mappers;
 using SIMA.Application.Feaatures.Auths.Groups.Mappers;
 using SIMA.Application.Feaatures.Auths.Locations.Mappers;
 using SIMA.Application.Feaatures.Auths.LocationTypes.Mappers;
+using SIMA.Application.Feaatures.Auths.OwnershipTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.Permision.Mappers;
 using SIMA.Application.Feaatures.Auths.PhoneTypes.Mappers;
 using SIMA.Application.Feaatures.Auths.PositionLevels.Mappers;
@@ -42,11 +51,13 @@ using SIMA.Application.Feaatures.Auths.SysConfigs.Mappers;
 using SIMA.Application.Feaatures.Auths.TimeMeasurements.Mappers;
 using SIMA.Application.Feaatures.Auths.UIInputElements.Mappers;
 using SIMA.Application.Feaatures.Auths.Users.Mappers;
+using SIMA.Application.Feaatures.Auths.Warehouses.Mappers;
 using SIMA.Application.Feaatures.BCP.Back_UpPeriods.Mappers;
 using SIMA.Application.Feaatures.BCP.BiaValues.Mappers;
 using SIMA.Application.Feaatures.BCP.BusinesImpactAnalysises.Mappers;
 using SIMA.Application.Feaatures.BCP.BusinessContinuityPlans.Mapper;
 using SIMA.Application.Feaatures.BCP.BusinessContinuityStrategies.Mappers;
+using SIMA.Application.Feaatures.BCP.ConsequenceIntensionDescriptions.Mappers;
 using SIMA.Application.Feaatures.BCP.ConsequenceIntensions.Mappers;
 using SIMA.Application.Feaatures.BCP.Consequences.Mappers;
 using SIMA.Application.Feaatures.BCP.ConsequenceValues.Mappers;
@@ -215,7 +226,9 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new SupplierMapper());
                 conf.AddProfile(new SupplierRankMapper());
                 conf.AddProfile(new AccessTypeMapper());
+                conf.AddProfile(new OwnershipTypeMapper());
                 conf.AddProfile(new TimeMeasurementMapper());
+                conf.AddProfile(new WarehouseMapper());
                 #endregion
 
                 #region WorkFlows
@@ -258,10 +271,10 @@ public static class ApplicationRegistrationExtension
                 #endregion
 
                 #region DMS
-                conf.AddProfile(new DocumentsExtensionMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
-                conf.AddProfile(new DocumentTypesMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
-                conf.AddProfile(new WorkFlowDocumentTypesMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>()));
-                conf.AddProfile(new DocumentMapper(scopedServiceProvider.GetRequiredService<ISimaIdentity>(),
+                conf.AddProfile(new DocumentsExtensionMapper());
+                conf.AddProfile(new DocumentTypesMapper());
+                conf.AddProfile(new WorkFlowDocumentTypesMapper());
+                conf.AddProfile(new DocumentMapper(
                     scopedServiceProvider.GetRequiredService<IWebHostEnvironment>(),
                     scopedServiceProvider.GetRequiredService<IFileService>(),
                     serviceProvider));
@@ -329,6 +342,7 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new ConsequenceIntensionMapper());
                 conf.AddProfile(new ConsequenceValueMapper());
                 conf.AddProfile(new BiaValueMapper());
+                conf.AddProfile(new ConsequenceIntensionDescriptionMapper());
                 conf.AddProfile(new HappeningPossibilityMapper());
                 conf.AddProfile(new ConsequenceMapper());
                 conf.AddProfile(new RecoveryPointObjectiveMapper());
@@ -386,7 +400,9 @@ public static class ApplicationRegistrationExtension
 
                 #region AssetAndConfigurations
                 conf.AddProfile(new AssetMapper());
+                conf.AddProfile(new ConfigurationItemMapper());
                 conf.AddProfile(new AssetPhysicalStatusMapper());
+                conf.AddProfile(new LicenseStatusMapper());
                 conf.AddProfile(new AssetTechnicalStatusMapper());
                 conf.AddProfile(new BusinessCriticalityMapper());
                 conf.AddProfile(new ConfigurationItemStatusMapper());
@@ -397,6 +413,12 @@ public static class ApplicationRegistrationExtension
                 conf.AddProfile(new DataProcedureTypeMapper());
                 conf.AddProfile(new BackupMethodMapper());
                 conf.AddProfile(new DataProcedureMapper());
+                conf.AddProfile(new ApiMapper());
+                conf.AddProfile(new DataCenterMapper());
+                conf.AddProfile(new OperationalStatusMapper());
+                conf.AddProfile(new CategoryMapper());
+                conf.AddProfile(new AssetCustomFieldMapper());
+                conf.AddProfile(new ConfigurationItemCustomFieldMapper());
                 #endregion
 
                 #region Notification

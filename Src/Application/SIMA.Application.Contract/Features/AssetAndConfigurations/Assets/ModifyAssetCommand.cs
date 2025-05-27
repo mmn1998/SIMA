@@ -10,6 +10,7 @@ public class ModifyAssetCommand : ICommand<Result<long>>
     public string? SerialNumber { get; set; }
     public long? SupplierId { get; set; }
     public long? OwnerId { get; set; }
+    public long? WarehouseId { get; set; }
     public long? AssetCategoryId { get; set; }
     public long? DataCenterId { get; set; }
     public long? OperationalStatusId { get; set; }

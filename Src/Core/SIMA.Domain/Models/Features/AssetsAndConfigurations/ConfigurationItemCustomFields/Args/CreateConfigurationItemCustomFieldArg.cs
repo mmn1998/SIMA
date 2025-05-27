@@ -5,9 +5,9 @@ public class CreateConfigurationItemCustomFieldArg
     public long Id { get; set; }
     public long? ParentId { get; set; }
     public long ConfigurationItemTypeId { get; set; }
-    public long CustomeFieldTypeId { get; set; }
+    public long CustomFieldTypeId { get; set; }
     public string? Name { get; set; }
-    public string? IsMandetory { get; set; }
+    public string? IsMandatory { get; set; }
     public string? DisplayName { get; set; }
     public string? BoundingViewName { get; set; }
     public string? ValueBoundingFeild { get; set; }

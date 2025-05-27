@@ -55,7 +55,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
       
     }
 
-    public async Task<List<GetProductListResult>> GetProductDiagrams(GetProductList query)
+    public async Task<List<GetProductListDiagramResult>> GetProductDiagrams(GetProductListDiagram query)
     {
         try
         {
@@ -81,7 +81,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
        
     }
 
-    public async Task<List<GetChannelListResult>> GetChannelDiagrams(GetChannelList query)
+    public async Task<List<GetChannelListDiagramResult>> GetChannelDiagrams(GetChannelListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
@@ -97,7 +97,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         return test[0].data;
     }
 
-    public async Task<List<GetAssetListResult>> GetAssetDiagrams(GetAssetList query)
+    public async Task<List<GetAssetListDiagramResult>> GetAssetDiagrams(GetAssetListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
@@ -113,7 +113,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         return test[0].Data;
     }
 
-    public async Task<List<GetAssignedStaffListResult>> GetAssignedStaffList(GetAssignedStaffList query)
+    public async Task<List<GetAssignedStaffListDiagramResult>> GetAssignedStaffList(GetAssignedStaffListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
@@ -129,7 +129,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         return test[0].Data;
     }
 
-    public async Task<List<GetApiListResult>> GetApiList(GetApiList query)
+    public async Task<List<GetApiListDiagramResult>> GetApiList(GetApiListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
@@ -145,7 +145,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         return test[0].Data;
     }
 
-    public async Task<List<GetProcedureListResult>> GetProcedureList(GetProcedureList query)
+    public async Task<List<GetProcedureListDiagramResult>> GetProcedureList(GetProcedureListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
@@ -161,7 +161,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         return test[0].Data;
     }
 
-    public async Task<List<GetRiskListResult>> GetRiskLis(GetRiskList query)
+    public async Task<List<GetRiskListDiagramResult>> GetRiskLis(GetRiskListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";
@@ -177,7 +177,7 @@ public class ServiceCatalogDiagramQueryRepository : IServiceCatalogDiagramQueryR
         return test[0].Data;
     }
 
-    public async Task<List<GetConfigurationItemListResult>> GetConfigurationItemList(GetConfigurationItemList query)
+    public async Task<List<GetConfigurationItemListDiagramResult>> GetConfigurationItemList(GetConfigurationItemListDiagram query)
     {
         //using var connection = new SqlConnection(_connectionString);
         //string spName = "Exec [dbo].[SP_ServiceCatalog_ServiceTreeDiagram]";

@@ -8,4 +8,5 @@ public interface ICobitScenarioQueryRepository : IQueryRepository
 {
     Task<GetCobitScenarioQueryResult> GetById(GetCobitScenarioQuery request);
     Task<Result<IEnumerable<GetCobitScenarioQueryResult>>> GetAll(GetAllCobitScenariosQuery request);
+    Task<IEnumerable<GetCobitScenarioQueryResult>> GetAllByCategory(GetCobitScenariosByCategoryQuery request);
 }

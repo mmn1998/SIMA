@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.Back_UpMethods;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.Back_UpMethods.V1;
 
@@ -19,14 +20,14 @@ public class BackupMethodsQueryController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.BackupMethodGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetBackupMethodQuery { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.BackupMethodGetAll)]
     public async Task<Result> Get([FromBody] GetAllBackupMethodsQuery query)
     {
         return await _mediator.Send(query);

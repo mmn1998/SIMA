@@ -57,7 +57,17 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                 }
                 entity.AddPreventiveActions(args);
             }
-            if (request.StaffList is not null)
+            if (request.RiskValueStrategyList is not null)
+            {
+                var args = _mapper.Map<List<CreateRiskValueStrategyArg>>(request.RiskValueStrategyList);
+                foreach (var item in args)
+                {
+                    item.RiskId = arg.Id;
+                    item.CreatedBy = userId;
+                }
+                entity.AddRiskValueStrategies(args);
+            }
+            /*if (request.StaffList is not null)
             {
                 var args = _mapper.Map<List<CreateRiskStaffArg>>(request.StaffList);
                 foreach (var item in args)
@@ -66,7 +76,7 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                     item.CreatedBy = userId;
                 }
                 entity.AddStaffs(args);
-            }
+            }*/
             if (request.CorrectiveActionList is not null)
             {
                 var args = _mapper.Map<List<CreateCorrectiveActionArg>>(request.CorrectiveActionList);
@@ -109,8 +119,18 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                 }
                 entity.AddThreats(args);
             }
+            if (request.CobitRiskCategoryScenarioList is not null)
+            {
+                var args = _mapper.Map<List<CreateCobitRiskCategoryScenarioArg>>(request.CobitRiskCategoryScenarioList);
+                foreach (var item in args)
+                {
+                    item.RiskId = arg.Id;
+                    item.CreatedBy = userId;
+                }
+                entity.AddCobitRiskCategoryScenarios(args);
+            }
             
-            if (request.ServiceAssignedStavesList is not null)
+            /*if (request.ServiceAssignedStavesList is not null)
             {
                 var args = _mapper.Map<List<CreateRiskStaffArg>>(request.ServiceAssignedStavesList);
                 foreach (var item in args)
@@ -119,7 +139,7 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                     item.CreatedBy = userId;
                 }
                 entity.AddStaffs(args);
-            }
+            }*/
             ////Add issue
 
             var relatedIssueArg = _mapper.Map<CreateRiskRelatedIssueArg>(request);
@@ -160,16 +180,27 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                 }
                 entity.ModifyPreventiveActions(args);
             }
-            if (request.StaffList is not null)
+
+            if (request.RiskValueStrategyList is not null)
             {
-                var args = _mapper.Map<List<CreateRiskStaffArg>>(request.StaffList);
+                var args = _mapper.Map<List<CreateRiskValueStrategyArg>>(request.RiskValueStrategyList);
                 foreach (var item in args)
                 {
-                    item.RiskId = request.Id;
+                    item.RiskId = entity.Id.Value;
                     item.CreatedBy = userId;
                 }
-                entity.ModifyStaffs(args);
+                entity.ModifyRiskValueStrategies(args);
             }
+            //if (request.StaffList is not null)
+            //{
+            //    var args = _mapper.Map<List<CreateRiskStaffArg>>(request.StaffList);
+            //    foreach (var item in args)
+            //    {
+            //        item.RiskId = request.Id;
+            //        item.CreatedBy = userId;
+            //    }
+            //    entity.ModifyStaffs(args);
+            //}
             if (request.CorrectiveActionList is not null)
             {
                 var args = _mapper.Map<List<CreateCorrectiveActionArg>>(request.CorrectiveActionList);
@@ -215,16 +246,26 @@ public class RiskCommandHandler : ICommandHandler<CreateRiskCommand, Result<long
                 }
                 entity.ModifyThreats(args);
             }
-            if (request.ServiceAssignedStavesList is not null)
+            if (request.CobitRiskCategoryScenarioList is not null)
             {
-                var args = _mapper.Map<List<CreateRiskStaffArg>>(request.ServiceAssignedStavesList);
+                var args = _mapper.Map<List<CreateCobitRiskCategoryScenarioArg>>(request.CobitRiskCategoryScenarioList);
                 foreach (var item in args)
                 {
-                    item.StaffId = request.Id;
+                    item.RiskId = request.Id;
                     item.CreatedBy = userId;
                 }
-                entity.ModifyStaffs(args);
+                entity.ModifyCobitRiskCategoryScenarios(args);
             }
+            //if (request.ServiceAssignedStavesList is not null)
+            //{
+            //    var args = _mapper.Map<List<CreateRiskStaffArg>>(request.ServiceAssignedStavesList);
+            //    foreach (var item in args)
+            //    {
+            //        item.StaffId = request.Id;
+            //        item.CreatedBy = userId;
+            //    }
+            //    entity.ModifyStaffs(args);
+            //}
 
             await _unitOfWork.SaveChangesAsync();
             return Result.Ok(request.Id);

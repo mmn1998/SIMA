@@ -72,6 +72,7 @@ public class CurrentOccurrenceProbability : Entity, IAggregateRoot
         arg.Code.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsRelationsUnique(new(arg.FrequencyId), new(arg.InherentOccurrenceProbabilityValueId))) throw new SimaResultException(CodeMessges._400Code, Messages.CombinationOfFieldsError);
     }
     private async Task ModifyGuard(ModifyCurrentOccurrenceProbabilityArg arg, ICurrentOccurrenceProbabilityDomainService service)
     {
@@ -79,6 +80,7 @@ public class CurrentOccurrenceProbability : Entity, IAggregateRoot
         arg.Code.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsRelationsUnique(new(arg.FrequencyId), new(arg.InherentOccurrenceProbabilityValueId), new(arg.Id))) throw new SimaResultException(CodeMessges._400Code, Messages.CombinationOfFieldsError);
     }
     #endregion
     public void Delete(long userId)

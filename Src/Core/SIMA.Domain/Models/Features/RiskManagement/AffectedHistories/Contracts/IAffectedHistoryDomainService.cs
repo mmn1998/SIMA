@@ -7,4 +7,5 @@ public interface IAffectedHistoryDomainService : IDomainService
 {
     Task<bool> IsCodeUnique(string code, AffectedHistoryId? id = null);
     Task<bool> IsNumericUnique(float value, AffectedHistoryId? id = null);
+    Task CanBeDeleted(AffectedHistoryId id);
 }

@@ -57,7 +57,7 @@ WHERE BM.ActiveStatusId <> 3
     public async Task<GetBackupMethodQueryResult> GetById(GetBackupMethodQuery request)
     {
         var query = $@"
-         {_mainQuery} AND DPT.[Id] = @Id";
+         {_mainQuery} AND BM.[Id] = @Id";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
         var result = await connection.QueryFirstAsync<GetBackupMethodQueryResult>(query, new { request.Id });

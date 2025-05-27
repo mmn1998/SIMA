@@ -7,6 +7,8 @@ using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Contracts;
 using SIMA.Application.Contract.Features.RiskManagers.ConsequenceLevels;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Args;
 using SIMA.Domain.Models.Features.RiskManagement.ConsequenceLevels.Entities;
+using SIMA.Framework.Common.Exceptions;
+using SIMA.Resources;
 
 namespace SIMA.Application.Feaatures.RiskManagers.ConsequenceLevels;
 
@@ -34,16 +36,16 @@ public class ConsequenceLevelCommandHandler : ICommandHandler<CreateConsequenceL
         var userId = _simaIdentity.UserId;
         arg.CreatedBy = userId;
         var entity = await ConsequenceLevel.Create(arg, _service);
-        if (request.ConsequenceCategoryList is not null && request.ConsequenceCategoryList.Count > 0)
+        if (request.ConsequenceCategoryList is null || request.ConsequenceCategoryList.Count == 0)
+            throw new SimaResultException(CodeMessges._400Code, Messages.ConsequenceCategoryIsNull);
+        var categoryArgs = _mapper.Map<List<CreateConsequenceLevelCategoryArg>>(request.ConsequenceCategoryList);
+        foreach (var categoryArg in categoryArgs)
         {
-            var categoryArgs = _mapper.Map<List<CreateConsequenceLevelCategoryArg>>(request.ConsequenceCategoryList);
-            foreach (var categoryArg in categoryArgs)
-            {
-                categoryArg.ConsequenceLevelId = arg.Id;
-                categoryArg.CreatedBy = userId;
-            }
-            entity.AddCategories(categoryArgs);
+            categoryArg.ConsequenceLevelId = arg.Id;
+            categoryArg.CreatedBy = userId;
         }
+        entity.AddCategories(categoryArgs);
+
         await _repository.Add(entity);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(entity.Id.Value);
@@ -56,16 +58,16 @@ public class ConsequenceLevelCommandHandler : ICommandHandler<CreateConsequenceL
         var userId = _simaIdentity.UserId;
         arg.ModifiedBy = userId;
         await entity.Modify(arg, _service);
-        if (request.ConsequenceCategoryList is not null && request.ConsequenceCategoryList.Count > 0)
+        if (request.ConsequenceCategoryList is null || request.ConsequenceCategoryList.Count == 0)
+            throw new SimaResultException(CodeMessges._400Code, Messages.ConsequenceCategoryIsNull);
+        var categoryArgs = _mapper.Map<List<CreateConsequenceLevelCategoryArg>>(request.ConsequenceCategoryList);
+        foreach (var categoryArg in categoryArgs)
         {
-            var categoryArgs = _mapper.Map<List<CreateConsequenceLevelCategoryArg>>(request.ConsequenceCategoryList);
-            foreach (var categoryArg in categoryArgs)
-            {
-                categoryArg.ConsequenceLevelId = request.Id;
-                categoryArg.CreatedBy = userId;
-            }
-            entity.ModifyCategories(categoryArgs);
+            categoryArg.ConsequenceLevelId = request.Id;
+            categoryArg.CreatedBy = userId;
         }
+        entity.ModifyCategories(categoryArgs);
+
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }
@@ -73,7 +75,8 @@ public class ConsequenceLevelCommandHandler : ICommandHandler<CreateConsequenceL
     public async Task<Result<long>> Handle(DeleteConsequenceLevelCommand request, CancellationToken cancellationToken)
     {
         var entity = await _repository.GetById(new(request.Id));
-        long userId = _simaIdentity.UserId; entity.Delete(userId);
+        long userId = _simaIdentity.UserId;
+        await entity.Delete(userId, _service);
         await _unitOfWork.SaveChangesAsync();
         return Result.Ok(request.Id);
     }

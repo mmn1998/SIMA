@@ -7,5 +7,5 @@ public class CreateConfigurationItemDataProcedureArg
     public long ConfigurationItemId { get; set; }
     public long ActiveStatusId { get; set; }
     public DateTime? CreatedAt { get; set; }
-    public long? CreatedBy { get; set; }
+    public long CreatedBy { get; set; }
 }

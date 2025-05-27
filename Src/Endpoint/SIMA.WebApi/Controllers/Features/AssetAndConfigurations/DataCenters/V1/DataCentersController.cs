@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Contract.Features.AssetAndConfigurations.DataCenters;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.DataCenters.V1;
 
@@ -19,19 +20,19 @@ public class DataCentersController : ControllerBase
         _mediator = mediator;
     }
     [HttpPost]
-    // [SimaAuthorize(Permissions.DataCenterPost)]
+    [SimaAuthorize(Permissions.DataCenterPost)]
     public async Task<Result> Post([FromBody] CreateDataCenterCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpPut]
-    // [SimaAuthorize(Permissions.DataCenterPut)]
+   [SimaAuthorize(Permissions.DataCenterPut)]
     public async Task<Result> Put([FromBody] ModifyDataCenterCommand command)
     {
         return await _mediator.Send(command);
     }
     [HttpDelete("{id}")]
-    //[SimaAuthorize(Permissions.DataCenterDelete)]
+    [SimaAuthorize(Permissions.DataCenterDelete)]
     public async Task<Result> Delete([FromRoute] long id)
     {
         var command = new DeleteDataCenterCommand { Id = id };

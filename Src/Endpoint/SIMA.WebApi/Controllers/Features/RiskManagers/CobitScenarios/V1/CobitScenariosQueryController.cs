@@ -29,4 +29,11 @@ public class CobitScenariosQueryController : ControllerBase
     {
         return await _mediator.Send(query);
     }
+    [HttpGet("GetByCategoryId/{categoryId}")]
+    //[SimaAuthorize(Permissions.CobitScenarioGetAll)]
+    public async Task<Result> GetByCategory([FromRoute] long categoryId)
+    {
+        var query = new GetCobitScenariosByCategoryQuery { CategoryId = categoryId };
+        return await _mediator.Send(query);
+    }
 }

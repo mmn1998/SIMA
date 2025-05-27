@@ -21,9 +21,9 @@ SELECT
 	S.[Id]
     ,S.[Code]
 	,S.ConsequenceLevelId
-	,CC.Name ConsequenceLevelName
+	,CC.ValueTitle ConsequenceLevelName
 	,S.AffectedHistoryId
-	,AH.Name AffectedHistoryName
+	,AH.ValueTitle AffectedHistoryName
 	,S.SeverityValueId
 	,SV.Name SeverityValueName
 	,A.[Name] ActiveStatus

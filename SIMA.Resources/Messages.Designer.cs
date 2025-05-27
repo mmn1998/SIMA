@@ -70,6 +70,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to شما مجاز به دسترسی به این بخش نمی باشید.
+        /// </summary>
+        public static string AccessDeny1 {
+            get {
+                return ResourceManager.GetString("AccessDeny1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to کد آدرس اجباری است.
         /// </summary>
         public static string AddressTypeCodeIsNotNullable {
@@ -84,6 +93,15 @@ namespace SIMA.Resources {
         public static string AddressTypeNameIsNotNullable {
             get {
                 return ResourceManager.GetString("AddressTypeNameIsNotNullable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to به علت تخصیص خانه نمودار، امکان حذف وجود ندارد.
+        /// </summary>
+        public static string AffectedHistoryAndConsequenceLevelAllocatedError {
+            get {
+                return ResourceManager.GetString("AffectedHistoryAndConsequenceLevelAllocatedError", resourceCulture);
             }
         }
         
@@ -250,6 +268,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ترکیب فیلد های مورد نظر تکراری میباشد!.
+        /// </summary>
+        public static string CombinationOfFieldsError {
+            get {
+                return ResourceManager.GetString("CombinationOfFieldsError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to شرکت مورد نظر یافت نشد..
         /// </summary>
         public static string CompanyNotFoundError {
@@ -273,6 +300,15 @@ namespace SIMA.Resources {
         public static string ConfirmPasswordNotValid {
             get {
                 return ResourceManager.GetString("ConfirmPasswordNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to دسته‌بندی اجباری می باشد.
+        /// </summary>
+        public static string ConsequenceCategoryIsNull {
+            get {
+                return ResourceManager.GetString("ConsequenceCategoryIsNull", resourceCulture);
             }
         }
         
@@ -475,6 +511,15 @@ namespace SIMA.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to مبلغ پروفرما را وارد نمایید.
+        /// </summary>
+        public static string EmptyProformaAmountError {
+            get {
+                return ResourceManager.GetString("EmptyProformaAmountError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to خطا در فراخوانی سرویس بهسازان.
         /// </summary>
         public static string ErrorFromBehsazanService {
@@ -660,6 +705,15 @@ namespace SIMA.Resources {
         public static string IbanIsNotValid {
             get {
                 return ResourceManager.GetString("IbanIsNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to آدرس آی پی وارد شده اشتباه است.
+        /// </summary>
+        public static string InvalidIpv4Error {
+            get {
+                return ResourceManager.GetString("InvalidIpv4Error", resourceCulture);
             }
         }
         
@@ -921,6 +975,15 @@ namespace SIMA.Resources {
         public static string NullException {
             get {
                 return ResourceManager.GetString("NullException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to فیلد شماره پروفرما اجباری می باشد.
+        /// </summary>
+        public static string NumberProformaIsRequried {
+            get {
+                return ResourceManager.GetString("NumberProformaIsRequried", resourceCulture);
             }
         }
         
@@ -1506,6 +1569,15 @@ namespace SIMA.Resources {
         public static string UserRoleDuplicateError {
             get {
                 return ResourceManager.GetString("UserRoleDuplicateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to فیلد های کارمزدکارگزار ، تاریخ انقضا استعلام ، مبلغ کارمزد الزامی می باشد.
+        /// </summary>
+        public static string ValidityPeriodAndCalculatedWageAndInquiryRequestCurrencyIdIsRequired {
+            get {
+                return ResourceManager.GetString("ValidityPeriodAndCalculatedWageAndInquiryRequestCurrencyIdIsRequired", resourceCulture);
             }
         }
         

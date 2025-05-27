@@ -5,5 +5,5 @@ namespace SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.Confi
 
 public class GetConfigurationItemQuery : IQuery<Result<GetConfigurationItemQueryInfoResult>>
 {
-    public string Code { get; set; }
+    public string? Code { get; set; }
 }

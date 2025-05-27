@@ -37,12 +37,20 @@ public class RiskDiagramQueryRepository : IRiskDiagramQueryRepository
 
     public async Task<GetSeverityQueryResult> GetSeverity(GetSeverityQuery query)
     {
-        using var connection = new SqlConnection(_connectionString);
-        string spName = $"Exec [SP_RiskManagement_severityChart] {query.RiskId}";
-        await connection.OpenAsync();
-        var result = await connection.QueryAsync<string>(spName) ?? throw SimaResultException.NotFound;
-        var test = JsonConvert.DeserializeObject<List<GetSeverityQueryResult>>(result.ToList()[0]);
-        return test[0];
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            string spName = $"Exec [SP_RiskManagement_severityChart] {query.RiskId}";
+            await connection.OpenAsync();
+            var result = await connection.QueryAsync<string>(spName) ?? throw SimaResultException.NotFound;
+            var test = JsonConvert.DeserializeObject<List<GetSeverityQueryResult>>(result.ToList()[0]);
+            return test[0];
+        }
+        catch(Exception ex)
+        {
+            throw;
+        }
+       
     }
 
     public async Task<GetInherentOccurrenceProbabilityQueryResult> GetInherentOccurrenceProbability(GetInherentOccurrenceProbabilityQuery query)

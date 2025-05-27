@@ -28,12 +28,12 @@ public class RiskValueConfiguration : IEntityTypeConfiguration<RiskValue>
         entity.Property(e => e.ModifiedAt)
             .IsRowVersion()
             .IsConcurrencyToken();
-        entity.Property(x => x.StrategyId)
-            .HasConversion(x => x.Value,
-            x => new(x));
-        entity.HasOne(x => x.Strategy)
-            .WithMany(x => x.RiskValues)
-            .HasForeignKey(x => x.StrategyId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
+        //entity.Property(x => x.StrategyId)
+        //    .HasConversion(x => x.Value,
+        //    x => new(x));
+        //entity.HasOne(x => x.Strategy)
+        //    .WithMany(x => x.RiskValues)
+        //    .HasForeignKey(x => x.StrategyId)
+        //    .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

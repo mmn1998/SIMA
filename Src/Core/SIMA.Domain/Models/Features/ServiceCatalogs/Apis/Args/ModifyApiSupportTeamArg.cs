@@ -6,5 +6,5 @@ public class ModifyApiSupportTeamArg
     public long StaffId { get;  set; }
     public long ActiveStatusId { get;  set; }
     public byte[]? ModifiedAt { get;  set; }
-    public long? ModifiedBy { get;  set; }
+    public long ModifiedBy { get;  set; }
 }

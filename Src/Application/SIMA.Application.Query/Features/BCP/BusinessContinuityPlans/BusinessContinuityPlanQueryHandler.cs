@@ -10,7 +10,8 @@ namespace SIMA.Application.Query.Features.BCP.BusinessContinuityPlans;
 public class BusinessContinuityPlanQueryHandler : IQueryHandler<GetBusinessContinuityPlanQuery, Result<GetBusinessContinuityPlanQueryResult>>,
 IQueryHandler<GetAllBusinessContinuityPlansQuery, Result<IEnumerable<GetAllBusinessContinuityPlansQueryResult>>>,
 IQueryHandler<GetAllPlanVersioningsByPlanIdQuery, Result<IEnumerable<GetAllPlanVersioningsByPlanIdQueryResult>>>,
-IQueryHandler<GetAllPlanAssumptionsByPlanIdQuery, Result<IEnumerable<GetAllPlanVersioningsByPlanIdQueryResult>>>
+IQueryHandler<GetAllPlanAssumptionsByPlanIdQuery, Result<IEnumerable<GetAllPlanVersioningsByPlanIdQueryResult>>>,
+IQueryHandler<GetBusinessContinuityPlanByVersionQuery,Result<GetBusinessContinuityPlanQueryResult>>
 {
     private readonly IBusinessContinuityPlanQueryRepository _repository;
     private readonly ISimaReportService _reportService;
@@ -26,6 +27,8 @@ IQueryHandler<GetAllPlanAssumptionsByPlanIdQuery, Result<IEnumerable<GetAllPlanV
         return Result.Ok(result);
     }
 
+    // throw new SimaResultException(CodeMessges._400Code, Messages.NotFound);
+    
     public async Task<Result<IEnumerable<GetAllBusinessContinuityPlansQueryResult>>> Handle(GetAllBusinessContinuityPlansQuery request, CancellationToken cancellationToken)
     {
         var res = await _repository.GetAll(request);
@@ -55,6 +58,12 @@ IQueryHandler<GetAllPlanAssumptionsByPlanIdQuery, Result<IEnumerable<GetAllPlanV
     public async Task<Result<IEnumerable<GetAllPlanVersioningsByPlanIdQueryResult>>> Handle(GetAllPlanAssumptionsByPlanIdQuery request, CancellationToken cancellationToken)
     {
         var result = await _repository.GetPlanAssumptionByPlanId(request.BusinessContinuityPlanId);
+        return Result.Ok(result);
+    }
+
+    public async Task<Result<GetBusinessContinuityPlanQueryResult>> Handle(GetBusinessContinuityPlanByVersionQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetByIdAndVersionNumber(request);
         return Result.Ok(result);
     }
 }

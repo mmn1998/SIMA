@@ -1,7 +1,5 @@
 ﻿using SIMA.Domain.Models.Features.Auths.Groups.ValueObjects;
 using SIMA.Domain.Models.Features.Auths.Positions.ValueObjects;
-using SIMA.Domain.Models.Features.BCP.Scenarios.Args;
-using SIMA.Domain.Models.Features.BCP.Scenarios.Entities;
 using SIMA.Domain.Models.Features.DMS.Documents.ValueObjects;
 using SIMA.Domain.Models.Features.Notifications.Messages.Args;
 using SIMA.Domain.Models.Features.Notifications.Messages.Contracts;
@@ -24,6 +22,7 @@ namespace SIMA.Domain.Models.Features.Notifications.Messages.Entities
             Subject = arg.Subject;
             Description = arg.Description;
             ExpireDate = arg.ExpireDate;
+            IsEveryOne = arg.IsEveryOne;
             ActiveStatusId = arg.ActiveStatusId;
             ActiveStatusId = arg.ActiveStatusId;
             CreatedAt = arg.CreatedAt;
@@ -162,6 +161,7 @@ namespace SIMA.Domain.Models.Features.Notifications.Messages.Entities
         public string Description { get; private set; }  
         public DateTime? ExpireDate { get; private set; }  
         public long ActiveStatusId { get; private set; }
+        public string? IsEveryOne { get; private set; }
         public DateTime CreatedAt { get; private set; }
         public long CreatedBy { get; private set; }
         public byte[]? ModifiedAt { get; private set; }

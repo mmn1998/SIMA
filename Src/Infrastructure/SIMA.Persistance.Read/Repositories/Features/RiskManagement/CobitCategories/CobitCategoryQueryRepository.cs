@@ -22,7 +22,7 @@ SELECT CC.[Id]
               ,CC.[Code]
 	          ,A.[Name] ActiveStatus
               ,CC.CreatedAt
-          FROM [RiskManagement].[CobitCategory] CC
+          FROM [RiskManagement].[CobitRiskCategory] CC
           INNER JOIN [Basic].[ActiveStatus] A ON CC.ActiveStatusId = A.ID
 WHERE CC.ActiveStatusId <> 3
 ";

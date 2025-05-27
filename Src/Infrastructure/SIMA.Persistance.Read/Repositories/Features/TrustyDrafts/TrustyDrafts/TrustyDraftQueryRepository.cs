@@ -83,7 +83,8 @@ left join TrustyDraft.DraftStatus DS on DS.Id = TD.DraftStatusId and DS.ActiveSt
 left join TrustyDraft.DraftValorStatus DVS on DVS.Id = TD.DraftValorStatusId and DVS.ActiveStatusId<>3
 left join TrustyDraft.WageDeductionMethod WDM on WDM.Id = TD.WageDeductionMethodId and WDM.ActiveStatusId<>3
 left join Bank.BrokerType BT on BT.Id = TD.BrokerTypeId and BT.ActiveStatusId <> 3
-left join Bank.PaymentType PT on PT.Id = TD.PaymentTypeId and PT.ActiveStatusId <> 3
+left join TrustyDraft.InquiryRequest IR on IR.Id = TD.InquiryRequestId and IR.ActiveStatusId <> 3
+left join Bank.PaymentType PT on PT.Id = IR.PaymentTypeId and PT.ActiveStatusId <> 3
 join Bank.Customer C on C.Id = TD.CustomerId and C.ActiveStatusId <> 3
 where
   (isnull(dbo.FN_GetBranchIdByUserId(@UserId),0) = 0 OR dbo.FN_GetBranchIdByUserId(@UserId) = td.BranchId)
@@ -191,6 +192,37 @@ AND
         var count = await multi.ReadFirstAsync<int>();
         var response = await multi.ReadAsync<GetAllReconcilliationResult>();
         return Result.Ok(response, request, count);
+    }
+
+    public async Task<Result<IEnumerable<GetTrustyDraftReportQueryResult>>> GetReport(GetTrustyDraftReportQuery request)
+    {
+		    using var connection = new SqlConnection(_connectionString);
+		    await connection.OpenAsync();
+
+		    string query = $@"
+		SELECT     td.*, B.Name AS BranchName, C.Name AS Customername, TrustyDraft.DraftOrigin.Name AS DraftOriginName, 
+                         TrustyDraft.DraftType.Name AS DraftTypeName, Bank.Broker.Name AS BrokerNameb, Bank.CurrencyType.Name AS CurrencyTypeName, Bank.BranchType.Name AS BranchTypeName, 
+                         TrustyDraft.DraftStatus.Name AS DraftStatusName
+FROM            TrustyDraft.TrustyDraft AS TD left join 
+                         Bank.Branch AS B ON TD.BranchId = B.Id left join 
+                         Bank.Customer AS C ON TD.CustomerId = C.Id left join 
+                         TrustyDraft.DraftOrigin ON TD.DraftOriginId = TrustyDraft.DraftOrigin.Id left join 
+                         TrustyDraft.DraftType ON TD.DraftTypeId = TrustyDraft.DraftType.Id left join 
+                         Bank.Broker ON TD.BrokerId = Bank.Broker.Id left join 
+                         Bank.CurrencyType ON TD.CancellationCurrencyTypeId = Bank.CurrencyType.Id left join 
+                         Bank.BranchType ON B.BranchTypeId = Bank.BranchType.Id LEFT join 
+                         TrustyDraft.DraftStatus ON TD.DraftStatusId = TrustyDraft.DraftStatus.Id 
+WHERE        (TD.ActiveStatusId = 4)
+AND (@FromDate IS NULL OR TD.CreatedAt >= @FromDate)
+AND (@ToDate IS NULL OR TD.CreatedAt <= @ToDate)
+AND (@DraftyNumber IS NULL OR TD.DraftNumber = @DraftyNumber)
+AND (@CreatedBy IS NULL OR TD.CreatedBy = @CreatedBy) 
+";
+		    var dynaimcParameters = (query).GenerateQuery(request);
+		    dynaimcParameters.Item2.Add("UserId", _simaIdentity.UserId);
+		    using var multi = await connection.QueryMultipleAsync(query, new { FromDate = request.FromDateMiladi,ToDate = request.ToDateMiladi, DraftyNumber = request.DraftyNumber,CreatedBy = request.CreatedBy });
+		    var response = await multi.ReadAsync<GetTrustyDraftReportQueryResult>();
+		    return Result.Ok(response, request);
     }
 
     public async Task<Result<IEnumerable<GetAllTrustyDraftRequestedResult>>> GetAllRequested(GetAllTrustyDraftRequested request)
@@ -513,12 +545,13 @@ AND
                     ------ PaymentType
 
                     select 
-                    DT.Id,
-                    DT.Name,
-                    DT.Code
-                    from TrustyDraft.TrustyDraft Td
-                    inner join Bank.PaymentType DT on DT.Id = Td.PaymentTypeId and DT.ActiveStatusId<>3
-                    where Td.Id = @Id
+                        DT.Id,
+                        DT.Name,
+                        DT.Code
+                        from TrustyDraft.TrustyDraft Td
+                        left join TrustyDraft.InquiryRequest IR on IR.Id = TD.InquiryRequestId and IR.ActiveStatusId <> 3
+                        inner join Bank.PaymentType DT on DT.Id = IR.PaymentTypeId and DT.ActiveStatusId<>3
+                    where TD.Id = @Id And TD.ActiveStatusId <> 3
 
 
                 ------- AccountTypeInfo

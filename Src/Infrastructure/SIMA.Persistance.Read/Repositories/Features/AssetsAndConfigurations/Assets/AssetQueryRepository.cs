@@ -22,16 +22,46 @@ public class AssetQueryRepository : IAssetQueryRepository
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
         var mainQuery = @"
-                              Select 
-	                             A.[Id]
-	                            ,A.[SerialNumber]
-	                            ,A.[Title]
-	                            ,A.[Model]
-                                ,A.CreatedAt
-	                            ,active.[Name] ActiveStatus
-	                            From AssetAndConfiguration.Asset A
-	                            join Basic.ActiveStatus active on A.ActiveStatusId = active.Id
-	                            WHERE A.[ActiveStatusID] <> 3
+       	
+	Select 
+	    A.[Id],
+		A.Code
+	    ,A.[SerialNumber]
+	    ,A.[Title]
+	    ,A.[Model]
+		,A.VersionNumber
+		,A.Manufacturer
+		,A.ManufactureDate
+		,A.OwnershipDate
+		,A.InServiceDate
+		,A.ExpireDate
+		,A.RetiredDate
+		,A.Description
+		,A.OwnershipPaymentValue
+		,A.OwnershipPrepaymentValue
+		,A.HasConfidentialInformation
+		,I.Id IssueId
+		,I.Code IssueCode
+		,wf.Id WorkflowId
+		,wf.Name WorkflowName
+		,State.Id CurrentStateId
+		,State.Name CurrentStateName
+		,S.Id CurrentStepId
+		,S.Name CurrentStepName
+		,I.CreatedAt IssueCreatedAt 
+        ,A.CreatedAt
+		,(P.FirstName + ' ' + P.LastName) CreatedBy
+	    ,active.[Name] ActiveStatus
+	    From AssetAndConfiguration.Asset A
+	    join Basic.ActiveStatus active on A.ActiveStatusId = active.Id
+		LEFT JOIN Authentication.Users U on U.Id = A.CreatedBy AND U.ActiveStatusId<>3
+        LEFT JOIN Authentication.Profile P on P.Id = U.ProfileID AND P.ActiveStatusId<>3
+		Inner join IssueManagement.Issue I on I.SourceId = A.Id  and I.ActiveStatusId <>3
+		Inner join Project.Step S on S.Id = I.CurrenStepId and S.ActiveStatusId <>3
+		inner join Project.WorkFlow wf on wf.Id = S.WorkFlowID
+        LEFT JOIN Project.State State on State.Id =I.CurrentStateId	
+		WHERE A.[ActiveStatusID] <> 3
+
 							";
         var queryCount = $@"
                              WITH Query as(	{mainQuery}	)
@@ -236,8 +266,7 @@ where Asset.Code = @Code and Asset.ActiveStatusId<>3;
 
     public async Task<GetAssetQueryInfoResult> GetById(long id)
     {
-        var mainQuery = @"
-SELECT
+        var mainQuery = @"SELECT
      Asset.[Id]
     ,Asset.SerialNumber
 	,Asset.VersionNumber
@@ -393,6 +422,137 @@ DC.Code
 From AssetAndConfiguration.Asset Asset
 INNER JOIN Basic.Location DC on DC.Id = Asset.PhysicalLocationId and DC.ActiveStatusId<>3
 where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+--AssetCustomFeildValue
+select 
+ACFV.AssetCustomFieldId,
+CFT.Id,
+CFT.Name,
+ACFV.ItemValue
+
+
+from AssetAndConfiguration.Asset Asset
+
+inner join Asset.AssetCustomFieldValue ACFV on ACFV.AssetId = Asset.Id
+inner join AssetAndConfiguration.AssetCustomField ACF on ACF.Id = ACFV.AssetCustomFieldId
+inner join Basic.CustomeFieldType CFT on  CFT.Id = ACF.CustomeFieldTypeId
+inner join Asset.AssetCustomFieldOption ACFO on ACFO.AssetCustomFieldId = ACF.Id
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+
+--AssetCustomFeildOption
+
+select 
+	ACFO.Id,
+	ACFO.OptionValue,
+	ACFO.OptionText,
+	ACFV.Id AssetCustomFeildValueId
+
+
+from AssetAndConfiguration.Asset Asset
+inner join Asset.AssetCustomFieldValue ACFV on  ACFV.AssetId = Asset.Id
+inner join AssetAndConfiguration.AssetCustomField ACF on ACF.Id = ACFV.AssetCustomFieldId
+inner join Basic.CustomeFieldType CFT on  CFT.Id = ACF.CustomeFieldTypeId
+inner join Asset.AssetCustomFieldOption ACFO on ACFO.AssetCustomFieldId = ACF.Id
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+
+--ServiceAsset
+
+select 
+ SA.Id,
+ SA.ServiceId,
+ S.Name,
+ S.Code,
+ SA.CreatedAt,
+ (P.FirstName + ' ' + P.LastName) CreatedBy
+
+from AssetAndConfiguration.Asset Asset
+inner join ServiceCatalog.ServiceAsset SA on SA.AssetId =  Asset.Id
+join ServiceCatalog.Service S on SA.ServiceId = S.Id
+LEFT JOIN Authentication.Users U on U.Id = SA.CreatedBy AND U.ActiveStatusId<>3
+LEFT JOIN Authentication.Profile P on P.Id = U.ProfileID AND P.ActiveStatusId<>3
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+
+--AssetDocument
+select 
+AD.DocumentId,
+D.DocumentTypeId,
+D.Name Title,
+D.FileExtensionId DocumentExtentionId,
+AD.CreatedAt,
+(P.FirstName + ' ' + P.LastName) CreatedBy
+
+from AssetAndConfiguration.Asset Asset
+inner join AssetAndConfiguration.AssetDocument AD on AD.AssetId = Asset.Id
+inner join  DMS.Documents D on D.Id =  AD.DocumentId
+LEFT JOIN Authentication.Users U on U.Id = AD.CreatedBy AND U.ActiveStatusId<>3
+LEFT JOIN Authentication.Profile P on P.Id = U.ProfileID AND P.ActiveStatusId<>3
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+
+
+--AssetAssignedStaff
+select 
+	AAS.StaffId,
+    (P.FirstName + ' ' + P.LastName) StaffName,
+	S.StaffNumber,
+	AAS.DepartmentId,
+	D.Name DepartmentName,
+	D.CompanyId,
+	C.Name CompanyName,
+	AAS.BranchId,
+	B.Name BranchName,
+	AAS.ResponsibleTypeId,
+	RT.Name ResponsibleTypeName,
+    (P.FirstName + ' ' + P.LastName) CreatedBy,
+	AAS.CreatedAt
+
+
+from AssetAndConfiguration.Asset Asset
+inner join Asset.AssetAssignedStaffs AAS on  AAS.AssetId =  Asset.Id
+inner join Organization.Staff S on  S.Id = AAS.StaffId
+inner join Organization.Department D on D.Id =  AAS.DepartmentId
+inner join Organization.Company C on C.Id = D.CompanyId
+LEFT JOIN Authentication.Profile P on P.Id = S.ProfileID AND P.ActiveStatusId<>3
+left join  Bank.Branch B on B.Id = AAS.BranchId
+left join Basic.ResponsibleType RT on RT.Id = AAS.ResponsibleTypeId
+LEFT JOIN Authentication.Users U on U.Id = AAS.CreatedBy AND U.ActiveStatusId<>3
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+
+
+--ConfigurationItemAsset 
+
+select 
+CIA.Id,
+Asset.Title Name , 
+CI.Code,
+CI.VersionNumber,
+CIA.CreatedAt,
+(P.FirstName + ' ' + P.LastName) CreatedBy
+
+
+
+from  AssetAndConfiguration.Asset Asset
+
+left  join AssetAndConfiguration.ConfigurationItemAsset CIA on CIA.AssetId = Asset.Id
+left join AssetAndConfiguration.ConfigurationItem CI on CI.Id = CIA.ConfigurationItemId
+LEFT JOIN Authentication.Users U on U.Id = CIA.CreatedBy AND U.ActiveStatusId<>3
+LEFT JOIN Authentication.Profile P on P.Id = U.ProfileID AND P.ActiveStatusId<>3
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
+
+--ComplexAsset
+
+select 
+CA.Id,
+Asset.SerialNumber,
+Asset.Title Name,
+Asset.Model,
+CA.CreatedAt,
+(P.FirstName + ' ' + P.LastName) CreatedBy
+
+from AssetAndConfiguration.Asset Asset
+
+inner join AssetAndConfiguration.ComplexAsset CA on CA.AssetId = Asset.Id
+LEFT JOIN Authentication.Users U on U.Id = CA.CreatedBy AND U.ActiveStatusId<>3
+LEFT JOIN Authentication.Profile P on P.Id = U.ProfileID AND P.ActiveStatusId<>3
+where Asset.Id= @Id and Asset.ActiveStatusId<>3;
 ";
         using var connection = new SqlConnection(_connectionString);
         await connection.OpenAsync();
@@ -412,6 +572,39 @@ where Asset.Id= @Id and Asset.ActiveStatusId<>3;
         response.UserTypeInfo = await multi.ReadFirstOrDefaultAsync<UserTypeInfo>();
         response.BusinessCriticalityInfo = await multi.ReadFirstOrDefaultAsync<BusinessCriticalityInfo>();
         response.PhysicalLocationInfo = await multi.ReadFirstOrDefaultAsync<PhysicalLocationInfo>();
+        response.AssetCustomFeildValue = await multi.ReadAsync<AssetCustomFeildValueInfo>();
+        var childern = await multi.ReadAsync<AssetCustomFeildOptionInfo>();
+        response.ServiceAsset = await multi.ReadAsync<ServiceAssetInfo>();
+        response.AssetDocument = await multi.ReadAsync<AssetDocumentInfo>();
+        /*
+        response.AssetCustomFeildOption = await multi.ReadAsync<AssetCustomFeildOptionInfo>();
+        */
+        response.AssetAssignedStaff = await multi.ReadAsync<AssetAssignedStaffInfo>();
+        response.ConfigurationItemAsset = await multi.ReadAsync<ConfigurationItemAssetInfo>();
+        response.ComplexAsset = await multi.ReadAsync<ComplexAssetInfo>();
+        
+        
+        var formPermission =  response.AssetCustomFeildValue.Select(ss => new AssetCustomFeildValueInfo
+        {
+	        AssetCustomFeildOption = childern.Where(x=>x.AssetCustomFeildValueId == ss.Id).ToList()
+        }).ToList();
+
 		return response;
+    }
+
+    public async Task<Result<IEnumerable<GetAssetComboQueryResult>>> GetAssetCombo(GetAssetComboQuery request)
+    {
+	    var mainQuery = @"SELECT
+							     Asset.[Id]
+								,Asset.Title Name
+								From AssetAndConfiguration.Asset Asset
+							WHERE Asset.ActiveStatusId <> 3 
+							";
+	    
+	    using var connection = new SqlConnection(_connectionString);
+	    await connection.OpenAsync();
+	    using var multi = await connection.QueryMultipleAsync(mainQuery);
+	    var response = await multi.ReadAsync<GetAssetComboQueryResult>();
+	    return Result.Ok(response);
     }
 }	

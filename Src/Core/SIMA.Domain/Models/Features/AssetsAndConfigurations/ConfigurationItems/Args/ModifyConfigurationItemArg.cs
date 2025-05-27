@@ -9,9 +9,11 @@ public class ModifyConfigurationItemArg
     public long LicenseTypeId { get; set; }
     public long? SupplierId { get; set; }
     public long? BusinessCriticalityId { get; set; }
-    public string? Title { get;  set; }
-    public string? UpdateSubject { get;  set; }
-    public string? VersionNumber { get;  set; }
+    public long? TimeMeasurementId { get; set; }
+    public long? LicenseStatusId { get; set; }
+    public string? Title { get; set; }
+    public string? UpdateSubject { get; set; }
+    public string? VersionNumber { get; set; }
     public long CompanyBuildingLocationId { get; set; }
     public string? Code { get; set; }
     public string? Description { get; set; }
@@ -20,4 +22,7 @@ public class ModifyConfigurationItemArg
     public DateTime? ReleaseDate { get; set; }
     public DateTime? LastUpdateDate { get; set; }
     public long? ModifiedBy { get; set; }
+    public float? Uptime { get; set; }
+    public float? Mttr { get; set; }
+    public float? Mtbf { get; set; }
 }

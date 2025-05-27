@@ -68,6 +68,8 @@ public class MatrixA : Entity, IAggregateRoot
         arg.Code.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsRelationUnique(new(arg.UseVulnerabilityId), new(arg.TriggerStatusId))) throw new SimaResultException(CodeMessges._400Code, Messages.CombinationOfFieldsError);
+
     }
     private async Task ModifyGuard(ModifyMatrixAArg arg, IMatrixADomainService service)
     {
@@ -75,6 +77,7 @@ public class MatrixA : Entity, IAggregateRoot
         arg.Code.NullCheck();
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (!await service.IsRelationUnique(new(arg.UseVulnerabilityId), new(arg.TriggerStatusId) , new(arg.Id))) throw new SimaResultException(CodeMessges._400Code, Messages.CombinationOfFieldsError);
     }
     #endregion
     public void Delete(long userId)

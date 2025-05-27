@@ -48,6 +48,11 @@ public class BusinessCriticality : Entity
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (arg.Ordering != null)
+        {
+             if (!await service.IsOrderingUnique(arg.Ordering)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
+        }
+        
     }
     private async Task ModifyGuards(ModifyBusinessCriticalityArg arg, IBusinessCriticalityDomainService service)
     {
@@ -58,6 +63,10 @@ public class BusinessCriticality : Entity
         if (arg.Name.Length > 200) throw new SimaResultException(CodeMessges._400Code, Messages.LengthNameException);
         if (arg.Code.Length > 20) throw new SimaResultException(CodeMessges._400Code, Messages.LengthCodeException);
         if (!await service.IsCodeUnique(arg.Code, Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueCodeError);
+        if (arg.Ordering != null)
+        {
+            if (await service.IsOrderingUnique(arg.Ordering,Id)) throw new SimaResultException(CodeMessges._400Code, Messages.UniqueOrderingError);
+        }
     }
     #endregion
     public BusinessCriticalityId Id { get; private set; }

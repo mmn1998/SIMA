@@ -8,6 +8,7 @@ public interface ITrustyDraftQueryRepository : IQueryRepository
 {
     Task<Result<IEnumerable<GetAllTrustyDraftsQueryResult>>> GetAll(GetAllTrustyDraftsQuery request);
     Task<Result<IEnumerable<GetAllTrustyDraftsQueryResult>>> GetAllMy(GetAllMyTrustyDraftsQuery request);
+    Task<Result<IEnumerable<GetTrustyDraftReportQueryResult>>> GetReport(GetTrustyDraftReportQuery request);
     Task<Result<IEnumerable<GetAllTrustyDraftRequestedResult>>> GetAllRequested(GetAllTrustyDraftRequested request);
     Task<Result<IEnumerable<GetAllDraftForPaymentResult>>> GetAllDraftForPayment(GetAllDraftForPayment request);
     Task<Result<IEnumerable<GetAllReconcilliationResult>>> GetAllReconcilliation(GetAllReconcilliation request);

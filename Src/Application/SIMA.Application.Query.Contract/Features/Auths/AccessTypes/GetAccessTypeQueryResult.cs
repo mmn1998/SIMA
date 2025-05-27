@@ -7,4 +7,3 @@ public class GetAccessTypeQueryResult
     public string? Code { get; set; }
     public string? ActiveStatus { get; set; }
 }
-

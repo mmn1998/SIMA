@@ -1,4 +1,5 @@
-﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
+﻿using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Args;
+using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.Entities;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.ConfigurationItems.ValueObjects;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Args;
 using SIMA.Domain.Models.Features.AssetsAndConfigurations.DataProcedures.Contracts;
@@ -90,7 +91,202 @@ public class DataProcedure : Entity, IAggregateRoot
     public long? CreatedBy { get; private set; }
     public byte[]? ModifiedAt { get; private set; }
     public long? ModifiedBy { get; private set; }
-    
+    #region AddMethods
+    public void AddDataProcedureDocuments(List<CreateDataProcedureDocumentArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = DataProcedureDocument.Create(arg);
+            _dataProcedureDocuments.Add(entity);
+        }
+    }
+    public void AddDataProcedureInputParams(List<CreateDataProcedureInputParamArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = Entities.DataProcedureInputParam.Create(arg);
+            _dataProcedureInputParam.Add(entity);
+        }
+    }
+    public void AddConfigurationItemDataProcedures(List<CreateConfigurationItemDataProcedureArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = ConfigurationItemDataProcedure.Create(arg);
+            _configurationItemDataProcedure.Add(entity);
+        }
+    }
+    public void AddDataProcedureOutputParams(List<CreateDataProcedureOutputParamArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = Entities.DataProcedureOutputParam.Create(arg);
+            _dataProcedureOutputParam.Add(entity);
+        }
+    }
+    public void AddDataProcedureSupportTeams(List<CreateDataProcedureSupportTeamArg> args)
+    {
+        foreach (var arg in args)
+        {
+            var entity = DataProcedureSupportTeam.Create(arg);
+            _dataProcedureSupportTeams.Add(entity);
+        }
+    }
+    #endregion
+    #region ModifyMethods
+    public void ModifyDataProcedureDocuments(List<CreateDataProcedureDocumentArg> args)
+    {
+        var activeEntities = _dataProcedureDocuments.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.DocumentId == x.DocumentId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.DocumentId.Value == x.DocumentId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _dataProcedureDocuments.FirstOrDefault(x => x.DocumentId.Value == arg.DocumentId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = DataProcedureDocument.Create(arg);
+                _dataProcedureDocuments.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void ModifyConfigurationItemDataProcedures(List<CreateConfigurationItemDataProcedureArg> args)
+    {
+        var activeEntities = _configurationItemDataProcedure.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.ConfigurationItemId == x.ConfigurationItemId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.ConfigurationItemId.Value == x.ConfigurationItemId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _configurationItemDataProcedure.FirstOrDefault(x => x.ConfigurationItemId.Value == arg.ConfigurationItemId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = ConfigurationItemDataProcedure.Create(arg);
+                _configurationItemDataProcedure.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void ModifyDataProcedureSupportTeams(List<CreateDataProcedureSupportTeamArg> args)
+    {
+        var activeEntities = _dataProcedureSupportTeams.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.StaffId == x.StaffId.Value));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.StaffId.Value == x.StaffId));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _dataProcedureSupportTeams.FirstOrDefault(x => x.StaffId.Value == arg.StaffId && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = DataProcedureSupportTeam.Create(arg);
+                _dataProcedureSupportTeams.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void ModifyDataProcedureInputParams(List<CreateDataProcedureInputParamArg> args)
+    {
+        var activeEntities = _dataProcedureInputParam.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.DataType == x.DataType && c.Name == x.Name));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.DataType == x.DataType && c.Name == x.Name));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _dataProcedureInputParam.FirstOrDefault(x => x.DataType == arg.DataType && x.Name == arg.Name && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = Entities.DataProcedureInputParam.Create(arg);
+                _dataProcedureInputParam.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    public void ModifyDataProcedureOutputParams(List<CreateDataProcedureOutputParamArg> args)
+    {
+        var activeEntities = _dataProcedureOutputParam.Where(x => x.ActiveStatusId != (long)ActiveStatusEnum.Delete);
+        var shouldDeleteEntities = activeEntities.Where(x => !args.Any(c => c.DataType == x.DataType && c.Name == x.Name));
+        var ShouldAddedArgs = args.Where(x => !activeEntities.Any(c => c.DataType == x.DataType && c.Name == x.Name));
+        foreach (var arg in ShouldAddedArgs)
+        {
+            var entity = _dataProcedureOutputParam.FirstOrDefault(x => x.DataType == arg.DataType && x.Name == arg.Name && x.ActiveStatusId != (long)ActiveStatusEnum.Active);
+            if (entity is not null)
+            {
+                entity.Active(arg.CreatedBy);
+            }
+            else
+            {
+                entity = Entities.DataProcedureOutputParam.Create(arg);
+                _dataProcedureOutputParam.Add(entity);
+            }
+        }
+        foreach (var entity in shouldDeleteEntities)
+        {
+            entity.Delete(args[0].CreatedBy);
+        }
+    }
+    #endregion
+    #region DeleteMethods
+    public void DeleteDataProcedureSupportTeams(long userId)
+    {
+        foreach (var entity in _dataProcedureSupportTeams)
+        {
+            entity.Delete(userId);
+        }
+    }
+    public void DeleteDataProcedureInputParams(long userId)
+    {
+        foreach (var entity in _dataProcedureInputParam)
+        {
+            entity.Delete(userId);
+        }
+    }
+    public void DeleteDataProcedureOutputParams(long userId)
+    {
+        foreach (var entity in _dataProcedureOutputParam)
+        {
+            entity.Delete(userId);
+        }
+    }
+    public void DeleteDataProcedureDocuments(long userId)
+    {
+        foreach (var entity in _dataProcedureDocuments)
+        {
+            entity.Delete(userId);
+        }
+    }
+    public void DeleteConfigurationItemDataProcedures(long userId)
+    {
+        foreach (var entity in _configurationItemDataProcedure)
+        {
+            entity.Delete(userId);
+        }
+    }
+    #endregion
     private List<DataProcedureOutputParam> _dataProcedureOutputParam = new();
     public ICollection<DataProcedureOutputParam> DataProcedureOutputParam  => _dataProcedureOutputParam;
     
@@ -111,6 +307,13 @@ public class DataProcedure : Entity, IAggregateRoot
         ModifiedBy = userId;
         ModifiedAt = Encoding.UTF8.GetBytes(DateTime.Now.ToString());
         ActiveStatusId = (long)ActiveStatusEnum.Delete;
+        #region DeleteRelatedEntities
+        DeleteConfigurationItemDataProcedures(userId);
+        DeleteDataProcedureDocuments(userId);
+        DeleteDataProcedureInputParams(userId);
+        DeleteDataProcedureOutputParams(userId);
+        DeleteDataProcedureSupportTeams(userId);
+        #endregion
     }
-    
+
 }

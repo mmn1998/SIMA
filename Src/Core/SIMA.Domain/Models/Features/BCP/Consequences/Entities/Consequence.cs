@@ -1,6 +1,7 @@
 ﻿using SIMA.Domain.Models.Features.BCP.AnalysisValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BiaValues.Entities;
 using SIMA.Domain.Models.Features.BCP.BusinessImpactAnalysises.Entities;
+using SIMA.Domain.Models.Features.BCP.ConsequenceIntensionDescriptions.Entities;
 using SIMA.Domain.Models.Features.BCP.Consequences.Args;
 using SIMA.Domain.Models.Features.BCP.Consequences.Contracts;
 using SIMA.Domain.Models.Features.BCP.Consequences.ValueObjects;
@@ -89,4 +90,7 @@ public class Consequence : Entity, IAggregateRoot
 
     private List<AnalysisValue> _analysisValues = new();
     public ICollection<AnalysisValue> AnalysisValues => _analysisValues;
+
+    private List<ConsequenceIntensionDescription> _consequenceIntensionDescriptions = new();
+    public ICollection<ConsequenceIntensionDescription> ConsequenceIntensionDescriptions => _consequenceIntensionDescriptions;
 }

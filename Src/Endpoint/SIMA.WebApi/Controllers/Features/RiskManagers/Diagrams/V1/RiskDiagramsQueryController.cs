@@ -29,7 +29,7 @@ public class RiskDiagramsQueryController : ControllerBase
     }
     
     [HttpGet("InherentOccurrenceProbabilityChart/{id}")]
-    [SimaAuthorize(Permissions.RiskDiagrams)]
+    //[SimaAuthorize(Permissions.RiskDiagrams)]
     public async Task<Result> GetInherentOccurrenceProbability([FromRoute] long id)
     {
         var query = new GetInherentOccurrenceProbabilityQuery() { RiskId = id };
@@ -38,7 +38,7 @@ public class RiskDiagramsQueryController : ControllerBase
     
     
     [HttpGet("MatrixAChartChart/{id}")]
-    [SimaAuthorize(Permissions.RiskDiagrams)]
+    //[SimaAuthorize(Permissions.RiskDiagrams)]
     public async Task<Result> GetMatrixAChartChart([FromRoute] long id)
     {
         var query = new GetMatrixAChartQuery() { RiskId = id };
@@ -47,7 +47,7 @@ public class RiskDiagramsQueryController : ControllerBase
     
     
     [HttpGet("RiskLevelCobitchartChart/{id}")]
-    [SimaAuthorize(Permissions.RiskDiagrams)]
+    //[SimaAuthorize(Permissions.RiskDiagrams)]
     public async Task<Result> GetRiskLevelCobitchartChart([FromRoute] long id)
     {
         var query = new GetRiskLevelCobitQuery() { RiskId = id };
@@ -55,14 +55,14 @@ public class RiskDiagramsQueryController : ControllerBase
     }
     
     [HttpGet("SeverityChart/{id}")]
-    [SimaAuthorize(Permissions.RiskDiagrams)]
+    //[SimaAuthorize(Permissions.RiskDiagrams)]
     public async Task<Result> GetSeverityChart([FromRoute] long id)
     {
         var query = new GetSeverityQuery() { RiskId = id };
         return await _mediator.Send(query);
     }
     [HttpGet("CurrentOccurrenceProbabilityChart/{id}")]
-    [SimaAuthorize(Permissions.RiskDiagrams)]
+    //[SimaAuthorize(Permissions.RiskDiagrams)]
     public async Task<Result> GetCurrentOccurrenceProbabilityChart([FromRoute] long id)
     {
         var query = new GetCurrentOccurrenceProbabilityQuery() { RiskId = id };

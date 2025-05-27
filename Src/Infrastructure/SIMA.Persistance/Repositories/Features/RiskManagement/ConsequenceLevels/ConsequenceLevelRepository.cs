@@ -19,7 +19,7 @@ public class ConsequenceLevelRepository : Repository<ConsequenceLevel>, IConsequ
     public async Task<ConsequenceLevel> GetById(ConsequenceLevelId id)
     {
         return await _context.ConsequenceLevels
-            .Include(x => x.RiskConsequences)
+            .Include(x => x.ConsequenceLevelCategories)
             .FirstOrDefaultAsync(c => c.Id == id) ?? throw SimaResultException.NotFound;
     }
 }

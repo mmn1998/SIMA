@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.LicenseTypes;
 using SIMA.Application.Query.Contract.Features.AssetsAndConfigurations.OperationalStatuses;
 using SIMA.Framework.Common.Response;
+using SIMA.Framework.Common.Security;
 
 namespace SIMA.WebApi.Controllers.Features.AssetAndConfigurations.OperationalStatuses.V1;
 
@@ -21,14 +22,14 @@ public class OperationalStatusQueryController
          _mediator = mediator;  
      }
      [HttpGet("{id}")]
-    //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.OperationalStatusGet)]
     public async Task<Result> Get([FromRoute] long id)
     {
         var query = new GetOperationalStatusQuery() { Id = id };
         return await _mediator.Send(query);
     }
     [HttpPost("GetAll")]
-   //[SimaAuthorize(Permissions.)]
+    [SimaAuthorize(Permissions.OperationalStatusGetAll)]
     public async Task<Result> Get([FromBody] GetAllOperationalStatusQuery query)
     {
         return await _mediator.Send(query);

@@ -40,7 +40,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetProdoctList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetProductList() { Id = id, Type = type };
+        var query = new GetProductListDiagram() { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     
@@ -51,7 +51,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetChannelList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetChannelList { Id = id, Type = type };
+        var query = new GetChannelListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     
@@ -61,7 +61,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetAssetList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetAssetList { Id = id, Type = type };
+        var query = new GetAssetListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     
@@ -72,7 +72,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetAssignedStaffList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetAssignedStaffList { Id = id, Type = type };
+        var query = new GetAssignedStaffListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
 
@@ -82,7 +82,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetApiList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetApiList { Id = id, Type = type };
+        var query = new GetApiListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     
@@ -92,7 +92,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetProcedureList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetProcedureList { Id = id, Type = type };
+        var query = new GetProcedureListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     
@@ -102,7 +102,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetRiskList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetRiskList { Id = id, Type = type };
+        var query = new GetRiskListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
     
@@ -112,7 +112,7 @@ public class ServiceDiagramsQueryController : ControllerBase
     */
     public async Task<Result> GetConfigurationItemList([FromQuery] long? id = null, [FromQuery] string? type = null)
     {
-        var query = new GetConfigurationItemList { Id = id, Type = type };
+        var query = new GetConfigurationItemListDiagram { Id = id, Type = type };
         return await _mediator.Send(query);
     }
 }

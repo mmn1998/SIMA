@@ -7,5 +7,6 @@ namespace SIMA.Persistance.Read.Repositories.Features.BCP.BusinesImpactAnalysise
 public interface IBusinessImpactAnalysisQueryRepository : IQueryRepository
 {
     Task<GetBusinessImpactAnalysisQueryResult> GetById(GetBusinessImpactAnalysisQuery request);
+    Task<GetBusinessImpactAnalysisQueryResult> GetByServcieId(GetFinalBusinessImpactAnalysisQuery request);
     Task<Result<IEnumerable<GetAllBusinessImpactAnalysisesQueryResult>>> GetAll(GetAllBusinessImpactAnalysisesQuery request);
 }

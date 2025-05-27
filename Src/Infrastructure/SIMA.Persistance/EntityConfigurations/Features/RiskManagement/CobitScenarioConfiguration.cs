@@ -24,22 +24,13 @@ public class CobitScenarioConfiguration : IEntityTypeConfiguration<CobitScenario
             .IsConcurrencyToken();
 
         entity.Property(x => x.Name).HasMaxLength(200);
-        entity.Property(x => x.CobitIdentifier).HasMaxLength(20).IsUnicode(false);
 
-        entity.Property(x => x.CobitScenarioCategoryId)
+        entity.Property(x => x.CobitRiskCategoryId)
             .HasConversion(x => x.Value,
             x => new(x));
-        entity.HasOne(x => x.CobitScenarioCategory)
+        entity.HasOne(x => x.CobitRiskCategory)
             .WithMany(x => x.CobitScenarios)
-            .HasForeignKey(x => x.CobitScenarioCategoryId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-        entity.Property(x => x.ScenarioId)
-            .HasConversion(x => x.Value,
-            x => new(x));
-        entity.HasOne(x => x.Scenario)
-            .WithMany(x => x.CobitScenarios)
-            .HasForeignKey(x => x.ScenarioId)
+            .HasForeignKey(x => x.CobitRiskCategoryId)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
 }

@@ -6,7 +6,8 @@ using SIMA.Persistance.Read.Repositories.Features.RiskManagement.CobitScenarios;
 namespace SIMA.Application.Query.Features.RiskManagement.CobitScenarios;
 
 public class CobitScenarioQueryHandler : IQueryHandler<GetCobitScenarioQuery, Result<GetCobitScenarioQueryResult>>,
-    IQueryHandler<GetAllCobitScenariosQuery, Result<IEnumerable<GetCobitScenarioQueryResult>>>
+    IQueryHandler<GetAllCobitScenariosQuery, Result<IEnumerable<GetCobitScenarioQueryResult>>>,
+    IQueryHandler<GetCobitScenariosByCategoryQuery, Result<IEnumerable<GetCobitScenarioQueryResult>>>
 {
     private readonly ICobitScenarioQueryRepository _repository;
 
@@ -22,6 +23,13 @@ public class CobitScenarioQueryHandler : IQueryHandler<GetCobitScenarioQuery, Re
 
     public async Task<Result<IEnumerable<GetCobitScenarioQueryResult>>> Handle(GetAllCobitScenariosQuery request, CancellationToken cancellationToken)
     {
-        return await _repository.GetAll(request);
+        var data = await _repository.GetAll(request);
+        return data;
+    }
+
+    public async Task<Result<IEnumerable<GetCobitScenarioQueryResult>>> Handle(GetCobitScenariosByCategoryQuery request, CancellationToken cancellationToken)
+    {
+        var result = await _repository.GetAllByCategory(request);
+        return Result.Ok(result);
     }
 }
