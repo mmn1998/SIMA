@@ -20,7 +20,7 @@ public class ConsequenceLevelConfiguration : IEntityTypeConfiguration<Consequenc
 
         entity.Property(e => e.Code).IsRequired().HasMaxLength(20);
         entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-        entity.Property(e => e.ValueTitle).IsRequired().HasMaxLength(200);
+        entity.Property(e => e.ValueTitle).HasMaxLength(200);
 
         entity.Property(e => e.CreatedAt)
             .HasDefaultValueSql("(getdate())")
