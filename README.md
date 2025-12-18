@@ -13,6 +13,9 @@ domain-driven design (DDD) and CQRS and workflow-based architectures (BPMN) for 
 - Redis Caching
 - ImemoryCache
 - Dapper
+- ElastichSearch
+- SeriLog
+- RSA Encryption, SHA-256 Hashing
 
 ## Architecture
 - Domain-Driven Design (Aggregates, Entities, Value Objects)
