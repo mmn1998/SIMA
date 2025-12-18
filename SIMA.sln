@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{07BBDC2A-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{76AC47DC-402D-4B41-B55E-BB6AD11FC0E2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Endpoint", "Endpoint", "{E2D74D18-B9F8-4C2E-A7D7-483C99BA592B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentaion", "Presentaion", "{E2D74D18-B9F8-4C2E-A7D7-483C99BA592B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Domain", "Src\Core\SIMA.Domain\SIMA.Domain.csproj", "{8D53AD04-3781-4E1B-8F9B-281986654AD3}"
 EndProject
@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Persistance", "Src\Inf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Persistance.Read", "Src\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj", "{281CCBF7-D5A4-476A-AADE-CA491AE9462D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.WebApi", "Src\Endpoint\SIMA.WebApi\SIMA.WebApi.csproj", "{411FC5C1-2B51-4196-9627-ECDB9C5C2B98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.WebApi", "Src\Presentation\SIMA.WebApi\SIMA.WebApi.csproj", "{411FC5C1-2B51-4196-9627-ECDB9C5C2B98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Application.Contract", "Src\Application\SIMA.Application.Contract\SIMA.Application.Contract.csproj", "{9A5CD073-2513-48CF-BA87-9DD3B6EA4A3D}"
 EndProject
@@ -36,9 +36,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{D3
 		Sccaffold.txt = Sccaffold.txt
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.LicenseKeyGenerator", "SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.LicenseKeyGenerator", "Src\Presentation\SIMA.LicenseKeyGenerator\SIMA.LicenseKeyGenerator.csproj", "{F409D6EF-F7A1-4819-9B88-D2C33633ABBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Resources", "SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIMA.Resources", "Src\Core\SIMA.Resources\SIMA.Resources.csproj", "{17516A77-3D55-4DE4-9A83-293A676E463D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
