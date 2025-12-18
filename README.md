@@ -9,7 +9,10 @@ domain-driven design (DDD) and CQRS patterns in a real-world scenario.
 - Entity Framework Core
 - SQL Server
 - MediatR (CQRS)
-- FluentValidation (if used)
+- FluentValidation
+- Redis Caching
+- ImemoryCache
+- Dapper
 
 ## Architecture
 - Domain-Driven Design (Aggregates, Entities, Value Objects)
@@ -37,4 +40,4 @@ domain-driven design (DDD) and CQRS patterns in a real-world scenario.
 
 ## Purpose
 This project was created to showcase advanced backend architecture
-patterns and production-oriented design using .NET.
+patterns and production-oriented design using .NET
