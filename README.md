@@ -4,9 +4,9 @@ SIMA is a backend-focused .NET application built to demonstrate
 domain-driven design (DDD) and CQRS and workflow-based architectures (BPMN) for banking automation systems patterns in a real-world scenario.
 
 
+## sima-system-architecture
 ![sima-system-architecture](https://github.com/mmn1998/SIMA/blob/master/docs/ArchitectureDiagram.png?raw=true)
 
-## sima-system-architecture
 
 ## Tech Stack
 - ASP.NET Core
