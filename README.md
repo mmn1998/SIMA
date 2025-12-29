@@ -44,7 +44,8 @@ domain-driven design (DDD) and CQRS and workflow-based architectures (BPMN) for 
 1. Clone the repository
 2. Configure database connection
 3. Apply migrations
-4. Run the API
+4. Resolve packages
+5. Run the API
 
 ## Purpose
 This project was created to showcase advanced backend architecture
