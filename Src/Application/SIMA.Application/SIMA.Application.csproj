@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\SIMA.Resources\SIMA.Resources.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj" />
     <ProjectReference Include="..\SIMA.Application.Query.Contract\SIMA.Application.Query.Contract.csproj" />

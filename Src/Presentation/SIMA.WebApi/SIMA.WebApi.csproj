@@ -419,6 +419,7 @@
     <ProjectReference Include="..\..\Application\SIMA.Application\SIMA.Application.csproj" />
     <ProjectReference Include="..\..\Core\SIMA.DomainService\SIMA.DomainService.csproj" />
     <ProjectReference Include="..\..\Core\SIMA.Domain\SIMA.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\SIMA.Resources\SIMA.Resources.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance.Read\SIMA.Persistance.Read.csproj" />
     <ProjectReference Include="..\..\Infrastructure\SIMA.Persistance\SIMA.Persistance.csproj" />
   </ItemGroup>
