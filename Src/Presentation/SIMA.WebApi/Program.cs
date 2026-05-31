@@ -12,6 +12,7 @@ using SIMA.DomainService.ConfigurationExtensions;
 using SIMA.Framework.Common.Cachings;
 using SIMA.Framework.Common.Exceptions;
 using SIMA.Framework.Common.Helper.FileHelper;
+using SIMA.Framework.Common.Helper.RSA;
 using SIMA.Framework.Common.Response;
 using SIMA.Framework.Common.Security;
 using SIMA.Framework.Common.Services;
@@ -42,24 +43,24 @@ var configuration = new ConfigurationBuilder()
 
 #region Serilog Settings
 var logSettings = configuration.GetSection("LogSettings").Get<LogSettings>() ?? new();
-Log.Logger = new LoggerConfiguration()
-    .Enrich.FromLogContext()
-    //.Enrich.WithClientIp()
-    //.Enrich.WithClientAgent()
-    .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
-    .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose)
-    .WriteTo.File(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information, path: logSettings.ErrorFilePath, rollingInterval: RollingInterval.Day)
-    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(logSettings.ElasticsearchUri))
-    {
-        AutoRegisterTemplate = true,
-        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv8,
-        IndexFormat = "Sima" + "-{0:yyyy.MM}",
-        RegisterTemplateFailure = RegisterTemplateRecovery.IndexAnyway,
-        EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog | EmitEventFailureHandling.RaiseCallback | EmitEventFailureHandling.ThrowException,
-        FailureCallback = e => { Console.WriteLine("Elasticsearch Error: " + e.MessageTemplate); },
-        MinimumLogEventLevel = Serilog.Events.LogEventLevel.Information
-    })
-    .CreateLogger();
+//Log.Logger = new LoggerConfiguration()
+//    .Enrich.FromLogContext()
+//    //.Enrich.WithClientIp()
+//    //.Enrich.WithClientAgent()
+//    .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder().WithDefaultDestructurers())
+//    .WriteTo.Console(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Verbose)
+//    .WriteTo.File(restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information, path: logSettings.ErrorFilePath, rollingInterval: RollingInterval.Day)
+//    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(logSettings.ElasticsearchUri))
+//    {
+//        AutoRegisterTemplate = true,
+//        AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv8,
+//        IndexFormat = "Sima" + "-{0:yyyy.MM}",
+//        RegisterTemplateFailure = RegisterTemplateRecovery.IndexAnyway,
+//        EmitEventFailure = EmitEventFailureHandling.WriteToSelfLog | EmitEventFailureHandling.RaiseCallback | EmitEventFailureHandling.ThrowException,
+//        FailureCallback = e => { Console.WriteLine("Elasticsearch Error: " + e.MessageTemplate); },
+//        MinimumLogEventLevel = Serilog.Events.LogEventLevel.Information
+//    })
+//    .CreateLogger();
 #endregion
 try
 {
@@ -105,6 +106,12 @@ try
     string plainRedisConnectionString = builder.Configuration.GetDecriptedValue(cipherOfRedisConnectionString, signOfRedisConnectionString);
     var redisSettings = configuration.GetSection("RedisSettings").Get<RedisSettings>() ?? new();
     redisSettings.ConnectionString = plainRedisConnectionString;
+    var test2 = EncryptThenSignWithRSAHelper.SignAndEncript(new RSASignRequest
+    {
+        PlainText = "185.105.239.136:6379",
+        PrivateKeyPath = "D:\\RSA-KEYS\\sima-private-key.pem",
+        PublicKeyPath = "D:\\RSA-KEYS\\sima-public-key.pem"
+    });
     builder.Services.AddSimaRedis(redisSettings);
 
     #endregion
@@ -118,6 +125,12 @@ try
     string CipherConnectionString = builder.Configuration.GetConnectionString("UserManagementCipher") ?? "";
     string SignedConnectionString = builder.Configuration.GetConnectionString("UserManagementSign") ?? "";
     string connectionString = builder.Configuration.GetDecriptedValue(CipherConnectionString, SignedConnectionString);
+    var test = EncryptThenSignWithRSAHelper.SignAndEncript(new RSASignRequest
+    {
+        PlainText = "Server=.;Database=SIMADB;User Id=sima;Password=1qaz!QAZ;TrustServerCertificate=True;",
+        PrivateKeyPath = "D:\\RSA-KEYS\\sima-private-key.pem",
+        PublicKeyPath = "D:\\RSA-KEYS\\sima-public-key.pem"
+    });
     //string connectionString = "Server=172.20.156.178,49235;Database=SIMADBBehsazanNew;User Id=DV_User;Password=2YR@&jdppAya;TrustServerCertificate=True;";
     //string connectionString = "Server=185.105.239.136;Database=SIMADBBank;User Id=foad;Password=foad1qaz!QAZ;TrustServerCertificate=True;";
 

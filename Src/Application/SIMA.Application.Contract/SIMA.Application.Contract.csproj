@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\SIMA.Resources\SIMA.Resources.csproj" />
     <ProjectReference Include="..\..\Core\SIMA.Resources\SIMA.Resources.csproj" />
   </ItemGroup>
 
